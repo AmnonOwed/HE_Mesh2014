@@ -6,7 +6,7 @@ import wblut.WB_Epsilon;
 
 public class WB_Containment {
 
-	public static boolean contains(final WB_Point p, final WB_AABBTree tree) {
+	public static boolean contains(final WB_Coordinate p, final WB_AABBTree tree) {
 		final LinkedList<WB_AABBNode> queue = new LinkedList<WB_AABBNode>();
 		queue.add(tree.getRoot());
 		WB_AABBNode current;
@@ -33,18 +33,18 @@ public class WB_Containment {
 		return false;
 	}
 
-	public static boolean contains(final WB_Point p, final WB_AABB AABB) {
-		return (p.x >= AABB.getMinX()) && (p.y >= AABB.getMinY())
-				&& (p.z >= AABB.getMinZ()) && (p.x < AABB.getMaxX())
-				&& (p.y < AABB.getMaxY()) && (p.z < AABB.getMaxZ());
+	public static boolean contains(final WB_Coordinate p, final WB_AABB AABB) {
+		return (p.xd() >= AABB.getMinX()) && (p.yd() >= AABB.getMinY())
+				&& (p.zd() >= AABB.getMinZ()) && (p.xd() < AABB.getMaxX())
+				&& (p.yd() < AABB.getMaxY()) && (p.zd() < AABB.getMaxZ());
 
 	}
 
-	public static boolean sameSide(final WB_Point p1, final WB_Point p2,
-			final WB_Point A, final WB_Point B) {
-		final WB_Point t1 = B.get()._subSelf(A);
-		WB_Point t2 = p1.get()._subSelf(A);
-		WB_Point t3 = p2.get()._subSelf(A);
+	public static boolean sameSide(final WB_Coordinate p1,
+			final WB_Coordinate p2, final WB_Coordinate A, final WB_Coordinate B) {
+		final WB_Point t1 = new WB_Point(B)._subSelf(A);
+		WB_Point t2 = new WB_Point(p1)._subSelf(A);
+		WB_Point t3 = new WB_Point(p2)._subSelf(A);
 		t2 = t1.cross(t2);
 		t3 = t1.cross(t3);
 		final double t = t2.dot(t3);
@@ -54,8 +54,8 @@ public class WB_Containment {
 		return false;
 	}
 
-	public static boolean contains(final WB_Point p, final WB_Point A,
-			final WB_Point B, final WB_Point C) {
+	public static boolean contains(final WB_Coordinate p,
+			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
 		if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistanceToLine(A, B, C))) {
 			return false;
 		}
@@ -66,7 +66,7 @@ public class WB_Containment {
 		return false;
 	}
 
-	public static boolean contains(final WB_Point p, final Triangle T) {
+	public static boolean contains(final WB_Coordinate p, final Triangle T) {
 		return contains(p, T.p1(), T.p2(), T.p3());
 	}
 

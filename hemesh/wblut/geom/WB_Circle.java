@@ -160,7 +160,7 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleThrough2Points(
-			final WB_Point p0, final WB_Point p1, final double r) {
+			final WB_Coordinate p0, final WB_Coordinate p1, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>();
 		final WB_Circle C0 = new WB_Circle(p0, r);
 		final WB_Circle C1 = new WB_Circle(p1, r);
@@ -174,12 +174,14 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleTangentToLineThroughPoint(
-			final WB_Line2D L, final WB_Point p, final double r) {
+			final WB_Line2D L, final WB_Coordinate p, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>();
-		double cPrime = L.c() + L.a() * p.x + L.b() * p.y;
+		double cPrime = L.c() + L.a() * p.xd() + L.b() * p.yd();
 		if (WB_Epsilon.isZero(cPrime)) {
-			result.add(new WB_Circle(p.add(L.a(), L.b(), r), r));
-			result.add(new WB_Circle(p.add(L.a(), L.b(), -r), r));
+			result.add(new WB_Circle(new WB_Point(p)._addSelf(L.a(), L.b(), r),
+					r));
+			result.add(new WB_Circle(
+					new WB_Point(p)._addSelf(L.a(), L.b(), -r), r));
 			return result;
 		}
 		double a, b;
@@ -196,13 +198,14 @@ public class WB_Circle implements WB_Geometry {
 		final double tmp1 = cPrime - r;
 		double tmp2 = r * r - tmp1 * tmp1;
 		if (WB_Epsilon.isZero(tmp2)) {
-			result.add(new WB_Circle(p.add(a, b, -tmp1), r));
+			result.add(new WB_Circle(new WB_Point(p)._addSelf(a, b, -tmp1), r));
 			return result;
 		} else if (tmp2 < 0) {
 			return result;
 		} else {
 			tmp2 = Math.sqrt(tmp2);
-			final WB_Point tmpp = new WB_Point(p.x - a * tmp1, p.y - b * tmp1);
+			final WB_Point tmpp = new WB_Point(p.xd() - a * tmp1, p.yd() - b
+					* tmp1);
 			result.add(new WB_Circle(tmpp.add(b, -a, tmp2), r));
 			result.add(new WB_Circle(tmpp.add(-b, a, tmp2), r));
 			return result;
@@ -243,7 +246,7 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleThroughPointTangentToCircle(
-			final WB_Point p, final WB_Circle C, final double r) {
+			final WB_Coordinate p, final WB_Circle C, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>(4);
 		final double dcp = WB_Distance2D.getDistance(p, C.getCenter());
 
