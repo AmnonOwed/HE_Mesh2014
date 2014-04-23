@@ -143,8 +143,8 @@ public class WB_Circle implements WB_Geometry {
 		radius = r;
 	}
 
-	public static WB_Circle getCircleThrough3Points(final WB_Point p0,
-			final WB_Point p1, final WB_Point p2) {
+	public static WB_Circle getCircleThrough3Points(final WB_Coordinate p0,
+			final WB_Coordinate p1, final WB_Coordinate p2) {
 		final WB_Triangle2D T = new WB_Triangle2D(p0, p1, p2);
 		return T.getCircumcircle();
 	}

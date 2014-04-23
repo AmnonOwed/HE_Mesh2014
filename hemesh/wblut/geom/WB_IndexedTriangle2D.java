@@ -150,16 +150,16 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 		return null;
 	}
 
-	public WB_Point getBarycentric(final WB_Point p) {
+	public WB_Point getBarycentric(final WB_Coordinate p) {
 		final double m = (points[i3].x - points[i1].x)
 				* (points[i2].y - points[i1].y) - (points[i3].y - points[i1].y)
 				* (points[i2].x - points[i1].x);
 
 		double nu, nv, ood;
 
-		nu = twiceSignedTriArea2D(p.x, p.y, points[i2].x, points[i2].y,
+		nu = twiceSignedTriArea2D(p.xd(), p.yd(), points[i2].x, points[i2].y,
 				points[i3].x, points[i3].y);
-		nv = twiceSignedTriArea2D(p.x, p.y, points[i3].x, points[i3].y,
+		nv = twiceSignedTriArea2D(p.xd(), p.yd(), points[i3].x, points[i3].y,
 				points[i1].x, points[i1].y);
 		ood = -1.0 / m;
 
@@ -169,11 +169,11 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 
 	}
 
-	public static boolean sameSide2D(final WB_Point p1, final WB_Point p2,
-			final WB_Point A, final WB_Point B) {
-		final WB_Point t1 = B.get()._subSelf(A);
-		final WB_Point t2 = p1.get()._subSelf(A);
-		final WB_Point t3 = p2.get()._subSelf(A);
+	public static boolean sameSide2D(final WB_Coordinate p1,
+			final WB_Coordinate p2, final WB_Coordinate A, final WB_Coordinate B) {
+		final WB_Point t1 = new WB_Point(B)._subSelf(A);
+		final WB_Point t2 = new WB_Point(p1)._subSelf(A);
+		final WB_Point t3 = new WB_Point(p2)._subSelf(A);
 		final double ct2 = t1.x * t2.y - t1.y * t2.x;
 		final double ct3 = t1.x * t3.y - t1.y * t3.x;
 
@@ -183,8 +183,8 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 		return false;
 	}
 
-	public static boolean pointInTriangle2D(final WB_Point p, final WB_Point A,
-			final WB_Point B, final WB_Point C) {
+	public static boolean pointInTriangle2D(final WB_Coordinate p,
+			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
 		if (WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistanceToLine(A, B, C))) {
 			return false;
 		}
@@ -208,13 +208,13 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 	 * return true; }
 	 */
 
-	public static boolean pointInTriangle2D(final WB_Point p,
+	public static boolean pointInTriangle2D(final WB_Coordinate p,
 			final WB_Triangle2D T) {
 		return pointInTriangle2D(p, T.p1, T.p2, T.p3);
 	}
 
-	public static boolean pointInTriangleBary2D(final WB_Point p,
-			final WB_Point A, final WB_Point B, final WB_Point C) {
+	public static boolean pointInTriangleBary2D(final WB_Coordinate p,
+			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
 
 		if (p == A) {
 			return false;
@@ -229,9 +229,9 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 			return false;
 		}
 		// Compute vectors
-		final WB_Point v0 = C.get()._subSelf(A);
-		final WB_Point v1 = B.get()._subSelf(A);
-		final WB_Point v2 = p.get()._subSelf(A);
+		final WB_Point v0 = new WB_Point(C)._subSelf(A);
+		final WB_Point v1 = new WB_Point(B)._subSelf(A);
+		final WB_Point v2 = new WB_Point(p)._subSelf(A);
 
 		// Compute dot products
 		final double dot00 = v0.dot(v0);
@@ -250,14 +250,15 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 				&& (u + v < 1 - WB_Epsilon.EPSILON);
 	}
 
-	public static boolean pointInTriangleBary2D(final WB_Point p,
+	public static boolean pointInTriangleBary2D(final WB_Coordinate p,
 			final WB_Triangle2D T) {
 		return pointInTriangleBary2D(p, T.p1, T.p2, T.p3);
 	}
 
-	public static double twiceSignedTriArea2D(final WB_Point p1,
-			final WB_Point p2, final WB_Point p3) {
-		return (p1.x - p3.x) * (p2.y - p3.y) - (p1.y - p3.y) * (p2.x - p3.x);
+	public static double twiceSignedTriArea2D(final WB_Coordinate p1,
+			final WB_Coordinate p2, final WB_Coordinate p3) {
+		return (p1.xd() - p3.xd()) * (p2.yd() - p3.yd()) - (p1.yd() - p3.yd())
+				* (p2.xd() - p3.xd());
 	}
 
 	public static double twiceSignedTriArea2D(final double x1, final double y1,
