@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/dev/externallibs/javolution-5.5.1.jar"/>
+	<classpathentry kind="lib" path="D:/processing-2.1.1/core/library/core.jar"/>
+	<classpathentry kind="lib" path="D:/dev/externallibs/jts.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
