@@ -12,8 +12,8 @@ public class WB_GeomGridCell {
 
 	protected ArrayList<Segment> segments;
 
-	public WB_GeomGridCell(final int index, final WB_Point min,
-			final WB_Point max) {
+	public WB_GeomGridCell(final int index, final WB_Coordinate min,
+			final WB_Coordinate max) {
 		this.index = index;
 		points = new ArrayList<WB_Point>();
 		segments = new ArrayList<Segment>();
@@ -21,8 +21,8 @@ public class WB_GeomGridCell {
 
 	}
 
-	public void addPoint(final WB_Point p) {
-		points.add(p);
+	public void addPoint(final WB_Coordinate p) {
+		points.add(new WB_Point(p));
 	}
 
 	public void removePoint(final WB_Point p) {

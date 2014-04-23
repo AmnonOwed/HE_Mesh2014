@@ -27,7 +27,7 @@ public class WB_Line2D extends WB_Linear2D {
 
 	}
 
-	public double getT(final WB_Point p) {
+	public double getT(final WB_Coordinate p) {
 		double t = Double.NaN;
 		final WB_Point proj = WB_Intersection2D.closestPoint2D(p, this);
 		final double x = WB_Math.fastAbs(direction.x);
@@ -40,10 +40,10 @@ public class WB_Line2D extends WB_Linear2D {
 		return t;
 	}
 
-	public WB_Classification classifyPointToLine2D(final WB_Point p) {
+	public WB_Classification classifyPointToLine2D(final WB_Coordinate p) {
 
-		final double dist = -direction.y * p.x + direction.x * p.y + origin.x
-				* direction.y - origin.y * direction.x;
+		final double dist = -direction.y * p.xd() + direction.x * p.yd()
+				+ origin.x * direction.y - origin.y * direction.x;
 
 		if (dist > WB_Epsilon.EPSILON) {
 			return WB_Classification.FRONT;
@@ -54,10 +54,10 @@ public class WB_Line2D extends WB_Linear2D {
 		return WB_Classification.ON;
 	}
 
-	public static WB_Classification classifyPointToLine2D(final WB_Point p,
-			final WB_Line2D L) {
+	public static WB_Classification classifyPointToLine2D(
+			final WB_Coordinate p, final WB_Line2D L) {
 
-		final double dist = L.a() * p.x + L.b() * p.y + L.c();
+		final double dist = L.a() * p.xd() + L.b() * p.yd() + L.c();
 
 		if (dist > WB_Epsilon.EPSILON) {
 			return WB_Classification.FRONT;
@@ -129,24 +129,24 @@ public class WB_Line2D extends WB_Linear2D {
 	}
 
 	public static WB_Line2D getLineTangentToCircleAtPoint(final WB_Circle C,
-			final WB_Point p) {
-		final WB_Point v = p.sub(C.getCenter());
+			final WB_Coordinate p) {
+		final WB_Vector v = new WB_Vector(C.getCenter(), p);
 		return new WB_Line2D(p, new WB_Point(-v.y, v.x));
 
 	}
 
 	public static ArrayList<WB_Line2D> getLinesTangentToCircleThroughPoint(
-			final WB_Circle C, final WB_Point p) {
+			final WB_Circle C, final WB_Coordinate p) {
 		final ArrayList<WB_Line2D> result = new ArrayList<WB_Line2D>(2);
 		final double dcp = WB_Distance2D.getDistance(C.getCenter(), p);
 
 		if (WB_Epsilon.isZero(dcp - C.getRadius())) {
-			final WB_Point u = p.sub(C.getCenter());
+			final WB_Vector u = new WB_Vector(C.getCenter(), p);
 			result.add(new WB_Line2D(p, new WB_Point(-u.y, u.x)));
 		} else if (dcp < C.getRadius()) {
 			return result;
 		} else {
-			final WB_Point u = p.sub(C.getCenter());
+			final WB_Vector u = new WB_Vector(C.getCenter(), p);
 			final double ux2 = u.x * u.x;
 			final double ux4 = ux2 * ux2;
 			final double uy2 = u.y * u.y;
@@ -237,35 +237,36 @@ public class WB_Line2D extends WB_Linear2D {
 		return result;
 	}
 
-	private static WB_Point[] getDirections(final WB_Point w, final double a) {
+	private static WB_Point[] getDirections(final WB_Coordinate w,
+			final double a) {
 		final WB_Point[] dir = new WB_Point[2];
 		final double asqr = a * a;
-		final double wxsqr = w.x * w.x;
-		final double wysqr = w.y * w.y;
+		final double wxsqr = w.xd() * w.xd();
+		final double wysqr = w.yd() * w.yd();
 		final double c2 = wxsqr + wysqr;
 		final double invc2 = 1.0 / c2;
 		double c0, c1, discr, invwx;
 		final double invwy;
 
-		if (WB_Math.fastAbs(w.x) >= WB_Math.fastAbs(w.y)) {
+		if (WB_Math.fastAbs(w.xd()) >= WB_Math.fastAbs(w.yd())) {
 			c0 = asqr - wxsqr;
-			c1 = -2 * a * w.y;
+			c1 = -2 * a * w.yd();
 			discr = Math.sqrt(WB_Math.fastAbs(c1 * c1 - 4 * c0 * c2));
-			invwx = 1.0 / w.x;
+			invwx = 1.0 / w.xd();
 			final double dir0y = -0.5 * (c1 + discr) * invc2;
-			dir[0] = new WB_Point((a - w.y * dir0y) * invwx, dir0y);
+			dir[0] = new WB_Point((a - w.yd() * dir0y) * invwx, dir0y);
 			final double dir1y = -0.5 * (c1 - discr) * invc2;
-			dir[1] = new WB_Point((a - w.y * dir1y) * invwx, dir1y);
+			dir[1] = new WB_Point((a - w.yd() * dir1y) * invwx, dir1y);
 
 		} else {
 			c0 = asqr - wysqr;
-			c1 = -2 * a * w.x;
+			c1 = -2 * a * w.xd();
 			discr = Math.sqrt(WB_Math.fastAbs(c1 * c1 - 4 * c0 * c2));
-			invwy = 1.0 / w.y;
+			invwy = 1.0 / w.yd();
 			final double dir0x = -0.5 * (c1 + discr) * invc2;
-			dir[0] = new WB_Point(dir0x, (a - w.x * dir0x) * invwy);
+			dir[0] = new WB_Point(dir0x, (a - w.xd() * dir0x) * invwy);
 			final double dir1x = -0.5 * (c1 - discr) * invc2;
-			dir[1] = new WB_Point(dir1x, (a - w.x * dir1x) * invwy);
+			dir[1] = new WB_Point(dir1x, (a - w.xd() * dir1x) * invwy);
 
 		}
 
@@ -273,21 +274,22 @@ public class WB_Line2D extends WB_Linear2D {
 	}
 
 	public static WB_Line2D getPerpendicularLineThroughPoint(final WB_Line2D L,
-			final WB_Point p) {
+			final WB_Coordinate p) {
 		return new WB_Line2D(p, new WB_Point(-L.getDirection().y,
 				L.getDirection().x));
 
 	}
 
 	public static WB_Line2D getParallelLineThroughPoint(final WB_Line2D L,
-			final WB_Point p) {
+			final WB_Coordinate p) {
 		return new WB_Line2D(p, L.getDirection());
 
 	}
 
-	public static WB_Line2D getBisector(final WB_Point p, final WB_Point q) {
-		return new WB_Line2D(WB_Point.interpolate(p, q, 0.5), new WB_Point(p.y
-				- q.y, q.x - p.x));
+	public static WB_Line2D getBisector(final WB_Coordinate p,
+			final WB_Coordinate q) {
+		return new WB_Line2D(WB_Point.interpolate(p, q, 0.5), new WB_Point(
+				p.yd() - q.yd(), q.xd() - p.xd()));
 	}
 
 	public static WB_Line2D[] getParallelLines(final WB_Line2D L, final double d) {

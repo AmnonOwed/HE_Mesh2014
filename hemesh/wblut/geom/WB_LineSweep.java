@@ -3,7 +3,7 @@ package wblut.geom;
 public class WB_LineSweep {
 
 	public static WB_BSplineSurface getLineSweep(final WB_BSpline C,
-			final WB_Vector v, final double f) {
+			final WB_Coordinate v, final double f) {
 		final WB_NurbsKnot VKnot = new WB_NurbsKnot(2, 1);
 		final WB_Point[][] points = new WB_Point[C.n() + 1][2];
 		for (int i = 0; i <= C.n(); i++) {
@@ -15,7 +15,7 @@ public class WB_LineSweep {
 	}
 
 	public static WB_RBSplineSurface getLineSweep(final WB_RBSpline C,
-			final WB_Vector v, final double f) {
+			final WB_Coordinate v, final double f) {
 		final WB_NurbsKnot VKnot = new WB_NurbsKnot(2, 1);
 		final WB_Point[][] points = new WB_Point[C.n() + 1][2];
 		final double[][] weights = new double[C.n() + 1][2];

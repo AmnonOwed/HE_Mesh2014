@@ -273,16 +273,18 @@ public class HEM_Extrude extends HEM_Modifier {
 		if (chamfer == 0) {
 			return applyStraight(mesh, mesh.getFacesAsList());
 		}
-
+		List<HE_Face> facelist = mesh.getFacesAsList();
 		if ((relative == true) && (chamfer == 1)) {
-			return applyPeaked(mesh, mesh.getFacesAsList());
+			return applyPeaked(mesh, facelist);
 		}
 		failedFaces = new FastList<HE_Face>();
 		failedHeights = new FastList<Double>();
 		applyFlat(mesh, faces, flat && fuse);
-		heights = new double[failedHeights.size()];
-		for (int i = 0; i < failedHeights.size(); i++) {
-			heights[i] = failedHeights.get(i);
+		if (heights != null) {
+			for (int i = 0; i < failedHeights.size(); i++) {
+				heights[facelist.indexOf(failedFaces.get(i))] = failedHeights
+						.get(i);
+			}
 		}
 		if (peak) {
 			applyPeaked(mesh, failedFaces);
@@ -381,9 +383,11 @@ public class HEM_Extrude extends HEM_Modifier {
 		failedFaces = new FastList<HE_Face>();
 		failedHeights = new FastList<Double>();
 		applyFlat(selection.parent, selFaces, flat && fuse);
-		heights = new double[failedHeights.size()];
-		for (int i = 0; i < failedHeights.size(); i++) {
-			heights[i] = failedHeights.get(i);
+		if (heights != null) {
+			for (int i = 0; i < failedHeights.size(); i++) {
+				heights[selFaces.indexOf(failedFaces.get(i))] = failedHeights
+						.get(i);
+			}
 		}
 		if (peak) {
 			applyPeaked(selection.parent, failedFaces);

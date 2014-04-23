@@ -3,8 +3,8 @@ package wblut.geom;
 public class WB_NurbsSurfaceOfRevolution {
 
 	public static WB_RBSplineSurface getSurfaceOfRevolution(final WB_BSpline C,
-			final WB_Point p, final WB_Vector v, double theta) {
-
+			final WB_Coordinate p, final WB_Coordinate axis, double theta) {
+		WB_Vector v = new WB_Vector(axis);
 		if (theta < 0) {
 			theta *= -1;
 			v._mulSelf(-1);
@@ -66,7 +66,7 @@ public class WB_NurbsSurfaceOfRevolution {
 					.getClosestPoint(C.points()[j], L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
-			final WB_Vector Y = new WB_Vector(v.cross(X));
+			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);
 			points[0][j] = new WB_Point(P0);
 			weights[0][j] = 1;
@@ -103,8 +103,9 @@ public class WB_NurbsSurfaceOfRevolution {
 	}
 
 	public static WB_RBSplineSurface getSurfaceOfRevolution(
-			final WB_RBSpline C, final WB_Point p, final WB_Vector v,
-			double theta) {
+			final WB_RBSpline C, final WB_Coordinate p,
+			final WB_Coordinate axis, double theta) {
+		WB_Vector v = new WB_Vector(axis);
 
 		if (theta < 0) {
 			theta *= -1;
@@ -167,7 +168,7 @@ public class WB_NurbsSurfaceOfRevolution {
 					.getClosestPoint(C.points()[j], L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
-			final WB_Vector Y = new WB_Vector(v.cross(X));
+			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);
 			points[0][j] = new WB_Point(P0);
 			weights[0][j] = C.wpoints()[j].w;

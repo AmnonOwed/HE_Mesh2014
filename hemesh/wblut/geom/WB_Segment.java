@@ -49,12 +49,10 @@ public class WB_Segment extends WB_Linear implements Segment {
 	}
 
 	@Override
-	public void getParametricPointInto(final double t, final WB_Point result) {
-		result.moveTo(direction);
-		if (WB_Math.clamp(t, 0, 1) == t) {
-			result._scaleSelf(t * length);
-		}
-		result.moveBy(origin);
+	public void getParametricPointInto(final double t,
+			final WB_MutableCoordinate result) {
+		result._set(direction.mul(WB_Math.clamp(t, 0, 1) * length)._addSelf(
+				origin));
 
 	}
 

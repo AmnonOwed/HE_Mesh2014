@@ -4,8 +4,8 @@ import wblut.WB_Epsilon;
 
 public class WB_Geom {
 
-	public static boolean between2D(final WB_Point a, final WB_Point b,
-			final WB_Point c) {
+	public static boolean between2D(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate c) {
 		if (WB_Geom.coincident2D(a, c)) {
 			return true;
 		} else if (WB_Geom.coincident2D(b, c)) {
@@ -21,8 +21,8 @@ public class WB_Geom {
 		return false;
 	}
 
-	public static boolean betweenStrict2D(final WB_Point a, final WB_Point b,
-			final WB_Point c) {
+	public static boolean betweenStrict2D(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate c) {
 		if (WB_Geom.coincident2D(a, c)) {
 			return true;
 		} else if (WB_Geom.coincident2D(b, c)) {
@@ -38,24 +38,25 @@ public class WB_Geom {
 		return false;
 	}
 
-	public static boolean coincident2D(final WB_Point a, final WB_Point b) {
+	public static boolean coincident2D(final WB_Coordinate a,
+			final WB_Coordinate b) {
 		if (WB_Distance2D.getSqDistance(a, b) < WB_Epsilon.SQEPSILON) {
 			return true;
 		}
 		return false;
 	}
 
-	public static double projectedDistanceNorm(final WB_Point a,
-			final WB_Point b, final WB_Point p) {
+	public static double projectedDistanceNorm(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate p) {
 		double x1, x2, y1, y2;
-		x1 = b.x - a.x;
-		x2 = p.x - a.x;
-		y1 = b.y - a.y;
-		y2 = p.y - a.y;
+		x1 = b.xd() - a.xd();
+		x2 = p.xd() - a.xd();
+		y1 = b.yd() - a.yd();
+		y2 = p.yd() - a.yd();
 		return (x1 * x2 + y1 * y2) / (x1 * x1 + y1 * y1);
 	}
 
-	public static double pointAlongLine(final WB_Point p, final WB_Line L) {
+	public static double pointAlongLine(final WB_Coordinate p, final WB_Line L) {
 		final WB_Vector ab = L.getDirection();
 		final WB_Vector ac = new WB_Vector(p);
 		ac._subSelf(L.getOrigin());

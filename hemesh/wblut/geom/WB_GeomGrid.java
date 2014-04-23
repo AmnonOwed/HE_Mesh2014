@@ -84,7 +84,7 @@ public class WB_GeomGrid {
 		idz = 1.0 / dz;
 	}
 
-	public void addPoint(final WB_Point p) {
+	public void addPoint(final WB_Coordinate p) {
 		final Index id = safeijk(p);
 		if (id != null) {
 			WB_GeomGridCell cell = cells.get(id);
@@ -99,7 +99,7 @@ public class WB_GeomGrid {
 		}
 	}
 
-	public void addPoint(final WB_Point p, final double r) {
+	public void addPoint(final WB_Coordinate p, final double r) {
 		final ArrayList<WB_GeomGridCell> fatcells = getCellsInNeighborhood(p,
 				r, true);
 		for (final WB_GeomGridCell fatcell : fatcells) {
@@ -201,12 +201,12 @@ public class WB_GeomGrid {
 		}
 	}
 
-	public WB_Point index(final WB_Point p) {
+	public WB_Point index(final WB_Coordinate p) {
 		final Index id = ijk(p);
 		return new WB_Point(id.i, id.j, id.k);
 	}
 
-	public WB_Point safeIndex(final WB_Point p) {
+	public WB_Point safeIndex(final WB_Coordinate p) {
 		final Index id = safeijk(p);
 		if (id == null) {
 			return null;
@@ -241,7 +241,7 @@ public class WB_GeomGrid {
 
 	}
 
-	public ArrayList<WB_Point> getPointsInSameCell(final WB_Point p) {
+	public ArrayList<WB_Point> getPointsInSameCell(final WB_Coordinate p) {
 		final Index id = safeijk(p);
 		if (id == null) {
 			return new ArrayList<WB_Point>();
@@ -253,8 +253,8 @@ public class WB_GeomGrid {
 		return cell.getPoints();
 	}
 
-	public ArrayList<WB_GeomGridCell> getCellsInNeighborhood(final WB_Point p,
-			final double r, final boolean all) {
+	public ArrayList<WB_GeomGridCell> getCellsInNeighborhood(
+			final WB_Coordinate p, final double r, final boolean all) {
 		final ArrayList<WB_GeomGridCell> result = new ArrayList<WB_GeomGridCell>();
 		final Index id = safeijk(p);
 		WB_GeomGridCell cell;
@@ -392,22 +392,22 @@ public class WB_GeomGrid {
 	 *            the p
 	 * @return the index
 	 */
-	private Index safeijk(final WB_Point p) {
-		final int i = (int) ((p.x - min.x) * idx);
+	private Index safeijk(final WB_Coordinate p) {
+		final int i = (int) ((p.xd() - min.x) * idx);
 		if (i < 0) {
 			return null;
 		}
 		if (i > W - 1) {
 			return null;
 		}
-		final int j = (int) ((p.y - min.y) * idy);
+		final int j = (int) ((p.yd() - min.y) * idy);
 		if (j < 0) {
 			return null;
 		}
 		if (j > H - 1) {
 			return null;
 		}
-		final int k = (int) ((p.z - min.z) * idz);
+		final int k = (int) ((p.zd() - min.z) * idz);
 		if (k < 0) {
 			return null;
 		}
@@ -425,14 +425,14 @@ public class WB_GeomGrid {
 	 *            the p
 	 * @return the index
 	 */
-	private Index ijk(final WB_Point p) {
+	private Index ijk(final WB_Coordinate p) {
 
-		final int i = (p.x - min.x < 0) ? (int) ((p.x - min.x) * idx) - 1
-				: (int) ((p.x - min.x) * idx);
-		final int j = (p.y - min.y < 0) ? (int) ((p.y - min.y) * idy) - 1
-				: (int) ((p.y - min.y) * idy);
-		final int k = (p.z - min.z < 0) ? (int) ((p.z - min.z) * idz) - 1
-				: (int) ((p.z - min.z) * idz);
+		final int i = (p.xd() - min.x < 0) ? (int) ((p.xd() - min.x) * idx) - 1
+				: (int) ((p.xd() - min.x) * idx);
+		final int j = (p.yd() - min.y < 0) ? (int) ((p.yd() - min.y) * idy) - 1
+				: (int) ((p.yd() - min.y) * idy);
+		final int k = (p.zd() - min.z < 0) ? (int) ((p.zd() - min.z) * idz) - 1
+				: (int) ((p.zd() - min.z) * idz);
 		boolean inside = true;
 		if (i < 0) {
 			inside = false;

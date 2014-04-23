@@ -58,26 +58,26 @@ public class WB_PointHomogeneous extends WB_Point4D {
 
 	}
 
-	public WB_PointHomogeneous(final WB_Point v, final double w) {
-		x = w * v.x;
-		y = w * v.y;
-		z = w * v.z;
+	public WB_PointHomogeneous(final WB_Coordinate v, final double w) {
+		x = w * v.xd();
+		y = w * v.yd();
+		z = w * v.zd();
 		this.w = w;
 		pointAtInfinity = false;
 	}
 
-	public WB_PointHomogeneous(final WB_Point v, final double w,
+	public WB_PointHomogeneous(final WB_Coordinate v, final double w,
 			final boolean atInfinity) {
 
 		if (atInfinity) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
+			x = v.xd();
+			y = v.yd();
+			z = v.zd();
 			this.w = 0;
 		} else {
-			x = w * v.x;
-			y = w * v.y;
-			z = w * v.z;
+			x = w * v.xd();
+			y = w * v.yd();
+			z = w * v.zd();
 			this.w = w;
 		}
 		pointAtInfinity = atInfinity;
@@ -111,18 +111,19 @@ public class WB_PointHomogeneous extends WB_Point4D {
 
 	}
 
-	public void _set(final WB_Point v, final double w, final boolean atInfinity) {
+	public void _set(final WB_Coordinate v, final double w,
+			final boolean atInfinity) {
 
 		if (atInfinity) {
-			x = v.x;
-			y = v.y;
-			z = v.z;
+			x = v.xd();
+			y = v.yd();
+			z = v.zd();
 			this.w = 0;
 
 		} else {
-			x = w * v.x;
-			y = w * v.y;
-			z = w * v.z;
+			x = w * v.xd();
+			y = w * v.yd();
+			z = w * v.zd();
 			this.w = w;
 		}
 		pointAtInfinity = atInfinity;

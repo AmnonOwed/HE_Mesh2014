@@ -6,9 +6,9 @@ public interface SimplePolygon {
 
 	public void set(final SimplePolygon poly);
 
-	public WB_Point closestPoint(final WB_Point p);
+	public WB_Point closestPoint(final WB_Coordinate p);
 
-	public int closestIndex(final WB_Point p);
+	public int closestIndex(final WB_Coordinate p);
 
 	public WB_Plane getPlane();
 

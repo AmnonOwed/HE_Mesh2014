@@ -269,8 +269,8 @@ public class WB_Intersection2D {
 		return result;
 	}
 
-	public static boolean getIntersection2DProper(final WB_Point a,
-			final WB_Point b, final WB_Point c, final WB_Point d) {
+	public static boolean getIntersection2DProper(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
 		if (WB_Predicates2D.orient2d(a, b, c) == 0
 				|| WB_Predicates2D.orient2d(a, b, d) == 0
 				|| WB_Predicates2D.orient2d(c, d, a) == 0
@@ -286,9 +286,9 @@ public class WB_Intersection2D {
 		}
 	}
 
-	public static WB_Point closestPoint2D(final WB_Point p, final Segment S) {
-		final WB_Point ab = S.getEndpoint().sub(S.getOrigin());
-		final WB_Point ac = p.sub(S.getOrigin());
+	public static WB_Point closestPoint2D(final WB_Coordinate p, final Segment S) {
+		final WB_Vector ab = new WB_Vector(S.getOrigin(), S.getEndpoint());
+		final WB_Vector ac = new WB_Vector(S.getOrigin(), p);
 		double t = ac.dot(ab);
 		if (t <= 0) {
 			t = 0;
@@ -305,34 +305,35 @@ public class WB_Intersection2D {
 		}
 	}
 
-	public static WB_Point closestPoint2D(final Segment S, final WB_Point p) {
+	public static WB_Point closestPoint2D(final Segment S, final WB_Coordinate p) {
 		return closestPoint2D(p, S);
 	}
 
-	public static WB_Point closestPointToSegment(final WB_Point p,
-			final WB_Point a, final WB_Point b) {
-		final WB_Point ab = b.sub(a);
-		final WB_Point ac = p.sub(a);
+	public static WB_Point closestPointToSegment(final WB_Coordinate p,
+			final WB_Coordinate a, final WB_Coordinate b) {
+		final WB_Vector ab = new WB_Vector(a, b);
+		final WB_Vector ac = new WB_Vector(a, p);
 		double t = ac.dot(ab);
 		if (t <= 0) {
 			t = 0;
-			return a.get();
+			return new WB_Point(a);
 		} else {
 			final double denom = ab.dot(ab);
 			if (t >= denom) {
 				t = 1;
-				return b.get();
+				return new WB_Point(b);
 			} else {
 				t = t / denom;
-				return new WB_Point(a.x + t * ab.x, a.y + t * ab.y);
+				return new WB_Point(a.xd() + t * ab.xd(), a.yd() + t * ab.yd());
 			}
 		}
 	}
 
-	public static void closestPointToSegmentInto(final WB_Point p,
-			final WB_Point a, final WB_Point b, final WB_Point result) {
-		final WB_Point ab = b.sub(a);
-		final WB_Point ac = p.sub(a);
+	public static void closestPointToSegmentInto(final WB_Coordinate p,
+			final WB_Coordinate a, final WB_Coordinate b,
+			final WB_MutableCoordinate result) {
+		final WB_Vector ab = new WB_Vector(a, b);
+		final WB_Vector ac = new WB_Vector(a, p);
 		double t = ac.dot(ab);
 		if (t <= 0) {
 			t = 0;
@@ -344,39 +345,41 @@ public class WB_Intersection2D {
 				result._set(b);
 			} else {
 				t = t / denom;
-				result._set(a.x + t * ab.x, a.y + t * ab.y);
+				result._set(a.xd() + t * ab.xd(), a.yd() + t * ab.yd());
 			}
 		}
 	}
 
-	public static WB_Point closestPoint2D(final WB_Point p, final WB_Line2D L) {
+	public static WB_Point closestPoint2D(final WB_Coordinate p,
+			final WB_Line2D L) {
 
 		if (WB_Epsilon.isZero(L.getDirection().x)) {
-			return new WB_Point(L.getOrigin().x, p.y);
+			return new WB_Point(L.getOrigin().x, p.yd());
 		}
 		if (WB_Epsilon.isZero(L.getDirection().y)) {
-			return new WB_Point(p.x, L.getOrigin().y);
+			return new WB_Point(p.xd(), L.getOrigin().y);
 		}
 
 		final double m = L.getDirection().y / L.getDirection().x;
 		final double b = L.getOrigin().y - m * L.getOrigin().x;
 
-		final double x = (m * p.y + p.x - m * b) / (m * m + 1);
-		final double y = (m * m * p.y + m * p.x + b) / (m * m + 1);
+		final double x = (m * p.yd() + p.xd() - m * b) / (m * m + 1);
+		final double y = (m * m * p.yd() + m * p.xd() + b) / (m * m + 1);
 
 		return new WB_Point(x, y);
 
 	}
 
-	public static WB_Point closestPointToLine2D(final WB_Point p,
-			final WB_Point a, final WB_Point b) {
+	public static WB_Point closestPointToLine2D(final WB_Coordinate p,
+			final WB_Coordinate a, final WB_Coordinate b) {
 		final WB_Line2D L = new WB_Line2D();
 		L.setFromPoints(a, b);
 		return closestPoint2D(p, L);
 	}
 
-	public static WB_Point closestPoint2D(final WB_Point p, final WB_Ray2D R) {
-		final WB_Point ac = p.sub(R.getOrigin());
+	public static WB_Point closestPoint2D(final WB_Coordinate p,
+			final WB_Ray2D R) {
+		final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
 		double t = ac.dot(R.getDirection());
 		if (t <= 0) {
 			t = 0;
@@ -386,8 +389,8 @@ public class WB_Intersection2D {
 		}
 	}
 
-	public static WB_Point closestPointToRay2D(final WB_Point p,
-			final WB_Point a, final WB_Point b) {
+	public static WB_Point closestPointToRay2D(final WB_Coordinate p,
+			final WB_Coordinate a, final WB_Coordinate b) {
 		final WB_Ray2D R = new WB_Ray2D();
 		R.setFromPoints(a, b);
 		return closestPoint2D(p, R);
@@ -535,18 +538,18 @@ public class WB_Intersection2D {
 
 	// POINT-TRIANGLE
 
-	public static WB_Point closestPoint2D(final WB_Point p,
+	public static WB_Point closestPoint2D(final WB_Coordinate p,
 			final WB_Triangle2D T) {
-		final WB_Point ab = T.p2.sub(T.p1);
-		final WB_Point ac = T.p3.sub(T.p1);
-		final WB_Point ap = p.sub(T.p1);
+		final WB_Vector ab = T.p2.subToVector(T.p1);
+		final WB_Vector ac = T.p3.subToVector(T.p1);
+		final WB_Vector ap = new WB_Vector(T.p1, p);
 		final double d1 = ab.dot(ap);
 		final double d2 = ac.dot(ap);
 		if (d1 <= 0 && d2 <= 0) {
 			return T.p1.get();
 		}
 
-		final WB_Point bp = p.sub(T.p2);
+		final WB_Vector bp = new WB_Vector(T.p2, p);
 		final double d3 = ab.dot(bp);
 		final double d4 = ac.dot(bp);
 		if (d3 >= 0 && d4 <= d3) {
@@ -559,7 +562,7 @@ public class WB_Intersection2D {
 			return T.p1.add(ab._mulSelf(v));
 		}
 
-		final WB_Point cp = p.sub(T.p3);
+		final WB_Vector cp = new WB_Vector(T.p3, p);
 		final double d5 = ab.dot(cp);
 		final double d6 = ac.dot(cp);
 		if (d6 >= 0 && d5 <= d6) {
@@ -584,67 +587,68 @@ public class WB_Intersection2D {
 		return T.p1.add(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
 	}
 
-	public static WB_Point closestPointToTriangle2D(final WB_Point p,
-			final WB_Point a, final WB_Point b, final WB_Point c) {
-		final WB_Point ab = b.sub(a);
-		final WB_Point ac = c.sub(a);
-		final WB_Point ap = p.sub(a);
+	public static WB_Point closestPointToTriangle2D(final WB_Coordinate p,
+			final WB_Coordinate a, final WB_Coordinate b, final WB_Coordinate c) {
+		final WB_Vector ab = new WB_Vector(a, b);
+		final WB_Vector ac = new WB_Vector(a, c);
+		final WB_Vector ap = new WB_Vector(a, p);
 		final double d1 = ab.dot(ap);
 		final double d2 = ac.dot(ap);
 		if (d1 <= 0 && d2 <= 0) {
-			return a.get();
+			return new WB_Point(a);
 		}
 
-		final WB_Point bp = p.sub(b);
+		final WB_Vector bp = new WB_Vector(b, p);
 		final double d3 = ab.dot(bp);
 		final double d4 = ac.dot(bp);
 		if (d3 >= 0 && d4 <= d3) {
-			return b.get();
+			return new WB_Point(b);
 		}
 
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return a.add(ab._mulSelf(v));
+			return new WB_Point(a)._addMulSelf(v, ab);
 		}
 
-		final WB_Point cp = p.sub(c);
+		final WB_Vector cp = new WB_Vector(c, p);
 		final double d5 = ab.dot(cp);
 		final double d6 = ac.dot(cp);
 		if (d6 >= 0 && d5 <= d6) {
-			return c.get();
+			return new WB_Point(c);
 		}
 
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return a.add(ac._mulSelf(w));
+			return new WB_Point(a)._addMulSelf(w, ac);
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return b.add((c.sub(b))._mulSelf(w));
+			return new WB_Point(b)._addMulSelf(w, new WB_Vector(b, c));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
 		final double v = vb * denom;
 		final double w = vc * denom;
-		return a.add(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		return new WB_Point(a)._addMulSelf(w, ac)._addMulSelf(v, ab);
+
 	}
 
-	public static WB_Point closestPointOnPeriphery2D(final WB_Point p,
+	public static WB_Point closestPointOnPeriphery2D(final WB_Coordinate p,
 			final WB_Triangle2D T) {
-		final WB_Point ab = T.p2.sub(T.p1);
-		final WB_Point ac = T.p3.sub(T.p1);
-		final WB_Point ap = p.sub(T.p1);
+		final WB_Vector ab = T.p2.subToVector(T.p1);
+		final WB_Vector ac = T.p3.subToVector(T.p1);
+		final WB_Vector ap = new WB_Vector(T.p1, p);
 		final double d1 = ab.dot(ap);
 		final double d2 = ac.dot(ap);
 		if (d1 <= 0 && d2 <= 0) {
 			return T.p1.get();
 		}
 
-		final WB_Point bp = p.sub(T.p2);
+		final WB_Vector bp = new WB_Vector(T.p2, p);
 		final double d3 = ab.dot(bp);
 		final double d4 = ac.dot(bp);
 		if (d3 >= 0 && d4 <= d3) {
@@ -657,7 +661,7 @@ public class WB_Intersection2D {
 			return T.p1.add(ab._mulSelf(v));
 		}
 
-		final WB_Point cp = p.sub(T.p3);
+		final WB_Vector cp = new WB_Vector(T.p3, p);
 		final double d5 = ab.dot(cp);
 		final double d6 = ac.dot(cp);
 		if (d6 >= 0 && d5 <= d6) {
@@ -708,7 +712,7 @@ public class WB_Intersection2D {
 
 	// POINT-POLYGON
 
-	public static WB_Point closestPoint2D(final WB_Point p,
+	public static WB_Point closestPoint2D(final WB_Coordinate p,
 			final WB_SimplePolygon2D poly) {
 		final List<WB_Triangle2D> tris = poly.triangulate();
 		final int n = tris.size();
@@ -730,7 +734,7 @@ public class WB_Intersection2D {
 		return closest;
 	}
 
-	public static WB_Point closestPoint2D(final WB_Point p,
+	public static WB_Point closestPoint2D(final WB_Coordinate p,
 			final ArrayList<? extends WB_Triangle2D> tris) {
 		final int n = tris.size();
 		double dmax2 = Double.POSITIVE_INFINITY;
@@ -751,7 +755,7 @@ public class WB_Intersection2D {
 		return closest;
 	}
 
-	public static WB_Point closestPointOnPeriphery2D(final WB_Point p,
+	public static WB_Point closestPointOnPeriphery2D(final WB_Coordinate p,
 			final WB_SimplePolygon2D poly) {
 		final List<WB_Triangle2D> tris = poly.triangulate();
 		final int n = tris.size();
@@ -788,7 +792,7 @@ public class WB_Intersection2D {
 		return closest;
 	}
 
-	public static WB_Point closestPointOnPeriphery2D(final WB_Point p,
+	public static WB_Point closestPointOnPeriphery2D(final WB_Coordinate p,
 			final WB_SimplePolygon2D poly, final ArrayList<WB_Triangle2D> tris) {
 		final int n = tris.size();
 		double dmax2 = Double.POSITIVE_INFINITY;

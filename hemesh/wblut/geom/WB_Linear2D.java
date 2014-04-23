@@ -63,10 +63,9 @@ public abstract class WB_Linear2D {
 		return result;
 	}
 
-	public void getPointInto(final double t, final WB_Point p) {
-		p.moveTo(direction);
-		p._scaleSelf(t);
-		p.moveBy(origin);
+	public void getPointInto(final double t, final WB_MutableCoordinate p) {
+		p._set(direction.mul(t)._addSelf(origin));
+
 	}
 
 	public WB_Point getOrigin() {

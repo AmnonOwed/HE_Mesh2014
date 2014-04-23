@@ -1,25 +1,7 @@
-/**
- * 
- */
 package wblut.geom;
 
-
-// TODO: Auto-generated Javadoc
-/**
- * The Class WB_NurbsSwungSurface.
- *
- * @author Frederik Vanhoutte, W:Blut
- */
 public class WB_NurbsSwungSurface {
-	
-	/**
-	 * Gets the swung surface.
-	 *
-	 * @param xzprofile the xzprofile
-	 * @param xytrajectory the xytrajectory
-	 * @param alpha the alpha
-	 * @return the swung surface
-	 */
+
 	public static WB_BSplineSurface getSwungSurface(final WB_BSpline xzprofile,
 			final WB_BSpline xytrajectory, final double alpha) {
 		final int n = xzprofile.n();
@@ -34,18 +16,10 @@ public class WB_NurbsSwungSurface {
 
 			}
 		}
-		return new WB_BSplineSurface(points, xzprofile.knot(), xytrajectory
-				.knot());
+		return new WB_BSplineSurface(points, xzprofile.knot(),
+				xytrajectory.knot());
 	}
 
-	/**
-	 * Gets the swung surface.
-	 *
-	 * @param xzprofile the xzprofile
-	 * @param xytrajectory the xytrajectory
-	 * @param alpha the alpha
-	 * @return the swung surface
-	 */
 	public static WB_RBSplineSurface getSwungSurface(
 			final WB_RBSpline xzprofile, final WB_RBSpline xytrajectory,
 			final double alpha) {
@@ -64,18 +38,10 @@ public class WB_NurbsSwungSurface {
 
 			}
 		}
-		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory
-				.knot(), weights);
+		return new WB_RBSplineSurface(points, xzprofile.knot(),
+				xytrajectory.knot(), weights);
 	}
 
-	/**
-	 * Gets the swung surface.
-	 *
-	 * @param xzprofile the xzprofile
-	 * @param xytrajectory the xytrajectory
-	 * @param alpha the alpha
-	 * @return the swung surface
-	 */
 	public static WB_RBSplineSurface getSwungSurface(
 			final WB_BSpline xzprofile, final WB_RBSpline xytrajectory,
 			final double alpha) {
@@ -93,18 +59,10 @@ public class WB_NurbsSwungSurface {
 
 			}
 		}
-		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory
-				.knot(), weights);
+		return new WB_RBSplineSurface(points, xzprofile.knot(),
+				xytrajectory.knot(), weights);
 	}
 
-	/**
-	 * Gets the swung surface.
-	 *
-	 * @param xzprofile the xzprofile
-	 * @param xytrajectory the xytrajectory
-	 * @param alpha the alpha
-	 * @return the swung surface
-	 */
 	public static WB_RBSplineSurface getSwungSurface(
 			final WB_RBSpline xzprofile, final WB_BSpline xytrajectory,
 			final double alpha) {
@@ -122,8 +80,8 @@ public class WB_NurbsSwungSurface {
 
 			}
 		}
-		return new WB_RBSplineSurface(points, xzprofile.knot(), xytrajectory
-				.knot(), weights);
+		return new WB_RBSplineSurface(points, xzprofile.knot(),
+				xytrajectory.knot(), weights);
 	}
 
 }

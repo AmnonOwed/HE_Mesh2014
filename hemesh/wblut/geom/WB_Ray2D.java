@@ -6,31 +6,31 @@ public class WB_Ray2D {
 
 	private WB_Point origin;
 
-	private WB_Point direction;
+	private WB_Vector direction;
 
 	public WB_Ray2D() {
 		origin = new WB_Point();
-		direction = new WB_Point(1, 0);
+		direction = new WB_Vector(1, 0);
 
 	}
 
-	public WB_Ray2D(final WB_Point o, final WB_Point d) {
-		origin = o.get();
-		direction = d.get();
+	public WB_Ray2D(final WB_Coordinate o, final WB_Coordinate d) {
+		origin = new WB_Point(o);
+		direction = new WB_Vector(d);
 		direction._normalizeSelf();
 
 	}
 
-	public void set(final WB_Point o, final WB_Point d) {
-		origin = o.get();
-		direction = d.get();
+	public void set(final WB_Coordinate o, final WB_Coordinate d) {
+		origin = new WB_Point(o);
+		direction = new WB_Vector(d);
 		direction._normalizeSelf();
 
 	}
 
-	public void setFromPoints(final WB_Point p1, final WB_Point p2) {
-		origin = p1.get();
-		direction = p2.sub(p1);
+	public void setFromPoints(final WB_Coordinate p1, final WB_Coordinate p2) {
+		origin = new WB_Point(p1);
+		direction = new WB_Vector(p1, p2);
 		direction._normalizeSelf();
 
 	}
@@ -54,7 +54,7 @@ public class WB_Ray2D {
 		return origin;
 	}
 
-	public WB_Point getDirection() {
+	public WB_Vector getDirection() {
 		return direction;
 	}
 }

@@ -62,11 +62,12 @@ public class WB_IndexedPolygon implements SimplePolygon {
 
 	}
 
-	public WB_Point closestPoint(final WB_Point p) {
+	public WB_Point closestPoint(final WB_Coordinate p) {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D.sqDistance(p, allpoints[indices[i]]);
+			final double cd = WB_Distance3D
+					.sqDistance(p, allpoints[indices[i]]);
 			if (cd < d) {
 				id = indices[i];
 				d = cd;
@@ -75,11 +76,12 @@ public class WB_IndexedPolygon implements SimplePolygon {
 		return allpoints[id];
 	}
 
-	public int closestIndex(final WB_Point p) {
+	public int closestIndex(final WB_Coordinate p) {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D.sqDistance(p, allpoints[indices[i]]);
+			final double cd = WB_Distance3D
+					.sqDistance(p, allpoints[indices[i]]);
 			if (cd < d) {
 				id = indices[i];
 				d = cd;

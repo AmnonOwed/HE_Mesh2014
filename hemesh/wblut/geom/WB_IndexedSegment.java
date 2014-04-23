@@ -30,12 +30,10 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 		return result;
 	}
 
-	public void getParametricPointInto(final double t, final WB_Point result) {
-		result.moveTo(direction);
-		if (WB_Math.clamp(t, 0, 1) == t) {
-			result._scaleSelf(t * length);
-		}
-		result.moveBy(points[i1]);
+	public void getParametricPointInto(final double t,
+			final WB_MutableCoordinate result) {
+		result._set(direction.mul(WB_Math.clamp(t, 0, 1) * length)._addSelf(
+				points[i1]));
 
 	}
 

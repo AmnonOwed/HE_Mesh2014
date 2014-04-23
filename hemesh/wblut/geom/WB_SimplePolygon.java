@@ -32,13 +32,17 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * Instantiates a new WB_Polygon.
 	 * 
 	 * @param points
-	 *            array of WB_Point, no copies are made
+	 *            array of WB_Point
 	 * @param n
 	 *            number of points
 	 */
-	public WB_SimplePolygon(final WB_Point[] points, final int n) {
-		this.points = points;
+	public WB_SimplePolygon(final WB_Coordinate[] points, final int n) {
 		this.n = n;
+		this.points = new WB_Point[n];
+		for (int i = 0; i < n; i++) {
+			this.points[i] = new WB_Point(points[i]);
+		}
+
 		P = getPlane();
 		updated = true;
 	}
@@ -47,38 +51,13 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * Instantiates a new WB_Polygon.
 	 * 
 	 * @param points
-	 *            array of WB_Point
-	 * @param n
-	 *            number of points
-	 * @param copy
-	 *            copy points?
-	 */
-	public WB_SimplePolygon(final WB_Point[] points, final int n,
-			final boolean copy) {
-		if (copy == false) {
-			this.points = points;
-		} else {
-			this.points = new WB_Point[n];
-			for (int i = 0; i < n; i++) {
-				this.points[i] = points[i].get();
-			}
-
-		}
-		this.n = n;
-		P = getPlane();
-	}
-
-	/**
-	 * Instantiates a new WB_Polygon.
-	 * 
-	 * @param points
 	 *            arrayList of WB_Point
 	 */
-	public WB_SimplePolygon(final List<WB_Point> points) {
+	public WB_SimplePolygon(final List<? extends WB_Coordinate> points) {
 		n = points.size();
 		this.points = new WB_Point[n];
 		for (int i = 0; i < n; i++) {
-			this.points[i] = points.get(i);
+			this.points[i] = new WB_Point(points.get(i));
 		}
 
 		P = getPlane();
@@ -92,9 +71,12 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * @param n
 	 *            number of points
 	 */
-	public void set(final WB_Point[] points, final int n) {
-		this.points = points;
+	public void set(final WB_Coordinate[] points, final int n) {
 		this.n = n;
+		this.points = new WB_Point[n];
+		for (int i = 0; i < n; i++) {
+			this.points[i] = new WB_Point(points[i]);
+		}
 		P = getPlane();
 	}
 
@@ -118,10 +100,10 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * @param n
 	 *            number of points
 	 */
-	public void set(final FastList<WB_Point> points, final int n) {
+	public void set(final FastList<? extends WB_Coordinate> points, final int n) {
 		this.points = new WB_Point[n];
 		for (int i = 0; i < n; i++) {
-			this.points[i] = points.get(i);
+			this.points[i] = new WB_Point(points.get(i));
 		}
 		this.n = n;
 		P = getPlane();
@@ -158,7 +140,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 *            point
 	 * @return closest point of polygon
 	 */
-	public WB_Point closestPoint(final WB_Point p) {
+	public WB_Point closestPoint(final WB_Coordinate p) {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
@@ -178,7 +160,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 *            point
 	 * @return index of closest point of polygon
 	 */
-	public int closestIndex(final WB_Point p) {
+	public int closestIndex(final WB_Coordinate p) {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {

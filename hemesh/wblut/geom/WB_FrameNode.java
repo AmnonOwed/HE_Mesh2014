@@ -14,7 +14,7 @@ public class WB_FrameNode extends WB_Point {
 
 	private double value;
 
-	public WB_FrameNode(final WB_Point pos, final int id, final double v) {
+	public WB_FrameNode(final WB_Coordinate pos, final int id, final double v) {
 		super(pos);
 		index = id;
 		struts = new FastList<WB_FrameStrut>();

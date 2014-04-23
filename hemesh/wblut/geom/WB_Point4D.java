@@ -30,10 +30,10 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		w = v.w;
 	}
 
-	public WB_Point4D(final WB_Point v, final double w) {
-		x = v.x;
-		y = v.y;
-		z = v.z;
+	public WB_Point4D(final WB_Coordinate v, final double w) {
+		x = v.xd();
+		y = v.yd();
+		z = v.zd();
 		this.w = w;
 	}
 
@@ -140,10 +140,10 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		return this;
 	}
 
-	public WB_Point4D moveTo(final WB_Point p) {
-		x = p.x;
-		y = p.y;
-		z = p.z;
+	public WB_Point4D moveTo(final WB_Coordinate p) {
+		x = p.xd();
+		y = p.yd();
+		z = p.zd();
 		return this;
 	}
 
@@ -154,10 +154,10 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		return this;
 	}
 
-	public WB_Point4D moveBy(final WB_Point v) {
-		x += v.x;
-		y += v.y;
-		z += v.z;
+	public WB_Point4D moveBy(final WB_Coordinate v) {
+		x += v.xd();
+		y += v.yd();
+		z += v.zd();
 		return this;
 	}
 
@@ -169,10 +169,10 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		result.w = w;
 	}
 
-	public void moveByInto(final WB_Point v, final WB_Point4D result) {
-		result.x = x + v.x;
-		result.y = y + v.y;
-		result.z = z + v.z;
+	public void moveByInto(final WB_Coordinate v, final WB_Point4D result) {
+		result.x = x + v.xd();
+		result.y = y + v.yd();
+		result.z = z + v.zd();
 		result.w = w;
 	}
 

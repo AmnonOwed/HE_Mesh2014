@@ -88,7 +88,7 @@ public class WB_Distance2D {
 	}
 
 	public static double getSqDistance(final WB_Coordinate p, final WB_Ray2D R) {
-		final WB_Point ab = R.getDirection();
+		final WB_Vector ab = R.getDirection();
 		final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
 		final double e = ac.dot(ab);
 		if (e <= 0) {

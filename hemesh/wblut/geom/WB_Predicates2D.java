@@ -30,16 +30,16 @@ public class WB_Predicates2D {
 	// <0 if pa,pb,pc cw
 	// =0 if colinear
 
-	public static double orient2d(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc) {
+	public static double orient2d(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc) {
 		if (orientErrorBound == -1) {
 			init();
 		}
 		double detleft, detright, det;
 		double detsum, errbound;
 
-		detleft = (pa.x - pc.x) * (pb.y - pc.y);
-		detright = (pa.y - pc.y) * (pb.x - pc.x);
+		detleft = (pa.xd() - pc.xd()) * (pb.yd() - pc.yd());
+		detright = (pa.yd() - pc.yd()) * (pb.xd() - pc.xd());
 		det = detleft - detright;
 
 		if (detleft > 0.0) {
@@ -65,18 +65,18 @@ public class WB_Predicates2D {
 		return orientDD2d(pa, pb, pc);
 	}
 
-	public static double orientDD2d(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc) {
+	public static double orientDD2d(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc) {
 		WB_DoubleDouble ax, ay, bx, by, cx, cy;
 		WB_DoubleDouble acx, bcx, acy, bcy;
 		WB_DoubleDouble detleft, detright, det;
 		det = WB_DoubleDouble.valueOf(0.0);
-		ax = WB_DoubleDouble.valueOf(pa.x);
-		ay = WB_DoubleDouble.valueOf(pa.y);
-		bx = WB_DoubleDouble.valueOf(pb.x);
-		by = WB_DoubleDouble.valueOf(pb.y);
-		cx = WB_DoubleDouble.valueOf(pc.x);
-		cy = WB_DoubleDouble.valueOf(pc.y);
+		ax = WB_DoubleDouble.valueOf(pa.xd());
+		ay = WB_DoubleDouble.valueOf(pa.yd());
+		bx = WB_DoubleDouble.valueOf(pb.xd());
+		by = WB_DoubleDouble.valueOf(pb.yd());
+		cx = WB_DoubleDouble.valueOf(pc.xd());
+		cy = WB_DoubleDouble.valueOf(pc.yd());
 		acx = ax.add(cx.negate());
 		bcx = bx.add(cx.negate());
 		acy = ay.add(cy.negate());
@@ -92,8 +92,9 @@ public class WB_Predicates2D {
 	// <0 if pd outside circle through pa,pb,pc (if ccw)
 	// =0 if on circle
 
-	public static double incircle2d(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd) {
+	public static double incircle2d(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd) {
 
 		if (incircleErrorBound == -1) {
 			init();
@@ -104,12 +105,12 @@ public class WB_Predicates2D {
 		double det;
 		double permanent, errbound;
 
-		adx = pa.x - pd.x;
-		bdx = pb.x - pd.x;
-		cdx = pc.x - pd.x;
-		ady = pa.y - pd.y;
-		bdy = pb.y - pd.y;
-		cdy = pc.y - pd.y;
+		adx = pa.xd() - pd.xd();
+		bdx = pb.xd() - pd.xd();
+		cdx = pc.xd() - pd.xd();
+		ady = pa.yd() - pd.yd();
+		bdy = pb.yd() - pd.yd();
+		cdy = pc.yd() - pd.yd();
 
 		bdxcdy = bdx * cdy;
 		cdxbdy = cdx * bdy;
@@ -154,8 +155,9 @@ public class WB_Predicates2D {
 		return incircleDD2d(pa, pb, pc, pd);
 	}
 
-	public static double incircleDD2d(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd) {
+	public static double incircleDD2d(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd) {
 		WB_DoubleDouble ax, ay, bx, by, cx, cy, dx, dy;
 		WB_DoubleDouble adx, ady, bdx, bdy, cdx, cdy;
 		WB_DoubleDouble bdxcdy, cdxbdy, cdxady, adxcdy, adxbdy, bdxady;
@@ -164,14 +166,14 @@ public class WB_Predicates2D {
 
 		det = WB_DoubleDouble.valueOf(0.0);
 
-		ax = WB_DoubleDouble.valueOf(pa.x);
-		ay = WB_DoubleDouble.valueOf(pa.y);
-		bx = WB_DoubleDouble.valueOf(pb.x);
-		by = WB_DoubleDouble.valueOf(pb.y);
-		cx = WB_DoubleDouble.valueOf(pc.x);
-		cy = WB_DoubleDouble.valueOf(pc.y);
-		dx = WB_DoubleDouble.valueOf(pd.x);
-		dy = WB_DoubleDouble.valueOf(pd.y);
+		ax = WB_DoubleDouble.valueOf(pa.xd());
+		ay = WB_DoubleDouble.valueOf(pa.yd());
+		bx = WB_DoubleDouble.valueOf(pb.xd());
+		by = WB_DoubleDouble.valueOf(pb.yd());
+		cx = WB_DoubleDouble.valueOf(pc.xd());
+		cy = WB_DoubleDouble.valueOf(pc.yd());
+		dx = WB_DoubleDouble.valueOf(pd.xd());
+		dy = WB_DoubleDouble.valueOf(pd.yd());
 
 		dx = dx.negate();
 		dy = dy.negate();
@@ -217,8 +219,9 @@ public class WB_Predicates2D {
 	// <0 if pd outside circle through pa,pb,pc (cw or ccw)
 	// =0 if on circle
 
-	public static double incircle2dOrient(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd) {
+	public static double incircle2dOrient(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd) {
 
 		if (orient2d(pa, pb, pc) > 0) {
 			return incircle2d(pa, pb, pc, pd);
@@ -234,8 +237,8 @@ public class WB_Predicates2D {
 
 	}
 
-	public static boolean getIntersection2dProper(final WB_Point a,
-			final WB_Point b, final WB_Point c, final WB_Point d) {
+	public static boolean getIntersection2dProper(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
 		if (WB_Predicates2D.orient2d(a, b, c) == 0
 				|| WB_Predicates2D.orient2d(a, b, d) == 0
 				|| WB_Predicates2D.orient2d(c, d, a) == 0
