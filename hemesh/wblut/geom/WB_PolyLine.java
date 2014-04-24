@@ -93,14 +93,14 @@ public class WB_PolyLine implements WB_Geometry {
 			throw new IllegalArgumentException("Parameter must between 0 and "
 					+ (n - 2) + ".");
 		}
-		WB_Vector n = geometryfactory.createVector(0, 0, 1);
-		n = n.cross(directions.getCoordinate(i));
-		final double d = n.getLength();
-		n = n.div(d);
+		WB_Vector normal = geometryfactory.createVector(0, 0, 1);
+		normal = normal.cross(directions.getCoordinate(i));
+		final double d = normal.getLength();
+		normal = normal.div(d);
 		if (WB_Epsilon.isZero(d)) {
-			n = geometryfactory.createVector(1, 0, 0);
+			normal = geometryfactory.createVector(1, 0, 0);
 		}
-		return n;
+		return normal;
 	}
 
 	public double a(final int i) {

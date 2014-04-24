@@ -95,16 +95,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(p.xd(), p.yd(), p.zd() - offset);
+			break;
 		case YZ:
 			result._set(p.yd(), p.zd(), p.xd() - offset);
+			break;
 		case ZX:
 			result._set(p.zd(), p.xd(), p.yd() - offset);
+			break;
 		case YX:
 			result._set(p.yd(), p.xd(), offset - p.zd());
+			break;
 		case ZY:
 			result._set(p.zd(), p.yd(), offset - p.xd());
+			break;
 		case XZ:
 			result._set(p.xd(), p.zd(), offset - p.yd());
+			break;
 
 		default:
 			T2D3D.applyInvAsPoint(p, result);
@@ -117,16 +123,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z - offset);
+			break;
 		case YZ:
 			result._set(y, z, x - offset);
+			break;
 		case ZX:
 			result._set(z, x, y - offset);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(z, y, offset - x);
+			break;
 		case XZ:
 			result._set(x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsPoint(x, y, z, result);
@@ -144,17 +156,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z - offset);
+			break;
 		case YZ:
 			result._set(y, z, x - offset);
+			break;
 		case ZX:
 			result._set(z, x, y - offset);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(z, y, offset - x);
+			break;
 		case XZ:
 			result._set(x, z, offset - y);
-
+			break;
 		default:
 			T2D3D.applyInvAsPoint(source, i, result);
 		}
@@ -166,16 +183,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(p.xd(), p.yd(), p.zd() + offset);
+			break;
 		case YZ:
 			result._set(p.zd() + offset, p.xd(), p.yd());
+			break;
 		case ZX:
 			result._set(p.yd(), p.zd() + offset, p.xd());
+			break;
 		case YX:
 			result._set(p.yd(), p.xd(), offset - p.zd());
+			break;
 		case ZY:
 			result._set(offset - p.zd(), p.yd(), p.xd());
+			break;
 		case XZ:
 			result._set(p.xd(), offset - p.zd(), p.yd());
+			break;
 
 		default:
 			T2D3D.applyAsPoint(p, result);
@@ -188,16 +211,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z + offset);
+			break;
 		case YZ:
 			result._set(z + offset, x, y);
+			break;
 		case ZX:
 			result._set(y, z + offset, x);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(offset - z, y, x);
+			break;
 		case XZ:
 			result._set(x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(x, y, z, result);
@@ -210,16 +239,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, offset);
+			break;
 		case YZ:
 			result._set(0, x, y + offset);
+			break;
 		case ZX:
 			result._set(y, 0, x + offset);
+			break;
 		case YX:
 			result._set(y, x, offset);
+			break;
 		case ZY:
 			result._set(offset, y, x);
+			break;
 		case XZ:
 			result._set(x, offset, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(x, y, 0, result);
@@ -236,16 +271,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z + offset);
+			break;
 		case YZ:
 			result._set(z + offset, x, y);
+			break;
 		case ZX:
 			result._set(y, z + offset, x);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(offset - z, y, x);
+			break;
 		case XZ:
 			result._set(x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(source, i, result);
@@ -258,16 +299,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, p.xd(), p.yd(), p.zd() - offset);
+			break;
 		case YZ:
 			result._setI(i, p.yd(), p.zd(), p.xd() - offset);
+			break;
 		case ZX:
 			result._setI(i, p.zd(), p.xd(), p.yd() - offset);
+			break;
 		case YX:
 			result._setI(i, p.yd(), p.xd(), offset - p.zd());
+			break;
 		case ZY:
 			result._setI(i, p.zd(), p.yd(), offset - p.xd());
+			break;
 		case XZ:
 			result._setI(i, p.xd(), p.zd(), offset - p.yd());
+			break;
 
 		default:
 			T2D3D.applyInvAsPoint(p, result, i);
@@ -280,16 +327,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, z - offset);
+			break;
 		case YZ:
 			result._setI(i, y, z, x - offset);
+			break;
 		case ZX:
 			result._setI(i, z, x, y - offset);
+			break;
 		case YX:
 			result._setI(i, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(i, z, y, offset - x);
+			break;
 		case XZ:
 			result._setI(i, x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsPoint(x, y, z, result, i);
@@ -306,16 +359,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(j, x, y, z - offset);
+			break;
 		case YZ:
 			result._setI(j, y, z, x - offset);
+			break;
 		case ZX:
 			result._setI(j, z, x, y - offset);
+			break;
 		case YX:
 			result._setI(j, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(j, z, y, offset - x);
+			break;
 		case XZ:
 			result._setI(j, x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsPoint(source, j, result, i);
@@ -328,16 +387,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, p.xd(), p.yd(), p.zd() + offset);
+			break;
 		case YZ:
 			result._setI(i, p.zd() + offset, p.xd(), p.yd());
+			break;
 		case ZX:
 			result._setI(i, p.yd(), p.zd() + offset, p.xd());
+			break;
 		case YX:
 			result._setI(i, p.yd(), p.xd(), offset - p.zd());
+			break;
 		case ZY:
 			result._setI(i, offset - p.zd(), p.yd(), p.xd());
+			break;
 		case XZ:
 			result._setI(i, p.xd(), offset - p.zd(), p.yd());
+			break;
 
 		default:
 			T2D3D.applyAsPoint(p, result, i);
@@ -350,16 +415,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, z + offset);
+			break;
 		case YZ:
 			result._setI(i, z + offset, x, y);
+			break;
 		case ZX:
 			result._setI(i, y, z + offset, x);
+			break;
 		case YX:
 			result._setI(i, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(i, offset - z, y, x);
+			break;
 		case XZ:
 			result._setI(i, x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(x, y, z, result, i);
@@ -372,16 +443,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, offset);
+			break;
 		case YZ:
 			result._setI(i, 0, x, y + offset);
+			break;
 		case ZX:
 			result._setI(i, y, 0, x + offset);
+			break;
 		case YX:
 			result._setI(i, y, x, offset);
+			break;
 		case ZY:
 			result._setI(i, offset, y, x);
+			break;
 		case XZ:
 			result._setI(i, x, offset, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(x, y, 0, result, i);
@@ -398,16 +475,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(j, x, y, z + offset);
+			break;
 		case YZ:
 			result._setI(j, z + offset, x, y);
+			break;
 		case ZX:
 			result._setI(j, y, z + offset, x);
+			break;
 		case YX:
 			result._setI(j, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(j, offset - z, y, x);
+			break;
 		case XZ:
 			result._setI(j, x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsPoint(source, i, result, j);
@@ -420,16 +503,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(v.xd(), v.yd(), v.zd() - offset);
+			break;
 		case YZ:
 			result._set(v.yd(), v.zd(), v.xd() - offset);
+			break;
 		case ZX:
 			result._set(v.zd(), v.xd(), v.yd() - offset);
+			break;
 		case YX:
 			result._set(v.yd(), v.xd(), offset - v.zd());
+			break;
 		case ZY:
 			result._set(v.zd(), v.yd(), offset - v.xd());
+			break;
 		case XZ:
 			result._set(v.xd(), v.zd(), offset - v.yd());
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(v, result);
@@ -442,16 +531,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z - offset);
+			break;
 		case YZ:
 			result._set(y, z, x - offset);
+			break;
 		case ZX:
 			result._set(z, x, y - offset);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(z, y, offset - x);
+			break;
 		case XZ:
 			result._set(x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(x, y, z, result);
@@ -468,16 +563,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z - offset);
+			break;
 		case YZ:
 			result._set(y, z, x - offset);
+			break;
 		case ZX:
 			result._set(z, x, y - offset);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(z, y, offset - x);
+			break;
 		case XZ:
 			result._set(x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(source, i, result);
@@ -490,16 +591,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(v.xd(), v.yd(), v.zd() + offset);
+			break;
 		case YZ:
 			result._set(v.zd() + offset, v.xd(), v.yd());
+			break;
 		case ZX:
 			result._set(v.yd(), v.zd() + offset, v.xd());
+			break;
 		case YX:
 			result._set(v.yd(), v.xd(), offset - v.zd());
+			break;
 		case ZY:
 			result._set(offset - v.zd(), v.yd(), v.xd());
+			break;
 		case XZ:
 			result._set(v.xd(), offset - v.zd(), v.yd());
+			break;
 
 		default:
 			T2D3D.applyAsVector(v, result);
@@ -512,16 +619,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z + offset);
+			break;
 		case YZ:
 			result._set(z + offset, x, y);
+			break;
 		case ZX:
 			result._set(y, z + offset, x);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(offset - z, y, x);
+			break;
 		case XZ:
 			result._set(x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(x, y, z, result);
@@ -534,16 +647,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, offset);
+			break;
 		case YZ:
 			result._set(0, x, y + offset);
+			break;
 		case ZX:
 			result._set(y, 0, x + offset);
+			break;
 		case YX:
 			result._set(y, x, offset);
+			break;
 		case ZY:
 			result._set(offset, y, x);
+			break;
 		case XZ:
 			result._set(x, offset, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(x, y, 0, result);
@@ -560,16 +679,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._set(x, y, z + offset);
+			break;
 		case YZ:
 			result._set(z + offset, x, y);
+			break;
 		case ZX:
 			result._set(y, z + offset, x);
+			break;
 		case YX:
 			result._set(y, x, offset - z);
+			break;
 		case ZY:
 			result._set(offset - z, y, x);
+			break;
 		case XZ:
 			result._set(x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(source, i, result);
@@ -582,16 +707,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, v.xd(), v.yd(), v.zd() - offset);
+			break;
 		case YZ:
 			result._setI(i, v.yd(), v.zd(), v.xd() - offset);
+			break;
 		case ZX:
 			result._setI(i, v.zd(), v.xd(), v.yd() - offset);
+			break;
 		case YX:
 			result._setI(i, v.yd(), v.xd(), offset - v.zd());
+			break;
 		case ZY:
 			result._setI(i, v.zd(), v.yd(), offset - v.xd());
+			break;
 		case XZ:
 			result._setI(i, v.xd(), v.zd(), offset - v.yd());
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(v, result, i);
@@ -604,16 +735,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, z - offset);
+			break;
 		case YZ:
 			result._setI(i, y, z, x - offset);
+			break;
 		case ZX:
 			result._setI(i, z, x, y - offset);
+			break;
 		case YX:
 			result._setI(i, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(i, z, y, offset - x);
+			break;
 		case XZ:
 			result._setI(i, x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(x, y, z, result, i);
@@ -630,16 +767,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(j, x, y, z - offset);
+			break;
 		case YZ:
 			result._setI(j, y, z, x - offset);
+			break;
 		case ZX:
 			result._setI(j, z, x, y - offset);
+			break;
 		case YX:
 			result._setI(j, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(j, z, y, offset - x);
+			break;
 		case XZ:
 			result._setI(j, x, z, offset - y);
+			break;
 
 		default:
 			T2D3D.applyInvAsVector(source, j, result, i);
@@ -652,16 +795,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, v.xd(), v.yd(), v.zd() + offset);
+			break;
 		case YZ:
 			result._setI(i, v.zd() + offset, v.xd(), v.yd());
+			break;
 		case ZX:
 			result._setI(i, v.yd(), v.zd() + offset, v.xd());
+			break;
 		case YX:
 			result._setI(i, v.yd(), v.xd(), offset - v.zd());
+			break;
 		case ZY:
 			result._setI(i, offset - v.zd(), v.yd(), v.xd());
+			break;
 		case XZ:
 			result._setI(i, v.xd(), offset - v.zd(), v.yd());
+			break;
 
 		default:
 			T2D3D.applyAsVector(v, result, i);
@@ -674,16 +823,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, z + offset);
+			break;
 		case YZ:
 			result._setI(i, z + offset, x, y);
+			break;
 		case ZX:
 			result._setI(i, y, z + offset, x);
+			break;
 		case YX:
 			result._setI(i, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(i, offset - z, y, x);
+			break;
 		case XZ:
 			result._setI(i, x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(x, y, z, result, i);
@@ -696,16 +851,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(i, x, y, offset);
+			break;
 		case YZ:
 			result._setI(i, 0, x, y + offset);
+			break;
 		case ZX:
 			result._setI(i, y, 0, x + offset);
+			break;
 		case YX:
 			result._setI(i, y, x, offset);
+			break;
 		case ZY:
 			result._setI(i, offset, y, x);
+			break;
 		case XZ:
 			result._setI(i, x, offset, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(x, y, 0, result, i);
@@ -722,16 +883,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 		switch (mode) {
 		case XY:
 			result._setI(j, x, y, z + offset);
+			break;
 		case YZ:
 			result._setI(j, z + offset, x, y);
+			break;
 		case ZX:
 			result._setI(j, y, z + offset, x);
+			break;
 		case YX:
 			result._setI(j, y, x, offset - z);
+			break;
 		case ZY:
 			result._setI(j, offset - z, y, x);
+			break;
 		case XZ:
 			result._setI(j, x, offset - z, y);
+			break;
 
 		default:
 			T2D3D.applyAsVector(source, i, result, j);

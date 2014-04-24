@@ -122,10 +122,10 @@ public class AlphaComplex implements SimplicialComplex {
 	 * Get a list of tetrahedra that are part of the alpha-complex with the
 	 * specified probe radius.
 	 */
-	public List<CTetrahedron> getTetrahedra(double alpha) {
+	public List<CTetrahedron> getTetrahedra(double a) {
 		List<CTetrahedron> ret = new ArrayList<CTetrahedron>();
 		for (CTetrahedron t : tetrahedra)
-			if (getInAlpha(t) < alpha)
+			if (getInAlpha(t) < a)
 				ret.add(t);
 		return ret;
 	}
@@ -146,7 +146,7 @@ public class AlphaComplex implements SimplicialComplex {
 	 * Get a list of triangles that are part of the alpha-complex with the
 	 * specified probe radius.
 	 */
-	public List<CTriangle> getTriangles(double alpha) {
+	public List<CTriangle> getTriangles(double a) {
 		List<CTriangle> ret = new ArrayList<CTriangle>();
 		for (CTriangle t : triangles)
 			if (getInAlpha(t) < alpha)
@@ -155,17 +155,17 @@ public class AlphaComplex implements SimplicialComplex {
 	}
 
 	/** Returns triangles in one tetrahedron only */
-	public List<Triangle> getSurfaceTriangles(double alpha) {
-		List<CTetrahedron> tetrahedra = getTetrahedra(alpha);
-		List<Triangle> triangles = new ArrayList<Triangle>();
-		for (CTetrahedron tetrahedron : tetrahedra) {
+	public List<Triangle> getSurfaceTriangles(double a) {
+		List<CTetrahedron> alphatetrahedra = getTetrahedra(a);
+		List<Triangle> alphatriangles = new ArrayList<Triangle>();
+		for (CTetrahedron tetrahedron : alphatetrahedra) {
 			for (int i = 0; i < 4; i++) {
 				CTetrahedron neighbor = tetrahedron.getNeighbour(i);
-				if ((neighbor == null) || (getInAlpha(neighbor) >= alpha))
-					triangles.add(tetrahedron.getTriangle(i));
+				if ((neighbor == null) || (getInAlpha(neighbor) >= a))
+					alphatriangles.add(tetrahedron.getTriangle(i));
 			}
 		}
-		return triangles;
+		return alphatriangles;
 	}
 
 	/**

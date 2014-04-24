@@ -1121,7 +1121,7 @@ public class Matrix implements Cloneable, java.io.Serializable {
 
 		// Ignore initial empty lines
 		while (tokenizer.nextToken() == StreamTokenizer.TT_EOL) {
-			;
+
 		}
 		if (tokenizer.ttype == StreamTokenizer.TT_EOF) {
 			throw new java.io.IOException("Unexpected EOF on matrix read.");
