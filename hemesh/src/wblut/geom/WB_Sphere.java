@@ -16,7 +16,7 @@ public class WB_Sphere implements WB_Geometry {
 			.instance();
 
 	public WB_Sphere() {
-		this.center = geometryfactory.createPoint(center);
+		this.center = geometryfactory.createPoint();
 		this.radius = WB_Math.fastAbs(0);
 	}
 
