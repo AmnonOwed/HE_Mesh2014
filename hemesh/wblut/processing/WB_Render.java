@@ -2077,7 +2077,7 @@ public class WB_Render {
 	/**
 	 * Draw polyline edges.
 	 * 
-	 * @param polyline
+	 * @param P
 	 *            the polyline
 	 */
 	public void drawPolylineEdges(final WB_PolyLine P) {
@@ -2109,7 +2109,7 @@ public class WB_Render {
 	/**
 	 * Draw polyline vertices.
 	 * 
-	 * @param polyline
+	 * @param P
 	 *            the polyline
 	 * @param d
 	 *            the d

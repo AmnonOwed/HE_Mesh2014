@@ -399,8 +399,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Create a 2D context from an offset plane
 	 * 
-	 * @param WB_Point
-	 *            plane
+	 * @param WB_Plane
+	 *            P
 	 * @param offset
 	 *            offset of the 2D context origin along plane normal
 	 * @return 2D context
@@ -415,8 +415,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Create a 2D context from a plane
 	 * 
-	 * @param WB_Point
-	 *            plane
+	 * @param WB_Plane
+	 *            P
 	 * @return 2D context
 	 */
 	public WB_Context2D createEmbeddedPlane(final WB_Plane P) {
@@ -640,8 +640,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Closest point to 2D line, z-ordinate is ignored
 	 * 
-	 * @param point
-	 * @param 2D line
+	 * @param WB_Coordinate p
+	 * @param WB_Line L
 	 * @return closest point on line
 	 */
 	public WB_Point createClosestPointOnLine2D(final WB_Coordinate p,
@@ -839,11 +839,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Mirror 2D point about 2D line
 	 * 
-	 * @param p
-	 * @param x0
-	 * @param y0
-	 * @param x1
-	 * @param y1
+	 * @param WB_Coordinate p
+	 * @param WB_Linear L
 	 * @return mirrored point
 	 */
 	public WB_Point createMirrorPoint(final WB_Coordinate p, final WB_Linear L) {
@@ -7675,9 +7672,9 @@ public class WB_GeometryFactory {
 	/**
 	 * Get dihedral angle defined by three vectors
 	 * 
-	 * @param b1
-	 * @param b2
-	 * @param b3
+	 * @param WB_Coordinate v1
+	 * @param WB_Coordinate v2
+	 * @param WB_Coordinate v3
 	 * @return
 	 */
 	public double getDihedralAngle(final WB_Coordinate v1,
@@ -7710,9 +7707,9 @@ public class WB_GeometryFactory {
 	/**
 	 * Get cosine of dihedral angle defined by three vectors
 	 * 
-	 * @param b1
-	 * @param b2
-	 * @param b3
+	 * @param WB_Coordinate u
+	 * @param WB_Coordinate v
+	 * @param WB_Coordinate w
 	 * @return
 	 */
 	public double getCosDihedralAngle(final WB_Coordinate u,
