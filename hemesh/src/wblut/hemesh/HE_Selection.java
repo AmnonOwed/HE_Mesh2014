@@ -476,10 +476,7 @@ public class HE_Selection extends HE_MeshStructure {
 	}
 
 	/**
-	 * Select all mesh element.
-	 * 
-	 * @param mesh
-	 *            mesh containing elements
+	 * Select all mesh elements.
 	 * @return current selection
 	 */
 	public HE_Selection selectAll() {
