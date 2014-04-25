@@ -530,7 +530,7 @@ public class HEC_FromFrame extends HEC_Creator {
 					}
 
 					tmp.cleanUnusedElementsByFace();
-					tmp.uncapHalfedges();
+					tmp.uncapBoundaryHalfedgesAndRemoveBoundaryEdges();
 
 					for (int j = 0; j < struts.size(); j++) {
 						int offset;
@@ -583,7 +583,7 @@ public class HEC_FromFrame extends HEC_Creator {
 		createVertices();
 		createNodes();
 		createStruts();
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 		if (!cap) {
 			mesh.capHalfedges();
 		}

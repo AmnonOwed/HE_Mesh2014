@@ -380,7 +380,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 					mesh.addHalfedges(faceEdges);
 				}
 			}
-			mesh.pairHalfedges();
+			mesh.pairHalfedgesAndCreateEdges();
 			mesh.capHalfedges();
 			// mesh.resolvePinchPoints();
 

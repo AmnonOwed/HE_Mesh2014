@@ -29,13 +29,6 @@ public class CollisionQ {
 
 	Skeleton skel;
 
-	/**
-	 * @param corners
-	 *            the input set of corners
-	 * @param liveEdges
-	 *            the (continuously updated) set of edges that still feature in
-	 *            the live corner list. Caller has to update this set :)
-	 */
 	public CollisionQ(Skeleton skel) {
 		this.skel = skel;
 		faceEvents = new PriorityQueue<EdgeCollision>(Math.max(3,

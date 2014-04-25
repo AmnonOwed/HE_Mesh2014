@@ -186,10 +186,8 @@ public class Edge {
 	}
 
 	/**
-	 * UNTESTED!
-	 * 
 	 * @param ribbon
-	 * @return
+	 * @return edge loops
 	 */
 	public static LoopL<Edge> fromPoints2d(LoopL<Point2d> ribbon) {
 		LoopL<Edge> loopl = new LoopL();
@@ -280,13 +278,6 @@ public class Edge {
 		}
 	}
 
-	/**
-	 * Collides a's two adjacent edges against the other given edge.
-	 * 
-	 * Currently this handles the case that a.next, a.prev is
-	 * 
-	 * @return
-	 */
 	static Tuple3d collide(Corner a, Edge edge) {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}

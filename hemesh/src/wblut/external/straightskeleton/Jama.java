@@ -11,14 +11,7 @@ import wblut.external.JAMA.Matrix;
  * @author twak
  */
 public class Jama {
-	/**
-	 * 
-	 * @param A
-	 *            Each rows of A is a cartesian point
-	 * @param b
-	 *            the offset of the matrix (normally 0?)
-	 * @return
-	 */
+
 	public static Vector3d solve(final Matrix3d A, final Tuple3d offset) {
 		final double[][] as = new double[][] { { A.m00, A.m01, A.m02 },
 				{ A.m10, A.m11, A.m12 }, { A.m20, A.m21, A.m22 } };

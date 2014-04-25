@@ -90,7 +90,7 @@ public class MultiMap<A, B> // implements Map<A,List<B>>
 	 * Removes entire list indexed by key
 	 * 
 	 * @param key
-	 * @return
+	 * @return list indexed by key
 	 */
 	public List<B> remove(A key) {
 		return map.remove(key);

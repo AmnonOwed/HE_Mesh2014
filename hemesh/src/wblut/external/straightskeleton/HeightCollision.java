@@ -23,13 +23,13 @@ public class HeightCollision implements HeightEvent {
 
 	private Set<Corner> newHoriz = new LinkedHashSet();
 
+	public HeightCollision() {
+	};
+
 	/**
 	 * @param coHeighted
 	 *            .size() > 1
 	 */
-	public HeightCollision() {
-	};
-
 	public HeightCollision(List<EdgeCollision> coHeighted) {
 		this.coHeighted = coHeighted;
 		height = coHeighted.get(0).getHeight();

@@ -213,7 +213,7 @@ public class HEM_Slice extends HEM_Modifier {
 		if (capHoles) {
 			if (simpleCap) {
 				cap.addFaces(mesh.capHoles());
-				mesh.pairHalfedges();
+				mesh.pairHalfedgesAndCreateEdges();
 				mesh.capHalfedges();
 			} else {
 				List<HE_Halfedge> unpairedHalfedges = mesh
@@ -297,7 +297,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 						}
 					}
-					mesh.pairHalfedges();
+					mesh.pairHalfedgesAndCreateEdges();
 					int old = 0;
 					unpairedHalfedges = mesh.getUnpairedHalfedges();
 					while (unpairedHalfedges.size() != old) {
@@ -312,7 +312,7 @@ public class HEM_Slice extends HEM_Modifier {
 			}
 
 		} else {
-			mesh.pairHalfedges();
+			mesh.pairHalfedgesAndCreateEdges();
 			mesh.capHalfedges();
 		}
 

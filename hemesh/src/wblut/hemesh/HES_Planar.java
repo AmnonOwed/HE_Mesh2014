@@ -249,7 +249,7 @@ public class HES_Planar extends HES_Subdividor {
 			face.setLabel(0);
 
 		}// end of face loop
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 		mesh.replaceFaces(newFaces);
 		return mesh;
 	}
@@ -402,7 +402,7 @@ public class HES_Planar extends HES_Subdividor {
 			}
 
 		}// end of face loop
-		selection.parent.pairHalfedges();
+		selection.parent.pairHalfedgesAndCreateEdges();
 
 		selection.parent.removeFaces(selection.getFacesAsArray());
 

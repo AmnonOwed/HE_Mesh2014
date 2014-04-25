@@ -123,7 +123,7 @@ public class HEM_Mirror extends HEM_Modifier {
 
 		mesh.add(mirrormesh);
 
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 		if (!keepCenter) {
 			mesh.resetCenter();
 		}

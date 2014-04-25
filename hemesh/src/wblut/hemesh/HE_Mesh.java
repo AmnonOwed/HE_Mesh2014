@@ -1280,7 +1280,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	/**
 	 * Try to pair all unpaired halfedges.
 	 */
-	public void pairHalfedges() {
+	public void pairHalfedgesAndCreateEdges() {
 		class VertexInfo {
 			FastList<HE_Halfedge> out;
 			FastList<HE_Halfedge> in;
@@ -1356,7 +1356,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param unpairedHalfedges
 	 *            the unpaired halfedges
 	 */
-	public void pairHalfedges(final List<HE_Halfedge> unpairedHalfedges) {
+	public void pairHalfedgesAndCreateEdges(
+			final List<HE_Halfedge> unpairedHalfedges) {
 		class VertexInfo {
 			FastList<HE_Halfedge> out;
 			FastList<HE_Halfedge> in;
@@ -1462,7 +1463,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	/**
 	 * Uncap halfedges.
 	 */
-	public void uncapHalfedges() {
+	public void uncapBoundaryHalfedgesAndRemoveBoundaryEdges() {
 		final Iterator<HE_Halfedge> heItr = heItr();
 		HE_Halfedge he;
 		while (heItr.hasNext()) {
@@ -1471,6 +1472,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				he.getVertex().setHalfedge(he.getPair());
 				he.getEdge().setHalfedge(he.getPair());
 				he.getPair().clearPair();
+				he.clearPair();
 				heItr.remove();
 			}
 
@@ -1582,6 +1584,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < n; i++) {
 			he = cleanedHalfedges.get(i);
 			if (!cleanedHalfedges.contains(he.getPair())) {
+				he.getPair().clearPair();
 				he.clearPair();
 				he.getVertex().setHalfedge(he);
 			} else {
@@ -2718,7 +2721,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 		return selectionOut;
 
 	}
@@ -2802,7 +2805,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 		return selectionOut;
 
 	}
@@ -2934,7 +2937,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				}
 			}
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 		return selectionOut;
 
 	}
@@ -3070,7 +3073,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				}
 			}
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 		return selectionOut;
 
 	}
@@ -4805,6 +4808,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			do {
 				he.getPair().clearEdge();
 				he.getPair().clearPair();
+				he.clearEdge();
+				he.clearPair();
 				remove(he.getEdge());
 				remove(he);
 				he = he.getNextInFace();
@@ -4837,7 +4842,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				add(he3);
 			}
 
-			pairHalfedges();
+			pairHalfedgesAndCreateEdges();
 		}
 	}
 
@@ -4854,6 +4859,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);
 			do {
+				he.clearEdge();
+				he.clearPair();
 				if (he.getPair() != null) {
 					he.getPair().clearEdge();
 					he.getPair().clearPair();
@@ -4903,7 +4910,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 	}
 
 	/**
@@ -4918,7 +4925,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedges();
+		pairHalfedgesAndCreateEdges();
 	}
 
 	/**

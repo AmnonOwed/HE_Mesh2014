@@ -752,7 +752,7 @@ public class HEC_IsoSurface extends HEC_Creator {
 				}
 			}
 		}
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 	}
 
 	/**

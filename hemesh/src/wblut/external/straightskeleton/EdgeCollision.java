@@ -45,7 +45,7 @@ public class EdgeCollision implements HeightEvent {
 	/**
 	 * Hash is agnostic to which edge is in a, b and c
 	 * 
-	 * @return
+	 * @return hashcode
 	 */
 	@Override
 	public int hashCode() {

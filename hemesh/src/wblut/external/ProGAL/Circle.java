@@ -220,7 +220,7 @@ public class Circle implements Shape {
 	 * needed to bring point p on this circle to be on the line l as well.
 	 * Returns null if there is no intersection or just one intersection.
 	 * 
-	 * @return
+	 * @return smallest rotation angle
 	 */
 	public Double getFirstIntersection(Line line, Point p, Vector dir) {
 		double dist = line.getDistance(center);
@@ -284,7 +284,7 @@ public class Circle implements Shape {
 	 * needed to bring point p on this circle to be on the circle c as well.
 	 * Returns null if there is no intersection or just one intersection.
 	 * 
-	 * @return
+	 * @return smallest rotation angle
 	 */
 	public Double getFirstIntersection(Circle c, Point p, Vector dir) {
 		double dist = center.distance(c.getCenter());

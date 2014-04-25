@@ -38,18 +38,6 @@ public class Output {
 		this.skeleton = skel;
 	}
 
-	/**
-	 * One edge may start in two locations at the same time. To accomodate this,
-	 * you call newEdge once per new edge, then new Defining Segment for each
-	 * corner that references that edge.
-	 * 
-	 * @param startCorner
-	 *            The corner at the start of the edge at the base of this edge
-	 * @param aParentCorner
-	 *            A corner whose
-	 * @param profileFeatures
-	 */
-
 	public void newEdge(Edge e, Corner aParentLeadingCorner) {
 		Face face = new Face();
 
@@ -105,13 +93,6 @@ public class Output {
 			// System.out.println(">>");
 		}
 	}
-
-	/**
-	 * Some faces (such as base-plates for globals) can't really be classified
-	 * nicely. They live here.
-	 * 
-	 * @param geom
-	 */
 
 	public void addNonSkeletonOutputFace(LoopL<Point3d> points, Vector3d norm) {
 		nonSkelFaces.add(new LoopNormal(points, norm));
@@ -272,8 +253,6 @@ public class Output {
 	 * Two parallel faces have become consecutive, remove info about toGo, add
 	 * to toKeep
 	 * 
-	 * @toKeep leading corner to keep
-	 * @toGo leading corner to go
 	 */
 	void merge(Corner toKeep, Corner toGo) {
 		Face toGoFace = faces.get(toGo.nextL.start), toKeepFace = faces
@@ -404,10 +383,10 @@ public class Output {
 		}
 
 		/**
-		 * When caculating an offset, we can assume that all edges add a face at
-		 * every interval this returns the number of faces below this face.
+		 * When calculating an offset, we can assume that all edges add a face
+		 * at every interval this returns the number of faces below this face.
 		 * 
-		 * @return
+		 * @return parent count
 		 */
 		public int getParentCount() {
 			int count = -1;

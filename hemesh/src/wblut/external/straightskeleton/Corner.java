@@ -39,7 +39,7 @@ public class Corner extends Point3d implements Iterable<Corner> {
 	 * behaviour. Therefore we revert to the system hash.
 	 * 
 	 * @param t1
-	 * @return
+	 * @return true/false
 	 */
 	@Override
 	public boolean equals(Object t1) {
@@ -64,7 +64,7 @@ public class Corner extends Point3d implements Iterable<Corner> {
 	 * We rely on the fact that we can shift the point's heights without
 	 * changing their locations in hashmaps.
 	 * 
-	 * @return
+	 * @return integer hashCode
 	 */
 	@Override
 	public int hashCode() {
@@ -147,7 +147,7 @@ public class Corner extends Point3d implements Iterable<Corner> {
 	 * currentCorners.
 	 * 
 	 * @param ribbon
-	 * @return
+	 * @return cloned set of corners
 	 */
 	public static LoopL<Corner> dupeNewAll(LoopL<Corner> ribbon) {
 

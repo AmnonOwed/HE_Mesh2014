@@ -527,7 +527,7 @@ public class HEC_IsoFunction extends HEC_Creator {
 			}
 		}
 
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 	}
 
 	private void getPolygons(final int i, final int j, final int k,

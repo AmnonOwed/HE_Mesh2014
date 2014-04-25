@@ -3,6 +3,10 @@ package wblut.geom;
 import wblut.WB_Epsilon;
 
 public class WB_Classify {
+
+	final public static WB_GeometryFactory geometryfactory = WB_GeometryFactory
+			.instance();
+
 	/**
 	 * Classify 2D point to 2D line.
 	 * 
@@ -12,10 +16,6 @@ public class WB_Classify {
 	 * @return WB_Classification.FRONT, WB_Classification.BACK,
 	 *         WB_Classification.ON
 	 */
-
-	final public static WB_GeometryFactory geometryfactory = WB_GeometryFactory
-			.instance();
-
 	public static WB_Classification classifyPointToLine2D(
 			final WB_Coordinate p, final WB_Line L) {
 

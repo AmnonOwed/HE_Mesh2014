@@ -22,7 +22,7 @@ public class Line3D {
 	 * Project point onto line
 	 * 
 	 * @param ept
-	 * @return
+	 * @return projected point
 	 */
 	public Point3d projectLine(Point3d ept) {
 		return project(ept, false);

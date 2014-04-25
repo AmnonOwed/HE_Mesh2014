@@ -56,7 +56,7 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 			HE_Mesh.cycleHalfedges(faceHalfedges);
 		}
 
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 		mesh.replaceFaces(newFaces);
 
 		return mesh;
@@ -116,7 +116,7 @@ public class HES_PlanarMidEdge extends HES_Subdividor {
 			HE_Mesh.cycleHalfedges(faceHalfedges);
 		}
 
-		selection.parent.pairHalfedges();
+		selection.parent.pairHalfedgesAndCreateEdges();
 		selection.parent.removeFaces(selection.getFacesAsArray());
 		selection.parent.addFaces(newFaces);
 

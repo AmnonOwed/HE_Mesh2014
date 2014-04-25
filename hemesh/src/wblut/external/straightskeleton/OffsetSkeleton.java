@@ -298,7 +298,7 @@ public class OffsetSkeleton<E extends Machine> {
 		 * Given two sets of leading corners, find the corner (if any) that lies
 		 * on both edges
 		 * 
-		 * @return
+		 * @return Corner
 		 */
 		private Corner findAdjacent(Set<Corner> first, Set<Corner> second) {
 			for (Corner c : first)

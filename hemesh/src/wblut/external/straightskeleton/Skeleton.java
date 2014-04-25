@@ -74,7 +74,6 @@ public class Skeleton {
 	}
 
 	/**
-	 * @Deprecated
 	 * @param input
 	 *            list of edges, edges shouldn't be repeated!
 	 */
@@ -120,7 +119,7 @@ public class Skeleton {
 	}
 
 	/**
-	 * @Deprecated
+	 * 
 	 * @param cap
 	 *            height (flat-topped skeleton) to finish at
 	 */

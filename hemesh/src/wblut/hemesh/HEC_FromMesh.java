@@ -125,7 +125,7 @@ public class HEC_FromMesh extends HEC_Creator {
 				mesh.addHalfedges(faceEdges);
 			}
 		}
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 		mesh.capHalfedges();
 
 		return mesh;

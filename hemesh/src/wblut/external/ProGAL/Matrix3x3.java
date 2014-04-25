@@ -70,7 +70,6 @@ public class Matrix3x3 extends Matrix {
 	/**
 	 * Get the determinant of this matrix.
 	 * 
-	 * @hops 9
 	 */
 	@Override
 	public double determinant() {
@@ -86,7 +85,6 @@ public class Matrix3x3 extends Matrix {
 	/**
 	 * Invert this matrix (overwrites this and returns it).
 	 * 
-	 * @hops 31
 	 */
 	@Override
 	public Matrix invertThis() {
@@ -123,7 +121,6 @@ public class Matrix3x3 extends Matrix {
 	 * the matrix is singular ... TODO: test this.
 	 * 
 	 * @return an array containing eigenvectors.
-	 * @hops 84
 	 */
 	public Vector[] getEigenvectors() {
 		if (coords.length != 3 || coords[0].length != 3)

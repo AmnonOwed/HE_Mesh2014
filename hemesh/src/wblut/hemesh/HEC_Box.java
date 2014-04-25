@@ -162,16 +162,19 @@ public class HEC_Box extends HEC_Creator {
 	 */
 	@Override
 	protected HE_Mesh createBase() {
-		final double oW = -0.5 * W;
-		final double oH = -0.5 * H;
-		final double oD = -0.5 * D;
+		final double oW = -0.5 * W;// X
+		final double oH = -0.5 * H;// Y
+		final double oD = -0.5 * D;// Z
 		final double dW = W * 1.0 / L;
 		final double dH = H * 1.0 / M;
 		final double dD = D * 1.0 / N;
-		final double[][] vertices = new double[(N + 1) * (L + 1) * (M + 1)][3];
+		final double[][] vertices = new double[(N + 1) * (L + 1) * (M + 1)
+				- (N - 1) * (L - 1) * (M - 1)][3];
 		final int[][] faces = new int[2 * N * L + 2 * M * N + 2 * M * L][4];
 
 		int idv = 0;
+		// top vertices
+
 		for (int k = 0; k < M + 1; k++) {
 			for (int j = 0; j < N + 1; j++) {
 				for (int i = 0; i < L + 1; i++) {

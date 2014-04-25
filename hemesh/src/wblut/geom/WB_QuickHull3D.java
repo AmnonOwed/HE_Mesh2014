@@ -21,7 +21,6 @@ import java.util.Vector;
 
 import javolution.util.FastList;
 import wblut.WB_Epsilon;
-import wblut.external.straightskeleton.Point3d;
 
 /**
  * Computes the convex hull of a set of three dimensional points.
@@ -38,9 +37,9 @@ import wblut.external.straightskeleton.Point3d;
  * 
  * <p>
  * A hull is constructed by providing a set of points to either a constructor or
- * a {@link #build(Point3d[]) build} method. After the hull is built, its
- * vertices and faces can be retrieved using {@link #getVertices() getVertices}
- * and {@link #getFaces() getFaces}. A typical usage might look like this:
+ * a build method. After the hull is built, its vertices and faces can be
+ * retrieved using getVertices and getFaces. A typical usage might look like
+ * this:
  * 
  * <pre>
  * // x y z coordinates of 6 points
@@ -69,9 +68,8 @@ import wblut.external.straightskeleton.Point3d;
  * }
  * </pre>
  * 
- * As a convenience, there are also {@link #build(double[]) build} and
- * {@link #getVertices(double[]) getVertex} methods which pass point information
- * using an array of doubles.
+ * As a convenience, there are also build and getVertex methods which pass point
+ * information using an array of doubles.
  * 
  * <h3><a name=distTol>Robustness</h3> Because this algorithm uses floating
  * point arithmetic, it is potentially vulnerable to errors arising from
@@ -80,12 +78,11 @@ import wblut.external.straightskeleton.Point3d;
  * clearly convex. A face is convex if its edges are convex, and an edge is
  * convex if the centroid of each adjacent plane is clearly <i>below</i> the
  * plane of the other face. The centroid is considered below a plane if its
- * distance to the plane is less than the negative of a
- * {@link #getDistanceTolerance() distance tolerance}. This tolerance represents
- * the smallest distance that can be reliably computed within the available
- * numeric precision. It is normally computed automatically from the point data,
- * although an application may {@link #setExplicitDistanceTolerance set this
- * tolerance explicitly}.
+ * distance to the plane is less than the negative of a distance tolerance. This
+ * tolerance represents the smallest distance that can be reliably computed
+ * within the available numeric precision. It is normally computed automatically
+ * from the point data, although an application may set this tolerance
+ * explicitly.
  * 
  * <p>
  * Numerical problems are more likely to arise in situations where data points
@@ -93,30 +90,30 @@ import wblut.external.straightskeleton.Point3d;
  * QuickHull3D for such situations by computing the convex hull of a random
  * point set, then adding additional randomly chosen points which lie very close
  * to the hull vertices and edges, and computing the convex hull again. The hull
- * is deemed correct if {@link #check check} returns <code>true</code>. These
- * tests have been successful for a large number of trials and so we are
- * confident that QuickHull3D is reasonably robust.
+ * is deemed correct if check returns <code>true</code>. These tests have been
+ * successful for a large number of trials and so we are confident that
+ * QuickHull3D is reasonably robust.
  * 
  * <h3>Merged Faces</h3> The merging of faces means that the faces returned by
  * QuickHull3D may be convex polygons instead of triangles. If triangles are
- * desired, the application may {@link #triangulate triangulate} the faces, but
- * it should be noted that this may result in triangles which are very small or
- * thin and hence difficult to perform reliable convexity tests on. In other
- * words, triangulating a merged face is likely to restore the numerical
- * problems which the merging process removed. Hence is it possible that, after
- * triangulation, {@link #check check} will fail (the same behavior is observed
- * with triangulated output from <a href=http://www.qhull.org>qhull</a>).
+ * desired, the application may triangulate the faces, but it should be noted
+ * that this may result in triangles which are very small or thin and hence
+ * difficult to perform reliable convexity tests on. In other words,
+ * triangulating a merged face is likely to restore the numerical problems which
+ * the merging process removed. Hence is it possible that, after triangulation,
+ * check will fail (the same behavior is observed with triangulated output from
+ * <a href=http://www.qhull.org>qhull</a>).
  * 
  * <h3>Degenerate Input</h3>It is assumed that the input points are
- * non-degenerate in that they are not coincident, colinear, or colplanar, and
+ * non-degenerate in that they are not coincident, colinear, or coplanar, and
  * thus the convex hull has a non-zero volume. If the input points are detected
- * to be degenerate within the {@link #getDistanceTolerance() distance
- * tolerance}, an IllegalArgumentException will be thrown.
+ * to be degenerate within the distance tolerance, an IllegalArgumentException
+ * will be thrown.
  * 
- * @author John E. Lloyd, Fall 2004
+ * author John E. Lloyd, Fall 2004
  * 
  * 
- *         Conversion to hemesh datatypes, Frederik Vanhoutte, 2013
+ * Conversion to hemesh datatypes, Frederik Vanhoutte, 2013
  * 
  * 
  */
@@ -476,8 +473,6 @@ public class WB_QuickHull3D {
 	 * Returns the vertex points in this hull.
 	 * 
 	 * @return array of vertex points
-	 * @see WB_QuickHull3D#getVertices(double[])
-	 * @see WB_QuickHull3D#getFaces()
 	 */
 	public List<WB_Point> getVertices() {
 		final List<WB_Point> vtxs = new FastList<WB_Point>(numVertices);

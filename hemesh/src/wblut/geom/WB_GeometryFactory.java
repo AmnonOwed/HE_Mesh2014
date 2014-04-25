@@ -399,8 +399,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Create a 2D context from an offset plane
 	 * 
-	 * @param WB_Plane
-	 *            P
+	 * @param P
+	 *            plane
 	 * @param offset
 	 *            offset of the 2D context origin along plane normal
 	 * @return 2D context
@@ -415,8 +415,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Create a 2D context from a plane
 	 * 
-	 * @param WB_Plane
-	 *            P
+	 * @param P
+	 *            plane
 	 * @return 2D context
 	 */
 	public WB_Context2D createEmbeddedPlane(final WB_Plane P) {
@@ -640,8 +640,10 @@ public class WB_GeometryFactory {
 	/**
 	 * Closest point to 2D line, z-ordinate is ignored
 	 * 
-	 * @param WB_Coordinate p
-	 * @param WB_Line L
+	 * @param p
+	 *            WB_Coordinate
+	 * @param L
+	 *            WB_Line
 	 * @return closest point on line
 	 */
 	public WB_Point createClosestPointOnLine2D(final WB_Coordinate p,
@@ -839,8 +841,12 @@ public class WB_GeometryFactory {
 	/**
 	 * Mirror 2D point about 2D line
 	 * 
-	 * @param WB_Coordinate p
-	 * @param WB_Linear L
+	 * @param p
+	 *            WB_Coordinate
+	 * 
+	 * @param L
+	 *            WB_Linear
+	 * 
 	 * @return mirrored point
 	 */
 	public WB_Point createMirrorPoint(final WB_Coordinate p, final WB_Linear L) {
@@ -2908,7 +2914,7 @@ public class WB_GeometryFactory {
 	 * @param L
 	 * @param p
 	 * @param q
-	 * @return
+	 * @return circles through 2 points and tangent to line
 	 */
 	public List<WB_Circle> createCirclePPL(final WB_Coordinate p,
 			final WB_Coordinate q, final WB_Line L) {
@@ -3275,7 +3281,7 @@ public class WB_GeometryFactory {
 	 * @param p
 	 * @param C1
 	 * @param C2
-	 * @return
+	 * @return circles through point and tangent to two circles
 	 */
 	public List<WB_Circle> createCirclePCC(final WB_Coordinate p,
 			final WB_Circle C1, final WB_Circle C2) {
@@ -5001,9 +5007,8 @@ public class WB_GeometryFactory {
 	/**
 	 * Johnson polyhedra.
 	 * 
-	 * @author Implemented by Frederik Vanhoutte (W:Blut), painstakingly
-	 *         collected by David Marec. Many thanks, without David this
-	 *         wouldn't be here.
+	 * Implemented by Frederik Vanhoutte (W:Blut), painstakingly collected by
+	 * David Marec. Many thanks, without David this wouldn't be here.
 	 * 
 	 */
 
@@ -7659,7 +7664,7 @@ public class WB_GeometryFactory {
 	 * @param p2
 	 * @param p3
 	 * @param p4
-	 * @return
+	 * @return dihedral angle
 	 */
 	public double getDihedralAngle(final WB_Coordinate p1,
 			final WB_Coordinate p2, final WB_Coordinate p3,
@@ -7672,10 +7677,16 @@ public class WB_GeometryFactory {
 	/**
 	 * Get dihedral angle defined by three vectors
 	 * 
-	 * @param WB_Coordinate v1
-	 * @param WB_Coordinate v2
-	 * @param WB_Coordinate v3
-	 * @return
+	 * @param v1
+	 *            WB_Coordinate
+	 * 
+	 * @param v2
+	 *            WB_Coordinate
+	 * 
+	 * @param v3
+	 *            WB_Coordinate
+	 * 
+	 * @return dihedral angle
 	 */
 	public double getDihedralAngle(final WB_Coordinate v1,
 			final WB_Coordinate v2, final WB_Coordinate v3) {
@@ -7694,7 +7705,7 @@ public class WB_GeometryFactory {
 	 * @param p2
 	 * @param p3
 	 * @param p4
-	 * @return
+	 * @return cosine of dihedral angle
 	 */
 	public double getCosDihedralAngle(final WB_Coordinate p1,
 			final WB_Coordinate p2, final WB_Coordinate p3,
@@ -7707,10 +7718,16 @@ public class WB_GeometryFactory {
 	/**
 	 * Get cosine of dihedral angle defined by three vectors
 	 * 
-	 * @param WB_Coordinate u
-	 * @param WB_Coordinate v
-	 * @param WB_Coordinate w
-	 * @return
+	 * @param u
+	 *            WB_Coordinate
+	 * 
+	 * @param v
+	 *            WB_Coordinate
+	 * 
+	 * @param w
+	 *            WB_Coordinate
+	 * 
+	 * @return cosine of dihedral angle
 	 */
 	public double getCosDihedralAngle(final WB_Coordinate u,
 			final WB_Coordinate v, final WB_Coordinate w) {

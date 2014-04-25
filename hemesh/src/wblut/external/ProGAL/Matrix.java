@@ -394,8 +394,6 @@ public class Matrix {
 	 * Reduce this matrix to row canonical form (reduced row echelon form). This
 	 * matrix is changed and returned.
 	 * 
-	 * @hops For n by m matrix: 0 to m*n+(n-1)^2*m
-	 * @todo TODO Optimize loops to remove 0-nominator divisions.
 	 */
 	public Matrix reduceThis() {
 		int rowCount = M;
@@ -1366,8 +1364,6 @@ public class Matrix {
 		/**
 		 * Check for symmetry, then construct the eigenvalue decomposition.
 		 * 
-		 * @param A
-		 *            Square matrix
 		 */
 		protected EigenvalueDecomposition() {
 			double[][] A = coords;// Arg.getArray();
@@ -1475,9 +1471,9 @@ public class Matrix {
 	 * 
 	 * @param r
 	 *            Array of row indices.
-	 * @param i0
+	 * @param j0
 	 *            Initial column index
-	 * @param i1
+	 * @param j1
 	 *            Final column index
 	 * @return A(r(:),j0:j1)
 	 * @exception ArrayIndexOutOfBoundsException

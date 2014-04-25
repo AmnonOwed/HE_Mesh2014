@@ -36,10 +36,6 @@ import wblut.WB_Epsilon;
  * 
  * A vector in (x,y,z)-space represented with double precision.
  * 
- * @todo cache the length so several calls to getLengthSquared and getLength
- *       takes less time. This can be relevant e.g. in Line3d for multiple
- *       projections, but can also cause serious problems if anyone chooses to
- *       extend the Vector3d object.
  */
 public class Vector {
 

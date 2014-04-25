@@ -130,10 +130,6 @@ public class Machine {
 		Collections.sort(events, HeightEvent.heightComparator);
 	}
 
-	/**
-	 * @param directions
-	 *            the directions to set
-	 */
 	public void addHeightEvent(HeightEvent dir) {
 		events.add(dir);
 		sortHeightEvents();

@@ -127,7 +127,7 @@ public class LinearForm3D implements Cloneable {
 	 * Returns a line or null if the planes are parallel
 	 * 
 	 * @param other
-	 * @return
+	 * @return line
 	 */
 	public Line3D collide(final LinearForm3D other) {
 		// special solution is cross product of normals

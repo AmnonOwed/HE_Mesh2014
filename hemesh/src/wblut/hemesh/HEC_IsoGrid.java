@@ -728,7 +728,7 @@ public class HEC_IsoGrid extends HEC_Creator {
 			}
 			c++;
 		}
-		mesh.pairHalfedges();
+		mesh.pairHalfedgesAndCreateEdges();
 	}
 
 	/**

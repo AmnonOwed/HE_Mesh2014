@@ -288,35 +288,22 @@ public class HE_Halfedge extends HE_Element {
 	 * Clear next.
 	 */
 	public void clearNext() {
-		if (_next != null) {
-			_next.clearPrev();
-		}
 		_next = null;
 	}
 
 	/**
-	 * Clear prev, only to be called by clearNext.
+	 * Clear prev
 	 */
-	private void clearPrev() {
+	public void clearPrev() {
 		_prev = null;
 	}
 
 	/**
-	 * Clear mutual pairing.
+	 * Clear pair
 	 */
 	public void clearPair() {
-		if (_pair != null) {
-			_pair.clearPairInt();
-		}
 		_pair = null;
 
-	}
-
-	/**
-	 * Unilateral clearing of pairing.Only to be called by clearPair.
-	 */
-	private void clearPairInt() {
-		_pair = null;
 	}
 
 	/**

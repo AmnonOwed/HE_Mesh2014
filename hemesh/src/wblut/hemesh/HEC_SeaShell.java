@@ -76,7 +76,7 @@ public class HEC_SeaShell extends HEC_Creator {
 	 * @param A
 	 *            size of spiral aperture (distance of aperture origin to world
 	 *            origin at theta=0
-	 * @return
+	 * @return this
 	 */
 	public HEC_SeaShell setA(final double A) {
 		this.A = A;
@@ -126,7 +126,7 @@ public class HEC_SeaShell extends HEC_Creator {
 	 * 
 	 * @param muf
 	 *            change of mu in degrees per full turn
-	 * @return
+	 * @return this
 	 */
 	public HEC_SeaShell setMuFactor(final double muf) {
 		this.muf = muf / 360.0;
@@ -137,7 +137,7 @@ public class HEC_SeaShell extends HEC_Creator {
 	 * 
 	 * @param omegaf
 	 *            change of omega in degrees per full turn
-	 * @return
+	 * @return this
 	 */
 	public HEC_SeaShell setOmegaFactor(final double omegaf) {
 		this.omegaf = omegaf / 360.0;
@@ -148,7 +148,7 @@ public class HEC_SeaShell extends HEC_Creator {
 	 * 
 	 * @param phif
 	 *            change of phi in degrees per full turn
-	 * @return
+	 * @return this
 	 */
 	public HEC_SeaShell setPhiFactor(final double phif) {
 		this.phif = phif / 360.0;

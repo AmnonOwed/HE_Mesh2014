@@ -78,17 +78,6 @@ class WB_ShapeReader {
 
 	}
 
-	/**
-	 * Converts a Java2D Shape to a List of WB_polygon, flattening it first.
-	 * 
-	 * @param shp
-	 *            the Java2D shape
-	 * @param flatness
-	 *            the flatness parameter to use
-	 * @param geomFact
-	 *            the GeometryFactory to use
-	 * @return list of polygons representing the shape
-	 */
 	public List<WB_Polygon> read(final Shape shp, final double flatness) {
 		final PathIterator pathIt = shp.getPathIterator(INVERT_Y, flatness);
 		return read(pathIt);
