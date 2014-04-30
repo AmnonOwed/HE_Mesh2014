@@ -1,6 +1,17 @@
 package wblut.math;
 
 public class WB_Bernstein {
+
+	/**
+	 * Calculate the (n+1) coefficients of the Bernstein polynomial of order n,
+	 * for the value u (0..1)
+	 * 
+	 * @param u
+	 *            value at which to evaluate the Bernstein coefficients
+	 * @param order
+	 *            order of the Bernstein polynomial
+	 * @return n+1 coefficients at value u
+	 */
 	public static double[] BernsteinCoefficientsOfOrderN(final double u,
 			final int order) {
 		final double[] B = new double[order + 1];

@@ -168,101 +168,97 @@ public class HEC_Box extends HEC_Creator {
 		final double dW = W * 1.0 / L;
 		final double dH = H * 1.0 / M;
 		final double dD = D * 1.0 / N;
-		final double[][] vertices = new double[(N + 1) * (L + 1) * (M + 1)
-				- (N - 1) * (L - 1) * (M - 1)][3];
-		final int[][] faces = new int[2 * N * L + 2 * M * N + 2 * M * L][4];
+		final double[][] vertices = new double[2 * (L + 1) * (M + 1) + 2
+				* (L + 1) * (N + 1) + 2 * (M + 1) * (N + 1)][3];
+		final int[][] faces = new int[2 * M * L + 2 * L * N + 2 * M * N][4];// XY,XZ,YZ
 
 		int idv = 0;
-		// top vertices
-
-		for (int k = 0; k < M + 1; k++) {
-			for (int j = 0; j < N + 1; j++) {
-				for (int i = 0; i < L + 1; i++) {
-					vertices[idv][0] = oW + i * dW;
-					vertices[idv][1] = oH + k * dH;
-					vertices[idv][2] = oD + j * dD;
-					idv++;
-				}
-			}
-		}
-
 		int idf = 0;
+		int LMv = (L + 1) * (M + 1);
+		int LMf = L * M;
+		int LNv = (L + 1) * (N + 1);
+		int LNf = L * N;
+		int MNv = (M + 1) * (N + 1);
+		int MNf = M * N;
+
+		for (int j = 0; j < M + 1; j++) {
+			for (int i = 0; i < L + 1; i++) {
+				vertices[idv][0] = vertices[idv + LMv][0] = oW + i * dW;
+				vertices[idv][1] = vertices[idv + LMv][1] = oH + j * dH;
+				vertices[idv][2] = oD;
+				vertices[idv + LMv][2] = -oD;
+				idv++;
+			}
+		}
+
+		for (int j = 0; j < M; j++) {
+			for (int i = 0; i < L; i++) {
+				faces[idf][3] = i + j * (L + 1);
+				faces[idf][2] = i + 1 + j * (L + 1);
+				faces[idf][1] = i + 1 + (j + 1) * (L + 1);
+				faces[idf][0] = i + (j + 1) * (L + 1);
+				faces[idf + LMf][0] = i + j * (L + 1) + LMv;
+				faces[idf + LMf][1] = i + 1 + j * (L + 1) + LMv;
+				faces[idf + LMf][2] = i + 1 + (j + 1) * (L + 1) + LMv;
+				faces[idf + LMf][3] = i + (j + 1) * (L + 1) + LMv;
+				idf++;
+			}
+		}
+		int offset = 2 * LMv;
+		idv = offset;
+		for (int j = 0; j < N + 1; j++) {
+			for (int i = 0; i < L + 1; i++) {
+				vertices[idv][0] = vertices[idv + LNv][0] = oW + i * dW;
+				vertices[idv][2] = vertices[idv + LNv][2] = oD + j * dD;
+				vertices[idv][1] = oH;
+				vertices[idv + LNv][1] = -oH;
+				idv++;
+			}
+		}
+		idf = 2 * LMf;
 		for (int j = 0; j < N; j++) {
 			for (int i = 0; i < L; i++) {
-				faces[idf][0] = index(i, j, 0);
-				faces[idf][1] = index(i + 1, j, 0);
-				faces[idf][2] = index(i + 1, j + 1, 0);
-				faces[idf][3] = index(i, j + 1, 0);
+				faces[idf][0] = i + j * (L + 1) + offset;
+				faces[idf][1] = i + 1 + j * (L + 1) + offset;
+				faces[idf][2] = i + 1 + (j + 1) * (L + 1) + offset;
+				faces[idf][3] = i + (j + 1) * (L + 1) + offset;
+				faces[idf + LNf][3] = i + j * (L + 1) + LNv + offset;
+				faces[idf + LNf][2] = i + 1 + j * (L + 1) + LNv + offset;
+				faces[idf + LNf][1] = i + 1 + (j + 1) * (L + 1) + LNv + offset;
+				faces[idf + LNf][0] = i + (j + 1) * (L + 1) + LNv + offset;
 				idf++;
 			}
 		}
 
+		offset = 2 * LMv + 2 * LNv;
+		idv = offset;
+		for (int j = 0; j < N + 1; j++) {
+			for (int i = 0; i < M + 1; i++) {
+				vertices[idv][1] = vertices[idv + MNv][1] = oH + i * dH;
+				vertices[idv][2] = vertices[idv + MNv][2] = oD + j * dD;
+				vertices[idv][0] = oW;
+				vertices[idv + MNv][0] = -oW;
+				idv++;
+			}
+		}
+		idf = 2 * LMf + 2 * LNf;
 		for (int j = 0; j < N; j++) {
-			for (int i = 0; i < L; i++) {
-				faces[idf][3] = index(i, j, M);
-				faces[idf][2] = index(i + 1, j, M);
-				faces[idf][1] = index(i + 1, j + 1, M);
-				faces[idf][0] = index(i, j + 1, M);
+			for (int i = 0; i < M; i++) {
+				faces[idf][3] = i + j * (M + 1) + offset;
+				faces[idf][2] = i + 1 + j * (M + 1) + offset;
+				faces[idf][1] = i + 1 + (j + 1) * (M + 1) + offset;
+				faces[idf][0] = i + (j + 1) * (M + 1) + offset;
+				faces[idf + MNf][0] = i + j * (M + 1) + MNv + offset;
+				faces[idf + MNf][1] = i + 1 + j * (M + 1) + MNv + offset;
+				faces[idf + MNf][2] = i + 1 + (j + 1) * (M + 1) + MNv + offset;
+				faces[idf + MNf][3] = i + (j + 1) * (M + 1) + MNv + offset;
 				idf++;
 			}
 		}
 
-		for (int k = 0; k < M; k++) {
-			for (int i = 0; i < L; i++) {
-				faces[idf][3] = index(i, 0, k);
-				faces[idf][2] = index(i + 1, 0, k);
-				faces[idf][1] = index(i + 1, 0, k + 1);
-				faces[idf][0] = index(i, 0, k + 1);
-				idf++;
-			}
-		}
-
-		for (int k = 0; k < M; k++) {
-			for (int i = 0; i < L; i++) {
-				faces[idf][0] = index(i, N, k);
-				faces[idf][1] = index(i + 1, N, k);
-				faces[idf][2] = index(i + 1, N, k + 1);
-				faces[idf][3] = index(i, N, k + 1);
-				idf++;
-			}
-		}
-
-		for (int k = 0; k < M; k++) {
-			for (int j = 0; j < N; j++) {
-				faces[idf][0] = index(0, j, k);
-				faces[idf][1] = index(0, j + 1, k);
-				faces[idf][2] = index(0, j + 1, k + 1);
-				faces[idf][3] = index(0, j, k + 1);
-				idf++;
-			}
-		}
-		for (int k = 0; k < M; k++) {
-			for (int j = 0; j < N; j++) {
-				faces[idf][3] = index(L, j, k);
-				faces[idf][2] = index(L, j + 1, k);
-				faces[idf][1] = index(L, j + 1, k + 1);
-				faces[idf][0] = index(L, j, k + 1);
-				idf++;
-			}
-		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
-		fl.setVertices(vertices).setFaces(faces).setDuplicate(false);
-		return fl.createBase().cleanUnusedElementsByFace();
+		fl.setVertices(vertices).setFaces(faces).setDuplicate(true);
+		return fl.createBase();
 	}
 
-	/**
-	 * Index.
-	 * 
-	 * @param i
-	 *            the i
-	 * @param j
-	 *            the j
-	 * @param k
-	 *            the k
-	 * @return the int
-	 */
-	private int index(final int i, final int j, final int k) {
-		return i + (L + 1) * j + (L + 1) * (N + 1) * k;
-
-	}
 }
