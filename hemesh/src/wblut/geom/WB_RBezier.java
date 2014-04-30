@@ -1,5 +1,7 @@
 package wblut.geom;
 
+import wblut.math.WB_Bernstein;
+
 public class WB_RBezier extends WB_Bezier {
 
 	private final double[] weights;
@@ -49,7 +51,7 @@ public class WB_RBezier extends WB_Bezier {
 	 */
 	@Override
 	public WB_Point curvePoint(final double u) {
-		final double[] B = allBernstein(u);
+		final double[] B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 		final WB_PointHomogeneous C = new WB_PointHomogeneous();
 		for (int k = 0; k <= n; k++) {
 			C.add(wpoints[k], B[k]);

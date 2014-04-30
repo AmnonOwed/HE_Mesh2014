@@ -2,6 +2,7 @@ package wblut.geom;
 
 import wblut.hemesh.HEC_FromFacelist;
 import wblut.hemesh.HE_Mesh;
+import wblut.math.WB_Bernstein;
 
 public class WB_BezierSurface implements WB_Surface {
 
@@ -45,13 +46,13 @@ public class WB_BezierSurface implements WB_Surface {
 			final WB_Point[] Q = new WB_Point[m + 1];
 			double[] B;
 			for (int j = 0; j <= m; j++) {
-				B = WB_Bezier.allBernstein(u, n);
+				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 				Q[j] = new WB_Point();
 				for (int k = 0; k <= n; k++) {
 					Q[j]._addSelf(B[k], points[k][j]);
 				}
 			}
-			B = WB_Bezier.allBernstein(v, m);
+			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
 			for (int k = 0; k <= m; k++) {
 				S._addSelf(B[k], Q[k]);
 			}
@@ -59,13 +60,13 @@ public class WB_BezierSurface implements WB_Surface {
 			final WB_Point[] Q = new WB_Point[n + 1];
 			double[] B;
 			for (int i = 0; i <= n; i++) {
-				B = WB_Bezier.allBernstein(v, m);
+				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
 				Q[i] = new WB_Point();
 				for (int k = 0; k <= m; k++) {
 					Q[i]._addSelf(B[k], points[i][k]);
 				}
 			}
-			B = WB_Bezier.allBernstein(u, n);
+			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 			for (int k = 0; k <= n; k++) {
 				S._addSelf(B[k], Q[k]);
 			}
