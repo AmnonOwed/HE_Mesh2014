@@ -453,7 +453,7 @@ public abstract class WB_Delaunay {
 			if (dim == 2 && !exact && nrs > 10000) {
 				// use fast in 2-D with a very large set and exact not required
 				choice = FAST;
-			} else if (nrs > 3000) {
+			} else if (nrs > 0) {
 				// use Clarkson for large sets
 				choice = CLARKSON;
 			} else {
