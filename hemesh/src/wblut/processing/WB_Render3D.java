@@ -5,6 +5,7 @@ import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PShape;
+import wblut.geom.WB_AABB;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
@@ -454,6 +455,15 @@ public class WB_Render3D {
 				home.line(xl, y, z, xu, y, z);
 			}
 		}
+	}
+
+	public void draw(final WB_AABB AABB) {
+		home.pushMatrix();
+		home.translate(AABB.getCenter().xf(), AABB.getCenter().yf(), AABB
+				.getCenter().zf());
+		home.box((float) AABB.getWidth(), (float) AABB.getHeight(),
+				(float) AABB.getDepth());
+		home.popMatrix();
 	}
 
 }

@@ -4758,11 +4758,17 @@ public class WB_GeometryFactory {
 		if (n < 4) {
 			return null;
 		}
-		final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
 
-		final int[][] faces = hull.getFaces();
-		final List<WB_Point> hullpoints = hull.getVertices();
-		return createMesh(hullpoints, faces);
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
+
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	public WB_Mesh createConvexHull(final List<? extends WB_Coordinate> points,
@@ -4772,11 +4778,15 @@ public class WB_GeometryFactory {
 			return null;
 		}
 
-		final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
 
-		final int[][] faces = hull.getFaces();
-		final List<WB_Point> hullpoints = hull.getVertices();
-		return createMesh(hullpoints, faces);
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public WB_Mesh createPrism(final int n, final double radius, final double h) {

@@ -109,6 +109,10 @@ public abstract class WB_Delaunay {
 	/** number of unique global edge numbers */
 	public int NumEdges;
 
+	public double[] circumradii;
+
+	public WB_Point[] circumcenters;
+
 	/**
 	 * The abstract constructor initializes the class's data arrays.
 	 * 
@@ -1098,6 +1102,56 @@ public abstract class WB_Delaunay {
 				} // end for (int i=0; i<ntris; i++)
 			} // end if (mdim == 3)
 		} // end if (Edges == null && mdim <= 3)
+
+		if (circumcenters == null && mdim == 3) {
+			circumcenters = new WB_Point[ntris];
+			circumradii = new double[ntris];
+			WB_Point p0 = new WB_Point();
+			WB_Point p1 = new WB_Point();
+			WB_Point p2 = new WB_Point();
+			WB_Point p3 = new WB_Point();
+			WB_Predicates pred = new WB_Predicates();
+			WB_Sphere CS;
+			int[] tetra;
+			for (int i = 0; i < ntris; i++) {
+				tetra = Tri[i];
+				p0._set(samples[0][tetra[0]], samples[1][tetra[0]],
+						samples[2][tetra[0]]);
+				p1._set(samples[0][tetra[1]], samples[1][tetra[1]],
+						samples[2][tetra[1]]);
+				p2._set(samples[0][tetra[2]], samples[1][tetra[2]],
+						samples[2][tetra[2]]);
+				p3._set(samples[0][tetra[3]], samples[1][tetra[3]],
+						samples[2][tetra[3]]);
+				CS = pred.circumsphereTetra(p0, p1, p2, p3);
+				circumcenters[i] = CS.getCenter();
+				circumradii[i] = CS.getRadius();
+			}
+
+		} else if (circumcenters == null && mdim == 2) {
+			circumcenters = new WB_Point[ntris];
+			circumradii = new double[ntris];
+			WB_Point p0 = new WB_Point();
+			WB_Point p1 = new WB_Point();
+			WB_Point p2 = new WB_Point();
+			WB_Predicates pred = new WB_Predicates();
+			WB_Sphere CS;
+			int[] tri;
+			for (int i = 0; i < ntris; i++) {
+				tri = Tri[i];
+				p0._set(samples[0][tri[0]], samples[1][tri[0]],
+						samples[2][tri[0]]);
+				p1._set(samples[0][tri[1]], samples[1][tri[1]],
+						samples[2][tri[1]]);
+				p2._set(samples[0][tri[2]], samples[1][tri[2]],
+						samples[2][tri[2]]);
+				CS = pred.circumsphereTri(p0, p1, p2);
+				circumcenters[i] = CS.getCenter();
+				circumradii[i] = CS.getRadius();
+			}
+
+		}
+
 	}
 
 	/**

@@ -18,16 +18,13 @@ public class WB_AABB {
 	int _id;
 
 	public WB_AABB(final WB_Coordinate p) {
-		_min = new double[3];
-		_max = new double[3];
+		init();
 		setToNull();
 		expandToInclude(p);
 	}
 
 	public WB_AABB() {
-		_min = new double[3];
-		_max = new double[3];
-		setToNull();
+		init();
 	}
 
 	public WB_AABB(final WB_Coordinate[] points) {
@@ -88,9 +85,9 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final double[] min, final double[] max) {
+		init();
 		if (min.length == 3 && max.length == 3) {
-			_min = new double[3];
-			_max = new double[3];
+
 			for (int i = 0; i < 3; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -101,8 +98,7 @@ public class WB_AABB {
 				}
 			}
 		} else if (min.length == 2 && max.length == 2) {
-			_min = new double[2];
-			_max = new double[2];
+
 			for (int i = 0; i < 2; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -120,9 +116,9 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final float[] min, final float[] max) {
+		init();
 		if (min.length == 3 && max.length == 3) {
-			_min = new double[3];
-			_max = new double[3];
+
 			for (int i = 0; i < 3; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -133,8 +129,7 @@ public class WB_AABB {
 				}
 			}
 		} else if (min.length == 2 && max.length == 2) {
-			_min = new double[3];
-			_max = new double[3];
+
 			for (int i = 0; i < 2; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -152,9 +147,9 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final int[] min, final int[] max) {
+		init();
 		if (min.length == 3 && max.length == 3) {
-			_min = new double[3];
-			_max = new double[3];
+
 			for (int i = 0; i < 3; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -165,8 +160,7 @@ public class WB_AABB {
 				}
 			}
 		} else if (min.length == 2 && max.length == 2) {
-			_min = new double[3];
-			_max = new double[3];
+
 			for (int i = 0; i < 2; i++) {
 				if (min[i] < max[i]) {
 					_min[i] = min[i];
@@ -184,8 +178,7 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final WB_Coordinate min, final WB_Coordinate max) {
-		_min = new double[3];
-		_max = new double[3];
+		init();
 		for (int i = 0; i < 3; i++) {
 			if (min.getd(i) < max.getd(i)) {
 				_min[i] = min.getd(i);
@@ -212,25 +205,19 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final double[] values) {
+		init();
 		if (values.length == 0) {
-			_min = new double[3];
-			_max = new double[3];
-			setToNull();
 
 		}
 
 		else if (values.length == 6) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 3; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 3];
 			}
 		} else if (values.length == 4) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 2; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 2];
@@ -243,25 +230,19 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final int[] values) {
+		init();
 		if (values.length == 0) {
-			_min = new double[3];
-			_max = new double[3];
-			setToNull();
 
 		}
 
 		else if (values.length == 6) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 3; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 3];
 			}
 		} else if (values.length == 4) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 2; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 2];
@@ -274,25 +255,19 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final float[] values) {
+		init();
 		if (values.length == 0) {
-			_min = new double[3];
-			_max = new double[3];
-			setToNull();
 
 		}
 
 		else if (values.length == 6) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 3; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 3];
 			}
 		} else if (values.length == 4) {
 
-			_min = new double[3];
-			_max = new double[3];
 			for (int i = 0; i < 2; i++) {
 				_min[i] = values[i];
 				_max[i] = values[i + 2];
@@ -305,19 +280,21 @@ public class WB_AABB {
 	}
 
 	public WB_AABB(final WB_CoordinateSequence<? extends WB_Coordinate> points) {
-		this();
+		init();
 		int id = 0;
 		double val;
 		for (int i = 0; i < points.size(); i++) {
 			for (int j = 0; j < 3; j++) {
-				val = points.getRaw(id++);
+				val = points.get(i, j);
 				if (_min[j] > val) {
 					_min[j] = val;
 				}
 				if (_max[j] < val) {
 					_max[j] = val;
 				}
+
 			}
+
 		}
 	}
 
@@ -1114,8 +1091,8 @@ public class WB_AABB {
 
 	public void setToNull() {
 		for (int i = 0; i < 3; i++) {
-			_min[i] = 0;
-			_max[i] = -1;
+			_min[i] = Double.POSITIVE_INFINITY;
+			_max[i] = Double.NEGATIVE_INFINITY;
 		}
 	}
 

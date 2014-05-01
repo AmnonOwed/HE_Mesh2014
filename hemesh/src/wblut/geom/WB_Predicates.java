@@ -492,57 +492,6 @@ public class WB_Predicates {
 	}
 
 	/**
-	 * Circumradius tetra.
-	 * 
-	 * @param p0
-	 *            the p0
-	 * @param p1
-	 *            the p1
-	 * @param p2
-	 *            the p2
-	 * @param p3
-	 *            the p3
-	 * @return the double
-	 */
-	public double circumradiusTetra(double[] p0, double[] p1, double[] p2,
-			double[] p3) {
-		double t1, t2, t3;
-		double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null, null,
-				null);
-		t1 = circumcenter[0] - p0[0];
-		t1 = t1 * t1;
-		t2 = circumcenter[1] - p0[1];
-		t2 = t2 * t2;
-		t3 = circumcenter[2] - p0[2];
-		t3 = t3 * t3;
-		return (Math.sqrt(t1 + t2 + t3));
-	}
-
-	/**
-	 * Circumradius tri.
-	 * 
-	 * @param p0
-	 *            the p0
-	 * @param p1
-	 *            the p1
-	 * @param p2
-	 *            the p2
-	 * @return the double
-	 */
-	public double circumradiusTri(double[] p0, double[] p1, double[] p2) {
-
-		double t1, t2, t3;
-		double[] circumcenter = circumcenterTri(p0, p1, p2);
-		t1 = circumcenter[0] - p0[0];
-		t1 = t1 * t1;
-		t2 = circumcenter[1] - p0[1];
-		t2 = t2 * t2;
-		t3 = circumcenter[2] - p0[2];
-		t3 = t3 * t3;
-		return (Math.sqrt(t1 + t2 + t3));
-	}
-
-	/**
 	 * Orient tetra.
 	 * 
 	 * @param p0
@@ -5501,35 +5450,6 @@ public class WB_Predicates {
 	/** The isperrbound c. */
 	private double isperrboundA, isperrboundB, isperrboundC;
 
-	public double circumradiusTetra(final WB_Coordinate p0,
-			final WB_Coordinate p1, final WB_Coordinate p2,
-			final WB_Coordinate p3) {
-		double t1, t2, t3;
-		final double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null,
-				null, null);
-		t1 = circumcenter[0] - p0.xd();
-		t1 = t1 * t1;
-		t2 = circumcenter[1] - p0.yd();
-		t2 = t2 * t2;
-		t3 = circumcenter[2] - p0.zd();
-		t3 = t3 * t3;
-		return (Math.sqrt(t1 + t2 + t3));
-	}
-
-	public double circumradiusTri(final WB_Coordinate p0,
-			final WB_Coordinate p1, final WB_Coordinate p2) {
-
-		double t1, t2, t3;
-		final double[] circumcenter = circumcenterTri(p0, p1, p2);
-		t1 = circumcenter[0] - p0.xd();
-		t1 = t1 * t1;
-		t2 = circumcenter[1] - p0.yd();
-		t2 = t2 * t2;
-		t3 = circumcenter[2] - p0.zd();
-		t3 = t3 * t3;
-		return (Math.sqrt(t1 + t2 + t3));
-	}
-
 	public double orientTetra(final WB_Coordinate p0, final WB_Coordinate p1,
 			final WB_Coordinate p2, final WB_Coordinate p3) {
 		double adx, bdx, cdx, ady, bdy, cdy, adz, bdz, cdz;
@@ -10253,61 +10173,6 @@ public class WB_Predicates {
 		return Q;
 	}
 
-	/**
-	 * Circumcenter tri.
-	 * 
-	 * @param a
-	 *            the a
-	 * @param b
-	 *            the b
-	 * @param c
-	 *            the c
-	 * @return the double[]
-	 */
-	public double[] circumcenterTri(double[] a, double[] b, double[] c) {
-		double xba, yba, zba, xca, yca, zca;
-		double balength, calength;
-		double xcrossbc, ycrossbc, zcrossbc;
-		double denominator;
-		double xcirca, ycirca, zcirca;
-
-		xba = b[0] - a[0];
-		yba = b[1] - a[1];
-		zba = b[2] - a[2];
-		xca = c[0] - a[0];
-		yca = c[1] - a[1];
-		zca = c[2] - a[2];
-
-		balength = xba * xba + yba * yba + zba * zba;
-		calength = xca * xca + yca * yca + zca * zca;
-
-		xcrossbc = yba * zca - yca * zba;
-		ycrossbc = zba * xca - zca * xba;
-		zcrossbc = xba * yca - xca * yba;
-
-		denominator = 0.5 / (xcrossbc * xcrossbc + ycrossbc * ycrossbc + zcrossbc
-				* zcrossbc);
-
-		xcirca = ((balength * yca - calength * yba) * zcrossbc - (balength
-				* zca - calength * zba)
-				* ycrossbc)
-				* denominator;
-		ycirca = ((balength * zca - calength * zba) * xcrossbc - (balength
-				* xca - calength * xba)
-				* zcrossbc)
-				* denominator;
-		zcirca = ((balength * xca - calength * xba) * ycrossbc - (balength
-				* yca - calength * yba)
-				* xcrossbc)
-				* denominator;
-		double[] circumcenter = new double[3];
-		circumcenter[0] = xcirca + a[0];
-		circumcenter[1] = ycirca + a[1];
-		circumcenter[2] = zcirca + a[2];
-		return circumcenter;
-
-	}
-
 	private void _exactinit() {
 		double half;
 		double check, lastcheck;
@@ -10504,6 +10369,12 @@ public class WB_Predicates {
 	}
 
 	public double[] circumcenterTetra(final double[] a, final double[] b,
+			final double[] c, final double[] d) {
+		return circumcenterTetra(a, b, c, d, null, null, null);
+
+	}
+
+	public double[] circumcenterTetra(final double[] a, final double[] b,
 			final double[] c, final double[] d, final double[] xi,
 			final double[] eta, final double[] zeta) {
 		double xba, yba, zba, xca, yca, zca, xda, yda, zda;
@@ -10565,6 +10436,12 @@ public class WB_Predicates {
 					* (2.0 * denominator);
 		}
 		return circumcenter;
+	}
+
+	public double[] circumcenterTetra(final WB_Coordinate a,
+			final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
+
+		return circumcenterTetra(a, b, c, d, null, null, null);
 	}
 
 	public double[] circumcenterTetra(final WB_Coordinate a,
@@ -10632,6 +10509,133 @@ public class WB_Predicates {
 		return circumcenter;
 	}
 
+	/**
+	 * Circumradius tetra.
+	 * 
+	 * @param p0
+	 *            the p0
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
+	 * @param p3
+	 *            the p3
+	 * @return the double
+	 */
+	public double circumradiusTetra(double[] p0, double[] p1, double[] p2,
+			double[] p3) {
+		double t1, t2, t3;
+		double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null, null,
+				null);
+		t1 = circumcenter[0] - p0[0];
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0[1];
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0[2];
+		t3 = t3 * t3;
+		return (Math.sqrt(t1 + t2 + t3));
+	}
+
+	public double circumradiusTetra(final WB_Coordinate p0,
+			final WB_Coordinate p1, final WB_Coordinate p2,
+			final WB_Coordinate p3) {
+		double t1, t2, t3;
+		final double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null,
+				null, null);
+		t1 = circumcenter[0] - p0.xd();
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0.yd();
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0.zd();
+		t3 = t3 * t3;
+		return (Math.sqrt(t1 + t2 + t3));
+	}
+
+	public WB_Sphere circumsphereTetra(double[] p0, double[] p1, double[] p2,
+			double[] p3) {
+		double t1, t2, t3;
+		double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null, null,
+				null);
+		t1 = circumcenter[0] - p0[0];
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0[1];
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0[2];
+		t3 = t3 * t3;
+		return new WB_Sphere(new WB_Point(circumcenter),
+				Math.sqrt(t1 + t2 + t3));
+	}
+
+	public WB_Sphere circumsphereTetra(WB_Coordinate p0, WB_Coordinate p1,
+			WB_Coordinate p2, WB_Coordinate p3) {
+		double t1, t2, t3;
+		double[] circumcenter = circumcenterTetra(p0, p1, p2, p3, null, null,
+				null);
+		t1 = circumcenter[0] - p0.xd();
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0.yd();
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0.zd();
+		t3 = t3 * t3;
+		return new WB_Sphere(new WB_Point(circumcenter),
+				Math.sqrt(t1 + t2 + t3));
+	}
+
+	/**
+	 * Circumcenter tri.
+	 * 
+	 * @param a
+	 *            the a
+	 * @param b
+	 *            the b
+	 * @param c
+	 *            the c
+	 * @return the double[]
+	 */
+	public double[] circumcenterTri(double[] a, double[] b, double[] c) {
+		double xba, yba, zba, xca, yca, zca;
+		double balength, calength;
+		double xcrossbc, ycrossbc, zcrossbc;
+		double denominator;
+		double xcirca, ycirca, zcirca;
+
+		xba = b[0] - a[0];
+		yba = b[1] - a[1];
+		zba = b[2] - a[2];
+		xca = c[0] - a[0];
+		yca = c[1] - a[1];
+		zca = c[2] - a[2];
+
+		balength = xba * xba + yba * yba + zba * zba;
+		calength = xca * xca + yca * yca + zca * zca;
+
+		xcrossbc = yba * zca - yca * zba;
+		ycrossbc = zba * xca - zca * xba;
+		zcrossbc = xba * yca - xca * yba;
+
+		denominator = 0.5 / (xcrossbc * xcrossbc + ycrossbc * ycrossbc + zcrossbc
+				* zcrossbc);
+
+		xcirca = ((balength * yca - calength * yba) * zcrossbc - (balength
+				* zca - calength * zba)
+				* ycrossbc)
+				* denominator;
+		ycirca = ((balength * zca - calength * zba) * xcrossbc - (balength
+				* xca - calength * xba)
+				* zcrossbc)
+				* denominator;
+		zcirca = ((balength * xca - calength * xba) * ycrossbc - (balength
+				* yca - calength * yba)
+				* xcrossbc)
+				* denominator;
+		double[] circumcenter = new double[3];
+		circumcenter[0] = xcirca + a[0];
+		circumcenter[1] = ycirca + a[1];
+		circumcenter[2] = zcirca + a[2];
+		return circumcenter;
+
+	}
+
 	public double[] circumcenterTri(final WB_Coordinate a,
 			final WB_Coordinate b, final WB_Coordinate c) {
 		double xba, yba, zba, xca, yca, zca;
@@ -10675,6 +10679,74 @@ public class WB_Predicates {
 		circumcenter[2] = zcirca + a.zd();
 		return circumcenter;
 
+	}
+
+	public double circumradiusTri(final WB_Coordinate p0,
+			final WB_Coordinate p1, final WB_Coordinate p2) {
+
+		double t1, t2, t3;
+		final double[] circumcenter = circumcenterTri(p0, p1, p2);
+		t1 = circumcenter[0] - p0.xd();
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0.yd();
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0.zd();
+		t3 = t3 * t3;
+		return (Math.sqrt(t1 + t2 + t3));
+	}
+
+	/**
+	 * Circumradius tri.
+	 * 
+	 * @param p0
+	 *            the p0
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
+	 * @return the double
+	 */
+	public double circumradiusTri(double[] p0, double[] p1, double[] p2) {
+
+		double t1, t2, t3;
+		double[] circumcenter = circumcenterTri(p0, p1, p2);
+		t1 = circumcenter[0] - p0[0];
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0[1];
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0[2];
+		t3 = t3 * t3;
+		return (Math.sqrt(t1 + t2 + t3));
+	}
+
+	public WB_Sphere circumsphereTri(final WB_Coordinate p0,
+			final WB_Coordinate p1, final WB_Coordinate p2) {
+
+		double t1, t2, t3;
+		final double[] circumcenter = circumcenterTri(p0, p1, p2);
+		t1 = circumcenter[0] - p0.xd();
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0.yd();
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0.zd();
+		t3 = t3 * t3;
+		return new WB_Sphere(new WB_Point(circumcenter),
+				Math.sqrt(t1 + t2 + t3));
+	}
+
+	public WB_Sphere circumsphereTri(final double[] p0, final double[] p1,
+			final double[] p2) {
+
+		double t1, t2, t3;
+		final double[] circumcenter = circumcenterTri(p0, p1, p2);
+		t1 = circumcenter[0] - p0[0];
+		t1 = t1 * t1;
+		t2 = circumcenter[1] - p0[1];
+		t2 = t2 * t2;
+		t3 = circumcenter[2] - p0[2];
+		t3 = t3 * t3;
+		return new WB_Sphere(new WB_Point(circumcenter),
+				Math.sqrt(t1 + t2 + t3));
 	}
 
 	/**

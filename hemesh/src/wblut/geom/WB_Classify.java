@@ -238,7 +238,7 @@ public class WB_Classify {
 
 	public static WB_Classification classifyPointToPlane(final WB_Plane P,
 			final WB_Coordinate p) {
-		if (P.getOrigin().equals(p)) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.distanceToPlane3D(p, P))) {
 			return WB_Classification.ON;
 		}
 		final WB_Predicates predicates = new WB_Predicates();

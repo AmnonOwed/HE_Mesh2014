@@ -23,7 +23,8 @@ public class WB_VoronoiCell3D {
 		this.index = index;
 
 		cell = geometryfactory.createConvexHull(points, false);
-		onBoundary = new boolean[cell.getNumberOfVertices()];
+		if (cell != null)
+			onBoundary = new boolean[cell.getNumberOfVertices()];
 	}
 
 	public WB_VoronoiCell3D(final List<? extends WB_Coordinate> points,
@@ -32,7 +33,8 @@ public class WB_VoronoiCell3D {
 		this.index = index;
 
 		cell = geometryfactory.createConvexHull(points, false);
-		onBoundary = new boolean[cell.getNumberOfVertices()];
+		if (cell != null)
+			onBoundary = new boolean[cell.getNumberOfVertices()];
 	}
 
 	public void constrain(final WB_AABB container) {
@@ -122,9 +124,8 @@ public class WB_VoronoiCell3D {
 		}
 	}
 
-	private void slice(final WB_Plane WB_Point) {
-
-		final WB_Classification[] classifyPoints = ptsPlane(WB_Point);
+	private void slice(final WB_Plane P) {
+		final WB_Classification[] classifyPoints = ptsPlane(P);
 		final List<WB_Point> newPoints = new ArrayList<WB_Point>();
 
 		for (int i = 0; i < classifyPoints.length; i++) {
@@ -132,17 +133,14 @@ public class WB_VoronoiCell3D {
 				newPoints.add(cell.getVertex(i));
 			}
 		}
-
 		final int[][] edges = cell.getEdges();
 		for (final int[] edge : edges) {
 			if (((classifyPoints[edge[0]] == WB_Classification.BACK) && (classifyPoints[edge[1]] == WB_Classification.FRONT))
 					|| ((classifyPoints[edge[1]] == WB_Classification.BACK) && (classifyPoints[edge[0]] == WB_Classification.FRONT))) {
 				final WB_Point a = cell.getVertex(edge[0]);
 				final WB_Point b = cell.getVertex(edge[1]);
-				final WB_Vector ab = geometryfactory.createVector(a, b);
-				final double t = (WB_Point.d() - WB_Point.getNormal().dot(a))
-						/ WB_Point.getNormal().dot(ab);
-				newPoints.add(a.addMul(t, ab));
+				newPoints.add((WB_Point) WB_Intersection.getIntersection(a, b,
+						P).object);
 				sliced = true;
 			}
 		}

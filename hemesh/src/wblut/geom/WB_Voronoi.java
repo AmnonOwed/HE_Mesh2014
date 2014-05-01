@@ -3,12 +3,8 @@ package wblut.geom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javolution.util.FastList;
-import wblut.external.ProGAL.CTetrahedron;
-import wblut.external.ProGAL.CVertex;
-import wblut.external.ProGAL.DelaunayComplex;
 
 import com.vividsolutions.jts.algorithm.ConvexHull;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -26,40 +22,24 @@ public class WB_Voronoi {
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
 			final WB_Coordinate[] points, final WB_AABB aabb) {
-		final int n = points.length;
-		final List<wblut.external.ProGAL.Point> tmppoints = new ArrayList<wblut.external.ProGAL.Point>(
-				n);
-		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
-		for (int i = 0; i < n; i++) {
-			tmppoints.add(new wblut.external.ProGAL.Point(points[i].xd(),
-					points[i].yd(), points[i].zd()));
-			tree.add(points[i], i);
-		}
-		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
-		final List<CVertex> vertices = dc.getVertices();
-		final int nv = vertices.size();
+		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
+				0.001);
+
+		final int nv = points.length;
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
 		for (int i = 0; i < nv; i++) {
-			boolean onConvexHull = false;
-			final CVertex v = vertices.get(i);
-			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
+
+			int[] tetras = triangulation.Vertices[i];
+
 			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
-			for (final CTetrahedron tetra : vertexhull) {
-				// if (!tetra.containsBigPoint()) {
-				hullpoints.add(toPoint(tetra.circumcenter()));
-				// }
-				if (tetra.containsBigPoint()) {
-					onConvexHull = true;
-				}
+			for (int t = 0; t < tetras.length; t++) {
+				hullpoints.add(triangulation.circumcenters[tetras[t]]);
 			}
-			final List<WB_Point> finalpoints = new FastList<WB_Point>();
-			for (int j = 0; j < hullpoints.size(); j++) {
-				finalpoints.add(geometryfactory.createPoint(hullpoints.get(j)));
-			}
-			final int index = tree.getNearestNeighbor(toPoint(v)).value;
-			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(finalpoints,
-					geometryfactory.createPoint(points[index]), index);
-			vor.constrain(aabb);
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
+					geometryfactory.createPoint(points[i]), i);
+
+			if (vor.cell != null)
+				vor.constrain(aabb);
 			if (vor.cell != null) {
 				result.add(vor);
 			}
@@ -69,53 +49,29 @@ public class WB_Voronoi {
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
 			final List<? extends WB_Coordinate> points, final WB_AABB aabb) {
-		final int n = points.size();
-		final List<wblut.external.ProGAL.Point> tmppoints = new ArrayList<wblut.external.ProGAL.Point>(
-				n);
-		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
-		int i = 0;
-		for (final WB_Coordinate p : points) {
-			tmppoints.add(new wblut.external.ProGAL.Point(p.xd(), p.yd(), p
-					.zd()));
-			tree.add(p, i++);
-		}
-		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
-		final List<CVertex> vertices = dc.getVertices();
-		final int nv = vertices.size();
 
+		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
+				0.001);
+
+		final int nv = points.size();
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
-		for (i = 0; i < nv; i++) {
-			boolean onConvexHull = false;
-			final CVertex v = vertices.get(i);
-			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
-			v.getAdjacentTriangles();
+		for (int i = 0; i < nv; i++) {
+
+			int[] tetras = triangulation.Vertices[i];
 
 			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
-			for (final CTetrahedron tetra : vertexhull) {
-				// if (!tetra.containsBigPoint()) {
-				hullpoints.add(toPoint(tetra.circumcenter()));
-				// }
-				if (tetra.containsBigPoint()) {
-					onConvexHull = true;
-				}
+			for (int t = 0; t < tetras.length; t++) {
+				hullpoints.add(triangulation.circumcenters[tetras[t]]);
 			}
-			final List<WB_Point> finalpoints = new FastList<WB_Point>();
-			for (int j = 0; j < hullpoints.size(); j++) {
-				finalpoints.add(geometryfactory.createPoint(hullpoints.get(j)));
-			}
-			final int index = tree.getNearestNeighbor(toPoint(v)).value;
-			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(finalpoints,
-					geometryfactory.createPoint(points.get(index)), index);
-			vor.constrain(aabb);
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
+					geometryfactory.createPoint(points.get(i)), i);
+			if (vor.cell != null)
+				vor.constrain(aabb);
 			if (vor.cell != null) {
 				result.add(vor);
 			}
 		}
 		return result;
-	}
-
-	private static WB_Point toPoint(final wblut.external.ProGAL.Point v) {
-		return geometryfactory.createPoint(v.x(), v.y(), v.z());
 	}
 
 	public static List<WB_VoronoiCell2D> getVoronoi2D(final WB_Point[] points,
