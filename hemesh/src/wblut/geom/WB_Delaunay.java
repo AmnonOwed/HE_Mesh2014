@@ -190,6 +190,35 @@ public abstract class WB_Delaunay {
 		return getTriangulation(samples, closest, true);
 	}
 
+	public static WB_Delaunay getTriangulation3D(WB_CoordinateSequence points,
+			double closest) {
+		double[][] samples = new double[3][points.size()];
+		int id = 0;
+		for (int i = 0; i < points.size(); i++) {
+			samples[0][i] = points.getRaw(id++);
+			samples[1][i] = points.getRaw(id++);
+			samples[2][i] = points.getRaw(id++);
+			id++;
+		}
+		return getTriangulation(samples, closest, true);
+	}
+
+	public static WB_Delaunay getTriangulation3D(WB_CoordinateSequence points,
+			double closest, double epsilon) {
+		double[][] samples = new double[3][points.size()];
+		int id = 0;
+		for (int i = 0; i < points.size(); i++) {
+			samples[0][i] = points.getRaw(id++) + 2 * epsilon
+					* (Math.random() - 0.5);
+			samples[1][i] = points.getRaw(id++) + 2 * epsilon
+					* (Math.random() - 0.5);
+			samples[2][i] = points.getRaw(id++) + 2 * epsilon
+					* (Math.random() - 0.5);
+			id++;
+		}
+		return getTriangulation(samples, closest, true);
+	}
+
 	public static WB_Delaunay getTriangulation4D(WB_Coordinate[] points,
 			double closest) {
 		double[][] samples = new double[4][points.length];
