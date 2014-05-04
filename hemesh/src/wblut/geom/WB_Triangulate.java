@@ -34,24 +34,24 @@ public class WB_Triangulate {
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final WB_Coordinate[] points) {
+			final WB_Coordinate[] points, double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
-				WB_Delaunay.getTriangulation3D(points, 0.000001).Tri);
+				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
 
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final List<? extends WB_Coordinate> points) {
+			final List<? extends WB_Coordinate> points, double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
-				WB_Delaunay.getTriangulation3D(points, 0.000001).Tri);
+				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final WB_CoordinateSequence points) {
+			final WB_CoordinateSequence points, double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
-				WB_Delaunay.getTriangulation3D(points, 0.000001).Tri);
+				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
 
 	}

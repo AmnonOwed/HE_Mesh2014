@@ -21,9 +21,9 @@ public class WB_Voronoi {
 			.instance();
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final WB_Coordinate[] points, final WB_AABB aabb) {
+			final WB_Coordinate[] points, final WB_AABB aabb, double precision) {
 		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
-				0.001);
+				precision);
 
 		final int nv = points.length;
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
@@ -48,10 +48,11 @@ public class WB_Voronoi {
 	}
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final List<? extends WB_Coordinate> points, final WB_AABB aabb) {
+			final List<? extends WB_Coordinate> points, final WB_AABB aabb,
+			double precision) {
 
 		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
-				0.001);
+				precision);
 
 		final int nv = points.size();
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
@@ -63,6 +64,7 @@ public class WB_Voronoi {
 			for (int t = 0; t < tetras.length; t++) {
 				hullpoints.add(triangulation.circumcenters[tetras[t]]);
 			}
+			hullpoints.add(new WB_Point(points.get(i)));
 			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
 					geometryfactory.createPoint(points.get(i)), i);
 			if (vor.cell != null)

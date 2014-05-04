@@ -1068,4 +1068,8 @@ public class WB_Point implements Comparable<WB_Coordinate>,
 		return WB_Epsilon.isZeroSq(sub(p).cross(sub(q)).getSqLength());
 	}
 
+	public double heading() {
+		return Math.atan2(y, x);
+	}
+
 }

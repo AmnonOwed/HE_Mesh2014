@@ -2281,9 +2281,8 @@ public abstract class WB_Delaunay {
 				System.arraycopy(samples[j], 0, site_blocks[j], 0, nrs);
 			}
 
-			double expansion = (closest < 1) ? ((closest >= 1e-4) ? 1.0 / closest
-					: 1e4)
-					: 1.0;
+			double expansion = (closest < 1) ? ((closest > 0) ? 1.0 / closest
+					: 0.001) : 1.0;
 
 			for (int j = 0; j < dim; j++) {
 				for (int kk = 0; kk < nrs; kk++) {
