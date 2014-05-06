@@ -2,11 +2,9 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
-import wblut.geom.WB_AABB;
-import wblut.geom.WB_KDTree;
-import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.WB_Delaunay;
 import wblut.geom.WB_Point;
 
 /**
@@ -44,19 +42,18 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 	/** Create divided skin of container. */
 	private boolean createSkin;
 
-	/** Use dummy for neighbor resolution?. */
-	private boolean useDummy;
-
 	/** The limit. */
 	public int limit;
+
+	public double precision;
 
 	/**
 	 * Instantiates a new HEMC_VoronoiCells.
 	 * 
 	 */
-	public HEMC_VoronoiCells() {
+	public HEMC_VoronoiCells(double precision) {
 		super();
-		useDummy = false;
+		this.precision = precision;
 	}
 
 	/**
@@ -225,18 +222,6 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		return this;
 	}
 
-	/**
-	 * Use dummy mesh for fast neighbor resolution?.
-	 * 
-	 * @param b
-	 *            true, false
-	 * @return self
-	 */
-	public HEMC_VoronoiCells setUseDummy(final boolean b) {
-		useDummy = b;
-		return this;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -260,131 +245,76 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		if (numberOfPoints == 0) {
 			numberOfPoints = points.length;
 		}
-		if (useDummy) {
-			return createWithDummy();
-		}
-		final ArrayList<HE_Mesh> lresult = new ArrayList<HE_Mesh>();
-		final ArrayList<HE_Selection> linnersel = new ArrayList<HE_Selection>();
-		final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
-		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
-		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-				.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
-		if (limit > 0) {
-			final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
-			for (int i = 0; i < numberOfPoints; i++) {
-				tree.add(points[i], i);
-			}
+		return createWithDelaunay();
 
-			for (int i = 0; i < numberOfPoints; i++) {
-				cvc.setCellIndex(i);
-				System.out.println("HEMC_VoronoiCells: creating cell "
-						+ (i + 1) + " of " + numberOfPoints + ".");
-				final WB_KDEntry<WB_Point, Integer>[] closest = tree
-						.getNearestNeighbors(points[i], limit);
-				final ArrayList<Integer> indicesToUse = new ArrayList<Integer>();
-				for (int j = 0; j < limit; j++) {
-					indicesToUse.add(closest[j].value);
-				}
-
-				cvc.setLimitPoints(true).setPointsToUse(indicesToUse);
-
-				final HE_Mesh mesh = cvc.createBase();
-				linnersel.add(cvc.inner);
-				loutersel.add(cvc.outer);
-				lresult.add(mesh);
-			}
-
-		} else {
-			for (int i = 0; i < numberOfPoints; i++) {
-				cvc.setCellIndex(i);
-				System.out.println("HEMC_VoronoiCells: creating cell "
-						+ (i + 1) + " of " + numberOfPoints + ".");
-				final HE_Mesh mesh = cvc.createBase();
-				linnersel.add(cvc.inner);
-				loutersel.add(cvc.outer);
-				lresult.add(mesh);
-			}
-
-		}
-
-		result = new HE_Mesh[(createSkin) ? lresult.size() + 1 : lresult.size()];
-		inner = new HE_Selection[lresult.size()];
-		outer = new HE_Selection[lresult.size()];
-		_numberOfMeshes = lresult.size();
-		for (int i = 0; i < _numberOfMeshes; i++) {
-			result[i] = lresult.get(i);
-			inner[i] = linnersel.get(i);
-			outer[i] = loutersel.get(i);
-		}
-
-		if (createSkin) {
-			final boolean[] on = new boolean[_numberOfMeshes];
-			for (int i = 0; i < _numberOfMeshes; i++) {
-				on[i] = true;
-			}
-
-			result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
-					.setActive(on).setCells(result));
-		}
-		return result;
+		/*
+		 * final ArrayList<HE_Mesh> lresult = new ArrayList<HE_Mesh>(); final
+		 * ArrayList<HE_Selection> linnersel = new ArrayList<HE_Selection>();
+		 * final ArrayList<HE_Selection> loutersel = new
+		 * ArrayList<HE_Selection>(); final HEC_VoronoiCell cvc = new
+		 * HEC_VoronoiCell();
+		 * cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
+		 * .setSurface(surface).setOffset(offset).setSimpleCap(simpleCap); if
+		 * (limit > 0) { final WB_KDTree<WB_Point, Integer> tree = new
+		 * WB_KDTree<WB_Point, Integer>(); for (int i = 0; i < numberOfPoints;
+		 * i++) { tree.add(points[i], i); }
+		 * 
+		 * for (int i = 0; i < numberOfPoints; i++) { cvc.setCellIndex(i);
+		 * System.out.println("HEMC_VoronoiCells: creating cell " + (i + 1) +
+		 * " of " + numberOfPoints + "."); final WB_KDEntry<WB_Point, Integer>[]
+		 * closest = tree .getNearestNeighbors(points[i], limit); final
+		 * ArrayList<Integer> indicesToUse = new ArrayList<Integer>(); for (int
+		 * j = 0; j < limit; j++) { indicesToUse.add(closest[j].value); }
+		 * 
+		 * cvc.setLimitPoints(true).setPointsToUse(indicesToUse);
+		 * 
+		 * final HE_Mesh mesh = cvc.createBase(); linnersel.add(cvc.inner);
+		 * loutersel.add(cvc.outer); lresult.add(mesh); }
+		 * 
+		 * } else { for (int i = 0; i < numberOfPoints; i++) {
+		 * cvc.setCellIndex(i);
+		 * System.out.println("HEMC_VoronoiCells: creating cell " + (i + 1) +
+		 * " of " + numberOfPoints + "."); final HE_Mesh mesh =
+		 * cvc.createBase(); linnersel.add(cvc.inner); loutersel.add(cvc.outer);
+		 * lresult.add(mesh); }
+		 * 
+		 * }
+		 * 
+		 * result = new HE_Mesh[(createSkin) ? lresult.size() + 1 :
+		 * lresult.size()]; inner = new HE_Selection[lresult.size()]; outer =
+		 * new HE_Selection[lresult.size()]; _numberOfMeshes = lresult.size();
+		 * for (int i = 0; i < _numberOfMeshes; i++) { result[i] =
+		 * lresult.get(i); inner[i] = linnersel.get(i); outer[i] =
+		 * loutersel.get(i); }
+		 * 
+		 * if (createSkin) { final boolean[] on = new boolean[_numberOfMeshes];
+		 * for (int i = 0; i < _numberOfMeshes; i++) { on[i] = true; }
+		 * 
+		 * result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
+		 * .setActive(on).setCells(result)); } return result;
+		 */
 	}
 
-	/**
-	 * Creates the with dummy.
-	 * 
-	 * @return the h e_ mesh[]
-	 */
-	public HE_Mesh[] createWithDummy() {
-		final WB_AABB AABB = new WB_AABB(points);
-		final WB_AABB meshAABB = container.getAABB();
-		AABB.getMin().x = Math.min(AABB.getMin().x, meshAABB.getMin().x);
-		AABB.getMin().y = Math.min(AABB.getMin().y, meshAABB.getMin().y);
-		AABB.getMin().z = Math.min(AABB.getMin().z, meshAABB.getMin().z);
-		AABB.getMax().x = Math.max(AABB.getMax().x, meshAABB.getMax().x);
-		AABB.getMax().y = Math.max(AABB.getMax().y, meshAABB.getMax().y);
-		AABB.getMax().z = Math.max(AABB.getMax().z, meshAABB.getMax().z);
-
-		final HE_Mesh dummy = new HE_Mesh(new HEC_Box().setFromAABB(AABB, 20));
+	public HE_Mesh[] createWithDelaunay() {
 		HE_Mesh[] result;
-
-		final ArrayList<HE_Mesh> lresult = new ArrayList<HE_Mesh>();
-		final ArrayList<HE_Selection> linnersel = new ArrayList<HE_Selection>();
-		final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
-		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
+		final WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(
+				points, precision);
+		HEC_VoronoiCell cvc = new HEC_VoronoiCell();
 		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
 				.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
-
-		final HEC_VoronoiCell dvc = new HEC_VoronoiCell();
-		dvc.setPoints(points).setN(numberOfPoints).setContainer(dummy)
-				.setSurface(surface).setOffset(offset).setSimpleCap(true);
-
 		HE_Mesh mesh;
+		List<HE_Mesh> lresult = new ArrayList<HE_Mesh>();
+		List<HE_Selection> linnersel = new ArrayList<HE_Selection>();
+		List<HE_Selection> loutersel = new ArrayList<HE_Selection>();
 		for (int i = 0; i < numberOfPoints; i++) {
 			cvc.setCellIndex(i);
-			dvc.setCellIndex(i);
 			System.out.println("HEMC_VoronoiCells: creating cell " + (i + 1)
 					+ " of " + numberOfPoints + ".");
+			cvc.setLimitPoints(true).setPointsToUse(triangulation.Neighbors[i]);
+			mesh = cvc.createBase();
+			linnersel.add(cvc.inner);
+			loutersel.add(cvc.outer);
 
-			mesh = dvc.createBase();
-			final ArrayList<Integer> indicesToUse = new ArrayList<Integer>(
-					mesh.getNumberOfFaces());
-			final Iterator<HE_Face> fItr = mesh.fItr();
-			while (fItr.hasNext()) {
-				final int j = fItr.next().getLabel();
-				if (j > -1) {
-					indicesToUse.add(j);
-				}
-			}
-			if (mesh.getNumberOfFaces() == 0) {
-				mesh = new HE_Mesh();
-				linnersel.add(new HE_Selection(mesh));
-				loutersel.add(new HE_Selection(mesh));
-			} else {
-				cvc.setLimitPoints(true).setPointsToUse(indicesToUse);
-				mesh = cvc.createBase();
-				linnersel.add(cvc.inner);
-				loutersel.add(cvc.outer);
-			}
 			lresult.add(mesh);
 		}
 		result = new HE_Mesh[lresult.size()];

@@ -12,7 +12,7 @@ import wblut.geom.WB_Vector;
  * @author Frederik Vanhoutte (W:Blut)
  * 
  */
-public class HE_Halfedge extends HE_Element {
+public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/** Start vertex of halfedge. */
 	private HE_Vertex _vertex;
@@ -35,11 +35,14 @@ public class HE_Halfedge extends HE_Element {
 	/** The _data. */
 	private HashMap<String, Object> _data;
 
+	private int hecolor;
+
 	/**
 	 * Instantiates a new HE_Halfedge.
 	 */
 	public HE_Halfedge() {
 		super();
+		hecolor = -1;
 	}
 
 	/**
@@ -99,6 +102,7 @@ public class HE_Halfedge extends HE_Element {
 	 * @return paired halfedge
 	 */
 	public HE_Halfedge getPair() {
+
 		return _pair;
 	}
 
@@ -414,6 +418,18 @@ public class HE_Halfedge extends HE_Element {
 	 */
 	public Object getData(final String s) {
 		return _data.get(s);
+	}
+
+	@Override
+	public int getColor() {
+
+		return hecolor;
+	}
+
+	@Override
+	public void setColor(int color) {
+		hecolor = color;
+
 	}
 
 }

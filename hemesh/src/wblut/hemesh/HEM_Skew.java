@@ -2,9 +2,10 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Distance3D;
 import wblut.geom.WB_Plane;
-import wblut.geom.WB_Point;
+import wblut.geom.WB_Vector;
 
 /**
  * Skew a mesh. Determined by a ground plane, a skew direction and a skew
@@ -19,7 +20,7 @@ public class HEM_Skew extends HEM_Modifier {
 	private WB_Plane groundPlane;
 
 	/** Skew direction. */
-	private WB_Point skewDirection;
+	private WB_Vector skewDirection;
 
 	/** Skew factor. */
 	private double skewFactor;
@@ -76,8 +77,8 @@ public class HEM_Skew extends HEM_Modifier {
 	 *            direction
 	 * @return self
 	 */
-	public HEM_Skew setSkewDirection(final WB_Point p) {
-		skewDirection = p.get();
+	public HEM_Skew setSkewDirection(final WB_Coordinate p) {
+		skewDirection = new WB_Vector(p);
 		skewDirection._normalizeSelf();
 		return this;
 	}
@@ -95,7 +96,7 @@ public class HEM_Skew extends HEM_Modifier {
 	 */
 	public HEM_Skew setSkewDirection(final double vx, final double vy,
 			final double vz) {
-		skewDirection = new WB_Point(vx, vy, vz);
+		skewDirection = new WB_Vector(vx, vy, vz);
 		skewDirection._normalizeSelf();
 		return this;
 	}

@@ -20,7 +20,7 @@ import wblut.math.WB_Math;
  * @author Frederik Vanhoutte (W:Blut)
  * 
  */
-public class HE_Face extends HE_Element implements WB_HasData {
+public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/** Halfedge associated with this face. */
 	private HE_Halfedge _halfedge;
@@ -31,11 +31,15 @@ public class HE_Face extends HE_Element implements WB_HasData {
 	/** The _data. */
 	private HashMap<String, Object> _data;
 
+	private int facecolor;
+
 	/**
 	 * Instantiates a new HE_Face.
 	 */
 	public HE_Face() {
+
 		super();
+		facecolor = -1;
 	}
 
 	/**
@@ -478,6 +482,18 @@ public class HE_Face extends HE_Element implements WB_HasData {
 	 */
 	public Object getData(final String s) {
 		return _data.get(s);
+	}
+
+	@Override
+	public int getColor() {
+
+		return facecolor;
+	}
+
+	@Override
+	public void setColor(int color) {
+		facecolor = color;
+
 	}
 
 }

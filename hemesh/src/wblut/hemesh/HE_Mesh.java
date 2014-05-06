@@ -1584,7 +1584,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < n; i++) {
 			he = cleanedHalfedges.get(i);
 			if (!cleanedHalfedges.contains(he.getPair())) {
-				he.getPair().clearPair();
+				if (he.getPair() != null)
+					he.getPair().clearPair();
 				he.clearPair();
 				he.getVertex().setHalfedge(he);
 			} else {
@@ -4859,15 +4860,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);
 			do {
-				he.clearEdge();
-				he.clearPair();
+
 				if (he.getPair() != null) {
 					he.getPair().clearEdge();
 					he.getPair().clearPair();
 				}
+
 				if (he.getEdge() != null) {
 					remove(he.getEdge());
 				}
+				he.clearEdge();
+				he.clearPair();
 				remove(he);
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());

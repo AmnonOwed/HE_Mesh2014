@@ -19,7 +19,7 @@ import wblut.geom.WB_Vector;
  * 
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-		WB_HasData {
+		WB_HasData, WB_HasColor {
 
 	public WB_Point pos;
 
@@ -29,12 +29,15 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	/** The _data. */
 	private HashMap<String, Object> _data;
 
+	private int vertexcolor;
+
 	/**
 	 * Instantiates a new HE_Vertex.
 	 */
 	public HE_Vertex() {
 		super();
 		pos = new WB_Point();
+		vertexcolor = -1;
 	}
 
 	/**
@@ -50,6 +53,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	public HE_Vertex(final double x, final double y, final double z) {
 		super();
 		pos = new WB_Point(x, y, z);
+		vertexcolor = -1;
 	}
 
 	/**
@@ -61,6 +65,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	public HE_Vertex(final WB_Coordinate v) {
 		super();
 		pos = new WB_Point(v);
+		vertexcolor = -1;
 	}
 
 	public HE_Vertex get() {
@@ -564,6 +569,18 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	@Override
 	public void _set(double x, double y, double z, double w) {
 		pos._set(x, y, z, w);
+
+	}
+
+	@Override
+	public int getColor() {
+
+		return vertexcolor;
+	}
+
+	@Override
+	public void setColor(int color) {
+		vertexcolor = color;
 
 	}
 

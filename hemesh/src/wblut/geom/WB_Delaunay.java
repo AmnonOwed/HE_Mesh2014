@@ -26,8 +26,10 @@
 
 package wblut.geom;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Delaunay represents an abstract class for calculating an N-dimensional
@@ -82,6 +84,8 @@ public abstract class WB_Delaunay {
 	 * except Tri.
 	 */
 	public int[][] Vertices;
+
+	public int[][] Neighbors;
 
 	/**
 	 * triangles/tetrahedra --> triangles/tetrahedra.
@@ -1102,6 +1106,27 @@ public abstract class WB_Delaunay {
 				} // end for (int i=0; i<ntris; i++)
 			} // end if (mdim == 3)
 		} // end if (Edges == null && mdim <= 3)
+
+		if (Neighbors == null && mdim <= 3) {
+			Neighbors = new int[nrs][];
+			Set<Integer> temp = new HashSet();
+			for (int i = 0; i < nrs; i++) {
+				int[] tetras = Vertices[i];
+				for (int j = 0; j < tetras.length; j++) {
+					for (int k = 0; k < mdim1; k++) {
+						temp.add(Tri[tetras[j]][k]);
+					}
+				}
+				temp.remove(i);
+				Neighbors[i] = new int[temp.size()];
+				int j = 0;
+				for (Integer s : temp) {
+					Neighbors[i][j++] = s;
+				}
+
+			}
+
+		}
 
 		if (circumcenters == null && mdim == 3) {
 			circumcenters = new WB_Point[ntris];
