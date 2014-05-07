@@ -3079,12 +3079,38 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	}
 
+	public HE_Selection centerFaceSplit() {
+		HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
+		modify(ext);
+		return ext.extruded;
+	}
+
+	public HE_Selection centerFaceSplitHole() {
+		HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
+		modify(ext);
+		delete(ext.extruded);
+		return ext.walls;
+	}
+
+	public HE_Selection centerFaceSplit(HE_Selection faces) {
+		HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
+		modifySelected(ext, faces);
+		return ext.extruded;
+	}
+
+	public HE_Selection centerFaceSplitHole(HE_Selection faces) {
+		HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
+		modifySelected(ext, faces);
+		delete(ext.extruded);
+		return ext.walls;
+	}
+
 	/**
-	 * Mid split faces.
+	 * Midedge split faces.
 	 * 
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midSplitFaces() {
+	public HE_Selection midEdgeSplitFaces() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3153,11 +3179,11 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	/**
-	 * Mid split faces.
+	 * Mid edge split faces.
 	 * 
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midSplitFacesHole() {
+	public HE_Selection midEdgeSplitFacesHole() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3227,13 +3253,13 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	/**
-	 * Mid split selected faces.
+	 * Mid edge split selected faces.
 	 * 
 	 * @param selection
 	 *            selection to split
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midSplitFaces(final HE_Selection selection) {
+	public HE_Selection midEdgeSplitFaces(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = selection.getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3302,14 +3328,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		return selectionOut;
 	}
 
-	/**
-	 * Mid split faces hole.
-	 * 
-	 * @param selection
-	 *            the selection
-	 * @return the h e_ selection
-	 */
-	public HE_Selection midSplitFacesHole(final HE_Selection selection) {
+	public HE_Selection midEdgeSplitFacesHole(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = selection.getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3433,6 +3452,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public void expandVertexToEdge(final HE_Vertex v, final HE_Face f1,
 			final HE_Face f2, final WB_Point vn) {
+		if (f1 == f2)
+			return;
 		HE_Halfedge he = v.getHalfedge();
 		HE_Halfedge he1 = new HE_Halfedge();
 		HE_Halfedge he2 = new HE_Halfedge();

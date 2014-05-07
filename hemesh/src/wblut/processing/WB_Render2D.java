@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Geometry;
@@ -18,9 +19,13 @@ import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulation2D;
 
 public class WB_Render2D {
-	private final PApplet home;
+	private final PGraphics home;
 
 	public WB_Render2D(final PApplet home) {
+		this.home = home.g;
+	}
+
+	public WB_Render2D(final PGraphics home) {
 		this.home = home;
 	}
 

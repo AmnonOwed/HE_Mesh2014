@@ -113,6 +113,11 @@ public class HET_Selector {
 		return _lastKey;
 	}
 
+	public Long get() {
+		_lastKey = buffer.getKey(home.mouseX, home.mouseY);
+		return _lastKey;
+	}
+
 	/**
 	 * Last key.
 	 * 
@@ -129,6 +134,10 @@ public class HET_Selector {
 	 */
 	public int bufferSize() {
 		return buffer.colorToObject.size();
+	}
+
+	public PApplet home() {
+		return home;
 	}
 
 }
