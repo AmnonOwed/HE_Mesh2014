@@ -101,6 +101,11 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		pos._set(v);
 	}
 
+	public WB_Point getOffset(double d) {
+		return new WB_Point(pos)._addMulSelf(d, getVertexNormal());
+
+	}
+
 	/**
 	 * Get vertex normal. Returns stored value if update status is true.
 	 * 

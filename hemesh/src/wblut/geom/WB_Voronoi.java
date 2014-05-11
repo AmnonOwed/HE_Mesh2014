@@ -21,11 +21,12 @@ public class WB_Voronoi {
 			.instance();
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final WB_Coordinate[] points, final WB_AABB aabb, double precision) {
+			final WB_Coordinate[] points, int n, final WB_AABB aabb,
+			double precision) {
 		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
 				precision);
 
-		final int nv = points.length;
+		final int nv = Math.min(n, points.length);
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
 		for (int i = 0; i < nv; i++) {
 
@@ -48,13 +49,13 @@ public class WB_Voronoi {
 	}
 
 	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final List<? extends WB_Coordinate> points, final WB_AABB aabb,
-			double precision) {
+			final List<? extends WB_Coordinate> points, int n,
+			final WB_AABB aabb, double precision) {
 
 		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
 				precision);
 
-		final int nv = points.size();
+		final int nv = Math.min(n, points.size());
 		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
 		for (int i = 0; i < nv; i++) {
 
@@ -577,5 +578,61 @@ public class WB_Voronoi {
 		context.pointTo3D(x, y, 0, tmp);
 		return tmp;
 
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final List<? extends WB_Coordinate> points, final WB_AABB aabb,
+			double precision) {
+
+		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
+				precision);
+
+		final int nv = points.size();
+		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
+		for (int i = 0; i < nv; i++) {
+
+			int[] tetras = triangulation.Vertices[i];
+
+			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
+			for (int t = 0; t < tetras.length; t++) {
+				hullpoints.add(triangulation.circumcenters[tetras[t]]);
+			}
+			hullpoints.add(new WB_Point(points.get(i)));
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
+					geometryfactory.createPoint(points.get(i)), i);
+			if (vor.cell != null)
+				vor.constrain(aabb);
+			if (vor.cell != null) {
+				result.add(vor);
+			}
+		}
+		return result;
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final WB_Coordinate[] points, final WB_AABB aabb, double precision) {
+		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
+				precision);
+
+		final int nv = points.length;
+		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
+		for (int i = 0; i < nv; i++) {
+
+			int[] tetras = triangulation.Vertices[i];
+
+			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
+			for (int t = 0; t < tetras.length; t++) {
+				hullpoints.add(triangulation.circumcenters[tetras[t]]);
+			}
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
+					geometryfactory.createPoint(points[i]), i);
+
+			if (vor.cell != null)
+				vor.constrain(aabb);
+			if (vor.cell != null) {
+				result.add(vor);
+			}
+		}
+		return result;
 	}
 }

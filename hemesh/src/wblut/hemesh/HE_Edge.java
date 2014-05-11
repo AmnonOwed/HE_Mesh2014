@@ -55,6 +55,16 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 
 	}
 
+	public WB_Point getEdgeCenter(double d) {
+		if ((getStartVertex() == null) || (getEndVertex() == null)) {
+			throw new NullPointerException("Vertices missing in edge.");
+		}
+		final WB_Point center = getStartVertex().pos.add(getEndVertex().pos)
+				._mulSelf(0.5);
+		return center._addMulSelf(d, getEdgeNormal());
+
+	}
+
 	/**
 	 * Return tangent WB_Vector.
 	 * 

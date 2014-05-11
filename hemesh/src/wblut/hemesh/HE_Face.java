@@ -72,6 +72,22 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return _center;
 	}
 
+	public WB_Point getFaceCenter(double d) {
+		if (_halfedge == null) {
+			return null;
+		}
+		HE_Halfedge he = _halfedge;
+		final WB_Point _center = new WB_Point();
+		int c = 0;
+		do {
+			_center._addSelf(he.getVertex());
+			c++;
+			he = he.getNextInFace();
+		} while (he != _halfedge);
+		_center._divSelf(c)._addMulSelf(d, getFaceNormal());
+		return _center;
+	}
+
 	/**
 	 * Get face normal. Returns stored value if update status is true.
 	 * 

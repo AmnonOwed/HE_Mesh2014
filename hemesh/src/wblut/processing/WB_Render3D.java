@@ -1348,9 +1348,11 @@ public class WB_Render3D {
 	 */
 	public void drawEdge(final Long key, final HE_MeshStructure mesh) {
 		final HE_Edge e = mesh.getEdgeByKey(key);
-		home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-				.getStartVertex().zf(), e.getEndVertex().xf(), e.getEndVertex()
-				.yf(), e.getEndVertex().zf());
+		if (e != null) {
+			home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
+					.getStartVertex().zf(), e.getEndVertex().xf(), e
+					.getEndVertex().yf(), e.getEndVertex().zf());
+		}
 	}
 
 	/**
@@ -1518,8 +1520,10 @@ public class WB_Render3D {
 	public void drawFace(final Long key, final HE_MeshStructure mesh) {
 		List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		tmpVertices = f.getFaceVertices();
-		drawConvexShapeFromVertices(tmpVertices, false, null);
+		if (f != null) {
+			tmpVertices = f.getFaceVertices();
+			drawConvexShapeFromVertices(tmpVertices, false, null);
+		}
 
 	}
 
@@ -2080,10 +2084,12 @@ public class WB_Render3D {
 	public void drawVertex(final Long key, final double d,
 			final HE_MeshStructure mesh) {
 		final HE_Vertex v = mesh.getVertexByKey(key);
-		home.pushMatrix();
-		home.translate((v.xf()), (v.yf()), (v.zf()));
-		home.box((float) d);
-		home.popMatrix();
+		if (v != null) {
+			home.pushMatrix();
+			home.translate((v.xf()), (v.yf()), (v.zf()));
+			home.box((float) d);
+			home.popMatrix();
+		}
 	}
 
 	public void drawVertices(final double d, final HE_MeshStructure mesh) {
