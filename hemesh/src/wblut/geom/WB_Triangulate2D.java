@@ -295,7 +295,7 @@ public class WB_Triangulate2D {
 	public WB_IndexedTriangle2D[] getIndexedTrianglesInsideConstraints(
 			final WB_Point[] points) {
 		final WB_AABB AABB = new WB_AABB(this.points);
-		final double range = WB_Distance2D.getDistance(AABB._min, AABB._max);
+		final double range = WB_Distance.getDistance2D(AABB._min, AABB._max);
 		final FastList<WB_IndexedTriangle2D> triangles = new FastList<WB_IndexedTriangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
@@ -824,7 +824,7 @@ public class WB_Triangulate2D {
 		/* find the closest point to p */
 		min = Double.MAX_VALUE;
 		for (final Tri_Point pTest : points) {
-			dist = WB_Distance2D.getSqDistance(p, pTest);
+			dist = WB_Distance.getSqDistance2D(p, pTest);
 			/* abort if the point is within epsilon of an existing point */
 			if (dist < WB_Epsilon.SQEPSILON) {
 				if (MESSAGES) {
@@ -2317,7 +2317,7 @@ public class WB_Triangulate2D {
 	 * @return true, if successful
 	 */
 	public final boolean coincident(final WB_Point a, final WB_Point b) {
-		if (WB_Distance2D.getSqDistance(a, b) < WB_Epsilon.SQEPSILON) {
+		if (WB_Distance.getSqDistance2D(a, b) < WB_Epsilon.SQEPSILON) {
 			return true;
 		}
 		return false;
@@ -2715,8 +2715,8 @@ public class WB_Triangulate2D {
 				final WB_Segment She = new WB_Segment(he.origin,
 						he.getNext().origin);
 
-				final WB_IntersectionResult ir = WB_Intersection2D.intersect2D(
-						Sray, She);
+				final WB_IntersectionResult ir = WB_Intersection
+						.getIntersection2D(Sray, She);
 				if (ir.intersection) {
 					if ((ir.t2 > 0) && (ir.t2 < 1)) {
 						count++;

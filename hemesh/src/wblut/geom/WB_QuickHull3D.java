@@ -1538,7 +1538,7 @@ public class WB_QuickHull3D {
 		protected double length() {
 			if (tail() != null) {
 
-				return WB_Distance3D.distance(head().pos, tail().pos);
+				return WB_Distance.getDistance3D(head().pos, tail().pos);
 			} else {
 				return -1;
 			}
@@ -1551,7 +1551,7 @@ public class WB_QuickHull3D {
 		 */
 		protected double lengthSquared() {
 			if (tail() != null) {
-				return WB_Distance3D.sqDistance(head().pos, tail().pos);
+				return WB_Distance.getSqDistance3D(head().pos, tail().pos);
 			} else {
 				return -1;
 			}

@@ -36,9 +36,9 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 	}
 
 	public void update() {
-		a = WB_Distance2D.getDistance(points[i2], points[i3]);
-		b = WB_Distance2D.getDistance(points[i1], points[i3]);
-		c = WB_Distance2D.getDistance(points[i1], points[i2]);
+		a = WB_Distance.getDistance2D(points[i2], points[i3]);
+		b = WB_Distance.getDistance2D(points[i1], points[i3]);
+		c = WB_Distance.getDistance2D(points[i1], points[i2]);
 
 		cosA = ((points[i2].x - points[i1].x) * (points[i3].x - points[i1].x) + (points[i2].y - points[i1].y)
 				* (points[i3].y - points[i1].y))
@@ -50,7 +50,7 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 				* (points[i1].y - points[i3].y))
 				/ (a * b);
 
-		degenerate = WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistanceToLine(
+		degenerate = WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(
 				points[i1], points[i2], points[i3]));
 	}
 
@@ -185,7 +185,7 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 
 	public static boolean pointInTriangle2D(final WB_Coordinate p,
 			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
-		if (WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistanceToLine(A, B, C))) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
 			return false;
 		}
 		if (sameSide2D(p, A, B, C) && sameSide2D(p, B, A, C)
@@ -225,7 +225,7 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 		if (p == C) {
 			return false;
 		}
-		if (WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistanceToLine(A, B, C))) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
 			return false;
 		}
 		// Compute vectors

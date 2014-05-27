@@ -63,7 +63,7 @@ public class WB_NurbsSurfaceOfRevolution {
 		}
 		for (j = 0; j <= C.n(); j++) {
 			final WB_Point O = WB_Intersection
-					.getClosestPoint(C.points()[j], L);
+					.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
@@ -84,7 +84,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection
-						.getClosestPoint(L1, L2);
+						.getClosestPoint3D(L1, L2);
 				final WB_Point p1 = (is.dimension == 0) ? (WB_Point) is.object
 						: ((WB_Segment) is.object).getOrigin();
 				points[index + 1][j] = p1;
@@ -165,7 +165,7 @@ public class WB_NurbsSurfaceOfRevolution {
 		}
 		for (j = 0; j <= C.n(); j++) {
 			final WB_Point O = WB_Intersection
-					.getClosestPoint(C.points()[j], L);
+					.getClosestPoint3D(C.points()[j], L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
@@ -186,7 +186,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection
-						.getClosestPoint(L1, L2);
+						.getClosestPoint3D(L1, L2);
 
 				final WB_Point p1 = (is.dimension == 0) ? (WB_Point) is.object
 						: ((WB_Segment) is.object).getOrigin();

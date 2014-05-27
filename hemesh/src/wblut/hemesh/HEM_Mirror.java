@@ -115,7 +115,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		HE_Mesh mirrormesh = mesh.get();
 		List<HE_Vertex> vertices = mirrormesh.getVerticesAsList();
 		for (HE_Vertex v : vertices) {
-			WB_Point p = WB_Intersection.getClosestPoint(v, lP);
+			WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
 			WB_Vector dv = v.pos.subToVector(p);
 			v.pos._addSelf(-2, dv);
 		}

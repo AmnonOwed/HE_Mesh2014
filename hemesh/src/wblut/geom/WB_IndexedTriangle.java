@@ -95,9 +95,9 @@ public class WB_IndexedTriangle implements Triangle {
 	}
 
 	public void update() {
-		a = WB_Distance3D.distance(points[i2], points[i3]);
-		b = WB_Distance3D.distance(points[i1], points[i3]);
-		c = WB_Distance3D.distance(points[i1], points[i2]);
+		a = WB_Distance.getDistance3D(points[i2], points[i3]);
+		b = WB_Distance.getDistance3D(points[i1], points[i3]);
+		c = WB_Distance.getDistance3D(points[i1], points[i2]);
 
 		cosA = ((points[i2].x - points[i1].x) * (points[i3].x - points[i1].x)
 				+ (points[i2].y - points[i1].y) * (points[i3].y - points[i1].y) + (points[i2].z - points[i1].z)
@@ -112,7 +112,7 @@ public class WB_IndexedTriangle implements Triangle {
 				* (points[i1].z - points[i3].z))
 				/ (a * b);
 
-		degenerate = WB_Epsilon.isZeroSq(WB_Distance3D.sqDistanceToLine(
+		degenerate = WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine3D(
 				points[i1], points[i2], points[i3]));
 	}
 

@@ -9,7 +9,7 @@ import wblut.WB_Epsilon;
 public class WB_VoronoiCell3D {
 	WB_Point generator;
 	int index;
-	WB_Mesh cell;
+	WB_FaceListMesh cell;
 	boolean open;
 	boolean sliced;
 	boolean[] onBoundary;
@@ -77,11 +77,11 @@ public class WB_VoronoiCell3D {
 
 	}
 
-	public void constrain(final WB_Mesh convexMesh, final double d) {
+	public void constrain(final WB_FaceListMesh convexMesh, final double d) {
 		constrain(convexMesh.getPlanes(d));
 	}
 
-	public void constrain(final WB_Mesh convexMesh) {
+	public void constrain(final WB_FaceListMesh convexMesh) {
 		constrain(convexMesh.getPlanes(0));
 	}
 
@@ -98,7 +98,7 @@ public class WB_VoronoiCell3D {
 			pointloop: for (int i = 0; i < cell.getNumberOfVertices(); i++) {
 				p = cell.getVertex(i);
 				for (final WB_Plane WB_Point : planes) {
-					d = WB_Distance.distanceToPlane3D(p, WB_Point);
+					d = WB_Distance.getDistanceToPlane3D(p, WB_Point);
 					if (WB_Epsilon.isZero(d)) {
 						onBoundary[i] = true;
 						continue pointloop;
@@ -139,8 +139,8 @@ public class WB_VoronoiCell3D {
 					|| ((classifyPoints[edge[1]] == WB_Classification.BACK) && (classifyPoints[edge[0]] == WB_Classification.FRONT))) {
 				final WB_Point a = cell.getVertex(edge[0]);
 				final WB_Point b = cell.getVertex(edge[1]);
-				newPoints.add((WB_Point) WB_Intersection.getIntersection(a, b,
-						P).object);
+				newPoints.add((WB_Point) WB_Intersection.getIntersection3D(a,
+						b, P).object);
 				sliced = true;
 			}
 		}
@@ -169,7 +169,7 @@ public class WB_VoronoiCell3D {
 		return generator;
 	}
 
-	public WB_Mesh getMesh() {
+	public WB_FaceListMesh getMesh() {
 		return cell;
 	}
 

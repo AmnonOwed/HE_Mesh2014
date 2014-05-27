@@ -2933,14 +2933,14 @@ public class WB_GeometryFactory {
 					.getSqDistance(p))) {
 				result.add(createCircleWithRadius(
 						createPoint(p).mulAddMul(0.5, 0.5, q),
-						0.5 * WB_Distance.distanceToPoint2D(p, q)));
+						0.5 * WB_Distance.getDistanceToPoint2D(p, q)));
 			} else {
 				final WB_Line perp = createPerpendicularLineThroughPoint2D(L, p);
 				final WB_Line PQbis = createBisector2D(p, q);
 				final WB_Point intersect = createIntersectionPoint2D(perp,
 						PQbis);
 				result.add(createCircleWithRadius(intersect,
-						WB_Distance.distanceToPoint2D(p, intersect)));
+						WB_Distance.getDistanceToPoint2D(p, intersect)));
 			}
 			return result;
 		}
@@ -2950,14 +2950,14 @@ public class WB_GeometryFactory {
 					.getSqDistance(q))) {
 				result.add(createCircleWithRadius(createPoint(p)
 						._mulAddMulSelf(0.5, 0.5, q), 0.5 * WB_Distance
-						.distanceToPoint2D(p, q)));
+						.getDistanceToPoint2D(p, q)));
 			} else {
 				final WB_Line perp = createPerpendicularLineThroughPoint2D(L, q);
 				final WB_Line PQbis = createBisector2D(p, q);
 				final WB_Point intersect = createIntersectionPoint2D(perp,
 						PQbis);
 				result.add(createCircleWithRadius(intersect,
-						WB_Distance.distanceToPoint2D(p, intersect)));
+						WB_Distance.getDistanceToPoint2D(p, intersect)));
 			}
 			return result;
 		}
@@ -2970,7 +2970,7 @@ public class WB_GeometryFactory {
 							* q.yd()), L);
 			result.add(createCirclePPP(p, q, r));
 		} else {
-			double d = WB_Distance.distanceToPoint2D(p, q);
+			double d = WB_Distance.getDistanceToPoint2D(p, q);
 			final WB_Circle OPQ = createCircleThrough2Points(p, q, d).get(0);
 			final WB_Point center = F.mulAddMul(0.5, 0.5, OPQ.getCenter());
 			final WB_Circle STF = createCircleWithRadius(center,
@@ -3087,7 +3087,7 @@ public class WB_GeometryFactory {
 				C);
 		final WB_Classification qType = WB_Classify.classifyPointToCircle2D(q,
 				C);
-		if (WB_Epsilon.isZero(WB_Distance.distanceToPoint2D(p, q))) {
+		if (WB_Epsilon.isZero(WB_Distance.getDistanceToPoint2D(p, q))) {
 			return result;
 		}
 		// Both points on circle: only solution is circle itself
@@ -4687,20 +4687,23 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createMesh(final WB_Coordinate[] points, final int[][] faces) {
-		return new WB_Mesh(points, faces);
-	}
-
-	public WB_Mesh createMesh(final Collection<? extends WB_Coordinate> points,
+	public WB_FaceListMesh createMesh(final WB_Coordinate[] points,
 			final int[][] faces) {
-		return new WB_Mesh(points, faces);
+		return new WB_FaceListMesh(points, faces);
 	}
 
-	public WB_Mesh createMesh(final double[] ordinates, final int[][] faces) {
-		return new WB_Mesh(ordinates, faces);
+	public WB_FaceListMesh createMesh(
+			final Collection<? extends WB_Coordinate> points,
+			final int[][] faces) {
+		return new WB_FaceListMesh(points, faces);
 	}
 
-	public WB_Mesh createUniqueMesh(final WB_Mesh mesh) {
+	public WB_FaceListMesh createMesh(final double[] ordinates,
+			final int[][] faces) {
+		return new WB_FaceListMesh(ordinates, faces);
+	}
+
+	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh) {
 		final List<WB_Point> uniqueVertices = new FastList<WB_Point>();
 		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>(
 				mesh.getNumberOfVertices());
@@ -4737,22 +4740,22 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTriMesh(final WB_Coordinate[] points,
+	public WB_FaceListMesh createTriMesh(final WB_Coordinate[] points,
 			final int[][] faces) {
 		return new WB_TriMesh(points, faces);
 	}
 
-	public WB_Mesh createTriMesh(
+	public WB_FaceListMesh createTriMesh(
 			final Collection<? extends WB_Coordinate> points,
 			final int[][] faces) {
 		return new WB_TriMesh(points, faces);
 	}
 
-	public WB_Mesh createTriMesh(final WB_Mesh mesh) {
+	public WB_FaceListMesh createTriMesh(final WB_FaceListMesh mesh) {
 		return new WB_TriMesh(mesh);
 	}
 
-	public WB_Mesh createConvexHull(final WB_Coordinate[] points,
+	public WB_FaceListMesh createConvexHull(final WB_Coordinate[] points,
 			final boolean triangulate) {
 		final int n = points.length;
 		if (n < 4) {
@@ -4771,7 +4774,8 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createConvexHull(final List<? extends WB_Coordinate> points,
+	public WB_FaceListMesh createConvexHull(
+			final List<? extends WB_Coordinate> points,
 			final boolean triangulate) {
 		final int n = points.size();
 		if (n < 4) {
@@ -4789,7 +4793,8 @@ public class WB_GeometryFactory {
 		}
 	}
 
-	public WB_Mesh createPrism(final int n, final double radius, final double h) {
+	public WB_FaceListMesh createPrism(final int n, final double radius,
+			final double h) {
 
 		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * n);
 		for (int i = 0; i < n; i++) {
@@ -4802,7 +4807,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createPrism(
+	public WB_FaceListMesh createPrism(
 			final Collection<? extends WB_Coordinate> points, final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
@@ -4814,7 +4819,8 @@ public class WB_GeometryFactory {
 		return createMesh(lpoints, createPrismFaces(points.size()));
 	}
 
-	public WB_Mesh createPrism(final WB_Coordinate[] points, final double h) {
+	public WB_FaceListMesh createPrism(final WB_Coordinate[] points,
+			final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.length);
 		for (final WB_Coordinate point : points) {
@@ -4844,7 +4850,7 @@ public class WB_GeometryFactory {
 		return faces;
 	}
 
-	public WB_Mesh createPrism(final WB_Polygon poly, final double h) {
+	public WB_FaceListMesh createPrism(final WB_Polygon poly, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * poly.size());
 		WB_Coordinate point;
@@ -4898,7 +4904,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createAntiprism(final int n, final double radius,
+	public WB_FaceListMesh createAntiprism(final int n, final double radius,
 			final double h) {
 
 		final List<WB_Point> points = new FastList<WB_Point>(2 * n);
@@ -4914,7 +4920,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createAntiPrism(
+	public WB_FaceListMesh createAntiPrism(
 			final Collection<? extends WB_Coordinate> points, final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
@@ -4926,7 +4932,8 @@ public class WB_GeometryFactory {
 		return createMesh(lpoints, createAntiprismFaces(points.size()));
 	}
 
-	public WB_Mesh createAntiPrism(final WB_Coordinate[] points, final double h) {
+	public WB_FaceListMesh createAntiPrism(final WB_Coordinate[] points,
+			final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
 		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.length);
@@ -4959,7 +4966,8 @@ public class WB_GeometryFactory {
 		return faces;
 	}
 
-	public WB_Mesh createArchimedes(final int type, final double edgeLength) {
+	public WB_FaceListMesh createArchimedes(final int type,
+			final double edgeLength) {
 
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -4983,7 +4991,7 @@ public class WB_GeometryFactory {
 		return createMesh(vertices, faces);
 	}
 
-	public WB_Mesh createCatalan(final int type, final double edgeLength) {
+	public WB_FaceListMesh createCatalan(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
 
@@ -5022,7 +5030,7 @@ public class WB_GeometryFactory {
 	 * 
 	 */
 
-	public WB_Mesh createJohnson(final int type, final double edgeLength) {
+	public WB_FaceListMesh createJohnson(final int type, final double edgeLength) {
 
 		final List<WB_Point> vertices;
 		final int[][] faces;
@@ -5061,7 +5069,8 @@ public class WB_GeometryFactory {
 		return createMesh(vertices, faces);
 	}
 
-	public WB_Mesh createOtherPolyhedron(final int type, final double edgeLength) {
+	public WB_FaceListMesh createOtherPolyhedron(final int type,
+			final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
 
@@ -5084,7 +5093,7 @@ public class WB_GeometryFactory {
 		return createMesh(vertices, faces);
 	}
 
-	public WB_Mesh createPlato(final int type, final double edgeLength) {
+	public WB_FaceListMesh createPlato(final int type, final double edgeLength) {
 		final List<WB_Point> vertices;
 		final int[][] faces;
 
@@ -5107,7 +5116,7 @@ public class WB_GeometryFactory {
 		return createMesh(vertices, faces);
 	}
 
-	public WB_Mesh createPolyhedron(String name, final double radius) {
+	public WB_FaceListMesh createPolyhedron(String name, final double radius) {
 		final BufferedReader br = new BufferedReader(new InputStreamReader(this
 				.getClass().getClassLoader()
 				.getResourceAsStream("resources/" + name + ".wrl")));
@@ -5169,7 +5178,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createZonohedron(final WB_Coordinate[] vectors,
+	public WB_FaceListMesh createZonohedron(final WB_Coordinate[] vectors,
 			final double scale) {
 		final int n = vectors.length;
 		if (n < 3) {
@@ -5195,7 +5204,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createStellatedIcosahedron(final int type,
+	public WB_FaceListMesh createStellatedIcosahedron(final int type,
 			final double radius) {
 		final BufferedReader br = new BufferedReader(
 				new InputStreamReader(this
@@ -5254,7 +5263,7 @@ public class WB_GeometryFactory {
 		return createMesh(points, ifaces);
 	}
 
-	public WB_Mesh createPyramidWithAngles(
+	public WB_FaceListMesh createPyramidWithAngles(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final boolean b, final WB_Context2D context) {
 		final Corner[] corners = new Corner[points.size()];
@@ -5317,8 +5326,9 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithAngles(final WB_Coordinate[] points,
-			final double[] angles, final boolean b, final WB_Context2D context) {
+	public WB_FaceListMesh createPyramidWithAngles(
+			final WB_Coordinate[] points, final double[] angles,
+			final boolean b, final WB_Context2D context) {
 
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
@@ -5380,7 +5390,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(
+	public WB_FaceListMesh createPyramidWithAngleRange(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final boolean b,
 			final WB_Context2D context) {
@@ -5445,9 +5455,9 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(final WB_Coordinate[] points,
-			final double minangle, final double maxangle, final boolean b,
-			final WB_Context2D context) {
+	public WB_FaceListMesh createPyramidWithAngleRange(
+			final WB_Coordinate[] points, final double minangle,
+			final double maxangle, final boolean b, final WB_Context2D context) {
 
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
@@ -5509,58 +5519,59 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(
+	public WB_FaceListMesh createPyramidWithAngleRange(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle,
 			final WB_Context2D context) {
 		return createPyramidWithAngleRange(points, minangle, maxangle, context);
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(final WB_Coordinate[] points,
-			final double minangle, final double maxangle,
-			final WB_Context2D context) {
+	public WB_FaceListMesh createPyramidWithAngleRange(
+			final WB_Coordinate[] points, final double minangle,
+			final double maxangle, final WB_Context2D context) {
 		return createPyramidWithAngleRange(points, minangle, maxangle, context);
 
 	}
 
-	public WB_Mesh createPyramidWithAngle(
+	public WB_FaceListMesh createPyramidWithAngle(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final WB_Context2D context) {
 
 		return createPyramidWithAngleRange(points, angle, angle, context);
 	}
 
-	public WB_Mesh createPyramidWithAngle(final WB_Coordinate[] points,
+	public WB_FaceListMesh createPyramidWithAngle(final WB_Coordinate[] points,
 			final double angle, final WB_Context2D context) {
 		return createPyramidWithAngleRange(points, angle, angle, context);
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(
+	public WB_FaceListMesh createPyramidWithAngleRange(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle) {
 		return createPyramidWithAngleRange(points, minangle, maxangle,
 				createEmbeddedPlane());
 	}
 
-	public WB_Mesh createPyramidWithAngleRange(final WB_Coordinate[] points,
-			final double minangle, final double maxangle) {
+	public WB_FaceListMesh createPyramidWithAngleRange(
+			final WB_Coordinate[] points, final double minangle,
+			final double maxangle) {
 		return createPyramidWithAngleRange(points, minangle, maxangle,
 				createEmbeddedPlane());
 	}
 
-	public WB_Mesh createPyramidWithAngle(
+	public WB_FaceListMesh createPyramidWithAngle(
 			final Collection<? extends WB_Coordinate> points, final double angle) {
 		return createPyramidWithAngle(points, angle, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createPyramidWithAngle(final WB_Coordinate[] points,
+	public WB_FaceListMesh createPyramidWithAngle(final WB_Coordinate[] points,
 			final double angle) {
 		return createPyramidWithAngle(points, angle, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createPyramidWithHeight(
+	public WB_FaceListMesh createPyramidWithHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double height, final boolean b, final WB_Context2D context) {
 
@@ -5624,14 +5635,14 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithHeight(
+	public WB_FaceListMesh createPyramidWithHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double height, final boolean b) {
 
 		return createPyramidWithHeight(points, height, b, createEmbeddedPlane());
 	}
 
-	public WB_Mesh createPyramidWithHeight(
+	public WB_FaceListMesh createPyramidWithHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double height) {
 
@@ -5639,8 +5650,9 @@ public class WB_GeometryFactory {
 				createEmbeddedPlane());
 	}
 
-	public WB_Mesh createPyramidWithHeight(final WB_Coordinate[] points,
-			final double height, final boolean b, final WB_Context2D context) {
+	public WB_FaceListMesh createPyramidWithHeight(
+			final WB_Coordinate[] points, final double height, final boolean b,
+			final WB_Context2D context) {
 
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
@@ -5701,20 +5713,20 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createPyramidWithHeight(final WB_Coordinate[] points,
-			final double height, final boolean b) {
+	public WB_FaceListMesh createPyramidWithHeight(
+			final WB_Coordinate[] points, final double height, final boolean b) {
 
 		return createPyramidWithHeight(points, height, b, createEmbeddedPlane());
 	}
 
-	public WB_Mesh createPyramidWithHeight(final WB_Coordinate[] points,
-			final double height) {
+	public WB_FaceListMesh createPyramidWithHeight(
+			final WB_Coordinate[] points, final double height) {
 
 		return createPyramidWithHeight(points, height, true,
 				createEmbeddedPlane());
 	}
 
-	public WB_Mesh createDipyramidWithAngleRange(
+	public WB_FaceListMesh createDipyramidWithAngleRange(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle,
 			final WB_Context2D context) {
@@ -5777,9 +5789,9 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createDipyramidWithAngleRange(final WB_Coordinate[] points,
-			final double minangle, final double maxangle,
-			final WB_Context2D context) {
+	public WB_FaceListMesh createDipyramidWithAngleRange(
+			final WB_Coordinate[] points, final double minangle,
+			final double maxangle, final WB_Context2D context) {
 
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
@@ -5839,31 +5851,32 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createDipyramidWithAngle(
+	public WB_FaceListMesh createDipyramidWithAngle(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final WB_Context2D context) {
 
 		return createDipyramidWithAngleRange(points, angle, angle, context);
 	}
 
-	public WB_Mesh createDipyramidWithAngle(final WB_Coordinate[] points,
-			final double angle, final WB_Context2D context) {
+	public WB_FaceListMesh createDipyramidWithAngle(
+			final WB_Coordinate[] points, final double angle,
+			final WB_Context2D context) {
 		return createDipyramidWithAngleRange(points, angle, angle, context);
 	}
 
-	public WB_Mesh createDipyramidWithAngle(
+	public WB_FaceListMesh createDipyramidWithAngle(
 			final Collection<? extends WB_Coordinate> points, final double angle) {
 		return createDipyramidWithAngle(points, angle, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createDipyramidWithAngle(final WB_Coordinate[] points,
-			final double angle) {
+	public WB_FaceListMesh createDipyramidWithAngle(
+			final WB_Coordinate[] points, final double angle) {
 		return createDipyramidWithAngle(points, angle, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createDipyramidWithHeight(
+	public WB_FaceListMesh createDipyramidWithHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double height, final WB_Context2D context) {
 
@@ -5925,15 +5938,16 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createDipyramidWithHeight(final WB_Coordinate[] points,
-			final double height) {
+	public WB_FaceListMesh createDipyramidWithHeight(
+			final WB_Coordinate[] points, final double height) {
 
 		return createDipyramidWithHeight(points, height, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createDipyramidWithHeight(final WB_Coordinate[] points,
-			final double height, final WB_Context2D context) {
+	public WB_FaceListMesh createDipyramidWithHeight(
+			final WB_Coordinate[] points, final double height,
+			final WB_Context2D context) {
 
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
@@ -5992,7 +6006,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createDipyramidWithHeight(
+	public WB_FaceListMesh createDipyramidWithHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double height) {
 
@@ -6000,7 +6014,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAnglesAndHeight(
+	public WB_FaceListMesh createTaperWithAnglesAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final double height, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -6081,9 +6095,10 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createTaperWithAnglesAndHeight(final WB_Coordinate[] points,
-			final double angles[], final double height, final boolean b,
-			final boolean t, final WB_Context2D context) {
+	public WB_FaceListMesh createTaperWithAnglesAndHeight(
+			final WB_Coordinate[] points, final double angles[],
+			final double height, final boolean b, final boolean t,
+			final WB_Context2D context) {
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
 		int id = 0;
@@ -6162,7 +6177,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createTaperWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final boolean b, final boolean t, final WB_Context2D context) {
@@ -6244,7 +6259,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createTaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createTaperWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -6326,7 +6341,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createTaperWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final WB_Context2D context) {
@@ -6335,7 +6350,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createTaperWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height,
 			final WB_Context2D context) {
@@ -6344,7 +6359,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleAndHeight(
+	public WB_FaceListMesh createTaperWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height, final WB_Context2D context) {
 		return createTaperWithAngleRangeAndHeight(points, angle, angle, height,
@@ -6352,14 +6367,15 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleAndHeight(final WB_Coordinate[] points,
-			final double angle, final double height, final WB_Context2D context) {
+	public WB_FaceListMesh createTaperWithAngleAndHeight(
+			final WB_Coordinate[] points, final double angle,
+			final double height, final WB_Context2D context) {
 		return createTaperWithAngleRangeAndHeight(points, angle, angle, height,
 				true, true, context);
 
 	}
 
-	public WB_Mesh createTaperWithAngleAndHeight(
+	public WB_FaceListMesh createTaperWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height) {
 		return createTaperWithAngleAndHeight(points, angle, height,
@@ -6367,14 +6383,15 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createTaperWithAngleAndHeight(final WB_Coordinate[] points,
-			final double angle, final double height) {
+	public WB_FaceListMesh createTaperWithAngleAndHeight(
+			final WB_Coordinate[] points, final double angle,
+			final double height) {
 		return createTaperWithAngleAndHeight(points, angle, height,
 				createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createBitaperWithAnglesAndHeight(
+	public WB_FaceListMesh createBitaperWithAnglesAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final double height, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -6476,7 +6493,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createBitaperWithAnglesAndHeight(
+	public WB_FaceListMesh createBitaperWithAnglesAndHeight(
 			final WB_Coordinate[] points, final double[] angles,
 			final double height, final boolean b, final boolean t,
 			final WB_Context2D context) {
@@ -6578,7 +6595,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final boolean b, final boolean t, final WB_Context2D context) {
@@ -6681,7 +6698,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -6783,56 +6800,56 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final WB_Context2D context) {
 		return createBitaperWithAngleRangeAndHeight(points, minangle, maxangle,
-				height, context);
+				height, true, true, context);
 
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height,
 			final WB_Context2D context) {
 		return createBitaperWithAngleRangeAndHeight(points, minangle, maxangle,
-				height, context);
+				height, true, true, context);
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height) {
 		return createBitaperWithAngleRangeAndHeight(points, minangle, maxangle,
-				height, createEmbeddedPlane());
+				height, true, true, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createBitaperWithAngleRangeAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height) {
 		return createBitaperWithAngleRangeAndHeight(points, minangle, maxangle,
-				height, createEmbeddedPlane());
+				height, true, true, createEmbeddedPlane());
 
 	}
 
-	public WB_Mesh createBitaperWithAngleAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height, final WB_Context2D context) {
 		return createBitaperWithAngleRangeAndHeight(points, angle, angle,
-				height, context);
+				height, true, true, context);
 
 	}
 
-	public WB_Mesh createBitaperWithAngleAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleAndHeight(
 			final WB_Coordinate[] points, final double angle,
 			final double height, final WB_Context2D context) {
 		return createBitaperWithAngleRangeAndHeight(points, angle, angle,
-				height, context);
+				height, true, true, context);
 
 	}
 
-	public WB_Mesh createBitaperWithAngleAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height) {
 		return createBitaperWithAngleAndHeight(points, angle, height,
@@ -6840,7 +6857,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createBitaperWithAngleAndHeight(
+	public WB_FaceListMesh createBitaperWithAngleAndHeight(
 			final WB_Coordinate[] points, final double angle,
 			final double height) {
 		return createBitaperWithAngleAndHeight(points, angle, height,
@@ -6848,7 +6865,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAnglesAndHeight(
+	public WB_FaceListMesh createCapsuleWithAnglesAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final double height, final double cap,
 			final boolean b, final boolean t, final WB_Context2D context) {
@@ -6971,7 +6988,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createCapsuleWithAngleRangeAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final double cap, final boolean b, final boolean t,
@@ -6985,7 +7002,7 @@ public class WB_GeometryFactory {
 				t, context);
 	}
 
-	public WB_Mesh createCapsuleWithAngleAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height, final double cap,
 			final boolean b, final boolean t, final WB_Context2D context) {
@@ -6999,7 +7016,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAnglesAndHeight(
+	public WB_FaceListMesh createCapsuleWithAnglesAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final double height, final double cap) {
 		return createCapsuleWithAnglesAndHeight(points, angles, height, cap,
@@ -7007,7 +7024,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAngleRangeAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleRangeAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double minangle, final double maxangle, final double height,
 			final double cap) {
@@ -7016,7 +7033,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAngleAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double angle, final double height, final double cap) {
 		return createCapsuleWithAngleRangeAndHeight(points, angle, angle,
@@ -7024,7 +7041,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAnglesAndHeight(
+	public WB_FaceListMesh createCapsuleWithAnglesAndHeight(
 			final WB_Coordinate[] points, final double[] angles,
 			final double height, final double cap, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -7146,7 +7163,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createCapsuleWithAngleRangeAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height, final double cap,
 			final boolean b, final boolean t, final WB_Context2D context) {
@@ -7160,7 +7177,7 @@ public class WB_GeometryFactory {
 				t, context);
 	}
 
-	public WB_Mesh createCapsuleWithAngleAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleAndHeight(
 			final WB_Coordinate[] points, final double angle,
 			final double height, final double cap, final boolean b,
 			final boolean t, final WB_Context2D context) {
@@ -7172,7 +7189,7 @@ public class WB_GeometryFactory {
 				t, context);
 	}
 
-	public WB_Mesh createCapsuleWithAnglesAndHeight(
+	public WB_FaceListMesh createCapsuleWithAnglesAndHeight(
 			final WB_Coordinate[] points, final double[] angles,
 			final double height, final double cap) {
 		return createCapsuleWithAnglesAndHeight(points, angles, height, cap,
@@ -7180,7 +7197,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAngleRangeAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleRangeAndHeight(
 			final WB_Coordinate[] points, final double minangle,
 			final double maxangle, final double height, final double cap) {
 		return createCapsuleWithAngleRangeAndHeight(points, minangle, maxangle,
@@ -7188,7 +7205,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createCapsuleWithAngleAndHeight(
+	public WB_FaceListMesh createCapsuleWithAngleAndHeight(
 			final WB_Coordinate[] points, final double angle,
 			final double height, final double cap) {
 		return createCapsuleWithAngleRangeAndHeight(points, angle, angle,
@@ -7196,7 +7213,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	WB_Mesh createSpindleWithAnglesAndHeight(
+	WB_FaceListMesh createSpindleWithAnglesAndHeight(
 			final Collection<? extends WB_Coordinate> points,
 			final double[] angles, final double height, final double cap,
 			final WB_Context2D context) {
@@ -7288,7 +7305,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createSpindle(
+	public WB_FaceListMesh createSpindle(
 			final Collection<? extends WB_Coordinate> points,
 			final double height, final double cap, final WB_Context2D context) {
 		final double[] angles = new double[points.size()];
@@ -7301,7 +7318,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createSpindle(
+	public WB_FaceListMesh createSpindle(
 			final Collection<? extends WB_Coordinate> points,
 			final double height, final double cap) {
 		final double[] angles = new double[points.size()];
@@ -7314,9 +7331,9 @@ public class WB_GeometryFactory {
 
 	}
 
-	WB_Mesh createSpindleWithAnglesAndHeight(final WB_Coordinate[] points,
-			final double[] angles, final double height, final double cap,
-			final WB_Context2D context) {
+	WB_FaceListMesh createSpindleWithAnglesAndHeight(
+			final WB_Coordinate[] points, final double[] angles,
+			final double height, final double cap, final WB_Context2D context) {
 		final Corner[] corners = new Corner[points.length];
 		// final WB_Point local = createPoint();
 		int id = 0;
@@ -7404,7 +7421,7 @@ public class WB_GeometryFactory {
 		return createUniqueMesh(createMesh(lpoints, faces));
 	}
 
-	public WB_Mesh createSpindle(final WB_Coordinate[] points,
+	public WB_FaceListMesh createSpindle(final WB_Coordinate[] points,
 			final double height, final double cap, final WB_Context2D context) {
 		final double[] angles = new double[points.length];
 		for (int i = 0; i < points.length; i++) {
@@ -7416,7 +7433,7 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createSpindle(final WB_Coordinate[] points,
+	public WB_FaceListMesh createSpindle(final WB_Coordinate[] points,
 			final double height, final double cap) {
 		final double[] angles = new double[points.length];
 		for (int i = 0; i < points.length; i++) {
@@ -7428,19 +7445,19 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_Mesh createConvexHull(
+	public WB_FaceListMesh createConvexHull(
 			final Collection<? extends WB_Coordinate> points) {
 		final WB_QuickHull3D qh = new WB_QuickHull3D(points);
 
 		return createMesh(qh.getVertices(), qh.getFaces());
 	}
 
-	public WB_Mesh createConvexHull(final WB_Coordinate[] points) {
+	public WB_FaceListMesh createConvexHull(final WB_Coordinate[] points) {
 		final WB_QuickHull3D qh = new WB_QuickHull3D(points);
 		return createMesh(qh.getVertices(), qh.getFaces());
 	}
 
-	public WB_Mesh createConcaveHull(
+	public WB_FaceListMesh createConcaveHull(
 			final List<? extends WB_Coordinate> points, final double filter) {
 		final WB_AlphaComplex ac = new WB_AlphaComplex(points);
 
@@ -7452,12 +7469,12 @@ public class WB_GeometryFactory {
 		return new WB_AlphaComplex(points);
 	}
 
-	public WB_Mesh createConcaveHull(final WB_AlphaComplex ac,
+	public WB_FaceListMesh createConcaveHull(final WB_AlphaComplex ac,
 			final double filter) {
 		return ac.getAlphaShapeMesh(filter);
 	}
 
-	public WB_Mesh createConcaveHull(final WB_Coordinate[] points,
+	public WB_FaceListMesh createConcaveHull(final WB_Coordinate[] points,
 			final double filter) {
 		final List<WB_Coordinate> list = new FastList<WB_Coordinate>(
 				points.length);

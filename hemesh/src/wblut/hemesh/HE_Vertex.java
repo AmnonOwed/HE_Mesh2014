@@ -7,10 +7,12 @@ import javolution.util.FastList;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_MutableCoordinate;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Transform;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_M33;
 
 /**
  * Vertex element of half-edge mesh.
@@ -104,50 +106,6 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	public WB_Point getOffset(double d) {
 		return new WB_Point(pos)._addMulSelf(d, getVertexNormal());
 
-	}
-
-	/**
-	 * Get vertex normal. Returns stored value if update status is true.
-	 * 
-	 * @return normal
-	 */
-	public WB_Vector getVertexNormal() {
-
-		if (_halfedge == null) {
-			return null;
-		}
-		HE_Halfedge he = _halfedge;
-		final WB_Vector _normal = new WB_Vector();
-		final FastList<WB_Vector> normals = new FastList<WB_Vector>();
-		do {
-			if (he.getFace() != null) {
-				final WB_Vector fn = he.getFace().getFaceNormal();
-				normals.add(fn);
-			}
-			he = he.getNextInVertex();
-		} while (he != _halfedge);
-
-		for (int i = 0; i < normals.size(); i++) {
-			final WB_Vector ni = normals.get(i);
-
-			boolean degenerate = false;
-			for (int j = i + 1; j < normals.size(); j++) {
-				final WB_Vector nj = normals.get(j);
-				if (ni.isParallel(nj)) {
-					degenerate = true;
-					break;
-				}
-			}
-
-			if (!degenerate) {
-				_normal._addSelf(ni);
-
-			}
-
-		}
-
-		_normal._normalizeSelf();
-		return _normal;
 	}
 
 	/**
@@ -587,6 +545,286 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	public void setColor(int color) {
 		vertexcolor = color;
 
+	}
+
+	public WB_CoordinateSystem getCS() {
+		WB_Vector normal = getVertexNormal();
+		if (normal == null)
+			return null;
+		WB_Vector t2 = new WB_Vector();
+
+		if (Math.abs(normal.xd()) < Math.abs(normal.yd()))
+			t2.set(0, 1.0);
+		else
+			t2.set(1, 1.0);
+		WB_Vector t1 = normal.cross(t2);
+		double n = t1.getLength();
+		if (n < WB_Epsilon.EPSILON)
+			return null;
+		t1._mulSelf(1.0 / n);
+		t2 = normal.cross(t1);
+		return geometryfactory.createCSFromOXYZ(this, t1, t2, normal);
+	}
+
+	// Common area-weighted mean normal
+	public WB_Vector getVertexNormal() {
+		if (_halfedge == null) {
+			return null;
+		}
+		WB_Vector normal = new WB_Vector();
+		WB_Vector[] temp = new WB_Vector[3];
+		for (int i = 0; i < 3; i++)
+			temp[i] = new WB_Vector();
+		HE_Vertex d = _halfedge.getEndVertex();
+		do {
+			_halfedge = _halfedge.getNextInVertex();
+			if (_halfedge.getFace() == null)
+				continue;
+			double area = computeNormal3D(pos, _halfedge.getEndVertex().pos,
+					_halfedge.getPrevInFace().getVertex().pos, temp[0],
+					temp[1], temp[2]);
+
+			normal._addMulSelf(area, temp[2]);
+		} while (_halfedge.getEndVertex() != d);
+		double n = normal.getLength();
+		if (n < WB_Epsilon.EPSILON) {
+			HE_Halfedge he = _halfedge;
+			normal = geometryfactory.createVector();
+			final FastList<WB_Vector> normals = new FastList<WB_Vector>();
+			do {
+				if (he.getFace() != null) {
+					final WB_Vector fn = he.getFace().getFaceNormal();
+					normals.add(fn);
+				}
+				he = he.getNextInVertex();
+			} while (he != _halfedge);
+			final WB_Vector tmp = geometryfactory.createVector();
+			for (int i = 0; i < normals.size(); i++) {
+				final WB_Vector ni = normals.get(i);
+				boolean degenerate = false;
+				for (int j = i + 1; j < normals.size(); j++) {
+					final WB_Vector nj = normals.get(j);
+					ni.crossInto(nj, tmp);
+					if (tmp.getSqLength() < WB_Epsilon.SQEPSILON) {
+						degenerate = true;
+						break;
+					}
+				}
+				if (!degenerate) {
+					normal.add(ni);
+
+				}
+
+			}
+
+			normal._normalizeSelf();
+			return normal;
+		}
+		normal._mulSelf(1.0 / n);
+		return normal;
+	}
+
+	/**
+	 * Returns the discrete Gaussian curvature and the mean normal. These
+	 * discrete operators are described in "Discrete Differential-Geometry
+	 * Operators for Triangulated 2-Manifolds", Mark Meyer, Mathieu Desbrun,
+	 * Peter Schröder, and Alan H. Barr.
+	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf
+	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf Note: on a
+	 * sphere, the Gaussian curvature is very accurate, but not the mean
+	 * curvature. Guoliang Xu suggests improvements in his papers
+	 * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
+	 */
+	public double getGaussianCurvature(WB_Vector meanCurvatureVector) {
+
+		meanCurvatureVector._set(0, 0, 0);
+		WB_Point vect1 = new WB_Point();
+		WB_Point vect2 = new WB_Point();
+		WB_Point vect3 = new WB_Point();
+
+		double mixed = 0.0;
+		double gauss = 0.0;
+		HE_Halfedge ot = getHalfedge();
+		HE_Vertex d = ot.getEndVertex();
+		do {
+			ot = ot.getNextInVertex();
+			if (ot.getFace() == null)
+				continue;
+			if (ot.getPair().getFace() == null) {
+				meanCurvatureVector._set(0, 0, 0);
+				return 0.0;
+			}
+			HE_Vertex p1 = ot.getEndVertex();
+			HE_Vertex p2 = ot.getPrevInFace().getVertex();
+			vect1 = p1.pos.sub(pos);
+			vect2 = p2.pos.sub(p1.pos);
+			vect3 = pos.sub(p2.pos);
+			double c12 = vect1.dot(vect2);
+			double c23 = vect2.dot(vect3);
+			double c31 = vect3.dot(vect1);
+			// Override vect2
+			vect2 = vect1.cross(vect3);
+			double area = 0.5 * vect2.getLength();
+			if (c31 > 0.0)
+				mixed += 0.5 * area;
+			else if (c12 > 0.0 || c23 > 0.0)
+				mixed += 0.25 * area;
+			else {
+				// Non-obtuse triangle
+				if (area > 0.0 && area > -WB_Epsilon.EPSILON * (c12 + c23))
+					mixed -= 0.125 * 0.5
+							* (c12 * vect3.dot(vect3) + c23 * vect1.dot(vect1))
+							/ area;
+			}
+			gauss += Math.abs(Math.atan2(2.0 * area, -c31));
+
+			meanCurvatureVector._addMulSelf(0.5 / area,
+					vect3.mulAddMul(c12, -c23, vect1));
+		} while (ot.getEndVertex() != d);
+		meanCurvatureVector._mulSelf(0.5 / mixed);
+		// Discrete gaussian curvature
+		return (2.0 * Math.PI - gauss) / mixed;
+	}
+
+	public WB_CoordinateSystem getCurvatureDirections() {
+
+		WB_CoordinateSystem tangent = getCS();
+		if (tangent == null)
+			return null;
+		// To compute B eigenvectors, we search for the minimum of
+		// E(a,b,c) = sum omega_ij (T(d_ij) B d_ij - kappa_ij)^2
+		// d_ij is the unit direction of the edge ij in the tangent
+		// plane, so it can be written in the (t1,t2) local frame:
+		// d_ij = d1_ij t1 + d2_ij t2
+		// Then
+		// T(d_ij) B d_ij = a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2
+		// We solve grad E = 0
+		// dE/da = 2 d1_ij^2 (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 - kappa_ij)
+		// dE/db = 4 d1_ij d2_ij (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 -
+		// kappa_ij)
+		// dE/dc = 2 d2_ij^2 (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 - kappa_ij)
+		// We may decrease the dimension by using a+c=Kh identity,
+		// but we found that Kh is much less accurate than Kg on
+		// a sphere, so we do not use this identity.
+		// (1/2) grad E = G (a b c) - H
+		WB_Vector vect1 = findOptimalSolution(tangent.getZ(), tangent.getX(),
+				tangent.getY());
+		if (vect1 == null)
+			return null;
+		// We can eventually compute eigenvectors of B(a b; b c).
+		// Let first compute the eigenvector associated to K1
+		double e1, e2;
+		if (Math.abs(vect1.yd()) < WB_Epsilon.EPSILON) {
+			if (Math.abs(vect1.xd()) < Math.abs(vect1.zd())) {
+				e1 = 0.0;
+				e2 = 1.0;
+			} else {
+				e1 = 1.0;
+				e2 = 0.0;
+			}
+		} else {
+			e2 = 1.0;
+			double delta = Math
+					.sqrt((vect1.xd() - vect1.zd()) * (vect1.xd() - vect1.zd())
+							+ 4.0 * vect1.yd() * vect1.yd());
+			double K1;
+			if (vect1.xd() + vect1.zd() < 0.0)
+				K1 = 0.5 * (vect1.xd() + vect1.zd() - delta);
+			else
+				K1 = 0.5 * (vect1.xd() + vect1.zd() + delta);
+			e1 = (K1 - vect1.xd()) / vect1.yd();
+			double n = Math.sqrt(e1 * e1 + e2 * e2);
+			e1 /= n;
+			e2 /= n;
+		}
+
+		WB_Vector t1 = tangent.getX();
+		WB_Vector t2 = tangent.getY();
+
+		WB_Vector X = t1.mulAddMul(e1, e2, t2);
+		WB_Vector Y = t1.mulAddMul(-e2, e1, t2);
+
+		return geometryfactory.createCSFromOXYZ(this, X, Y, tangent.getZ());
+	}
+
+	private static double computeNormal3D(WB_Point p0, WB_Point p1,
+			WB_Point p2, WB_Vector tempD1, WB_Vector tempD2, WB_Vector ret) {
+		tempD1 = p1.subToVector(p2);
+		tempD2 = p2.subToVector(p0);
+		tempD1.crossInto(tempD2, ret);
+
+		double norm = ret.getLength();
+		if (norm * norm > WB_Epsilon.SQEPSILON
+				* (tempD1.xd() * tempD1.xd() + tempD1.yd() * tempD1.yd()
+						+ tempD1.zd() * tempD1.zd() + tempD2.xd() * tempD2.xd()
+						+ tempD2.yd() * tempD2.yd() + tempD2.zd() * tempD2.zd())) {
+			ret._mulSelf(1.0 / norm);
+
+		} else {
+			ret = new WB_Vector();
+			norm = 0.0;
+		}
+		return 0.5 * norm;
+	}
+
+	private WB_Vector findOptimalSolution(WB_Vector normal, WB_Vector t1,
+			WB_Vector t2) {
+
+		WB_Vector vect1 = new WB_Vector();
+		WB_Vector vect2 = new WB_Vector();
+		WB_Vector vect3 = new WB_Vector();
+		WB_Vector g0 = new WB_Vector();
+		WB_Vector g1 = new WB_Vector();
+		WB_Vector g2 = new WB_Vector();
+		WB_Vector h = new WB_Vector();
+
+		HE_Halfedge ot = getHalfedge();
+		HE_Vertex d = ot.getEndVertex();
+		do {
+			ot = ot.getNextInVertex();
+			if (ot.getFace() == null)
+				continue;
+			WB_Point p1 = ot.getEndVertex().pos;
+			WB_Point p2 = ot.getPrevInFace().getVertex().pos;
+
+			vect1 = new WB_Vector(this, p1);
+			vect2 = new WB_Vector(p1, p2);
+			vect3 = new WB_Vector(p2, this);
+
+			double c12 = vect1.dot(vect2);
+			double c23 = vect2.dot(vect3);
+			// Override vect2
+			vect2 = vect1.cross(vect3);
+			double area = 0.5 * vect2.getLength();
+			double len2 = vect1.dot(vect1);
+			if (len2 < WB_Epsilon.SQEPSILON)
+				continue;
+			double kappa = 2.0 * vect1.dot(normal) / len2;
+			double d1 = vect1.dot(t1);
+			double d2 = vect1.dot(t2);
+			double n = Math.sqrt(d1 * d1 + d2 * d2);
+			if (n < WB_Epsilon.EPSILON)
+				continue;
+			d1 /= n;
+			d2 /= n;
+			double omega = 0.5
+					* (c12 * vect3.dot(vect3) + c23 * vect1.dot(vect1)) / area;
+			g0._addSelf(omega * d1 * d1 * d1 * d1, omega * 2.0 * d1 * d1 * d1
+					* d2, omega * d1 * d1 * d2 * d2);
+			g1._addSelf(omega * 4.0 * d1 * d1 * d2 * d2, omega * 2.0 * d1 * d2
+					* d2 * d2, omega * d2 * d2 * d2 * d2);
+			h._addSelf(omega * kappa * d1 * d1, omega * kappa * 2.0 * d1 * d2,
+					omega * kappa * d2 * d2);
+		} while (ot.getEndVertex() != d);
+		g1._setX(g0.yd());
+		g2._setX(g0.zd());
+		g2._setY(g1.zd());
+		WB_M33 G = new WB_M33(g0.xd(), g1.xd(), g2.xd(), g0.yd(), g1.yd(),
+				g2.yd(), g0.zd(), g1.zd(), g2.zd());
+		G = G.inverse();
+		if (G == null)
+			return null;
+		return WB_M33.mult(G, h);
 	}
 
 }

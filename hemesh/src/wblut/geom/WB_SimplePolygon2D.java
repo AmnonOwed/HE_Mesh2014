@@ -151,7 +151,7 @@ public class WB_SimplePolygon2D {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance2D.getSqDistance(p, points[i]);
+			final double cd = WB_Distance.getSqDistance2D(p, points[i]);
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -171,7 +171,7 @@ public class WB_SimplePolygon2D {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance2D.getSqDistance(p, points[i]);
+			final double cd = WB_Distance.getSqDistance2D(p, points[i]);
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -458,8 +458,8 @@ public class WB_SimplePolygon2D {
 				bSide = L.classifyPointToLine2D(b);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
-						i = WB_Intersection2D.closestPoint2D(L, new WB_Segment(
-								a, b));
+						i = WB_Intersection.getClosestPoint2D(L,
+								new WB_Segment(a, b));
 						frontVerts.add((WB_Point) i.object);
 						numFront++;
 						backVerts.add((WB_Point) i.object);
@@ -469,8 +469,8 @@ public class WB_SimplePolygon2D {
 					numFront++;
 				} else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
-						i = WB_Intersection2D.closestPoint2D(L, new WB_Segment(
-								a, b));
+						i = WB_Intersection.getClosestPoint2D(L,
+								new WB_Segment(a, b));
 
 						/*
 						 * if (classifyPointToPlane(i.p1, P) !=
@@ -764,7 +764,7 @@ public class WB_SimplePolygon2D {
 		final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 		int i = 0;
 		for (i = 0; i < segs.size(); i++) {
-			if (!WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistance(segs.get(i)
+			if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance2D(segs.get(i)
 					.getOrigin(), segs.get(i).getEndpoint()))) {
 				tree.add(segs.get(i).getOrigin(), 2 * i);
 				tree.add(segs.get(i).getEndpoint(), 2 * i + 1);
@@ -775,7 +775,7 @@ public class WB_SimplePolygon2D {
 
 		}
 		for (; i < segs.size(); i++) {
-			if (!WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistance(segs.get(i)
+			if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance2D(segs.get(i)
 					.getOrigin(), segs.get(i).getEndpoint()))) {
 				WB_Point origin = segs.get(i).getOrigin();
 				WB_Point end = segs.get(i).getEndpoint();
@@ -820,7 +820,7 @@ public class WB_SimplePolygon2D {
 		do {
 			found = false;
 			for (int i = 0; i < localSegs.size(); i++) {
-				if (WB_Epsilon.isZeroSq(WB_Distance2D.getSqDistance(localSegs
+				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance2D(localSegs
 						.get(i).getOrigin(), start.getEndpoint()))) {
 					// if (localSegs.get(i).origin() == start.end()) {
 					start = localSegs.get(i);

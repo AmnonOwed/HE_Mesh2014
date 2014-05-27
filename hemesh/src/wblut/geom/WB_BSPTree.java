@@ -167,7 +167,7 @@ public class WB_BSPTree {
 			}
 		} else {
 			for (int i = 0; i < node.polygons.size(); i++) {
-				if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(p,
+				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
 						node.polygons.get(i)))) {
 					return 0;
 				}

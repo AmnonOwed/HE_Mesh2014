@@ -271,13 +271,13 @@ public class WB_GeomGrid {
 						cell = cells.get(neighbor);
 
 						if (cell != null) {
-							if (WB_Distance3D.sqDistance(p, cell.getAABB()) <= r2) {
+							if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
 								result.add(cell);
 							}
 						} else if (all) {
 							cell = getNewCellForIndex(id.i + di, id.j + dj,
 									id.k + dk);
-							if (WB_Distance3D.sqDistance(p, cell.getAABB()) <= r2) {
+							if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
 								result.add(cell);
 							}
 
@@ -324,13 +324,13 @@ public class WB_GeomGrid {
 					if (neighbor > -1) {
 						cell = cells.get(neighbor);
 						if (cell != null) {
-							if (WB_Distance3D.sqDistance(cell.getAABB()
+							if (WB_Distance.getSqDistance3D(cell.getAABB()
 									.getCenter(), S) <= r2) {
 								result.add(cell);
 							}
 						} else if (all) {
 							cell = getNewCellForIndex(di, dj, dk);
-							if (WB_Distance3D.sqDistance(cell.getAABB()
+							if (WB_Distance.getSqDistance3D(cell.getAABB()
 									.getCenter(), S) <= r2) {
 								result.add(cell);
 							}
@@ -467,7 +467,7 @@ public class WB_GeomGrid {
 	public ArrayList<Index> indicesTraversed(final Segment segment) {
 
 		final ArrayList<Index> indicesTraversed = new ArrayList<Index>();
-		if (!WB_Intersection.checkIntersection(segment, aabb)) {
+		if (!WB_Intersection.checkIntersection3D(segment, aabb)) {
 			return indicesTraversed;
 		}
 		final Index start = ijk(segment.getOrigin());

@@ -251,10 +251,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 */
 	public void setFace(final HE_Face face) {
 		if (_face != null) {
-			_face._sorted = false;
+			_face.reset();
 		}
 		_face = face;
-		_face._sorted = false;
+		_face.reset();
 	}
 
 	/**
@@ -322,7 +322,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 */
 	public void clearFace() {
 		if (_face != null) {
-			_face._sorted = false;
+			_face.reset();
 		}
 		_face = null;
 

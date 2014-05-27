@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.HashMap;
 
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
@@ -105,7 +105,7 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 	 * @return the length
 	 */
 	public double getLength() {
-		return WB_Distance3D.distance(getStartVertex(), getEndVertex());
+		return WB_Distance.getDistance3D(getStartVertex(), getEndVertex());
 	}
 
 	/**

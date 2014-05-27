@@ -29,7 +29,7 @@ public class WB_Line2D extends WB_Linear2D {
 
 	public double getT(final WB_Coordinate p) {
 		double t = Double.NaN;
-		final WB_Point proj = WB_Intersection2D.closestPoint2D(p, this);
+		final WB_Point proj = WB_Intersection.getClosestPoint2D(p, this);
 		final double x = WB_Math.fastAbs(direction.x);
 		final double y = WB_Math.fastAbs(direction.y);
 		if (x >= y) {
@@ -138,7 +138,7 @@ public class WB_Line2D extends WB_Linear2D {
 	public static ArrayList<WB_Line2D> getLinesTangentToCircleThroughPoint(
 			final WB_Circle C, final WB_Coordinate p) {
 		final ArrayList<WB_Line2D> result = new ArrayList<WB_Line2D>(2);
-		final double dcp = WB_Distance2D.getDistance(C.getCenter(), p);
+		final double dcp = WB_Distance.getDistance2D(C.getCenter(), p);
 
 		if (WB_Epsilon.isZero(dcp - C.getRadius())) {
 			final WB_Vector u = new WB_Vector(C.getCenter(), p);

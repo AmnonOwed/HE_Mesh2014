@@ -16,10 +16,10 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBNode;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Circle;
-import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_Curve;
+import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_FrameNode;
 import wblut.geom.WB_FrameStrut;
@@ -27,9 +27,7 @@ import wblut.geom.WB_Geometry;
 import wblut.geom.WB_GeometryCollection;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Grid3D;
-import wblut.geom.WB_IndexedTriangle2D;
 import wblut.geom.WB_Line;
-import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
@@ -37,7 +35,6 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
-import wblut.geom.WB_SimpleMesh;
 import wblut.geom.WB_SimplePolygon2D;
 import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
@@ -76,7 +73,7 @@ public class WB_Render3D {
 		home.popMatrix();
 	}
 
-	public void drawVector(final WB_Coordinate v, final WB_Coordinate p,
+	public void drawVector(final WB_Coordinate p, final WB_Coordinate v,
 			final double r) {
 		home.pushMatrix();
 		home.translate(p.xf(), p.yf(), p.zf());
@@ -309,9 +306,9 @@ public class WB_Render3D {
 			if (f.length == 1) {
 				drawPlane((WB_Plane) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Mesh) {
+		} else if (geometry instanceof WB_FaceListMesh) {
 			if (f.length == 0) {
-				drawMesh((WB_Mesh) geometry);
+				drawMesh((WB_FaceListMesh) geometry);
 			}
 		}
 
@@ -335,17 +332,17 @@ public class WB_Render3D {
 	private void drawPolygon(final int[] indices,
 			final WB_CoordinateSequence points) {
 		if (points != null && indices != null) {
-			home.beginShape(PApplet.POLYGON);
+			home.beginShape(home.POLYGON);
 			for (final int indice : indices) {
 				home.vertex((float) points.get(indice, 0),
 						(float) points.get(indice, 1),
 						(float) points.get(indice, 2));
 			}
-			home.endShape(PApplet.CLOSE);
+			home.endShape(home.CLOSE);
 		}
 	}
 
-	public void drawMesh(final WB_Mesh mesh) {
+	public void drawMesh(final WB_FaceListMesh mesh) {
 		if (mesh == null) {
 			return;
 		}
@@ -355,10 +352,10 @@ public class WB_Render3D {
 
 	}
 
-	public PShape toSmoothPShape(final WB_Mesh mesh) {
+	public PShape toSmoothPShape(final WB_FaceListMesh mesh) {
 		final PShape retained = home.createShape();
 		retained.beginShape(home.TRIANGLES);
-		final WB_Mesh lmesh = geometryfactory.createTriMesh(mesh);
+		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_Vector v = geometryfactory.createVector();
 		final WB_Point p = geometryfactory.createPoint();
 		final WB_CoordinateSequence seq = lmesh.getVertices();
@@ -384,10 +381,10 @@ public class WB_Render3D {
 		return retained;
 	}
 
-	public PShape toFacetedPShape(final WB_Mesh mesh) {
+	public PShape toFacetedPShape(final WB_FaceListMesh mesh) {
 		final PShape retained = home.createShape();
 		retained.beginShape(home.TRIANGLES);
-		final WB_Mesh lmesh = geometryfactory.createTriMesh(mesh);
+		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_Point p = geometryfactory.createPoint();
 		final WB_CoordinateSequence seq = lmesh.getVertices();
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
@@ -677,655 +674,6 @@ public class WB_Render3D {
 		}
 	}
 
-	private void drawConcaveFace(final HE_Face f) {
-
-		final List<WB_IndexedTriangle2D> tris = f.triangulate();
-		final List<HE_Vertex> vertices = f.getFaceVertices();
-		WB_Point v0, v1, v2;
-		WB_IndexedTriangle2D tri;
-		for (int i = 0; i < tris.size(); i++) {
-			tri = tris.get(i);
-			home.beginShape(PConstants.TRIANGLES);
-
-			v0 = vertices.get(tri.i1).pos;
-			v1 = vertices.get(tri.i2).pos;
-			v2 = vertices.get(tri.i3).pos;
-
-			home.vertex(v0.xf(), v0.yf(), v0.zf());
-
-			home.vertex(v1.xf(), v1.yf(), v1.zf());
-
-			home.vertex(v2.xf(), v2.yf(), v2.zf());
-			home.endShape();
-
-		}
-	}
-
-	private void drawConcaveFaceHC(final HE_Face f) {
-		home.pushStyle();
-		final List<WB_IndexedTriangle2D> tris = f.triangulate();
-		final List<HE_Vertex> vertices = f.getFaceVertices();
-		final List<HE_Halfedge> halfedges = f.getFaceHalfedges();
-		WB_Point v0, v1, v2;
-		WB_IndexedTriangle2D tri;
-		for (int i = 0; i < tris.size(); i++) {
-			tri = tris.get(i);
-			home.beginShape(PConstants.TRIANGLES);
-
-			v0 = vertices.get(tri.i1).pos;
-			v1 = vertices.get(tri.i2).pos;
-			v2 = vertices.get(tri.i3).pos;
-			home.fill(halfedges.get(tri.i1).getColor());
-			home.vertex(v0.xf(), v0.yf(), v0.zf());
-			home.fill(halfedges.get(tri.i2).getColor());
-			home.vertex(v1.xf(), v1.yf(), v1.zf());
-			home.fill(halfedges.get(tri.i3).getColor());
-			home.vertex(v2.xf(), v2.yf(), v2.zf());
-			home.endShape();
-
-		}
-		home.popStyle();
-	}
-
-	private void drawConcaveFaceVC(final HE_Face f) {
-		home.pushStyle();
-		final List<WB_IndexedTriangle2D> tris = f.triangulate();
-		final List<HE_Vertex> vertices = f.getFaceVertices();
-		WB_Point v0, v1, v2;
-		WB_IndexedTriangle2D tri;
-		for (int i = 0; i < tris.size(); i++) {
-			tri = tris.get(i);
-			home.beginShape(PConstants.TRIANGLES);
-
-			v0 = vertices.get(tri.i1).pos;
-			v1 = vertices.get(tri.i2).pos;
-			v2 = vertices.get(tri.i3).pos;
-			home.fill(vertices.get(tri.i1).getColor());
-			home.vertex(v0.xf(), v0.yf(), v0.zf());
-			home.fill(vertices.get(tri.i2).getColor());
-			home.vertex(v1.xf(), v1.yf(), v1.zf());
-			home.fill(vertices.get(tri.i3).getColor());
-			home.vertex(v2.xf(), v2.yf(), v2.zf());
-			home.endShape();
-
-		}
-		home.popStyle();
-	}
-
-	/**
-	 * Draw arbitrary convex face. Used internally by drawFace().
-	 * 
-	 * @param vertices
-	 *            vertices of face
-	 * @param smooth
-	 *            use vertex normals?
-	 * @param mesh
-	 *            the mesh
-	 */
-	private void drawConvexShapeFromVertices(final List<HE_Vertex> vertices,
-			final boolean smooth, final HE_MeshStructure mesh) {
-		final int degree = vertices.size();
-		if (degree < 3) {
-			// yeah, right...
-		} else if (degree == 3) {
-			if (smooth) {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final HE_Vertex v1 = vertices.get(1);
-				final WB_Vector n1 = v1.getVertexNormal();
-				final HE_Vertex v2 = vertices.get(2);
-				final WB_Vector n2 = v2.getVertexNormal();
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-			} else {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-
-				final HE_Vertex v2 = vertices.get(2);
-
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-
-			}
-		} else if (degree == 4) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-
-			}
-		} else if (degree == 5) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-				final WB_Vector n4 = v4.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n4.xf(), n4.yf(), n4.zf());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-				home.beginShape(PConstants.TRIANGLES);
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-				home.endShape();
-			}
-		} else {
-			final ArrayList<HE_Vertex> subset = new ArrayList<HE_Vertex>();
-			int div = 3;
-			final int rem = vertices.size() - 5;
-			if (rem == 1) {
-				div = 3;
-			} else if (rem == 2) {
-				div = 4;
-			} else {
-				div = 5;
-			}
-
-			for (int i = 0; i < div; i++) {
-				subset.add(vertices.get(i));
-			}
-			final ArrayList<HE_Vertex> toRemove = new ArrayList<HE_Vertex>();
-			toRemove.add(vertices.get(1));
-			if (div > 3) {
-				toRemove.add(vertices.get(2));
-			}
-			if (div > 4) {
-				toRemove.add(vertices.get(3));
-			}
-			vertices.removeAll(toRemove);
-			drawConvexShapeFromVertices(subset, smooth, mesh);
-			drawConvexShapeFromVertices(vertices, smooth, mesh);
-		}
-
-	}
-
-	private void drawConvexShapeFromVerticesHC(final List<HE_Vertex> vertices,
-			final List<HE_Halfedge> halfedges, final boolean smooth,
-			final HE_Mesh mesh) {
-		final int degree = vertices.size();
-		home.pushStyle();
-		if (degree < 3) {
-			// yeah, right...
-		} else if (degree == 3) {
-			if (smooth) {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final HE_Vertex v1 = vertices.get(1);
-				final WB_Vector n1 = v1.getVertexNormal();
-				final HE_Vertex v2 = vertices.get(2);
-				final WB_Vector n2 = v2.getVertexNormal();
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-			} else {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-
-				final HE_Vertex v2 = vertices.get(2);
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-
-			}
-		} else if (degree == 4) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-
-			}
-		} else if (degree == 5) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-				final WB_Vector n4 = v4.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n4.xf(), n4.yf(), n4.zf());
-				home.fill(halfedges.get(4).getColor());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-				home.beginShape(PConstants.TRIANGLES);
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(1).getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(2).getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.fill(halfedges.get(0).getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(halfedges.get(3).getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.fill(halfedges.get(4).getColor());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-				home.endShape();
-			}
-		} else {
-			final ArrayList<HE_Vertex> subset = new ArrayList<HE_Vertex>();
-			final ArrayList<HE_Halfedge> hesubset = new ArrayList<HE_Halfedge>();
-			int div = 3;
-			final int rem = vertices.size() - 5;
-			if (rem == 1) {
-				div = 3;
-			} else if (rem == 2) {
-				div = 4;
-			} else {
-				div = 5;
-			}
-
-			for (int i = 0; i < div; i++) {
-				subset.add(vertices.get(i));
-				hesubset.add(halfedges.get(i));
-			}
-			final ArrayList<HE_Vertex> toRemove = new ArrayList<HE_Vertex>();
-			final ArrayList<HE_Halfedge> hetoRemove = new ArrayList<HE_Halfedge>();
-			toRemove.add(vertices.get(1));
-			hetoRemove.add(halfedges.get(1));
-			if (div > 3) {
-				toRemove.add(vertices.get(2));
-				hetoRemove.add(halfedges.get(2));
-			}
-			if (div > 4) {
-				toRemove.add(vertices.get(3));
-				hetoRemove.add(halfedges.get(3));
-			}
-			vertices.removeAll(toRemove);
-			halfedges.removeAll(hetoRemove);
-			drawConvexShapeFromVerticesHC(subset, hesubset, smooth, mesh);
-			drawConvexShapeFromVerticesHC(vertices, halfedges, smooth, mesh);
-		}
-		home.popStyle();
-
-	}
-
-	private void drawConvexShapeFromVerticesVC(final List<HE_Vertex> vertices,
-			final boolean smooth, final HE_MeshStructure mesh) {
-		final int degree = vertices.size();
-		home.pushStyle();
-		if (degree < 3) {
-			// yeah, right...
-		} else if (degree == 3) {
-			if (smooth) {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final HE_Vertex v1 = vertices.get(1);
-				final WB_Vector n1 = v1.getVertexNormal();
-				final HE_Vertex v2 = vertices.get(2);
-				final WB_Vector n2 = v2.getVertexNormal();
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-			} else {
-				home.beginShape(PConstants.TRIANGLES);
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-
-				final HE_Vertex v2 = vertices.get(2);
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.endShape();
-
-			}
-		} else if (degree == 4) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-
-				home.endShape();
-
-			}
-		} else if (degree == 5) {
-			if (smooth) {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-
-				final WB_Vector n0 = v0.getVertexNormal();
-				final WB_Vector n1 = v1.getVertexNormal();
-				final WB_Vector n2 = v2.getVertexNormal();
-				final WB_Vector n3 = v3.getVertexNormal();
-				final WB_Vector n4 = v4.getVertexNormal();
-
-				home.beginShape(PConstants.TRIANGLES);
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n1.xf(), n1.yf(), n1.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n2.xf(), n2.yf(), n2.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n0.xf(), n0.yf(), n0.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.normal(n3.xf(), n3.yf(), n3.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.normal(n4.xf(), n4.yf(), n4.zf());
-				home.fill(v4.getColor());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-
-				home.endShape();
-			} else {
-				final HE_Vertex v0 = vertices.get(0);
-				final HE_Vertex v1 = vertices.get(1);
-				final HE_Vertex v2 = vertices.get(2);
-				final HE_Vertex v3 = vertices.get(3);
-				final HE_Vertex v4 = vertices.get(4);
-				home.beginShape(PConstants.TRIANGLES);
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v1.getColor());
-				home.vertex(v1.xf(), v1.yf(), v1.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v2.getColor());
-				home.vertex(v2.xf(), v2.yf(), v2.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.fill(v0.getColor());
-				home.vertex(v0.xf(), v0.yf(), v0.zf());
-				home.fill(v3.getColor());
-				home.vertex(v3.xf(), v3.yf(), v3.zf());
-				home.fill(v4.getColor());
-				home.vertex(v4.xf(), v4.yf(), v4.zf());
-				home.endShape();
-			}
-		} else {
-			final ArrayList<HE_Vertex> subset = new ArrayList<HE_Vertex>();
-			int div = 3;
-			final int rem = vertices.size() - 5;
-			if (rem == 1) {
-				div = 3;
-			} else if (rem == 2) {
-				div = 4;
-			} else {
-				div = 5;
-			}
-
-			for (int i = 0; i < div; i++) {
-				subset.add(vertices.get(i));
-			}
-			final ArrayList<HE_Vertex> toRemove = new ArrayList<HE_Vertex>();
-			toRemove.add(vertices.get(1));
-			if (div > 3) {
-				toRemove.add(vertices.get(2));
-			}
-			if (div > 4) {
-				toRemove.add(vertices.get(3));
-			}
-			vertices.removeAll(toRemove);
-			drawConvexShapeFromVerticesVC(subset, smooth, mesh);
-			drawConvexShapeFromVerticesVC(vertices, smooth, mesh);
-		}
-		home.popStyle();
-
-	}
-
 	/**
 	 * Draw one edge.
 	 * 
@@ -1425,138 +773,221 @@ public class WB_Render3D {
 		}
 	}
 
-	/**
-	 * Draw edges.
-	 * 
-	 * @param mesh
-	 *            the mesh
-	 */
-	public void drawEdges(final WB_SimpleMesh mesh) {
-		final int nf = mesh.getFaces().length;
-		for (int i = 0; i < nf; i++) {
-			final int[] verts = mesh.getFaces()[i];
-			final int nv = verts.length;
-			for (int j = 0, k = nv - 1; j < nv; k = j, j++) {
-				final WB_Point p = mesh.getVertex(verts[k]);
-				final WB_Point q = mesh.getVertex(verts[j]);
-				if (p.smallerThan(q)) {
-					home.line(p.xf(), p.yf(), p.zf(), q.xf(), q.yf(), q.zf());
+	public void drawFace(final HE_Face f) {
+		drawFace(f, false);
+	}
+
+	public void drawFace(final HE_Face f, final boolean smooth) {
+		if (f.getFaceOrder() > 2) {
+			final int[][] tris = f.triangulate();
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			HE_Vertex v0, v1, v2;
+			WB_Vector n0, n1, n2;
+			int[] tri;
+			if (smooth) {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					n0 = v0.getVertexNormal();
+					v1 = vertices.get(tri[1]);
+					n1 = v1.getVertexNormal();
+					v2 = vertices.get(tri[2]);
+					n2 = v2.getVertexNormal();
+					home.normal(n0.xf(), n0.yf(), n0.zf());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.normal(n1.xf(), n1.yf(), n1.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.normal(n2.xf(), n2.yf(), n2.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+				}
+			} else {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					v1 = vertices.get(tri[1]);
+					v2 = vertices.get(tri[2]);
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+
 				}
 			}
-
 		}
-
 	}
 
-	/**
-	 * Draw one face.
-	 * 
-	 * @param f
-	 *            face
-	 */
-	public void drawFace(final HE_Face f) {
+	public void drawFaceFC(final HE_Face f, final boolean smooth) {
 		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
-				tmpVertices = f.getFaceVertices();
-				drawConvexShapeFromVertices(tmpVertices, false, null);
+			home.pushStyle();
+			home.fill(f.getColor());
+			final int[][] tris = f.triangulate();
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			HE_Vertex v0, v1, v2;
+			WB_Vector n0, n1, n2;
+			int[] tri;
+			if (smooth) {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					n0 = v0.getVertexNormal();
+					v1 = vertices.get(tri[1]);
+					n1 = v1.getVertexNormal();
+					v2 = vertices.get(tri[2]);
+					n2 = v2.getVertexNormal();
+					home.normal(n0.xf(), n0.yf(), n0.zf());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.normal(n1.xf(), n1.yf(), n1.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.normal(n2.xf(), n2.yf(), n2.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+				}
 			} else {
-				drawConcaveFace(f);
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					v1 = vertices.get(tri[1]);
+					v2 = vertices.get(tri[2]);
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
 
+				}
+			}
+			home.popStyle();
+		}
+	}
+
+	public void drawFaceHC(final HE_Face f, final boolean smooth) {
+		if (f.getFaceOrder() > 2) {
+			final int[][] tris = f.triangulate();
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			final List<HE_Halfedge> halfedges = f.getFaceHalfedges();
+			HE_Vertex v0, v1, v2;
+			WB_Vector n0, n1, n2;
+			int[] tri;
+			if (smooth) {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					n0 = v0.getVertexNormal();
+					v1 = vertices.get(tri[1]);
+					n1 = v1.getVertexNormal();
+					v2 = vertices.get(tri[2]);
+					n2 = v2.getVertexNormal();
+					home.fill(halfedges.get(tri[0]).getColor());
+					home.normal(n0.xf(), n0.yf(), n0.zf());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.fill(halfedges.get(tri[1]).getColor());
+					home.normal(n1.xf(), n1.yf(), n1.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.fill(halfedges.get(tri[2]).getColor());
+					home.normal(n2.xf(), n2.yf(), n2.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+				}
+			} else {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					v1 = vertices.get(tri[1]);
+					v2 = vertices.get(tri[2]);
+					home.fill(halfedges.get(tri[0]).getColor());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.fill(halfedges.get(tri[1]).getColor());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.fill(halfedges.get(tri[2]).getColor());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+
+				}
 			}
 		}
 	}
 
-	/**
-	 * Draw one face.
-	 * 
-	 * @param f
-	 *            face
-	 * @param smooth
-	 *            the smooth
-	 * @param mesh
-	 *            the mesh
-	 */
-	public void drawFace(final HE_Face f, final boolean smooth,
-			final HE_MeshStructure mesh) {
+	public void drawFaceVC(final HE_Face f, final boolean smooth) {
 		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
-				tmpVertices = f.getFaceVertices();
-				drawConvexShapeFromVertices(tmpVertices, smooth, mesh);
+			final int[][] tris = f.triangulate();
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			HE_Vertex v0, v1, v2;
+			WB_Vector n0, n1, n2;
+			int[] tri;
+			if (smooth) {
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					n0 = v0.getVertexNormal();
+					v1 = vertices.get(tri[1]);
+					n1 = v1.getVertexNormal();
+					v2 = vertices.get(tri[2]);
+					n2 = v2.getVertexNormal();
+					home.fill(v0.getColor());
+					home.normal(n0.xf(), n0.yf(), n0.zf());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.fill(v1.getColor());
+					home.normal(n1.xf(), n1.yf(), n1.zf());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.fill(v2.getColor());
+					home.normal(n2.xf(), n2.yf(), n2.zf());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
+				}
 			} else {
-				drawConcaveFace(f);
+				for (int i = 0; i < tris.length; i++) {
+					tri = tris[i];
+					home.beginShape(PConstants.TRIANGLES);
+					v0 = vertices.get(tri[0]);
+					v1 = vertices.get(tri[1]);
+					v2 = vertices.get(tri[2]);
+					home.fill(v0.getColor());
+					home.vertex(v0.xf(), v0.yf(), v0.zf());
+					home.fill(v1.getColor());
+					home.vertex(v1.xf(), v1.yf(), v1.zf());
+					home.fill(v2.getColor());
+					home.vertex(v2.xf(), v2.yf(), v2.zf());
+					home.endShape();
 
+				}
 			}
 		}
 	}
 
-	/**
-	 * Draw one face.
-	 * 
-	 * @param key
-	 *            key of face
-	 * @param smooth
-	 *            the smooth
-	 * @param mesh
-	 *            the mesh
-	 */
 	public void drawFace(final Long key, final boolean smooth,
 			final HE_MeshStructure mesh) {
-		drawFace(mesh.getFaceByKey(key), smooth, mesh);
+		final HE_Face f = mesh.getFaceByKey(key);
+		if (f != null)
+			drawFace(f, smooth);
 
 	}
 
-	// RENDER
-
-	/**
-	 * Draw one face.
-	 * 
-	 * @param key
-	 *            key of face
-	 * @param mesh
-	 *            the mesh
-	 */
 	public void drawFace(final Long key, final HE_MeshStructure mesh) {
 		List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
 		if (f != null) {
-			tmpVertices = f.getFaceVertices();
-			drawConvexShapeFromVertices(tmpVertices, false, null);
+			drawFace(f, false);
 		}
 
 	}
 
 	public void drawFaceFC(final HE_Face f) {
-		home.pushStyle();
-		home.fill(f.getColor());
-		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
-				tmpVertices = f.getFaceVertices();
-				drawConvexShapeFromVertices(tmpVertices, false, null);
-			} else {
-				drawConcaveFace(f);
-
-			}
-		}
-		home.popStyle();
+		drawFaceFC(f, false);
 	}
 
 	public void drawFaceHC(final HE_Face f) {
+		drawFaceHC(f, false);
+	}
 
-		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = f.getFaceVertices();
-				List<HE_Halfedge> tmpHalfedges = f.getFaceHalfedges();
-				drawConvexShapeFromVerticesHC(tmpVertices, tmpHalfedges, false,
-						null);
-			} else {
-				drawConcaveFaceHC(f);
-
-			}
-		}
-
+	public void drawFaceVC(final HE_Face f) {
+		drawFaceVC(f, false);
 	}
 
 	public void drawFaces(final Collection<? extends HE_MeshStructure> meshes) {
@@ -1598,28 +1029,6 @@ public class WB_Render3D {
 		}
 	}
 
-	/**
-	 * Draw faces.
-	 * 
-	 * @param mesh
-	 *            the mesh
-	 */
-	public void drawFaces(final WB_SimpleMesh mesh) {
-		final int nf = mesh.getFaces().length;
-		for (int i = 0; i < nf; i++) {
-			final int[] verts = mesh.getFaces()[i];
-			final int nv = verts.length;
-			home.beginShape(PConstants.POLYGON);
-			for (int j = 0; j < nv; j++) {
-				final WB_Point p = mesh.getVertex(verts[j]);
-				home.vertex(p.xf(), p.yf(), p.zf());
-
-			}
-
-		}
-		home.endShape(PConstants.CLOSE);
-	}
-
 	public void drawFacesFC(final HE_MeshStructure mesh) {
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
@@ -1634,6 +1043,13 @@ public class WB_Render3D {
 		}
 	}
 
+	public void drawFacesVC(final HE_MeshStructure mesh) {
+		final Iterator<HE_Face> fItr = mesh.fItr();
+		while (fItr.hasNext()) {
+			drawFaceVC(fItr.next());
+		}
+	}
+
 	/**
 	 * Draw one face using vertex normals.
 	 * 
@@ -1645,8 +1061,49 @@ public class WB_Render3D {
 	public void drawFaceSmooth(final Long key, final HE_MeshStructure mesh) {
 		new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		drawFace(f, true, mesh);
+		if (f != null)
+			drawFace(f, true);
+	}
 
+	public void drawFaceSmooth(final HE_Face f) {
+		new ArrayList<HE_Vertex>();
+		drawFace(f, true);
+	}
+
+	public void drawFaceSmoothFC(final Long key, final HE_MeshStructure mesh) {
+		new ArrayList<HE_Vertex>();
+		final HE_Face f = mesh.getFaceByKey(key);
+		if (f != null)
+			drawFaceFC(f, true);
+	}
+
+	public void drawFaceSmoothFC(final HE_Face f) {
+		new ArrayList<HE_Vertex>();
+		drawFaceFC(f, true);
+	}
+
+	public void drawFaceSmoothVC(final Long key, final HE_MeshStructure mesh) {
+		new ArrayList<HE_Vertex>();
+		final HE_Face f = mesh.getFaceByKey(key);
+		if (f != null)
+			drawFaceVC(f, true);
+	}
+
+	public void drawFaceSmoothVC(final HE_Face f) {
+		new ArrayList<HE_Vertex>();
+		drawFaceVC(f, true);
+	}
+
+	public void drawFaceSmoothHC(final Long key, final HE_MeshStructure mesh) {
+		new ArrayList<HE_Vertex>();
+		final HE_Face f = mesh.getFaceByKey(key);
+		if (f != null)
+			drawFaceHC(f, true);
+	}
+
+	public void drawFaceSmoothHC(final HE_Face f) {
+		new ArrayList<HE_Vertex>();
+		drawFaceHC(f, true);
 	}
 
 	/**
@@ -1659,31 +1116,30 @@ public class WB_Render3D {
 		new ArrayList<HE_Vertex>();
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
-			drawFace(fItr.next(), true, mesh);
+			drawFace(fItr.next(), true);
 		}
 
 	}
 
-	public void drawFacesVC(final HE_MeshStructure mesh) {
+	public void drawFacesSmoothFC(final HE_MeshStructure mesh) {
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
-			drawFaceVC(fItr.next());
+			drawFaceFC(fItr.next(), true);
 		}
 	}
 
-	public void drawFaceVC(final HE_Face f) {
-
-		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
-				tmpVertices = f.getFaceVertices();
-				drawConvexShapeFromVerticesVC(tmpVertices, false, null);
-			} else {
-				drawConcaveFaceVC(f);
-
-			}
+	public void drawFacesSmoothHC(final HE_MeshStructure mesh) {
+		final Iterator<HE_Face> fItr = mesh.fItr();
+		while (fItr.hasNext()) {
+			drawFaceHC(fItr.next(), true);
 		}
+	}
 
+	public void drawFacesSmoothVC(final HE_MeshStructure mesh) {
+		final Iterator<HE_Face> fItr = mesh.fItr();
+		while (fItr.hasNext()) {
+			drawFaceVC(fItr.next(), true);
+		}
 	}
 
 	/**

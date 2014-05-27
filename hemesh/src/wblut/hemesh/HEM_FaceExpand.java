@@ -73,7 +73,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 				} else {
 					final WB_Plane planef2 = he.getPair().getFace().toPlane(d);
 					final WB_IntersectionResult ir = WB_Intersection
-							.getIntersection(planef, planef2);
+							.getIntersection3D(planef, planef2);
 					final WB_Line lineff;
 					if (ir.dimension == 1) {
 						lineff = (WB_Line) ir.object;
@@ -82,7 +82,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 						lineff = new WB_Line(v.pos.addMul(d, en),
 								he.getHalfedgeTangent());
 					}
-					p = WB_Intersection.getClosestPoint(v, lineff);
+					p = WB_Intersection.getClosestPoint3D(v, lineff);
 					System.out.println(lineff + " " + p);
 				}
 

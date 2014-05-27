@@ -336,7 +336,7 @@ public class WB_Frame {
 		for (int i = 0; i < struts.size(); i++) {
 			final WB_FrameStrut strut = struts.get(i);
 			final WB_Segment S = new WB_Segment(strut.start(), strut.end());
-			d = Math.min(d, WB_Distance3D.distance(p, S));
+			d = Math.min(d, WB_Distance.getDistance3D(p, S));
 		}
 		return d;
 	}
@@ -346,7 +346,7 @@ public class WB_Frame {
 		int q = -1;
 		for (int i = 0; i < nodes.size(); i++) {
 
-			final double d = WB_Distance3D.sqDistance(p, nodes.get(i));
+			final double d = WB_Distance.getSqDistance3D(p, nodes.get(i));
 			if (d < mind) {
 				mind = d;
 				q = i;
@@ -363,10 +363,10 @@ public class WB_Frame {
 			final WB_FrameStrut strut = struts.get(i);
 			final WB_Segment S = new WB_Segment(strut.start(), strut.end());
 
-			final double d = WB_Distance3D.distance(p, S);
+			final double d = WB_Distance.getDistance3D(p, S);
 			if (d < mind) {
 				mind = d;
-				q = WB_Intersection.getClosestPoint(S, p);
+				q = WB_Intersection.getClosestPoint3D(S, p);
 			}
 
 		}
@@ -379,7 +379,7 @@ public class WB_Frame {
 		for (int i = 0; i < struts.size(); i++) {
 			final WB_FrameStrut strut = struts.get(i);
 			final WB_Segment S = new WB_Segment(strut.start(), strut.end());
-			d = Math.min(d, WB_Distance3D.distance(new WB_Point(x, y, z), S));
+			d = Math.min(d, WB_Distance.getDistance3D(new WB_Point(x, y, z), S));
 		}
 		return d;
 	}
@@ -392,10 +392,11 @@ public class WB_Frame {
 			final WB_FrameStrut strut = struts.get(i);
 			final WB_Segment S = new WB_Segment(strut.start(), strut.end());
 
-			final double d = WB_Distance3D.distance(new WB_Point(x, y, z), S);
+			final double d = WB_Distance
+					.getDistance3D(new WB_Point(x, y, z), S);
 			if (d < mind) {
 				mind = d;
-				q = WB_Intersection.getClosestPoint(S, new WB_Point(x, y, z));
+				q = WB_Intersection.getClosestPoint3D(S, new WB_Point(x, y, z));
 			}
 
 		}

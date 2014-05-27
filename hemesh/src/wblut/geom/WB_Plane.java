@@ -71,7 +71,7 @@ public class WB_Plane {
 		this.n = new WB_Vector(n);
 		this.n._normalizeSelf();
 		this.d = d;
-		origin = WB_Intersection.getClosestPoint(new WB_Point(), this);
+		origin = WB_Intersection.getClosestPoint3D(new WB_Point(), this);
 		setAxes();
 	}
 
@@ -251,10 +251,10 @@ public class WB_Plane {
 	 * @return true/false
 	 */
 	public static boolean isEqual(final WB_Plane P, final WB_Plane Q) {
-		if (!WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(P.getOrigin(), Q))) {
+		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(P.getOrigin(), Q))) {
 			return false;
 		}
-		if (!WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(Q.getOrigin(), P))) {
+		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(Q.getOrigin(), P))) {
 			return false;
 		}
 		if (!P.getNormal().isParallelNorm(Q.getNormal())) {
@@ -383,7 +383,7 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point mirrorPoint(final WB_Coordinate p) {
-		if (WB_Epsilon.isZero(WB_Distance3D.distance(p, this))) {
+		if (WB_Epsilon.isZero(WB_Distance.getDistance3D(p, this))) {
 			return new WB_Point(p);
 		}
 		return extractPoint2D(localPoint(p)._scaleSelf(1, 1, -1));

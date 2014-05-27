@@ -56,7 +56,7 @@ public class WB_Containment {
 
 	public static boolean contains(final WB_Coordinate p,
 			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
-		if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistanceToLine(A, B, C))) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine3D(A, B, C))) {
 			return false;
 		}
 		if (sameSide(p, A, B, C) && sameSide(p, B, A, C)

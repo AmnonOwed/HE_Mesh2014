@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
 
 public class HEC_Geodesic extends HEC_Creator {
@@ -63,7 +63,7 @@ public class HEC_Geodesic extends HEC_Creator {
 		final Iterator<HE_Vertex> vItr = result.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			final double d = Math.sqrt(WB_Distance3D.sqDistance(v, bc));
+			final double d = Math.sqrt(WB_Distance.getSqDistance3D(v, bc));
 			v.pos._mulSelf(R / d);
 		}
 

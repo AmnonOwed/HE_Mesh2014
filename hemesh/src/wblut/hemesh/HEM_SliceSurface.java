@@ -106,7 +106,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 		// check if plane intersects mesh
 		WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
-		if (!WB_Intersection.checkIntersection(mesh.getAABB(), lP)) {
+		if (!WB_Intersection.checkIntersection3D(mesh.getAABB(), lP)) {
 			return mesh;
 		}
 		final WB_AABBTree tree = new WB_AABBTree(mesh, 4);

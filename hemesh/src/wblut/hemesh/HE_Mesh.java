@@ -14,12 +14,12 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
+import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_IndexedSegment;
 import wblut.geom.WB_IndexedTriangle;
-import wblut.geom.WB_IndexedTriangle2D;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree;
@@ -77,6 +77,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		setNoCopy(creator.create());
 		_centerUpdated = false;
 		label = -1;
+	}
+
+	public HE_Mesh(final WB_FaceListMesh mesh) {
+		this(new HEC_FromFaceListMesh(mesh));
 	}
 
 	// MODIFY
@@ -692,6 +696,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			result.put(e.key(), e.getEdgeCenter());
 		}
 		return result;
+	}
+
+	public WB_FaceListMesh toFaceListMesh() {
+		return WB_GeometryFactory.instance().createMesh(getVerticesAsPoint(),
+				getFacesAsInt());
+
 	}
 
 	/**
@@ -1902,7 +1912,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		HE_Edge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(
+			if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
 					e.getStartVertex(), e.getEndVertex()))) {
 				edgesToRemove.add(e);
 			}
@@ -2437,7 +2447,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			c++;
 			final WB_Plane P = new WB_Plane(he.getHalfedgeCenter(),
 					he.getHalfedgeNormal());
-			final double d = WB_Distance3D.distance(v, P);
+			final double d = WB_Distance.getDistance3D(v, P);
 			if (WB_Epsilon.isZero(d)) {
 				onEdge = true;
 				break;
@@ -3886,7 +3896,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				}
 			} else {
 
-				lpi = WB_Intersection.getIntersection(R, P);
+				lpi = WB_Intersection.getIntersection3D(R, P);
 				if (lpi.intersection) {
 					if (pointIsInFace((WB_Point) lpi.object, face)) {
 						if (!HE_Mesh.pointIsStrictlyInFace(
@@ -3912,8 +3922,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return true/false
 	 */
 	public static boolean pointIsInFace(final WB_Point p, final HE_Face f) {
-		return WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(p,
-				WB_Intersection.getClosestPoint(p, f.toPolygon())));
+		return WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+				WB_Intersection.getClosestPoint3D(p, f.toPolygon())));
 	}
 
 	/**
@@ -3929,12 +3939,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			final HE_Face f) {
 		final WB_SimplePolygon poly = f.toPolygon();
 		final List<WB_IndexedTriangle> tris = poly.triangulate();
-		if (!WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(p,
-				WB_Intersection.getClosestPoint(p, tris)))) {
+		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+				WB_Intersection.getClosestPoint3D(p, tris)))) {
 			return false;
 		}
-		if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(p,
-				WB_Intersection.getClosestPointOnPeriphery(p, poly, tris)))) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+				WB_Intersection.getClosestPointOnPeriphery3D(p, poly, tris)))) {
 			return false;
 		}
 		return true;
@@ -4428,6 +4438,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	/**
+	 * Reset faces.
+	 */
+	public void resetFaces() {
+		final Iterator<HE_Face> fItr = fItr();
+		while (fItr.hasNext()) {
+			fItr.next().reset();
+		}
+
+	}
+
+	/**
 	 * Reset edge labels.
 	 */
 	public void resetEdgeLabels() {
@@ -4619,8 +4640,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		WB_Point result = new WB_Point();
 		for (int i = 0; i < faces.size(); i++) {
 			final WB_SimplePolygon poly = faces.get(i).toPolygon();
-			final WB_Point tmp = WB_Intersection.getClosestPoint(p, poly);
-			d = WB_Distance3D.sqDistance(tmp, p);
+			final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
+			d = WB_Distance.getSqDistance3D(tmp, p);
 			if (d < dmin) {
 				dmin = d;
 				result = tmp;
@@ -4648,8 +4669,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		HE_Face face = new HE_Face();
 		for (int i = 0; i < faces.size(); i++) {
 			final WB_SimplePolygon poly = faces.get(i).toPolygon();
-			final WB_Point tmp = WB_Intersection.getClosestPoint(p, poly);
-			d = WB_Distance3D.sqDistance(tmp, p);
+			final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
+			d = WB_Distance.getSqDistance3D(tmp, p);
 			if (d < dmin) {
 				dmin = d;
 				face = faces.get(i);
@@ -4660,15 +4681,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		vertexTree.add(nv.pos, nv.key());
 	}
 
-	/**
-	 * Get all faces shared between two vertices.
-	 * 
-	 * @param v1
-	 *            the v1
-	 * @param v2
-	 *            the v2
-	 * @return shared faces as FastList<HE_Face>
-	 */
 	public List<HE_Face> getSharedFaces(final HE_Vertex v1, final HE_Vertex v2) {
 		final List<HE_Face> result = v1.getFaceStar();
 		final List<HE_Face> compare = v2.getFaceStar();
@@ -4682,11 +4694,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		return result;
 	}
 
-	/**
-	 * Gets the boundary as polygons.
-	 * 
-	 * @return the boundary as polygons
-	 */
 	public List<WB_SimplePolygon> getBoundaryAsPolygons() {
 		final List<WB_SimplePolygon> polygons = new FastList<WB_SimplePolygon>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
@@ -4712,11 +4719,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	}
 
-	/**
-	 * Gets the boundary loop halfedges.
-	 * 
-	 * @return the boundary loop halfedges
-	 */
 	public List<HE_Halfedge> getBoundaryLoopHalfedges() {
 		final List<HE_Halfedge> hes = new FastList<HE_Halfedge>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
@@ -4790,11 +4792,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		} while (pinchFound && run < 10);
 	}
 
-	/**
-	 * Gets the area.
-	 * 
-	 * @return the area
-	 */
 	public double getArea() {
 		final Iterator<HE_Face> fItr = fItr();
 		double A = 0.0;
@@ -4815,15 +4812,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	}
 
-	/**
-	 * Triangulate.
-	 * 
-	 * @param face
-	 *            the face
-	 */
 	public void triangulate(final HE_Face face) {
 		if (face.getFaceOrder() > 3) {
-			final List<WB_IndexedTriangle2D> tris = face.triangulate();
+			final int[][] tris = face.triangulate();
 			final List<HE_Vertex> vertices = face.getFaceVertices();
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);
@@ -4837,17 +4828,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());
 
-			for (int i = 0; i < tris.size(); i++) {
-				final WB_IndexedTriangle2D tri = tris.get(i);
+			for (int i = 0; i < tris.length; i++) {
+				final int[] tri = tris[i];
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
-				he1.setVertex(vertices.get(tri.i1));
-				he2.setVertex(vertices.get(tri.i2));
-				he3.setVertex(vertices.get(tri.i3));
+				he1.setVertex(vertices.get(tri[0]));
+				he2.setVertex(vertices.get(tri[1]));
+				he3.setVertex(vertices.get(tri[2]));
 				he1.getVertex().setHalfedge(he1);
 				he2.getVertex().setHalfedge(he2);
 				he3.getVertex().setHalfedge(he3);
@@ -4868,15 +4859,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		}
 	}
 
-	/**
-	 * Triangulate no pairing.
-	 * 
-	 * @param face
-	 *            the face
-	 */
 	private void triangulateNoPairing(final HE_Face face) {
 		if (face.getFaceOrder() > 3) {
-			final List<WB_IndexedTriangle2D> tris = face.triangulate();
+			final int[][] tris = face.triangulate();
 			final List<HE_Vertex> vertices = face.getFaceVertices();
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);
@@ -4896,17 +4881,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 				he = he.getNextInFace();
 			} while (he != face.getHalfedge());
 
-			for (int i = 0; i < tris.size(); i++) {
-				final WB_IndexedTriangle2D tri = tris.get(i);
+			for (int i = 0; i < tris.length; i++) {
+				final int[] tri = tris[i];
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
-				he1.setVertex(vertices.get(tri.i1));
-				he2.setVertex(vertices.get(tri.i2));
-				he3.setVertex(vertices.get(tri.i3));
+				he1.setVertex(vertices.get(tri[0]));
+				he2.setVertex(vertices.get(tri[1]));
+				he3.setVertex(vertices.get(tri[2]));
 				he1.getVertex().setHalfedge(he1);
 				he2.getVertex().setHalfedge(he2);
 				he3.getVertex().setHalfedge(he3);
@@ -4991,12 +4976,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	}
 
-	/**
-	 * Smooth.
-	 * 
-	 * @param rep
-	 *            the rep
-	 */
 	public void smooth(int rep) {
 		subdivide(new HES_CatmullClark(), rep);
 

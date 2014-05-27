@@ -3,12 +3,13 @@ package wblut.hemesh;
 import java.util.List;
 import java.util.Map;
 
+import javolution.context.LogContext;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import wblut.WB_Epsilon;
 import wblut.geom.Segment;
 import wblut.geom.WB_Convex;
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Point;
@@ -239,9 +240,11 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		LogContext.enter(LogContext.NULL);
 		mesh.resetFaceLabels();
 		walls = new HE_Selection(mesh);
 		extruded = new HE_Selection(mesh);
+
 		_halfedgeNormals = new FastMap<Long, WB_Vector>();
 		_halfedgeEWs = new FastMap<Long, Double>();
 
@@ -340,6 +343,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+		LogContext.enter(LogContext.NULL);
 		selection.parent.resetFaceLabels();
 		walls = new HE_Selection(selection.parent);
 		extruded = new HE_Selection(selection.parent);
@@ -870,7 +874,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							v3.addMul(d[i], n2));
 
 					final WB_IntersectionResult ir = WB_Intersection
-							.getIntersection(S1, S2);
+							.getIntersection3D(S1, S2);
 					final WB_Point p = (ir.dimension == 0) ? (WB_Point) ir.object
 							: ((Segment) ir.object).getCenter();
 					extFaceVertices.get(i)._set(p);
@@ -964,7 +968,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			final List<HE_Edge> edgesToRemove = new FastList<HE_Edge>();
 			for (int i = 0; i < newEdges2.size(); i++) {
 				final HE_Edge e = newEdges2.get(i);
-				if (WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(
+				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
 						e.getStartVertex(), e.getEndVertex()))) {
 					edgesToRemove.add(e);
 				}

@@ -8,11 +8,11 @@ import java.util.Map.Entry;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
-public class WB_TriMesh extends WB_Mesh {
+public class WB_TriMesh extends WB_FaceListMesh {
 	private final static int[] PREV = new int[] { 2, 0, 1 };
 	private final static int[] NEXT = new int[] { 1, 2, 0 };
 
-	Object[] pdir1 = null, pdir2 = null;
+	WB_Vector[] pdir1 = null, pdir2 = null;
 	double[] curv1 = null, curv2 = null;
 	double k1min, k2min, Kmin, k1max, k2max, Kmax;
 	double[][] dcurv = null;
@@ -41,7 +41,7 @@ public class WB_TriMesh extends WB_Mesh {
 		triangulate();
 	}
 
-	protected WB_TriMesh(final WB_Mesh mesh) {
+	protected WB_TriMesh(final WB_FaceListMesh mesh) {
 		vertices = mesh.getVertices();
 		faces = mesh.getFaces();
 		aabb = new WB_AABB(vertices);
@@ -54,7 +54,7 @@ public class WB_TriMesh extends WB_Mesh {
 			return;
 		}
 
-		faceNormals = new Object[nf];
+		faceNormals = new WB_Vector[nf];
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
 			final WB_Point p0 = vertices.getCoordinate(face[0]);
@@ -63,7 +63,8 @@ public class WB_TriMesh extends WB_Mesh {
 			final WB_Vector a = geometryfactory.createNormalizedVector(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVector(p2, p1);
 
-			faceNormals[i] = a.cross(b)._normalizeSelf();
+			faceNormals[i] = a.cross(b);
+			faceNormals[i]._normalizeSelf();
 		}
 
 		fNormalsUpdated = true;
@@ -91,7 +92,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!fNormalsUpdated) {
 			updateFaceNormals();
 		}
-		vertexNormals = new Object[nv];
+		vertexNormals = new WB_Vector[nv];
 		for (int i = 0; i < nv; i++) {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
@@ -109,16 +110,13 @@ public class WB_TriMesh extends WB_Mesh {
 			final double l2b = b.getSqLength();
 			final double l2c = c.getSqLength();
 			final WB_Vector facenormal = a.cross(b);
-			((WB_Vector) vertexNormals[face[0]])._addMulSelf(1.0 / (l2a * l2c),
-					facenormal);
-			((WB_Vector) vertexNormals[face[1]])._addMulSelf(1.0 / (l2b * l2a),
-					facenormal);
-			((WB_Vector) vertexNormals[face[2]])._addMulSelf(1.0 / (l2c * l2b),
-					facenormal);
+			(vertexNormals[face[0]])._addMulSelf(1.0 / (l2a * l2c), facenormal);
+			(vertexNormals[face[1]])._addMulSelf(1.0 / (l2b * l2a), facenormal);
+			(vertexNormals[face[2]])._addMulSelf(1.0 / (l2c * l2b), facenormal);
 
 		}
-		for (final Object v : vertexNormals) {
-			((WB_Vector) v)._normalizeSelf();
+		for (final WB_Vector v : vertexNormals) {
+			(v)._normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -133,7 +131,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!fNormalsUpdated) {
 			updateFaceNormals();
 		}
-		vertexNormals = new Object[nv];
+		vertexNormals = new WB_Vector[nv];
 		for (int i = 0; i < nv; i++) {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
@@ -147,13 +145,13 @@ public class WB_TriMesh extends WB_Mesh {
 			final WB_Vector b = geometryfactory.createNormalizedVector(p1, p2);
 
 			final WB_Vector facenormal = a.cross(b);
-			((WB_Vector) vertexNormals[face[0]])._addSelf(facenormal);
-			((WB_Vector) vertexNormals[face[1]])._addSelf(facenormal);
-			((WB_Vector) vertexNormals[face[2]])._addSelf(facenormal);
+			(vertexNormals[face[0]])._addSelf(facenormal);
+			(vertexNormals[face[1]])._addSelf(facenormal);
+			(vertexNormals[face[2]])._addSelf(facenormal);
 
 		}
-		for (final Object v : vertexNormals) {
-			((WB_Vector) v)._normalizeSelf();
+		for (final WB_Vector v : vertexNormals) {
+			(v)._normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -178,7 +176,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!fNormalsUpdated) {
 			updateFaceNormals();
 		}
-		vertexNormals = new Object[nv];
+		vertexNormals = new WB_Vector[nv];
 		for (int i = 0; i < nv; i++) {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
@@ -198,16 +196,15 @@ public class WB_TriMesh extends WB_Mesh {
 			final double w0 = P10.getAngleNorm(P20);
 			P10._mulSelf(-1);
 			final double w1 = P10.getAngleNorm(P21);
-			final WB_Vector fn = (WB_Vector) faceNormals[i];
-			((WB_Vector) vertexNormals[face[0]])._addMulSelf(w0, fn);
-			((WB_Vector) vertexNormals[face[1]])._addMulSelf(w1, fn);
-			((WB_Vector) vertexNormals[face[2]])._addMulSelf(Math.PI - w0 - w1,
-					fn);
+			final WB_Vector fn = faceNormals[i];
+			(vertexNormals[face[0]])._addMulSelf(w0, fn);
+			(vertexNormals[face[1]])._addMulSelf(w1, fn);
+			(vertexNormals[face[2]])._addMulSelf(Math.PI - w0 - w1, fn);
 			i++;
 
 		}
-		for (final Object v : vertexNormals) {
-			((WB_Vector) v)._normalizeSelf();
+		for (final WB_Vector v : vertexNormals) {
+			v._normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -222,7 +219,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!fNormalsUpdated) {
 			updateFaceNormals();
 		}
-		vertexNormals = new Object[nv];
+		vertexNormals = new WB_Vector[nv];
 		for (int i = 0; i < nv; i++) {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
@@ -230,14 +227,14 @@ public class WB_TriMesh extends WB_Mesh {
 		final int nf = faces.length;
 		int i = 0;
 		for (final int[] face : faces) {
-			final WB_Vector fn = (WB_Vector) faceNormals[i];
-			((WB_Vector) vertexNormals[face[0]])._addSelf(fn);
-			((WB_Vector) vertexNormals[face[1]])._addSelf(fn);
-			((WB_Vector) vertexNormals[face[2]])._addSelf(fn);
+			final WB_Vector fn = faceNormals[i];
+			(vertexNormals[face[0]])._addSelf(fn);
+			(vertexNormals[face[1]])._addSelf(fn);
+			(vertexNormals[face[2]])._addSelf(fn);
 			i++;
 		}
-		for (final Object v : vertexNormals) {
-			((WB_Vector) v)._normalizeSelf();
+		for (final WB_Vector v : vertexNormals) {
+			(v)._normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -304,7 +301,7 @@ public class WB_TriMesh extends WB_Mesh {
 		areasUpdated = true;
 	}
 
-	private void updateCurvatures() {
+	protected void updateCurvatures() {
 		if (curvaturesUpdated) {
 			return;
 		}
@@ -316,8 +313,8 @@ public class WB_TriMesh extends WB_Mesh {
 		k1max = k2max = Kmax = Double.NEGATIVE_INFINITY;
 		curv1 = new double[nv];
 		curv2 = new double[nv];
-		pdir1 = new Object[nv];
-		pdir2 = new Object[nv];
+		pdir1 = new WB_Vector[nv];
+		pdir2 = new WB_Vector[nv];
 		final double[] curv12 = new double[nv];
 
 		for (final int[] face : faces) {
@@ -333,10 +330,10 @@ public class WB_TriMesh extends WB_Mesh {
 		}
 
 		for (int i = 0; i < nv; i++) {
-			((WB_Vector) pdir1[i])._crossSelf((WB_Vector) vertexNormals[i])
-					._normalizeSelf();
-			pdir2[i] = ((WB_Vector) vertexNormals[i]).cross(
-					(WB_Vector) pdir1[i])._normalizeSelf();
+			(pdir1[i])._crossSelf(vertexNormals[i]);
+			pdir1[i]._normalizeSelf();
+			pdir2[i] = (vertexNormals[i]).cross(pdir1[i]);
+			pdir2[i]._normalizeSelf();
 		}
 		int i = 0;
 		for (final int[] face : faces) {
@@ -368,8 +365,8 @@ public class WB_TriMesh extends WB_Mesh {
 				w[0][1] += u * v;
 				w[2][2] += v * v;
 				final WB_Vector dn = geometryfactory.createVector(
-						(WB_Vector) vertexNormals[face[NEXT[j]]],
-						(WB_Vector) vertexNormals[face[PREV[j]]]);
+						vertexNormals[face[NEXT[j]]],
+						vertexNormals[face[PREV[j]]]);
 				final double dnu = dn.dot(t);
 				final double dnv = dn.dot(b);
 				m[0] += dnu * u;
@@ -386,8 +383,7 @@ public class WB_TriMesh extends WB_Mesh {
 			for (int j = 0; j < 3; j++) {
 				final int vj = face[j];
 				final WB_Vector cs = geometryfactory.createVector();
-				projCurv(t, b, m[0], m[1], m[2], (WB_Vector) pdir1[vj],
-						(WB_Vector) pdir2[vj], cs);
+				projCurv(t, b, m[0], m[1], m[2], pdir1[vj], pdir2[vj], cs);
 				final double wt = cornerareas[i][j] / pointareas[vj];
 				curv1[vj] += wt * cs.xd();
 				curv12[vj] += wt * cs.yd();
@@ -398,10 +394,8 @@ public class WB_TriMesh extends WB_Mesh {
 
 		for (i = 0; i < nv; i++) {
 			final WB_Vector ks = geometryfactory.createVector();
-			diagonalizeCurv((WB_Vector) pdir1[i], (WB_Vector) pdir2[i],
-					curv1[i], curv12[i], curv2[i],
-					(WB_Vector) vertexNormals[i], (WB_Vector) pdir1[i],
-					(WB_Vector) pdir2[i], ks);
+			diagonalizeCurv(pdir1[i], pdir2[i], curv1[i], curv12[i], curv2[i],
+					vertexNormals[i], pdir1[i], pdir2[i], ks);
 			curv1[i] = ks.xd();
 			curv2[i] = ks.yd();
 			k1min = Math.min(k1min, curv1[i]);
@@ -414,7 +408,7 @@ public class WB_TriMesh extends WB_Mesh {
 		curvaturesUpdated = true;
 	}
 
-	private void updateDCurvatures() {
+	protected void updateDCurvatures() {
 		if (DCurvaturesUpdated) {
 			return;
 		}
@@ -443,12 +437,12 @@ public class WB_TriMesh extends WB_Mesh {
 			final WB_Vector b = n.cross(t);
 			b._normalizeSelf();
 
-			final Object[] fcurv = new Object[3];
+			final WB_Vector[] fcurv = new WB_Vector[3];
 			for (int j = 0; j < 3; j++) {
 				fcurv[j] = geometryfactory.createVector();
 				final int vj = faces[i][j];
-				projCurv((WB_Vector) pdir1[vj], (WB_Vector) pdir2[vj],
-						curv1[vj], 0, curv2[vj], t, b, (WB_Vector) fcurv[j]);
+				projCurv(pdir1[vj], pdir2[vj], curv1[vj], 0, curv2[vj], t, b,
+						fcurv[j]);
 
 			}
 
@@ -457,7 +451,7 @@ public class WB_TriMesh extends WB_Mesh {
 					{ 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
 			for (int j = 0; j < 3; j++) {
 				final WB_Vector dfcurv = geometryfactory.createVector(
-						(WB_Vector) fcurv[NEXT[j]], (WB_Vector) fcurv[PREV[j]]);
+						fcurv[NEXT[j]], fcurv[PREV[j]]);
 				final double u = ((j == 0) ? e0 : ((j == 1) ? e1 : e2)).dot(t);
 				final double v = ((j == 0) ? e0 : ((j == 1) ? e1 : e2)).dot(b);
 				final double u2 = u * u;
@@ -490,8 +484,7 @@ public class WB_TriMesh extends WB_Mesh {
 			for (int j = 0; j < 3; j++) {
 				final int vj = face[j];
 				final double[] thisVertDcurv = new double[4];
-				projDcurv(t, b, faceDcurv, (WB_Vector) pdir1[vj],
-						(WB_Vector) pdir2[vj], thisVertDcurv);
+				projDcurv(t, b, faceDcurv, pdir1[vj], pdir2[vj], thisVertDcurv);
 				final double wt = cornerareas[i][j] / pointareas[vj];
 				for (int k = 0; k < 4; k++) {
 					dcurv[vj][k] += wt * thisVertDcurv[k];
@@ -947,7 +940,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!curvaturesUpdated) {
 			updateCurvatures();
 		}
-		return (WB_Vector) pdir1[i];
+		return pdir1[i];
 	}
 
 	@Override
@@ -955,7 +948,7 @@ public class WB_TriMesh extends WB_Mesh {
 		if (!curvaturesUpdated) {
 			updateCurvatures();
 		}
-		return (WB_Vector) pdir2[i];
+		return pdir2[i];
 	}
 
 	@Override

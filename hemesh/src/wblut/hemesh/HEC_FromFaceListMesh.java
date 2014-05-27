@@ -9,7 +9,7 @@ import javolution.util.FastMap;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
-import wblut.geom.WB_Mesh;
+import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Point;
 
 /**
@@ -19,10 +19,10 @@ import wblut.geom.WB_Point;
  * @author Frederik Vanhoutte (W:Blut)
  * 
  */
-public class HEC_FromMesh extends HEC_Creator {
+public class HEC_FromFaceListMesh extends HEC_Creator {
 
 	/** Facelist source mesh */
-	private final WB_Mesh source;
+	private final WB_FaceListMesh source;
 
 	/** Duplicate vertices? */
 	private boolean duplicate;
@@ -33,7 +33,7 @@ public class HEC_FromMesh extends HEC_Creator {
 	/**
 	 * Instantiates a new HEC_Facelist ²
 	 */
-	public HEC_FromMesh(final WB_Mesh source) {
+	public HEC_FromFaceListMesh(final WB_FaceListMesh source) {
 		super();
 		this.source = source;
 		duplicate = true;
@@ -47,7 +47,7 @@ public class HEC_FromMesh extends HEC_Creator {
 	 *            true/false
 	 * @return self
 	 */
-	public HEC_FromMesh setDuplicate(final boolean b) {
+	public HEC_FromFaceListMesh setDuplicate(final boolean b) {
 		duplicate = b;
 		return this;
 	}
@@ -59,7 +59,7 @@ public class HEC_FromMesh extends HEC_Creator {
 	 *            true/false
 	 * @return self
 	 */
-	public HEC_FromMesh setCheckNormals(final boolean b) {
+	public HEC_FromFaceListMesh setCheckNormals(final boolean b) {
 		normalcheck = b;
 		return this;
 	}

@@ -20,7 +20,7 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 		this.i1 = i1;
 		this.i2 = i2;
 		this.points = points;
-		length = WB_Distance3D.distance(points[i1], points[i2]);
+		length = WB_Distance.getDistance3D(points[i1], points[i2]);
 	}
 
 	public WB_Point getParametricPoint(final double t) {

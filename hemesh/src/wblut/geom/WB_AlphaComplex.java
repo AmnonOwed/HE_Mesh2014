@@ -293,7 +293,7 @@ public class WB_AlphaComplex {
 		return result;
 	}
 
-	public WB_Mesh getAlphaShapeMesh(final double filter) {
+	public WB_FaceListMesh getAlphaShapeMesh(final double filter) {
 		final List<CTriangle> tris = af.getAlphaShape(filter);
 		final int[][] result = new int[tris.size()][3];
 		final Map<Integer, Integer> indexkeys = new FastMap<Integer, Integer>();

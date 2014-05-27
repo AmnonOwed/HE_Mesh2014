@@ -39,7 +39,7 @@ public class WB_BSPTree2D {
 			} else if (result == WB_Classification.BACK) {
 				neg_list.add(seg);
 			} else if (result == WB_Classification.CROSSING) { /* spanning */
-				final WB_Segment[] split_seg = WB_Intersection2D.splitSegment(
+				final WB_Segment[] split_seg = WB_Intersection.splitSegment2D(
 						seg, tree.partition);
 				if (split_seg != null) {
 					pos_list.add(split_seg[0]);
@@ -105,7 +105,7 @@ public class WB_BSPTree2D {
 			}
 		} else {
 			for (int i = 0; i < node.segments.size(); i++) {
-				if (WB_Epsilon.isZero(WB_Distance2D.getDistance(p,
+				if (WB_Epsilon.isZero(WB_Distance.getDistance2D(p,
 						node.segments.get(i)))) {
 					return 0;
 				}
@@ -137,7 +137,7 @@ public class WB_BSPTree2D {
 				.classifySegmentToLine2D(S);
 
 		if (type == WB_Classification.CROSSING) {
-			final WB_Segment[] split = WB_Intersection2D.splitSegment(S,
+			final WB_Segment[] split = WB_Intersection.splitSegment2D(S,
 					node.partition);
 			if (split != null) {
 				getSegmentPosPartition(node, split[0], pos, neg, coSame, coDiff);
@@ -176,8 +176,8 @@ public class WB_BSPTree2D {
 				final double u1 = L.getT(thisS.getEndpoint());
 				double[] intersection;
 				if (u0 < u1) {
-					intersection = WB_Intersection2D.intervalIntersection(u0,
-							u1, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
+					intersection = WB_Intersection.getIntervalIntersection2D(
+							u0, u1, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
 
 					if (intersection[0] == 2) {
 						final WB_Point pi = L.getPoint(intersection[1]);
@@ -197,8 +197,8 @@ public class WB_BSPTree2D {
 					}
 
 				} else {
-					intersection = WB_Intersection2D.intervalIntersection(u1,
-							u0, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
+					intersection = WB_Intersection.getIntervalIntersection2D(
+							u1, u0, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
 
 					if (intersection[0] == 2) {
 						final WB_Point pi = L.getPoint(intersection[1]);
@@ -314,7 +314,7 @@ public class WB_BSPTree2D {
 					.classifyPolygonToLine2D(P);
 
 			if (type == WB_Classification.CROSSING) {
-				final WB_SimplePolygon2D[] split = WB_Intersection2D
+				final WB_SimplePolygon2D[] split = WB_Intersection
 						.splitPolygon2D(P, node.partition);
 				if (split[0].n > 2) {
 					getPolygonPosPartition(node, split[0], pos, neg);

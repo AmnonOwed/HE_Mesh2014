@@ -25,13 +25,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	/** Halfedge associated with this face. */
 	private HE_Halfedge _halfedge;
 
-	/** Status of sorting. */
-	protected boolean _sorted;
+	private boolean _sorted;
 
-	/** The _data. */
 	private HashMap<String, Object> _data;
 
 	private int facecolor;
+
+	private int[][] triangles;
 
 	/**
 	 * Instantiates a new HE_Face.
@@ -42,20 +42,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		facecolor = -1;
 	}
 
-	/**
-	 * Get key.
-	 * 
-	 * @return key
-	 */
 	public Long key() {
 		return super.getKey();
 	}
 
-	/**
-	 * Get face center.
-	 * 
-	 * @return center
-	 */
 	public WB_Point getFaceCenter() {
 		if (_halfedge == null) {
 			return null;
@@ -88,11 +78,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return _center;
 	}
 
-	/**
-	 * Get face normal. Returns stored value if update status is true.
-	 * 
-	 * @return normal
-	 */
 	public WB_Vector getFaceNormal() {
 		if (_halfedge == null) {
 			return null;
@@ -116,11 +101,28 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return _normal;
 	}
 
-	/**
-	 * Get face area.
-	 * 
-	 * @return area
-	 */
+	public WB_Vector getFaceNormalNN() {
+		if (_halfedge == null) {
+			return null;
+		}
+		// calculate normal with Newell's method
+		HE_Halfedge he = _halfedge;
+		final WB_Vector _normal = new WB_Vector();
+		HE_Vertex p0;
+		HE_Vertex p1;
+		do {
+			p0 = he.getVertex();
+			p1 = he.getNextInFace().getVertex();
+
+			_normal.x += (p0.yd() - p1.yd()) * (p0.zd() + p1.zd());
+			_normal.y += (p0.zd() - p1.zd()) * (p0.xd() + p1.xd());
+			_normal.z += (p0.xd() - p1.xd()) * (p0.yd() + p1.yd());
+
+			he = he.getNextInFace();
+		} while (he != _halfedge);
+		return _normal;
+	}
+
 	public double getFaceArea() {
 		if (_halfedge == null) {
 			return Double.NaN;
@@ -171,11 +173,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	/**
-	 * Get face type.
-	 * 
-	 * @return WB_PolygonType2D.CONVEX, WB_PolygonType2D.CONCAVE
-	 */
 	public WB_Convex getFaceType() {
 		if (_halfedge == null) {
 			return null;
@@ -191,11 +188,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return WB_Convex.CONVEX;
 	}
 
-	/**
-	 * Get vertices of face as arraylist of HE_Vertex.
-	 * 
-	 * @return vertices
-	 */
 	public List<HE_Vertex> getFaceVertices() {
 		if (!_sorted) {
 			sort();
@@ -217,11 +209,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	/**
-	 * Get number of vertices in face.
-	 * 
-	 * @return number of vertices
-	 */
 	public int getFaceOrder() {
 
 		int result = 0;
@@ -239,12 +226,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	/**
-	 * Get halfedges of face as arraylist of HE_Halfedge. The halfedge of the
-	 * leftmost vertex is returned first.
-	 * 
-	 * @return halfedges
-	 */
 	public List<HE_Halfedge> getFaceHalfedges() {
 		if (!_sorted) {
 			sort();
@@ -266,12 +247,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	/**
-	 * Get edges of face as arraylist of HE_Edge. The edge of the leftmost
-	 * vertex is returned first.
-	 * 
-	 * @return edges
-	 */
 	public List<HE_Edge> getFaceEdges() {
 		if (!_sorted) {
 			sort();
@@ -293,24 +268,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	/**
-	 * Get halfedge.
-	 * 
-	 * @return halfedge
-	 */
 	public HE_Halfedge getHalfedge() {
 		return _halfedge;
 	}
 
-	/**
-	 * Sets the halfedge.
-	 * 
-	 * @param halfedge
-	 *            the new halfedge
-	 */
 	public void setHalfedge(final HE_Halfedge halfedge) {
 		_halfedge = halfedge;
-		_sorted = false;
+		reset();
 	}
 
 	public void push(WB_Coordinate c) {
@@ -323,38 +287,20 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		} while (he != _halfedge);
 	}
 
-	/**
-	 * Clear halfedge.
-	 */
 	public void clearHalfedge() {
 		_halfedge = null;
 		_sorted = false;
 	}
 
-	/**
-	 * Get plane of face.
-	 * 
-	 * @return plane
-	 */
 	public WB_Plane toPlane() {
 		return new WB_Plane(getFaceCenter(), getFaceNormal());
 	}
 
-	/**
-	 * Get plane of face.
-	 * 
-	 * @param d
-	 *            the d
-	 * @return plane
-	 */
 	public WB_Plane toPlane(final double d) {
 		final WB_Vector fn = getFaceNormal();
 		return new WB_Plane(getFaceCenter()._addSelf(d, fn), fn);
 	}
 
-	/**
-	 * Sort halfedges in lexicographic order.
-	 */
 	public void sort() {
 		if (_halfedge != null) {
 
@@ -371,21 +317,25 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 	}
 
-	/**
-	 * Triangulate the face, returns indexed 2D triangles. The index refers to
-	 * the face vertices()
-	 * 
-	 * @return ArrayList of WB_IndexedTriangle
-	 */
-	public List<WB_IndexedTriangle2D> triangulate() {
-		return toPolygon2D().indexedTriangulate();
+	public int[][] triangulate() {
+		if (triangles == null) {
+			List<WB_IndexedTriangle2D> tris = toPolygon2D()
+					.indexedTriangulate();
+			triangles = new int[tris.size()][3];
+			for (int i = 0; i < tris.size(); i++) {
+				triangles[i][0] = tris.get(i).i1;
+				triangles[i][1] = tris.get(i).i2;
+				triangles[i][2] = tris.get(i).i3;
+			}
+		}
+		return triangles;
 	}
 
-	/**
-	 * Get the face as a WB_Polygon2D.
-	 * 
-	 * @return face as WB_Polygon2D
-	 */
+	public void reset() {
+		triangles = null;
+		_sorted = false;
+	}
+
 	public WB_SimplePolygon toPolygon() {
 		final int n = getFaceOrder();
 		if (n == 0) {
@@ -410,22 +360,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return new WB_SimplePolygon(points, n);
 	}
 
-	/**
-	 * Get the face as a WB_Polygon2D.
-	 * 
-	 * @return face as WB_Polygon2D
-	 */
 	public WB_SimplePolygon2D toPolygon2D() {
 
 		return toPolygon().toPolygon2D();
 	}
 
-	/**
-	 * Get neighboring faces as arraylist of HE_Face. The face of the leftmost
-	 * halfedge is returned first.
-	 * 
-	 * @return neighboring faces
-	 */
 	public List<HE_Face> getNeighborFaces() {
 		if (!isSorted()) {
 			sort();
@@ -470,11 +409,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return s;
 	}
 
-	/**
-	 * Checks if is sorted.
-	 * 
-	 * @return true, if is sorted
-	 */
 	public boolean isSorted() {
 		return _sorted;
 	}

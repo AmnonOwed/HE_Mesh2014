@@ -1,6 +1,5 @@
 package wblut.processing;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -8,10 +7,7 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.opengl.PGraphics3D;
-import wblut.geom.WB_Convex;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_IndexedTriangle2D;
-import wblut.geom.WB_Point;
 import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_MeshStructure;
@@ -47,126 +43,6 @@ public class WB_SelectRender3D {
 
 	}
 
-	private void drawConcaveFace(final HE_Face f) {
-
-		final List<WB_IndexedTriangle2D> tris = f.triangulate();
-		final List<HE_Vertex> vertices = f.getFaceVertices();
-		WB_Point v0, v1, v2;
-		WB_IndexedTriangle2D tri;
-		for (int i = 0; i < tris.size(); i++) {
-			tri = tris.get(i);
-			selector.beginShape(PConstants.TRIANGLES);
-
-			v0 = vertices.get(tri.i1).pos;
-			v1 = vertices.get(tri.i2).pos;
-			v2 = vertices.get(tri.i3).pos;
-
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-
-			selector.vertex(v1.xf(), v1.yf(), v1.zf());
-
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.endShape();
-
-		}
-	}
-
-	/**
-	 * Draw arbitrary convex face. Used internally by drawFace().
-	 * 
-	 * @param vertices
-	 *            vertices of face
-	 * @param smooth
-	 *            use vertex normals?
-	 * @param mesh
-	 *            the mesh
-	 */
-	private void drawConvexShapeFromVertices(final List<HE_Vertex> vertices,
-			final HE_MeshStructure mesh) {
-		final int degree = vertices.size();
-		if (degree < 3) {
-			// yeah, right...
-		} else if (degree == 3) {
-
-			selector.beginShape(PConstants.TRIANGLES);
-			final HE_Vertex v0 = vertices.get(0);
-			final HE_Vertex v1 = vertices.get(1);
-
-			final HE_Vertex v2 = vertices.get(2);
-
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-
-			selector.vertex(v1.xf(), v1.yf(), v1.zf());
-
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.endShape();
-
-		} else if (degree == 4) {
-
-			final HE_Vertex v0 = vertices.get(0);
-			final HE_Vertex v1 = vertices.get(1);
-			final HE_Vertex v2 = vertices.get(2);
-			final HE_Vertex v3 = vertices.get(3);
-
-			selector.beginShape(PConstants.TRIANGLES);
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-			selector.vertex(v1.xf(), v1.yf(), v1.zf());
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.vertex(v3.xf(), v3.yf(), v3.zf());
-
-			selector.endShape();
-
-		} else if (degree == 5) {
-
-			final HE_Vertex v0 = vertices.get(0);
-			final HE_Vertex v1 = vertices.get(1);
-			final HE_Vertex v2 = vertices.get(2);
-			final HE_Vertex v3 = vertices.get(3);
-			final HE_Vertex v4 = vertices.get(4);
-			selector.beginShape(PConstants.TRIANGLES);
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-			selector.vertex(v1.xf(), v1.yf(), v1.zf());
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-			selector.vertex(v2.xf(), v2.yf(), v2.zf());
-			selector.vertex(v3.xf(), v3.yf(), v3.zf());
-			selector.vertex(v0.xf(), v0.yf(), v0.zf());
-			selector.vertex(v3.xf(), v3.yf(), v3.zf());
-			selector.vertex(v4.xf(), v4.yf(), v4.zf());
-			selector.endShape();
-
-		} else {
-			final ArrayList<HE_Vertex> subset = new ArrayList<HE_Vertex>();
-			int div = 3;
-			final int rem = vertices.size() - 5;
-			if (rem == 1) {
-				div = 3;
-			} else if (rem == 2) {
-				div = 4;
-			} else {
-				div = 5;
-			}
-
-			for (int i = 0; i < div; i++) {
-				subset.add(vertices.get(i));
-			}
-			final ArrayList<HE_Vertex> toRemove = new ArrayList<HE_Vertex>();
-			toRemove.add(vertices.get(1));
-			if (div > 3) {
-				toRemove.add(vertices.get(2));
-			}
-			if (div > 4) {
-				toRemove.add(vertices.get(3));
-			}
-			vertices.removeAll(toRemove);
-			drawConvexShapeFromVertices(subset, mesh);
-			drawConvexShapeFromVertices(vertices, mesh);
-		}
-
-	}
-
 	/**
 	 * Draw one face.
 	 * 
@@ -175,18 +51,23 @@ public class WB_SelectRender3D {
 	 */
 	private void drawFace(final HE_Face f) {
 		if (f.getFaceOrder() > 2) {
-			if (f.getFaceType() == WB_Convex.CONVEX) {
-				List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
-				tmpVertices = f.getFaceVertices();
-				drawConvexShapeFromVertices(tmpVertices, null);
-			} else {
-				drawConcaveFace(f);
-
+			final int[][] tris = f.triangulate();
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			HE_Vertex v0, v1, v2;
+			int[] tri;
+			for (int i = 0; i < tris.length; i++) {
+				tri = tris[i];
+				selector.beginShape(PConstants.TRIANGLES);
+				v0 = vertices.get(tri[0]);
+				v1 = vertices.get(tri[1]);
+				v2 = vertices.get(tri[2]);
+				selector.vertex(v0.xf(), v0.yf(), v0.zf());
+				selector.vertex(v1.xf(), v1.yf(), v1.zf());
+				selector.vertex(v2.xf(), v2.yf(), v2.zf());
+				selector.endShape();
 			}
 		}
 	}
-
-	// RENDER
 
 	/**
 	 * Draw mesh faces. Typically used with noStroke();

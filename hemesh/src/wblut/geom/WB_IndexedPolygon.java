@@ -66,8 +66,8 @@ public class WB_IndexedPolygon implements SimplePolygon {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D
-					.sqDistance(p, allpoints[indices[i]]);
+			final double cd = WB_Distance.getSqDistance3D(p,
+					allpoints[indices[i]]);
 			if (cd < d) {
 				id = indices[i];
 				d = cd;
@@ -80,8 +80,8 @@ public class WB_IndexedPolygon implements SimplePolygon {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D
-					.sqDistance(p, allpoints[indices[i]]);
+			final double cd = WB_Distance.getSqDistance3D(p,
+					allpoints[indices[i]]);
 			if (cd < d) {
 				id = indices[i];
 				d = cd;
@@ -297,7 +297,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 		final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 		int i = 0;
 		for (i = 0; i < segs.size(); i++) {
-			if (!WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(segs.get(i)
+			if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(segs.get(i)
 					.getOrigin(), segs.get(i).getEndpoint()))) {
 				tree.add(segs.get(i).getOrigin(), segs.get(i).i1());
 				tree.add(segs.get(i).getEndpoint(), segs.get(i).i2());
@@ -308,7 +308,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 
 		}
 		for (; i < segs.size(); i++) {
-			if (!WB_Epsilon.isZeroSq(WB_Distance3D.sqDistance(segs.get(i)
+			if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(segs.get(i)
 					.getOrigin(), segs.get(i).getEndpoint()))) {
 				WB_Point origin = segs.get(i).getOrigin();
 				WB_Point end = segs.get(i).getEndpoint();

@@ -11,7 +11,7 @@ public class WB_Geom {
 		} else if (WB_Geom.coincident2D(b, c)) {
 			return true;
 		} else {
-			if (WB_Distance2D.getSqDistanceToLine(c, a, b) < WB_Epsilon.SQEPSILON) {
+			if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 				final double d = projectedDistanceNorm(c, a, b);
 				if (0 < d && d < 1) {
 					return true;
@@ -28,7 +28,7 @@ public class WB_Geom {
 		} else if (WB_Geom.coincident2D(b, c)) {
 			return true;
 		} else {
-			if (WB_Distance2D.getSqDistanceToLine(c, a, b) < WB_Epsilon.SQEPSILON) {
+			if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 				final double d = projectedDistanceNorm(c, a, b);
 				if (0 < d && d < 1) {
 					return true;
@@ -40,7 +40,7 @@ public class WB_Geom {
 
 	public static boolean coincident2D(final WB_Coordinate a,
 			final WB_Coordinate b) {
-		if (WB_Distance2D.getSqDistance(a, b) < WB_Epsilon.SQEPSILON) {
+		if (WB_Distance.getSqDistance2D(a, b) < WB_Epsilon.SQEPSILON) {
 			return true;
 		}
 		return false;

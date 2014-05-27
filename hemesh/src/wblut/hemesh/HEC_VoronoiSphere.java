@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.ArrayList;
 
 import wblut.WB_Epsilon;
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 import wblut.geom.WB_Plane;
@@ -309,7 +309,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 				while ((j == index) && (d2self < cutoff * cutoff)) {
 					steps++;
 					p._addSelf(stepSize * r.x, stepSize * r.y, stepSize * r.z);
-					d2self = WB_Distance3D.sqDistance(p, c);
+					d2self = WB_Distance.getSqDistance3D(p, c);
 					final WB_KDEntry<WB_Point, Integer>[] closest = kdtree
 							.getNearestNeighbors(p, 2);
 					j = closest[1].value;

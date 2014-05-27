@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import javolution.util.FastMap;
 import wblut.WB_Epsilon;
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
 
 public class HES_DooSabin extends HES_Subdividor {
@@ -93,7 +93,7 @@ public class HES_DooSabin extends HES_Subdividor {
 						.mul(edgeFactor));
 				p._divSelf(div);
 				if (absolute) {
-					final double dcurrent = WB_Distance3D.distance(p,
+					final double dcurrent = WB_Distance.getDistance3D(p,
 							he.getVertex());
 					p._subSelf(he.getVertex());
 					p._mulSelf(d / dcurrent);

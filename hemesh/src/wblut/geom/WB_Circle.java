@@ -151,9 +151,12 @@ public class WB_Circle implements WB_Geometry {
 
 	public static WB_Circle getCircleTangentTo3Lines(final WB_Line2D L0,
 			final WB_Line2D L1, final WB_Line2D L2) {
-		final WB_Point p0 = (WB_Point) WB_Intersection2D.closestPoint2D(L0, L1).object;
-		final WB_Point p1 = (WB_Point) WB_Intersection2D.closestPoint2D(L1, L2).object;
-		final WB_Point p2 = (WB_Point) WB_Intersection2D.closestPoint2D(L0, L2).object;
+		final WB_Point p0 = (WB_Point) WB_Intersection
+				.getClosestPoint2D(L0, L1).object;
+		final WB_Point p1 = (WB_Point) WB_Intersection
+				.getClosestPoint2D(L1, L2).object;
+		final WB_Point p2 = (WB_Point) WB_Intersection
+				.getClosestPoint2D(L0, L2).object;
 
 		final WB_Triangle2D T = new WB_Triangle2D(p0, p1, p2);
 		return T.getIncircle();
@@ -164,8 +167,8 @@ public class WB_Circle implements WB_Geometry {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>();
 		final WB_Circle C0 = new WB_Circle(p0, r);
 		final WB_Circle C1 = new WB_Circle(p1, r);
-		final ArrayList<WB_Point> intersection = WB_Intersection2D.intersect2D(
-				C0, C1);
+		final ArrayList<WB_Point> intersection = WB_Intersection
+				.getIntersection2D(C0, C1);
 		for (int i = 0; i < intersection.size(); i++) {
 			result.add(new WB_Circle(intersection.get(i), r));
 
@@ -248,7 +251,7 @@ public class WB_Circle implements WB_Geometry {
 	public static ArrayList<WB_Circle> getCircleThroughPointTangentToCircle(
 			final WB_Coordinate p, final WB_Circle C, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>(4);
-		final double dcp = WB_Distance2D.getDistance(p, C.getCenter());
+		final double dcp = WB_Distance.getDistance2D(p, C.getCenter());
 
 		if (dcp > C.getRadius() + 2 * r) {
 			return result;
@@ -259,14 +262,14 @@ public class WB_Circle implements WB_Geometry {
 		} else {
 			final WB_Circle ctmp1 = new WB_Circle(p, r);
 			WB_Circle ctmp2 = new WB_Circle(C.getCenter(), r + C.getRadius());
-			ArrayList<WB_Point> intersection = WB_Intersection2D.intersect2D(
-					ctmp1, ctmp2);
+			ArrayList<WB_Point> intersection = WB_Intersection
+					.getIntersection2D(ctmp1, ctmp2);
 			for (int i = 0; i < intersection.size(); i++) {
 				result.add(new WB_Circle(intersection.get(i), r));
 			}
 			ctmp2 = new WB_Circle(C.getCenter(), WB_Math.fastAbs(r
 					- C.getRadius()));
-			intersection = WB_Intersection2D.intersect2D(ctmp1, ctmp2);
+			intersection = WB_Intersection.getIntersection2D(ctmp1, ctmp2);
 			for (int i = 0; i < intersection.size(); i++) {
 				result.add(new WB_Circle(intersection.get(i), r));
 			}
@@ -279,7 +282,7 @@ public class WB_Circle implements WB_Geometry {
 	public static ArrayList<WB_Circle> getCircleTangentToLineAndCircle(
 			final WB_Line2D L, final WB_Circle C, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>(8);
-		final double d = WB_Distance2D.getDistance(C.getCenter(), L);
+		final double d = WB_Distance.getDistance2D(C.getCenter(), L);
 		if (d > 2 * r + C.getRadius()) {
 			return result;
 		}
@@ -291,10 +294,10 @@ public class WB_Circle implements WB_Geometry {
 		final WB_Circle C2 = new WB_Circle(C.getCenter(), WB_Math.fastAbs(C
 				.getRadius() - r));
 		final ArrayList<WB_Point> intersections = new ArrayList<WB_Point>();
-		intersections.addAll(WB_Intersection2D.intersect2D(L1, C1));
-		intersections.addAll(WB_Intersection2D.intersect2D(L1, C2));
-		intersections.addAll(WB_Intersection2D.intersect2D(L2, C1));
-		intersections.addAll(WB_Intersection2D.intersect2D(L2, C2));
+		intersections.addAll(WB_Intersection.getIntersection2D(L1, C1));
+		intersections.addAll(WB_Intersection.getIntersection2D(L1, C2));
+		intersections.addAll(WB_Intersection.getIntersection2D(L2, C1));
+		intersections.addAll(WB_Intersection.getIntersection2D(L2, C2));
 		for (int i = 0; i < intersections.size(); i++) {
 			result.add(new WB_Circle(intersections.get(i), r));
 		}
@@ -309,7 +312,7 @@ public class WB_Circle implements WB_Geometry {
 		final WB_Circle C1r = new WB_Circle(C1.getCenter(), C1.getRadius() + r);
 
 		final ArrayList<WB_Point> intersections = new ArrayList<WB_Point>();
-		intersections.addAll(WB_Intersection2D.intersect2D(C0r, C1r));
+		intersections.addAll(WB_Intersection.getIntersection2D(C0r, C1r));
 
 		for (int i = 0; i < intersections.size(); i++) {
 			result.add(new WB_Circle(intersections.get(i), r));

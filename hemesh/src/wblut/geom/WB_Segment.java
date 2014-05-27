@@ -28,7 +28,7 @@ public class WB_Segment extends WB_Linear implements Segment {
 	public WB_Segment(final WB_Coordinate p1, final WB_Coordinate p2) {
 		super(p1, new WB_Vector(p1, p2));
 		endpoint = new WB_Point(p2);
-		length = Math.sqrt(WB_Distance3D.sqDistance(p1, p2));
+		length = Math.sqrt(WB_Distance.getSqDistance3D(p1, p2));
 	}
 
 	public WB_Segment(final double p1x, final double p1y, final double p1z,
@@ -36,7 +36,7 @@ public class WB_Segment extends WB_Linear implements Segment {
 		super(new WB_Point(p1x, p1y, p1z), new WB_Vector(p2x - p1x, p2y - p1y,
 				p2z - p1z));
 		endpoint = new WB_Point(p2x, p2y, p2z);
-		length = Math.sqrt(WB_Distance3D.sqDistance(origin, endpoint));
+		length = Math.sqrt(WB_Distance.getSqDistance3D(origin, endpoint));
 
 	}
 

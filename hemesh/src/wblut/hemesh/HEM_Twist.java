@@ -2,8 +2,10 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.geom.WB_Distance3D;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_Line;
+import wblut.geom.WB_Vector;
 
 /**
  * Twist a mesh. Determined by a twist axis and an angle factor.
@@ -38,6 +40,19 @@ public class HEM_Twist extends HEM_Modifier {
 		return this;
 	}
 
+	public HEM_Twist setTwistAxis(final WB_Coordinate o, final WB_Coordinate d) {
+		twistAxis = new WB_Line(o, d);
+		return this;
+	}
+
+	public HEM_Twist setTwistAxisFromPoints(final WB_Coordinate a,
+			final WB_Coordinate b) {
+		WB_Vector axis = new WB_Vector(a, b);
+		axis._normalizeSelf();
+		twistAxis = new WB_Line(a, axis);
+		return this;
+	}
+
 	/**
 	 * Set angle factor, ratio of twist angle in degrees to distance to twist
 	 * axis.
@@ -63,12 +78,12 @@ public class HEM_Twist extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = mesh.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = Math.sqrt(WB_Distance3D.sqDistance(v,
-						twistAxis));
+				final double d = WB_Distance.getDistance3D(v, twistAxis);
 				v.pos.rotateAboutAxis(d * angleFactor, twistAxis.getOrigin(),
 						twistAxis.getOrigin().add(twistAxis.getDirection()));
 			}
 		}
+		mesh.resetFaces();
 		return mesh;
 	}
 
@@ -86,13 +101,12 @@ public class HEM_Twist extends HEM_Modifier {
 			final Iterator<HE_Vertex> vItr = selection.vItr();
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				final double d = Math.sqrt(WB_Distance3D.sqDistance(v,
-						twistAxis));
+				final double d = WB_Distance.getDistance3D(v, twistAxis);
 				v.pos.rotateAboutAxis(d * angleFactor, twistAxis.getOrigin(),
 						twistAxis.getOrigin().add(twistAxis.getDirection()));
 			}
 		}
+		selection.parent.resetFaces();
 		return selection.parent;
 	}
-
 }

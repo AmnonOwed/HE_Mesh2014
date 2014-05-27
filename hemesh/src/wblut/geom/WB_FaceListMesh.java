@@ -9,14 +9,14 @@ import java.util.concurrent.TimeUnit;
 
 import javolution.util.FastList;
 
-public class WB_Mesh implements WB_Geometry {
+public class WB_FaceListMesh implements WB_Geometry {
 	protected int[][] faces;
 	/** points of line. */
 	protected WB_PointSequence vertices;
 	protected WB_AABB aabb;
 
-	Object[] vertexNormals = null;
-	Object[] faceNormals = null;
+	WB_Vector[] vertexNormals = null;
+	WB_Vector[] faceNormals = null;
 	int[][] vvNeighbors = null;
 	int[][] vfNeighbors = null;
 	int[][] ffNeighbors = null;
@@ -24,15 +24,31 @@ public class WB_Mesh implements WB_Geometry {
 			vfNeighborsUpdated, ffNeighborsUpdated;
 
 	List<int[]> tris;
+	WB_Vector[] pdir1 = null;
+	WB_Vector[] pdir2 = null;
+	double[] curv1 = null;
+	double[] curv2 = null;
+	double k1min;
+	double k2min;
+	double Kmin;
+	double k1max;
+	double k2max;
+	double Kmax;
+	double[][] dcurv = null;
+	double[][] cornerareas = null;
+	double[] pointareas = null;
+	boolean areasUpdated;
+	boolean curvaturesUpdated;
+	boolean DCurvaturesUpdated;
 
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	protected WB_Mesh() {
+	protected WB_FaceListMesh() {
 
 	}
 
-	protected WB_Mesh(final WB_PointSequence points, final int[][] faces) {
+	protected WB_FaceListMesh(final WB_PointSequence points, final int[][] faces) {
 
 		vertices = geometryfactory.createPointSequence(points);
 		this.faces = new int[faces.length][];
@@ -47,7 +63,7 @@ public class WB_Mesh implements WB_Geometry {
 
 	}
 
-	protected WB_Mesh(final Collection<? extends WB_Coordinate> points,
+	protected WB_FaceListMesh(final Collection<? extends WB_Coordinate> points,
 			final int[][] faces) {
 
 		vertices = geometryfactory.createPointSequence(points);
@@ -63,7 +79,7 @@ public class WB_Mesh implements WB_Geometry {
 
 	}
 
-	protected WB_Mesh(final WB_Coordinate[] points, final int[][] faces) {
+	protected WB_FaceListMesh(final WB_Coordinate[] points, final int[][] faces) {
 
 		vertices = geometryfactory.createPointSequence(points);
 		this.faces = new int[faces.length][];
@@ -78,7 +94,7 @@ public class WB_Mesh implements WB_Geometry {
 
 	}
 
-	protected WB_Mesh(final double[] points, final int[][] faces) {
+	protected WB_FaceListMesh(final double[] points, final int[][] faces) {
 
 		vertices = geometryfactory.createPointSequence(points);
 		this.faces = new int[faces.length][];
@@ -201,7 +217,7 @@ public class WB_Mesh implements WB_Geometry {
 		return new WB_AABB(vertices);
 	}
 
-	public WB_Mesh isoFitInAABB(final WB_AABB AABB) {
+	public WB_FaceListMesh isoFitInAABB(final WB_AABB AABB) {
 		final WB_AABB self = getAABB();
 		final double scx = self.getCenterX();
 		final double acx = AABB.getCenterX();
@@ -226,13 +242,13 @@ public class WB_Mesh implements WB_Geometry {
 		return geometryfactory.createMesh(rescaled, faces);
 	}
 
-	public WB_Mesh triangulate() {
+	public WB_FaceListMesh triangulate() {
 
 		return triangulateST();
 
 	}
 
-	private WB_Mesh triangulateST() {
+	private WB_FaceListMesh triangulateST() {
 		tris = new FastList<int[]>();
 		int[] face;
 		int[][] triangles;
@@ -241,9 +257,6 @@ public class WB_Mesh implements WB_Geometry {
 			face = face2;
 			if (face.length == 3) {
 				addTriangle(face);
-			} else if (face.length == 4) {
-				addTriangle(new int[] { face[0], face[1], face[2] });
-				addTriangle(new int[] { face[0], face[2], face[3] });
 			} else {
 				triangles = WB_Triangulate.getPolygonTriangulation2D(face,
 						vertices, true,
@@ -266,7 +279,7 @@ public class WB_Mesh implements WB_Geometry {
 
 	}
 
-	private WB_Mesh triangulateMT() {
+	private WB_FaceListMesh triangulateMT() {
 		tris = Collections.synchronizedList(new FastList<int[]>());
 		final int threadCount = Runtime.getRuntime().availableProcessors();
 		final int dfaces = faces.length / threadCount;
@@ -318,9 +331,6 @@ public class WB_Mesh implements WB_Geometry {
 				face = faces[i];
 				if (face.length == 3) {
 					addTriangle(face);
-				} else if (face.length == 4) {
-					addTriangle(new int[] { face[0], face[1], face[2] });
-					addTriangle(new int[] { face[0], face[2], face[3] });
 				} else {
 					triangles = WB_Triangulate.getPolygonTriangulation2D(face,
 							vertices, true,
@@ -450,7 +460,7 @@ public class WB_Mesh implements WB_Geometry {
 		if (!fNormalsUpdated) {
 			updateFaceNormalsMT();
 		}
-		vertexNormals = new Object[nv];
+		vertexNormals = new WB_Vector[nv];
 		for (int i = 0; i < nv; i++) {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
@@ -475,8 +485,8 @@ public class WB_Mesh implements WB_Geometry {
 			i++;
 
 		}
-		for (final Object v : vertexNormals) {
-			((WB_Vector) v)._normalizeSelf();
+		for (final WB_Vector v : vertexNormals) {
+			v._normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -489,7 +499,7 @@ public class WB_Mesh implements WB_Geometry {
 			return;
 		}
 
-		faceNormals = new Object[nf];
+		faceNormals = new WB_Vector[nf];
 		WB_Point p0, p1;
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
@@ -505,7 +515,8 @@ public class WB_Mesh implements WB_Geometry {
 				tmp._addSelf(tmp2);
 			}
 
-			faceNormals[i] = tmp._normalizeSelf();
+			faceNormals[i] = tmp;
+			faceNormals[i]._normalizeSelf();
 		}
 
 		fNormalsUpdated = true;
@@ -517,7 +528,7 @@ public class WB_Mesh implements WB_Geometry {
 		if (fNormalsUpdated) {
 			return;
 		}
-		faceNormals = new Object[nf];
+		faceNormals = new WB_Vector[nf];
 		final int threadCount = Runtime.getRuntime().availableProcessors();
 		final int dfaces = nf / threadCount;
 		final ExecutorService executor = Executors
@@ -572,7 +583,8 @@ public class WB_Mesh implements WB_Geometry {
 					tmp._addSelf(tmp2);
 				}
 
-				faceNormals[i] = tmp._normalizeSelf();
+				faceNormals[i] = tmp;
+				faceNormals[i]._normalizeSelf();
 			}
 
 		}
@@ -590,7 +602,7 @@ public class WB_Mesh implements WB_Geometry {
 	}
 
 	@Override
-	public WB_Mesh apply(final WB_Transform WB_Point) {
+	public WB_FaceListMesh apply(final WB_Transform WB_Point) {
 		final FastList newvertices = new FastList();
 		int id = 0;
 		WB_Point point;
@@ -622,58 +634,129 @@ public class WB_Mesh implements WB_Geometry {
 	}
 
 	public double k1(final int i) {
-
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return curv1[i];
 	}
 
 	public double k2(final int i) {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return curv2[i];
 	}
 
 	public double K(final int i) {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return curv2[i] * curv1[i];
 	}
 
 	public double k1min() {
-
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return k1min;
 	}
 
 	public double k2min() {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return k2min;
 	}
 
 	public double Kmin() {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return Kmin;
 	}
 
 	public double k1max() {
-
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return k1max;
 	}
 
 	public double k2max() {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return k2max;
 	}
 
 	public double Kmax() {
-		return 0;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return Kmax;
 	}
 
 	public WB_Vector k1dir(final int i) {
-		return null;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return (WB_Vector) pdir1[i];
 	}
 
 	public WB_Vector k2dir(final int i) {
-		return null;
+		if (!curvaturesUpdated) {
+			updateCurvatures();
+		}
+		return (WB_Vector) pdir2[i];
 	}
 
 	public double[] DCurv(final int i) {
-		return null;
+		if (!DCurvaturesUpdated) {
+			updateDCurvatures();
+		}
+		return dcurv[i];
 	}
 
 	public double DCurvInvariant(final int i) {
-		return 0;
+		if (!DCurvaturesUpdated) {
+			updateDCurvatures();
+		}
+		return dcurv[i][0] * dcurv[i][0] + dcurv[i][1] * dcurv[i][1]
+				+ dcurv[i][2] * dcurv[i][2] + dcurv[i][3] * dcurv[i][3];
+	}
+
+	private void updateCurvatures() {
+		WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		tri.updateCurvatures();
+		k1min = tri.k1min;
+		k2min = tri.k2min;
+		Kmin = tri.Kmin;
+		k1max = tri.k1max;
+		k2max = tri.k2max;
+		Kmax = tri.Kmax;
+		curv1 = tri.curv1;
+		curv2 = tri.curv2;
+		pdir1 = tri.pdir1;
+		pdir2 = tri.pdir2;
+		curvaturesUpdated = true;
+	}
+
+	private void updateDCurvatures() {
+		WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		tri.updateDCurvatures();
+		k1min = tri.k1min;
+		k2min = tri.k2min;
+		Kmin = tri.Kmin;
+		k1max = tri.k1max;
+		k2max = tri.k2max;
+		Kmax = tri.Kmax;
+		curv1 = tri.curv1;
+		curv2 = tri.curv2;
+		pdir1 = tri.pdir1;
+		pdir2 = tri.pdir2;
+		dcurv = tri.dcurv;
+		curvaturesUpdated = true;
+		DCurvaturesUpdated = true;
 	}
 
 }

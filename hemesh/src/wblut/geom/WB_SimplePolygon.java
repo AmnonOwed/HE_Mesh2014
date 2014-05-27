@@ -144,7 +144,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D.sqDistance(p, points[i]);
+			final double cd = WB_Distance.getSqDistance3D(p, points[i]);
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -164,7 +164,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 		double d = Double.POSITIVE_INFINITY;
 		int id = -1;
 		for (int i = 0; i < n; i++) {
-			final double cd = WB_Distance3D.sqDistance(p, points[i]);
+			final double cd = WB_Distance.getSqDistance3D(p, points[i]);
 			if (cd < d) {
 				id = i;
 				d = cd;
@@ -482,7 +482,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 		int numBack = 0;
 
 		final WB_AABB AABB = new WB_AABB(poly.points);
-		if (WB_Intersection.checkIntersection(AABB, P)) {
+		if (WB_Intersection.checkIntersection3D(AABB, P)) {
 
 			final FastList<WB_Point> frontVerts = new FastList<WB_Point>(20);
 			final FastList<WB_Point> backVerts = new FastList<WB_Point>(20);
@@ -499,7 +499,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 				bSide = P.classifyPointToPlane(b);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
-						i = WB_Intersection.getIntersection(b, a, P);
+						i = WB_Intersection.getIntersection3D(b, a, P);
 
 						/*
 						 * if (classifyPointToPlane(i.p1, P) !=
@@ -517,7 +517,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 					numFront++;
 				} else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
-						i = WB_Intersection.getIntersection(a, b, P);
+						i = WB_Intersection.getIntersection3D(a, b, P);
 
 						/*
 						 * if (classifyPointToPlane(i.p1, P) !=
@@ -618,7 +618,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 				bSide = P.classifyPointToPlane(b);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
-						i = WB_Intersection.getIntersection(b, a, P);
+						i = WB_Intersection.getIntersection3D(b, a, P);
 
 						/*
 						 * if (classifyPointToPlane(i.p1, P) !=
@@ -636,7 +636,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 					numFront++;
 				} else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
-						i = WB_Intersection.getIntersection(a, b, P);
+						i = WB_Intersection.getIntersection3D(a, b, P);
 
 						/*
 						 * if (classifyPointToPlane(i.p1, P) !=
