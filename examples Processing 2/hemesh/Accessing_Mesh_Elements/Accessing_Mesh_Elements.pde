@@ -9,6 +9,7 @@ void setup() {
   size(100, 100, P3D);
   HE_Mesh mesh = new HE_Mesh(new HEC_Cube().setEdge(100));
 
+
   /*
 * A HE_Mesh objects contains 4 kinds of elements, 3 of them self-
    * explanatory:
@@ -138,8 +139,17 @@ void setup() {
   }
   println();
 
-  HE_Face fadjacent;
   println("Edges of face: "+f);
+  HE_FaceEdgeCirculator feCrc=new HE_FaceEdgeCirculator(f);
+  while (feCrc.hasNext ()) {
+    e=feCrc.next();
+    println(e);
+    //do thingy
+  }
+  println();
+
+  HE_Face fadjacent;
+  println("Neighboring faces of face: "+f);
   HE_FaceFaceCirculator ffCrc=new HE_FaceFaceCirculator(f);
   while (ffCrc.hasNext ()) {
     fadjacent=ffCrc.next();
