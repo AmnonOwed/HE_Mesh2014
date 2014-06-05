@@ -3,8 +3,7 @@ package wblut.geom;
 import java.util.Collections;
 import java.util.List;
 
-
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class WB_Danzer {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
@@ -62,8 +61,8 @@ public class WB_Danzer {
 		r1 = c / (a + 2 * c);
 		r2 = c / (a + b + c);
 		r3 = b / (a + b + c);
-		points = new FastList<WB_Point>();
-		tiles = new FastList<DanzerTile>();
+		points = new FastTable<WB_Point>();
+		tiles = new FastTable<DanzerTile>();
 		type = t;
 		final DanzerTile T = new DanzerTile(type, 0);
 		switch (type) {
@@ -110,7 +109,7 @@ public class WB_Danzer {
 	}
 
 	public void inflate() {
-		final List<DanzerTile> newTiles = new FastList<DanzerTile>();
+		final List<DanzerTile> newTiles = new FastTable<DanzerTile>();
 		for (int i = 0; i < tiles.size(); i++) {
 			newTiles.addAll(inflateTileInt(tiles.get(i)));
 		}
@@ -125,7 +124,7 @@ public class WB_Danzer {
 	}
 
 	protected List<DanzerTile> inflateTileInt(final DanzerTile T) {
-		final List<DanzerTile> newTiles = new FastList<DanzerTile>();
+		final List<DanzerTile> newTiles = new FastTable<DanzerTile>();
 		final WB_Point p1 = points.get(T.p1);
 		final WB_Point p2 = points.get(T.p2);
 		final WB_Point p3 = points.get(T.p3);
@@ -361,7 +360,7 @@ public class WB_Danzer {
 	}
 
 	public List<WB_Polygon> getTiles() {
-		final List<WB_Polygon> faces = new FastList<WB_Polygon>();
+		final List<WB_Polygon> faces = new FastTable<WB_Polygon>();
 		clean();
 		for (final DanzerTile T : tiles) {
 			faces.add(geometryfactory.createSimplePolygon(points.get(T.p1),
@@ -381,7 +380,7 @@ public class WB_Danzer {
 		}
 
 		int ni = 0;
-		final List<WB_Point> newpoints = new FastList<WB_Point>();
+		final List<WB_Point> newpoints = new FastTable<WB_Point>();
 		for (int i = 0; i < points.size(); i++) {
 			if (used[i]) {
 				newindices[i] = ni++;

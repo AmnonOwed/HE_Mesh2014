@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
@@ -207,7 +207,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * @return halfedges
 	 */
 	public List<HE_Halfedge> getHalfedgeStar() {
-		final List<HE_Halfedge> vhe = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> vhe = new FastTable<HE_Halfedge>();
 		if (getHalfedge() == null) {
 			return vhe;
 		}
@@ -228,7 +228,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 */
 	public List<HE_Edge> getEdgeStar() {
 
-		final List<HE_Edge> ve = new FastList<HE_Edge>();
+		final List<HE_Edge> ve = new FastTable<HE_Edge>();
 		if (getHalfedge() == null) {
 			return ve;
 		}
@@ -248,7 +248,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * @return faces
 	 */
 	public List<HE_Face> getFaceStar() {
-		final List<HE_Face> vf = new FastList<HE_Face>();
+		final List<HE_Face> vf = new FastTable<HE_Face>();
 		if (getHalfedge() == null) {
 			return vf;
 		}
@@ -270,7 +270,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * @return neighbors
 	 */
 	public List<HE_Vertex> getNeighborVertices() {
-		final List<HE_Vertex> vv = new FastList<HE_Vertex>();
+		final List<HE_Vertex> vv = new FastTable<HE_Vertex>();
 		if (getHalfedge() == null) {
 			return vv;
 		}
@@ -590,7 +590,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		if (n < WB_Epsilon.EPSILON) {
 			HE_Halfedge he = _halfedge;
 			normal = geometryfactory.createVector();
-			final FastList<WB_Vector> normals = new FastList<WB_Vector>();
+			final FastTable<WB_Vector> normals = new FastTable<WB_Vector>();
 			do {
 				if (he.getFace() != null) {
 					final WB_Vector fn = he.getFace().getFaceNormal();

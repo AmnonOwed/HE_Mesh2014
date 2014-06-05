@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.WB_Point;
 
 public class HEC_FromVoronoiCells extends HEC_Creator {
@@ -55,7 +55,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			return new HE_Mesh();
 		}
 		final int n = on.length;
-		final FastList<HE_Face> tmpfaces = new FastList<HE_Face>();
+		final FastTable<HE_Face> tmpfaces = new FastTable<HE_Face>();
 		int nv = 0;
 		for (int i = 0; i < n; i++) {
 			final HE_Mesh m = cells[i];

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.math.WB_Math;
 
@@ -23,11 +23,11 @@ public class WB_BSPTree2D {
 			cseg = S2DItr.next();
 		}
 		tree.partition = new WB_Line2D(cseg.getOrigin(), cseg.getDirection());
-		final FastList<WB_Segment> _segs = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> _segs = new FastTable<WB_Segment>();
 
 		_segs.add(cseg);
-		final FastList<WB_Segment> pos_list = new FastList<WB_Segment>();
-		final FastList<WB_Segment> neg_list = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> pos_list = new FastTable<WB_Segment>();
+		final FastTable<WB_Segment> neg_list = new FastTable<WB_Segment>();
 		WB_Segment seg = null;
 		while (S2DItr.hasNext()) {
 			seg = S2DItr.next();
@@ -160,12 +160,12 @@ public class WB_BSPTree2D {
 			final List<WB_Segment> neg, final List<WB_Segment> coSame,
 			final List<WB_Segment> coDiff) {
 
-		FastList<WB_Segment> partSegments = new FastList<WB_Segment>();
+		FastTable<WB_Segment> partSegments = new FastTable<WB_Segment>();
 		partSegments.add(S);
 		WB_Segment thisS, otherS;
 		final WB_Line2D L = node.partition;
 		for (int i = 0; i < node.segments.size(); i++) {
-			final FastList<WB_Segment> newpartSegments = new FastList<WB_Segment>();
+			final FastTable<WB_Segment> newpartSegments = new FastTable<WB_Segment>();
 			otherS = node.segments.get(i);
 			final double v0 = L.getT(otherS.getOrigin());
 			final double v1 = L.getT(otherS.getEndpoint());

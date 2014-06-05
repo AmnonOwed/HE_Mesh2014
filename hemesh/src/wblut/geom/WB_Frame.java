@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.hemesh.HEC_Geodesic;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Math;
@@ -13,19 +13,19 @@ import wblut.math.WB_RandomSphere;
 
 public class WB_Frame {
 
-	private FastList<WB_FrameStrut> struts;
+	private FastTable<WB_FrameStrut> struts;
 
-	private FastList<WB_FrameNode> nodes;
+	private FastTable<WB_FrameNode> nodes;
 
 	public WB_Frame() {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 	}
 
 	public WB_Frame(final WB_Coordinate[] points,
 			final WB_IndexedSegment[] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point, 1);
 		}
@@ -36,8 +36,8 @@ public class WB_Frame {
 
 	public WB_Frame(final WB_Coordinate[] points,
 			final Collection<WB_IndexedSegment> connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point, 1);
 		}
@@ -50,10 +50,10 @@ public class WB_Frame {
 			final Collection<WB_IndexedSegment> connections) {
 
 		if (struts == null) {
-			struts = new FastList<WB_FrameStrut>();
+			struts = new FastTable<WB_FrameStrut>();
 		}
 		if (nodes == null) {
-			nodes = new FastList<WB_FrameNode>();
+			nodes = new FastTable<WB_FrameNode>();
 		}
 		final int nodeoffset = nodes.size();
 
@@ -68,10 +68,10 @@ public class WB_Frame {
 	public void add(final WB_Frame frame) {
 
 		if (struts == null) {
-			struts = new FastList<WB_FrameStrut>();
+			struts = new FastTable<WB_FrameStrut>();
 		}
 		if (nodes == null) {
-			nodes = new FastList<WB_FrameNode>();
+			nodes = new FastTable<WB_FrameNode>();
 		}
 		final int nodeoffset = nodes.size();
 
@@ -85,8 +85,8 @@ public class WB_Frame {
 
 	public WB_Frame(final Collection<? extends WB_Coordinate> points,
 			final Collection<WB_IndexedSegment> connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point, 1);
 		}
@@ -96,8 +96,8 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final WB_Coordinate[] points, final int[][] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -108,8 +108,8 @@ public class WB_Frame {
 
 	public WB_Frame(final Collection<? extends WB_Coordinate> points,
 			final int[][] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
@@ -119,8 +119,8 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final double[][] points, final int[][] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final double[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -130,8 +130,8 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final float[][] points, final int[][] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final float[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -141,8 +141,8 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final int[][] points, final int[][] connections) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final int[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -152,32 +152,32 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final WB_Coordinate[] points) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
 	}
 
 	public WB_Frame(final Collection<? extends WB_Coordinate> points) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final WB_Coordinate point : points) {
 			addNode(point.xd(), point.yd(), point.zd(), 1);
 		}
 	}
 
 	public WB_Frame(final double[][] points) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final double[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
 	}
 
 	public WB_Frame(final float[][] points) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final float[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -185,8 +185,8 @@ public class WB_Frame {
 	}
 
 	public WB_Frame(final int[][] points) {
-		struts = new FastList<WB_FrameStrut>();
-		nodes = new FastList<WB_FrameNode>();
+		struts = new FastTable<WB_FrameStrut>();
+		nodes = new FastTable<WB_FrameNode>();
 		for (final int[] point : points) {
 			addNode(point[0], point[1], point[2], 1);
 		}
@@ -428,7 +428,7 @@ public class WB_Frame {
 
 	public WB_Frame refine(final double threshold) {
 		final WB_Frame result = new WB_Frame();
-		final FastList<WB_Point> npoints = new FastList<WB_Point>();
+		final FastTable<WB_Point> npoints = new FastTable<WB_Point>();
 		for (final WB_FrameNode node : nodes) {
 			result.addNode(node, node.getValue());
 		}
@@ -464,7 +464,7 @@ public class WB_Frame {
 
 	public List<WB_Point> toPointCloud(int n, double r, double d, int l,
 			double rr, double dr) {
-		List<WB_Point> points = new FastList<WB_Point>();
+		List<WB_Point> points = new FastTable<WB_Point>();
 
 		double sl, dsl;
 		int divs;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.hemesh.HEMC_SplitMesh;
 import wblut.hemesh.HE_Mesh;
@@ -26,11 +26,11 @@ public class WB_BSPTree {
 				cpol = PItr.next();
 			}
 			tree.partition = cpol.getPlane();
-			final FastList<WB_SimplePolygon> _pols = new FastList<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> _pols = new FastTable<WB_SimplePolygon>();
 
 			_pols.add(cpol);
-			final FastList<WB_SimplePolygon> pos_list = new FastList<WB_SimplePolygon>();
-			final FastList<WB_SimplePolygon> neg_list = new FastList<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> pos_list = new FastTable<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> neg_list = new FastTable<WB_SimplePolygon>();
 			WB_SimplePolygon pol = null;
 			while (PItr.hasNext()) {
 				pol = PItr.next();
@@ -75,11 +75,11 @@ public class WB_BSPTree {
 			final WB_SimplePolygon cpol = polygons[0];
 
 			tree.partition = cpol.getPlane();
-			final FastList<WB_SimplePolygon> _pols = new FastList<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> _pols = new FastTable<WB_SimplePolygon>();
 
 			_pols.add(cpol);
-			final FastList<WB_SimplePolygon> pos_list = new FastList<WB_SimplePolygon>();
-			final FastList<WB_SimplePolygon> neg_list = new FastList<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> pos_list = new FastTable<WB_SimplePolygon>();
+			final FastTable<WB_SimplePolygon> neg_list = new FastTable<WB_SimplePolygon>();
 			WB_SimplePolygon pol = null;
 			for (int i = 1; i < polygons.length; i++) {
 				pol = polygons[i];
@@ -232,11 +232,11 @@ public class WB_BSPTree {
 			final List<WB_SimplePolygon> coDiff) {
 
 		/*
-		 * FastList<WB_Polygon> partSegments = new FastList<WB_Polygon>();
+		 * FastTable<WB_Polygon> partSegments = new FastTable<WB_Polygon>();
 		 * partSegments.add(S); WB_Polygon thisS, otherS; final WB_Line2D L =
 		 * node.partition; for (int i = 0; i < node.segments.size(); i++) {
-		 * final FastList<WB_Polygon> newpartSegments = new
-		 * FastList<WB_Polygon>(); otherS = node.segments.get(i); final double
+		 * final FastTable<WB_Polygon> newpartSegments = new
+		 * FastTable<WB_Polygon>(); otherS = node.segments.get(i); final double
 		 * v0 = L.getT(otherS.origin()); final double v1 = L.getT(otherS.end());
 		 * for (int j = 0; j < partSegments.size(); j++) { thisS =
 		 * partSegments.get(j); final double u0 = L.getT(thisS.origin()); final

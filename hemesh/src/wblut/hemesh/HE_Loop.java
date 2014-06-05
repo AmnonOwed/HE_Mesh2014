@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class HE_Loop extends HE_Element implements WB_HasData {
 
@@ -63,7 +63,7 @@ public class HE_Loop extends HE_Element implements WB_HasData {
 		if (!_sorted) {
 			sort();
 		}
-		final List<HE_Halfedge> fhe = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
 		if (_loopHalfedge == null) {
 			return fhe;
 		}
@@ -90,7 +90,7 @@ public class HE_Loop extends HE_Element implements WB_HasData {
 		if (!_sorted) {
 			sort();
 		}
-		final List<HE_Edge> fe = new FastList<HE_Edge>();
+		final List<HE_Edge> fe = new FastTable<HE_Edge>();
 		if (_loopHalfedge == null) {
 			return fe;
 		}
@@ -165,7 +165,7 @@ public class HE_Loop extends HE_Element implements WB_HasData {
 		if (!isSorted()) {
 			sort();
 		}
-		final List<HE_Face> ff = new FastList<HE_Face>();
+		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getLoopHalfedge() == null) {
 			return ff;
 		}
@@ -195,7 +195,7 @@ public class HE_Loop extends HE_Element implements WB_HasData {
 		if (!isSorted()) {
 			sort();
 		}
-		final List<HE_Face> ff = new FastList<HE_Face>();
+		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getLoopHalfedge() == null) {
 			return ff;
 		}

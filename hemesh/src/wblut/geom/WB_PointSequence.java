@@ -3,7 +3,7 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class WB_PointSequence implements WB_CoordinateSequence<WB_Point> {
 	double[] ordinates;
@@ -150,7 +150,7 @@ public class WB_PointSequence implements WB_CoordinateSequence<WB_Point> {
 
 	@Override
 	public List<WB_Point> getAsList() {
-		final List<WB_Point> list = new FastList<WB_Point>(size());
+		final List<WB_Point> list = new FastTable<WB_Point>();
 		for (int i = 0; i < n; i++) {
 
 			list.add(geometryfactory.createPoint(ordinates[4 * i],

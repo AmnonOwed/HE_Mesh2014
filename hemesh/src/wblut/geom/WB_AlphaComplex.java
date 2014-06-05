@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.external.ProGAL.AlphaComplex;
 import wblut.external.ProGAL.CTetrahedron;
 import wblut.external.ProGAL.CTriangle;
@@ -297,7 +297,7 @@ public class WB_AlphaComplex {
 		final List<CTriangle> tris = af.getAlphaShape(filter);
 		final int[][] result = new int[tris.size()][3];
 		final Map<Integer, Integer> indexkeys = new FastMap<Integer, Integer>();
-		final List<WB_Point> points = new FastList<WB_Point>();
+		final List<WB_Point> points = new FastTable<WB_Point>();
 		for (int i = 0; i < tris.size(); i++) {
 			final CTriangle tri = tris.get(i);
 			for (int j = 0; j < 3; j++) {

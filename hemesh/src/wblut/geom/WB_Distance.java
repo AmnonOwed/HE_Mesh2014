@@ -201,15 +201,15 @@ public class WB_Distance {
 		final WB_Vector ab = new WB_Vector(S.getOrigin(), S.getEndpoint());
 		final WB_Vector ac = new WB_Vector(p).sub(S.getOrigin());
 		final WB_Vector bc = new WB_Vector(p).sub(S.getEndpoint());
-		final double e = ac.dot(ab);
+		final double e = ac.dot2D(ab);
 		if (e <= 0) {
-			return ac.dot(ac);
+			return ac.dot2D(ac);
 		}
-		final double f = ab.dot(ab);
+		final double f = ab.dot2D(ab);
 		if (e >= f) {
-			return bc.dot(bc);
+			return bc.dot2D(bc);
 		}
-		return ac.dot(ac) - e * e / f;
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	public static double getSqDistance2D(final WB_Coordinate p,
@@ -222,20 +222,20 @@ public class WB_Distance {
 			final WB_Line2D L) {
 		final WB_Vector ab = L.getDirection();
 		final WB_Vector ac = new WB_Vector(L.getOrigin(), p);
-		final double e = ac.dot(ab);
-		final double f = ab.dot(ab);
-		return ac.dot(ac) - e * e / f;
+		final double e = ac.dot2D(ab);
+		final double f = ab.dot2D(ab);
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	public static double getSqDistance2D(final WB_Coordinate p, final WB_Ray2D R) {
 		final WB_Vector ab = R.getDirection();
 		final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
-		final double e = ac.dot(ab);
+		final double e = ac.dot2D(ab);
 		if (e <= 0) {
-			return ac.dot(ac);
+			return ac.dot2D(ac);
 		}
-		final double f = ab.dot(ab);
-		return ac.dot(ac) - e * e / f;
+		final double f = ab.dot2D(ab);
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	public static double getSqDistance3D(final Segment S, final Segment T) {
@@ -347,9 +347,9 @@ public class WB_Distance {
 			final WB_Coordinate a, final WB_Coordinate b) {
 		final WB_Vector ab = new WB_Vector(a, b);
 		final WB_Vector ac = new WB_Vector(a, p);
-		final double e = ac.dot(ab);
-		final double f = ab.dot(ab);
-		return ac.dot(ac) - e * e / f;
+		final double e = ac.dot2D(ab);
+		final double f = ab.dot2D(ab);
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	/**
@@ -365,9 +365,9 @@ public class WB_Distance {
 				L.getDirection().yd());
 		final WB_Point ac = geometryfactory.createPoint(p.xd()
 				- L.getOrigin().xd(), p.yd() - L.getOrigin().yd());
-		final double e = ac.dot(ab);
-		final double f = ab.dot(ab);
-		return ac.dot(ac) - e * e / f;
+		final double e = ac.dot2D(ab);
+		final double f = ab.dot2D(ab);
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	/**
@@ -446,12 +446,12 @@ public class WB_Distance {
 			final WB_Coordinate a, final WB_Coordinate b) {
 		final WB_Vector ab = new WB_Vector(a, b);
 		final WB_Vector ac = new WB_Vector(a, p);
-		final double e = ac.dot(ab);
+		final double e = ac.dot2D(ab);
 		if (e <= 0) {
-			return ac.dot(ac);
+			return ac.dot2D(ac);
 		}
-		final double f = ab.dot(ab);
-		return ac.dot(ac) - e * e / f;
+		final double f = ab.dot2D(ab);
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	/**
@@ -502,15 +502,15 @@ public class WB_Distance {
 		final WB_Vector ab = new WB_Vector(a, b);
 		final WB_Vector ac = new WB_Vector(a, p);
 		final WB_Vector bc = new WB_Vector(b, p);
-		final double e = ac.dot(ab);
+		final double e = ac.dot2D(ab);
 		if (e <= 0) {
-			return ac.dot(ac);
+			return ac.dot2D(ac);
 		}
-		final double f = ab.dot(ab);
+		final double f = ab.dot2D(ab);
 		if (e >= f) {
-			return bc.dot(bc);
+			return bc.dot2D(bc);
 		}
-		return ac.dot(ac) - e * e / f;
+		return ac.dot2D(ac) - e * e / f;
 	}
 
 	/**

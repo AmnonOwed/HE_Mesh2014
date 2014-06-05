@@ -13,26 +13,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 
 public class HE_RAS<E extends HE_Element> extends AbstractSet<E> {
 	List<E> objects;
 	Map<Long, Integer> indices;
 
 	public HE_RAS() {
-		objects = new FastList<E>();
+		objects = new FastTable<E>();
 		indices = new FastMap<Long, Integer>();
 	}
 
 	public HE_RAS(int n) {
-		objects = new FastList<E>(n);
-		indices = new FastMap<Long, Integer>(n);
+		objects = new FastTable<E>();
+		indices = new FastMap<Long, Integer>();
 	}
 
 	public HE_RAS(Collection<E> items) {
-		objects = new FastList<E>(items.size());
-		indices = new FastMap<Long, Integer>(items.size());
+		objects = new FastTable<E>();
+		indices = new FastMap<Long, Integer>();
 		for (E item : items) {
 			indices.put(item._key, objects.size());
 			objects.add(item);

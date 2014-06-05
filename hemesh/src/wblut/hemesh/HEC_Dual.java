@@ -98,6 +98,7 @@ public class HEC_Dual extends HEC_Creator {
 		}
 		result.pairHalfedgesAndCreateEdges();
 		result.moveTo(source.getCenter());
+		result.flipAllFaces();
 		return result;
 	}
 }

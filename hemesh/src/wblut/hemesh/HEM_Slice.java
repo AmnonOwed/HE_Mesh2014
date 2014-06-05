@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_IndexedTriangle2D;
@@ -219,8 +219,8 @@ public class HEM_Slice extends HEM_Modifier {
 				List<HE_Halfedge> unpairedHalfedges = mesh
 						.getUnpairedHalfedges();
 				if (unpairedHalfedges.size() > 0) {
-					final FastList<HE_Vertex> verticesOnCutFaces = new FastList<HE_Vertex>();
-					final FastList<WB_Point> mappedVertices = new FastList<WB_Point>();
+					final FastTable<HE_Vertex> verticesOnCutFaces = new FastTable<HE_Vertex>();
+					final FastTable<WB_Point> mappedVertices = new FastTable<WB_Point>();
 					final FastMap<Long, Integer> vertexKeyToMappedVertexIndex = new FastMap<Long, Integer>();
 					HE_Vertex v;
 					for (final HE_Halfedge he : unpairedHalfedges) {

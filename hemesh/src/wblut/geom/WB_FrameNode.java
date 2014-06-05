@@ -2,13 +2,13 @@ package wblut.geom;
 
 import java.util.ArrayList;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_FrameNode extends WB_Point {
 
-	private final FastList<WB_FrameStrut> struts;
+	private final FastTable<WB_FrameStrut> struts;
 
 	protected final int index;
 
@@ -17,7 +17,7 @@ public class WB_FrameNode extends WB_Point {
 	public WB_FrameNode(final WB_Coordinate pos, final int id, final double v) {
 		super(pos);
 		index = id;
-		struts = new FastList<WB_FrameStrut>();
+		struts = new FastTable<WB_FrameStrut>();
 		value = v;
 	}
 

@@ -86,9 +86,9 @@ public class WB_VoronoiCell3D {
 	}
 
 	public void constrain(final Collection<? extends WB_Plane> planes) {
-		for (final WB_Plane WB_Point : planes) {
+		for (final WB_Plane P : planes) {
 			if (cell != null) {
-				slice(WB_Point);
+				slice(P);
 			}
 		}
 		if (cell != null) {

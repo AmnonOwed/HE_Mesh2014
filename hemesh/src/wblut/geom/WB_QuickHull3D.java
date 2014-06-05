@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 
 /**
@@ -131,7 +131,7 @@ public class WB_QuickHull3D {
 	protected Vector faces = new Vector(16);
 	protected Vector horizon = new Vector(16);
 
-	private final FastList<Face> newFaces = new FastList<Face>();
+	private final FastTable<Face> newFaces = new FastTable<Face>();
 	private final VertexList unclaimed = new VertexList();
 	private final VertexList claimed = new VertexList();
 
@@ -153,7 +153,7 @@ public class WB_QuickHull3D {
 	 */
 	public WB_QuickHull3D(final Collection<? extends WB_Coordinate> points)
 			throws IllegalArgumentException {
-		this.points = new FastList<WB_Point>(points.size());
+		this.points = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			this.points.add(new WB_Point(point));
 
@@ -163,7 +163,7 @@ public class WB_QuickHull3D {
 
 	public WB_QuickHull3D(final Collection<? extends WB_Coordinate> points,
 			final boolean triangulate) throws IllegalArgumentException {
-		this.points = new FastList<WB_Point>(points.size());
+		this.points = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			this.points.add(new WB_Point(point));
 
@@ -174,7 +174,7 @@ public class WB_QuickHull3D {
 	public WB_QuickHull3D(final WB_Coordinate[] points)
 			throws IllegalArgumentException {
 
-		this.points = new FastList<WB_Point>(points.length);
+		this.points = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			this.points.add(new WB_Point(point));
 
@@ -184,7 +184,7 @@ public class WB_QuickHull3D {
 
 	public WB_QuickHull3D(final WB_Coordinate[] points,
 			final boolean triangulate) throws IllegalArgumentException {
-		this.points = new FastList<WB_Point>(points.length);
+		this.points = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			this.points.add(new WB_Point(point));
 
@@ -475,7 +475,7 @@ public class WB_QuickHull3D {
 	 * @return array of vertex points
 	 */
 	public List<WB_Point> getVertices() {
-		final List<WB_Point> vtxs = new FastList<WB_Point>(numVertices);
+		final List<WB_Point> vtxs = new FastTable<WB_Point>();
 		for (int i = 0; i < numVertices; i++) {
 			vtxs.add(points.get(vertexPointIndices[i]));
 		}
@@ -1003,7 +1003,7 @@ public class WB_QuickHull3D {
 			return face;
 		}
 
-		protected static Face create(final FastList<Vertex> vtxArray,
+		protected static Face create(final FastTable<Vertex> vtxArray,
 				final int[] indices) {
 			final Face face = new Face();
 			HalfEdge hePrev = null;

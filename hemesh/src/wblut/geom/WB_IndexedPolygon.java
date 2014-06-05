@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 
@@ -139,7 +139,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 	 * @return arrayList of WB_IndexedTriangle, points are not copied
 	 */
 	public List<WB_IndexedTriangle> triangulate() {
-		final List<WB_IndexedTriangle> tris = new FastList<WB_IndexedTriangle>();
+		final List<WB_IndexedTriangle> tris = new FastTable<WB_IndexedTriangle>();
 		final WB_SimplePolygon2D tmp = toPolygon2D();
 		final List<WB_IndexedTriangle2D> tris2d = tmp.indexedTriangulate();
 		WB_IndexedTriangle2D tri2d;
@@ -238,8 +238,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 	 * @see wblut.geom.WB_Polygon#getSegments()
 	 */
 	public List<WB_IndexedSegment> getSegments() {
-		final List<WB_IndexedSegment> segments = new FastList<WB_IndexedSegment>(
-				n);
+		final List<WB_IndexedSegment> segments = new FastTable<WB_IndexedSegment>();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			segments.add(new WB_IndexedSegment(i, j, allpoints));
 
@@ -258,12 +257,12 @@ public class WB_IndexedPolygon implements SimplePolygon {
 	 */
 	public static List<WB_IndexedPolygon> extractPolygons(
 			final List<WB_IndexedSegment> segs, final WB_Point[] points) {
-		final List<WB_IndexedPolygon> result = new FastList<WB_IndexedPolygon>();
-		final List<WB_IndexedSegment> leftovers = new FastList<WB_IndexedSegment>();
+		final List<WB_IndexedPolygon> result = new FastTable<WB_IndexedPolygon>();
+		final List<WB_IndexedSegment> leftovers = new FastTable<WB_IndexedSegment>();
 		final List<WB_IndexedSegment> cleanedsegs = clean(segs, points);
 		leftovers.addAll(cleanedsegs);
 		while (leftovers.size() > 0) {
-			final List<WB_IndexedSegment> currentPolygon = new FastList<WB_IndexedSegment>();
+			final List<WB_IndexedSegment> currentPolygon = new FastTable<WB_IndexedSegment>();
 			final boolean loopFound = tryToFindLoop(leftovers, currentPolygon,
 					points);
 			if (loopFound) {
@@ -293,7 +292,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 	 */
 	public static List<WB_IndexedSegment> clean(
 			final List<WB_IndexedSegment> segs, final WB_Point[] points) {
-		final List<WB_IndexedSegment> cleanedsegs = new FastList<WB_IndexedSegment>();
+		final List<WB_IndexedSegment> cleanedsegs = new FastTable<WB_IndexedSegment>();
 		final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 		int i = 0;
 		for (i = 0; i < segs.size(); i++) {
@@ -350,7 +349,7 @@ public class WB_IndexedPolygon implements SimplePolygon {
 	 */
 	private static boolean tryToFindLoop(final List<WB_IndexedSegment> segs,
 			final List<WB_IndexedSegment> loop, final WB_Point[] points) {
-		final List<WB_IndexedSegment> localSegs = new FastList<WB_IndexedSegment>();
+		final List<WB_IndexedSegment> localSegs = new FastTable<WB_IndexedSegment>();
 		localSegs.addAll(segs);
 		WB_IndexedSegment start = localSegs.get(0);
 		loop.add(localSegs.get(0));

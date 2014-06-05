@@ -3,7 +3,7 @@ package wblut.geom;
 import java.util.Collection;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class WB_VectorSequence implements WB_CoordinateSequence<WB_Vector> {
 	double[] ordinates;
@@ -150,7 +150,7 @@ public class WB_VectorSequence implements WB_CoordinateSequence<WB_Vector> {
 
 	@Override
 	public List<WB_Vector> getAsList() {
-		final List<WB_Vector> list = new FastList<WB_Vector>(size());
+		final List<WB_Vector> list = new FastTable<WB_Vector>();
 		for (int i = 0; i < n; i++) {
 
 			list.add(geometryfactory.createVector(ordinates[4 * i],

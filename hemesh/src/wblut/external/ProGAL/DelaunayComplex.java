@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.external.ProGAL.ExactJavaPredicates.SphereConfig;
 import wblut.external.ProGAL.Flips.Flip14;
 
@@ -110,14 +110,14 @@ public class DelaunayComplex implements SimplicialComplex {
 
 	/** Builds the Delaunay complex of the specified point-set */
 	public DelaunayComplex(final List<Point> points) {
-		this.points = new FastList<CVertex>(points.size());
+		this.points = new FastTable<CVertex>();
 
 		for (final Point p : points) {
 			this.points.add(new CVertex(p));
 		}
-		edges = new FastList<CEdge>(points.size() * 6);
-		triangles = new FastList<CTriangle>(points.size() * 6);
-		tetrahedra = new FastList<CTetrahedron>(points.size() * 6);
+		edges = new FastTable<CEdge>();
+		triangles = new FastTable<CTriangle>();
+		tetrahedra = new FastTable<CTetrahedron>();
 
 		predicates = new ExactJavaPredicates();
 		walk = new Walk(predicates);
@@ -142,12 +142,14 @@ public class DelaunayComplex implements SimplicialComplex {
 	 */
 	@Override
 	public List<CTetrahedron> getTetrahedra() {
-		return new FastList<CTetrahedron>(tetrahedra);
+		List<CTetrahedron> T = new FastTable<CTetrahedron>();
+		T.addAll(tetrahedra);
+		return T;
 	}
 
 	/** returns all tetrahedra (including tetrahedra with bigPoint */
 	public List<CTetrahedron> getAllTetrahedra() {
-		final List<CTetrahedron> allTetrahedra = new FastList<CTetrahedron>();
+		final List<CTetrahedron> allTetrahedra = new FastTable<CTetrahedron>();
 		for (final CVertex v : getVertices()) {
 			final List<CTetrahedron> adjacentTetrahedra = v
 					.getAllAdjacentTetrahedra();
@@ -162,7 +164,7 @@ public class DelaunayComplex implements SimplicialComplex {
 
 	/** returns all big tetrahedra */
 	public List<CTetrahedron> getBigTetrahedra() {
-		final List<CTetrahedron> bigTetrahedra = new FastList<CTetrahedron>();
+		final List<CTetrahedron> bigTetrahedra = new FastTable<CTetrahedron>();
 		for (final CVertex v : getVertices()) {
 			final List<CTetrahedron> adjacentTetrahedra = v
 					.getAllAdjacentTetrahedra();
@@ -181,7 +183,10 @@ public class DelaunayComplex implements SimplicialComplex {
 	 */
 	@Override
 	public List<CTriangle> getTriangles() {
-		return new FastList<CTriangle>(triangles);
+		List<CTriangle> T = new FastTable<CTriangle>();
+		T.addAll(triangles);
+		return T;
+
 	}
 
 	/**
@@ -190,13 +195,17 @@ public class DelaunayComplex implements SimplicialComplex {
 	 */
 	@Override
 	public List<CEdge> getEdges() {
-		return new FastList<CEdge>(edges);
+		List<CEdge> E = new FastTable<CEdge>();
+		E.addAll(edges);
+		return E;
 	}
 
 	/** Get the vertices in the complex. The 'big points' are not returned */
 	@Override
 	public List<CVertex> getVertices() {
-		return new FastList<CVertex>(points);
+		List<CVertex> V = new FastTable<CVertex>();
+		V.addAll(points);
+		return V;
 	}
 
 	public CVertex getVertex(final int i) {

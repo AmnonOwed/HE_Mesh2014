@@ -26,7 +26,7 @@ public class HE_FaceFaceCirculator implements Iterator<HE_Face> {
 		} else {
 			_current = _current.getNextInFace();
 		}
-		return _current.getFace();
+		return _current.getPair().getFace();
 	}
 
 	@Override

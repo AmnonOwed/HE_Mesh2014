@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 
 /**
@@ -51,7 +51,7 @@ import wblut.WB_Epsilon;
  */
 public class WB_Triangulate2D {
 
-	/* typical size of polygons, for initializing FastLists */
+	/* typical size of polygons, for initializing FastTables */
 	/** The Constant TYPICAL_POLYGON_SIZE. */
 	private final static int TYPICAL_POLYGON_SIZE = 16;
 
@@ -183,7 +183,7 @@ public class WB_Triangulate2D {
 	 * @return the face coordinates
 	 */
 	public WB_Point[] getFaceCoordinates() {
-		final FastList<WB_Point> facePoints = new FastList<WB_Point>();
+		final FastTable<WB_Point> facePoints = new FastTable<WB_Point>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -211,7 +211,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit triangles
 	 */
 	public WB_Triangle2D[] getExplicitTriangles() {
-		final FastList<WB_Triangle2D> triangles = new FastList<WB_Triangle2D>();
+		final FastTable<WB_Triangle2D> triangles = new FastTable<WB_Triangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -237,7 +237,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit triangles as list
 	 */
 	public List<WB_Triangle2D> getExplicitTrianglesAsList() {
-		final List<WB_Triangle2D> triangles = new FastList<WB_Triangle2D>();
+		final List<WB_Triangle2D> triangles = new FastTable<WB_Triangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -265,7 +265,7 @@ public class WB_Triangulate2D {
 	 * @return the indexed triangles
 	 */
 	public WB_IndexedTriangle2D[] getIndexedTriangles(final WB_Point[] points) {
-		final FastList<WB_IndexedTriangle2D> triangles = new FastList<WB_IndexedTriangle2D>();
+		final FastTable<WB_IndexedTriangle2D> triangles = new FastTable<WB_IndexedTriangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -296,7 +296,7 @@ public class WB_Triangulate2D {
 			final WB_Point[] points) {
 		final WB_AABB AABB = new WB_AABB(this.points);
 		final double range = WB_Distance.getDistance2D(AABB._min, AABB._max);
-		final FastList<WB_IndexedTriangle2D> triangles = new FastList<WB_IndexedTriangle2D>();
+		final FastTable<WB_IndexedTriangle2D> triangles = new FastTable<WB_IndexedTriangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -328,7 +328,7 @@ public class WB_Triangulate2D {
 	 */
 	public List<WB_IndexedTriangle2D> getIndexedTrianglesAsList(
 			final WB_Point[] points) {
-		final List<WB_IndexedTriangle2D> triangles = new FastList<WB_IndexedTriangle2D>();
+		final List<WB_IndexedTriangle2D> triangles = new FastTable<WB_IndexedTriangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -362,7 +362,7 @@ public class WB_Triangulate2D {
 	 */
 	public List<WB_IndexedTriangle2D> getIndexedTrianglesAsList(
 			final WB_Point[] points, final boolean reverse) {
-		final List<WB_IndexedTriangle2D> triangles = new FastList<WB_IndexedTriangle2D>();
+		final List<WB_IndexedTriangle2D> triangles = new FastTable<WB_IndexedTriangle2D>();
 		// reset 'used' flags
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
@@ -397,7 +397,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit edges
 	 */
 	public WB_Segment[] getExplicitEdges() {
-		final FastList<WB_Segment> edges = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -418,7 +418,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit constrained edges
 	 */
 	public WB_Segment[] getExplicitConstrainedEdges() {
-		final FastList<WB_Segment> edges = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -441,7 +441,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit boundary edges
 	 */
 	public WB_Segment[] getExplicitBoundaryEdges() {
-		final FastList<WB_Segment> edges = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -464,7 +464,7 @@ public class WB_Triangulate2D {
 	 * @return the explicit interior edges
 	 */
 	public WB_Segment[] getExplicitInteriorEdges() {
-		final FastList<WB_Segment> edges = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -490,7 +490,7 @@ public class WB_Triangulate2D {
 	 * @return the indexed edges
 	 */
 	public WB_IndexedSegment[] getIndexedEdges(final WB_Point[] points) {
-		final FastList<WB_IndexedSegment> edges = new FastList<WB_IndexedSegment>();
+		final FastTable<WB_IndexedSegment> edges = new FastTable<WB_IndexedSegment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -514,7 +514,7 @@ public class WB_Triangulate2D {
 	 */
 	public WB_IndexedSegment[] getIndexedConstrainedEdges(
 			final WB_Point[] points) {
-		final FastList<WB_IndexedSegment> edges = new FastList<WB_IndexedSegment>();
+		final FastTable<WB_IndexedSegment> edges = new FastTable<WB_IndexedSegment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -539,7 +539,7 @@ public class WB_Triangulate2D {
 	 * @return the indexed boundary edges
 	 */
 	public WB_IndexedSegment[] getIndexedBoundaryEdges(final WB_Point[] points) {
-		final FastList<WB_IndexedSegment> edges = new FastList<WB_IndexedSegment>();
+		final FastTable<WB_IndexedSegment> edges = new FastTable<WB_IndexedSegment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -564,7 +564,7 @@ public class WB_Triangulate2D {
 	 * @return the indexed internal edges
 	 */
 	public WB_IndexedSegment[] getIndexedInternalEdges(final WB_Point[] points) {
-		final FastList<WB_IndexedSegment> edges = new FastList<WB_IndexedSegment>();
+		final FastTable<WB_IndexedSegment> edges = new FastTable<WB_IndexedSegment>();
 		clearFlags(Tri_HalfEdge.FLAG_READ);
 		// find the faces
 		for (final Tri_HalfEdge he : halfEdges) {
@@ -643,7 +643,7 @@ public class WB_Triangulate2D {
 	public void startWithBoundary(final WB_Point[] pts) {
 		final int s = pts.length;
 		assert s >= 3 : error("Initialization requires at least 3 points!");
-		final FastList<Tri_HalfEdge> polygon = new FastList<Tri_HalfEdge>(s);
+		final FastTable<Tri_HalfEdge> polygon = new FastTable<Tri_HalfEdge>();
 		clear();
 		for (final WB_Point point : pts) {
 			final Tri_Point p = new Tri_Point(point);
@@ -675,7 +675,7 @@ public class WB_Triangulate2D {
 	public void startWithBoundary(final WB_Point[] pts, final boolean reverse) {
 		final int s = pts.length;
 		assert s >= 3 : error("Initialization requires at least 3 points!");
-		final FastList<Tri_HalfEdge> polygon = new FastList<Tri_HalfEdge>(s);
+		final FastTable<Tri_HalfEdge> polygon = new FastTable<Tri_HalfEdge>();
 		clear();
 		for (final WB_Point point : pts) {
 			final Tri_Point p = new Tri_Point(point);
@@ -1019,13 +1019,12 @@ public class WB_Triangulate2D {
 	 *            the he
 	 * @return the fast list
 	 */
-	protected FastList<Tri_HalfEdge> constructPolygon(final Tri_HalfEdge he) {
+	protected FastTable<Tri_HalfEdge> constructPolygon(final Tri_HalfEdge he) {
 		assert halfEdges.contains(he) : error(E_MISSING);
 
 		int i;
 		Tri_HalfEdge heSearch;
-		final FastList<Tri_HalfEdge> polygon = new FastList<Tri_HalfEdge>(
-				TYPICAL_POLYGON_SIZE);
+		final FastTable<Tri_HalfEdge> polygon = new FastTable<Tri_HalfEdge>();
 
 		polygon.add(he);
 		heSearch = he.next;
@@ -1057,7 +1056,7 @@ public class WB_Triangulate2D {
 	 * @param polygon
 	 *            the polygon
 	 */
-	protected void fillGeneralPolygon(final FastList<Tri_HalfEdge> polygon) {
+	protected void fillGeneralPolygon(final FastTable<Tri_HalfEdge> polygon) {
 		fillGeneralPolygonRecurse(polygon);
 		delaunayQueue.addAll(polygon);
 	}
@@ -1068,7 +1067,7 @@ public class WB_Triangulate2D {
 	 * @param polygon
 	 *            the polygon
 	 */
-	private void fillGeneralPolygonRecurse(final FastList<Tri_HalfEdge> polygon) {
+	private void fillGeneralPolygonRecurse(final FastTable<Tri_HalfEdge> polygon) {
 		assert polygon.size() >= 3 : error("Illegal size!");
 
 		int n, s;
@@ -1124,7 +1123,7 @@ public class WB_Triangulate2D {
 			heAdd.next = polygon.get((n + 2) % s);
 			polygon.get((n + s - 1) % s).next = heAdd;
 			if (s > 4) {
-				final FastList<Tri_HalfEdge> polygon0 = new FastList<Tri_HalfEdge>();
+				final FastTable<Tri_HalfEdge> polygon0 = new FastTable<Tri_HalfEdge>();
 				for (int j = 0; j < (s - 1); j++) {
 					polygon0.add(heAdd);
 					heAdd = heAdd.next;
@@ -1141,7 +1140,7 @@ public class WB_Triangulate2D {
 	 *            the he
 	 */
 	protected void fillEdgeVisiblePolygon(final Tri_HalfEdge he) {
-		final FastList<Tri_HalfEdge> polygon = constructPolygon(he);
+		final FastTable<Tri_HalfEdge> polygon = constructPolygon(he);
 		fillEdgeVisiblePolygonRecurse(polygon);
 		delaunayQueue.addAll(polygon);
 	}
@@ -1153,7 +1152,7 @@ public class WB_Triangulate2D {
 	 *            the polygon
 	 */
 	private void fillEdgeVisiblePolygonRecurse(
-			final FastList<Tri_HalfEdge> polygon) {
+			final FastTable<Tri_HalfEdge> polygon) {
 		assert polygon.size() >= 3 : error("Illegal size!");
 
 		int i, c, s;

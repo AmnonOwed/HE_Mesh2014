@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 
 public class WB_SimplePolygon implements SimplePolygon {
@@ -100,7 +100,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * @param n
 	 *            number of points
 	 */
-	public void set(final FastList<? extends WB_Coordinate> points, final int n) {
+	public void set(final FastTable<? extends WB_Coordinate> points, final int n) {
 		this.points = new WB_Point[n];
 		for (int i = 0; i < n; i++) {
 			this.points[i] = new WB_Point(points.get(i));
@@ -236,7 +236,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * @return arrayList of WB_IndexedTriangle, points are not copied
 	 */
 	public List<WB_IndexedTriangle> triangulate() {
-		final List<WB_IndexedTriangle> tris = new FastList<WB_IndexedTriangle>();
+		final List<WB_IndexedTriangle> tris = new FastTable<WB_IndexedTriangle>();
 		final WB_SimplePolygon2D tmp = toPolygon2D();
 		final List<WB_IndexedTriangle2D> tris2d = tmp.indexedTriangulate();
 		WB_IndexedTriangle2D tri2d;
@@ -484,8 +484,8 @@ public class WB_SimplePolygon implements SimplePolygon {
 		final WB_AABB AABB = new WB_AABB(poly.points);
 		if (WB_Intersection.checkIntersection3D(AABB, P)) {
 
-			final FastList<WB_Point> frontVerts = new FastList<WB_Point>(20);
-			final FastList<WB_Point> backVerts = new FastList<WB_Point>(20);
+			final FastTable<WB_Point> frontVerts = new FastTable<WB_Point>();
+			final FastTable<WB_Point> backVerts = new FastTable<WB_Point>();
 
 			final int numVerts = poly.n;
 			WB_Point a = poly.points[numVerts - 1];
@@ -602,8 +602,8 @@ public class WB_SimplePolygon implements SimplePolygon {
 		int numFront = 0;
 		int numBack = 0;
 
-		final FastList<WB_Point> frontVerts = new FastList<WB_Point>(20);
-		final FastList<WB_Point> backVerts = new FastList<WB_Point>(20);
+		final FastTable<WB_Point> frontVerts = new FastTable<WB_Point>();
+		final FastTable<WB_Point> backVerts = new FastTable<WB_Point>();
 
 		final int numVerts = poly.n;
 		if (numVerts > 0) {
@@ -710,9 +710,8 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 * 
 	 * @see wblut.geom.WB_Polygon#getSegments()
 	 */
-	public FastList<WB_IndexedSegment> getSegments() {
-		final FastList<WB_IndexedSegment> segments = new FastList<WB_IndexedSegment>(
-				n);
+	public FastTable<WB_IndexedSegment> getSegments() {
+		final FastTable<WB_IndexedSegment> segments = new FastTable<WB_IndexedSegment>();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			segments.add(new WB_IndexedSegment(i, j, points));
 
@@ -743,7 +742,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 	 */
 	public static List<WB_SimplePolygon> negate(
 			final List<WB_SimplePolygon> polys) {
-		final List<WB_SimplePolygon> neg = new FastList<WB_SimplePolygon>();
+		final List<WB_SimplePolygon> neg = new FastTable<WB_SimplePolygon>();
 		for (int i = 0; i < polys.size(); i++) {
 			neg.add(polys.get(i).negate());
 		}

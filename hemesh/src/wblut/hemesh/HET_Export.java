@@ -49,8 +49,7 @@ public class HET_Export {
 		final int nOffset = obj.getCurrNormalOffset() + 1;
 		obj.newObject(new Long(mesh.getKey()).toString());
 		// vertices
-		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>(
-				mesh.getNumberOfVertices());
+		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>();
 		Iterator<HE_Vertex> vItr = triMesh.vItr();
 		HE_Vertex v;
 		int i = 0;
@@ -521,8 +520,7 @@ public class HET_Export {
 		triMesh.triangulate();
 		final int vOffset = pov.getCurrVertexOffset();
 		pov.beginMesh2(String.format("obj%d", mesh.getKey()));
-		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>(
-				mesh.getNumberOfVertices());
+		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>();
 		Iterator<HE_Vertex> vItr = triMesh.vItr();
 		final int vcount = mesh.getNumberOfVertices();
 		pov.total(vcount);

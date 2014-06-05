@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_IndexedTriangle2D;
@@ -192,7 +192,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		if (!_sorted) {
 			sort();
 		}
-		final List<HE_Vertex> fv = new FastList<HE_Vertex>();
+		final List<HE_Vertex> fv = new FastTable<HE_Vertex>();
 		if (_halfedge == null) {
 			return fv;
 		}
@@ -230,7 +230,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		if (!_sorted) {
 			sort();
 		}
-		final List<HE_Halfedge> fhe = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
 		if (_halfedge == null) {
 			return fhe;
 		}
@@ -251,7 +251,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		if (!_sorted) {
 			sort();
 		}
-		final List<HE_Edge> fe = new FastList<HE_Edge>();
+		final List<HE_Edge> fe = new FastTable<HE_Edge>();
 		if (_halfedge == null) {
 			return fe;
 		}
@@ -317,7 +317,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 	}
 
-	public int[][] triangulate() {
+	public int[][] getTriangles() {
 		if (triangles == null) {
 			List<WB_IndexedTriangle2D> tris = toPolygon2D()
 					.indexedTriangulate();
@@ -369,7 +369,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		if (!isSorted()) {
 			sort();
 		}
-		final List<HE_Face> ff = new FastList<HE_Face>();
+		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getHalfedge() == null) {
 			return ff;
 		}
@@ -443,6 +443,22 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	@Override
 	public void setColor(int color) {
 		facecolor = color;
+
+	}
+
+	/**
+	 * Checks if is boundary.
+	 * 
+	 * @return true, if is boundary
+	 */
+	public boolean isBoundary() {
+		HE_Halfedge he = _halfedge;
+		do {
+			if (he.getPair().getFace() == null)
+				return true;
+			he = he.getNextInFace();
+		} while (he != _halfedge);
+		return false;
 
 	}
 

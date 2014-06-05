@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.Collection;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.SimplePolygon;
 import wblut.geom.WB_Point;
 
@@ -89,8 +89,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 		if (polygons != null) {
 			if (polygons.length > 0) {
 				final int nq = polygons.length;
-				final FastList<WB_Point> vertices = new FastList<WB_Point>(
-						nq * 3);
+				final FastTable<WB_Point> vertices = new FastTable<WB_Point>();
 				final int[][] faces = new int[nq][];
 				int id = 0;
 				for (int i = 0; i < nq; i++) {

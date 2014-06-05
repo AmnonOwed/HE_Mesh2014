@@ -779,7 +779,7 @@ public class WB_Render3D {
 
 	public void drawFace(final HE_Face f, final boolean smooth) {
 		if (f.getFaceOrder() > 2) {
-			final int[][] tris = f.triangulate();
+			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
@@ -823,7 +823,7 @@ public class WB_Render3D {
 		if (f.getFaceOrder() > 2) {
 			home.pushStyle();
 			home.fill(f.getColor());
-			final int[][] tris = f.triangulate();
+			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
@@ -866,7 +866,7 @@ public class WB_Render3D {
 
 	public void drawFaceHC(final HE_Face f, final boolean smooth) {
 		if (f.getFaceOrder() > 2) {
-			final int[][] tris = f.triangulate();
+			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			final List<HE_Halfedge> halfedges = f.getFaceHalfedges();
 			HE_Vertex v0, v1, v2;
@@ -915,7 +915,7 @@ public class WB_Render3D {
 
 	public void drawFaceVC(final HE_Face f, final boolean smooth) {
 		if (f.getFaceOrder() > 2) {
-			final int[][] tris = f.triangulate();
+			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;

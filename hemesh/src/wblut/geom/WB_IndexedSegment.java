@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.math.WB_Math;
 
 public class WB_IndexedSegment extends WB_Linear implements Segment {
@@ -68,7 +68,7 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 
 	public static List<WB_IndexedSegment> negate(
 			final List<WB_IndexedSegment> segs) {
-		final List<WB_IndexedSegment> neg = new FastList<WB_IndexedSegment>();
+		final List<WB_IndexedSegment> neg = new FastTable<WB_IndexedSegment>();
 		for (int i = 0; i < segs.size(); i++) {
 			neg.add(segs.get(i).negate());
 		}

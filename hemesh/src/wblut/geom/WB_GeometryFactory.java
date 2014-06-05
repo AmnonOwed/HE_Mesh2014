@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.external.straightskeleton.Corner;
 import wblut.external.straightskeleton.Edge;
@@ -24,6 +24,11 @@ import wblut.external.straightskeleton.Output.Face;
 import wblut.external.straightskeleton.Point3d;
 import wblut.external.straightskeleton.Skeleton;
 import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.data.WB_JohnsonPolyhedraData01;
+import wblut.geom.data.WB_JohnsonPolyhedraData02;
+import wblut.geom.data.WB_JohnsonPolyhedraData03;
+import wblut.geom.data.WB_JohnsonPolyhedraData04;
+import wblut.geom.data.WB_PolyhedraData;
 import wblut.math.WB_Math;
 
 import com.vividsolutions.jts.densify.Densifier;
@@ -2471,7 +2476,7 @@ public class WB_GeometryFactory {
 
 	public WB_Polygon createSimplePolygon(
 			final List<? extends WB_Coordinate> tuples, final int[] indices) {
-		final List<WB_Coordinate> coords = new FastList<WB_Coordinate>();
+		final List<WB_Coordinate> coords = new FastTable<WB_Coordinate>();
 		for (final int indice : indices) {
 			coords.add(tuples.get(indice));
 		}
@@ -2533,7 +2538,7 @@ public class WB_GeometryFactory {
 
 	private List<WB_Polygon> createPolygonsFromJTSGeometry(
 			final Geometry geometry) {
-		final List<WB_Polygon> polygons = new FastList<WB_Polygon>();
+		final List<WB_Polygon> polygons = new FastTable<WB_Polygon>();
 
 		for (int i = 0; i < geometry.getNumGeometries(); i++) {
 			final Geometry geo = geometry.getGeometryN(i);
@@ -4704,9 +4709,8 @@ public class WB_GeometryFactory {
 	}
 
 	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh) {
-		final List<WB_Point> uniqueVertices = new FastList<WB_Point>();
-		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>(
-				mesh.getNumberOfVertices());
+		final List<WB_Point> uniqueVertices = new FastTable<WB_Point>();
+		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>();
 		final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
 
 		WB_KDEntry<WB_Point, Integer> neighbor;
@@ -4796,7 +4800,7 @@ public class WB_GeometryFactory {
 	public WB_FaceListMesh createPrism(final int n, final double radius,
 			final double h) {
 
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * n);
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		for (int i = 0; i < n; i++) {
 			lpoints.add(createPoint(radius * Math.cos(Math.PI * 2.0 / n * i),
 					radius * Math.sin(Math.PI * 2.0 / n * i), 0));
@@ -4811,7 +4815,7 @@ public class WB_GeometryFactory {
 			final Collection<? extends WB_Coordinate> points, final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.size());
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			lpoints.add(createPoint(point));
 			lpoints.add(createPoint(point)._addSelf(offset));
@@ -4822,7 +4826,7 @@ public class WB_GeometryFactory {
 	public WB_FaceListMesh createPrism(final WB_Coordinate[] points,
 			final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.length);
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			lpoints.add(createPoint(point));
 			lpoints.add(createPoint(point)._addSelf(offset));
@@ -4852,7 +4856,7 @@ public class WB_GeometryFactory {
 
 	public WB_FaceListMesh createPrism(final WB_Polygon poly, final double h) {
 		final WB_Vector offset = createVector(0, 0, h);
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * poly.size());
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Coordinate point;
 		for (int i = 0; i < poly.size(); i++) {
 			point = poly.getPoint(i);
@@ -4907,7 +4911,7 @@ public class WB_GeometryFactory {
 	public WB_FaceListMesh createAntiprism(final int n, final double radius,
 			final double h) {
 
-		final List<WB_Point> points = new FastList<WB_Point>(2 * n);
+		final List<WB_Point> points = new FastTable<WB_Point>();
 		for (int i = 0; i < n; i++) {
 			points.add(createPoint(radius * Math.cos(Math.PI * 2.0 / n * i),
 					radius * Math.sin(Math.PI * 2.0 / n * i), 0));
@@ -4924,7 +4928,7 @@ public class WB_GeometryFactory {
 			final Collection<? extends WB_Coordinate> points, final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.size());
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			lpoints.add(createPoint(point));
 			lpoints.add(createPoint(point)._addSelf(offset));
@@ -4936,7 +4940,7 @@ public class WB_GeometryFactory {
 			final double h) {
 
 		final WB_Vector offset = createVector(0, 0, h);
-		final List<WB_Point> lpoints = new FastList<WB_Point>(2 * points.length);
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		for (final WB_Coordinate point : points) {
 			lpoints.add(createPoint(point));
 			lpoints.add(createPoint(point)._addSelf(offset));
@@ -5015,7 +5019,7 @@ public class WB_GeometryFactory {
 	}
 
 	private List<WB_Point> createVerticesFromArray(final double[][] vertices) {
-		final List<WB_Point> points = new FastList<WB_Point>(vertices.length);
+		final List<WB_Point> points = new FastTable<WB_Point>();
 		for (final double[] vertice : vertices) {
 			points.add(createPoint(vertice[0], vertice[1], vertice[2]));
 		}
@@ -5120,8 +5124,8 @@ public class WB_GeometryFactory {
 		final BufferedReader br = new BufferedReader(new InputStreamReader(this
 				.getClass().getClassLoader()
 				.getResourceAsStream("resources/" + name + ".wrl")));
-		final List<WB_Point> points = new FastList<WB_Point>();
-		final List<int[]> faces = new FastList<int[]>();
+		final List<WB_Point> points = new FastTable<WB_Point>();
+		final List<int[]> faces = new FastTable<int[]>();
 		String line;
 
 		String[] words;
@@ -5185,7 +5189,7 @@ public class WB_GeometryFactory {
 			return null;
 		}
 		final int nop = (int) Math.pow(2, n);
-		final List<WB_Point> points = new FastList<WB_Point>(nop);
+		final List<WB_Point> points = new FastTable<WB_Point>();
 		for (int i = 0; i < nop; i++) {
 			final WB_Point point = createPoint();
 			int div = i;
@@ -5289,8 +5293,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5353,8 +5357,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5418,8 +5422,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5482,8 +5486,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5597,8 +5601,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5676,8 +5680,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5754,8 +5758,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5816,8 +5820,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5902,8 +5906,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -5971,8 +5975,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6042,8 +6046,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6122,8 +6126,8 @@ public class WB_GeometryFactory {
 		final LoopL<Corner> top = skel.flatTop;
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6206,8 +6210,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6286,8 +6290,8 @@ public class WB_GeometryFactory {
 		final LoopL<Corner> top = skel.flatTop;
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6419,8 +6423,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6521,8 +6525,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6624,8 +6628,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6725,8 +6729,8 @@ public class WB_GeometryFactory {
 		final LoopL<Corner> top = skel.flatTop;
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		for (final Face face : expfaces) {
 
@@ -6893,8 +6897,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 
 		i = 0;
 		WB_Point point;
@@ -7069,8 +7073,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 		WB_Point point;
 		i = 0;
 		for (final WB_Coordinate p : points) {
@@ -7240,8 +7244,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 
 		i = 0;
 		WB_Point point;
@@ -7357,8 +7361,8 @@ public class WB_GeometryFactory {
 
 		final Collection<Face> expfaces = skel.output.faces.values();
 		int counter = 0;
-		final List<int[]> tmpfaces = new FastList<int[]>();
-		final List<WB_Point> lpoints = new FastList<WB_Point>();
+		final List<int[]> tmpfaces = new FastTable<int[]>();
+		final List<WB_Point> lpoints = new FastTable<WB_Point>();
 
 		i = 0;
 		WB_Point point;
@@ -7476,8 +7480,7 @@ public class WB_GeometryFactory {
 
 	public WB_FaceListMesh createConcaveHull(final WB_Coordinate[] points,
 			final double filter) {
-		final List<WB_Coordinate> list = new FastList<WB_Coordinate>(
-				points.length);
+		final List<WB_Coordinate> list = new FastTable<WB_Coordinate>();
 		for (final WB_Coordinate p : points) {
 			list.add(p);
 		}
@@ -7487,8 +7490,7 @@ public class WB_GeometryFactory {
 	}
 
 	public WB_AlphaComplex createAlphaComplex(final WB_Coordinate[] points) {
-		final List<WB_Coordinate> list = new FastList<WB_Coordinate>(
-				points.length);
+		final List<WB_Coordinate> list = new FastTable<WB_Coordinate>();
 		for (final WB_Coordinate p : points) {
 			list.add(p);
 		}
@@ -7523,7 +7525,7 @@ public class WB_GeometryFactory {
 				false, true);
 		final GlyphVector gv = font.createGlyphVector(fontContext, chs);
 		final List polys = new ArrayList();
-		final List<WB_Polygon> geometries = new FastList<WB_Polygon>();
+		final List<WB_Polygon> geometries = new FastTable<WB_Polygon>();
 		for (int i = 0; i < gv.getNumGlyphs(); i++) {
 			geometries
 					.addAll(shapereader.read(gv.getGlyphOutline(i), flatness));
@@ -8000,7 +8002,7 @@ public class WB_GeometryFactory {
 
 	public List<WB_Polygon> constrain(final WB_Polygon[] polygons,
 			final WB_Polygon container) {
-		final List<WB_Polygon> polys = new FastList<WB_Polygon>();
+		final List<WB_Polygon> polys = new FastTable<WB_Polygon>();
 		for (final WB_Polygon poly : polygons) {
 			final Polygon JTSpoly1 = toJTSPolygon(poly);
 			final Polygon JTSpoly2 = toJTSPolygon(container);
@@ -8012,7 +8014,7 @@ public class WB_GeometryFactory {
 
 	public List<WB_Polygon> constrain(final List<WB_Polygon> polygons,
 			final WB_Polygon container) {
-		final List<WB_Polygon> polys = new FastList<WB_Polygon>();
+		final List<WB_Polygon> polys = new FastTable<WB_Polygon>();
 		for (final WB_Polygon poly : polygons) {
 			final Polygon JTSpoly1 = toJTSPolygon(poly);
 			final Polygon JTSpoly2 = toJTSPolygon(container);
@@ -8057,8 +8059,8 @@ public class WB_GeometryFactory {
 		int numFront = 0;
 		int numBack = 0;
 
-		List<WB_Point> frontVerts = new FastList<WB_Point>(20);
-		List<WB_Point> backVerts = new FastList<WB_Point>(20);
+		List<WB_Point> frontVerts = new FastTable<WB_Point>();
+		List<WB_Point> backVerts = new FastTable<WB_Point>();
 
 		final int numVerts = poly.getNumberOfPoints();
 		final WB_Polygon[] polys = new WB_Polygon[2];
@@ -8134,7 +8136,7 @@ public class WB_GeometryFactory {
 	}
 
 	private List<WB_Point> clean(final List<WB_Point> points) {
-		final List<WB_Point> result = new FastList<WB_Point>();
+		final List<WB_Point> result = new FastTable<WB_Point>();
 		final int n = points.size();
 		for (int i = 0; i < n; i++) {
 			if (!points.get(i).equals(points.get((i + 1) % n))) {
@@ -8183,7 +8185,7 @@ public class WB_GeometryFactory {
 
 	public WB_PointSequence createPointSequence(
 			final List<? extends WB_Coordinate> tuples, final int[] indices) {
-		final List<WB_Coordinate> coords = new FastList<WB_Coordinate>();
+		final List<WB_Coordinate> coords = new FastTable<WB_Coordinate>();
 		for (final int indice : indices) {
 			coords.add(tuples.get(indice));
 		}

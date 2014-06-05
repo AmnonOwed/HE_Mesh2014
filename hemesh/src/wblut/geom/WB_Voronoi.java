@@ -3,8 +3,12 @@ package wblut.geom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
+import wblut.external.ProGAL.CTetrahedron;
+import wblut.external.ProGAL.CVertex;
+import wblut.external.ProGAL.DelaunayComplex;
 
 import com.vividsolutions.jts.algorithm.ConvexHull;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -27,7 +31,7 @@ public class WB_Voronoi {
 				precision);
 
 		final int nv = Math.min(n, points.length);
-		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
+		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
 		for (int i = 0; i < nv; i++) {
 
 			int[] tetras = triangulation.Vertices[i];
@@ -56,7 +60,7 @@ public class WB_Voronoi {
 				precision);
 
 		final int nv = Math.min(n, points.size());
-		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
+		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
 		for (int i = 0; i < nv; i++) {
 
 			int[] tetras = triangulation.Vertices[i];
@@ -75,6 +79,126 @@ public class WB_Voronoi {
 			}
 		}
 		return result;
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final List<? extends WB_Coordinate> points, final WB_AABB aabb,
+			double precision) {
+		return getVoronoi3D(points, points.size(), aabb, precision);
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final WB_Coordinate[] points, final WB_AABB aabb, double precision) {
+		return getVoronoi3D(points, points.length, aabb, precision);
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final WB_Coordinate[] points, final WB_AABB aabb) {
+		return getVoronoi3D(points, points.length, aabb);
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final WB_Coordinate[] points, int nv, final WB_AABB aabb) {
+
+		nv = Math.min(nv, points.length);
+		final int n = points.length;
+		final List<wblut.external.ProGAL.Point> tmppoints = new ArrayList<wblut.external.ProGAL.Point>(
+				n);
+		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
+		for (int i = 0; i < n; i++) {
+			tmppoints.add(new wblut.external.ProGAL.Point(points[i].xd(),
+					points[i].yd(), points[i].zd()));
+			tree.add(points[i], i);
+		}
+		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
+		final List<CVertex> vertices = dc.getVertices();
+		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
+		for (int i = 0; i < nv; i++) {
+			boolean onConvexHull = false;
+			final CVertex v = vertices.get(i);
+			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
+			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
+			for (final CTetrahedron tetra : vertexhull) {
+				// if (!tetra.containsBigPoint()) {
+				hullpoints.add(toPoint(tetra.circumcenter()));
+				// }
+				if (tetra.containsBigPoint()) {
+					onConvexHull = true;
+				}
+			}
+			final List<WB_Point> finalpoints = new FastTable<WB_Point>();
+			for (int j = 0; j < hullpoints.size(); j++) {
+				finalpoints.add(geometryfactory.createPoint(hullpoints.get(j)));
+			}
+			final int index = tree.getNearestNeighbor(toPoint(v)).value;
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(finalpoints,
+					geometryfactory.createPoint(points[index]), index);
+			vor.constrain(aabb);
+			if (vor.cell != null) {
+				result.add(vor);
+			}
+		}
+		return result;
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final List<? extends WB_Coordinate> points, final WB_AABB aabb) {
+		return getVoronoi3D(points, points.size(), aabb);
+
+	}
+
+	public static List<WB_VoronoiCell3D> getVoronoi3D(
+			final List<? extends WB_Coordinate> points, int nv,
+			final WB_AABB aabb) {
+		nv = Math.min(nv, points.size());
+		final int n = points.size();
+		final List<wblut.external.ProGAL.Point> tmppoints = new ArrayList<wblut.external.ProGAL.Point>(
+				n);
+		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
+		int i = 0;
+		for (final WB_Coordinate p : points) {
+			tmppoints.add(new wblut.external.ProGAL.Point(p.xd(), p.yd(), p
+					.zd()));
+			tree.add(p, i++);
+		}
+		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
+		final List<CVertex> vertices = dc.getVertices();
+
+		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
+		for (i = 0; i < nv; i++) {
+			boolean onConvexHull = false;
+			final CVertex v = vertices.get(i);
+			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
+			v.getAdjacentTriangles();
+
+			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
+			for (final CTetrahedron tetra : vertexhull) {
+				// if (!tetra.containsBigPoint()) {
+				hullpoints.add(toPoint(tetra.circumcenter()));
+				// }
+				if (tetra.containsBigPoint()) {
+					onConvexHull = true;
+				}
+			}
+			final List<WB_Point> finalpoints = new FastTable<WB_Point>();
+			for (int j = 0; j < hullpoints.size(); j++) {
+				finalpoints.add(geometryfactory.createPoint(hullpoints.get(j)));
+			}
+			final int index = tree.getNearestNeighbor(toPoint(v)).value;
+			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(finalpoints,
+					geometryfactory.createPoint(points.get(index)), index);
+			if (vor.cell != null) {
+				vor.constrain(aabb);
+			}
+			if (vor.cell != null) {
+				result.add(vor);
+			}
+		}
+		return result;
+	}
+
+	private static WB_Point toPoint(final wblut.external.ProGAL.Point v) {
+		return geometryfactory.createPoint(v.x(), v.y(), v.z());
 	}
 
 	public static List<WB_VoronoiCell2D> getVoronoi2D(final WB_Point[] points,
@@ -341,13 +465,11 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		for (int i = 0; i < npolys; i++) {
 			final Polygon poly = (Polygon) polys.getGeometryN(i);
 			final Coordinate[] polycoord = poly.getCoordinates();
-			final List<WB_Point> polypoints = new FastList<WB_Point>(
-					polycoord.length);
+			final List<WB_Point> polypoints = new FastTable<WB_Point>();
 			for (final Coordinate element : polycoord) {
 				polypoints.add(toPoint(element.x, element.y, context));
 			}
@@ -372,15 +494,13 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		for (int i = 0; i < npolys; i++) {
 			Geometry poly = polys.getGeometryN(i);
 			poly = poly.buffer(-d, c);
 			poly = polys.getGeometryN(0);
 			final Coordinate[] polycoord = poly.getCoordinates();
-			final List<WB_Point> polypoints = new FastList<WB_Point>(
-					polycoord.length);
+			final List<WB_Point> polypoints = new FastTable<WB_Point>();
 			;
 			for (final Coordinate element : polycoord) {
 				polypoints.add(toPoint(element.x, element.y, context));
@@ -404,8 +524,7 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		Coordinate[] coordsArray = new Coordinate[coords.size()];
 		coordsArray = coords.toArray(coordsArray);
 		final ConvexHull ch = new ConvexHull(coordsArray, new GeometryFactory());
@@ -417,9 +536,8 @@ public class WB_Voronoi {
 			if (intersect.getGeometryType().equals("Polygon")) {
 				poly = (Polygon) intersect.getGeometryN(0);
 				final Coordinate[] polycoord = poly.getCoordinates();
-				final List<WB_Point> polypoints = new FastList<WB_Point>(
-						polycoord.length);
-				;
+				final List<WB_Point> polypoints = new FastTable<WB_Point>();
+
 				for (final Coordinate element : polycoord) {
 					polypoints.add(toPoint(element.x, element.y, context));
 				}
@@ -445,8 +563,7 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		Coordinate[] coordsArray = new Coordinate[coords.size()];
 		coordsArray = coords.toArray(coordsArray);
 		final ConvexHull ch = new ConvexHull(coordsArray, new GeometryFactory());
@@ -459,9 +576,8 @@ public class WB_Voronoi {
 			if (intersect.getGeometryType().equals("Polygon")) {
 				poly = (Polygon) intersect.getGeometryN(0);
 				final Coordinate[] polycoord = poly.getCoordinates();
-				final List<WB_Point> polypoints = new FastList<WB_Point>(
-						polycoord.length);
-				;
+				final List<WB_Point> polypoints = new FastTable<WB_Point>();
+
 				for (final Coordinate element : polycoord) {
 					polypoints.add(toPoint(element.x, element.y, context));
 				}
@@ -487,8 +603,7 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		Coordinate[] bdcoordsArray = new Coordinate[bdcoords.size()];
 		bdcoordsArray = bdcoords.toArray(bdcoordsArray);
 		final Polygon hull = new GeometryFactory().createPolygon(bdcoordsArray);
@@ -500,9 +615,7 @@ public class WB_Voronoi {
 					&& !intersect.isEmpty()) {
 				poly = (Polygon) intersect.getGeometryN(0);
 				final Coordinate[] polycoord = poly.getCoordinates();
-				final List<WB_Point> polypoints = new FastList<WB_Point>(
-						polycoord.length);
-				;
+				final List<WB_Point> polypoints = new FastTable<WB_Point>();
 				for (final Coordinate element : polycoord) {
 					polypoints.add(toPoint(element.x, element.y, context));
 				}
@@ -529,8 +642,7 @@ public class WB_Voronoi {
 		final GeometryCollection polys = (GeometryCollection) qes
 				.getVoronoiDiagram(new GeometryFactory());
 		final int npolys = polys.getNumGeometries();
-		final List<WB_VoronoiCell2D> result = new FastList<WB_VoronoiCell2D>(
-				npolys);
+		final List<WB_VoronoiCell2D> result = new FastTable<WB_VoronoiCell2D>();
 		Coordinate[] bdcoordsArray = new Coordinate[bdcoords.size()];
 		bdcoordsArray = bdcoords.toArray(bdcoordsArray);
 		final Polygon hull = new GeometryFactory().createPolygon(bdcoordsArray);
@@ -544,8 +656,7 @@ public class WB_Voronoi {
 					&& !intersect.isEmpty()) {
 				poly = (Polygon) intersect.getGeometryN(0);
 				final Coordinate[] polycoord = poly.getCoordinates();
-				final List<WB_Point> polypoints = new FastList<WB_Point>(
-						polycoord.length);
+				final List<WB_Point> polypoints = new FastTable<WB_Point>();
 				;
 				for (final Coordinate element : polycoord) {
 					polypoints.add(toPoint(element.x, element.y, context));
@@ -578,61 +689,5 @@ public class WB_Voronoi {
 		context.pointTo3D(x, y, 0, tmp);
 		return tmp;
 
-	}
-
-	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final List<? extends WB_Coordinate> points, final WB_AABB aabb,
-			double precision) {
-
-		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
-				precision);
-
-		final int nv = points.size();
-		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
-		for (int i = 0; i < nv; i++) {
-
-			int[] tetras = triangulation.Vertices[i];
-
-			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
-			for (int t = 0; t < tetras.length; t++) {
-				hullpoints.add(triangulation.circumcenters[tetras[t]]);
-			}
-			hullpoints.add(new WB_Point(points.get(i)));
-			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
-					geometryfactory.createPoint(points.get(i)), i);
-			if (vor.cell != null)
-				vor.constrain(aabb);
-			if (vor.cell != null) {
-				result.add(vor);
-			}
-		}
-		return result;
-	}
-
-	public static List<WB_VoronoiCell3D> getVoronoi3D(
-			final WB_Coordinate[] points, final WB_AABB aabb, double precision) {
-		WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(points,
-				precision);
-
-		final int nv = points.length;
-		final List<WB_VoronoiCell3D> result = new FastList<WB_VoronoiCell3D>(nv);
-		for (int i = 0; i < nv; i++) {
-
-			int[] tetras = triangulation.Vertices[i];
-
-			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
-			for (int t = 0; t < tetras.length; t++) {
-				hullpoints.add(triangulation.circumcenters[tetras[t]]);
-			}
-			final WB_VoronoiCell3D vor = new WB_VoronoiCell3D(hullpoints,
-					geometryfactory.createPoint(points[i]), i);
-
-			if (vor.cell != null)
-				vor.constrain(aabb);
-			if (vor.cell != null) {
-				result.add(vor);
-			}
-		}
-		return result;
 	}
 }

@@ -5491,7 +5491,12 @@ public class WB_Predicates {
 		if ((det > errbound) || (-det > errbound)) {
 			return (det > 0) ? 1 : -1;
 		}
-		return _orientTetraAdapt(p0, p1, p2, p3, permanent);
+		try {
+			return _orientTetraAdapt(p0, p1, p2, p3, permanent);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return 0;
+		}
+
 	}
 
 	private double _orientTetraAdapt(final WB_Coordinate pa,

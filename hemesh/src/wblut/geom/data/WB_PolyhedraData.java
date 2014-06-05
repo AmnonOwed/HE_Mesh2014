@@ -1,8 +1,8 @@
-package wblut.geom;
+package wblut.geom.data;
 
-class WB_PolyhedraData {
+public class WB_PolyhedraData {
 
-	final static String[] Anames = { "cuboctahedron",
+	final public static String[] Anames = { "cuboctahedron",
 			"great rhombicosidodecahedron", "great rhombicuboctahedron",
 			"icosidodecahedron", "small rhombicosidodecahedron",
 			"small rhombicuboctahedron", "snub cube", "snub dodecahedron",
@@ -10,7 +10,7 @@ class WB_PolyhedraData {
 			"truncated icosahedron", "truncated octahedron",
 			"truncated tetrahedron" };
 
-	final static double[][][] Avertices = {
+	final public static double[][][] Avertices = {
 			{ { -1., 0., 0. }, { -0.5, -0.5, -0.707107 },
 					{ -0.5, -0.5, 0.707107 }, { -0.5, 0.5, -0.707107 },
 					{ -0.5, 0.5, 0.707107 }, { 0., -1., 0. }, { 0., 1., 0. },
@@ -406,7 +406,7 @@ class WB_PolyhedraData {
 					{ -0.866025, 0.5, -0.612372 },
 					{ 0.866025, -0.5, -0.612372 }, { 0.866025, 0.5, -0.612372 } } };
 
-	static final int[][][] Afaces = {
+	static final public int[][][] Afaces = {
 			{ { 3, 9, 7, 1 }, { 2, 8, 10, 4 }, { 8, 5, 7, 11 }, { 2, 0, 1, 5 },
 					{ 4, 6, 3, 0 }, { 10, 11, 9, 6 }, { 11, 10, 8 },
 					{ 2, 4, 0 }, { 5, 8, 2 }, { 4, 10, 6 }, { 7, 9, 11 },
@@ -596,10 +596,10 @@ class WB_PolyhedraData {
 					{ 10, 7, 6, 4, 2, 0 }, { 1, 3, 5, 6, 7, 11 },
 					{ 8, 2, 4, 5, 3, 9 }, { 1, 11, 10, 0, 8, 9 } } };
 
-	final static String[] Pnames = { "cube", "dodecahedron", "icosahedron",
-			"octahedron", "tetrahedron" };
+	final static public String[] Pnames = { "cube", "dodecahedron",
+			"icosahedron", "octahedron", "tetrahedron" };
 
-	final static double[][][] Pvertices = {
+	final static public double[][][] Pvertices = {
 			{ { -0.5, -0.5, -0.5 }, { -0.5, -0.5, 0.5 }, { -0.5, 0.5, -0.5 },
 					{ -0.5, 0.5, 0.5 }, { 0.5, -0.5, -0.5 },
 					{ 0.5, -0.5, 0.5 }, { 0.5, 0.5, -0.5 }, { 0.5, 0.5, 0.5 } },
@@ -635,7 +635,7 @@ class WB_PolyhedraData {
 			{ { 0., 0., 0.612372 }, { -0.288675, -0.5, -0.204124 },
 					{ -0.288675, 0.5, -0.204124 }, { 0.57735, 0., -0.204124 } } };
 
-	final static int[][][] Pfaces = {
+	final static public int[][][] Pfaces = {
 			{ { 7, 3, 1, 5 }, { 7, 5, 4, 6 }, { 7, 6, 2, 3 }, { 3, 2, 0, 1 },
 					{ 0, 2, 6, 4 }, { 1, 0, 4, 5 } },
 			{ { 14, 9, 8, 13, 0 }, { 1, 5, 11, 10, 4 }, { 4, 10, 6, 2, 18 },
@@ -653,20 +653,20 @@ class WB_PolyhedraData {
 					{ 4, 2, 5 }, { 2, 0, 1 }, { 5, 2, 1 } },
 			{ { 1, 2, 3 }, { 2, 1, 0 }, { 3, 0, 1 }, { 0, 3, 2 } } };
 
-	final static double isqrt2 = 1.0 / sqrt(2.0);
-	final static double isqrt3 = 1.0 / sqrt(3.0);
-	final static double sqrt2o3 = sqrt(2.0 / 3.0);
-	final static double isqrt6 = 1.0 / sqrt(6.0);
-	final static double sqrt5 = sqrt(5.0);
-	final static double sqrt5ps5 = sqrt(5.0 + sqrt(5.0));
+	final static public double isqrt2 = 1.0 / sqrt(2.0);
+	final static public double isqrt3 = 1.0 / sqrt(3.0);
+	final static public double sqrt2o3 = sqrt(2.0 / 3.0);
+	final static public double isqrt6 = 1.0 / sqrt(6.0);
+	final static public double sqrt5 = sqrt(5.0);
+	final static public double sqrt5ps5 = sqrt(5.0 + sqrt(5.0));
 
-	final static String[] Cnames = { "triakis tetrahedron",
+	final static public String[] Cnames = { "triakis tetrahedron",
 			"rhombic dodecahedron", "triakis octahedron",
 			"tetrakis hexahedron", "pentakis dodecahedron",
 			"trapezoidal hexecontahedron", "pentagonal hexecontahedron",
 			"trapezoidal icositetrahedron" };
 
-	final static double[][][] Cvertices = {
+	final static public double[][][] Cvertices = {
 			{ { 0., 0., -2.5 * isqrt6 }, { 0., 0., 0.5 * sqrt(1.5) },
 					{ -5.0 / 3.0 * isqrt3, 0, 5.0 / 6.0 * isqrt6 },
 					{ -0.5 * isqrt3, -0.5, -.5 * isqrt6 },
@@ -1174,7 +1174,7 @@ class WB_PolyhedraData {
 
 	};
 
-	static final int[][][] Cfaces = {
+	static final public int[][][] Cfaces = {
 			{ { 5, 3, 0 }, { 0, 4, 6 }, { 5, 2, 3 }, { 6, 4, 2 }, { 5, 1, 2 },
 					{ 6, 2, 1 }, { 6, 1, 5 }, { 6, 5, 7 }, { 3, 2, 0 },
 					{ 2, 4, 0 }, { 5, 0, 7 }, { 0, 6, 7 }

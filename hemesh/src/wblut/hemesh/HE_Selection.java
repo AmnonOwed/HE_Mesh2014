@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Vector;
 
@@ -32,13 +32,13 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get outer edges.
 	 * 
-	 * @return outer edges as FastList<HE_Edge>
+	 * @return outer edges as FastTable<HE_Edge>
 	 */
 	public List<HE_Edge> getOuterEdges() {
 		final HE_Selection sel = get();
 		sel.collectEdges();
 
-		final List<HE_Edge> result = new FastList<HE_Edge>();
+		final List<HE_Edge> result = new FastTable<HE_Edge>();
 		HE_Edge e;
 		final int n = sel.edges.size();
 		for (int i = 0; i < n; i++) {
@@ -58,12 +58,12 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get inner edges.
 	 * 
-	 * @return inner edges as FastList<HE_Edge>
+	 * @return inner edges as FastTable<HE_Edge>
 	 */
 	public List<HE_Edge> getInnerEdges() {
 		final HE_Selection sel = get();
 		sel.collectEdges();
-		final List<HE_Edge> result = new FastList<HE_Edge>();
+		final List<HE_Edge> result = new FastTable<HE_Edge>();
 		HE_Edge e;
 		final int n = sel.edges.size();
 		for (int i = 0; i < n; i++) {
@@ -82,11 +82,11 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get outer vertices.
 	 * 
-	 * @return outer vertices as FastList<HE_Vertex>
+	 * @return outer vertices as FastTable<HE_Vertex>
 	 */
 	public List<HE_Vertex> getOuterVertices() {
 
-		final List<HE_Vertex> result = new FastList<HE_Vertex>();
+		final List<HE_Vertex> result = new FastTable<HE_Vertex>();
 		final List<HE_Edge> outerEdges = getOuterEdges();
 
 		for (int i = 0; i < outerEdges.size(); i++) {
@@ -107,12 +107,12 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get inner vertices.
 	 * 
-	 * @return inner vertices as FastList<HE_Vertex>
+	 * @return inner vertices as FastTable<HE_Vertex>
 	 */
 	public List<HE_Vertex> getInnerVertices() {
 		final HE_Selection sel = get();
 		sel.collectVertices();
-		final List<HE_Vertex> result = new FastList<HE_Vertex>();
+		final List<HE_Vertex> result = new FastTable<HE_Vertex>();
 		final List<HE_Vertex> outerVertices = getOuterVertices();
 		HE_Vertex v;
 		final int n = sel.vertices.size();
@@ -128,11 +128,11 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get vertices in selection on mesh boundary.
 	 * 
-	 * @return boundary vertices in selection as FastList<HE_Vertex>
+	 * @return boundary vertices in selection as FastTable<HE_Vertex>
 	 */
 	public List<HE_Vertex> getBoundaryVertices() {
 
-		final List<HE_Vertex> result = new FastList<HE_Vertex>();
+		final List<HE_Vertex> result = new FastTable<HE_Vertex>();
 		final List<HE_Edge> outerEdges = getOuterEdges();
 		for (int i = 0; i < outerEdges.size(); i++) {
 			final HE_Edge e = outerEdges.get(i);
@@ -154,12 +154,12 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get outer halfedges.
 	 * 
-	 * @return outside halfedges of outer edges as FastList<HE_halfedge>
+	 * @return outside halfedges of outer edges as FastTable<HE_halfedge>
 	 */
 	public List<HE_Halfedge> getOuterHalfedges() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> result = new FastTable<HE_Halfedge>();
 		HE_Halfedge he;
 		final int n = sel.halfedges.size();
 		for (int i = 0; i < n; i++) {
@@ -175,12 +175,12 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get outer halfedges.
 	 * 
-	 * @return inside halfedges of outer edges as FastList<HE_halfedge>
+	 * @return inside halfedges of outer edges as FastTable<HE_halfedge>
 	 */
 	public List<HE_Halfedge> getOuterHalfedgesInside() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> result = new FastTable<HE_Halfedge>();
 		HE_Halfedge he;
 		final int n = sel.halfedges.size();
 		for (int i = 0; i < n; i++) {
@@ -196,12 +196,12 @@ public class HE_Selection extends HE_MeshStructure {
 	/**
 	 * Get innerhalfedges.
 	 * 
-	 * @return inner halfedges as FastList<HE_halfedge>
+	 * @return inner halfedges as FastTable<HE_halfedge>
 	 */
 	public List<HE_Halfedge> getInnerHalfedges() {
 		final HE_Selection sel = get();
 		sel.collectHalfedges();
-		final List<HE_Halfedge> result = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> result = new FastTable<HE_Halfedge>();
 		HE_Halfedge he;
 		final int n = sel.halfedges.size();
 		for (int i = 0; i < n; i++) {
@@ -320,7 +320,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 * Grow face selection outwards by one face.
 	 */
 	public void grow() {
-		final FastList<HE_Face> currentFaces = new FastList<HE_Face>();
+		final FastTable<HE_Face> currentFaces = new FastTable<HE_Face>();
 		HE_Face f;
 		final int n = faces.size();
 		for (int i = 0; i < n; i++) {
@@ -378,7 +378,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 * Select faces surrounding current face selection.
 	 */
 	public void surround() {
-		final FastList<HE_Face> currentFaces = new FastList<HE_Face>();
+		final FastTable<HE_Face> currentFaces = new FastTable<HE_Face>();
 		HE_Face face;
 		final int n = faces.size();
 		for (int i = 0; i < n; i++) {
@@ -411,7 +411,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 *            face is added
 	 */
 	public void smooth(final int threshold) {
-		final FastList<HE_Halfedge> currentHalfedges = new FastList<HE_Halfedge>();
+		final FastTable<HE_Halfedge> currentHalfedges = new FastTable<HE_Halfedge>();
 		HE_Halfedge hei;
 		final int n = halfedges.size();
 		for (int i = 0; i < n; i++) {
@@ -447,7 +447,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 *            face is added
 	 */
 	public void smooth(final double threshold) {
-		final FastList<HE_Halfedge> currentHalfedges = new FastList<HE_Halfedge>();
+		final FastTable<HE_Halfedge> currentHalfedges = new FastTable<HE_Halfedge>();
 		HE_Halfedge hei;
 		final int n = halfedges.size();
 		for (int i = 0; i < n; i++) {
@@ -477,6 +477,7 @@ public class HE_Selection extends HE_MeshStructure {
 
 	/**
 	 * Select all mesh elements.
+	 * 
 	 * @return current selection
 	 */
 	public HE_Selection selectAll() {
@@ -677,7 +678,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 * Collect vertices belonging to selection elements.
 	 */
 	public void collectVertices() {
-		List<HE_Vertex> tmpVertices = new FastList<HE_Vertex>();
+		List<HE_Vertex> tmpVertices = new FastTable<HE_Vertex>();
 		HE_Face f;
 		int n = faces.size();
 		for (int i = 0; i < n; i++) {
@@ -764,7 +765,7 @@ public class HE_Selection extends HE_MeshStructure {
 			f = getFaceByIndex(i);
 			addHalfedges(f.getFaceHalfedges());
 		}
-		final FastList<HE_Halfedge> newhalfedges = new FastList<HE_Halfedge>();
+		final FastTable<HE_Halfedge> newhalfedges = new FastTable<HE_Halfedge>();
 		final HE_Halfedge he;
 		n = halfedges.size();
 		for (int i = 0; i < n; i++) {

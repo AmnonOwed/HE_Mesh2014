@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
@@ -512,8 +511,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return FastMap of WB_Vector.
 	 */
 	public Map<Long, WB_Vector> getKeyedVertexNormals() {
-		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>(
-				getNumberOfVertices());
+		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
@@ -582,8 +580,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return FastMap of WB_Vector.
 	 */
 	public Map<Long, WB_Vector> getKeyedFaceNormals() {
-		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>(
-				getNumberOfFaces());
+		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 		while (fItr.hasNext()) {
@@ -617,8 +614,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return FastMap of WB_Point.
 	 */
 	public Map<Long, WB_Point> getKeyedFaceCenters() {
-		final Map<Long, WB_Point> result = new FastMap<Long, WB_Point>(
-				getNumberOfFaces());
+		final Map<Long, WB_Point> result = new FastMap<Long, WB_Point>();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 		while (fItr.hasNext()) {
@@ -652,8 +648,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return FastMap of WB_Vector.
 	 */
 	public Map<Long, WB_Vector> getKeyedEdgeNormals() {
-		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>(
-				getNumberOfEdges());
+		final Map<Long, WB_Vector> result = new FastMap<Long, WB_Vector>();
 		HE_Edge e;
 		final Iterator<HE_Edge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -687,8 +682,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return FastMap of WB_Point.
 	 */
 	public Map<Long, WB_Point> getKeyedEdgeCenters() {
-		final Map<Long, WB_Point> result = new FastMap<Long, WB_Point>(
-				getNumberOfEdges());
+		final Map<Long, WB_Point> result = new FastMap<Long, WB_Point>();
 		HE_Edge e;
 		final Iterator<HE_Edge> eItr = eItr();
 		while (eItr.hasNext()) {
@@ -809,7 +803,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return the polygon list
 	 */
 	public List<WB_SimplePolygon> getPolygonList() {
-		final List<WB_SimplePolygon> result = new FastList<WB_SimplePolygon>();
+		final List<WB_SimplePolygon> result = new FastTable<WB_SimplePolygon>();
 		final Iterator<HE_Face> fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -820,7 +814,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	public List<WB_Triangle> getTriangles() {
-		final List<WB_Triangle> result = new FastList<WB_Triangle>();
+		final List<WB_Triangle> result = new FastTable<WB_Triangle>();
 		HE_Mesh trimesh = this.get();
 		trimesh.triangulate();
 		final Iterator<HE_Face> fItr = trimesh.fItr();
@@ -1257,7 +1251,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return the unpaired halfedges
 	 */
 	public List<HE_Halfedge> getUnpairedHalfedges() {
-		final List<HE_Halfedge> unpairedHalfedges = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> unpairedHalfedges = new FastTable<HE_Halfedge>();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -1275,7 +1269,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return boundary halfedges
 	 */
 	public List<HE_Halfedge> getBoundaryHalfedges() {
-		final List<HE_Halfedge> boundaryHalfedges = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> boundaryHalfedges = new FastTable<HE_Halfedge>();
 		HE_Halfedge he;
 		final Iterator<HE_Halfedge> heItr = heItr();
 		while (heItr.hasNext()) {
@@ -1292,12 +1286,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public void pairHalfedgesAndCreateEdges() {
 		class VertexInfo {
-			FastList<HE_Halfedge> out;
-			FastList<HE_Halfedge> in;
+			FastTable<HE_Halfedge> out;
+			FastTable<HE_Halfedge> in;
 
 			VertexInfo() {
-				out = new FastList<HE_Halfedge>();
-				in = new FastList<HE_Halfedge>();
+				out = new FastTable<HE_Halfedge>();
+				in = new FastTable<HE_Halfedge>();
 			}
 
 		}
@@ -1369,12 +1363,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	public void pairHalfedgesAndCreateEdges(
 			final List<HE_Halfedge> unpairedHalfedges) {
 		class VertexInfo {
-			FastList<HE_Halfedge> out;
-			FastList<HE_Halfedge> in;
+			FastTable<HE_Halfedge> out;
+			FastTable<HE_Halfedge> in;
 
 			VertexInfo() {
-				out = new FastList<HE_Halfedge>();
-				in = new FastList<HE_Halfedge>();
+				out = new FastTable<HE_Halfedge>();
+				in = new FastTable<HE_Halfedge>();
 			}
 
 		}
@@ -1493,10 +1487,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	/**
 	 * Cap holes.
 	 * 
-	 * @return all new faces as FastList<HE_Face>
+	 * @return all new faces as FastTable<HE_Face>
 	 */
 	public List<HE_Face> capHoles() {
-		final List<HE_Face> caps = new FastList<HE_Face>();
+		final List<HE_Face> caps = new FastTable<HE_Face>();
 		final List<HE_Halfedge> unpairedEdges = getUnpairedHalfedges();
 		List<HE_Halfedge> loopedHalfedges;
 		HE_Halfedge start;
@@ -1508,7 +1502,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		HE_Halfedge nhe;
 		HE_Edge ne;
 		while (unpairedEdges.size() > 0) {
-			loopedHalfedges = new FastList<HE_Halfedge>();
+			loopedHalfedges = new FastTable<HE_Halfedge>();
 			start = unpairedEdges.get(0);
 			loopedHalfedges.add(start);
 			he = start;
@@ -1536,7 +1530,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 			nf = new HE_Face();
 			add(nf);
 			caps.add(nf);
-			newHalfedges = new FastList<HE_Halfedge>();
+			newHalfedges = new FastTable<HE_Halfedge>();
 			for (int i = 0; i < loopedHalfedges.size(); i++) {
 				phe = loopedHalfedges.get(i);
 				nhe = new HE_Halfedge();
@@ -1567,9 +1561,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return self
 	 */
 	public HE_Mesh cleanUnusedElementsByFace() {
-		final List<HE_Vertex> cleanedVertices = new FastList<HE_Vertex>();
-		final List<HE_Halfedge> cleanedHalfedges = new FastList<HE_Halfedge>();
-		final List<HE_Edge> cleanedEdges = new FastList<HE_Edge>();
+		final List<HE_Vertex> cleanedVertices = new FastTable<HE_Vertex>();
+		final List<HE_Halfedge> cleanedHalfedges = new FastTable<HE_Halfedge>();
+		final List<HE_Edge> cleanedEdges = new FastTable<HE_Edge>();
 
 		HE_Halfedge he;
 		HE_Edge e;
@@ -1907,7 +1901,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * 
 	 */
 	public void collapseDegenerateEdges() {
-		final FastList<HE_Edge> edgesToRemove = new FastList<HE_Edge>();
+		final FastTable<HE_Edge> edgesToRemove = new FastTable<HE_Edge>();
 		final Iterator<HE_Edge> eItr = eItr();
 		HE_Edge e;
 		while (eItr.hasNext()) {
@@ -4695,10 +4689,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	public List<WB_SimplePolygon> getBoundaryAsPolygons() {
-		final List<WB_SimplePolygon> polygons = new FastList<WB_SimplePolygon>();
+		final List<WB_SimplePolygon> polygons = new FastTable<WB_SimplePolygon>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
-		final List<HE_Halfedge> loop = new FastList<HE_Halfedge>();
-		final List<WB_Point> points = new FastList<WB_Point>();
+		final List<HE_Halfedge> loop = new FastTable<HE_Halfedge>();
+		final List<WB_Point> points = new FastTable<WB_Point>();
 		while (halfedges.size() > 0) {
 
 			points.clear();
@@ -4720,9 +4714,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	}
 
 	public List<HE_Halfedge> getBoundaryLoopHalfedges() {
-		final List<HE_Halfedge> hes = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> hes = new FastTable<HE_Halfedge>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
-		final List<HE_Halfedge> loop = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> loop = new FastTable<HE_Halfedge>();
 		while (halfedges.size() > 0) {
 			loop.clear();
 			HE_Halfedge he = halfedges.get(0);
@@ -4752,7 +4746,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		HE_Vertex v;
 		HE_Halfedge he;
 		boolean pinchFound;
-		final FastList<HE_Halfedge> vHalfedges = new FastList<HE_Halfedge>();
+		final FastTable<HE_Halfedge> vHalfedges = new FastTable<HE_Halfedge>();
 		int run = 0;
 		do {
 			vItr = vItr();
@@ -4814,7 +4808,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	public void triangulate(final HE_Face face) {
 		if (face.getFaceOrder() > 3) {
-			final int[][] tris = face.triangulate();
+			final int[][] tris = face.getTriangles();
 			final List<HE_Vertex> vertices = face.getFaceVertices();
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);
@@ -4861,7 +4855,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 	private void triangulateNoPairing(final HE_Face face) {
 		if (face.getFaceOrder() > 3) {
-			final int[][] tris = face.triangulate();
+			final int[][] tris = face.getTriangles();
 			final List<HE_Vertex> vertices = face.getFaceVertices();
 			HE_Halfedge he = face.getHalfedge();
 			remove(face);

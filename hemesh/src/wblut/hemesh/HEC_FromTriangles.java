@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.Collection;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.Triangle;
 import wblut.geom.WB_Point;
 
@@ -16,7 +16,7 @@ import wblut.geom.WB_Point;
 public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
 
 	/** Source triangles. */
-	FastList<T> triangles;
+	FastTable<T> triangles;
 
 	/**
 	 * Instantiates a new HEC_FromTriangles.
@@ -35,7 +35,7 @@ public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
 	 * @return self
 	 */
 	public HEC_FromTriangles setTriangles(final T[] ts) {
-		triangles = new FastList<T>();
+		triangles = new FastTable<T>();
 		for (final T tri : ts) {
 			triangles.add(tri);
 		}
@@ -51,7 +51,7 @@ public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
 	 */
 	public HEC_FromTriangles setTriangles(final Collection<T> ts) {
 
-		triangles = new FastList<T>();
+		triangles = new FastTable<T>();
 		triangles.addAll(ts);
 		return this;
 	}

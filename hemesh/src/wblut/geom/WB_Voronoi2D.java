@@ -2,8 +2,8 @@ package wblut.geom;
 
 import java.util.List;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 
@@ -83,7 +83,7 @@ public class WB_Voronoi2D {
 
 	private VoronoiHalfedge2D edgeListLeftEnd, edgeListRightEnd;
 
-	private FastList<WB_IndexedBisector2D> allEdges;
+	private FastTable<WB_IndexedBisector2D> allEdges;
 
 	private FastMap<WB_Point, Integer> indices;
 
@@ -93,7 +93,7 @@ public class WB_Voronoi2D {
 	public List<WB_IndexedBisector2D> generateVoronoi(final double minX,
 			final double maxX, final double minY, final double maxY,
 			final WB_Point[] points) {
-		final FastList<WB_Point> ppoints = new FastList<WB_Point>();
+		final FastTable<WB_Point> ppoints = new FastTable<WB_Point>();
 		for (final WB_Point point : points) {
 			ppoints.add(point);
 		}
@@ -122,16 +122,15 @@ public class WB_Voronoi2D {
 		collectSites(points);
 		createVoronoi2D();
 
-		final List<WB_IndexedBisector2D> result = new FastList<WB_IndexedBisector2D>(
-				allEdges.size());
+		final List<WB_IndexedBisector2D> result = new FastTable<WB_IndexedBisector2D>();
 		result.addAll(allEdges);
 		return result;
 	}
 
 	private void collectSites(final List<WB_Point> pointsIn) {
-		allEdges = new FastList<WB_IndexedBisector2D>();
+		allEdges = new FastTable<WB_IndexedBisector2D>();
 
-		final FastList<WB_Point> points = new FastList<WB_Point>();
+		final FastTable<WB_Point> points = new FastTable<WB_Point>();
 		final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
 		WB_KDEntry<WB_Point, Integer>[] neighbors;
 		WB_Point p = new WB_Point(pointsIn.get(0));
@@ -149,7 +148,7 @@ public class WB_Voronoi2D {
 		sortSites(points);
 	}
 
-	private void sortSites(final FastList<WB_Point> points) {
+	private void sortSites(final FastTable<WB_Point> points) {
 		sites = new WB_Point[nsites];
 		xmin = points.get(0).x;
 		ymin = points.get(0).y;

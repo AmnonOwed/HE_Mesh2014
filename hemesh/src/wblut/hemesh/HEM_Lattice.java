@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.context.LogContext;
+import javolution.context.LogContext.Level;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
@@ -28,7 +29,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	public HEM_Lattice() {
 		super();
-		LogContext.enter(LogContext.NULL);
+		LogContext.enter().setLevel(Level.INFO);
 		d = 0;
 		sew = 0;
 		thresholdAngle = -1;

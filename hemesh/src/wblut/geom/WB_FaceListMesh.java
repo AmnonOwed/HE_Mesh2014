@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class WB_FaceListMesh implements WB_Geometry {
 	protected int[][] faces;
@@ -161,7 +161,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 		}
 		normal._normalizeSelf();
 		center._divSelf(face.length);
-		// System.out.println(center + " " + normal);
+
 		return geometryfactory.createPlane(center.addMul(d, normal), normal);
 
 	}
@@ -171,7 +171,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 	}
 
 	public List<WB_Plane> getPlanes(final double d) {
-		final List<WB_Plane> planes = new FastList<WB_Plane>(faces.length);
+		final List<WB_Plane> planes = new FastTable<WB_Plane>();
 		for (int i = 0; i < faces.length; i++) {
 			planes.add(getPlane(i, d));
 		}
@@ -190,7 +190,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 	}
 
 	public List<WB_Polygon> getPolygons() {
-		final List<WB_Polygon> polygons = new FastList<WB_Polygon>(faces.length);
+		final List<WB_Polygon> polygons = new FastTable<WB_Polygon>();
 		for (int i = 0; i < faces.length; i++) {
 			polygons.add(getPolygon(i));
 		}
@@ -230,7 +230,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 				/ self.getHeight());
 		f = Math.min(f, AABB.getDepth() / self.getDepth());
 		final WB_Vector center = geometryfactory.createVector(acx, acy, acz);
-		final List rescaled = new FastList(vertices.size());
+		final List rescaled = new FastTable();
 		for (int i = 0; i < vertices.size(); i++) {
 			final WB_Point p = vertices.getCoordinate(i);
 			p._addSelf(-scx, -scy, -scz);
@@ -249,7 +249,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 	}
 
 	private WB_FaceListMesh triangulateST() {
-		tris = new FastList<int[]>();
+		tris = new FastTable<int[]>();
 		int[] face;
 		int[][] triangles;
 		int id = 0;
@@ -280,7 +280,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 	}
 
 	private WB_FaceListMesh triangulateMT() {
-		tris = Collections.synchronizedList(new FastList<int[]>());
+		tris = Collections.synchronizedList(new FastTable<int[]>());
 		final int threadCount = Runtime.getRuntime().availableProcessors();
 		final int dfaces = faces.length / threadCount;
 		final ExecutorService executor = Executors
@@ -603,7 +603,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 	@Override
 	public WB_FaceListMesh apply(final WB_Transform WB_Point) {
-		final FastList newvertices = new FastList();
+		final FastTable newvertices = new FastTable();
 		int id = 0;
 		WB_Point point;
 		for (int i = 0; i < vertices.size(); i++) {

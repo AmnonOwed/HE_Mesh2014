@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 
@@ -442,8 +442,8 @@ public class WB_SimplePolygon2D {
 		int numFront = 0;
 		int numBack = 0;
 
-		final FastList<WB_Point> frontVerts = new FastList<WB_Point>(20);
-		final FastList<WB_Point> backVerts = new FastList<WB_Point>(20);
+		final FastTable<WB_Point> frontVerts = new FastTable<WB_Point>();
+		final FastTable<WB_Point> backVerts = new FastTable<WB_Point>();
 
 		final int numVerts = poly.n;
 		if (numVerts > 0) {
@@ -530,8 +530,7 @@ public class WB_SimplePolygon2D {
 	 * @return the list
 	 */
 	public List<WB_IndexedSegment> toSegments() {
-		final List<WB_IndexedSegment> segments = new FastList<WB_IndexedSegment>(
-				n);
+		final List<WB_IndexedSegment> segments = new FastTable<WB_IndexedSegment>();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			segments.add(new WB_IndexedSegment(j, i, points));
 
@@ -545,7 +544,7 @@ public class WB_SimplePolygon2D {
 	 * @return the list
 	 */
 	public List<WB_Segment> toExplicitSegments() {
-		final List<WB_Segment> segments = new FastList<WB_Segment>(n);
+		final List<WB_Segment> segments = new FastTable<WB_Segment>();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			segments.add(new WB_Segment(points[j], points[i]));
 
@@ -576,7 +575,7 @@ public class WB_SimplePolygon2D {
 	 */
 	public static List<WB_SimplePolygon2D> negate(
 			final List<WB_SimplePolygon2D> polys) {
-		final List<WB_SimplePolygon2D> neg = new FastList<WB_SimplePolygon2D>();
+		final List<WB_SimplePolygon2D> neg = new FastTable<WB_SimplePolygon2D>();
 		for (int i = 0; i < polys.size(); i++) {
 			neg.add(polys.get(i).negate());
 		}
@@ -595,11 +594,11 @@ public class WB_SimplePolygon2D {
 	 */
 	public static List<WB_Segment> intersectionSeg(final WB_SimplePolygon2D P,
 			final WB_SimplePolygon2D Q) {
-		final FastList<WB_Segment> pos = new FastList<WB_Segment>();
-		final FastList<WB_Segment> neg = new FastList<WB_Segment>();
-		final FastList<WB_Segment> coSame = new FastList<WB_Segment>();
-		final FastList<WB_Segment> coDiff = new FastList<WB_Segment>();
-		final FastList<WB_Segment> intersect = new FastList<WB_Segment>();
+		final FastTable<WB_Segment> pos = new FastTable<WB_Segment>();
+		final FastTable<WB_Segment> neg = new FastTable<WB_Segment>();
+		final FastTable<WB_Segment> coSame = new FastTable<WB_Segment>();
+		final FastTable<WB_Segment> coDiff = new FastTable<WB_Segment>();
+		final FastTable<WB_Segment> intersect = new FastTable<WB_Segment>();
 		final WB_BSPTree2D tree = new WB_BSPTree2D();
 		tree.build(P);
 		for (int i = 0, j = Q.n - 1; i < Q.n; j = i, i++) {
@@ -728,15 +727,15 @@ public class WB_SimplePolygon2D {
 	 */
 	public static List<WB_SimplePolygon2D> extractPolygons(
 			final List<WB_Segment> segs) {
-		final List<WB_SimplePolygon2D> result = new FastList<WB_SimplePolygon2D>();
-		final List<WB_Segment> leftovers = new FastList<WB_Segment>();
+		final List<WB_SimplePolygon2D> result = new FastTable<WB_SimplePolygon2D>();
+		final List<WB_Segment> leftovers = new FastTable<WB_Segment>();
 		final List<WB_Segment> cleanedsegs = clean(segs);
 		leftovers.addAll(cleanedsegs);
 		while (leftovers.size() > 0) {
-			final FastList<WB_Segment> currentPolygon = new FastList<WB_Segment>();
+			final FastTable<WB_Segment> currentPolygon = new FastTable<WB_Segment>();
 			final boolean loopFound = tryToFindLoop(leftovers, currentPolygon);
 			if (loopFound) {
-				final FastList<WB_Point> points = new FastList<WB_Point>();
+				final FastTable<WB_Point> points = new FastTable<WB_Point>();
 				for (int i = 0; i < currentPolygon.size(); i++) {
 					points.add(currentPolygon.get(i).getOrigin());
 
@@ -760,7 +759,7 @@ public class WB_SimplePolygon2D {
 	 * @return the list
 	 */
 	private static List<WB_Segment> clean(final List<WB_Segment> segs) {
-		final List<WB_Segment> cleanedsegs = new FastList<WB_Segment>();
+		final List<WB_Segment> cleanedsegs = new FastTable<WB_Segment>();
 		final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 		int i = 0;
 		for (i = 0; i < segs.size(); i++) {
@@ -812,7 +811,7 @@ public class WB_SimplePolygon2D {
 	 */
 	private static boolean tryToFindLoop(final List<WB_Segment> segs,
 			final List<WB_Segment> loop) {
-		final List<WB_Segment> localSegs = new FastList<WB_Segment>();
+		final List<WB_Segment> localSegs = new FastTable<WB_Segment>();
 		localSegs.addAll(segs);
 		Segment start = localSegs.get(0);
 		loop.add(localSegs.get(0));

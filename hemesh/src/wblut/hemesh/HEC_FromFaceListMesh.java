@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.WB_Epsilon;
+import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
-import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Point;
 
 /**
@@ -197,8 +197,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 	}
 
 	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
-		final List<HE_Vertex> uniqueVertices = new FastList<HE_Vertex>(
-				source.getNumberOfVertices());
+		final List<HE_Vertex> uniqueVertices = new FastTable<HE_Vertex>();
 		if (duplicate) {
 			final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
 			WB_KDEntry<WB_Point, Integer> neighbor;

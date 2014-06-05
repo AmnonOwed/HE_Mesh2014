@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 public class WB_Polygon extends WB_Ring {
 
@@ -205,15 +205,15 @@ public class WB_Polygon extends WB_Ring {
 
 			final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
 					points.size());
-			final List<WB_Point> pts = new FastList<WB_Point>(n);
+			final List<WB_Point> pts = new FastTable<WB_Point>();
 			int index = 0;
 			for (int i = 0; i < n; i++) {
 				pointmap.add(points.getCoordinate(index), index);
 				pts.add(points.getCoordinate(index++));
 			}
-			final List[] hpts = new FastList[numberOfHoles];
+			final List[] hpts = new FastTable[numberOfHoles];
 			for (int i = 0; i < numberOfHoles; i++) {
-				hpts[i] = new FastList<WB_Point>(nph[i]);
+				hpts[i] = new FastTable<WB_Point>();
 				for (int j = 0; j < nph[i]; j++) {
 					pointmap.add(points.getCoordinate(index), index);
 					hpts[i].add(points.getCoordinate(index++));

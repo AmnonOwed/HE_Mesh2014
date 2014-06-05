@@ -1,4 +1,4 @@
-package wblut.geom;
+package wblut.geom.data;
 
 /**
  * Johnson polyhedra.

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Point;
@@ -149,7 +149,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * Adds edges.
 	 * 
 	 * @param edges
-	 *            edges to add as FastList<HE_Edge>
+	 *            edges to add as FastTable<HE_Edge>
 	 */
 	public final void addEdges(final List<HE_Edge> edges) {
 		for (int i = 0; i < edges.size(); i++) {
@@ -556,7 +556,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * Removes halfedges.
 	 * 
 	 * @param halfedges
-	 *            halfedges to remove as FastList<HE_Halfedge>
+	 *            halfedges to remove as FastTable<HE_Halfedge>
 	 */
 	public final void removeHalfedges(final List<HE_Halfedge> halfedges) {
 		for (int i = 0; i < halfedges.size(); i++) {
@@ -588,7 +588,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * Removes vertices.
 	 * 
 	 * @param vertices
-	 *            vertices to remove as FastList<HE_Vertex>
+	 *            vertices to remove as FastTable<HE_Vertex>
 	 */
 	public final void removeVertices(final List<HE_Vertex> vertices) {
 		for (int i = 0; i < vertices.size(); i++) {
@@ -809,10 +809,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Edges as arrayList.
 	 * 
-	 * @return all vertices as FastList<HE_Edge>
+	 * @return all vertices as FastTable<HE_Edge>
 	 */
 	public final List<HE_Edge> getEdgesAsList() {
-		final List<HE_Edge> edges = new FastList<HE_Edge>();
+		final List<HE_Edge> edges = new FastTable<HE_Edge>();
 		edges.addAll(this.edges);
 		return (edges);
 	}
@@ -847,10 +847,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Faces as arrayList.
 	 * 
-	 * @return all vertices as FastList<HE_Face>
+	 * @return all vertices as FastTable<HE_Face>
 	 */
 	public final List<HE_Face> getFacesAsList() {
-		final List<HE_Face> faces = new FastList<HE_Face>();
+		final List<HE_Face> faces = new FastTable<HE_Face>();
 		faces.addAll(this.faces);
 		return (faces);
 	}
@@ -885,10 +885,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Halfedges as arrayList.
 	 * 
-	 * @return all vertices as FastList<HE_Halfedge>
+	 * @return all vertices as FastTable<HE_Halfedge>
 	 */
 	public final List<HE_Halfedge> getHalfedgesAsList() {
-		final List<HE_Halfedge> halfedges = new FastList<HE_Halfedge>();
+		final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
 		halfedges.addAll(this.halfedges);
 		return (halfedges);
 	}
@@ -924,10 +924,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Vertices as arrayList.
 	 * 
-	 * @return all vertices as FastList<HE_Vertex>
+	 * @return all vertices as FastTable<HE_Vertex>
 	 */
 	public final List<HE_Vertex> getVerticesAsList() {
-		final List<HE_Vertex> vertices = new FastList<HE_Vertex>();
+		final List<HE_Vertex> vertices = new FastTable<HE_Vertex>();
 		final Collection<HE_Vertex> _vertices = this.vertices;
 		vertices.addAll(_vertices);
 		return (vertices);

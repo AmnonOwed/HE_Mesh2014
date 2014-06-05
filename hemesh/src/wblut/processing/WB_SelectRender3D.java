@@ -51,7 +51,7 @@ public class WB_SelectRender3D {
 	 */
 	private void drawFace(final HE_Face f) {
 		if (f.getFaceOrder() > 2) {
-			final int[][] tris = f.triangulate();
+			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;
 			int[] tri;

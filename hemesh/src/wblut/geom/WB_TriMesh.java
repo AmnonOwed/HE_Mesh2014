@@ -1,12 +1,6 @@
 package wblut.geom;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javolution.util.FastList;
-import javolution.util.FastMap;
 
 public class WB_TriMesh extends WB_FaceListMesh {
 	private final static int[] PREV = new int[] { 2, 0, 1 };
@@ -499,71 +493,6 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	private void updatevvNeighbors() {
 		if (vvNeighborsUpdated) {
 			return;
-		}
-
-		final int nv = vertices.size();
-		final int nf = faces.length;
-		final int[] numNeighbors = new int[nv];
-		for (final int[] tri : faces) {
-			numNeighbors[tri[0]]++;
-			numNeighbors[tri[1]]++;
-			numNeighbors[tri[2]]++;
-		}
-		vvNeighbors = new int[nv][];
-
-		final List<FastMap<Integer, Integer>> prev = new FastList<FastMap<Integer, Integer>>(
-				nv);
-		final List<FastMap<Integer, Integer>> next = new FastList<FastMap<Integer, Integer>>(
-				nv);
-		for (int i = 0; i < nv; i++) {
-			prev.add(new FastMap<Integer, Integer>());
-			next.add(new FastMap<Integer, Integer>());
-		}
-
-		for (final int[] tri : faces) {
-
-			for (int j = 0; j < 3; j++) {
-				final int n0 = tri[j];
-				final int n1 = tri[NEXT[j]];
-				final int n2 = tri[PREV[j]];
-				prev.get(n0).put(n2, n1);
-				next.get(n0).put(n1, n2);
-			}
-
-		}
-
-		for (int i = 0; i < nv; i++) {
-			final FastMap<Integer, Integer> previ = prev.get(i);
-			final FastMap<Integer, Integer> nexti = next.get(i);
-			if (previ.size() == 0) {
-				continue;
-			}
-			int startVertex = previ.head().getValue();
-			int count = 0;
-			Entry<Integer, Integer> entry = previ.getEntry(startVertex);
-			while ((entry != null) && (count++ < numNeighbors[i])) {
-				startVertex = entry.getValue();
-				entry = previ.getEntry(startVertex);
-			}
-
-			int curVertex = startVertex;
-			boolean haveNextVertex = true;
-			final ArrayList<Integer> tmp = new ArrayList<Integer>(
-					numNeighbors[i] + 2);
-			do {
-				tmp.add(curVertex);
-				final Entry<Integer, Integer> in = nexti.getEntry(curVertex);
-				haveNextVertex = (in != null);
-				if (haveNextVertex) {
-					curVertex = in.getValue();
-				}
-
-			} while (haveNextVertex && curVertex != startVertex);
-
-			vvNeighbors[i] = new int[tmp.size()];
-			for (int j = 0; j < tmp.size(); j++) {
-				vvNeighbors[i][j] = tmp.get(j);
-			}
 		}
 
 		vvNeighborsUpdated = true;
