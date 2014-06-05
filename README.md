@@ -9,5 +9,9 @@ The first thing you need to do is download or fork this repository and import th
 You need to add some other external *.jar files to the properties of your Eclipse project to compile HE_Mesh.
 
 * `core.jar`: This is the core Processing API from Processing 2.1.1. Download the latest version of Processing here: http://processing.org/
-* `javolution.jar`: Javolution is used to make HE_Mesh faster. You'll need version 5.5.1, download here: http://download.java.net/maven/2/javolution/javolution/5.5.1/
-* `jts.jar`: The JTS Topology Suite is an API of spatial predicates and functions for processing geometry. You need version 1.13. Download here: http://tsusiatsoftware.net/jts/main.html
+* `javolution.jar`: Javolution is used to make HE_Mesh faster. You'll need version 6.1.0, download here: http://hemesh.wblut.com/javolution-6.1.0.zip
+* `jts.jar`: The JTS Topology Suite is an API of spatial predicates and functions for processing geometry. You need version 1.13. Download here: http://hemesh.wblut.com/jts.zip
+
+## Build-of-the-day HE_Mesh 2014
+
+Download a recent built here: http://hemesh.wblut.com/hemesh.zip.
