@@ -171,18 +171,18 @@ public class HET_Export {
 				final WB_Point v3 = f.getHalfedge().getNextInFace()
 						.getNextInFace().getVertex().pos;
 				buf.rewind();
-				buf.putFloat((float) n.x);
-				buf.putFloat((float) n.y);
-				buf.putFloat((float) n.z);
-				buf.putFloat((float) (scale * v1.x));
-				buf.putFloat((float) (scale * v1.y));
-				buf.putFloat((float) (scale * v1.z));
-				buf.putFloat((float) (scale * v2.x));
-				buf.putFloat((float) (scale * v2.y));
-				buf.putFloat((float) (scale * v2.z));
-				buf.putFloat((float) (scale * v3.x));
-				buf.putFloat((float) (scale * v3.y));
-				buf.putFloat((float) (scale * v3.z));
+				buf.putFloat(n.xf());
+				buf.putFloat(n.yf());
+				buf.putFloat(n.zf());
+				buf.putFloat((float) (scale * v1.xd()));
+				buf.putFloat((float) (scale * v1.yd()));
+				buf.putFloat((float) (scale * v1.zd()));
+				buf.putFloat((float) (scale * v2.xd()));
+				buf.putFloat((float) (scale * v2.yd()));
+				buf.putFloat((float) (scale * v2.zd()));
+				buf.putFloat((float) (scale * v3.xd()));
+				buf.putFloat((float) (scale * v3.yd()));
+				buf.putFloat((float) (scale * v3.zd()));
 
 				buf.rewind();
 				buf.get(header);

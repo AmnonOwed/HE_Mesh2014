@@ -4,7 +4,7 @@ import wblut.hemesh.HEC_FromFacelist;
 import wblut.hemesh.HE_Mesh;
 
 public class WB_BSplineSurface implements WB_Surface {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	protected WB_NurbsKnot uknot;
 
 	protected WB_NurbsKnot vknot;
@@ -114,9 +114,9 @@ public class WB_BSplineSurface implements WB_Surface {
 			tmp = new WB_Point();
 			final int vind = vspan - q + el;
 			for (int k = 0; k <= p; k++) {
-				tmp._addSelf(Nu[k] * points[uind + k][vind].x, Nu[k]
-						* points[uind + k][vind].y, Nu[k]
-						* points[uind + k][vind].z);
+				tmp._addSelf(Nu[k] * points[uind + k][vind].xd(), Nu[k]
+						* points[uind + k][vind].yd(), Nu[k]
+						* points[uind + k][vind].zd());
 
 			}
 			S._addSelf(tmp._mulSelf(Nv[el]));
@@ -200,7 +200,8 @@ public class WB_BSplineSurface implements WB_Surface {
 			for (int j = 1; j <= r; j++) {
 				L = k - p + j;
 				for (int i = 0; i <= p - j - s; i++) {
-					RW[i] = WB_Point.interpolate(RW[i], RW[i + 1], alpha[i][j]);
+					RW[i] = gf.createInterpolatedPoint(RW[i], RW[i + 1],
+							alpha[i][j]);
 				}
 				Q[L][row] = RW[0];
 				Q[k + r - j - s][row] = RW[p - j - s];
@@ -267,7 +268,8 @@ public class WB_BSplineSurface implements WB_Surface {
 			for (int j = 1; j <= r; j++) {
 				L = k - q + j;
 				for (int i = 0; i <= q - j - s; i++) {
-					RW[i] = WB_Point.interpolate(RW[i], RW[i + 1], alpha[i][j]);
+					RW[i] = gf.createInterpolatedPoint(RW[i], RW[i + 1],
+							alpha[i][j]);
 				}
 				Q[col][L] = RW[0];
 				Q[col][k + r - j - s] = RW[q - j - s];
@@ -292,7 +294,8 @@ public class WB_BSplineSurface implements WB_Surface {
 			cpoints[j] = new WB_Point();
 			for (int i = 0; i <= p; i++) {
 				final WB_Point tmp = points[span - p + i][j];
-				cpoints[j]._addSelf(N[i] * tmp.x, N[i] * tmp.y, N[i] * tmp.z);
+				cpoints[j]._addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i]
+						* tmp.zd());
 			}
 		}
 		return new WB_BSpline(cpoints, vknot);
@@ -309,7 +312,8 @@ public class WB_BSplineSurface implements WB_Surface {
 			cpoints[i] = new WB_Point();
 			for (int j = 0; j <= q; j++) {
 				final WB_Point tmp = points[i][span - q + j];
-				cpoints[i]._addSelf(N[j] * tmp.x, N[j] * tmp.y, N[j] * tmp.z);
+				cpoints[i]._addSelf(N[j] * tmp.xd(), N[j] * tmp.yd(), N[j]
+						* tmp.zd());
 			}
 		}
 		return new WB_BSpline(cpoints, uknot);

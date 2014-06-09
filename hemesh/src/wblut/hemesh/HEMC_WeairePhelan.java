@@ -172,13 +172,13 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	@Override
 	public HE_Mesh[] create() {
 		if (scU == 0) {
-			scU = extents.x / U;
+			scU = extents.xd() / U;
 		}
 		if (scV == 0) {
-			scV = extents.y / V;
+			scV = extents.yd() / V;
 		}
 		if (scW == 0) {
-			scW = extents.z / W;
+			scW = extents.zd() / W;
 		}
 		final ArrayList<HE_Mesh> tmp = new ArrayList<HE_Mesh>();
 		HE_Mesh[] tmpCells;
@@ -208,9 +208,9 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 		for (int i = 0; i < U + 1; i++) {
 			for (int j = 0; j < V + 1; j++) {
 				for (int k = 0; k < W + 1; k++) {
-					final WB_Vector offset = new WB_Vector(origin.x + (i - 0.5)
-							* scU, origin.y + (j - 0.5) * scV, origin.z
-							+ (k - 0.5) * scW);
+					final WB_Vector offset = new WB_Vector(origin.xd()
+							+ (i - 0.5) * scU, origin.yd() + (j - 0.5) * scV,
+							origin.zd() + (k - 0.5) * scW);
 					tmpCells = singleCell(offset);
 					for (int c = 0; c < 8; c++) {
 						if (planes.size() > 0) {

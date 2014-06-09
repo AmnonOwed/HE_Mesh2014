@@ -1186,7 +1186,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxX()) {
 			v = AABB.getMaxX();
 		}
-		result.x = v;
+		result._setX(v);
 		v = p.yd();
 		if (v < AABB.getMinY()) {
 			v = AABB.getMinY();
@@ -1194,7 +1194,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxY()) {
 			v = AABB.getMaxY();
 		}
-		result.y = v;
+		result._setY(v);
 		v = p.zd();
 		if (v < AABB.getMinZ()) {
 			v = AABB.getMinZ();
@@ -1202,7 +1202,8 @@ public class WB_Intersection {
 		if (v > AABB.getMaxZ()) {
 			v = AABB.getMaxZ();
 		}
-		result.z = v;
+		result._setZ(v);
+
 		return result;
 	}
 
@@ -1687,10 +1688,10 @@ public class WB_Intersection {
 		WB_Vector ld = n1.cross(n2);
 
 		// Compute an index to the largest component of line direction.
-		double max = Math.abs(ld.x);
+		double max = Math.abs(ld.xd());
 		int index = 0;
-		double b = Math.abs(ld.y);
-		double c = Math.abs(ld.z);
+		double b = Math.abs(ld.yd());
+		double c = Math.abs(ld.zd());
 		if (b > max) {
 			max = b;
 			index = 1;
@@ -1700,29 +1701,29 @@ public class WB_Intersection {
 		}
 
 		// This is the simplified projection onto the line of intersection.
-		double vp0 = v.p1().x;
-		double vp1 = v.p2().x;
-		double vp2 = v.p3().x;
+		double vp0 = v.p1().xd();
+		double vp1 = v.p2().xd();
+		double vp2 = v.p3().xd();
 
-		double up0 = u.p1().x;
-		double up1 = u.p2().x;
-		double up2 = u.p3().x;
+		double up0 = u.p1().xd();
+		double up1 = u.p2().xd();
+		double up2 = u.p3().xd();
 		if (index == 1) {
-			vp0 = v.p1().y;
-			vp1 = v.p2().y;
-			vp2 = v.p3().y;
+			vp0 = v.p1().yd();
+			vp1 = v.p2().yd();
+			vp2 = v.p3().yd();
 
-			up0 = u.p1().y;
-			up1 = u.p2().y;
-			up2 = u.p3().y;
+			up0 = u.p1().yd();
+			up1 = u.p2().yd();
+			up2 = u.p3().yd();
 		} else if (index == 2) {
-			vp0 = v.p1().z;
-			vp1 = v.p2().z;
-			vp2 = v.p3().z;
+			vp0 = v.p1().zd();
+			vp1 = v.p2().zd();
+			vp2 = v.p3().zd();
 
-			up0 = u.p1().z;
-			up1 = u.p2().z;
-			up2 = u.p3().z;
+			up0 = u.p1().zd();
+			up1 = u.p2().zd();
+			up2 = u.p3().zd();
 		}
 
 		// Compute interval for triangle 1.
@@ -1855,7 +1856,8 @@ public class WB_Intersection {
 		int i0;
 		int i1;
 
-		double[] a = new double[] { Math.abs(n.x), Math.abs(n.y), Math.abs(n.z) };
+		double[] a = new double[] { Math.abs(n.xd()), Math.abs(n.yd()),
+				Math.abs(n.zd()) };
 		if (a[0] > a[1]) // X > Y
 		{
 			if (a[0] > a[2]) { // X is greatest
@@ -1877,13 +1879,13 @@ public class WB_Intersection {
 		}
 
 		// Test all edges of triangle 1 against the edges of triangle 2.
-		double[] v0 = new double[] { v.p1().x, v.p1().y, v.p1().z };
-		double[] v1 = new double[] { v.p2().x, v.p2().y, v.p2().z };
-		double[] v2 = new double[] { v.p3().x, v.p3().y, v.p3().z };
+		double[] v0 = new double[] { v.p1().xd(), v.p1().yd(), v.p1().zd() };
+		double[] v1 = new double[] { v.p2().xd(), v.p2().yd(), v.p2().zd() };
+		double[] v2 = new double[] { v.p3().xd(), v.p3().yd(), v.p3().zd() };
 
-		double[] u0 = new double[] { u.p1().x, u.p1().y, u.p1().z };
-		double[] u1 = new double[] { u.p2().x, u.p2().y, u.p2().z };
-		double[] u2 = new double[] { u.p3().x, u.p3().y, u.p3().z };
+		double[] u0 = new double[] { u.p1().xd(), u.p1().yd(), u.p1().zd() };
+		double[] u1 = new double[] { u.p2().xd(), u.p2().yd(), u.p2().zd() };
+		double[] u2 = new double[] { u.p3().xd(), u.p3().yd(), u.p3().zd() };
 
 		boolean tf = triangleEdgeTest(v0, v1, u0, u1, u2, i0, i1);
 		if (tf)
@@ -2184,7 +2186,8 @@ public class WB_Intersection {
 		final double d2 = u.getSqLength();
 		final double d = Math.sqrt(d2);
 		if (WB_Epsilon.isEqualAbs(d, C0.getRadius() + C1.getRadius())) {
-			result.add(WB_Point.interpolate(C0.getCenter(), C1.getCenter(),
+			result.add(factory.createInterpolatedPoint(C0.getCenter(),
+					C1.getCenter(),
 					C0.getRadius() / (C0.getRadius() + C1.getRadius())));
 			return result;
 		}
@@ -2197,10 +2200,14 @@ public class WB_Intersection {
 		final double a = (r02 - r12 + d2) / (2 * d);
 		final double h = Math.sqrt(r02 - a * a);
 		final WB_Point c = u.mul(a / d)._addSelf(C0.getCenter());
-		final double p0x = c.x + h * (C1.getCenter().y - C0.getCenter().y) / d;
-		final double p0y = c.y - h * (C1.getCenter().x - C0.getCenter().x) / d;
-		final double p1x = c.x - h * (C1.getCenter().y - C0.getCenter().y) / d;
-		final double p1y = c.y + h * (C1.getCenter().x - C0.getCenter().x) / d;
+		final double p0x = c.xd() + h
+				* (C1.getCenter().yd() - C0.getCenter().yd()) / d;
+		final double p0y = c.yd() - h
+				* (C1.getCenter().xd() - C0.getCenter().xd()) / d;
+		final double p1x = c.xd() - h
+				* (C1.getCenter().yd() - C0.getCenter().yd()) / d;
+		final double p1y = c.yd() + h
+				* (C1.getCenter().xd() - C0.getCenter().xd()) / d;
 		final WB_Point p0 = new WB_Point(p0x, p0y);
 		result.add(p0);
 		final WB_Point p1 = new WB_Point(p1x, p1y);
@@ -2214,14 +2221,14 @@ public class WB_Intersection {
 			final WB_Circle C) {
 		final ArrayList<WB_Point> result = new ArrayList<WB_Point>();
 
-		final double b = 2 * (L.getDirection().x
-				* (L.getOrigin().x - C.getCenter().x) + L.getDirection().y
-				* (L.getOrigin().y - C.getCenter().y));
+		final double b = 2 * (L.getDirection().xd()
+				* (L.getOrigin().xd() - C.getCenter().xd()) + L.getDirection()
+				.yd() * (L.getOrigin().yd() - C.getCenter().yd()));
 		final double c = C.getCenter().getSqLength()
 				+ L.getOrigin().getSqLength()
 				- 2
-				* (C.getCenter().x * L.getOrigin().x + C.getCenter().y
-						* L.getOrigin().y) - C.getRadius() * C.getRadius();
+				* (C.getCenter().xd() * L.getOrigin().xd() + C.getCenter().yd()
+						* L.getOrigin().yd()) - C.getRadius() * C.getRadius();
 		double disc = b * b - 4 * c;
 		if (disc < -WB_Epsilon.EPSILON) {
 			return result;
@@ -2323,15 +2330,15 @@ public class WB_Intersection {
 	public static WB_Point getClosestPoint2D(final WB_Coordinate p,
 			final WB_Line2D L) {
 
-		if (WB_Epsilon.isZero(L.getDirection().x)) {
-			return new WB_Point(L.getOrigin().x, p.yd());
+		if (WB_Epsilon.isZero(L.getDirection().xd())) {
+			return new WB_Point(L.getOrigin().xd(), p.yd());
 		}
-		if (WB_Epsilon.isZero(L.getDirection().y)) {
-			return new WB_Point(p.xd(), L.getOrigin().y);
+		if (WB_Epsilon.isZero(L.getDirection().yd())) {
+			return new WB_Point(p.xd(), L.getOrigin().yd());
 		}
 
-		final double m = L.getDirection().y / L.getDirection().x;
-		final double b = L.getOrigin().y - m * L.getOrigin().x;
+		final double m = L.getDirection().yd() / L.getDirection().xd();
+		final double b = L.getOrigin().yd() - m * L.getOrigin().xd();
 
 		final double x = (m * p.yd() + p.xd() - m * b) / (m * m + 1);
 		final double y = (m * m * p.yd() + m * p.xd() + b) / (m * m + 1);

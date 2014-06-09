@@ -78,7 +78,7 @@ public abstract class WB_Linear2D {
 
 	public WB_Point getNormal() {
 
-		WB_Point n = new WB_Point(-direction.y, direction.x);
+		WB_Point n = new WB_Point(-direction.yd(), direction.xd());
 		final double d = n._normalizeSelf();
 		if (WB_Epsilon.isZero(d)) {
 			n = new WB_Point(1, 0);
@@ -87,15 +87,15 @@ public abstract class WB_Linear2D {
 	}
 
 	public double a() {
-		return -direction.y;
+		return -direction.yd();
 	}
 
 	public double b() {
-		return direction.x;
+		return direction.xd();
 	}
 
 	public double c() {
-		return origin.x * direction.y - origin.y * direction.x;
+		return origin.xd() * direction.yd() - origin.yd() * direction.xd();
 	}
 
 }

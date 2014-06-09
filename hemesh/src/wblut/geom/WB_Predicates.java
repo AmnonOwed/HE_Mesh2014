@@ -62,15 +62,18 @@ public class WB_Predicates {
 	 *            the pd
 	 * @return the double
 	 */
-	public static double orient(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd) {
+	public static double orient(final WB_Coordinate pa, final WB_Coordinate pb,
+			final WB_Coordinate pc, final WB_Coordinate pd) {
 		if (orientErrorBound == -1) {
 			init();
 		}
 
-		final double adx = pa.x - pd.x, bdx = pb.x - pd.x, cdx = pc.x - pd.x;
-		final double ady = pa.y - pd.y, bdy = pb.y - pd.y, cdy = pc.y - pd.y;
-		double adz = pa.z - pb.z, bdz = pb.z - pd.x, cdz = pc.z - pd.z;
+		final double adx = pa.xd() - pd.xd(), bdx = pb.xd() - pd.xd(), cdx = pc
+				.xd() - pd.xd();
+		final double ady = pa.yd() - pd.yd(), bdy = pb.yd() - pd.yd(), cdy = pc
+				.yd() - pd.yd();
+		double adz = pa.zd() - pb.zd(), bdz = pb.zd() - pd.xd(), cdz = pc.zd()
+				- pd.zd();
 
 		double adxbdy = adx * bdy;
 		double adybdx = ady * bdx;
@@ -140,8 +143,9 @@ public class WB_Predicates {
 	 *            the pd
 	 * @return the double
 	 */
-	public static double orientExact(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd) {
+	public static double orientExact(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd) {
 		WB_DoubleDouble ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz;
 		WB_DoubleDouble adx, bdx, cdx, ady, bdy, cdy, adz, bdz, cdz;
 		WB_DoubleDouble m1, m2, m3;
@@ -149,18 +153,18 @@ public class WB_Predicates {
 
 		det = WB_DoubleDouble.ZERO;
 
-		ax = new WB_DoubleDouble(pa.x);
-		ay = new WB_DoubleDouble(pa.y);
-		az = new WB_DoubleDouble(pa.z);
-		bx = new WB_DoubleDouble(pb.x);
-		by = new WB_DoubleDouble(pb.y);
-		bz = new WB_DoubleDouble(pb.z);
-		cx = new WB_DoubleDouble(pc.x);
-		cy = new WB_DoubleDouble(pc.y);
-		cz = new WB_DoubleDouble(pc.z);
-		dx = new WB_DoubleDouble(pd.x).negate();
-		dy = new WB_DoubleDouble(pd.y).negate();
-		dz = new WB_DoubleDouble(pd.z).negate();
+		ax = new WB_DoubleDouble(pa.xd());
+		ay = new WB_DoubleDouble(pa.yd());
+		az = new WB_DoubleDouble(pa.zd());
+		bx = new WB_DoubleDouble(pb.xd());
+		by = new WB_DoubleDouble(pb.yd());
+		bz = new WB_DoubleDouble(pb.zd());
+		cx = new WB_DoubleDouble(pc.xd());
+		cy = new WB_DoubleDouble(pc.yd());
+		cz = new WB_DoubleDouble(pc.zd());
+		dx = new WB_DoubleDouble(pd.xd()).negate();
+		dy = new WB_DoubleDouble(pd.yd()).negate();
+		dz = new WB_DoubleDouble(pd.zd()).negate();
 
 		adx = ax.add(dx);
 		bdx = bx.add(dx);
@@ -199,8 +203,9 @@ public class WB_Predicates {
 	 *            the pe
 	 * @return the double
 	 */
-	public static double insphere(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd, final WB_Point pe) {
+	public static double insphere(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd, final WB_Coordinate pe) {
 
 		if (insphereErrorBound == -1) {
 			init();
@@ -220,18 +225,18 @@ public class WB_Predicates {
 		double det;
 		double permanent, errbound;
 
-		aex = pa.x - pe.x;
-		bex = pb.x - pe.x;
-		cex = pc.x - pe.x;
-		dex = pd.x - pe.x;
-		aey = pa.y - pe.y;
-		bey = pb.y - pe.y;
-		cey = pc.y - pe.y;
-		dey = pd.y - pe.y;
-		aez = pa.z - pe.z;
-		bez = pb.z - pe.z;
-		cez = pc.z - pe.z;
-		dez = pd.z - pe.z;
+		aex = pa.xd() - pe.xd();
+		bex = pb.xd() - pe.xd();
+		cex = pc.xd() - pe.xd();
+		dex = pd.xd() - pe.xd();
+		aey = pa.yd() - pe.yd();
+		bey = pb.yd() - pe.yd();
+		cey = pc.yd() - pe.yd();
+		dey = pd.yd() - pe.yd();
+		aez = pa.zd() - pe.zd();
+		bez = pb.zd() - pe.zd();
+		cez = pc.zd() - pe.zd();
+		dez = pd.zd() - pe.zd();
 
 		aexbey = aex * bey;
 		bexaey = bex * aey;
@@ -319,8 +324,9 @@ public class WB_Predicates {
 	 *            the pe
 	 * @return the double
 	 */
-	public static double insphereExact(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd, final WB_Point pe) {
+	public static double insphereExact(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd, final WB_Coordinate pe) {
 		WB_DoubleDouble ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz, ex, ey, ez;
 		WB_DoubleDouble aex, bex, cex, dex;
 		WB_DoubleDouble aey, bey, cey, dey;
@@ -334,21 +340,21 @@ public class WB_Predicates {
 
 		det = WB_DoubleDouble.ZERO;
 
-		ax = new WB_DoubleDouble(pa.x);
-		ay = new WB_DoubleDouble(pa.y);
-		az = new WB_DoubleDouble(pa.z);
-		bx = new WB_DoubleDouble(pb.x);
-		by = new WB_DoubleDouble(pb.y);
-		bz = new WB_DoubleDouble(pb.z);
-		cx = new WB_DoubleDouble(pc.x);
-		cy = new WB_DoubleDouble(pc.y);
-		cz = new WB_DoubleDouble(pc.z);
-		dx = new WB_DoubleDouble(pd.x);
-		dy = new WB_DoubleDouble(pd.y);
-		dz = new WB_DoubleDouble(pd.z);
-		ex = new WB_DoubleDouble(pe.x).negate();
-		ey = new WB_DoubleDouble(pe.y).negate();
-		ez = new WB_DoubleDouble(pe.z).negate();
+		ax = new WB_DoubleDouble(pa.xd());
+		ay = new WB_DoubleDouble(pa.yd());
+		az = new WB_DoubleDouble(pa.zd());
+		bx = new WB_DoubleDouble(pb.xd());
+		by = new WB_DoubleDouble(pb.yd());
+		bz = new WB_DoubleDouble(pb.zd());
+		cx = new WB_DoubleDouble(pc.xd());
+		cy = new WB_DoubleDouble(pc.yd());
+		cz = new WB_DoubleDouble(pc.zd());
+		dx = new WB_DoubleDouble(pd.xd());
+		dy = new WB_DoubleDouble(pd.yd());
+		dz = new WB_DoubleDouble(pd.zd());
+		ex = new WB_DoubleDouble(pe.xd()).negate();
+		ey = new WB_DoubleDouble(pe.yd()).negate();
+		ez = new WB_DoubleDouble(pe.zd()).negate();
 
 		aex = ax.add(ex);
 		bex = bx.add(ex);
@@ -418,8 +424,9 @@ public class WB_Predicates {
 	 *            the pe
 	 * @return the double
 	 */
-	public static double inSphereOrient(final WB_Point pa, final WB_Point pb,
-			final WB_Point pc, final WB_Point pd, final WB_Point pe) {
+	public static double inSphereOrient(final WB_Coordinate pa,
+			final WB_Coordinate pb, final WB_Coordinate pc,
+			final WB_Coordinate pd, final WB_Coordinate pe) {
 
 		if (orient(pa, pb, pc, pd) > 0) {
 			return insphere(pa, pb, pc, pd, pe);
@@ -452,8 +459,9 @@ public class WB_Predicates {
 	 *            the q2
 	 * @return true, if successful
 	 */
-	public static boolean diffSides(final WB_Point p1, final WB_Point p2,
-			final WB_Point p3, final WB_Point q1, final WB_Point q2) {
+	public static boolean diffSides(final WB_Coordinate p1,
+			final WB_Coordinate p2, final WB_Coordinate p3,
+			final WB_Coordinate q1, final WB_Coordinate q2) {
 		double a, b;
 		a = orient(p1, p2, p3, q1);
 		b = orient(p1, p2, p3, q2);
@@ -475,9 +483,9 @@ public class WB_Predicates {
 	 *            the q
 	 * @return true, if successful
 	 */
-	public static boolean insideTetrahedron(final WB_Point p1,
-			final WB_Point p2, final WB_Point p3, final WB_Point p4,
-			final WB_Point q) {
+	public static boolean insideTetrahedron(final WB_Coordinate p1,
+			final WB_Coordinate p2, final WB_Coordinate p3,
+			final WB_Coordinate p4, final WB_Coordinate q) {
 
 		return (!diffSides(p1, p2, p3, q, p4) && !diffSides(p2, p3, p4, q, p1)
 				&& !diffSides(p1, p2, p4, q, p3) && !diffSides(p1, p3, p4, q,

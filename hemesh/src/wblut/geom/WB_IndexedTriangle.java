@@ -100,17 +100,23 @@ public class WB_IndexedTriangle implements Triangle {
 		b = WB_Distance.getDistance3D(points[i1], points[i3]);
 		c = WB_Distance.getDistance3D(points[i1], points[i2]);
 
-		cosA = ((points[i2].x - points[i1].x) * (points[i3].x - points[i1].x)
-				+ (points[i2].y - points[i1].y) * (points[i3].y - points[i1].y) + (points[i2].z - points[i1].z)
-				* (points[i3].z - points[i1].z))
+		cosA = ((points[i2].xd() - points[i1].xd())
+				* (points[i3].xd() - points[i1].xd())
+				+ (points[i2].yd() - points[i1].yd())
+				* (points[i3].yd() - points[i1].yd()) + (points[i2].zd() - points[i1]
+				.zd()) * (points[i3].zd() - points[i1].zd()))
 				/ (b * c);
-		cosB = ((points[i1].x - points[i2].x) * (points[i3].x - points[i2].x)
-				+ (points[i1].y - points[i2].y) * (points[i3].y - points[i2].y) + (points[i1].z - points[i2].z)
-				* (points[i3].z - points[i2].z))
+		cosB = ((points[i1].xd() - points[i2].xd())
+				* (points[i3].xd() - points[i2].xd())
+				+ (points[i1].yd() - points[i2].yd())
+				* (points[i3].yd() - points[i2].yd()) + (points[i1].zd() - points[i2]
+				.zd()) * (points[i3].zd() - points[i2].zd()))
 				/ (a * c);
-		cosC = ((points[i2].x - points[i3].x) * (points[i1].x - points[i3].x)
-				+ (points[i2].y - points[i3].y) * (points[i1].y - points[i3].y) + (points[i2].z - points[i3].z)
-				* (points[i1].z - points[i3].z))
+		cosC = ((points[i2].xd() - points[i3].xd())
+				* (points[i1].xd() - points[i3].xd())
+				+ (points[i2].yd() - points[i3].yd())
+				* (points[i1].yd() - points[i3].yd()) + (points[i2].zd() - points[i3]
+				.zd()) * (points[i1].zd() - points[i3].zd()))
 				/ (a * b);
 
 		degenerate = WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine3D(
@@ -171,31 +177,36 @@ public class WB_IndexedTriangle implements Triangle {
 	}
 
 	public WB_Point getBarycentric(final WB_Coordinate p) {
-		final WB_Vector m = WB_Vector.getCross(
-				points[i3].subToVector(points[i1]),
+		final WB_Vector m = points[i3].subToVector(points[i1]).cross(
 				points[i2].subToVector(points[i1]));
 		double nu, nv, ood;
-		final double x = WB_Math.fastAbs(m.x);
-		final double y = WB_Math.fastAbs(m.y);
-		final double z = WB_Math.fastAbs(m.z);
+		final double x = WB_Math.fastAbs(m.xd());
+		final double y = WB_Math.fastAbs(m.yd());
+		final double z = WB_Math.fastAbs(m.zd());
 		if (x >= y && x >= z) {
 			nu = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(),
-					points[i2].y, points[i2].z, points[i3].y, points[i3].z);
+					points[i2].yd(), points[i2].zd(), points[i3].yd(),
+					points[i3].zd());
 			nv = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(),
-					points[i3].y, points[i3].z, points[i1].y, points[i1].z);
-			ood = 1.0 / m.x;
+					points[i3].yd(), points[i3].zd(), points[i1].yd(),
+					points[i1].zd());
+			ood = 1.0 / m.xd();
 		} else if (y >= x && y >= z) {
 			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(),
-					points[i2].x, points[i2].z, points[i3].x, points[i3].z);
+					points[i2].xd(), points[i2].zd(), points[i3].xd(),
+					points[i3].zd());
 			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(),
-					points[i3].x, points[i3].z, points[i1].x, points[i1].z);
-			ood = -1.0 / m.y;
+					points[i3].xd(), points[i3].zd(), points[i1].xd(),
+					points[i1].zd());
+			ood = -1.0 / m.yd();
 		} else {
 			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(),
-					points[i2].x, points[i2].y, points[i3].x, points[i3].y);
+					points[i2].xd(), points[i2].yd(), points[i3].xd(),
+					points[i3].yd());
 			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(),
-					points[i3].x, points[i3].y, points[i1].x, points[i1].y);
-			ood = -1.0 / m.z;
+					points[i3].xd(), points[i3].yd(), points[i1].xd(),
+					points[i1].yd());
+			ood = -1.0 / m.zd();
 		}
 		nu *= ood;
 		nv *= ood;
@@ -239,8 +250,8 @@ public class WB_IndexedTriangle implements Triangle {
 
 	@Override
 	public WB_Geometry apply(final WB_Transform T) {
-		return geometryfactory.createTriangle(p1().applyAsPoint(T), p2()
-				.applyAsPoint(T), p3().applyAsPoint(T));
+		return geometryfactory.createTriangle(p1().applySelfAsPoint(T), p2()
+				.applySelfAsPoint(T), p3().applySelfAsPoint(T));
 	}
 
 }

@@ -41,14 +41,17 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 		b = WB_Distance.getDistance2D(points[i1], points[i3]);
 		c = WB_Distance.getDistance2D(points[i1], points[i2]);
 
-		cosA = ((points[i2].x - points[i1].x) * (points[i3].x - points[i1].x) + (points[i2].y - points[i1].y)
-				* (points[i3].y - points[i1].y))
+		cosA = ((points[i2].xd() - points[i1].xd())
+				* (points[i3].xd() - points[i1].xd()) + (points[i2].yd() - points[i1]
+				.yd()) * (points[i3].yd() - points[i1].yd()))
 				/ (b * c);
-		cosB = ((points[i1].x - points[i2].x) * (points[i3].x - points[i2].x) + (points[i1].y - points[i2].y)
-				* (points[i3].y - points[i2].y))
+		cosB = ((points[i1].xd() - points[i2].xd())
+				* (points[i3].xd() - points[i2].xd()) + (points[i1].yd() - points[i2]
+				.yd()) * (points[i3].yd() - points[i2].yd()))
 				/ (a * c);
-		cosC = ((points[i2].x - points[i3].x) * (points[i1].x - points[i3].x) + (points[i2].y - points[i3].y)
-				* (points[i1].y - points[i3].y))
+		cosC = ((points[i2].xd() - points[i3].xd())
+				* (points[i1].xd() - points[i3].xd()) + (points[i2].yd() - points[i3]
+				.yd()) * (points[i1].yd() - points[i3].yd()))
 				/ (a * b);
 
 		degenerate = WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(
@@ -65,10 +68,10 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 					/ Math.sqrt(2 * a * a * b * b + 2 * b * b * c * c + 2 * a
 							* a * c * c - a * a * a * a - b * b * b * b - c * c
 							* c * c));
-			final double bx = points[i2].x - points[i1].x;
-			final double by = points[i2].y - points[i1].y;
-			final double cx = points[i3].x - points[i1].x;
-			final double cy = points[i3].y - points[i1].y;
+			final double bx = points[i2].xd() - points[i1].xd();
+			final double by = points[i2].yd() - points[i1].yd();
+			final double cx = points[i3].xd() - points[i1].xd();
+			final double cy = points[i3].yd() - points[i1].yd();
 			double d = 2 * (bx * cy - by * cx);
 			if (WB_Epsilon.isZero(d)) {
 				return null;
@@ -78,7 +81,7 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 			final double c2 = cx * cx + cy * cy;
 			final double x = (cy * b2 - by * c2) * d;
 			final double y = (bx * c2 - cx * b2) * d;
-			result.setCenter(x + points[i1].x, y + points[i1].y);
+			result.setCenter(x + points[i1].xd(), y + points[i1].yd());
 			return result;
 		}
 		return null;
@@ -152,16 +155,17 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 	}
 
 	public WB_Point getBarycentric(final WB_Coordinate p) {
-		final double m = (points[i3].x - points[i1].x)
-				* (points[i2].y - points[i1].y) - (points[i3].y - points[i1].y)
-				* (points[i2].x - points[i1].x);
+		final double m = (points[i3].xd() - points[i1].xd())
+				* (points[i2].yd() - points[i1].yd())
+				- (points[i3].yd() - points[i1].yd())
+				* (points[i2].xd() - points[i1].xd());
 
 		double nu, nv, ood;
 
-		nu = twiceSignedTriArea2D(p.xd(), p.yd(), points[i2].x, points[i2].y,
-				points[i3].x, points[i3].y);
-		nv = twiceSignedTriArea2D(p.xd(), p.yd(), points[i3].x, points[i3].y,
-				points[i1].x, points[i1].y);
+		nu = twiceSignedTriArea2D(p.xd(), p.yd(), points[i2].xd(),
+				points[i2].yd(), points[i3].xd(), points[i3].yd());
+		nv = twiceSignedTriArea2D(p.xd(), p.yd(), points[i3].xd(),
+				points[i3].yd(), points[i1].xd(), points[i1].yd());
 		ood = -1.0 / m;
 
 		nu *= ood;
@@ -175,8 +179,8 @@ public class WB_IndexedTriangle2D implements Triangle2D {
 		final WB_Point t1 = new WB_Point(B)._subSelf(A);
 		final WB_Point t2 = new WB_Point(p1)._subSelf(A);
 		final WB_Point t3 = new WB_Point(p2)._subSelf(A);
-		final double ct2 = t1.x * t2.y - t1.y * t2.x;
-		final double ct3 = t1.x * t3.y - t1.y * t3.x;
+		final double ct2 = t1.xd() * t2.yd() - t1.yd() * t2.xd();
+		final double ct3 = t1.xd() * t3.yd() - t1.yd() * t3.xd();
 
 		if (ct2 * ct3 >= WB_Epsilon.EPSILON) {
 			return true;

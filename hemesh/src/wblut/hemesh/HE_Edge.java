@@ -205,7 +205,8 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 				.getFaceNormal() : new WB_Vector(0, 0, 0);
 		final WB_Vector n2 = (getSecondFace() != null) ? getSecondFace()
 				.getFaceNormal() : new WB_Vector(0, 0, 0);
-		final WB_Vector n = new WB_Vector(n1.x + n2.x, n1.y + n2.y, n1.z + n2.z);
+		final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
+				n1.zd() + n2.zd());
 		n._normalizeSelf();
 		return n;
 	}

@@ -12,7 +12,7 @@ import wblut.math.WB_Math;
 import wblut.math.WB_RandomSphere;
 
 public class WB_Frame {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	private FastTable<WB_FrameStrut> struts;
 
 	private FastTable<WB_FrameNode> nodes;
@@ -436,7 +436,8 @@ public class WB_Frame {
 			if (strut.getLength() > threshold) {
 				final WB_Point start = strut.start();
 				final WB_Point end = strut.end();
-				final WB_Point mid = WB_Point.interpolate(start, end, 0.5);
+				final WB_Point mid = gf
+						.createInterpolatedPoint(start, end, 0.5);
 				result.addNode(mid, 0.5 * (strut.start().getValue() + strut
 						.end().getValue()));
 			}

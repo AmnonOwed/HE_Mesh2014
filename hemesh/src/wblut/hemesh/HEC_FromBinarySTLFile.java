@@ -106,11 +106,11 @@ public class HEC_FromBinarySTLFile extends HEC_Creator {
 	private WB_Point readVector(final DataInputStream ds, final WB_Point result)
 			throws IOException {
 		ds.read(buf, 0, 4);
-		result.x = scale * bufferToDouble();
+		result._setX(scale * bufferToDouble());
 		ds.read(buf, 0, 4);
-		result.y = scale * bufferToDouble();
+		result._setY(scale * bufferToDouble());
 		ds.read(buf, 0, 4);
-		result.z = scale * bufferToDouble();
+		result._setZ(scale * bufferToDouble());
 		return result;
 	}
 

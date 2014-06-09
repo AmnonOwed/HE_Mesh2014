@@ -395,9 +395,9 @@ public class HEC_IsoFunction extends HEC_Creator {
 	 */
 	@Override
 	public HEC_IsoFunction setCenter(final WB_Point c) {
-		cx = c.x;
-		cy = c.y;
-		cz = c.z;
+		cx = c.xd();
+		cy = c.yd();
+		cz = c.zd();
 		return this;
 	}
 
@@ -495,8 +495,8 @@ public class HEC_IsoFunction extends HEC_Creator {
 		}
 		mu = (isolevel - valp1) / (valp2 - valp1);
 
-		return new HE_Vertex(p1.x + mu * (p2.x - p1.x), p1.y + mu
-				* (p2.y - p1.y), p1.z + mu * (p2.z - p1.z));
+		return new HE_Vertex(p1.xd() + mu * (p2.xd() - p1.xd()), p1.yd() + mu
+				* (p2.yd() - p1.yd()), p1.zd() + mu * (p2.zd() - p1.zd()));
 	}
 
 	private void polygonise() {

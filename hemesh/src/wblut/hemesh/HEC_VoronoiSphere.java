@@ -308,19 +308,21 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 				steps = 0;
 				while ((j == index) && (d2self < cutoff * cutoff)) {
 					steps++;
-					p._addSelf(stepSize * r.x, stepSize * r.y, stepSize * r.z);
+					p._addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
+							* r.zd());
 					d2self = WB_Distance.getSqDistance3D(p, c);
 					final WB_KDEntry<WB_Point, Integer>[] closest = kdtree
 							.getNearestNeighbors(p, 2);
 					j = closest[1].value;
 				}
 				if (j != index) {
-					p._subSelf(stepSize * r.x, stepSize * r.y, stepSize * r.z);
+					p._subSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
+							* r.zd());
 					d2self = 0;
 					stepSize /= 2;
 				} else {
-					p._set(c.x + cutoff * r.x, c.y + cutoff * r.y, c.z + cutoff
-							* r.z);
+					p._set(c.xd() + cutoff * r.xd(), c.yd() + cutoff * r.yd(),
+							c.zd() + cutoff * r.zd());
 					stepSize = -1;
 
 				}

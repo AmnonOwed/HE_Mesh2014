@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -33,7 +34,7 @@ import wblut.math.WB_Parameter;
  */
 
 public class HES_CatmullClark extends HES_Subdividor {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Keep edges?. */
 	private boolean keepEdges;
 
@@ -156,7 +157,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				p._divSelf(order);
 				newPositions.put(
 						v.key(),
-						WB_Point.interpolate(v, p,
+						gf.createInterpolatedPoint(v, p,
 								blendFactor.value(v.xd(), v.yd(), v.zd())));
 			} else {
 				p = new WB_Point();
@@ -174,7 +175,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				if (edgePoint) {
 					newPositions.put(
 							v.key(),
-							WB_Point.interpolate(v, p,
+							gf.createInterpolatedPoint(v, p,
 									blendFactor.value(v.xd(), v.yd(), v.zd())));
 				} else {
 					newPositions.put(v.key(), v.pos);
@@ -203,7 +204,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				}
 				newPositions.put(
 						v.key(),
-						(nc > 1) ? WB_Point.interpolate(v,
+						(nc > 1) ? gf.createInterpolatedPoint(v,
 								p._scaleSelf(1.0 / c),
 								blendFactor.value(v.xd(), v.yd(), v.zd()))
 								: v.pos);
@@ -292,7 +293,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				p._divSelf(order);
 				newPositions.put(
 						v.key(),
-						WB_Point.interpolate(v, p,
+						gf.createInterpolatedPoint(v, p,
 								blendFactor.value(v.xd(), v.yd(), v.zd())));
 			} else {
 				p = new WB_Point();
@@ -310,7 +311,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				if (edgePoint) {
 					newPositions.put(
 							v.key(),
-							WB_Point.interpolate(v, p,
+							gf.createInterpolatedPoint(v, p,
 									blendFactor.value(v.xd(), v.yd(), v.zd())));
 				} else {
 					newPositions.put(v.key(), v.pos);
@@ -337,7 +338,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				}
 				newPositions.put(
 						v.key(),
-						(nc > 1) ? WB_Point.interpolate(v,
+						(nc > 1) ? gf.createInterpolatedPoint(v,
 								p._scaleSelf(1.0 / c),
 								blendFactor.value(v.xd(), v.yd(), v.zd()))
 								: v.pos);
@@ -416,7 +417,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 				newPositions.put(
 						v.key(),
-						WB_Point.interpolate(v, p,
+						gf.createInterpolatedPoint(v, p,
 								blendFactor.value(v.xd(), v.yd(), v.zd())));
 			}
 			id++;

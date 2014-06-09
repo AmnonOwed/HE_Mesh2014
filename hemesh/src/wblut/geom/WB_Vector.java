@@ -2,156 +2,29 @@ package wblut.geom;
 
 import wblut.WB_Epsilon;
 import wblut.math.WB_M33;
-import wblut.math.WB_MTRandom;
 import wblut.math.WB_Math;
 
 public class WB_Vector implements Comparable<WB_Coordinate>,
 		WB_MutableCoordinate {
 
-	static private double k0, k1, k2, d;
-	static private int exp0, exp1, exp2, cmp;
-
-	public static double absDot(final WB_Coordinate p, final WB_Coordinate q) {
-		return WB_Math.fastAbs(p.xd() * q.xd() + p.yd() * q.yd() + p.zd()
-				* q.zd());
-	}
-
-	public static double angleBetween(final WB_Coordinate v0,
-			final WB_Coordinate v1) {
-		final WB_Vector lv0 = new WB_Vector(v0);
-		final WB_Vector lv1 = new WB_Vector(v1);
-		lv0._normalizeSelf();
-		lv1._normalizeSelf();
-		return Math.acos(lv0.dot(lv1));
-
-	}
-
-	protected static int calculateHashCode(final double x, final double y,
-			final double z) {
-		int result = 17;
-
-		final long a = Double.doubleToLongBits(x);
-		result += 31 * result + (int) (a ^ (a >>> 32));
-
-		final long b = Double.doubleToLongBits(y);
-		result += 31 * result + (int) (b ^ (b >>> 32));
-
-		final long c = Double.doubleToLongBits(z);
-		result += 31 * result + (int) (c ^ (c >>> 32));
-
-		return result;
-
-	}
-
-	public static double cosAngleBetween(final WB_Coordinate v0,
-			final WB_Coordinate v1) {
-		final WB_Vector lv0 = new WB_Vector(v0);
-		final WB_Vector lv1 = new WB_Vector(v1);
-		lv0._normalizeSelf();
-		lv1._normalizeSelf();
-		return lv0.dot(lv1);
-
-	}
-
-	public static double dot(final WB_Coordinate p, final WB_Coordinate q) {
-		double k0 = p.xd() * q.xd();
-		double k1 = p.yd() * q.yd();
-		double k2 = p.zd() * q.zd();
-
-		double exp0 = WB_Math.getExp(k0);
-		double exp1 = WB_Math.getExp(k1);
-		double exp2 = WB_Math.getExp(k2);
-		if (exp0 < exp1) {
-			if (exp0 < exp2) {
-				return (k1 + k2) + k0;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		} else {
-			if (exp1 < exp2) {
-				return (k0 + k2) + k1;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		}
-
-	}
-
-	public static double dot2D(final WB_Coordinate p, final WB_Coordinate q) {
-		return p.xd() * q.xd() + p.yd() * q.yd();
-	}
-
-	public static WB_Vector getCross(final WB_Coordinate p,
-			final WB_Coordinate q) {
-		return new WB_Vector(p.yd() * q.zd() - p.zd() * q.yd(), p.zd() * q.xd()
-				- p.xd() * q.zd(), p.xd() * q.yd() - p.yd() * q.xd());
-	}
-
-	public static WB_Vector interpolate(final WB_Coordinate p0,
-			final WB_Coordinate p1, final double t) {
-		return new WB_Vector(p0.xd() + t * (p1.xd() - p0.xd()), p0.yd() + t
-				* (p1.yd() - p0.yd()), p0.zd() + t * (p1.zd() - p0.zd()));
-
-	}
-
-	public static WB_Vector[] randomVectors(final int n, final double x,
-			final double y, final double z) {
-		final WB_MTRandom mtr = new WB_MTRandom();
-		final WB_Vector[] points = new WB_Vector[n];
-		for (int i = 0; i < n; i++) {
-			points[i] = new WB_Vector(-x + 2 * mtr.nextDouble() * x, -y + 2
-					* mtr.nextDouble() * y, -z + 2 * mtr.nextDouble() * z);
-		}
-
-		return points;
-	}
-
-	public static WB_Vector[] randomVectors(final int n, final double lx,
-			final double ly, final double lz, final double ux, final double uy,
-			final double uz) {
-		final WB_MTRandom mtr = new WB_MTRandom();
-		final WB_Vector[] points = new WB_Vector[n];
-		final double dx = ux - lx;
-		final double dy = uy - ly;
-		final double dz = uz - lz;
-
-		for (int i = 0; i < n; i++) {
-			points[i] = new WB_Vector(lx + mtr.nextDouble() * dx, ly
-					+ mtr.nextDouble() * dy, lz + mtr.nextDouble() * dz);
-		}
-
-		return points;
-	}
-
-	public static double scalarTriple(final WB_Coordinate p,
-			final WB_Coordinate q, final WB_Coordinate r) {
-		return (dot(p, getCross(q, r)));
-	}
-
-	public static WB_M33 tensor(final WB_Coordinate p, final WB_Coordinate q) {
-		return new WB_M33(p.xd() * q.xd(), p.xd() * q.yd(), p.xd() * q.zd(),
-				p.yd() * q.xd(), p.yd() * q.yd(), p.yd() * q.zd(), p.zd()
-						* q.xd(), p.zd() * q.yd(), p.zd() * q.zd());
-	}
-
-	public static WB_Vector X() {
+	public static WB_Coordinate X() {
 		return new WB_Vector(1, 0, 0);
 	}
 
-	public static WB_Vector Y() {
+	public static WB_Coordinate Y() {
 		return new WB_Vector(0, 1, 0);
 	}
 
-	public static WB_Vector Z() {
+	public static WB_Coordinate Z() {
 		return new WB_Vector(0, 0, 1);
 	}
 
-	public static WB_Vector ZERO() {
+	public static WB_Coordinate ZERO() {
 		return new WB_Vector(0, 0, 0);
 	}
 
 	/** Coordinates. */
-	public double x, y, z;
+	private double x, y, z;
 
 	public WB_Vector() {
 		x = y = z = 0;
@@ -219,13 +92,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 		this.x += x;
 		this.y += y;
 		this.z += z;
-		return this;
-	}
-
-	public WB_Vector _addSelf(final double f, final WB_Coordinate p) {
-		x += f * p.xd();
-		y += f * p.yd();
-		z += f * p.zd();
 		return this;
 	}
 
@@ -419,7 +285,22 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double absDot(final WB_Coordinate p) {
-		return WB_Math.fastAbs(p.xd() * x + p.yd() * y + p.zd() * z);
+		return WB_Math.fastAbs(WB_CoordinateMath.dot(x, y, z, p.xd(), p.yd(),
+				p.zd()));
+	}
+
+	public double absDot(final WB_CoordinateSequence seq, int i) {
+		return WB_Math.fastAbs(WB_CoordinateMath.dot(x, y, z, seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2)));
+	}
+
+	public double absDot2D(final WB_Coordinate p) {
+		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(x, y, p.xd(), p.yd()));
+	}
+
+	public double absDot2D(final WB_CoordinateSequence seq, int i) {
+		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(x, y, seq.get(i, 0),
+				seq.get(i, 1)));
 	}
 
 	public WB_Vector add(final double x, final double y, final double z) {
@@ -487,16 +368,11 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 				+ f * seq.get(i, 2));
 	}
 
-	public double angleNorm(final WB_Coordinate p) {
-		return Math.acos(p.xd() * x + p.yd() * y + p.zd() * z);
+	public WB_Vector applySelf(final WB_Transform T) {
+		return applySelfAsVector(T);
 	}
 
-	public WB_Vector apply(final WB_Transform T) {
-
-		return applyAsVector(T);
-	}
-
-	public WB_Vector applyAsNormal(final WB_Transform T) {
+	public WB_Vector applySelfAsNormal(final WB_Transform T) {
 		final WB_Vector result = new WB_Vector();
 		T.applyAsNormal(this, result);
 		return result;
@@ -512,7 +388,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 		T.applyAsNormal(this, result);
 	}
 
-	public WB_Vector applyAsPoint(final WB_Transform T) {
+	public WB_Vector applySelfAsPoint(final WB_Transform T) {
 		final WB_Vector result = new WB_Vector();
 		T.applyAsPoint(this, result);
 		return result;
@@ -529,7 +405,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	}
 
-	public WB_Vector applyAsVector(final WB_Transform T) {
+	public WB_Vector applySelfAsVector(final WB_Transform T) {
 		final WB_Vector result = new WB_Vector();
 		T.applyAsVector(this, result);
 		return result;
@@ -543,22 +419,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	public void applyAsVectorInto(final WB_Transform T,
 			final WB_MutableCoordinate result) {
 		T.applyAsVector(this, result);
-	}
-
-	protected int calculateHashCode() {
-		int result = 17;
-
-		final long a = Double.doubleToLongBits(x);
-		result += 31 * result + (int) (a ^ (a >>> 32));
-
-		final long b = Double.doubleToLongBits(y);
-		result += 31 * result + (int) (b ^ (b >>> 32));
-
-		final long c = Double.doubleToLongBits(z);
-		result += 31 * result + (int) (c ^ (c >>> 32));
-
-		return result;
-
 	}
 
 	@Override
@@ -578,19 +438,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 		return Double.compare(wd(), p.wd());
 	}
 
-	public int compareTo(final WB_Vector otherXYZ) {
-		int _tmp = WB_Epsilon.compareAbs(x, otherXYZ.x);
-		if (_tmp != 0) {
-			return _tmp;
-		}
-		_tmp = WB_Epsilon.compareAbs(y, otherXYZ.y);
-		if (_tmp != 0) {
-			return _tmp;
-		}
-		_tmp = WB_Epsilon.compareAbs(z, otherXYZ.z);
-		return _tmp;
-	}
-
 	public int compareToY1st(final WB_Coordinate p) {
 		int cmp = Double.compare(yd(), p.yd());
 		if (cmp != 0) {
@@ -606,19 +453,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 			return cmp;
 		}
 		return Double.compare(wd(), p.wd());
-	}
-
-	public int compareToY1st(final WB_Vector otherXYZ) {
-		int _tmp = WB_Epsilon.compareAbs(y, otherXYZ.y);
-		if (_tmp != 0) {
-			return _tmp;
-		}
-		_tmp = WB_Epsilon.compareAbs(x, otherXYZ.x);
-		if (_tmp != 0) {
-			return _tmp;
-		}
-		_tmp = WB_Epsilon.compareAbs(z, otherXYZ.z);
-		return _tmp;
 	}
 
 	public double[] coords() {
@@ -642,13 +476,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 				x * p.yd() - y * p.xd());
 	}
 
-	public void crossInto(final WB_CoordinateSequence seq, final int i,
-			final WB_MutableCoordinate result) {
-		result._set(yd() * seq.get(i, 2) - zd() * seq.get(i, 1),
-				zd() * seq.get(i, 0) - xd() * seq.get(i, 2),
-				xd() * seq.get(i, 1) - yd() * seq.get(i, 0));
-	}
-
 	public WB_Vector div(final double f) {
 		return mul(1.0 / f);
 	}
@@ -658,59 +485,41 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double dot(final WB_Coordinate p) {
-		double k0 = p.xd() * x;
-		double k1 = p.yd() * y;
-		double k2 = p.zd() * z;
-
-		double exp0 = WB_Math.getExp(k0);
-		double exp1 = WB_Math.getExp(k1);
-		double exp2 = WB_Math.getExp(k2);
-		if (exp0 < exp1) {
-			if (exp0 < exp2) {
-				return (k1 + k2) + k0;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		} else {
-			if (exp1 < exp2) {
-				return (k0 + k2) + k1;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		}
+		return WB_CoordinateMath.dot(x, y, z, p.xd(), p.yd(), p.zd());
 	}
 
 	public double dot(final WB_CoordinateSequence seq, final int i) {
-
-		k0 = seq.get(i, 0) * xd();
-		k1 = seq.get(i, 1) * yd();
-		k2 = seq.get(i, 2) * zd();
-
-		exp0 = WB_Math.getExp(k0);
-		exp1 = WB_Math.getExp(k1);
-		exp2 = WB_Math.getExp(k2);
-		if (exp0 < exp1) {
-			if (exp0 < exp2) {
-				return (k1 + k2) + k0;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		} else {
-			if (exp1 < exp2) {
-				return (k0 + k2) + k1;
-			} else {
-				return (k0 + k1) + k2;
-			}
-		}
+		return WB_CoordinateMath.dot(x, y, z, seq.get(i, 0), seq.get(i, 1),
+				seq.get(i, 2));
 	}
 
 	public double dot2D(final WB_Coordinate p) {
-		return p.xd() * x + p.yd() * y;
-
+		return WB_CoordinateMath.dot2D(x, y, p.xd(), p.yd());
 	}
 
 	public double dot2D(final WB_CoordinateSequence seq, final int i) {
-		return seq.get(i, 0) * xd() + seq.get(i, 1) * yd();
+		return WB_CoordinateMath.dot2D(x, y, seq.get(i, 0), seq.get(i, 1));
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (o == this) {
+			return true;
+		}
+		if (!(o instanceof WB_Vector)) {
+			return false;
+		}
+		final WB_Vector p = (WB_Vector) o;
+		if (!WB_Epsilon.isEqualAbs(x, p.x)) {
+			return false;
+		}
+		if (!WB_Epsilon.isEqualAbs(y, p.y)) {
+			return false;
+		}
+		if (!WB_Epsilon.isEqualAbs(z, p.z)) {
+			return false;
+		}
+		return true;
 	}
 
 	public WB_Vector get() {
@@ -718,47 +527,23 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double getAngle(final WB_CoordinateSequence seq, final int i) {
-		d = this.dot(seq, i) / (getLength() * seq.getLength(i));
-		if (d < -1.0) {
-			d = -1.0;
-		}
-		if (d > 1.0) {
-			d = 1.0;
-		}
-		return (Math.acos(d));
+
+		return WB_CoordinateMath.angleBetween(x, y, z, seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2));
 	}
 
-	public double getAngle(final WB_Vector v) {
-		d = this.dot(v) / (getLength() * v.getLength());
-		if (d < -1.0) {
-			d = -1.0;
-		}
-		if (d > 1.0) {
-			d = 1.0;
-		}
-		return (Math.acos(d));
+	public double getAngle(final WB_Coordinate p) {
+		return WB_CoordinateMath.angleBetween(x, y, z, p.xd(), p.yd(), p.zd());
+	}
+
+	public double getAngleNorm(final WB_Coordinate p) {
+		return WB_CoordinateMath.angleBetweenNorm(x, y, z, p.xd(), p.yd(),
+				p.zd());
 	}
 
 	public double getAngleNorm(final WB_CoordinateSequence seq, final int i) {
-		d = this.dot(seq, i);
-		if (d < -1.0) {
-			d = -1.0;
-		}
-		if (d > 1.0) {
-			d = 1.0;
-		}
-		return (Math.acos(d));
-	}
-
-	public double getAngleNorm(final WB_Vector v) {
-		d = this.dot(v);
-		if (d < -1.0) {
-			d = -1.0;
-		}
-		if (d > 1.0) {
-			d = 1.0;
-		}
-		return (Math.acos(d));
+		return WB_CoordinateMath.angleBetweenNorm(x, y, z, seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getd(final int i) {
@@ -775,24 +560,21 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double getDistance(final WB_Coordinate p) {
-		return Math.sqrt((p.xd() - xd()) * (p.xd() - xd()) + (p.yd() - yd())
-				* (p.yd() - yd()) + (p.zd() - zd()) * (p.zd() - zd()));
+		return WB_CoordinateMath.getDistance(x, y, z, p.xd(), p.yd(), p.zd());
 	}
 
 	public double getDistance(final WB_CoordinateSequence seq, final int i) {
-		return Math.sqrt((seq.get(i, 0) - xd()) * (seq.get(i, 0) - xd())
-				+ (seq.get(i, 1) - yd()) * (seq.get(i, 1) - yd())
-				+ (seq.get(i, 2) - zd()) * (seq.get(i, 2) - zd()));
+		return WB_CoordinateMath.getDistance(x, y, z, seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getDistance2D(final WB_Coordinate p) {
-		return Math.sqrt((p.xd() - xd()) * (p.xd() - xd()) + (p.yd() - yd())
-				* (p.yd() - yd()));
+		return WB_CoordinateMath.getDistance2D(x, y, p.xd(), p.yd());
 	}
 
 	public double getDistance2D(final WB_CoordinateSequence seq, final int i) {
-		return Math.sqrt((seq.get(i, 0) - xd()) * (seq.get(i, 0) - xd())
-				+ (seq.get(i, 1) - yd()) * (seq.get(i, 1) - yd()));
+		return WB_CoordinateMath.getDistance2D(x, y, seq.get(i, 0),
+				seq.get(i, 1));
 	}
 
 	public float getf(final int i) {
@@ -809,68 +591,76 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double getLength() {
-		return Math.sqrt(x * x + y * y + z * z);
+		return WB_CoordinateMath.getLength(x, y, z);
 	}
 
 	public double getLength2D() {
-		return Math.sqrt(x * x + y * y);
-	}
-
-	public WB_Vector getOrthoNormal2D() {
-		final WB_Vector a = new WB_Vector(-yd(), xd(), 0);
-		a._normalizeSelf();
-		return a;
-	}
-
-	public WB_Vector getOrthoNormal3D() {
-		if (Math.abs(zd()) > WB_Epsilon.EPSILON) {
-			final WB_Vector a = new WB_Vector(1, 0, -xd() / zd());
-			a._normalizeSelf();
-			return a;
-		} else {
-			return new WB_Vector(0, 0, 1);
-		}
-
+		return WB_CoordinateMath.getLength2D(x, y);
 	}
 
 	public double getSqDistance(final WB_Coordinate p) {
-		return (p.xd() - xd()) * (p.xd() - xd()) + (p.yd() - yd())
-				* (p.yd() - yd()) + (p.zd() - zd()) * (p.zd() - zd());
+		return WB_CoordinateMath.getSqDistance(x, y, z, p.xd(), p.yd(), p.zd());
 	}
 
 	public double getSqDistance(final WB_CoordinateSequence seq, final int i) {
-		return (seq.get(i, 0) - xd()) * (seq.get(i, 0) - xd())
-				+ (seq.get(i, 1) - yd()) * (seq.get(i, 1) - yd())
-				+ (seq.get(i, 2) - zd()) * (seq.get(i, 2) - zd());
+		return WB_CoordinateMath.getSqDistance(x, y, z, seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getSqDistance2D(final WB_Coordinate p) {
-		return (p.xd() - xd()) * (p.xd() - xd()) + (p.yd() - yd())
-				* (p.yd() - yd());
+		return WB_CoordinateMath.getSqDistance2D(x, y, p.xd(), p.yd());
 	}
 
 	public double getSqDistance2D(final WB_CoordinateSequence seq, final int i) {
-		return (seq.get(i, 0) - xd()) * (seq.get(i, 0) - xd())
-				+ (seq.get(i, 1) - yd()) * (seq.get(i, 1) - yd());
+		return WB_CoordinateMath.getSqDistance2D(x, y, seq.get(i, 0),
+				seq.get(i, 1));
 	}
 
 	public double getSqLength() {
-		return x * x + y * y + z * z;
+		return WB_CoordinateMath.getSqLength(x, y, z);
+	}
+
+	public double getSqLength2D() {
+		return WB_CoordinateMath.getSqLength2D(x, y);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result = 31 * result + hashCode(x);
-		result = 31 * result + hashCode(y);
-		result = 31 * result + hashCode(z);
-		return result;
+
+		return WB_CoordinateMath.calculateHashCode(x, y, z);
 
 	}
 
-	private int hashCode(final double v) {
-		final long tmp = Double.doubleToLongBits(v);
-		return (int) (tmp ^ (tmp >>> 32));
+	public double heading() {
+		return Math.atan2(y, x);
+	}
+
+	public boolean isCollinear(final WB_Coordinate p, final WB_Coordinate q) {
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(p, q))) {
+			return true;
+		}
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(this, q))) {
+			return true;
+		}
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(this, p))) {
+			return true;
+		}
+		return WB_Epsilon.isZeroSq(sub(p).cross(sub(q)).getSqLength());
+	}
+
+	public boolean isCollinear(final WB_CoordinateSequence seq, final int i,
+			final int j) {
+		if (WB_Epsilon.isZeroSq(seq.getSqDistance(i, j))) {
+			return true;
+		}
+		if (WB_Epsilon.isZeroSq(seq.getSqDistance(i, this))) {
+			return true;
+		}
+		if (WB_Epsilon.isZeroSq(seq.getSqDistance(j, this))) {
+			return true;
+		}
+		return WB_Epsilon.isZeroSq(sub(seq, i)._crossSelf(sub(seq, j))
+				.getSqLength());
 	}
 
 	public boolean isParallel(final WB_Coordinate p) {
@@ -893,7 +683,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public boolean isZero() {
-		return (getSqLength() < WB_Epsilon.SQEPSILON);
+		return WB_CoordinateMath.isZero(x, y, z);
 	}
 
 	public WB_Vector mul(final double f) {
@@ -934,25 +724,33 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 			final double p2y, final double p2z) {
 
 		final WB_Transform raa = new WB_Transform();
-		raa.addRotate(angle, new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
+		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
+				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applySelfAsVector(this);
 	}
 
 	public void rotateAboutAxis(final double angle, final WB_Coordinate p1,
 			final WB_Coordinate p2) {
+
 		final WB_Transform raa = new WB_Transform();
-		raa.addRotate(angle, new WB_Vector(p1, p2));
+		raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
+
 		raa.applySelfAsVector(this);
+
 	}
 
-	public void rotateAboutAxis(final double angle, final WB_Vector a) {
+	public void rotateAboutAxis(final double angle, final WB_Coordinate p,
+			final WB_Vector a) {
+
 		final WB_Transform raa = new WB_Transform();
-		raa.addRotate(angle, a);
+		raa.addRotateAboutAxis(angle, p, a);
+
 		raa.applySelfAsVector(this);
+
 	}
 
 	public double scalarTriple(final WB_Coordinate p, final WB_Coordinate q) {
-		return (dot(this, getCross(p, q)));
+		return WB_CoordinateMath.scalarTriple(this, p, q);
 	}
 
 	public void scale(final double f, final WB_MutableCoordinate result) {
@@ -970,16 +768,16 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	}
 
-	public boolean smallerThan(final WB_Vector otherXYZ) {
-		int _tmp = WB_Epsilon.compareAbs(x, otherXYZ.x);
+	public boolean smallerThan(final WB_Coordinate otherXYZ) {
+		int _tmp = WB_Epsilon.compareAbs(x, otherXYZ.xd());
 		if (_tmp != 0) {
 			return (_tmp < 0);
 		}
-		_tmp = WB_Epsilon.compareAbs(y, otherXYZ.y);
+		_tmp = WB_Epsilon.compareAbs(y, otherXYZ.yd());
 		if (_tmp != 0) {
 			return (_tmp < 0);
 		}
-		_tmp = WB_Epsilon.compareAbs(z, otherXYZ.z);
+		_tmp = WB_Epsilon.compareAbs(z, otherXYZ.zd());
 		return (_tmp < 0);
 	}
 
@@ -1005,12 +803,6 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 				- seq.get(i, 2));
 	}
 
-	public void subInto(final WB_CoordinateSequence seq, final int i,
-			final WB_MutableCoordinate result) {
-		result._set(xd() - seq.get(i, 0), yd() - seq.get(i, 1),
-				zd() - seq.get(i, 2));
-	}
-
 	public WB_M33 tensor(final WB_CoordinateSequence seq, final int i) {
 
 		return new WB_M33(xd() * seq.get(i, 0), xd() * seq.get(i, 1), xd()
@@ -1019,31 +811,14 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 						* seq.get(i, 1), zd() * seq.get(i, 2));
 	}
 
-	public WB_M33 tensor(final WB_Vector q) {
-		return new WB_M33(x * q.x, x * q.y, x * q.z, y * q.x, y * q.y, y * q.z,
-				z * q.x, z * q.y, z * q.z);
-	}
+	public WB_M33 tensor(final WB_Coordinate q) {
+		return WB_CoordinateMath.tensor(this, q);
 
-	public void tensorInto(final WB_CoordinateSequence seq, final int i,
-			final WB_M33 result) {
-		result.set(xd() * seq.get(i, 0), xd() * seq.get(i, 1),
-				xd() * seq.get(i, 2), yd() * seq.get(i, 0),
-				yd() * seq.get(i, 1), yd() * seq.get(i, 2),
-				zd() * seq.get(i, 0), zd() * seq.get(i, 1),
-				zd() * seq.get(i, 2));
-	}
-
-	public WB_Point toPoint() {
-		return new WB_Point(x, y, z);
 	}
 
 	@Override
 	public String toString() {
-		return "XYZ [x=" + x + ", y=" + y + ", z=" + z + "]";
-	}
-
-	public WB_Vector toVector() {
-		return new WB_Vector(x, y, z);
+		return "WB_Vector [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
 
 	@Override
@@ -1082,6 +857,23 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	public float zf() {
 		return (float) z;
+	}
+
+	public WB_Vector getOrthoNormal2D() {
+		final WB_Vector a = new WB_Vector(-yd(), xd(), 0);
+		a._normalizeSelf();
+		return a;
+	}
+
+	public WB_Vector getOrthoNormal3D() {
+		if (Math.abs(zd()) > WB_Epsilon.EPSILON) {
+			final WB_Vector a = new WB_Vector(1, 0, -xd() / zd());
+			a._normalizeSelf();
+			return a;
+		} else {
+			return new WB_Vector(0, 0, 1);
+		}
+
 	}
 
 }

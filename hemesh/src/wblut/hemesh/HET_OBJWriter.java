@@ -184,7 +184,7 @@ public class HET_OBJWriter {
 	 *            the n
 	 */
 	public void normal(final WB_Vector n) {
-		objWriter.println("vn " + n.x + " " + n.y + " " + n.z);
+		objWriter.println("vn " + n.xd() + " " + n.yd() + " " + n.zd());
 		numNormalsWritten++;
 	}
 
@@ -195,7 +195,7 @@ public class HET_OBJWriter {
 	 *            the v
 	 */
 	public void vertex(final WB_Point v) {
-		objWriter.println("v " + v.x + " " + v.y + " " + v.z);
+		objWriter.println("v " + v.xd() + " " + v.yd() + " " + v.zd());
 		numVerticesWritten++;
 	}
 }

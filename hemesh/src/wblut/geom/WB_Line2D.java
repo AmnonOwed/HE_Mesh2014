@@ -7,6 +7,7 @@ import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
 public class WB_Line2D extends WB_Linear2D {
+	private static final WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	public WB_Line2D() {
 		super();
@@ -31,20 +32,20 @@ public class WB_Line2D extends WB_Linear2D {
 	public double getT(final WB_Coordinate p) {
 		double t = Double.NaN;
 		final WB_Point proj = WB_Intersection.getClosestPoint2D(p, this);
-		final double x = WB_Math.fastAbs(direction.x);
-		final double y = WB_Math.fastAbs(direction.y);
+		final double x = WB_Math.fastAbs(direction.xd());
+		final double y = WB_Math.fastAbs(direction.yd());
 		if (x >= y) {
-			t = (proj.x - origin.x) / (direction.x);
+			t = (proj.xd() - origin.xd()) / (direction.xd());
 		} else {
-			t = (proj.y - origin.y) / (direction.y);
+			t = (proj.yd() - origin.yd()) / (direction.yd());
 		}
 		return t;
 	}
 
 	public WB_Classification classifyPointToLine2D(final WB_Coordinate p) {
 
-		final double dist = -direction.y * p.xd() + direction.x * p.yd()
-				+ origin.x * direction.y - origin.y * direction.x;
+		final double dist = -direction.yd() * p.xd() + direction.xd() * p.yd()
+				+ origin.xd() * direction.yd() - origin.yd() * direction.xd();
 
 		if (dist > WB_Epsilon.EPSILON) {
 			return WB_Classification.FRONT;
@@ -132,7 +133,7 @@ public class WB_Line2D extends WB_Linear2D {
 	public static WB_Line2D getLineTangentToCircleAtPoint(final WB_Circle C,
 			final WB_Coordinate p) {
 		final WB_Vector v = new WB_Vector(C.getCenter(), p);
-		return new WB_Line2D(p, new WB_Point(-v.y, v.x));
+		return new WB_Line2D(p, new WB_Point(-v.yd(), v.xd()));
 
 	}
 
@@ -143,24 +144,24 @@ public class WB_Line2D extends WB_Linear2D {
 
 		if (WB_Epsilon.isZero(dcp - C.getRadius())) {
 			final WB_Vector u = new WB_Vector(C.getCenter(), p);
-			result.add(new WB_Line2D(p, new WB_Point(-u.y, u.x)));
+			result.add(new WB_Line2D(p, new WB_Point(-u.yd(), u.xd())));
 		} else if (dcp < C.getRadius()) {
 			return result;
 		} else {
 			final WB_Vector u = new WB_Vector(C.getCenter(), p);
-			final double ux2 = u.x * u.x;
+			final double ux2 = u.xd() * u.xd();
 			final double ux4 = ux2 * ux2;
-			final double uy2 = u.y * u.y;
+			final double uy2 = u.yd() * u.yd();
 			final double r2 = C.getRadius() * C.getRadius();
 			final double r4 = r2 * r2;
 			final double num = r2 * uy2;
 			final double denom = ux2 + uy2;
 			final double rad = Math.sqrt(-r4 * ux2 + r2 * ux4 + r2 * ux2 * uy2);
 
-			result.add(new WB_Line2D(p, new WB_Point(-((r2 * u.y) + rad)
-					/ denom, (r2 - (num + u.y * rad) / denom) / u.x)));
-			result.add(new WB_Line2D(p, new WB_Point(-((r2 * u.y) - rad)
-					/ denom, (r2 - (num - u.y * rad) / denom) / u.x)));
+			result.add(new WB_Line2D(p, new WB_Point(-((r2 * u.yd()) + rad)
+					/ denom, (r2 - (num + u.yd() * rad) / denom) / u.xd())));
+			result.add(new WB_Line2D(p, new WB_Point(-((r2 * u.yd()) - rad)
+					/ denom, (r2 - (num - u.yd() * rad) / denom) / u.xd())));
 
 		}
 
@@ -197,8 +198,8 @@ public class WB_Line2D extends WB_Linear2D {
 			}
 			WB_Point[] dir = getDirections(w, a);
 
-			WB_Point org = new WB_Point(C0.getCenter().x + s * w.x,
-					C0.getCenter().y + s * w.y);
+			WB_Point org = new WB_Point(C0.getCenter().xd() + s * w.xd(), C0
+					.getCenter().yd() + s * w.yd());
 			result.add(new WB_Line2D(org, dir[0]));
 			result.add(new WB_Line2D(org, dir[1]));
 
@@ -211,8 +212,8 @@ public class WB_Line2D extends WB_Linear2D {
 			}
 			dir = getDirections(w, a);
 
-			org = new WB_Point(C0.getCenter().x + s * w.x, C0.getCenter().y + s
-					* w.y);
+			org = new WB_Point(C0.getCenter().xd() + s * w.xd(), C0.getCenter()
+					.yd() + s * w.yd());
 			result.add(new WB_Line2D(org, dir[0]));
 			result.add(new WB_Line2D(org, dir[1]));
 
@@ -226,12 +227,11 @@ public class WB_Line2D extends WB_Linear2D {
 			result.add(new WB_Line2D(mid, dir[1]));
 
 			final double invwlen = 1.0 / Math.sqrt(wlensqr);
-			w.x *= invwlen;
-			w.y *= invwlen;
-			result.add(new WB_Line2D(new WB_Point(mid.x + C0.getRadius() * w.y,
-					mid.y - C0.getRadius() * w.x), w));
-			result.add(new WB_Line2D(new WB_Point(mid.x - C0.getRadius() * w.y,
-					mid.y + C0.getRadius() * w.x), w));
+			w._mulSelf(invwlen);
+			result.add(new WB_Line2D(new WB_Point(mid.xd() + C0.getRadius()
+					* w.yd(), mid.yd() - C0.getRadius() * w.xd()), w));
+			result.add(new WB_Line2D(new WB_Point(mid.xd() - C0.getRadius()
+					* w.yd(), mid.yd() + C0.getRadius() * w.xd()), w));
 
 		}
 
@@ -276,8 +276,8 @@ public class WB_Line2D extends WB_Linear2D {
 
 	public static WB_Line2D getPerpendicularLineThroughPoint(final WB_Line2D L,
 			final WB_Coordinate p) {
-		return new WB_Line2D(p, new WB_Point(-L.getDirection().y,
-				L.getDirection().x));
+		return new WB_Line2D(p, new WB_Point(-L.getDirection().yd(), L
+				.getDirection().xd()));
 
 	}
 
@@ -289,35 +289,33 @@ public class WB_Line2D extends WB_Linear2D {
 
 	public static WB_Line2D getBisector(final WB_Coordinate p,
 			final WB_Coordinate q) {
-		return new WB_Line2D(WB_Point.interpolate(p, q, 0.5), new WB_Point(
-				p.yd() - q.yd(), q.xd() - p.xd()));
+		return new WB_Line2D(gf.createInterpolatedPoint(p, q, 0.5),
+				new WB_Point(p.yd() - q.yd(), q.xd() - p.xd()));
 	}
 
 	public static WB_Line2D[] getParallelLines(final WB_Line2D L, final double d) {
 		final WB_Line2D[] result = new WB_Line2D[2];
-		result[0] = new WB_Line2D(
-				new WB_Point(L.getOrigin().x - d * L.getDirection().y,
-						L.getOrigin().y + d * L.getDirection().x),
-				L.getDirection());
-		result[1] = new WB_Line2D(
-				new WB_Point(L.getOrigin().x + d * L.getDirection().y,
-						L.getOrigin().y - d * L.getDirection().x),
-				L.getDirection());
+		result[0] = new WB_Line2D(new WB_Point(L.getOrigin().xd() - d
+				* L.getDirection().yd(), L.getOrigin().yd() + d
+				* L.getDirection().xd()), L.getDirection());
+		result[1] = new WB_Line2D(new WB_Point(L.getOrigin().xd() + d
+				* L.getDirection().yd(), L.getOrigin().yd() - d
+				* L.getDirection().xd()), L.getDirection());
 		return result;
 	}
 
 	public static WB_Line2D[] getPerpendicularLinesTangentToCircle(
 			final WB_Line2D L, final WB_Circle C) {
 		final WB_Line2D[] result = new WB_Line2D[2];
-		result[0] = new WB_Line2D(new WB_Point(C.getCenter().x + C.getRadius()
-				* L.getDirection().x, C.getCenter().y + C.getRadius()
-				* L.getDirection().y), new WB_Point(-L.getDirection().y,
-				L.getDirection().x));
+		result[0] = new WB_Line2D(new WB_Point(C.getCenter().xd()
+				+ C.getRadius() * L.getDirection().xd(), C.getCenter().yd()
+				+ C.getRadius() * L.getDirection().yd()), new WB_Point(-L
+				.getDirection().yd(), L.getDirection().xd()));
 
-		result[1] = new WB_Line2D(new WB_Point(C.getCenter().x - C.getRadius()
-				* L.getDirection().x, C.getCenter().y - C.getRadius()
-				* L.getDirection().y), new WB_Point(-L.getDirection().y,
-				L.getDirection().x));
+		result[1] = new WB_Line2D(new WB_Point(C.getCenter().xd()
+				- C.getRadius() * L.getDirection().xd(), C.getCenter().yd()
+				- C.getRadius() * L.getDirection().yd()), new WB_Point(-L
+				.getDirection().yd(), L.getDirection().xd()));
 		return result;
 	}
 

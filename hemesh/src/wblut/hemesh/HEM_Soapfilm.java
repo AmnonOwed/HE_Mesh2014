@@ -5,6 +5,7 @@ import java.util.List;
 
 import wblut.WB_Epsilon;
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_Point;
 
 public class HEM_Soapfilm extends HEM_Modifier {
@@ -146,10 +147,16 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			neighbor = he.getEndVertex();
 			{
 				corner = he.getPrevInFace().getVertex();
-				cota = WB_Point.cosAngleBetween(corner.pos, neighbor.pos, v);
+				cota = WB_CoordinateMath.cosAngleBetween(corner.pos.xd(),
+						corner.pos.yd(), corner.pos.zd(), neighbor.pos.xd(),
+						neighbor.pos.yd(), neighbor.pos.zd(), v.xd(), v.yd(),
+						v.zd());
 				cotsum += cota / Math.sqrt(1 - cota * cota);
 				corner = he.getPair().getPrevInFace().getVertex();
-				cotb = WB_Point.cosAngleBetween(corner.pos, neighbor.pos, v);
+				cotb = WB_CoordinateMath.cosAngleBetween(corner.pos.xd(),
+						corner.pos.yd(), corner.pos.zd(), neighbor.pos.xd(),
+						neighbor.pos.yd(), neighbor.pos.zd(), v.xd(), v.yd(),
+						v.zd());
 				cotsum += cotb / Math.sqrt(1 - cotb * cotb);
 			}
 			result._addMulSelf(cotsum, neighbor);

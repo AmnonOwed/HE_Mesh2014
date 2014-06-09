@@ -243,9 +243,9 @@ public class HEM_Slice extends HEM_Modifier {
 					final WB_Point[] boundary = new WB_Point[4];
 
 					boundary[0] = leftlower;
-					boundary[1] = new WB_Point(leftlower.x, rightupper.y);
+					boundary[1] = new WB_Point(leftlower.xd(), rightupper.yd());
 					boundary[2] = rightupper;
-					boundary[3] = new WB_Point(rightupper.x, leftlower.y);
+					boundary[3] = new WB_Point(rightupper.xd(), leftlower.yd());
 
 					final WB_Triangulate2D triang = new WB_Triangulate2D();
 

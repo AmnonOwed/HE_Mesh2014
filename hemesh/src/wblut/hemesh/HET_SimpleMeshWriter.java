@@ -111,7 +111,8 @@ public class HET_SimpleMeshWriter {
 	public void vertices(final WB_Point[] v) {
 		int i = 0;
 		for (i = 0; i < v.length; i++) {
-			simpleMeshWriter.println(v[i].x + " " + v[i].y + " " + v[i].z);
+			simpleMeshWriter.println(v[i].xd() + " " + v[i].yd() + " "
+					+ v[i].zd());
 		}
 	}
 

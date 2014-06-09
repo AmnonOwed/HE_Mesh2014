@@ -102,9 +102,9 @@ public class WB_IndexedPolygon implements SimplePolygon {
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			p0 = allpoints[indices[j]];
 			p1 = allpoints[indices[i]];
-			normal.x += (p0.y - p1.y) * (p0.z + p1.z);
-			normal.y += (p0.z - p1.z) * (p0.x + p1.x);
-			normal.z += (p0.x - p1.x) * (p0.y + p1.y);
+			normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 			center._addSelf(p1);
 		}
 		normal._normalizeSelf();

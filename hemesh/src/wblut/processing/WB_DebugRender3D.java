@@ -140,8 +140,8 @@ public class WB_DebugRender3D {
 
 	public void drawHalfedge(final HE_Halfedge he, final double d,
 			final double s, final double f) {
-		final WB_Point c = WB_Point.interpolate(he.getVertex(),
-				he.getEndVertex(), f);
+		final WB_Point c = geometryfactory.createInterpolatedPoint(
+				he.getVertex(), he.getEndVertex(), f);
 		c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
 
 		home.stroke(255, 0, 0);
@@ -179,7 +179,8 @@ public class WB_DebugRender3D {
 			he = heItr.next();
 
 			if (he.getFace() != null) {
-				c = WB_Point.interpolate(he.getVertex(), he.getEndVertex(), f);
+				c = geometryfactory.createInterpolatedPoint(he.getVertex(),
+						he.getEndVertex(), f);
 				c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
 
 				home.stroke(255, 0, 0);
@@ -201,7 +202,8 @@ public class WB_DebugRender3D {
 				home.box((float) d);
 				home.popMatrix();
 			} else {
-				c = WB_Point.interpolate(he.getVertex(), he.getEndVertex(), f);
+				c = geometryfactory.createInterpolatedPoint(he.getVertex(),
+						he.getEndVertex(), f);
 				c._addSelf(he.getPair().getHalfedgeNormal()._mulSelf(-d));
 
 				home.stroke(255, 0, 0);

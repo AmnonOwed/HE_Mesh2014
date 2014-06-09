@@ -606,8 +606,7 @@ public class WB_Triangulate2D {
 	 */
 	public void translate(final double x, final double y) {
 		for (final Tri_Point p : points) {
-			p.x += x;
-			p.y += y;
+			p._addSelf(x, y, 0);
 		}
 	}
 
@@ -1584,14 +1583,15 @@ public class WB_Triangulate2D {
 		for (final Tri_Point p : bounds) {
 			p.type = Tri_Point.BOUNDS;
 		}
-		boundsPath.moveTo(bounds[0].x, bounds[0].y);
+		boundsPath.moveTo(bounds[0].xd(), bounds[0].yd());
 		for (i = 1; i < bounds.length; i++) {
-			boundsPath.lineTo(bounds[i].x, bounds[i].y);
+			boundsPath.lineTo(bounds[i].xd(), bounds[i].yd());
 		}
 		boundsPath.closePath();
 		while (deleteQueue.size() > 0) {
 			p1 = deleteQueue.pop();
-			if (boundsPath.contains(p1.x, p1.y) && !p1.isType(Tri_Point.BOUNDS)) {
+			if (boundsPath.contains(p1.xd(), p1.yd())
+					&& !p1.isType(Tri_Point.BOUNDS)) {
 				heTest = p1.he;
 				for (i = 0; i <= halfEdges.size(); i++) {
 					if (p1.he == null) {
@@ -1831,16 +1831,16 @@ public class WB_Triangulate2D {
 				message("Moving point to ensure simple quadrilateral.");
 			}
 			final WB_Point pp = intersection(pPrev, p, pNext, pTemp);
-			p.x = pp.x + 0.5 * (pPrev.x - pp.x);
-			p.y = pp.y + 0.5 * (pPrev.y - pp.y);
+			p._setX(pp.xd() + 0.5 * (pPrev.xd() - pp.xd()));
+			p._setY(pp.yd() + 0.5 * (pPrev.yd() - pp.yd()));
 			updateBoundaryPointOutside(p);
 		} else if (intersectProper(pNext, p, pPrev, pTemp)) {
 			if (MESSAGES) {
 				message("Moving point to ensure simple quadrilateral.");
 			}
 			final WB_Point pp = intersection(pNext, p, pPrev, pTemp);
-			p.x = pp.x + 0.5 * (pNext.x - pp.x);
-			p.y = pp.y + 0.5 * (pNext.y - pp.y);
+			p._setX(pp.xd() + 0.5 * (pNext.xd() - pp.xd()));
+			p._setY(pp.yd() + 0.5 * (pNext.yd() - pp.yd()));
 			updateBoundaryPointOutside(p);
 		}
 		// insert an interior point where the new boundary point will
@@ -1890,8 +1890,8 @@ public class WB_Triangulate2D {
 		if (MESSAGES) {
 			message("Relocating boundary point and boundary edges.");
 		}
-		p.x = pTemp.x;
-		p.y = pTemp.y;
+		p._setX(pTemp.xd());
+		p._setY(pTemp.yd());
 		fillGeneralPolygon(p.he);
 		updateDelaunay();
 		return true;
@@ -2252,10 +2252,10 @@ public class WB_Triangulate2D {
 	private final static double projNorm(final WB_Point a, final WB_Point b,
 			final WB_Point c) {
 		double x1, x2, y1, y2;
-		x1 = b.x - a.x;
-		x2 = c.x - a.x;
-		y1 = b.y - a.y;
-		y2 = c.y - a.y;
+		x1 = b.xd() - a.xd();
+		x2 = c.xd() - a.xd();
+		y1 = b.yd() - a.yd();
+		y2 = c.yd() - a.yd();
 		return (x1 * x2 + y1 * y2) / (x1 * x1 + y1 * y1);
 	}
 
@@ -2274,10 +2274,10 @@ public class WB_Triangulate2D {
 	private final static double cross(final WB_Point a, final WB_Point b,
 			final WB_Point c) {
 		double x1, x2, y1, y2;
-		x1 = b.x - a.x;
-		x2 = c.x - a.x;
-		y1 = b.y - a.y;
-		y2 = c.y - a.y;
+		x1 = b.xd() - a.xd();
+		x2 = c.xd() - a.xd();
+		y1 = b.yd() - a.yd();
+		y2 = c.yd() - a.yd();
 		return x1 * y2 - y1 * x2;
 	}
 
@@ -2296,10 +2296,10 @@ public class WB_Triangulate2D {
 	private final static double perpDistSq(final WB_Point a, final WB_Point b,
 			final WB_Point c) {
 		double x1, x2, y1, y2, cross, lenSq;
-		x1 = b.x - a.x;
-		x2 = c.x - a.x;
-		y1 = b.y - a.y;
-		y2 = c.y - a.y;
+		x1 = b.xd() - a.xd();
+		x2 = c.xd() - a.xd();
+		y1 = b.yd() - a.yd();
+		y2 = c.yd() - a.yd();
 		cross = x1 * y2 - y1 * x2;
 		lenSq = cross * cross;
 		lenSq /= x1 * x1 + y1 * y1;
@@ -2338,10 +2338,10 @@ public class WB_Triangulate2D {
 	public final static double projection(final WB_Point p1, final WB_Point p2,
 			final WB_Point p) {
 		double ax, ay, bx, by;
-		ax = p.x - p1.x;
-		ay = p.y - p1.y;
-		bx = p2.x - p1.x;
-		by = p2.y - p1.y;
+		ax = p.xd() - p1.xd();
+		ay = p.yd() - p1.yd();
+		bx = p2.xd() - p1.xd();
+		by = p2.yd() - p1.yd();
 		return (ax * bx + ay * by) / (bx * bx + by * by);
 	}
 
@@ -2366,12 +2366,12 @@ public class WB_Triangulate2D {
 		double cdx, cdy;
 		WB_Point p;
 
-		cdx = c.x - d.x;
-		cdy = c.y - d.y;
+		cdx = c.xd() - d.xd();
+		cdy = c.yd() - d.yd();
 		// distance from a to cd
-		l1 = Math.abs((a.x - d.x) * cdy - (a.y - d.y) * cdx);
+		l1 = Math.abs((a.xd() - d.xd()) * cdy - (a.yd() - d.yd()) * cdx);
 		// distance from b to cd
-		l2 = Math.abs((b.x - d.x) * cdy - (b.y - d.y) * cdx);
+		l2 = Math.abs((b.xd() - d.xd()) * cdy - (b.yd() - d.yd()) * cdx);
 		// need to handle case where l1+l2 = 0
 		// if this method could be called on parallel segments
 		// that overlap
@@ -2380,7 +2380,8 @@ public class WB_Triangulate2D {
 					.println("Intersection called on parallel overlapping segments!");
 		}
 		t = l1 / (l1 + l2);
-		p = new WB_Point((1 - t) * a.x + t * b.x, (1 - t) * a.y + t * b.y);
+		p = new WB_Point((1 - t) * a.xd() + t * b.xd(), (1 - t) * a.yd() + t
+				* b.yd());
 		return p;
 	}
 
@@ -2527,11 +2528,11 @@ public class WB_Triangulate2D {
 		double x2, y2, px, py;
 		// Adjust vectors relative to x1,y1
 		// x2,y2 becomes relative vector from x1,y1 to end of segment
-		x2 = p2.x - p1.x;
-		y2 = p2.y - p1.y;
+		x2 = p2.xd() - p1.xd();
+		y2 = p2.yd() - p1.yd();
 		// px,py becomes relative vector from x1,y1 to test point
-		px = p.x - p1.x;
-		py = p.y - p1.y;
+		px = p.xd() - p1.xd();
+		py = p.yd() - p1.yd();
 		double dotprod = px * x2 + py * y2;
 		double projlenSq;
 		if (dotprod <= 0.0) {

@@ -148,7 +148,7 @@ public class HES_TriDec extends HES_Simplifier {
 		double A;
 		for (final HE_Face f : faces) {
 			A = f.getFaceArea();
-			nom._addSelf(A, f.getFaceNormal());
+			nom._addMulSelf(A, f.getFaceNormal());
 			denom += A;
 		}
 		if (WB_Epsilon.isZero(denom)) {

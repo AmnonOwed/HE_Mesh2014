@@ -70,8 +70,8 @@ public class WB_Sphere implements WB_Geometry {
 
 	@Override
 	public WB_Sphere apply(final WB_Transform T) {
-		return geometryfactory.createSphereWithRadius(center.applyAsPoint(T),
-				radius);
+		return geometryfactory.createSphereWithRadius(
+				center.applySelfAsPoint(T), radius);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class WB_Sphere implements WB_Geometry {
 			final double newRadius = (radius + dist) * 0.5;
 			final double k = (newRadius - radius) / dist;
 			radius = newRadius;
-			center._addSelf(k * d.x, k * d.y, k * d.z);
+			center._addSelf(k * d.xd(), k * d.yd(), k * d.zd());
 		}
 	}
 

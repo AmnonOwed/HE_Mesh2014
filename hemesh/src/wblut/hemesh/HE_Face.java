@@ -6,8 +6,6 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_FixedPoint;
-import wblut.geom.WB_FixedVector;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedTriangle2D;
@@ -63,7 +61,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_center._divSelf(c);
-		return new WB_FixedPoint(_center);
+		return _center;
 	}
 
 	public WB_Point getFaceCenter(double d) {
@@ -79,7 +77,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_center._divSelf(c)._addMulSelf(d, getFaceNormal());
-		return new WB_FixedPoint(_center);
+		return _center;
 	}
 
 	public WB_Vector getFaceNormal() {
@@ -95,14 +93,14 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			p0 = he.getVertex();
 			p1 = he.getNextInFace().getVertex();
 
-			_normal.x += (p0.yd() - p1.yd()) * (p0.zd() + p1.zd());
-			_normal.y += (p0.zd() - p1.zd()) * (p0.xd() + p1.xd());
-			_normal.z += (p0.xd() - p1.xd()) * (p0.yd() + p1.yd());
+			_normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_normal._normalizeSelf();
-		return new WB_FixedVector(_normal);
+		return _normal;
 	}
 
 	public WB_Vector getFaceNormalNN() {
@@ -118,13 +116,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			p0 = he.getVertex();
 			p1 = he.getNextInFace().getVertex();
 
-			_normal.x += (p0.yd() - p1.yd()) * (p0.zd() + p1.zd());
-			_normal.y += (p0.zd() - p1.zd()) * (p0.xd() + p1.xd());
-			_normal.z += (p0.xd() - p1.xd()) * (p0.yd() + p1.yd());
+			_normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return new WB_FixedVector(_normal);
+		return _normal;
 	}
 
 	public double getFaceArea() {

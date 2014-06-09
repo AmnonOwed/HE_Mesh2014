@@ -9,10 +9,11 @@ public class WB_NurbsSwungSurface {
 		final WB_Point[][] points = new WB_Point[n + 1][m + 1];
 		for (int i = 0; i <= n; i++) {
 			for (int j = 0; j <= m; j++) {
-				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].x
-						* xytrajectory.points()[j].x, alpha
-						* xzprofile.points()[i].x * xytrajectory.points()[j].y,
-						xzprofile.points()[i].z);
+				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].xd(), alpha
+						* xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].yd(),
+						xzprofile.points()[i].zd());
 
 			}
 		}
@@ -29,10 +30,11 @@ public class WB_NurbsSwungSurface {
 		final double[][] weights = new double[n + 1][m + 1];
 		for (int i = 0; i <= n; i++) {
 			for (int j = 0; j <= m; j++) {
-				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].x
-						* xytrajectory.points()[j].x, alpha
-						* xzprofile.points()[i].x * xytrajectory.points()[j].y,
-						xzprofile.points()[i].z);
+				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].xd(), alpha
+						* xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].yd(),
+						xzprofile.points()[i].zd());
 				weights[i][j] = xzprofile.weights()[i]
 						* xytrajectory.weights()[j];
 
@@ -51,10 +53,11 @@ public class WB_NurbsSwungSurface {
 		final double[][] weights = new double[n + 1][m + 1];
 		for (int i = 0; i <= n; i++) {
 			for (int j = 0; j <= m; j++) {
-				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].x
-						* xytrajectory.points()[j].x, alpha
-						* xzprofile.points()[i].x * xytrajectory.points()[j].y,
-						xzprofile.points()[i].z);
+				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].xd(), alpha
+						* xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].yd(),
+						xzprofile.points()[i].zd());
 				weights[i][j] = xytrajectory.weights()[j];
 
 			}
@@ -72,10 +75,11 @@ public class WB_NurbsSwungSurface {
 		final double[][] weights = new double[n + 1][m + 1];
 		for (int i = 0; i <= n; i++) {
 			for (int j = 0; j <= m; j++) {
-				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].x
-						* xytrajectory.points()[j].x, alpha
-						* xzprofile.points()[i].x * xytrajectory.points()[j].y,
-						xzprofile.points()[i].z);
+				points[i][j] = new WB_Point(alpha * xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].xd(), alpha
+						* xzprofile.points()[i].xd()
+						* xytrajectory.points()[j].yd(),
+						xzprofile.points()[i].zd());
 				weights[i][j] = xzprofile.weights()[i];
 
 			}

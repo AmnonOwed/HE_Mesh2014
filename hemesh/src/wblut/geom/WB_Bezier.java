@@ -4,6 +4,7 @@ import wblut.math.WB_Bernstein;
 
 public class WB_Bezier implements WB_Curve {
 
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	protected WB_Point[] points;
 
 	protected int n;
@@ -74,8 +75,8 @@ public class WB_Bezier implements WB_Curve {
 		npoints[n + 1] = points[n];
 		final double inp = 1.0 / (n + 1);
 		for (int i = 1; i <= n; i++) {
-			npoints[i] = WB_Point
-					.interpolate(points[i], points[i - 1], i * inp);
+			npoints[i] = gf.createInterpolatedPoint(points[i], points[i - 1], i
+					* inp);
 
 		}
 		return new WB_Bezier(npoints);

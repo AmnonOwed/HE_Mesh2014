@@ -43,8 +43,8 @@ public abstract class HEC_Creator {
 	 */
 	public HEC_Creator() {
 		center = new WB_Point();
-		zaxis = WB_Vector.Z();
-		Z = WB_Vector.Z();
+		zaxis = new WB_Vector(WB_Vector.Z());
+		Z = new WB_Vector(WB_Vector.Z());
 		toModelview = false;
 	}
 
@@ -199,15 +199,15 @@ public abstract class HEC_Creator {
 		if (!override) {
 
 			if (zangle != 0) {
-				base.rotateAboutAxis(zangle, center.x, center.y, center.z,
-						center.x, center.y, center.z + 1);
+				base.rotateAboutAxis(zangle, center.xd(), center.yd(),
+						center.zd(), center.xd(), center.yd(), center.zd() + 1);
 			}
 
 			final WB_Vector tmp = zaxis.cross(Z);
 			if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-				base.rotateAboutAxis(-Math.acos(zaxis.dot(Z)), center.x,
-						center.y, center.z, center.x + tmp.x, center.y + tmp.y,
-						center.z + tmp.z);
+				base.rotateAboutAxis(-Math.acos(zaxis.dot(Z)), center.xd(),
+						center.yd(), center.zd(), center.xd() + tmp.xd(),
+						center.yd() + tmp.yd(), center.zd() + tmp.zd());
 			} else if (zaxis.dot(Z) < -1 + WB_Epsilon.EPSILON) {
 				base.scale(1, 1, -1);
 			}

@@ -29,7 +29,7 @@ public class HEC_Sphere extends HEC_Creator {
 		R = 0;
 		uFacets = 12;
 		vFacets = 6;
-		Z = WB_Vector.Y();
+		Z = new WB_Vector(WB_Vector.Y());
 	}
 
 	/**

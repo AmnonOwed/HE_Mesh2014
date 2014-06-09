@@ -1,6 +1,7 @@
 package wblut.math;
 
 import wblut.geom.WB_Angle;
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_LatLon;
 import wblut.geom.WB_Vector;
 
@@ -128,7 +129,7 @@ public class WB_Quaternion {
 		return this.w;
 	}
 
-	public static WB_Quaternion fromAxisAngle(WB_Angle angle, WB_Vector axis) {
+	public static WB_Quaternion fromAxisAngle(WB_Angle angle, WB_Coordinate axis) {
 		if (angle == null) {
 
 			throw new IllegalArgumentException();
@@ -137,7 +138,7 @@ public class WB_Quaternion {
 			throw new IllegalArgumentException();
 		}
 
-		return fromAxisAngle(angle, axis.x, axis.y, axis.z, true);
+		return fromAxisAngle(angle, axis.xd(), axis.yd(), axis.zd(), true);
 	}
 
 	public static WB_Quaternion fromAxisAngle(WB_Angle angle, double axisX,

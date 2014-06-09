@@ -191,9 +191,9 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 			p0 = points[j];
 			p1 = points[i];
-			normal.x += (p0.y - p1.y) * (p0.z + p1.z);
-			normal.y += (p0.z - p1.z) * (p0.x + p1.x);
-			normal.z += (p0.x - p1.x) * (p0.y + p1.y);
+			normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
+					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 			center._addSelf(p1);
 		}
 		normal._normalizeSelf();
@@ -392,7 +392,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 			// center of edge
 			origin = p1.add(p2)._mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d * normal.x, d * normal.y, d * normal.z);
+			origin._addSelf(d * normal.xd(), d * normal.yd(), d * normal.zd());
 
 			splitPolygonInto(poly, new WB_Plane(origin, normal), frontPoly,
 					backPoly);
@@ -445,7 +445,8 @@ public class WB_SimplePolygon implements SimplePolygon {
 			// center of edge
 			origin = p1.add(p2)._mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d[j] * normal.x, d[j] * normal.y, d[j] * normal.z);
+			origin._addSelf(d[j] * normal.xd(), d[j] * normal.yd(), d[j]
+					* normal.zd());
 
 			splitPolygonInto(poly, new WB_Plane(origin, normal), frontPoly,
 					backPoly);

@@ -146,8 +146,8 @@ public class WB_Triangle implements Triangle {
 
 	@Override
 	public WB_Geometry apply(final WB_Transform T) {
-		return geometryfactory.createTriangle(p1.applyAsPoint(T),
-				p2.applyAsPoint(T), p3.applyAsPoint(T));
+		return geometryfactory.createTriangle(p1.applySelfAsPoint(T),
+				p2.applySelfAsPoint(T), p3.applySelfAsPoint(T));
 	}
 
 	/**
@@ -265,30 +265,29 @@ public class WB_Triangle implements Triangle {
 	 * @return the w b_ point
 	 */
 	public WB_Point getBarycentric(final WB_Coordinate p) {
-		final WB_Vector m = WB_Vector.getCross(p3.subToVector(p1),
-				p2.subToVector(p1));
+		final WB_Vector m = p3.subToVector(p1).cross(p2.subToVector(p1));
 		double nu, nv, ood;
-		final double x = WB_Math.fastAbs(m.x);
-		final double y = WB_Math.fastAbs(m.y);
-		final double z = WB_Math.fastAbs(m.z);
+		final double x = WB_Math.fastAbs(m.xd());
+		final double y = WB_Math.fastAbs(m.yd());
+		final double z = WB_Math.fastAbs(m.zd());
 		if (x >= y && x >= z) {
-			nu = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(), p2.y, p2.z,
-					p3.y, p3.z);
-			nv = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(), p3.y, p3.z,
-					p1.y, p1.z);
-			ood = 1.0 / m.x;
+			nu = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(), p2.yd(),
+					p2.zd(), p3.yd(), p3.zd());
+			nv = WB_Triangle2D.twiceSignedTriArea2D(p.yd(), p.zd(), p3.yd(),
+					p3.zd(), p1.yd(), p1.zd());
+			ood = 1.0 / m.xd();
 		} else if (y >= x && y >= z) {
-			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(), p2.x, p2.z,
-					p3.x, p3.z);
-			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(), p3.x, p3.z,
-					p1.x, p1.z);
-			ood = -1.0 / m.y;
+			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(), p2.xd(),
+					p2.zd(), p3.xd(), p3.zd());
+			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.zd(), p3.xd(),
+					p3.zd(), p1.xd(), p1.zd());
+			ood = -1.0 / m.yd();
 		} else {
-			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(), p2.x, p2.y,
-					p3.x, p3.y);
-			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(), p3.x, p3.y,
-					p1.x, p1.y);
-			ood = -1.0 / m.z;
+			nu = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(), p2.xd(),
+					p2.yd(), p3.xd(), p3.yd());
+			nv = WB_Triangle2D.twiceSignedTriArea2D(p.xd(), p.yd(), p3.xd(),
+					p3.yd(), p1.xd(), p1.yd());
+			ood = -1.0 / m.zd();
 		}
 		nu *= ood;
 		nv *= ood;
@@ -308,9 +307,9 @@ public class WB_Triangle implements Triangle {
 		}
 		final WB_Vector n = getPlane().getNormal();
 
-		final double x = WB_Math.fastAbs(n.x);
-		final double y = WB_Math.fastAbs(n.y);
-		final double z = WB_Math.fastAbs(n.z);
+		final double x = WB_Math.fastAbs(n.xd());
+		final double y = WB_Math.fastAbs(n.yd());
+		final double z = WB_Math.fastAbs(n.zd());
 		double area = 0;
 		int coord = 3;
 		if (x >= y && x >= z) {
@@ -321,16 +320,19 @@ public class WB_Triangle implements Triangle {
 
 		switch (coord) {
 		case 1:
-			area = (p1.y * (p2.z - p3.z)) + (p2.y * (p3.z - p1.z))
-					+ (p3.y * (p1.z - p2.z));
+			area = (p1.yd() * (p2.zd() - p3.zd()))
+					+ (p2.yd() * (p3.zd() - p1.zd()))
+					+ (p3.yd() * (p1.zd() - p2.zd()));
 			break;
 		case 2:
-			area = (p1.x * (p2.z - p3.z)) + (p2.x * (p3.z - p1.z))
-					+ (p3.x * (p1.z - p2.z));
+			area = (p1.xd() * (p2.zd() - p3.zd()))
+					+ (p2.xd() * (p3.zd() - p1.zd()))
+					+ (p3.xd() * (p1.zd() - p2.zd()));
 			break;
 		case 3:
-			area = (p1.x * (p2.y - p3.y)) + (p2.x * (p3.y - p1.y))
-					+ (p3.x * (p1.y - p2.y));
+			area = (p1.xd() * (p2.yd() - p3.yd()))
+					+ (p2.xd() * (p3.yd() - p1.yd()))
+					+ (p3.xd() * (p1.yd() - p2.yd()));
 			break;
 
 		}

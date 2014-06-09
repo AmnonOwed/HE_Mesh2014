@@ -20,6 +20,7 @@ import wblut.math.WB_Math;
 public class WB_LatLon {
 	public static final WB_LatLon ZERO = new WB_LatLon(WB_Angle.ZERO,
 			WB_Angle.ZERO);
+	private static final WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	public enum Type {
 		GREAT_CIRCLE, LOXODROME, RHUMB_LINE, LINEAR
@@ -218,9 +219,9 @@ public class WB_LatLon {
 				value1.getLatitude().radians, 0);
 		WB_Point v2 = new WB_Point(value2.getLongitude().radians,
 				value2.getLatitude().radians, 0);
-		WB_Point p = WB_Point.interpolate(v1, v2, amount);
+		WB_Point p = gf.createInterpolatedPoint(v1, v2, amount);
 
-		return WB_LatLon.fromRadians(p.y, p.x);
+		return WB_LatLon.fromRadians(p.yd(), p.xd());
 	}
 
 	/**

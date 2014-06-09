@@ -83,7 +83,7 @@ public class WB_AlphaComplex {
 			WB_Point p = new WB_Point(points[i].xd() + (Math.random() - 0.5)
 					* joggle, points[i].yd() + (Math.random() - 0.5) * joggle,
 					points[i].zd() + (Math.random() - 0.5) * joggle);
-			_points.add(new Point(p.x, p.y, p.z));
+			_points.add(new Point(p.xd(), p.yd(), p.zd()));
 			tree.add(p, i);
 		}
 		af = new AlphaComplex(_points);
@@ -180,7 +180,7 @@ public class WB_AlphaComplex {
 					+ (Math.random() - 0.5) * joggle, points.get(i).yd()
 					+ (Math.random() - 0.5) * joggle, points.get(i).zd()
 					+ (Math.random() - 0.5) * joggle);
-			_points.add(new Point(p.x, p.y, p.z));
+			_points.add(new Point(p.xd(), p.yd(), p.zd()));
 			tree.add(p, i);
 		}
 		af = new AlphaComplex(_points);

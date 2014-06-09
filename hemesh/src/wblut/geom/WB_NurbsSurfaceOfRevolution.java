@@ -80,7 +80,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = 1;
 				final WB_Vector T2 = Y.mul(cosines[i]);
-				T2._addSelf(-sines[i], X);
+				T2._addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection
@@ -182,7 +182,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = C.wpoints()[j].w;
 				final WB_Vector T2 = Y.mul(cosines[i]);
-				T2._addSelf(-sines[i], X);
+				T2._addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection

@@ -572,15 +572,18 @@ public class WB_Math {
 	 * @throws IllegalArgumentException
 	 *             if any of the specified vertices are null.
 	 */
-	public static WB_Vector computeTriangleNormal(WB_Vector a, WB_Vector b,
-			WB_Vector c) {
+	public static WB_Vector computeTriangleNormal(WB_Coordinate a,
+			WB_Coordinate b, WB_Coordinate c) {
 		if (a == null || b == null || c == null) {
 			throw new IllegalArgumentException();
 		}
 
-		double x = ((b.y - a.y) * (c.z - a.z)) - ((b.z - a.z) * (c.y - a.y));
-		double y = ((b.z - a.z) * (c.x - a.x)) - ((b.x - a.x) * (c.z - a.z));
-		double z = ((b.x - a.x) * (c.y - a.y)) - ((b.y - a.y) * (c.x - a.x));
+		double x = ((b.yd() - a.yd()) * (c.zd() - a.zd()))
+				- ((b.zd() - a.zd()) * (c.yd() - a.yd()));
+		double y = ((b.zd() - a.zd()) * (c.xd() - a.xd()))
+				- ((b.xd() - a.xd()) * (c.zd() - a.zd()));
+		double z = ((b.xd() - a.xd()) * (c.yd() - a.yd()))
+				- ((b.yd() - a.yd()) * (c.xd() - a.xd()));
 
 		double length = (x * x) + (y * y) + (z * z);
 		if (length == 0d)

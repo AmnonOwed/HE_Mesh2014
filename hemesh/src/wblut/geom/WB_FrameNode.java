@@ -171,7 +171,7 @@ public class WB_FrameNode extends WB_Point {
 	}
 
 	public WB_Point toPoint() {
-		return new WB_Point(x, y, z);
+		return new WB_Point(xd(), yd(), zd());
 	}
 
 }

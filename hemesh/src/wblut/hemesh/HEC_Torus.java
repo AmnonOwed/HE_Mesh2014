@@ -135,8 +135,8 @@ public class HEC_Torus extends HEC_Creator {
 						* Math.cos(dtua * i + j * dtwa), 0, Ri
 						* Math.sin(dtua * i + j * dtwa));
 
-				vertices[id] = new WB_Point(ca * basevertex.x, sa
-						* basevertex.x, basevertex.z);
+				vertices[id] = new WB_Point(ca * basevertex.xd(), sa
+						* basevertex.xd(), basevertex.zd());
 				id++;
 			}
 

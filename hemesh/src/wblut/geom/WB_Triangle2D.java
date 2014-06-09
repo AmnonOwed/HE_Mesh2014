@@ -64,11 +64,14 @@ public class WB_Triangle2D implements Triangle2D {
 		b = WB_Distance.getDistance2D(p1, p3);
 		c = WB_Distance.getDistance2D(p1, p2);
 
-		cosA = ((p2.x - p1.x) * (p3.x - p1.x) + (p2.y - p1.y) * (p3.y - p1.y))
+		cosA = ((p2.xd() - p1.xd()) * (p3.xd() - p1.xd()) + (p2.yd() - p1.yd())
+				* (p3.yd() - p1.yd()))
 				/ (b * c);
-		cosB = ((p1.x - p2.x) * (p3.x - p2.x) + (p1.y - p2.y) * (p3.y - p2.y))
+		cosB = ((p1.xd() - p2.xd()) * (p3.xd() - p2.xd()) + (p1.yd() - p2.yd())
+				* (p3.yd() - p2.yd()))
 				/ (a * c);
-		cosC = ((p2.x - p3.x) * (p1.x - p3.x) + (p2.y - p3.y) * (p1.y - p3.y))
+		cosC = ((p2.xd() - p3.xd()) * (p1.xd() - p3.xd()) + (p2.yd() - p3.yd())
+				* (p1.yd() - p3.yd()))
 				/ (a * b);
 
 		degenerate = WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(p1,
@@ -90,10 +93,10 @@ public class WB_Triangle2D implements Triangle2D {
 					/ Math.sqrt(2 * a * a * b * b + 2 * b * b * c * c + 2 * a
 							* a * c * c - a * a * a * a - b * b * b * b - c * c
 							* c * c));
-			final double bx = p2.x - p1.x;
-			final double by = p2.y - p1.y;
-			final double cx = p3.x - p1.x;
-			final double cy = p3.y - p1.y;
+			final double bx = p2.xd() - p1.xd();
+			final double by = p2.yd() - p1.yd();
+			final double cx = p3.xd() - p1.xd();
+			final double cy = p3.yd() - p1.yd();
 			double d = 2 * (bx * cy - by * cx);
 			if (WB_Epsilon.isZero(d)) {
 				return null;
@@ -103,7 +106,7 @@ public class WB_Triangle2D implements Triangle2D {
 			final double c2 = cx * cx + cy * cy;
 			final double x = (cy * b2 - by * c2) * d;
 			final double y = (bx * c2 - cx * b2) * d;
-			result.setCenter(x + p1.x, y + p1.y);
+			result.setCenter(x + p1.xd(), y + p1.yd());
 			return result;
 		}
 		return null;
@@ -231,13 +234,15 @@ public class WB_Triangle2D implements Triangle2D {
 	 * @return barycentric coordinates as WB_XYZ
 	 */
 	public WB_Point getBarycentric(final WB_Coordinate p) {
-		final double m = (p3.x - p1.x) * (p2.y - p1.y) - (p3.y - p1.y)
-				* (p2.x - p1.x);
+		final double m = (p3.xd() - p1.xd()) * (p2.yd() - p1.yd())
+				- (p3.yd() - p1.yd()) * (p2.xd() - p1.xd());
 
 		double nu, nv, ood;
 
-		nu = twiceSignedTriArea2D(p.xd(), p.yd(), p2.x, p2.y, p3.x, p3.y);
-		nv = twiceSignedTriArea2D(p.xd(), p.yd(), p3.x, p3.y, p1.x, p1.y);
+		nu = twiceSignedTriArea2D(p.xd(), p.yd(), p2.xd(), p2.yd(), p3.xd(),
+				p3.yd());
+		nv = twiceSignedTriArea2D(p.xd(), p.yd(), p3.xd(), p3.yd(), p1.xd(),
+				p1.yd());
 		ood = -1.0 / m;
 
 		nu *= ood;
@@ -264,8 +269,8 @@ public class WB_Triangle2D implements Triangle2D {
 		final WB_Point t1 = new WB_Point(B)._subSelf(A);
 		final WB_Point t2 = new WB_Point(p1)._subSelf(A);
 		final WB_Point t3 = new WB_Point(p2)._subSelf(A);
-		final double ct2 = t1.x * t2.y - t1.y * t2.x;
-		final double ct3 = t1.x * t3.y - t1.y * t3.x;
+		final double ct2 = t1.xd() * t2.yd() - t1.yd() * t2.xd();
+		final double ct3 = t1.xd() * t3.yd() - t1.yd() * t3.xd();
 
 		if (ct2 * ct3 >= WB_Epsilon.EPSILON) {
 			return true;

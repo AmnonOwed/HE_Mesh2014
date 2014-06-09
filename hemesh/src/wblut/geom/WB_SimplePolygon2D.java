@@ -194,7 +194,7 @@ public class WB_SimplePolygon2D {
 		final WB_Point vn = points[(i == n - 1) ? 0 : i + 1].sub(points[i]);
 		vn._normalizeSelf();
 
-		final double cross = vp.x * vn.y - vp.y * vn.x;
+		final double cross = vp.xd() * vn.yd() - vp.yd() * vn.xd();
 
 		if (WB_Epsilon.isZero(cross)) {
 			return WB_Convex.FLAT;
@@ -350,11 +350,11 @@ public class WB_SimplePolygon2D {
 			v = p2.sub(p1);
 			v._normalizeSelf();
 			// edge normal is perpendicular to edge and plane normal
-			normal = new WB_Point(v.y, -v.x);
+			normal = new WB_Point(v.yd(), -v.xd());
 			// center of edge
 			origin = p1.add(p2)._mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d * normal.x, d * normal.y, 0);
+			origin._addSelf(d * normal.xd(), d * normal.yd(), 0);
 
 			splitPolygonInto(poly, new WB_Line2D(origin, v), frontPoly,
 					backPoly);
@@ -402,11 +402,11 @@ public class WB_SimplePolygon2D {
 			v = p2.sub(p1);
 			v._normalizeSelf();
 			// edge normal is perpendicular to edge and plane normal
-			normal = new WB_Point(v.y, -v.x);
+			normal = new WB_Point(v.yd(), -v.xd());
 			// center of edge
 			origin = p1.add(p2)._mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d[i] * normal.x, d[i] * normal.y, 0);
+			origin._addSelf(d[i] * normal.xd(), d[i] * normal.yd(), 0);
 
 			splitPolygonInto(poly, new WB_Line2D(origin, v), frontPoly,
 					backPoly);
@@ -848,7 +848,7 @@ public class WB_SimplePolygon2D {
 	public WB_SimplePolygon toPolygon() {
 		final WB_Point[] points3D = new WB_Point[n];
 		for (int i = 0; i < n; i++) {
-			points3D[i] = new WB_Point(points[i].x, points[i].y, 0);
+			points3D[i] = new WB_Point(points[i].xd(), points[i].yd(), 0);
 		}
 		return new WB_SimplePolygon(points3D, n);
 

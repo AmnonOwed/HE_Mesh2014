@@ -112,8 +112,16 @@ public class WB_Circle implements WB_Geometry {
 
 	@Override
 	public WB_Circle apply(final WB_Transform T) {
-		return geometryfactory.createCircleWithRadius(center.applyAsPoint(T),
-				normal.applyAsNormal(T), radius);
+		return geometryfactory.createCircleWithRadius(geometryfactory
+				.createPoint(center).applySelfAsPoint(T), geometryfactory
+				.createVector(normal).applySelfAsNormal(T), radius);
+
+	}
+
+	public WB_Circle applySelf(final WB_Transform T) {
+		center.applySelfAsPoint(T);
+		normal.applySelfAsNormal(T);
+		return this;
 
 	}
 
@@ -287,9 +295,11 @@ public class WB_Circle implements WB_Geometry {
 			return result;
 		}
 		final WB_Line2D L1 = new WB_Line2D(L.getOrigin().add(
-				L.getDirection().y, -L.getDirection().x, r), L.getDirection());
+				L.getDirection().yd(), -L.getDirection().xd(), r),
+				L.getDirection());
 		final WB_Line2D L2 = new WB_Line2D(L.getOrigin().add(
-				-L.getDirection().y, +L.getDirection().x, r), L.getDirection());
+				-L.getDirection().yd(), +L.getDirection().xd(), r),
+				L.getDirection());
 		final WB_Circle C1 = new WB_Circle(C.getCenter(), C.getRadius() + r);
 		final WB_Circle C2 = new WB_Circle(C.getCenter(), WB_Math.fastAbs(C
 				.getRadius() - r));

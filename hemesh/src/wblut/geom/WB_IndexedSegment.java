@@ -7,7 +7,7 @@ import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
 public class WB_IndexedSegment extends WB_Linear implements Segment {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	private int i1;
 
 	private int i2;
@@ -39,7 +39,7 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 	}
 
 	public WB_Point getCenter() {
-		return WB_Point.interpolate(points[i1], points[i2], 0.5);
+		return gf.createMidpoint(points[i1], points[i2]);
 	}
 
 	public WB_Point getEndpoint() {
@@ -118,8 +118,8 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 
 	@Override
 	public WB_Geometry apply(WB_Transform T) {
-		return geometryfactory.createSegment(getOrigin().applyAsPoint(T),
-				getEndpoint().applyAsPoint(T));
+		return geometryfactory.createSegment(getOrigin().applySelfAsPoint(T),
+				getEndpoint().applySelfAsPoint(T));
 	}
 
 }

@@ -4,7 +4,7 @@ import wblut.WB_Epsilon;
 import wblut.math.WB_Binomial;
 
 public class WB_BSpline implements WB_Curve {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	protected WB_NurbsKnot knot;
 
 	protected WB_Point[] points;
@@ -64,7 +64,7 @@ public class WB_BSpline implements WB_Curve {
 		final int p = knot.p();
 		for (int i = 0; i <= p; i++) {
 			final WB_Point tmp = points[span - p + i];
-			C._addSelf(N[i] * tmp.x, N[i] * tmp.y, N[i] * tmp.z);
+			C._addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i] * tmp.zd());
 		}
 		return C;
 	}
@@ -115,7 +115,7 @@ public class WB_BSpline implements WB_Curve {
 			for (int i = 0; i <= p - j - s; i++) {
 				final double alpha = (u - knot.value(L + i))
 						/ (knot.value(i + k + 1) - knot.value(L + i));
-				RW[i] = WB_Point.interpolate(RW[i], RW[i + 1], alpha);
+				RW[i] = gf.createInterpolatedPoint(RW[i], RW[i + 1], alpha);
 			}
 			Q[L] = RW[0];
 			Q[k + r - j - s] = RW[p - j - s];
@@ -210,8 +210,8 @@ public class WB_BSpline implements WB_Curve {
 					Q[ind - 1] = new WB_Point(Q[ind]);
 				} else {
 					alpha /= (Ubar.value(k + el) - knot.value(i - p + el));
-					Q[ind - 1] = WB_Point
-							.interpolate(Q[ind], Q[ind - 1], alpha);
+					Q[ind - 1] = gf.createInterpolatedPoint(Q[ind], Q[ind - 1],
+							alpha);
 				}
 			}
 			Ubar.setValue(k, X[j]);
@@ -346,8 +346,8 @@ public class WB_BSpline implements WB_Curve {
 					final int save = r - j;
 					final int sj = mul + j;
 					for (k = p; k >= sj; k--) {
-						bpts[k] = WB_Point.interpolate(bpts[k - 1], bpts[k],
-								alfs[k - sj]);
+						bpts[k] = gf.createInterpolatedPoint(bpts[k - 1],
+								bpts[k], alfs[k - sj]);
 					}
 					nextbpts[save] = new WB_Point(bpts[p]);
 				}
@@ -374,17 +374,18 @@ public class WB_BSpline implements WB_Curve {
 						if (i < cind) {
 							final double alf = (ub - Uh.value(i))
 									/ (ua - Uh.value(i));
-							Q[i] = WB_Point.interpolate(Q[i - 1], Q[i], alf);
+							Q[i] = gf.createInterpolatedPoint(Q[i - 1], Q[i],
+									alf);
 						}
 						if (j >= lbz) {
 							if (j - tr <= kind - ph + oldr) {
 								final double gam = (ub - Uh.value(j - tr))
 										/ den;
-								ebpts[kj] = WB_Point.interpolate(ebpts[kj + 1],
-										ebpts[kj], gam);
+								ebpts[kj] = gf.createInterpolatedPoint(
+										ebpts[kj + 1], ebpts[kj], gam);
 							} else {
-								ebpts[kj] = WB_Point.interpolate(ebpts[kj + 1],
-										ebpts[kj], bet);
+								ebpts[kj] = gf.createInterpolatedPoint(
+										ebpts[kj + 1], ebpts[kj], bet);
 							}
 						}
 						i++;

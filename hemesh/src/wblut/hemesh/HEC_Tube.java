@@ -50,7 +50,7 @@ public class HEC_Tube extends HEC_Creator {
 		shiftX = 0;
 		shiftY = 0;
 
-		Z = WB_Vector.Y();
+		Z = new WB_Vector(WB_Vector.Y());
 
 	}
 

@@ -40,7 +40,7 @@ import wblut.geom.WB_Vector;
  * 
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
 
@@ -957,8 +957,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		}
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
-			vItr.next().pos._addSelf(x - _center.x, y - _center.y, z
-					- _center.z);
+			vItr.next().pos._addSelf(x - _center.xd(), y - _center.yd(), z
+					- _center.zd());
 		}
 		_center._set(x, y, z);
 		return this;
@@ -1094,13 +1094,13 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(c.x + scaleFactorx * (v.xd() - c.x),
-					c.y + scaleFactory * (v.yd() - c.y), c.z + scaleFactorz
-							* (v.zd() - c.z));
+			v._set(c.xd() + scaleFactorx * (v.xd() - c.xd()), c.yd()
+					+ scaleFactory * (v.yd() - c.yd()), c.zd() + scaleFactorz
+					* (v.zd() - c.zd()));
 		}
-		_center._set(c.x + scaleFactorx * (-c.x + _center.x), c.y
-				+ scaleFactory * (-c.y + _center.y), c.z + scaleFactorz
-				* (-c.z + _center.z));
+		_center._set(c.xd() + scaleFactorx * (-c.xd() + _center.xd()), c.yd()
+				+ scaleFactory * (-c.yd() + _center.yd()), c.zd()
+				+ scaleFactorz * (-c.zd() + _center.zd()));
 		;
 		return this;
 	}
@@ -1138,9 +1138,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(_center.x + scaleFactorx * (v.xd() - _center.x), _center.y
-					+ scaleFactory * (v.yd() - _center.y), _center.z
-					+ scaleFactorz * (v.zd() - _center.z));
+			v._set(_center.xd() + scaleFactorx * (v.xd() - _center.xd()),
+					_center.yd() + scaleFactory * (v.yd() - _center.yd()),
+					_center.zd() + scaleFactorz * (v.zd() - _center.zd()));
 		}
 		;
 		return this;
@@ -2113,7 +2113,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return selection of new vertex and new edge
 	 */
 	public HE_Selection splitEdge(final HE_Edge edge, final double f) {
-		final WB_Point v = WB_Point.interpolate(edge.getStartVertex(),
+		final WB_Point v = gf.createInterpolatedPoint(edge.getStartVertex(),
 				edge.getEndVertex(), f);
 		return splitEdge(edge, v);
 	}
@@ -2233,7 +2233,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < f.length; i++) {
 			final double fi = fArray[i];
 			if ((fi > 0) && (fi < 1)) {
-				v = new HE_Vertex(WB_Point.interpolate(v0, v1, fi));
+				v = new HE_Vertex(gf.createInterpolatedPoint(v0, v1, fi));
 				e = (splitEdge(e, v.pos).eItr().next());
 			}
 		}
@@ -2273,7 +2273,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 		for (int i = 0; i < f.length; i++) {
 			final double fi = fArray[i];
 			if ((fi > 0) && (fi < 1)) {
-				v = new HE_Vertex(WB_Point.interpolate(v0, v1, fi));
+				v = new HE_Vertex(gf.createInterpolatedPoint(v0, v1, fi));
 				e = (splitEdge(e, v.pos).eItr().next());
 			}
 		}

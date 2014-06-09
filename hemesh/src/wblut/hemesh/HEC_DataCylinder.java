@@ -42,7 +42,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 		H = 0;
 		_facets = 6;
 		_steps = 1;
-		Z = WB_Vector.Y();
+		Z = new WB_Vector(WB_Vector.Y());
 		topcap = true;
 		bottomcap = true;
 		taper = 1.0;

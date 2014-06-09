@@ -3,7 +3,7 @@ package wblut.geom;
 /**
  * Simple interface for anything that present itself as a 2D, 3D or 4D tuple of
  * double. Useful to create a wrapper for other point and vector-classes. If the
- * class is intended to be mutable use WB_MTuple instead.
+ * class is intended to be mutable use WB_MutableCoordinate instead.
  * 
  * @author Frederik Vanhoutte
  * 

@@ -7,6 +7,7 @@ import javolution.util.FastMap;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_FrameNode;
 import wblut.geom.WB_FrameStrut;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
@@ -14,7 +15,7 @@ import wblut.math.WB_ConstantParameter;
 import wblut.math.WB_Parameter;
 
 public class HEC_FromFrame extends HEC_Creator {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	private WB_Frame frame;
 
 	private int numberOfNodes, numberOfStruts;
@@ -210,17 +211,17 @@ public class HEC_FromFrame extends HEC_Creator {
 		int i = 0;
 		for (final WB_FrameNode node : frame.getNodes()) {
 			if (nodeTypes[i] == NodeType.ENDPOINT) {
-				double r = strutRadius.value(node.x, node.y, node.z);
+				double r = strutRadius.value(node.xd(), node.yd(), node.zd());
 				if (useNodeValues) {
 					r *= node.getValue();
 				}
 				createNodeStrutConnection(node, 0, 0.0, 0.0, r);
 			} else if (nodeTypes[i] == NodeType.STRAIGHT) {
-				double r = strutRadius.value(node.x, node.y, node.z);
+				double r = strutRadius.value(node.xd(), node.yd(), node.zd());
 				if (useNodeValues) {
 					r *= node.getValue();
 				}
-				double o = strutRadius.value(node.x, node.y, node.z);
+				double o = strutRadius.value(node.xd(), node.yd(), node.zd());
 				if (useNodeValues) {
 					o *= node.getValue();
 				}
@@ -229,7 +230,7 @@ public class HEC_FromFrame extends HEC_Creator {
 			} else if ((nodeTypes[i] == NodeType.TURN)
 					|| (nodeTypes[i] == NodeType.BEND)) {
 				final double minSpan = node.findSmallestSpan();
-				double r = strutRadius.value(node.x, node.y, node.z);
+				double r = strutRadius.value(node.xd(), node.yd(), node.zd());
 				double o = fidget * r / Math.min(1.0, Math.tan(0.5 * minSpan));
 				if (useNodeValues) {
 					r *= node.getValue();
@@ -242,7 +243,7 @@ public class HEC_FromFrame extends HEC_Creator {
 			} else if (nodeTypes[i] == NodeType.STAR) {
 				final double minSpan = node.findSmallestSpan();
 
-				double r = strutRadius.value(node.x, node.y, node.z);
+				double r = strutRadius.value(node.xd(), node.yd(), node.zd());
 				double mo = fidget * r / Math.min(1.0, Math.tan(0.5 * minSpan));
 				if (useNodeValues) {
 					r *= node.getValue();
@@ -258,8 +259,8 @@ public class HEC_FromFrame extends HEC_Creator {
 					if (useNodeValues) {
 						o *= node.getValue();
 					}
-					double mso = maximumStrutOffset.value(node.x, node.y,
-							node.z);
+					double mso = maximumStrutOffset.value(node.xd(), node.yd(),
+							node.zd());
 					if (useNodeValues) {
 						mso *= node.getValue();
 					}
@@ -317,9 +318,9 @@ public class HEC_FromFrame extends HEC_Creator {
 			for (int j = 0; j < strutFacets; j++) {
 				final WB_Point p = new WB_Point(strutNodeConnections[id].node);
 				final double af = angleFactor.value(
-						strutNodeConnections[id].node.x,
-						strutNodeConnections[id].node.y,
-						strutNodeConnections[id].node.z);
+						strutNodeConnections[id].node.xd(),
+						strutNodeConnections[id].node.yd(),
+						strutNodeConnections[id].node.zd());
 				p._addMulSelf(so, v);
 				final WB_Vector localu = u.mul(sr);
 				localu.rotateAboutAxis((j + af) * da, new WB_Point(),
@@ -357,10 +358,12 @@ public class HEC_FromFrame extends HEC_Creator {
 			final HE_Vertex[][] extraVertices = new HE_Vertex[strutFacets][ns - 1];
 			for (int j = 0; j < strutFacets; j++) {
 				for (int k = 0; k < ns - 1; k++) {
-					extraVertices[j][k] = new HE_Vertex(WB_Point.interpolate(
-							strutNodeConnections[offsets].vertices.get(j),
-							strutNodeConnections[offsete].vertices.get(j),
-							(k + 1) / (double) ns));
+					extraVertices[j][k] = new HE_Vertex(
+							gf.createInterpolatedPoint(
+									strutNodeConnections[offsets].vertices
+											.get(j),
+									strutNodeConnections[offsete].vertices
+											.get(j), (k + 1) / (double) ns));
 					mesh.add(extraVertices[j][k]);
 				}
 			}
@@ -463,7 +466,8 @@ public class HEC_FromFrame extends HEC_Creator {
 				}
 			} else {
 				if ((nodeTypes[i] != NodeType.ISOLATED) || createIsolatedNodes) {
-					double br = strutRadius.value(node.x, node.y, node.z);
+					double br = strutRadius.value(node.xd(), node.yd(),
+							node.zd());
 					for (int j = 0; j < struts.size(); j++) {
 						int offset;
 						if (node == struts.get(j).start()) {

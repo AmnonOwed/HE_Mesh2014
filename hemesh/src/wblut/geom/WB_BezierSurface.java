@@ -5,7 +5,7 @@ import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Bernstein;
 
 public class WB_BezierSurface implements WB_Surface {
-
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	protected WB_Point[][] points;
 
 	protected int n;
@@ -136,7 +136,7 @@ public class WB_BezierSurface implements WB_Surface {
 			npoints[n + 1][j] = points[n][j];
 			final double inp = 1.0 / (n + 1);
 			for (int i = 1; i <= n; i++) {
-				npoints[i][j] = WB_Point.interpolate(points[i][j],
+				npoints[i][j] = gf.createInterpolatedPoint(points[i][j],
 						points[i - 1][j], i * inp);
 
 			}
@@ -153,7 +153,7 @@ public class WB_BezierSurface implements WB_Surface {
 			npoints[i][m + 1] = points[i][m];
 			final double inp = 1.0 / (n + 1);
 			for (int j = 1; j <= m; j++) {
-				npoints[i][j] = WB_Point.interpolate(points[i][j],
+				npoints[i][j] = gf.createInterpolatedPoint(points[i][j],
 						points[i][j - 1], j * inp);
 
 			}

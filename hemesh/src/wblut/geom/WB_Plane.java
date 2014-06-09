@@ -38,7 +38,7 @@ public class WB_Plane {
 		final WB_Vector v31 = new WB_Vector(p1, p3);
 		n = new WB_Vector(v21.cross(v31));
 		n._normalizeSelf();
-		d = n.x * p1.xd() + n.y * p1.yd() + n.z * p1.zd();
+		d = n.xd() * p1.xd() + n.yd() * p1.yd() + n.zd() * p1.zd();
 		origin = new WB_Point(p1);
 		setAxes();
 	}
@@ -268,17 +268,17 @@ public class WB_Plane {
 	 * Sets the axes.
 	 */
 	private void setAxes() {
-		final double x = WB_Math.fastAbs(n.x);
-		final double y = WB_Math.fastAbs(n.y);
+		final double x = WB_Math.fastAbs(n.xd());
+		final double y = WB_Math.fastAbs(n.yd());
 
 		if (x >= y) {
-			u = new WB_Vector(n.z, 0, -n.x);
+			u = new WB_Vector(n.zd(), 0, -n.xd());
 
 		} else {
-			u = new WB_Vector(0, n.z, -n.y);
+			u = new WB_Vector(0, n.zd(), -n.yd());
 		}
 		u._normalizeSelf();
-		v = WB_Vector.getCross(n, u);
+		v = n.cross(u);
 
 	}
 
@@ -291,11 +291,14 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point localPoint(final WB_Coordinate p) {
-		return new WB_Point(u.x * (p.xd() - origin.x) + u.y
-				* (p.yd() - origin.y) + u.z * (p.zd() - origin.z), v.x
-				* (p.xd() - origin.x) + v.y * (p.yd() - origin.y) + v.z
-				* (p.zd() - origin.z), n.x * (p.xd() - origin.x) + n.y
-				* (p.yd() - origin.y) + n.z * (p.zd() - origin.z));
+		return new WB_Point(u.xd() * (p.xd() - origin.xd()) + u.yd()
+				* (p.yd() - origin.yd()) + u.zd() * (p.zd() - origin.zd()),
+				v.xd() * (p.xd() - origin.xd()) + v.yd()
+						* (p.yd() - origin.yd()) + v.zd()
+						* (p.zd() - origin.zd()), n.xd()
+						* (p.xd() - origin.xd()) + n.yd()
+						* (p.yd() - origin.yd()) + n.zd()
+						* (p.zd() - origin.zd()));
 
 	}
 
@@ -307,10 +310,11 @@ public class WB_Plane {
 	 * @return the w b_ point2d
 	 */
 	public WB_Point localPoint2D(final WB_Coordinate p) {
-		return new WB_Point(u.x * (p.xd() - origin.x) + u.y
-				* (p.yd() - origin.y) + u.z * (p.zd() - origin.z), v.x
-				* (p.xd() - origin.x) + v.y * (p.yd() - origin.y) + v.z
-				* (p.zd() - origin.z));
+		return new WB_Point(u.xd() * (p.xd() - origin.xd()) + u.yd()
+				* (p.yd() - origin.yd()) + u.zd() * (p.zd() - origin.zd()),
+				v.xd() * (p.xd() - origin.xd()) + v.yd()
+						* (p.yd() - origin.yd()) + v.zd()
+						* (p.zd() - origin.zd()));
 
 	}
 
@@ -323,9 +327,9 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point extractPoint(final WB_Coordinate p) {
-		return new WB_Point(origin.x + p.xd() * u.x + p.yd() * v.x, origin.y
-				+ p.xd() * u.y + p.yd() * v.y, origin.z + p.xd() * u.z + p.yd()
-				* v.z);
+		return new WB_Point(origin.xd() + p.xd() * u.xd() + p.yd() * v.xd(),
+				origin.yd() + p.xd() * u.yd() + p.yd() * v.yd(), origin.zd()
+						+ p.xd() * u.zd() + p.yd() * v.zd());
 	}
 
 	// Return embedded point coordinates relative to world axes
@@ -339,8 +343,9 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point extractPoint(final double x, final double y) {
-		return new WB_Point(origin.x + x * u.x + y * v.x, origin.y + x * u.y
-				+ y * v.y, origin.z + x * u.z + y * v.z);
+		return new WB_Point(origin.xd() + x * u.xd() + y * v.xd(), origin.yd()
+				+ x * u.yd() + y * v.yd(), origin.zd() + x * u.zd() + y
+				* v.zd());
 	}
 
 	// Return coordinates relative to world axes
@@ -352,9 +357,10 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point extractPoint2D(final WB_Coordinate p) {
-		return new WB_Point(origin.x + p.xd() * u.x + p.yd() * v.x + p.zd()
-				* n.x, origin.y + p.xd() * u.y + p.yd() * v.y + p.zd() * n.y,
-				origin.z + p.xd() * u.z + p.yd() * v.z + p.zd() * n.z);
+		return new WB_Point(origin.xd() + p.xd() * u.xd() + p.yd() * v.xd()
+				+ p.zd() * n.xd(), origin.yd() + p.xd() * u.yd() + p.yd()
+				* v.yd() + p.zd() * n.yd(), origin.zd() + p.xd() * u.zd()
+				+ p.yd() * v.zd() + p.zd() * n.zd());
 	}
 
 	// Return coordinates relative to world axes
@@ -370,9 +376,9 @@ public class WB_Plane {
 	 * @return the w b_ point3d
 	 */
 	public WB_Point extractPoint(final double x, final double y, final double z) {
-		return new WB_Point(origin.x + x * u.x + y * v.x + z * n.x, origin.y
-				+ x * u.y + y * v.y + z * n.y, origin.z + x * u.z + y * v.z + z
-				* n.z);
+		return new WB_Point(origin.xd() + x * u.xd() + y * v.xd() + z * n.xd(),
+				origin.yd() + x * u.yd() + y * v.yd() + z * n.yd(), origin.zd()
+						+ x * u.zd() + y * v.zd() + z * n.zd());
 	}
 
 	// Return new point mirrored across plane

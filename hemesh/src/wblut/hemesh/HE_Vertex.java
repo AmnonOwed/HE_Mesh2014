@@ -826,7 +826,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		G = G.inverse();
 		if (G == null)
 			return null;
-		return WB_M33.mult(G, h);
+		return WB_M33.mulToPoint(G, h);
 	}
 
 }

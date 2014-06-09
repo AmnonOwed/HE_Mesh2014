@@ -1,6 +1,8 @@
 package wblut.math;
 
 import wblut.WB_Epsilon;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_MutableCoordinate;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
@@ -321,7 +323,7 @@ public class WB_M33 {
 	 * @param f
 	 *            factor
 	 */
-	public void mult(final double f) {
+	public void mul(final double f) {
 		m11 *= f;
 		m12 *= f;
 		m13 *= f;
@@ -442,7 +444,7 @@ public class WB_M33 {
 	 *            matrix
 	 * @return result
 	 */
-	public static WB_M33 mult(final WB_M33 m, final WB_M33 n) {
+	public static WB_M33 mul(final WB_M33 m, final WB_M33 n) {
 		return new WB_M33(m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31, m.m11
 				* n.m12 + m.m12 * n.m22 + m.m13 * n.m32, m.m11 * n.m13 + m.m12
 				* n.m23 + m.m13 * n.m33, m.m21 * n.m11 + m.m22 * n.m21 + m.m23
@@ -462,7 +464,7 @@ public class WB_M33 {
 	 * @param result
 	 *            result
 	 */
-	public static void multInto(final WB_M33 m, final WB_M33 n,
+	public static void mulInto(final WB_M33 m, final WB_M33 n,
 			final WB_M33 result) {
 		result.set(m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31, m.m11 * n.m12
 				+ m.m12 * n.m22 + m.m13 * n.m32, m.m11 * n.m13 + m.m12 * n.m23
@@ -481,7 +483,7 @@ public class WB_M33 {
 	 *            matrix
 	 * @return result
 	 */
-	public WB_M33 mult(final WB_M33 n) {
+	public WB_M33 mul(final WB_M33 n) {
 		return new WB_M33(m11 * n.m11 + m12 * n.m21 + m13 * n.m31, m11 * n.m12
 				+ m12 * n.m22 + m13 * n.m32, m11 * n.m13 + m12 * n.m23 + m13
 				* n.m33, m21 * n.m11 + m22 * n.m21 + m23 * n.m31, m21 * n.m12
@@ -510,21 +512,6 @@ public class WB_M33 {
 	}
 
 	/**
-	 * Multiply matrix and vector into new vector.
-	 * 
-	 * @param m
-	 *            matrix
-	 * @param v
-	 *            vector
-	 * @return result
-	 */
-	public static WB_Vector mult(final WB_M33 m, final WB_Vector v) {
-		return new WB_Vector(v.x * m.m11 + v.y * m.m12 + v.z * m.m13, v.x
-				* m.m21 + v.y * m.m22 + v.z * m.m23, v.x * m.m31 + v.y * m.m32
-				+ v.z * m.m33);
-	}
-
-	/**
 	 * Multiply matrix and vector into provided vector.
 	 * 
 	 * @param m
@@ -534,41 +521,18 @@ public class WB_M33 {
 	 * @param result
 	 *            result
 	 */
-	public static void multInto(final WB_M33 m, final WB_Vector v,
-			final WB_Vector result) {
-		result._set(v.x * m.m11 + v.y * m.m12 + v.z * m.m13, v.x * m.m21 + v.y
-				* m.m22 + v.z * m.m23, v.x * m.m31 + v.y * m.m32 + v.z * m.m33);
+	public static void mulInto(final WB_M33 m, final WB_Coordinate v,
+			final WB_MutableCoordinate result) {
+		result._set(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13, v.xd()
+				* m.m21 + v.yd() * m.m22 + v.zd() * m.m23,
+				v.xd() * m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
-	/**
-	 * Multiply point and matrix into new point.
-	 * 
-	 * @param v
-	 *            point
-	 * @param m
-	 *            matrix
-	 * @return result
-	 */
-	public static WB_Point mult(final WB_Point v, final WB_M33 m) {
-		return new WB_Point(v.x * m.m11 + v.y * m.m21 + v.z * m.m31, v.x
-				* m.m12 + v.y * m.m22 + v.z * m.m32, v.x * m.m13 + v.y * m.m23
-				+ v.z * m.m33);
-	}
-
-	/**
-	 * Multiply vector and matrix into provided point.
-	 * 
-	 * @param v
-	 *            point
-	 * @param m
-	 *            matrix
-	 * @param result
-	 *            result
-	 */
-	public static void multInto(final WB_Point v, final WB_M33 m,
-			final WB_Point result) {
-		result._set(v.x * m.m11 + v.y * m.m21 + v.z * m.m31, v.x * m.m12 + v.y
-				* m.m22 + v.z * m.m32, v.x * m.m13 + v.y * m.m23 + v.z * m.m33);
+	public static void mulInto(final WB_Coordinate v, final WB_M33 m,
+			final WB_MutableCoordinate result) {
+		result._set(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31, v.xd()
+				* m.m12 + v.yd() * m.m22 + v.zd() * m.m32,
+				v.xd() * m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
 	/**
@@ -580,57 +544,37 @@ public class WB_M33 {
 	 *            point
 	 * @return result
 	 */
-	public static WB_Point mult(final WB_M33 m, final WB_Point v) {
-		return new WB_Point(v.x * m.m11 + v.y * m.m12 + v.z * m.m13, v.x
-				* m.m21 + v.y * m.m22 + v.z * m.m23, v.x * m.m31 + v.y * m.m32
-				+ v.z * m.m33);
+	public static WB_Point mulToPoint(final WB_M33 m, final WB_Coordinate v) {
+		return new WB_Point(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13,
+				v.xd() * m.m21 + v.yd() * m.m22 + v.zd() * m.m23, v.xd()
+						* m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
 	/**
-	 * Multiply matrix and point into provided point.
+	 * Multiply point and matrix into new point.
 	 * 
-	 * @param m
-	 *            matrix
 	 * @param v
 	 *            point
-	 * @param result
-	 *            result
-	 */
-	public static void multInto(final WB_M33 m, final WB_Point v,
-			final WB_Point result) {
-		result._set(v.x * m.m11 + v.y * m.m12 + v.z * m.m13, v.x * m.m21 + v.y
-				* m.m22 + v.z * m.m23, v.x * m.m31 + v.y * m.m32 + v.z * m.m33);
-	}
-
-	/**
-	 * Multiply normal and matrix into new normal.
-	 * 
-	 * @param v
-	 *            normal
 	 * @param m
 	 *            matrix
 	 * @return result
 	 */
-	public static WB_Vector mult(final WB_Vector v, final WB_M33 m) {
-		return new WB_Vector(v.x * m.m11 + v.y * m.m21 + v.z * m.m31, v.x
-				* m.m12 + v.y * m.m22 + v.z * m.m32, v.x * m.m13 + v.y * m.m23
-				+ v.z * m.m33);
+	public static WB_Point mulToPoint(final WB_Coordinate v, final WB_M33 m) {
+		return new WB_Point(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31,
+				v.xd() * m.m12 + v.yd() * m.m22 + v.zd() * m.m32, v.xd()
+						* m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
-	/**
-	 * Multiply normal and matrix into provided normal.
-	 * 
-	 * @param v
-	 *            normal
-	 * @param m
-	 *            matrix
-	 * @param result
-	 *            result
-	 */
-	public static void multInto(final WB_Vector v, final WB_M33 m,
-			final WB_Vector result) {
-		result._set(v.x * m.m11 + v.y * m.m21 + v.z * m.m31, v.x * m.m12 + v.y
-				* m.m22 + v.z * m.m32, v.x * m.m13 + v.y * m.m23 + v.z * m.m33);
+	public static WB_Vector mulToVector(final WB_M33 m, final WB_Coordinate v) {
+		return new WB_Vector(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13,
+				v.xd() * m.m21 + v.yd() * m.m22 + v.zd() * m.m23, v.xd()
+						* m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
+	}
+
+	public static WB_Vector mulToVector(final WB_Coordinate v, final WB_M33 m) {
+		return new WB_Vector(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31,
+				v.xd() * m.m12 + v.yd() * m.m22 + v.zd() * m.m32, v.xd()
+						* m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
 
 	/**
@@ -818,10 +762,10 @@ public class WB_M33 {
 			Jm[q][p] = -cs[1];
 			Jm[q][q] = cs[0];
 			J.set(Jm);
-			v.mult(J);
+			v.mul(J);
 			JT = J.getTranspose();
-			JT.mult(a);
-			JT.mult(J);
+			JT.mul(a);
+			JT.mul(J);
 			a.set(JT);
 			double off = 0;
 			am = a.toArray();
@@ -876,16 +820,16 @@ public class WB_M33 {
 		e00 = e11 = e22 = e01 = e02 = e12 = 0;
 		for (int i = 0; i < numPoints; i++) {
 			points[i].sub(c, p);
-			e00 += p.x * p.x;
-			e11 += p.y * p.y;
-			e22 += p.z * p.z;
-			e01 += p.x * p.y;
-			e02 += p.x * p.z;
-			e12 += p.y * p.z;
+			e00 += p.xd() * p.xd();
+			e11 += p.yd() * p.yd();
+			e22 += p.zd() * p.zd();
+			e01 += p.xd() * p.yd();
+			e02 += p.xd() * p.zd();
+			e12 += p.yd() * p.zd();
 		}
 		final WB_M33 cov = new WB_M33(e00, e01, e02, e01, e11, e12, e02, e12,
 				e22);
-		cov.mult(oon);
+		cov.mul(oon);
 		return cov;
 	}
 
