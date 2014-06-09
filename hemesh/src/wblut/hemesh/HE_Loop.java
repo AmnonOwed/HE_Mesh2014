@@ -3,6 +3,8 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 
+import wblut.geom.WB_HasData;
+
 import javolution.util.FastTable;
 
 public class HE_Loop extends HE_Element implements WB_HasData {

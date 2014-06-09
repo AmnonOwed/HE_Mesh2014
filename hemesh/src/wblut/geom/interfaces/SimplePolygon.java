@@ -1,6 +1,14 @@
-package wblut.geom;
+package wblut.geom.interfaces;
 
 import java.util.List;
+
+import wblut.geom.WB_Convex;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_IndexedSegment;
+import wblut.geom.WB_IndexedTriangle;
+import wblut.geom.WB_Plane;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_SimplePolygon2D;
 
 public interface SimplePolygon {
 

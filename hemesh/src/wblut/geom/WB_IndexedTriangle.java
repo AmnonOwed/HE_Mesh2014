@@ -1,6 +1,7 @@
 package wblut.geom;
 
 import wblut.WB_Epsilon;
+import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Math;
 
 public class WB_IndexedTriangle implements Triangle {

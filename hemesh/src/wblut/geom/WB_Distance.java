@@ -3,6 +3,8 @@ package wblut.geom;
 import java.util.List;
 
 import wblut.WB_Epsilon;
+import wblut.geom.interfaces.Segment;
+import wblut.geom.interfaces.SimplePolygon;
 
 public class WB_Distance {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory

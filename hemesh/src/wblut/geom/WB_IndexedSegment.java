@@ -3,6 +3,7 @@ package wblut.geom;
 import java.util.List;
 
 import javolution.util.FastTable;
+import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
 public class WB_IndexedSegment extends WB_Linear implements Segment {
@@ -23,14 +24,14 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 		length = WB_Distance.getDistance3D(points[i1], points[i2]);
 	}
 
-	public WB_Point getParametricPoint(final double t) {
+	public WB_Point getParametricPointOnSegment(final double t) {
 		final WB_Point result = new WB_Point(direction);
 		result._scaleSelf(WB_Math.clamp(t, 0, 1) * length);
 		result.moveBy(points[i1]);
 		return result;
 	}
 
-	public void getParametricPointInto(final double t,
+	public void getParametricPointOnSegmentInto(final double t,
 			final WB_MutableCoordinate result) {
 		result._set(direction.mul(WB_Math.clamp(t, 0, 1) * length)._addSelf(
 				points[i1]));

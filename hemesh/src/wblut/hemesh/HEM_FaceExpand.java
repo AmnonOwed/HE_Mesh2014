@@ -68,7 +68,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 				final WB_Point p;
 				if (vn.isParallel(fn)) {
 					p = new WB_Point(v);
-					p._addSelf(d, fn);
+					p._addMulSelf(d, fn);
 
 				} else {
 					final WB_Plane planef2 = he.getPair().getFace().toPlane(d);

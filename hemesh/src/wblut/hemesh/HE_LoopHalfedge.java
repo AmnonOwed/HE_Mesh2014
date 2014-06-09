@@ -2,6 +2,8 @@ package wblut.hemesh;
 
 import java.util.HashMap;
 
+import wblut.geom.WB_HasData;
+
 public class HE_LoopHalfedge extends HE_Element implements WB_HasData {
 	private HE_Halfedge _he;
 

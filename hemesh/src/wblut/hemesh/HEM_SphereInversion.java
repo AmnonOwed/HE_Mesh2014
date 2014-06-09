@@ -75,7 +75,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 			if (linear) {
 				d = v.pos.subToVector(center);
 				d._normalizeSelf();
-				surf = new WB_Point(center)._addSelf(r, d);
+				surf = new WB_Point(center)._addMulSelf(r, d);
 				d = surf.subToVector(v)._mulSelf(2);
 				v.pos._addSelf(d);
 			} else {
@@ -84,7 +84,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 				d._normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
 				v._set(center);
-				v.pos._addSelf(rf, d);
+				v.pos._addMulSelf(rf, d);
 			}
 
 		}
@@ -116,7 +116,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 			if (linear) {
 				d = v.pos.subToVector(center);
 				d._normalizeSelf();
-				surf = new WB_Point(center)._addSelf(r, d);
+				surf = new WB_Point(center)._addMulSelf(r, d);
 				d = v.pos.subToVector(surf);
 				v.pos._addSelf(d);
 			} else {
@@ -125,7 +125,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 				d._normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
 				v.pos._set(center);
-				v.pos._addSelf(rf, d);
+				v.pos._addMulSelf(rf, d);
 			}
 
 		}

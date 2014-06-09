@@ -357,7 +357,7 @@ public class WB_BSpline implements WB_Curve {
 				ebpts[i] = new WB_Point();
 				mpi = Math.min(p, i);
 				for (j = Math.max(0, i - t); j <= mpi; j++) {
-					ebpts[i]._addSelf(bezalfs[i][j], bpts[j]);
+					ebpts[i]._addMulSelf(bezalfs[i][j], bpts[j]);
 				}
 			}
 

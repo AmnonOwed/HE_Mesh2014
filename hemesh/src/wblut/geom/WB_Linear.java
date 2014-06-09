@@ -25,14 +25,14 @@ public abstract class WB_Linear {
 		direction._normalizeSelf();
 	}
 
-	public WB_Point getPoint(final double t) {
+	public WB_Point getPointOnLine(final double t) {
 		final WB_Point result = new WB_Point(direction);
 		result._scaleSelf(t);
 		result.moveBy(origin);
 		return result;
 	}
 
-	public void getPointInto(final double t, final WB_MutableCoordinate p) {
+	public void getPointOnLineInto(final double t, final WB_MutableCoordinate p) {
 		p._set(direction.mul(t)._addSelf(origin));
 	}
 

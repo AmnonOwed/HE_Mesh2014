@@ -16,7 +16,8 @@ public class HE_FaceHalfedgeOuterCirculator implements Iterator<HE_Halfedge> {
 	@Override
 	public boolean hasNext() {
 
-		return (_current == null) || (_current.getPrevInFace() != _start);
+		return ((_current == null) || (_current.getPrevInFace() != _start))
+				&& (_start != null);
 	}
 
 	@Override

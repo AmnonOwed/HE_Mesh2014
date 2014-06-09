@@ -1,6 +1,13 @@
-package wblut.geom;
+package wblut.geom.interfaces;
 
-public interface Triangle2D {
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_Plane;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Simplex;
+
+public interface Triangle extends WB_Simplex {
+
+	public WB_Plane getPlane();
 
 	public WB_Point getCenter();
 
@@ -9,12 +16,6 @@ public interface Triangle2D {
 	public WB_Point getCircumcenter();
 
 	public WB_Point getOrthocenter();
-
-	public WB_Point getIncenter();
-
-	public WB_Circle getCircumcircle();
-
-	public WB_Circle getIncircle();
 
 	public WB_Point getPointFromTrilinear(final double x, final double y,
 			final double z);

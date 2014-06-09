@@ -1,6 +1,7 @@
 package wblut.geom;
 
 import wblut.WB_Epsilon;
+import wblut.geom.interfaces.SimplePolygon;
 import wblut.math.WB_Math;
 
 public class WB_Plane {

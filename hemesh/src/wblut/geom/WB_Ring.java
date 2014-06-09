@@ -253,6 +253,79 @@ public class WB_Ring extends WB_PolyLine {
 	@Override
 	public WB_Ring apply(final WB_Transform T) {
 		return geometryfactory.createRing(points.applyAsPoint(T));
+
+	}
+
+	public WB_Point getPoint(final int i) {
+		if ((i < 0) || (i > n - 1)) {
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
+		}
+		return points.getCoordinate(i);
+	}
+
+	public double getd(final int i, final int j) {
+		if ((i < 0) || (i > n - 1)) {
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
+		}
+		return points.get(i, j);
+	}
+
+	public float getf(final int i, final int j) {
+		if ((i < 0) || (i > n - 1)) {
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
+		}
+		return (float) points.get(i, j);
+	}
+
+	public WB_Point getPointOnLine(final double t) {
+		if ((t < 0) || (t > incLengths[n - 1])) {
+			throw new IllegalArgumentException(
+					"Parameter must between 0 and length of polyline"
+							+ incLengths[n - 1] + " .");
+		}
+		if (t == 0) {
+			return points.getCoordinate(0);
+		}
+		int index = 0;
+		while (t > incLengths[index]) {
+			index++;
+		}
+
+		final double d = incLengths[index + 1] - incLengths[index];
+		final double x = t - incLengths[index];
+
+		return points.getCoordinate(index)._addMulSelf(x,
+				directions.getCoordinate(index));
+	}
+
+	public WB_Point getParametricPointOnLine(final double t) {
+		if ((t < 0) || (t > n - 1)) {
+			throw new IllegalArgumentException("Parameter must between 0 and "
+					+ (n - 1) + ".");
+		}
+		final double ft = t - (int) t;
+		if (ft == 0.0) {
+			return points.getCoordinate((int) t);
+		}
+
+		return points.getCoordinate((int) t)._mulAddMulSelf(1 - ft, ft,
+				points.getCoordinate(1 + (int) t));
+	}
+
+	public int getNumberOfPoints() {
+		return n;
+	}
+
+	public WB_Segment getSegment(final int i) {
+		if ((i < 0) || (i > n - 1)) {
+			throw new IllegalArgumentException("Parameter must between 0 and "
+					+ (n - 1) + ".");
+		}
+		return geometryfactory
+				.createSegment(getPoint(i), getPoint((i + 1) % n));
 	}
 
 }

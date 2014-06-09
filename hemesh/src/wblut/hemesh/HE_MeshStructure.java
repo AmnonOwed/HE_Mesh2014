@@ -8,6 +8,7 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 

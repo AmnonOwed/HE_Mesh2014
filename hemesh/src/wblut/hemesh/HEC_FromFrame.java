@@ -320,7 +320,7 @@ public class HEC_FromFrame extends HEC_Creator {
 						strutNodeConnections[id].node.x,
 						strutNodeConnections[id].node.y,
 						strutNodeConnections[id].node.z);
-				p._addSelf(so, v);
+				p._addMulSelf(so, v);
 				final WB_Vector localu = u.mul(sr);
 				localu.rotateAboutAxis((j + af) * da, new WB_Point(),
 						P.getNormal());

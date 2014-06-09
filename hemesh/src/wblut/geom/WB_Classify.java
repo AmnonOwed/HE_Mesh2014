@@ -127,10 +127,10 @@ public class WB_Classify {
 
 		final WB_Predicates pred = new WB_Predicates();
 		final double pside = Math.signum(pred.orientTri(
-				toDouble(L.getOrigin()), toDouble(L.getPoint(100.0)),
+				toDouble(L.getOrigin()), toDouble(L.getPointOnLine(100.0)),
 				toDouble(p)));
 		final double qside = Math.signum(pred.orientTri(
-				toDouble(L.getOrigin()), toDouble(L.getPoint(100.0)),
+				toDouble(L.getOrigin()), toDouble(L.getPointOnLine(100.0)),
 				toDouble(q)));
 
 		if ((pside == 0) || (qside == 0) || (pside == qside)) {

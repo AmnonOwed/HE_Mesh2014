@@ -3,8 +3,8 @@ package wblut.hemesh;
 import java.util.Collection;
 
 import javolution.util.FastTable;
-import wblut.geom.SimplePolygon;
 import wblut.geom.WB_Point;
+import wblut.geom.interfaces.SimplePolygon;
 
 /**
  * Creates a new mesh from a list of polygons. Duplicate vertices are fused.

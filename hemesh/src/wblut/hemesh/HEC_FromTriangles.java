@@ -3,8 +3,8 @@ package wblut.hemesh;
 import java.util.Collection;
 
 import javolution.util.FastTable;
-import wblut.geom.Triangle;
 import wblut.geom.WB_Point;
+import wblut.geom.interfaces.Triangle;
 
 /**
  * Creates a new mesh from a list of triangles. Duplicate vertices are fused.

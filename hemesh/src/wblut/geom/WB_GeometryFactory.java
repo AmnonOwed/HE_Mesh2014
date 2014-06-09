@@ -29,6 +29,7 @@ import wblut.geom.data.WB_JohnsonPolyhedraData02;
 import wblut.geom.data.WB_JohnsonPolyhedraData03;
 import wblut.geom.data.WB_JohnsonPolyhedraData04;
 import wblut.geom.data.WB_PolyhedraData;
+import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Math;
 
 import com.vividsolutions.jts.densify.Densifier;
@@ -693,12 +694,12 @@ public class WB_GeometryFactory {
 		if (WB_Epsilon.isZero(denom)) {
 			final double t2 = r.dot(L1.getDirection());
 			result.add(createPoint(L1.getOrigin()));
-			result.add(createPoint(L2.getPoint(t2)));
+			result.add(createPoint(L2.getPointOnLine(t2)));
 			return result;
 		}
 		denom = 1.0 / denom;
 		final double t1 = (b * f - c * e) * denom;
-		result.add(createPoint(L1.getPoint(t1)));
+		result.add(createPoint(L1.getPointOnLine(t1)));
 		return result;
 
 	}
@@ -776,12 +777,12 @@ public class WB_GeometryFactory {
 		}
 
 		if (WB_Epsilon.isZero(disc)) {
-			result.add(createPoint(L.getPoint(-0.5 * b)));
+			result.add(createPoint(L.getPointOnLine(-0.5 * b)));
 			return result;
 		}
 		disc = Math.sqrt(disc);
-		result.add(createPoint(L.getPoint(0.5 * (-b + disc))));
-		result.add(createPoint(L.getPoint(0.5 * (-b - disc))));
+		result.add(createPoint(L.getPointOnLine(0.5 * (-b + disc))));
+		result.add(createPoint(L.getPointOnLine(0.5 * (-b - disc))));
 		return result;
 	}
 
@@ -808,8 +809,8 @@ public class WB_GeometryFactory {
 		denom = 1.0 / denom;
 		final double t1 = (b * f - c * e) * denom;
 		final double t2 = (a * f - b * c) * denom;
-		final WB_Point p1 = L1.getPoint(t1);
-		final WB_Point p2 = L2.getPoint(t2);
+		final WB_Point p1 = L1.getPointOnLine(t1);
+		final WB_Point p2 = L2.getPointOnLine(t2);
 
 		return p1.mulAddMul(0.5, 0.5, p2);
 	}
@@ -3129,7 +3130,7 @@ public class WB_GeometryFactory {
 
 			final WB_Line ABbis = createBisector2D(p, q);
 			if (C.getCenter().isCollinear(ABbis.getOrigin(),
-					ABbis.getPoint(100.0))) {
+					ABbis.getPointOnLine(100.0))) {
 				final List<WB_Point> points = createIntersectionPoints(ABbis, C);
 				for (final WB_Point pt : points) {
 					result.add(createCirclePPP(pt, p, q));
@@ -3212,7 +3213,7 @@ public class WB_GeometryFactory {
 
 			final WB_Line ABbis = createBisector2D(ip, iq);
 			if (iC2.getCenter().isCollinear(ABbis.getOrigin(),
-					ABbis.getPoint(100.0))) {
+					ABbis.getPointOnLine(100.0))) {
 				final List<WB_Point> points = createIntersectionPoints(ABbis,
 						iC2);
 				for (final WB_Point pt : points) {
@@ -3679,7 +3680,7 @@ public class WB_GeometryFactory {
 						&& WB_Classify.classifyPointToCircle2D(p, C) != WB_Classification.INSIDE) {
 					final WB_Circle inversion = createCircleWithRadius(p, 100.0);
 					WB_Point p1 = createInversionPoint(L.getOrigin(), inversion);
-					WB_Point p2 = createInversionPoint(L.getPoint(100.0),
+					WB_Point p2 = createInversionPoint(L.getPointOnLine(100.0),
 							inversion);
 					final WB_Circle invL = createCirclePPP(p, p1, p2);
 
@@ -3696,7 +3697,7 @@ public class WB_GeometryFactory {
 					for (int i = 0; i < Math.min(2, invResult.size()); i++) {
 						final WB_Line inv = invResult.get(i);
 						p1 = createInversionPoint(inv.getOrigin(), inversion);
-						p2 = createInversionPoint(inv.getPoint(100.0),
+						p2 = createInversionPoint(inv.getPointOnLine(100.0),
 								inversion);
 						result.add(createCirclePPP(p, p1, p2));
 					}
@@ -3706,7 +3707,7 @@ public class WB_GeometryFactory {
 
 				final WB_Circle inversion = createCircleWithRadius(p, 100.0);
 				WB_Point p1 = createInversionPoint(L.getOrigin(), inversion);
-				WB_Point p2 = createInversionPoint(L.getPoint(100.0), inversion);
+				WB_Point p2 = createInversionPoint(L.getPointOnLine(100.0), inversion);
 				final WB_Circle invL = createCirclePPP(p, p1, p2);
 
 				p1 = createInversionPoint(
@@ -3721,7 +3722,7 @@ public class WB_GeometryFactory {
 				for (int i = 0; i < invResult.size(); i++) {
 					final WB_Line inv = invResult.get(i);
 					p1 = createInversionPoint(inv.getOrigin(), inversion);
-					p2 = createInversionPoint(inv.getPoint(100.0), inversion);
+					p2 = createInversionPoint(inv.getPointOnLine(100.0), inversion);
 					result.add(createCirclePPP(p, p1, p2));
 				}
 			}
@@ -7592,15 +7593,15 @@ public class WB_GeometryFactory {
 
 	public WB_Point createClosestPointOnPolygon(final WB_Coordinate p,
 			final WB_Polygon poly) {
-		final int[][] tris = poly.getTriangles();
+		int[][] triangles = poly.getTriangles();
 
-		final int n = tris.length;
+		final int n = triangles.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Point closest = null;
 		WB_Point tmp;
 		int[] T;
 		for (int i = 0; i < n; i++) {
-			T = tris[i];
+			T = triangles[i];
 			tmp = createClosestPointOnTriangle(p, poly.getPoint(T[0]),
 					poly.getPoint(T[1]), poly.getPoint(T[2]));
 			final double d2 = tmp.getSqDistance(p);

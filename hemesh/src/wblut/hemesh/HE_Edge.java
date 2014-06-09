@@ -3,6 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 
 import wblut.geom.WB_Distance;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
@@ -87,7 +88,7 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 	 * @return segment
 	 */
 
-	public WB_Segment toSegment() {
+	public WB_Segment toOrderedSegment() {
 		if ((getStartVertex() == null) || (getEndVertex() == null)) {
 			throw new IllegalArgumentException("Vertices missing in edge.");
 		}
@@ -96,6 +97,21 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 		} else {
 			return new WB_Segment(getEndVertex(), getStartVertex());
 		}
+
+	}
+
+	/**
+	 * Return edge segment.
+	 * 
+	 * @return segment
+	 */
+
+	public WB_Segment toSegment() {
+		if ((getStartVertex() == null) || (getEndVertex() == null)) {
+			throw new IllegalArgumentException("Vertices missing in edge.");
+		}
+
+		return new WB_Segment(getStartVertex(), getEndVertex());
 
 	}
 

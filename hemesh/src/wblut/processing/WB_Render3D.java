@@ -9,9 +9,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PShape;
-import wblut.geom.Segment;
-import wblut.geom.SimplePolygon;
-import wblut.geom.Triangle;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBNode;
 import wblut.geom.WB_AABBTree;
@@ -41,6 +38,9 @@ import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangle2D;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
+import wblut.geom.interfaces.Segment;
+import wblut.geom.interfaces.SimplePolygon;
+import wblut.geom.interfaces.Triangle;
 import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_Halfedge;
@@ -145,6 +145,7 @@ public class WB_Render3D {
 	public void drawPolygon(final WB_Polygon P) {
 		final int[][] tris = P.getTriangles();
 		for (final int[] tri : tris) {
+
 			drawTriangle(P.getPoint(tri[0]), P.getPoint(tri[1]),
 					P.getPoint(tri[2]));
 		}

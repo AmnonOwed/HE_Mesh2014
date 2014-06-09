@@ -1,4 +1,4 @@
-package wblut.hemesh;
+package wblut.geom;
 
 public interface WB_HasData {
 

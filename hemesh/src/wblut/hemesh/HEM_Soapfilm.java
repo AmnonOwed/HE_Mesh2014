@@ -152,7 +152,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 				cotb = WB_Point.cosAngleBetween(corner.pos, neighbor.pos, v);
 				cotsum += cotb / Math.sqrt(1 - cotb * cotb);
 			}
-			result._addSelf(cotsum, neighbor);
+			result._addMulSelf(cotsum, neighbor);
 			weight += cotsum;
 		}
 

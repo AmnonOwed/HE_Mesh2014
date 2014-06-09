@@ -6,6 +6,10 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_FixedPoint;
+import wblut.geom.WB_FixedVector;
+import wblut.geom.WB_HasColor;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedTriangle2D;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -59,7 +63,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_center._divSelf(c);
-		return _center;
+		return new WB_FixedPoint(_center);
 	}
 
 	public WB_Point getFaceCenter(double d) {
@@ -75,7 +79,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_center._divSelf(c)._addMulSelf(d, getFaceNormal());
-		return _center;
+		return new WB_FixedPoint(_center);
 	}
 
 	public WB_Vector getFaceNormal() {
@@ -98,7 +102,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		_normal._normalizeSelf();
-		return _normal;
+		return new WB_FixedVector(_normal);
 	}
 
 	public WB_Vector getFaceNormalNN() {
@@ -120,7 +124,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		return _normal;
+		return new WB_FixedVector(_normal);
 	}
 
 	public double getFaceArea() {
@@ -298,7 +302,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public WB_Plane toPlane(final double d) {
 		final WB_Vector fn = getFaceNormal();
-		return new WB_Plane(getFaceCenter()._addSelf(d, fn), fn);
+		return new WB_Plane(getFaceCenter()._addMulSelf(d, fn), fn);
 	}
 
 	public void sort() {

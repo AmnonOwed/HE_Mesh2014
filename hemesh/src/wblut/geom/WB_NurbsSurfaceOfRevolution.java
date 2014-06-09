@@ -62,8 +62,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_Intersection
-					.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
+					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
@@ -75,8 +75,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			angle = 0.0;
 			for (i = 1; i <= narcs; i++) {
 				final WB_Point P2 = new WB_Point(O);
-				P2._addSelf(r * cosines[i], X);
-				P2._addSelf(r * sines[i], Y);
+				P2._addMulSelf(r * cosines[i], X);
+				P2._addMulSelf(r * sines[i], Y);
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = 1;
 				final WB_Vector T2 = Y.mul(cosines[i]);
@@ -164,8 +164,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_Intersection
-					.getClosestPoint3D(C.points()[j], L);
+			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
+					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X._normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
@@ -177,8 +177,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			angle = 0.0;
 			for (i = 1; i <= narcs; i++) {
 				final WB_Point P2 = new WB_Point(O);
-				P2._addSelf(r * cosines[i], X);
-				P2._addSelf(r * sines[i], Y);
+				P2._addMulSelf(r * cosines[i], X);
+				P2._addMulSelf(r * sines[i], Y);
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = C.wpoints()[j].w;
 				final WB_Vector T2 = Y.mul(cosines[i]);

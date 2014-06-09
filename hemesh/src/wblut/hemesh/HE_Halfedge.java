@@ -3,6 +3,8 @@ package wblut.hemesh;
 import java.util.HashMap;
 
 import wblut.geom.WB_Convex;
+import wblut.geom.WB_HasColor;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.interfaces.SimplePolygon;
 
 public class WB_IndexedPolygon implements SimplePolygon {
 

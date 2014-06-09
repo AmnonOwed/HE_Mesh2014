@@ -8,7 +8,6 @@ import javolution.context.LogContext.Level;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
-import wblut.geom.Segment;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
@@ -17,6 +16,7 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
+import wblut.geom.interfaces.Segment;
 import wblut.math.WB_ConstantParameter;
 import wblut.math.WB_Parameter;
 
@@ -306,7 +306,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							he = f.getHalfedge();
 							do {
 								final HE_Vertex v = he.getVertex();
-								he.getVertex().pos._addSelf(heights[i], n);
+								he.getVertex().pos._addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -325,7 +325,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						he = f.getHalfedge();
 						do {
 							final HE_Vertex v = he.getVertex();
-							he.getVertex().pos._addSelf(
+							he.getVertex().pos._addMulSelf(
 									d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
@@ -407,7 +407,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						he = f.getHalfedge();
 						do {
 							final HE_Vertex v = he.getVertex();
-							he.getVertex().pos._addSelf(heights[i], n);
+							he.getVertex().pos._addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -424,7 +424,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					he = f.getHalfedge();
 					do {
 						final HE_Vertex v = he.getVertex();
-						he.getVertex().pos._addSelf(
+						he.getVertex().pos._addMulSelf(
 								d.value(v.xd(), v.yd(), v.zd()), n);
 						he = he.getNextInFace();
 					} while (he != f.getHalfedge());
@@ -557,7 +557,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					.getVertex());
 
 			if (n != null)
-				eov.pos._addSelf(d, n);
+				eov.pos._addMulSelf(d, n);
 			extOuterVertices.add(eov);
 			newEdges.add(new HE_Edge());
 
@@ -567,7 +567,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		for (int i = 0; i < vertices.size(); i++) {
 			final HE_Vertex v = vertices.get(i);
 			if (!outerVertices.contains(v)) {
-				v.pos._addSelf(d, n);
+				v.pos._addMulSelf(d, n);
 			}
 
 		}

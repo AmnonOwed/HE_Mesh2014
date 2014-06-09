@@ -3,7 +3,6 @@ package wblut.hemesh;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.geom.Segment;
 import wblut.geom.WB_AABBNode;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Distance;
@@ -14,6 +13,7 @@ import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Segment;
+import wblut.geom.interfaces.Segment;
 
 public class HE_Intersection {
 

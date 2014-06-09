@@ -8,6 +8,8 @@ import wblut.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSystem;
+import wblut.geom.WB_HasColor;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_MutableCoordinate;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Transform;
@@ -761,7 +763,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			ret._mulSelf(1.0 / norm);
 
 		} else {
-			ret = new WB_Vector();
+			ret._set(0, 0, 0);
 			norm = 0.0;
 		}
 		return 0.5 * norm;

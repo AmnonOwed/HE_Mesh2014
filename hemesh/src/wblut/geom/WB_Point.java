@@ -208,13 +208,6 @@ public class WB_Point implements Comparable<WB_Coordinate>,
 		return this;
 	}
 
-	public WB_Point _addSelf(final double f, final WB_Coordinate p) {
-		x += f * p.xd();
-		y += f * p.yd();
-		z += f * p.zd();
-		return this;
-	}
-
 	public WB_Point _addSelf(final WB_Coordinate p) {
 		x += p.xd();
 		y += p.yd();

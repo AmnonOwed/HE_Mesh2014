@@ -1012,7 +1012,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[polygon.size() + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < polygon.size(); i++) {
 			context.pointTo2D(polygon.get(i), point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), i);
@@ -1025,6 +1025,7 @@ public class WB_Triangulate {
 		final int[][] E = extractEdges(ears);
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}
@@ -1038,7 +1039,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[polygon.length + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < polygon.length; i++) {
 			context.pointTo2D(points.get(polygon[i]), point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), polygon[i]);
@@ -1058,6 +1059,7 @@ public class WB_Triangulate {
 
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}
@@ -1072,7 +1074,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.size() + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < outerPolygon.size(); i++) {
 			context.pointTo2D(outerPolygon.get(i), point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), i);
@@ -1096,6 +1098,7 @@ public class WB_Triangulate {
 		final int[][] E = extractEdges(ears);
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}
@@ -1110,7 +1113,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.size() + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < outerPolygon.size(); i++) {
 			context.pointTo2D(outerPolygon.get(i), point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), i);
@@ -1140,6 +1143,7 @@ public class WB_Triangulate {
 		final int[][] E = extractEdges(ears);
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}
@@ -1154,7 +1158,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.length + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < outerPolygon.length; i++) {
 			context.pointTo2D(outerPolygon[i], point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), i);
@@ -1178,6 +1182,7 @@ public class WB_Triangulate {
 		final int[][] E = extractEdges(ears);
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}
@@ -1192,7 +1197,7 @@ public class WB_Triangulate {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.length + 1];
-		final WB_Point point = geometryfactory.createPoint();
+		WB_Point point = geometryfactory.createPoint();
 		for (int i = 0; i < outerPolygon.length; i++) {
 			context.pointTo2D(outerPolygon[i], point);
 			coords[i] = new Coordinate(point.xd(), point.yd(), i);
@@ -1221,6 +1226,7 @@ public class WB_Triangulate {
 		final int[][] E = extractEdges(ears);
 		final List Points = new FastTable();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
+			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
 			Points.add(point);
 		}

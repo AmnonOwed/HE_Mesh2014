@@ -89,8 +89,10 @@ public class WB_Render2D {
 	}
 
 	public void drawPolygon(final WB_Polygon P) {
+
 		final int[][] tris = P.getTriangles();
 		for (final int[] tri : tris) {
+
 			drawTriangle(P.getPoint(tri[0]), P.getPoint(tri[1]),
 					P.getPoint(tri[2]));
 		}

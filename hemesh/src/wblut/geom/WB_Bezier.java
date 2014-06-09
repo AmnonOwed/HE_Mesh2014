@@ -32,7 +32,7 @@ public class WB_Bezier implements WB_Curve {
 		final double[] B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 		final WB_Point C = new WB_Point();
 		for (int k = 0; k <= n; k++) {
-			C._addSelf(B[k], points[k]);
+			C._addMulSelf(B[k], points[k]);
 		}
 		return C;
 	}

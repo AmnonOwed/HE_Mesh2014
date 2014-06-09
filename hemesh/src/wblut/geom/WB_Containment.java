@@ -3,6 +3,7 @@ package wblut.geom;
 import java.util.LinkedList;
 
 import wblut.WB_Epsilon;
+import wblut.geom.interfaces.Triangle;
 
 public class WB_Containment {
 

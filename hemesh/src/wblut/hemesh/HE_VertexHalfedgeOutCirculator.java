@@ -17,7 +17,8 @@ public class HE_VertexHalfedgeOutCirculator<V extends HE_Vertex> implements
 	@Override
 	public boolean hasNext() {
 
-		return (_current == null) || (_current.getNextInVertex() != _start);
+		return ((_current == null) || (_current.getNextInVertex() != _start))
+				&& (_start != null);
 	}
 
 	@Override

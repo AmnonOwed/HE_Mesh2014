@@ -49,12 +49,12 @@ public class WB_BezierSurface implements WB_Surface {
 				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 				Q[j] = new WB_Point();
 				for (int k = 0; k <= n; k++) {
-					Q[j]._addSelf(B[k], points[k][j]);
+					Q[j]._addMulSelf(B[k], points[k][j]);
 				}
 			}
 			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
 			for (int k = 0; k <= m; k++) {
-				S._addSelf(B[k], Q[k]);
+				S._addMulSelf(B[k], Q[k]);
 			}
 		} else {
 			final WB_Point[] Q = new WB_Point[n + 1];
@@ -63,12 +63,12 @@ public class WB_BezierSurface implements WB_Surface {
 				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
 				Q[i] = new WB_Point();
 				for (int k = 0; k <= m; k++) {
-					Q[i]._addSelf(B[k], points[i][k]);
+					Q[i]._addMulSelf(B[k], points[i][k]);
 				}
 			}
 			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
 			for (int k = 0; k <= n; k++) {
-				S._addSelf(B[k], Q[k]);
+				S._addMulSelf(B[k], Q[k]);
 			}
 
 		}

@@ -17,6 +17,7 @@ import wblut.geom.WB_Distance;
 import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
 import wblut.geom.WB_IndexedTriangle;
 import wblut.geom.WB_Intersection;
@@ -207,10 +208,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public HE_Mesh get() {
 		final HE_Mesh result = new HE_Mesh();
-		final HashMap<Long, Long> vertexCorrelation = new HashMap<Long, Long>();
-		final HashMap<Long, Long> faceCorrelation = new HashMap<Long, Long>();
-		final HashMap<Long, Long> halfedgeCorrelation = new HashMap<Long, Long>();
-		final HashMap<Long, Long> edgeCorrelation = new HashMap<Long, Long>();
+		final FastMap<Long, Long> vertexCorrelation = new FastMap<Long, Long>();
+		final FastMap<Long, Long> faceCorrelation = new FastMap<Long, Long>();
+		final FastMap<Long, Long> halfedgeCorrelation = new FastMap<Long, Long>();
+		final FastMap<Long, Long> edgeCorrelation = new FastMap<Long, Long>();
 		HE_Vertex rv;
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2538,7 +2539,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public HE_Selection triSplitFace(final HE_Face face, final double d) {
 		return triSplitFace(face,
-				face.getFaceCenter()._addSelf(d, face.getFaceNormal()));
+				face.getFaceCenter()._addMulSelf(d, face.getFaceNormal()));
 	}
 
 	/**
@@ -4803,6 +4804,45 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public void triangulate(final Long key) {
 		triangulate(getFaceByKey(key));
+
+	}
+
+	public void triangulateFaceStar(HE_Vertex v) {
+		final HE_Selection vf = new HE_Selection(this);
+		HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(v);
+
+		HE_Face f;
+		while (vfc.hasNext()) {
+			f = vfc.next();
+			if (f != null) {
+				if (f.getFaceOrder() > 3)
+					if (!vf.contains(f)) {
+						vf.add(f);
+					}
+			}
+
+		}
+		triangulate(vf);
+
+	}
+
+	public void triangulateFaceStar(long vertexkey) {
+		final HE_Selection vf = new HE_Selection(this);
+		HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(
+				getVertexByKey(vertexkey));
+
+		HE_Face f;
+		while (vfc.hasNext()) {
+			f = vfc.next();
+			if (f != null) {
+				if (f.getFaceOrder() > 3)
+					if (!vf.contains(f)) {
+						vf.add(f);
+					}
+			}
+
+		}
+		triangulate(vf);
 
 	}
 

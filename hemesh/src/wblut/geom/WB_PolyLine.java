@@ -23,24 +23,24 @@ public class WB_PolyLine implements WB_Geometry {
 
 	public WB_Point getPoint(final int i) {
 		if ((i < 0) || (i > n - 1)) {
-			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 1) + ".");
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
 		}
 		return points.getCoordinate(i);
 	}
 
 	public double getd(final int i, final int j) {
 		if ((i < 0) || (i > n - 1)) {
-			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 1) + ".");
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
 		}
 		return points.get(i, j);
 	}
 
 	public float getf(final int i, final int j) {
 		if ((i < 0) || (i > n - 1)) {
-			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 1) + ".");
+			throw new IllegalArgumentException("Parameter " + i
+					+ " must between 0 and " + (n - 1) + ".");
 		}
 		return (float) points.get(i, j);
 	}

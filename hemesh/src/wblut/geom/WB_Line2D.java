@@ -3,6 +3,7 @@ package wblut.geom;
 import java.util.ArrayList;
 
 import wblut.WB_Epsilon;
+import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
 public class WB_Line2D extends WB_Linear2D {
