@@ -3,7 +3,7 @@ package wblut.hemesh;
 import javolution.util.FastMap;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_Point;
-import wblut.math.WB_Function3D;
+import wblut.math.parameter.WB_Function3D;
 
 public class HEC_IsoFunction extends HEC_Creator {
 

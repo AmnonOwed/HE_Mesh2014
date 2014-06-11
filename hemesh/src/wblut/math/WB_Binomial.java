@@ -18,7 +18,7 @@ public class WB_Binomial {
 	 * 
 	 * n! / (n-k)! k!
 	 * 
-	 * This is efficient if the same coefficient are need over and over. The
+	 * This is efficient if the same coefficients are need over and over. The
 	 * precalculated coefficient are retrieved with binPreCalc(). If only a few
 	 * coefficients are needed, the static function bin() can be more efficient.
 	 * It can be directly called as WB_Binomial.bin(n,k)

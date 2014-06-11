@@ -9,7 +9,7 @@ import wblut.geom.WB_KDTree.WB_KDEntry;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
-import wblut.math.WB_RandomSphere;
+import wblut.math.WB_RandomOnSphere;
 
 /**
  * Creates the Voronoi cell of one point in a collection of points, constrained
@@ -48,7 +48,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 	private double traceStep;
 
 	/** The random gen. */
-	private final WB_RandomSphere randomGen;
+	private final WB_RandomOnSphere randomGen;
 
 	/**
 	 * Instantiates a new HEC_VoronoiSphere.
@@ -60,7 +60,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		traceStep = 10;
 		numTracers = 100;
 		override = true;
-		randomGen = new WB_RandomSphere();
+		randomGen = new WB_RandomOnSphere();
 	}
 
 	/**

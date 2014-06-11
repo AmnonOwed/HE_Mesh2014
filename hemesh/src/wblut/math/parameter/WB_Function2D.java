@@ -1,4 +1,4 @@
-package wblut.math;
+package wblut.math.parameter;
 
 public interface WB_Function2D<T> {
 

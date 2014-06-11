@@ -1,7 +1,5 @@
 package wblut.geom;
 
-import java.util.List;
-
 import wblut.WB_Epsilon;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
@@ -65,6 +63,11 @@ public class WB_Distance {
 		return P.getNormal().dot(p) - P.d();
 	}
 
+	public static double getDistance3D(final double p[], final WB_Plane P) {
+		WB_Vector n = P.getNormal();
+		return n.xd() * p[0] + n.yd() * p[1] + n.zd() * p[2] - P.d();
+	}
+
 	public static double getDistance3D(final WB_Coordinate p, final WB_Ray R) {
 		return Math.sqrt(getSqDistance3D(p, R));
 	}
@@ -104,6 +107,12 @@ public class WB_Distance {
 	public static double getDistanceToPlane3D(final WB_Coordinate p,
 			final WB_Plane P) {
 		final double d = P.getNormal().dot(p) - P.d();
+		return (d < 0) ? -d : d;
+	}
+
+	public static double getDistanceToPlane3D(final double[] p, final WB_Plane P) {
+		WB_Vector v = P.getNormal();
+		final double d = v.xd() * p[0] + v.yd() * p[1] + v.zd() * p[2] - P.d();
 		return (d < 0) ? -d : d;
 	}
 
@@ -261,14 +270,16 @@ public class WB_Distance {
 
 	public static double getSqDistance3D(final WB_Coordinate p,
 			final SimplePolygon poly) {
-		final List<WB_IndexedTriangle> tris = poly.triangulate();
-		final int n = tris.size();
+		final int[][] tris = poly.triangulate();
+		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Coordinate tmp;
-		WB_IndexedTriangle T;
+		int[] T;
 		for (int i = 0; i < n; i++) {
-			T = tris.get(i);
-			tmp = WB_Intersection.getClosestPoint3D(p, T);
+			T = tris[i];
+			tmp = WB_Intersection.getClosestPointToTriangle3D(p,
+					poly.getPoint(T[0]), poly.getPoint(T[1]),
+					poly.getPoint(T[2]));
 			final double d2 = WB_Distance.getDistance3D(tmp, p);
 			if (d2 < dmax2) {
 				dmax2 = d2;

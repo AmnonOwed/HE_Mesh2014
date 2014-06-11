@@ -10,58 +10,31 @@ import wblut.geom.WB_Vector;
  * @author Frederik Vanhoutte, W:Blut
  * 
  */
-public class WB_RandomBox {
+public class WB_RandomCube {
 
-	/** The random gen. */
+
 	private final WB_MTRandom randomGen;
 
-	/**
-	 * Instantiates a new w b_ random box.
-	 */
-	public WB_RandomBox() {
+
+	public WB_RandomCube() {
 		randomGen = new WB_MTRandom();
 	}
 
-	/**
-	 * Set random seed.
-	 * 
-	 * @param seed
-	 *            seed
-	 * @return self
-	 */
-	public WB_RandomBox setSeed(final long seed) {
+
+	public WB_RandomCube setSeed(final long seed) {
 		randomGen.setSeed(seed);
 		return this;
 	}
 
-	/**
-	 * Next point.
-	 * 
-	 * @return the w b_ point3d
-	 */
 	public WB_Point nextPoint() {
 		return new WB_Point(randomGen.nextDouble(), randomGen.nextDouble(),
 				randomGen.nextDouble());
 	}
 
-	/**
-	 * Next vector.
-	 * 
-	 * @return the w b_ vector3d
-	 */
 	public WB_Vector nextVector() {
 		return new WB_Vector(randomGen.nextDouble(), randomGen.nextDouble(),
 				randomGen.nextDouble());
 	}
 
-	/**
-	 * Next normal.
-	 * 
-	 * @return the w b_ normal3d
-	 */
-	public WB_Vector nextNormal() {
-		return new WB_Vector(randomGen.nextDouble(), randomGen.nextDouble(),
-				randomGen.nextDouble());
-	}
 
 }

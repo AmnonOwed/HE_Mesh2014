@@ -1,4 +1,4 @@
-package wblut.math;
+package wblut.math.parameter;
 
 /**
  * Generic interface for parameter classes.

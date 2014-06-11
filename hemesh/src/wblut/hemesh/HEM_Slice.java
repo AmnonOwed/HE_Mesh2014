@@ -2,16 +2,9 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import javolution.util.FastMap;
-import javolution.util.FastTable;
-import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
-import wblut.geom.WB_IndexedTriangle2D;
 import wblut.geom.WB_Plane;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Triangulate2D;
 
 /**
  * Planar cut of a mesh. Faces on positive side of cut plane are removed.
@@ -216,99 +209,8 @@ public class HEM_Slice extends HEM_Modifier {
 				mesh.pairHalfedgesAndCreateEdges();
 				mesh.capHalfedges();
 			} else {
-				List<HE_Halfedge> unpairedHalfedges = mesh
-						.getUnpairedHalfedges();
-				if (unpairedHalfedges.size() > 0) {
-					final FastTable<HE_Vertex> verticesOnCutFaces = new FastTable<HE_Vertex>();
-					final FastTable<WB_Point> mappedVertices = new FastTable<WB_Point>();
-					final FastMap<Long, Integer> vertexKeyToMappedVertexIndex = new FastMap<Long, Integer>();
-					HE_Vertex v;
-					for (final HE_Halfedge he : unpairedHalfedges) {
-						v = he.getVertex();
-						if (!verticesOnCutFaces.contains(v)) {
-							verticesOnCutFaces.add(v);
-							final WB_Point mappedV = lP.localPoint2D(v);
-							mappedVertices.add(mappedV);
-							vertexKeyToMappedVertexIndex.put(v.key(),
-									mappedVertices.size() + 3);
-						}
-					}
-					final WB_AABB AABB = new WB_AABB(mappedVertices);
-					final WB_Point leftlower = new WB_Point(AABB.getMin())
-							._mulSelf(2)._subSelf(AABB.getCenterX(),
-									AABB.getCenterY(), AABB.getCenterZ());
-					final WB_Point rightupper = new WB_Point(AABB.getMax())
-							._mulSelf(2)._subSelf(AABB.getCenterX(),
-									AABB.getCenterY(), AABB.getCenterZ());
-					final WB_Point[] boundary = new WB_Point[4];
+				// TODO
 
-					boundary[0] = leftlower;
-					boundary[1] = new WB_Point(leftlower.xd(), rightupper.yd());
-					boundary[2] = rightupper;
-					boundary[3] = new WB_Point(rightupper.xd(), leftlower.yd());
-
-					final WB_Triangulate2D triang = new WB_Triangulate2D();
-
-					triang.startWithBoundary(boundary);
-					for (final WB_Point point : mappedVertices) {
-						triang.addInteriorPoint(point);
-					}
-					for (final HE_Halfedge he : unpairedHalfedges) {
-						final int c1 = vertexKeyToMappedVertexIndex.get(he
-								.getVertex().key());
-						final int c2 = vertexKeyToMappedVertexIndex.get(he
-								.getEndVertex().key());
-						triang.addConstraint(c1, c2);
-					}
-					final WB_Point[] dummy = new WB_Point[mappedVertices.size() + 4];
-					for (int i = 0; i < mappedVertices.size() + 4; i++) {
-						dummy[i] = new WB_Point(1, 1);
-
-					}
-					final List<WB_IndexedTriangle2D> tris = triang
-							.getIndexedTrianglesAsList(dummy);
-					for (final WB_IndexedTriangle2D tri : tris) {
-						if ((tri.i1 > 3) && (tri.i2 > 3) && (tri.i3 > 3)) {// leave
-																			// out
-																			// triangles
-																			// with
-																			// boundary
-																			// points
-
-							final HE_Face newFace = new HE_Face();
-							final HE_Halfedge he1 = new HE_Halfedge();
-							final HE_Halfedge he2 = new HE_Halfedge();
-							final HE_Halfedge he3 = new HE_Halfedge();
-							he1.setVertex(verticesOnCutFaces.get(tri.i1 - 4));
-							he2.setVertex(verticesOnCutFaces.get(tri.i3 - 4));
-							he3.setVertex(verticesOnCutFaces.get(tri.i2 - 4));
-							he1.setNext(he2);
-							he1.setFace(newFace);
-							he2.setNext(he3);
-							he2.setFace(newFace);
-							he3.setNext(he1);
-							he3.setFace(newFace);
-							mesh.add(he1);
-							mesh.add(he2);
-							mesh.add(he3);
-							newFace.setHalfedge(he1);
-							mesh.add(newFace);
-							cap.add(newFace);
-
-						}
-					}
-					mesh.pairHalfedgesAndCreateEdges();
-					int old = 0;
-					unpairedHalfedges = mesh.getUnpairedHalfedges();
-					while (unpairedHalfedges.size() != old) {
-						old = unpairedHalfedges.size();
-						for (final HE_Halfedge he : unpairedHalfedges) {
-							mesh.remove(he.getFace());
-						}
-						mesh.cleanUnusedElementsByFace();
-						unpairedHalfedges = mesh.getUnpairedHalfedges();
-					}
-				}
 			}
 
 		} else {

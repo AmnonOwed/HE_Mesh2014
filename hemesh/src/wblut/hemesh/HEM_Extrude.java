@@ -17,8 +17,8 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
-import wblut.math.WB_ConstantParameter;
-import wblut.math.WB_Parameter;
+import wblut.math.parameter.WB_ConstantParameter;
+import wblut.math.parameter.WB_Parameter;
 
 /**
  * Extrudes and scales a face along its face normal.

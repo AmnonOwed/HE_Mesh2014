@@ -22,8 +22,8 @@ import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
-import wblut.math.WB_ConstantParameter;
-import wblut.math.WB_Parameter;
+import wblut.math.parameter.WB_ConstantParameter;
+import wblut.math.parameter.WB_Parameter;
 
 // TODO: Auto-generated Javadoc
 /**

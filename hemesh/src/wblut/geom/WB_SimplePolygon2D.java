@@ -11,7 +11,8 @@ import wblut.geom.interfaces.Segment;
  * Planar polygon class.
  */
 public class WB_SimplePolygon2D {
-
+	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
+			.instance();
 	/** Ordered array of WB_Point. */
 	public WB_Point[] points;
 
@@ -208,23 +209,45 @@ public class WB_SimplePolygon2D {
 	/**
 	 * Triangulate polygon.
 	 * 
-	 * @return arrayList of WB_Triangle, points are not copied
+	 * @return int[][] of faces
 	 */
-	public List<WB_Triangle2D> triangulate() {
-		final WB_Triangulate2D tri = new WB_Triangulate2D();
-		tri.startWithBoundary(points);
-		return tri.getExplicitTrianglesAsList();
-	}
 
-	/**
-	 * Triangulate polygon.
-	 * 
-	 * @return arrayList of WB_IndexedTriangle, points are not copied
-	 */
-	public List<WB_IndexedTriangle2D> indexedTriangulate() {
-		final WB_Triangulate2D tri = new WB_Triangulate2D();
-		tri.startWithBoundary(points, true);
-		return tri.getIndexedTrianglesAsList(points, true);
+	public int[][] triangulate() {
+
+		final List<WB_Point> pts = new FastTable<WB_Point>();
+		for (int i = 0; i < n; i++) {
+			pts.add(points[i]);
+		}
+
+		WB_Triangulation2DWithPoints triangulation = WB_Triangulate
+				.getPolygonTriangulation2D(pts, true,
+						geometryfactory.createEmbeddedPlane());
+
+		final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
+				points.length);
+
+		for (int i = 0; i < points.length; i++) {
+			pointmap.add(points[i], i);
+		}
+
+		int[][] triangles = triangulation.getTriangles();
+
+		final List<WB_Point> tripoints = triangulation.getPoints();
+		final int[] intmap = new int[tripoints.size()];
+		int index = 0;
+		for (final WB_Point point : tripoints) {
+			final int found = pointmap.getNearestNeighbor(point).value;
+			intmap[index++] = found;
+		}
+
+		for (int[] T : triangles) {
+			T[0] = intmap[T[0]];
+			T[1] = intmap[T[1]];
+			T[2] = intmap[T[2]];
+		}
+
+		return triangles;
+
 	}
 
 	/**

@@ -9,7 +9,7 @@ import javolution.util.FastTable;
 import wblut.hemesh.HEC_Geodesic;
 import wblut.hemesh.HE_Mesh;
 import wblut.math.WB_Math;
-import wblut.math.WB_RandomSphere;
+import wblut.math.WB_RandomOnSphere;
 
 public class WB_Frame {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
@@ -473,7 +473,7 @@ public class WB_Frame {
 		WB_Vector u, localu, v;
 		WB_Point offset;
 		WB_Point p;
-		WB_RandomSphere rnd = new WB_RandomSphere();
+		WB_RandomOnSphere rnd = new WB_RandomOnSphere();
 		double da = 2.0 * Math.PI / n;
 		for (WB_FrameStrut strut : struts) {
 			sl = strut.getLength() - 2 * rr;

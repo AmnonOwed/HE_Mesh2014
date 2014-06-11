@@ -4,8 +4,7 @@ import wblut.WB_Epsilon;
 import wblut.math.WB_M33;
 import wblut.math.WB_Math;
 
-public class WB_Vector implements Comparable<WB_Coordinate>,
-		WB_MutableCoordinate {
+public class WB_Vector extends WB_AbstractVector {
 
 	public static WB_Coordinate X() {
 		return new WB_Vector(1, 0, 0);
@@ -23,54 +22,37 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 		return new WB_Vector(0, 0, 0);
 	}
 
-	/** Coordinates. */
-	private double x, y, z;
-
 	public WB_Vector() {
-		x = y = z = 0;
+		super();
 	}
 
 	public WB_Vector(final double x, final double y) {
-		this.x = x;
-		this.y = y;
-		z = 0;
+		super(x, y);
 	}
 
 	public WB_Vector(final double x, final double y, final double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x, y, z);
 	}
 
 	public WB_Vector(final double[] x) {
-		this.x = x[0];
-		this.y = x[1];
-		this.z = x[2];
+		super(x);
 	}
 
 	public WB_Vector(final double[] p1, final double[] p2) {
-		this.x = p2[0] - p1[0];
-		this.y = p2[1] - p1[1];
-		this.z = p2[2] - p1[2];
+		super(p1, p2);
 	}
 
 	public WB_Vector(final WB_Coordinate v) {
-		x = v.xd();
-		y = v.yd();
-		z = v.zd();
+		super(v);
 	}
 
 	public WB_Vector(final WB_Coordinate p1, final WB_Coordinate p2) {
-		x = p2.xd() - p1.xd();
-		y = p2.yd() - p1.yd();
-		z = p2.zd() - p1.zd();
+		super(p1, p2);
 	}
 
 	public WB_Vector _addMulSelf(final double f, final double x,
 			final double y, final double z) {
-		this.x += f * x;
-		this.y += f * y;
-		this.z += f * z;
+		_set(xd() + f * x, yd() + f * y, zd() + f * z);
 		return this;
 	}
 
@@ -89,16 +71,12 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public WB_Vector _addSelf(final double x, final double y, final double z) {
-		this.x += x;
-		this.y += y;
-		this.z += z;
+		_set(xd() + x, yd() + y, zd() + z);
 		return this;
 	}
 
 	public WB_Vector _addSelf(final WB_Coordinate p) {
-		x += p.xd();
-		y += p.yd();
-		z += p.zd();
+		_set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 		return this;
 	}
 
@@ -124,8 +102,8 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public WB_Vector _crossSelf(final WB_Coordinate p) {
-		_set(y * p.zd() - z * p.yd(), z * p.xd() - x * p.zd(), x * p.yd() - y
-				* p.xd());
+		_set(yd() * p.zd() - this.zd() * p.yd(), this.zd() * p.xd() - this.xd()
+				* p.zd(), this.xd() * p.yd() - yd() * p.xd());
 		return this;
 	}
 
@@ -142,9 +120,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public void _invert() {
-		x *= -1;
-		y *= -1;
-		z *= -1;
+		_mulSelf(-1);
 	}
 
 	public WB_Vector _mulAddMulSelf(final double f, final double g,
@@ -164,7 +140,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public WB_Vector _mulSelf(final double f) {
-		_scaleSelf(f);
+		_set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
 
@@ -173,101 +149,29 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 		if (WB_Epsilon.isZero(d)) {
 			_set(0, 0, 0);
 		} else {
-			_set(x / d, y / d, z / d);
+			_set(xd() / d, yd() / d, zd() / d);
 		}
 		return d;
 	}
 
 	public WB_Vector _scaleSelf(final double f) {
-		x *= f;
-		y *= f;
-		z *= f;
+		_mulSelf(f);
 		return this;
 	}
 
 	public WB_Vector _scaleSelf(final double fx, final double fy,
 			final double fz) {
-		x *= fx;
-		y *= fy;
-		z *= fz;
+		_set(xd() * fx, yd() * fy, zd() * fz);
 		return this;
 	}
 
-	public void _set(final double x, final double y) {
-		this.x = x;
-		this.y = y;
-		z = 0;
-	}
-
-	public void _set(final double x, final double y, final double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public void _set(double x, double y, double z, double w) {
-		_set(x, y, z);
-
-	}
-
-	public void _set(final WB_Coordinate v) {
-		_set(v.xd(), v.yd(), v.zd());
-	}
-
-	public void _set(final WB_CoordinateSequence seq, final int i) {
-		_set(seq.get(i, 0), seq.get(i, 1), seq.get(i, 2), seq.get(i, 3));
-
-	}
-
-	@Override
-	public void _setCoord(int i, double v) {
-		if (i == 0) {
-			this.x = v;
-		}
-		if (i == 1) {
-			this.y = v;
-		}
-		if (i == 2) {
-			this.z = v;
-		}
-
-	}
-
-	@Override
-	public void _setW(double w) {
-
-	}
-
-	@Override
-	public void _setX(double x) {
-		this.x = x;
-
-	}
-
-	@Override
-	public void _setY(double y) {
-		this.y = y;
-
-	}
-
-	@Override
-	public void _setZ(double z) {
-		this.z = z;
-
-	}
-
 	public WB_Vector _subSelf(final double x, final double y, final double z) {
-		this.x -= x;
-		this.y -= y;
-		this.z -= z;
+		_set(xd() - x, yd() - y, zd() - z);
 		return this;
 	}
 
 	public WB_Vector _subSelf(final WB_Coordinate v) {
-		x -= v.xd();
-		y -= v.yd();
-		z -= v.zd();
+		_set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
 		return this;
 	}
 
@@ -285,39 +189,40 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double absDot(final WB_Coordinate p) {
-		return WB_Math.fastAbs(WB_CoordinateMath.dot(x, y, z, p.xd(), p.yd(),
-				p.zd()));
+		return WB_Math.fastAbs(WB_CoordinateMath.dot(xd(), yd(), zd(), p.xd(),
+				p.yd(), p.zd()));
 	}
 
 	public double absDot(final WB_CoordinateSequence seq, int i) {
-		return WB_Math.fastAbs(WB_CoordinateMath.dot(x, y, z, seq.get(i, 0),
-				seq.get(i, 1), seq.get(i, 2)));
+		return WB_Math.fastAbs(WB_CoordinateMath.dot(xd(), yd(), zd(),
+				seq.get(i, 0), seq.get(i, 1), seq.get(i, 2)));
 	}
 
 	public double absDot2D(final WB_Coordinate p) {
-		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(x, y, p.xd(), p.yd()));
+		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(xd(), yd(), p.xd(),
+				p.yd()));
 	}
 
 	public double absDot2D(final WB_CoordinateSequence seq, int i) {
-		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(x, y, seq.get(i, 0),
-				seq.get(i, 1)));
+		return WB_Math.fastAbs(WB_CoordinateMath.dot2D(xd(), yd(),
+				seq.get(i, 0), seq.get(i, 1)));
 	}
 
 	public WB_Vector add(final double x, final double y, final double z) {
-		return new WB_Vector(this.x + x, this.y + y, this.z + z);
+		return new WB_Vector(this.xd() + x, this.yd() + y, this.zd() + z);
 	}
 
 	public void add(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
-		result._set(this.x + x, this.y + y, this.z + z);
+		result._set(this.xd() + x, this.yd() + y, this.zd() + z);
 	}
 
 	public WB_Vector add(final WB_Coordinate p) {
-		return new WB_Vector(x + p.xd(), y + p.yd(), z + p.zd());
+		return new WB_Vector(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 	}
 
 	public void add(final WB_Coordinate p, final WB_MutableCoordinate result) {
-		result._set(x + p.xd(), y + p.yd(), z + p.zd());
+		result._set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 	}
 
 	public WB_Vector add(final WB_CoordinateSequence seq, final int i) {
@@ -334,21 +239,23 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	public WB_Vector addMul(final double f, final double x, final double y,
 			final double z) {
-		return new WB_Vector(this.x + f * x, this.y + f * y, this.z + f * z);
+		return new WB_Vector(this.xd() + f * x, this.yd() + f * y, this.zd()
+				+ f * z);
 	}
 
 	public void addMul(final double f, final double x, final double y,
 			final double z, final WB_MutableCoordinate result) {
-		result._set(this.x + f * x, this.y + f * y, this.z + f * z);
+		result._set(this.xd() + f * x, this.yd() + f * y, this.zd() + f * z);
 	}
 
 	public WB_Vector addMul(final double f, final WB_Coordinate p) {
-		return new WB_Vector(x + f * p.xd(), y + f * p.yd(), z + f * p.zd());
+		return new WB_Vector(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f
+				* p.zd());
 	}
 
 	public void addMul(final double f, final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
-		result._set(x + f * p.xd(), y + f * p.yd(), z + f * p.zd());
+		result._set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 	}
 
 	public WB_Vector addMul(final double f, final WB_CoordinateSequence seq,
@@ -456,12 +363,12 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double[] coords() {
-		return new double[] { x, y, z };
+		return new double[] { xd(), yd(), zd() };
 	}
 
 	public WB_Vector cross(final WB_Coordinate p) {
-		return new WB_Vector(y * p.zd() - z * p.yd(), z * p.xd() - x * p.zd(),
-				x * p.yd() - y * p.xd());
+		return new WB_Vector(yd() * p.zd() - zd() * p.yd(), zd() * p.xd()
+				- xd() * p.zd(), xd() * p.yd() - yd() * p.xd());
 	}
 
 	public WB_Vector cross(final WB_CoordinateSequence seq, final int i) {
@@ -472,8 +379,8 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	public void crossInto(final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
-		result._set(y * p.zd() - z * p.yd(), z * p.xd() - x * p.zd(),
-				x * p.yd() - y * p.xd());
+		result._set(yd() * p.zd() - zd() * p.yd(),
+				zd() * p.xd() - xd() * p.zd(), xd() * p.yd() - yd() * p.xd());
 	}
 
 	public WB_Vector div(final double f) {
@@ -485,20 +392,21 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public double dot(final WB_Coordinate p) {
-		return WB_CoordinateMath.dot(x, y, z, p.xd(), p.yd(), p.zd());
+		return WB_CoordinateMath.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd());
 	}
 
 	public double dot(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.dot(x, y, z, seq.get(i, 0), seq.get(i, 1),
-				seq.get(i, 2));
+		return WB_CoordinateMath.dot(xd(), yd(), zd(), seq.get(i, 0),
+				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double dot2D(final WB_Coordinate p) {
-		return WB_CoordinateMath.dot2D(x, y, p.xd(), p.yd());
+		return WB_CoordinateMath.dot2D(xd(), yd(), p.xd(), p.yd());
 	}
 
 	public double dot2D(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.dot2D(x, y, seq.get(i, 0), seq.get(i, 1));
+		return WB_CoordinateMath
+				.dot2D(xd(), yd(), seq.get(i, 0), seq.get(i, 1));
 	}
 
 	@Override
@@ -510,129 +418,106 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 			return false;
 		}
 		final WB_Vector p = (WB_Vector) o;
-		if (!WB_Epsilon.isEqualAbs(x, p.x)) {
+		if (!WB_Epsilon.isEqualAbs(xd(), p.xd())) {
 			return false;
 		}
-		if (!WB_Epsilon.isEqualAbs(y, p.y)) {
+		if (!WB_Epsilon.isEqualAbs(yd(), p.yd())) {
 			return false;
 		}
-		if (!WB_Epsilon.isEqualAbs(z, p.z)) {
+		if (!WB_Epsilon.isEqualAbs(zd(), p.zd())) {
 			return false;
 		}
 		return true;
 	}
 
 	public WB_Vector get() {
-		return new WB_Vector(x, y, z);
+		return new WB_Vector(xd(), yd(), zd());
 	}
 
 	public double getAngle(final WB_CoordinateSequence seq, final int i) {
 
-		return WB_CoordinateMath.angleBetween(x, y, z, seq.get(i, 0),
+		return WB_CoordinateMath.angleBetween(xd(), yd(), zd(), seq.get(i, 0),
 				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getAngle(final WB_Coordinate p) {
-		return WB_CoordinateMath.angleBetween(x, y, z, p.xd(), p.yd(), p.zd());
-	}
-
-	public double getAngleNorm(final WB_Coordinate p) {
-		return WB_CoordinateMath.angleBetweenNorm(x, y, z, p.xd(), p.yd(),
+		return WB_CoordinateMath.angleBetween(xd(), yd(), zd(), p.xd(), p.yd(),
 				p.zd());
 	}
 
-	public double getAngleNorm(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.angleBetweenNorm(x, y, z, seq.get(i, 0),
-				seq.get(i, 1), seq.get(i, 2));
+	public double getAngleNorm(final WB_Coordinate p) {
+		return WB_CoordinateMath.angleBetweenNorm(xd(), yd(), zd(), p.xd(),
+				p.yd(), p.zd());
 	}
 
-	public double getd(final int i) {
-		if (i == 0) {
-			return x;
-		}
-		if (i == 1) {
-			return y;
-		}
-		if (i == 2) {
-			return z;
-		}
-		return Double.NaN;
+	public double getAngleNorm(final WB_CoordinateSequence seq, final int i) {
+		return WB_CoordinateMath.angleBetweenNorm(xd(), yd(), zd(),
+				seq.get(i, 0), seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getDistance(final WB_Coordinate p) {
-		return WB_CoordinateMath.getDistance(x, y, z, p.xd(), p.yd(), p.zd());
+		return WB_CoordinateMath.getDistance(xd(), yd(), zd(), p.xd(), p.yd(),
+				p.zd());
 	}
 
 	public double getDistance(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.getDistance(x, y, z, seq.get(i, 0),
+		return WB_CoordinateMath.getDistance(xd(), yd(), zd(), seq.get(i, 0),
 				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getDistance2D(final WB_Coordinate p) {
-		return WB_CoordinateMath.getDistance2D(x, y, p.xd(), p.yd());
+		return WB_CoordinateMath.getDistance2D(xd(), yd(), p.xd(), p.yd());
 	}
 
 	public double getDistance2D(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.getDistance2D(x, y, seq.get(i, 0),
+		return WB_CoordinateMath.getDistance2D(xd(), yd(), seq.get(i, 0),
 				seq.get(i, 1));
 	}
 
-	public float getf(final int i) {
-		if (i == 0) {
-			return (float) x;
-		}
-		if (i == 1) {
-			return (float) y;
-		}
-		if (i == 2) {
-			return (float) z;
-		}
-		return Float.NaN;
-	}
-
 	public double getLength() {
-		return WB_CoordinateMath.getLength(x, y, z);
+		return WB_CoordinateMath.getLength(xd(), yd(), zd());
 	}
 
 	public double getLength2D() {
-		return WB_CoordinateMath.getLength2D(x, y);
+		return WB_CoordinateMath.getLength2D(xd(), yd());
 	}
 
 	public double getSqDistance(final WB_Coordinate p) {
-		return WB_CoordinateMath.getSqDistance(x, y, z, p.xd(), p.yd(), p.zd());
+		return WB_CoordinateMath.getSqDistance(xd(), yd(), zd(), p.xd(),
+				p.yd(), p.zd());
 	}
 
 	public double getSqDistance(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.getSqDistance(x, y, z, seq.get(i, 0),
+		return WB_CoordinateMath.getSqDistance(xd(), yd(), zd(), seq.get(i, 0),
 				seq.get(i, 1), seq.get(i, 2));
 	}
 
 	public double getSqDistance2D(final WB_Coordinate p) {
-		return WB_CoordinateMath.getSqDistance2D(x, y, p.xd(), p.yd());
+		return WB_CoordinateMath.getSqDistance2D(xd(), yd(), p.xd(), p.yd());
 	}
 
 	public double getSqDistance2D(final WB_CoordinateSequence seq, final int i) {
-		return WB_CoordinateMath.getSqDistance2D(x, y, seq.get(i, 0),
+		return WB_CoordinateMath.getSqDistance2D(xd(), yd(), seq.get(i, 0),
 				seq.get(i, 1));
 	}
 
 	public double getSqLength() {
-		return WB_CoordinateMath.getSqLength(x, y, z);
+		return WB_CoordinateMath.getSqLength(xd(), yd(), zd());
 	}
 
 	public double getSqLength2D() {
-		return WB_CoordinateMath.getSqLength2D(x, y);
+		return WB_CoordinateMath.getSqLength2D(xd(), yd());
 	}
 
 	@Override
 	public int hashCode() {
 
-		return WB_CoordinateMath.calculateHashCode(x, y, z);
+		return WB_CoordinateMath.calculateHashCode(xd(), yd(), zd());
 
 	}
 
 	public double heading() {
-		return Math.atan2(y, x);
+		return Math.atan2(yd(), xd());
 	}
 
 	public boolean isCollinear(final WB_Coordinate p, final WB_Coordinate q) {
@@ -683,11 +568,11 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public boolean isZero() {
-		return WB_CoordinateMath.isZero(x, y, z);
+		return WB_CoordinateMath.isZero(xd(), yd(), zd());
 	}
 
 	public WB_Vector mul(final double f) {
-		return new WB_Vector(x * f, y * f, z * f);
+		return new WB_Vector(xd() * f, yd() * f, zd() * f);
 	}
 
 	public void mul(final double f, final WB_MutableCoordinate result) {
@@ -754,48 +639,38 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 	}
 
 	public void scale(final double f, final WB_MutableCoordinate result) {
-		result._set(x * f, y * f, z * f);
-	}
-
-	public void set(final int i, final double v) {
-		if (i == 0) {
-			x = v;
-		} else if (i == 1) {
-			y = v;
-		} else if (i == 2) {
-			z = v;
-		}
-
+		result._set(xd() * f, yd() * f, zd() * f);
 	}
 
 	public boolean smallerThan(final WB_Coordinate otherXYZ) {
-		int _tmp = WB_Epsilon.compareAbs(x, otherXYZ.xd());
+		int _tmp = WB_Epsilon.compareAbs(xd(), otherXYZ.xd());
 		if (_tmp != 0) {
 			return (_tmp < 0);
 		}
-		_tmp = WB_Epsilon.compareAbs(y, otherXYZ.yd());
+		_tmp = WB_Epsilon.compareAbs(yd(), otherXYZ.yd());
 		if (_tmp != 0) {
 			return (_tmp < 0);
 		}
-		_tmp = WB_Epsilon.compareAbs(z, otherXYZ.zd());
+		_tmp = WB_Epsilon.compareAbs(zd(), otherXYZ.zd());
 		return (_tmp < 0);
 	}
 
 	public WB_Vector sub(final double x, final double y, final double z) {
-		return new WB_Vector(this.x - x, this.y - y, this.z - z);
+		return new WB_Vector(this.xd() - x, this.yd() - y, this.zd() - z);
 	}
 
 	public void sub(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
-		result._set(this.x - x, this.y - y, this.z - z);
+		result._set(this.xd() - x, this.yd() - y, this.zd() - z);
 	}
 
 	public WB_Vector sub(final WB_Coordinate p) {
-		return new WB_Vector(x - p.xd(), y - p.yd(), z - p.zd());
+		return new WB_Vector(this.xd() - p.xd(), this.yd() - p.yd(), this.zd()
+				- p.zd());
 	}
 
 	public void sub(final WB_Coordinate p, final WB_MutableCoordinate result) {
-		result._set(x - p.xd(), y - p.yd(), z - p.zd());
+		result._set(this.xd() - p.xd(), this.yd() - p.yd(), this.zd() - p.zd());
 	}
 
 	public WB_Vector sub(final WB_CoordinateSequence seq, final int i) {
@@ -818,45 +693,7 @@ public class WB_Vector implements Comparable<WB_Coordinate>,
 
 	@Override
 	public String toString() {
-		return "WB_Vector [x=" + x + ", y=" + y + ", z=" + z + "]";
-	}
-
-	@Override
-	public double wd() {
-		return 0;
-	}
-
-	@Override
-	public float wf() {
-
-		return 0;
-	}
-
-	@Override
-	public double xd() {
-		return x;
-	}
-
-	public float xf() {
-		return (float) x;
-	}
-
-	@Override
-	public double yd() {
-		return y;
-	}
-
-	public float yf() {
-		return (float) y;
-	}
-
-	@Override
-	public double zd() {
-		return z;
-	}
-
-	public float zf() {
-		return (float) z;
+		return "WB_Vector [x=" + xd() + ", y=" + yd() + ", z=" + zd() + "]";
 	}
 
 	public WB_Vector getOrthoNormal2D() {

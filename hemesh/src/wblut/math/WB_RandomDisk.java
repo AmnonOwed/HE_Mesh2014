@@ -5,12 +5,12 @@ import wblut.geom.WB_Vector;
 
 /**
  * 
- * Random generator for vectors uniformly distributed inside the unit disk.
+ * Random generator for vectors uniformly distributed on the unit disk.
  * 
  * @author Frederik Vanhoutte, W:Blut
  * 
  */
-public class WB_RandomDisc {
+public class WB_RandomDisk {
 
 	/** The random gen. */
 	private final WB_MTRandom randomGen;
@@ -18,7 +18,7 @@ public class WB_RandomDisc {
 	/**
 	 * Instantiates a new w b_ random disc.
 	 */
-	public WB_RandomDisc() {
+	public WB_RandomDisk() {
 		randomGen = new WB_MTRandom();
 	}
 
@@ -29,7 +29,7 @@ public class WB_RandomDisc {
 	 *            seed
 	 * @return self
 	 */
-	public WB_RandomDisc setSeed(final long seed) {
+	public WB_RandomDisk setSeed(final long seed) {
 		randomGen.setSeed(seed);
 		return this;
 	}
@@ -37,7 +37,7 @@ public class WB_RandomDisc {
 	/**
 	 * Next point.
 	 * 
-	 * @return next random WB_Point inside unit disk
+	 * @return next random WB_Point on unit disk
 	 */
 	public WB_Point nextPoint() {
 		final double r = Math.sqrt(randomGen.nextDouble());
@@ -48,7 +48,7 @@ public class WB_RandomDisc {
 	/**
 	 * Next vector.
 	 * 
-	 * @return next random WB_Vector inside unit disk
+	 * @return next random WB_Vector on unit disk
 	 */
 	public WB_Vector nextVector() {
 		final double r = Math.sqrt(randomGen.nextDouble());

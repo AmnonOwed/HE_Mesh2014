@@ -30,7 +30,7 @@ public class WB_Bezier implements WB_Curve {
 	 * @see wblut.nurbs.WB_Curve#curvePoint(double)
 	 */
 	public WB_Point curvePoint(final double u) {
-		final double[] B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
+		final double[] B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(u, n);
 		final WB_Point C = new WB_Point();
 		for (int k = 0; k <= n; k++) {
 			C._addMulSelf(B[k], points[k]);

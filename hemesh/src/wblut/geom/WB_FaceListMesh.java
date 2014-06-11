@@ -63,6 +63,21 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 	}
 
+	protected WB_FaceListMesh(final WB_FaceListMesh mesh) {
+
+		vertices = geometryfactory.createPointSequence(mesh.vertices);
+		this.faces = new int[mesh.faces.length][];
+		int i = 0;
+		for (final int[] face : mesh.faces) {
+			this.faces[i] = new int[face.length];
+			for (int j = 0; j < face.length; j++) {
+				this.faces[i][j] = face[j];
+			}
+			i++;
+		}
+
+	}
+
 	protected WB_FaceListMesh(final Collection<? extends WB_Coordinate> points,
 			final int[][] faces) {
 
@@ -106,6 +121,11 @@ public class WB_FaceListMesh implements WB_Geometry {
 			}
 			i++;
 		}
+
+	}
+
+	public WB_FaceListMesh get() {
+		return new WB_FaceListMesh(this);
 
 	}
 
@@ -611,6 +631,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 			WB_Point.applyAsPoint(vertices.getRaw(id++), vertices.getRaw(id++),
 					vertices.getRaw(id++), point);
 			newvertices.add(point);
+			id++;
 		}
 		return geometryfactory.createMesh(newvertices, faces);
 	}

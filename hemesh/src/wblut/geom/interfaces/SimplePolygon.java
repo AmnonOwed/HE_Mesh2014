@@ -5,7 +5,6 @@ import java.util.List;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_IndexedSegment;
-import wblut.geom.WB_IndexedTriangle;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon2D;
@@ -22,7 +21,7 @@ public interface SimplePolygon {
 
 	public WB_Convex isConvex(final int i);
 
-	public List<WB_IndexedTriangle> triangulate();
+	public int[][] triangulate();
 
 	public List<WB_IndexedSegment> getSegments();
 

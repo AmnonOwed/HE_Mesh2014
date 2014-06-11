@@ -10,7 +10,7 @@ import wblut.geom.WB_Vector;
  * @author Frederik Vanhoutte, W:Blut
  * 
  */
-public class WB_RandomSphere {
+public class WB_RandomOnSphere {
 
 	/** The random gen. */
 	private final WB_MTRandom randomGen;
@@ -18,7 +18,7 @@ public class WB_RandomSphere {
 	/**
 	 * Instantiates a new w b_ random sphere.
 	 */
-	public WB_RandomSphere() {
+	public WB_RandomOnSphere() {
 		randomGen = new WB_MTRandom();
 	}
 
@@ -29,7 +29,7 @@ public class WB_RandomSphere {
 	 *            seed
 	 * @return self
 	 */
-	public WB_RandomSphere setSeed(final long seed) {
+	public WB_RandomOnSphere setSeed(final long seed) {
 		randomGen.setSeed(seed);
 		return this;
 	}

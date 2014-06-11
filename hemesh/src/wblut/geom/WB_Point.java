@@ -130,7 +130,7 @@ public class WB_Point extends WB_Vector {
 	}
 
 	public WB_Point _mulSelf(final double f) {
-		_scaleSelf(f);
+		_set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
 

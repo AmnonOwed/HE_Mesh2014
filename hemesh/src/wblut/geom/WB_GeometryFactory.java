@@ -453,6 +453,10 @@ public class WB_GeometryFactory {
 		return new WB_Point(p);
 	}
 
+	public WB_Point createPoint(final double[] p) {
+		return new WB_Point(p);
+	}
+
 	/**
 	 * Copy of coordinate as point, z-ordinate is ignored
 	 * 
@@ -3707,7 +3711,8 @@ public class WB_GeometryFactory {
 
 				final WB_Circle inversion = createCircleWithRadius(p, 100.0);
 				WB_Point p1 = createInversionPoint(L.getOrigin(), inversion);
-				WB_Point p2 = createInversionPoint(L.getPointOnLine(100.0), inversion);
+				WB_Point p2 = createInversionPoint(L.getPointOnLine(100.0),
+						inversion);
 				final WB_Circle invL = createCirclePPP(p, p1, p2);
 
 				p1 = createInversionPoint(
@@ -3722,7 +3727,8 @@ public class WB_GeometryFactory {
 				for (int i = 0; i < invResult.size(); i++) {
 					final WB_Line inv = invResult.get(i);
 					p1 = createInversionPoint(inv.getOrigin(), inversion);
-					p2 = createInversionPoint(inv.getPointOnLine(100.0), inversion);
+					p2 = createInversionPoint(inv.getPointOnLine(100.0),
+							inversion);
 					result.add(createCirclePPP(p, p1, p2));
 				}
 			}
@@ -4758,44 +4764,6 @@ public class WB_GeometryFactory {
 
 	public WB_FaceListMesh createTriMesh(final WB_FaceListMesh mesh) {
 		return new WB_TriMesh(mesh);
-	}
-
-	public WB_FaceListMesh createConvexHull(final WB_Coordinate[] points,
-			final boolean triangulate) {
-		final int n = points.length;
-		if (n < 4) {
-			return null;
-		}
-
-		try {
-			final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
-
-			final int[][] faces = hull.getFaces();
-			final List<WB_Point> hullpoints = hull.getVertices();
-			return createMesh(hullpoints, faces);
-		} catch (Exception e) {
-			return null;
-		}
-
-	}
-
-	public WB_FaceListMesh createConvexHull(
-			final List<? extends WB_Coordinate> points,
-			final boolean triangulate) {
-		final int n = points.size();
-		if (n < 4) {
-			return null;
-		}
-
-		try {
-			final WB_QuickHull3D hull = new WB_QuickHull3D(points, triangulate);
-
-			final int[][] faces = hull.getFaces();
-			final List<WB_Point> hullpoints = hull.getVertices();
-			return createMesh(hullpoints, faces);
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	public WB_FaceListMesh createPrism(final int n, final double radius,
@@ -7451,15 +7419,165 @@ public class WB_GeometryFactory {
 	}
 
 	public WB_FaceListMesh createConvexHull(
-			final Collection<? extends WB_Coordinate> points) {
-		final WB_QuickHull3D qh = new WB_QuickHull3D(points);
-
-		return createMesh(qh.getVertices(), qh.getFaces());
+			final List<? extends WB_Coordinate> points) {
+		return createConvexHull(points, true);
 	}
 
 	public WB_FaceListMesh createConvexHull(final WB_Coordinate[] points) {
-		final WB_QuickHull3D qh = new WB_QuickHull3D(points);
-		return createMesh(qh.getVertices(), qh.getFaces());
+		return createConvexHull(points, true);
+	}
+
+	public WB_FaceListMesh createConvexHull(final WB_Coordinate[] points,
+			final boolean triangulate) {
+		final List<WB_Coordinate> uniqueVertices = new FastTable<WB_Coordinate>();
+		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
+
+		WB_KDEntry<WB_Coordinate, Integer> neighbor;
+
+		int n = 0;
+		for (WB_Coordinate p : points) {
+			if (n == 0) {
+				kdtree.add(p, n++);
+				uniqueVertices.add(p);
+			} else {
+				neighbor = kdtree.getNearestNeighbor(p);
+				if (neighbor.d2 > WB_Epsilon.SQEPSILON) {
+					kdtree.add(p, n++);
+					uniqueVertices.add(p);
+				}
+			}
+		}
+		if (n < 4) {
+			return null;
+		}
+
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(uniqueVertices,
+					triangulate);
+
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	public WB_FaceListMesh createConvexHull(
+			final List<? extends WB_Coordinate> points,
+			final boolean triangulate) {
+
+		final List<WB_Coordinate> uniqueVertices = new FastTable<WB_Coordinate>();
+		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
+
+		WB_KDEntry<WB_Coordinate, Integer> neighbor;
+
+		int n = 0;
+		for (WB_Coordinate p : points) {
+			if (n == 0) {
+				kdtree.add(p, n++);
+				uniqueVertices.add(p);
+			} else {
+				neighbor = kdtree.getNearestNeighbor(p);
+				if (neighbor.d2 > WB_Epsilon.SQEPSILON) {
+					kdtree.add(p, n++);
+					uniqueVertices.add(p);
+				}
+			}
+		}
+
+		if (n < 4) {
+			return null;
+		}
+
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(uniqueVertices,
+					triangulate);
+
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public WB_FaceListMesh createConvexHullWithThreshold(
+			final WB_Coordinate[] points, final boolean triangulate,
+			double threshold) {
+		final List<WB_Coordinate> uniqueVertices = new FastTable<WB_Coordinate>();
+		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
+
+		WB_KDEntry<WB_Coordinate, Integer> neighbor;
+		double t2 = threshold * threshold;
+		int n = 0;
+		for (WB_Coordinate p : points) {
+			if (n == 0) {
+				kdtree.add(p, n++);
+				uniqueVertices.add(p);
+			} else {
+				neighbor = kdtree.getNearestNeighbor(p);
+				if (neighbor.d2 > t2) {
+					kdtree.add(p, n++);
+					uniqueVertices.add(p);
+				}
+			}
+		}
+		if (n < 4) {
+			return null;
+		}
+
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(uniqueVertices,
+					triangulate);
+
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	public WB_FaceListMesh createConvexHullWithThreshold(
+			final List<? extends WB_Coordinate> points,
+			final boolean triangulate, double threshold) {
+
+		final List<WB_Coordinate> uniqueVertices = new FastTable<WB_Coordinate>();
+		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
+
+		WB_KDEntry<WB_Coordinate, Integer> neighbor;
+		double t2 = threshold * threshold;
+		int n = 0;
+		for (WB_Coordinate p : points) {
+			if (n == 0) {
+				kdtree.add(p, n++);
+				uniqueVertices.add(p);
+			} else {
+				neighbor = kdtree.getNearestNeighbor(p);
+				if (neighbor.d2 > t2) {
+					kdtree.add(p, n++);
+					uniqueVertices.add(p);
+				}
+			}
+		}
+
+		if (n < 4) {
+			return null;
+		}
+
+		try {
+			final WB_QuickHull3D hull = new WB_QuickHull3D(uniqueVertices,
+					triangulate);
+
+			final int[][] faces = hull.getFaces();
+			final List<WB_Point> hullpoints = hull.getVertices();
+			return createMesh(hullpoints, faces);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public WB_FaceListMesh createConcaveHull(

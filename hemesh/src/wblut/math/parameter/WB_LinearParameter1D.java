@@ -1,7 +1,8 @@
 /**
  * 
  */
-package wblut.math;
+package wblut.math.parameter;
+
 
 /**
  * Parameter class dependent on a single variable. An implementation of the

@@ -66,13 +66,13 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 			final WB_PointHomogeneous[] Q = new WB_PointHomogeneous[m + 1];
 			double[] B;
 			for (int j = 0; j <= m; j++) {
-				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
+				B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(u, n);
 				Q[j] = new WB_PointHomogeneous();
 				for (int k = 0; k <= n; k++) {
 					Q[j].add(wpoints[k][j], B[k]);
 				}
 			}
-			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
+			B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(v, m);
 			for (int k = 0; k <= m; k++) {
 				S.add(Q[k], B[k]);
 			}
@@ -80,13 +80,13 @@ public class WB_RBezierSurface extends WB_BezierSurface {
 			final WB_PointHomogeneous[] Q = new WB_PointHomogeneous[n + 1];
 			double[] B;
 			for (int i = 0; i <= n; i++) {
-				B = WB_Bernstein.BernsteinCoefficientsOfOrderN(v, m);
+				B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(v, m);
 				Q[i] = new WB_PointHomogeneous();
 				for (int k = 0; k <= m; k++) {
 					Q[i].add(wpoints[i][k], B[k]);
 				}
 			}
-			B = WB_Bernstein.BernsteinCoefficientsOfOrderN(u, n);
+			B = WB_Bernstein.getBernsteinCoefficientsOfOrderN(u, n);
 			for (int k = 0; k <= n; k++) {
 				S.add(Q[k], B[k]);
 			}

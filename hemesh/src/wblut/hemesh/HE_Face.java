@@ -8,7 +8,6 @@ import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
-import wblut.geom.WB_IndexedTriangle2D;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon;
@@ -321,14 +320,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public int[][] getTriangles() {
 		if (triangles == null) {
-			List<WB_IndexedTriangle2D> tris = toPolygon2D()
-					.indexedTriangulate();
-			triangles = new int[tris.size()][3];
-			for (int i = 0; i < tris.size(); i++) {
-				triangles[i][0] = tris.get(i).i1;
-				triangles[i][1] = tris.get(i).i2;
-				triangles[i][2] = tris.get(i).i3;
-			}
+			triangles = toPolygon().triangulate();
 		}
 		return triangles;
 	}

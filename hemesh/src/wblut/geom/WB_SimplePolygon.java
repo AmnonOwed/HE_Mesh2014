@@ -7,6 +7,8 @@ import wblut.WB_Epsilon;
 import wblut.geom.interfaces.SimplePolygon;
 
 public class WB_SimplePolygon implements SimplePolygon {
+	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
+			.instance();
 
 	/** Ordered array of WB_Point. */
 	private WB_Point[] points;
@@ -234,20 +236,45 @@ public class WB_SimplePolygon implements SimplePolygon {
 	/**
 	 * Triangulate polygon.
 	 * 
-	 * @return arrayList of WB_IndexedTriangle, points are not copied
+	 * @return int[][] of faces
 	 */
-	public List<WB_IndexedTriangle> triangulate() {
-		final List<WB_IndexedTriangle> tris = new FastTable<WB_IndexedTriangle>();
-		final WB_SimplePolygon2D tmp = toPolygon2D();
-		final List<WB_IndexedTriangle2D> tris2d = tmp.indexedTriangulate();
-		WB_IndexedTriangle2D tri2d;
-		for (int i = 0; i < tris2d.size(); i++) {
-			tri2d = tris2d.get(i);
-			tris.add(new WB_IndexedTriangle(tri2d.i1, tri2d.i2, tri2d.i3,
-					points));
 
+	public int[][] triangulate() {
+
+		final List<WB_Point> pts = new FastTable<WB_Point>();
+		for (int i = 0; i < n; i++) {
+			pts.add(points[i]);
 		}
-		return tris;
+
+		WB_Triangulation2DWithPoints triangulation = WB_Triangulate
+				.getPolygonTriangulation2D(pts, true,
+						geometryfactory.createEmbeddedPlane(getPlane()));
+
+		final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
+				points.length);
+
+		for (int i = 0; i < points.length; i++) {
+			pointmap.add(points[i], i);
+		}
+
+		int[][] triangles = triangulation.getTriangles();
+
+		final List<WB_Point> tripoints = triangulation.getPoints();
+		final int[] intmap = new int[tripoints.size()];
+		int index = 0;
+		for (final WB_Point point : tripoints) {
+			final int found = pointmap.getNearestNeighbor(point).value;
+			intmap[index++] = found;
+		}
+
+		for (int[] T : triangles) {
+			T[0] = intmap[T[0]];
+			T[1] = intmap[T[1]];
+			T[2] = intmap[T[2]];
+		}
+
+		return triangles;
+
 	}
 
 	/**

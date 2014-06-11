@@ -3,9 +3,9 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Vector;
-import wblut.math.WB_ConstantParameter;
-import wblut.math.WB_Parameter;
-import wblut.math.WB_RandomSphere;
+import wblut.math.WB_RandomOnSphere;
+import wblut.math.parameter.WB_ConstantParameter;
+import wblut.math.parameter.WB_Parameter;
 
 /**
  * Expands or contracts all vertices along the vertex normals.
@@ -65,7 +65,7 @@ public class HEM_Noise extends HEM_Modifier {
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = mesh.vItr();
 
-		final WB_RandomSphere rs = new WB_RandomSphere();
+		final WB_RandomOnSphere rs = new WB_RandomOnSphere();
 		WB_Vector n;
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -89,7 +89,7 @@ public class HEM_Noise extends HEM_Modifier {
 
 		HE_Vertex v;
 
-		final WB_RandomSphere rs = new WB_RandomSphere();
+		final WB_RandomOnSphere rs = new WB_RandomOnSphere();
 		WB_Vector n;
 		while (vItr.hasNext()) {
 			v = vItr.next();

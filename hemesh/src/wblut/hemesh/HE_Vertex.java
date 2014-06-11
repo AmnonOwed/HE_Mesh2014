@@ -556,9 +556,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		WB_Vector t2 = new WB_Vector();
 
 		if (Math.abs(normal.xd()) < Math.abs(normal.yd()))
-			t2.set(0, 1.0);
+			t2._setX(1.0);
 		else
-			t2.set(1, 1.0);
+			t2._setY(1.0);
 		WB_Vector t1 = normal.cross(t2);
 		double n = t1.getLength();
 		if (n < WB_Epsilon.EPSILON)

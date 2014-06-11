@@ -1,7 +1,7 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Point;
-import wblut.math.WB_Function2D;
+import wblut.math.parameter.WB_Function2D;
 
 /**
  * Creates a new mesh from a parametric uv equation.

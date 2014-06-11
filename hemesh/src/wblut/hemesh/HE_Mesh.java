@@ -19,7 +19,6 @@ import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
-import wblut.geom.WB_IndexedTriangle;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree;
@@ -3933,13 +3932,16 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	public static boolean pointIsStrictlyInFace(final WB_Point p,
 			final HE_Face f) {
 		final WB_SimplePolygon poly = f.toPolygon();
-		final List<WB_IndexedTriangle> tris = poly.triangulate();
+		final int[][] tris = poly.triangulate();
 		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
-				WB_Intersection.getClosestPoint3D(p, tris)))) {
+				WB_Intersection.getClosestPoint3D(p, f.toPolygon())))) {
 			return false;
 		}
-		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
-				WB_Intersection.getClosestPointOnPeriphery3D(p, poly, tris)))) {
+		if (!WB_Epsilon
+				.isZeroSq(WB_Distance.getSqDistance3D(
+						p,
+						WB_Intersection.getClosestPointOnPeriphery3D(p,
+								f.toPolygon())))) {
 			return false;
 		}
 		return true;

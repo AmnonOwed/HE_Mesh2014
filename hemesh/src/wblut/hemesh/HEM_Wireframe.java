@@ -1,8 +1,8 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Frame;
-import wblut.math.WB_ConstantParameter;
-import wblut.math.WB_Parameter;
+import wblut.math.parameter.WB_ConstantParameter;
+import wblut.math.parameter.WB_Parameter;
 
 public class HEM_Wireframe extends HEM_Modifier {
 
