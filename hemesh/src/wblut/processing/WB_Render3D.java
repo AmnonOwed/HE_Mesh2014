@@ -33,10 +33,8 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Ring;
 import wblut.geom.WB_Segment;
-import wblut.geom.WB_SimplePolygon2D;
 import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
-import wblut.geom.WB_Triangle2D;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
@@ -1275,59 +1273,60 @@ public class WB_Render3D {
 		home.endShape(PConstants.CLOSE);
 	}
 
-	public void drawPolygon2D(final Collection<WB_SimplePolygon2D> polygons) {
-		final Iterator<WB_SimplePolygon2D> polyItr = polygons.iterator();
+	public void drawPolygon2D(final Collection<SimplePolygon> polygons) {
+		final Iterator<SimplePolygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygon2D(polyItr.next());
 		}
 
 	}
 
-	public void drawPolygon2D(final WB_SimplePolygon2D polygon) {
+	public void drawPolygon2D(final SimplePolygon polygon) {
 		WB_Point v1;
-		final int n = polygon.n;
+		final int n = polygon.getN();
 		home.beginShape(PConstants.POLYGON);
 		for (int i = 0; i < n; i++) {
-			v1 = polygon.points[i];
+			v1 = polygon.getPoint(i);
 			home.vertex(v1.xf(), v1.yf());
 
 		}
 		home.endShape(PConstants.CLOSE);
 	}
 
-	public void drawPolygon2DEdges(final Collection<WB_SimplePolygon2D> polygons) {
-		final Iterator<WB_SimplePolygon2D> polyItr = polygons.iterator();
+	public void drawPolygon2DEdges(
+			final Collection<? extends SimplePolygon> polygons) {
+		final Iterator<? extends SimplePolygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygon2DEdges(polyItr.next());
 		}
 
 	}
 
-	public void drawPolygon2DEdges(final WB_SimplePolygon2D polygon) {
+	public void drawPolygon2DEdges(final SimplePolygon polygon) {
 		WB_Point v1, v2;
-		final int n = polygon.n;
+		final int n = polygon.getN();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
-			v1 = polygon.points[i];
-			v2 = polygon.points[j];
+			v1 = polygon.getPoint(i);
+			v2 = polygon.getPoint(j);
 			home.line(v1.xf(), v1.yf(), v2.xf(), v2.yf());
 		}
 	}
 
-	public void drawPolygon2DVertices(
-			final Collection<WB_SimplePolygon2D> polygons, final double d) {
-		final Iterator<WB_SimplePolygon2D> polyItr = polygons.iterator();
+	public void drawPolygon2DVertices(final Collection<SimplePolygon> polygons,
+			final double d) {
+		final Iterator<SimplePolygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygon2DVertices(polyItr.next(), d);
 		}
 
 	}
 
-	public void drawPolygon2DVertices(final WB_SimplePolygon2D polygon,
+	public void drawPolygon2DVertices(final SimplePolygon polygon,
 			final double d) {
 		WB_Point v1;
-		final int n = polygon.n;
+		final int n = polygon.getN();
 		for (int i = 0; i < n; i++) {
-			v1 = polygon.points[i];
+			v1 = polygon.getPoint(i);
 
 			home.ellipse(v1.xf(), v1.yf(), (float) d, (float) d);
 
@@ -1468,17 +1467,16 @@ public class WB_Render3D {
 		home.endShape();
 	}
 
-	public void drawTriangle2D(
-			final Collection<? extends WB_Triangle2D> triangles) {
+	public void drawTriangle2D(final Collection<? extends Triangle> triangles) {
 
-		final Iterator<? extends WB_Triangle2D> triItr = triangles.iterator();
+		final Iterator<? extends Triangle> triItr = triangles.iterator();
 		while (triItr.hasNext()) {
 			drawTriangle2D(triItr.next());
 		}
 
 	}
 
-	public void drawTriangle2D(final WB_Triangle2D triangle) {
+	public void drawTriangle2D(final Triangle triangle) {
 		home.beginShape();
 		home.vertex(triangle.p1().xf(), triangle.p1().yf());
 		home.vertex(triangle.p2().xf(), triangle.p2().yf());
@@ -1486,24 +1484,24 @@ public class WB_Render3D {
 		home.endShape();
 	}
 
-	public void drawTriangle2D(final WB_Triangle2D[] triangles) {
+	public void drawTriangle2D(final Triangle[] triangles) {
 
-		for (final WB_Triangle2D triangle : triangles) {
+		for (final Triangle triangle : triangles) {
 			drawTriangle2D(triangle);
 		}
 
 	}
 
 	public void drawTriangle2DEdges(
-			final Collection<? extends WB_Triangle2D> triangles) {
-		final Iterator<? extends WB_Triangle2D> triItr = triangles.iterator();
+			final Collection<? extends Triangle> triangles) {
+		final Iterator<? extends Triangle> triItr = triangles.iterator();
 		while (triItr.hasNext()) {
 			drawTriangle2DEdges(triItr.next());
 		}
 
 	}
 
-	public void drawTriangle2DEdges(final WB_Triangle2D triangle) {
+	public void drawTriangle2DEdges(final Triangle triangle) {
 
 		home.line(triangle.p1().xf(), triangle.p1().yf(), triangle.p2().xf(),
 				triangle.p2().yf());
@@ -1514,9 +1512,9 @@ public class WB_Render3D {
 
 	}
 
-	public void drawTriangle2DEdges(final WB_Triangle2D[] triangles) {
+	public void drawTriangle2DEdges(final Triangle[] triangles) {
 
-		for (final WB_Triangle2D triangle : triangles) {
+		for (final Triangle triangle : triangles) {
 			drawTriangle2DEdges(triangle);
 		}
 

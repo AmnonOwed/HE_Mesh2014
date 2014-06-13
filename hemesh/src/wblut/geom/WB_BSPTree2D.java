@@ -22,7 +22,7 @@ public class WB_BSPTree2D {
 		if (S2DItr.hasNext()) {
 			cseg = S2DItr.next();
 		}
-		tree.partition = new WB_Line2D(cseg.getOrigin(), cseg.getDirection());
+		tree.partition = new WB_Line(cseg.getOrigin(), cseg.getDirection());
 		final FastTable<WB_Segment> _segs = new FastTable<WB_Segment>();
 
 		_segs.add(cseg);
@@ -72,11 +72,11 @@ public class WB_BSPTree2D {
 		build(root, segments);
 	}
 
-	public void build(final WB_SimplePolygon2D poly) {
+	public void build(final WB_SimplePolygon poly) {
 		if (root == null) {
 			root = new WB_BSPNode2D();
 		}
-		build(root, poly.toExplicitSegments());
+		build(root, poly.toSegments());
 	}
 
 	public int pointLocation(final WB_Point p) {
@@ -163,7 +163,7 @@ public class WB_BSPTree2D {
 		FastTable<WB_Segment> partSegments = new FastTable<WB_Segment>();
 		partSegments.add(S);
 		WB_Segment thisS, otherS;
-		final WB_Line2D L = node.partition;
+		final WB_Line L = node.partition;
 		for (int i = 0; i < node.segments.size(); i++) {
 			final FastTable<WB_Segment> newpartSegments = new FastTable<WB_Segment>();
 			otherS = node.segments.get(i);
@@ -180,8 +180,8 @@ public class WB_BSPTree2D {
 							u0, u1, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
 
 					if (intersection[0] == 2) {
-						final WB_Point pi = L.getPoint(intersection[1]);
-						final WB_Point pj = L.getPoint(intersection[2]);
+						final WB_Point pi = L.getPointOnLine(intersection[1]);
+						final WB_Point pj = L.getPointOnLine(intersection[2]);
 						if (u0 < intersection[1]) {
 							newpartSegments.add(new WB_Segment(thisS
 									.getOrigin(), pi));
@@ -201,8 +201,8 @@ public class WB_BSPTree2D {
 							u1, u0, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
 
 					if (intersection[0] == 2) {
-						final WB_Point pi = L.getPoint(intersection[1]);
-						final WB_Point pj = L.getPoint(intersection[2]);
+						final WB_Point pi = L.getPointOnLine(intersection[1]);
+						final WB_Point pj = L.getPointOnLine(intersection[2]);
 						if (u1 < intersection[1]) {
 							newpartSegments.add(new WB_Segment(pi, thisS
 									.getEndpoint()));
@@ -281,7 +281,7 @@ public class WB_BSPTree2D {
 
 	private WB_BSPNode2D negate(final WB_BSPNode2D node) {
 		final WB_BSPNode2D negNode = new WB_BSPNode2D();
-		negNode.partition = new WB_Line2D(node.partition.getOrigin(),
+		negNode.partition = new WB_Line(node.partition.getOrigin(),
 				node.partition.getDirection().mul(-1));
 		for (int i = 0; i < node.segments.size(); i++) {
 			final WB_Segment seg = node.segments.get(i);
@@ -297,24 +297,23 @@ public class WB_BSPTree2D {
 		return negNode;
 	}
 
-	public void partitionPolygon(final WB_SimplePolygon2D P,
-			final List<WB_SimplePolygon2D> pos,
-			final List<WB_SimplePolygon2D> neg) {
+	public void partitionPolygon(final WB_SimplePolygon P,
+			final List<WB_SimplePolygon> pos, final List<WB_SimplePolygon> neg) {
 
 		partitionPolygon(root, P, pos, neg);
 
 	}
 
 	private void partitionPolygon(final WB_BSPNode2D node,
-			final WB_SimplePolygon2D P, final List<WB_SimplePolygon2D> pos,
-			final List<WB_SimplePolygon2D> neg) {
+			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
+			final List<WB_SimplePolygon> neg) {
 
 		if (P.n > 2) {
 			final WB_Classification type = node.partition
 					.classifyPolygonToLine2D(P);
 
 			if (type == WB_Classification.CROSSING) {
-				final WB_SimplePolygon2D[] split = WB_Intersection
+				final WB_SimplePolygon[] split = WB_Intersection
 						.splitPolygon2D(P, node.partition);
 				if (split[0].n > 2) {
 					getPolygonPosPartition(node, split[0], pos, neg);
@@ -334,8 +333,8 @@ public class WB_BSPTree2D {
 	}
 
 	private void getPolygonPosPartition(final WB_BSPNode2D node,
-			final WB_SimplePolygon2D P, final List<WB_SimplePolygon2D> pos,
-			final List<WB_SimplePolygon2D> neg) {
+			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
+			final List<WB_SimplePolygon> neg) {
 		if (node.pos != null) {
 			partitionPolygon(node.pos, P, pos, neg);
 		} else {
@@ -345,8 +344,8 @@ public class WB_BSPTree2D {
 	}
 
 	private void getPolygonNegPartition(final WB_BSPNode2D node,
-			final WB_SimplePolygon2D P, final List<WB_SimplePolygon2D> pos,
-			final List<WB_SimplePolygon2D> neg) {
+			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
+			final List<WB_SimplePolygon> neg) {
 		if (node.neg != null) {
 			partitionPolygon(node.neg, P, pos, neg);
 		} else {

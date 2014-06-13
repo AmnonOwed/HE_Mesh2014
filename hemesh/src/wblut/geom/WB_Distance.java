@@ -25,11 +25,11 @@ public class WB_Distance {
 		return Math.sqrt(getSqDistance2D(p, q));
 	}
 
-	public static double getDistance2D(final WB_Coordinate p, final WB_Line2D L) {
+	public static double getDistance2D(final WB_Coordinate p, final WB_Line L) {
 		return Math.sqrt(getSqDistance2D(p, L));
 	}
 
-	public static double getDistance2D(final WB_Coordinate p, final WB_Ray2D R) {
+	public static double getDistance2D(final WB_Coordinate p, final WB_Ray R) {
 		return Math.sqrt(getSqDistance2D(p, R));
 	}
 
@@ -229,8 +229,7 @@ public class WB_Distance {
 				* (q.yd() - p.yd()));
 	}
 
-	public static double getSqDistance2D(final WB_Coordinate p,
-			final WB_Line2D L) {
+	public static double getSqDistance2D(final WB_Coordinate p, final WB_Line L) {
 		final WB_Vector ab = L.getDirection();
 		final WB_Vector ac = new WB_Vector(L.getOrigin(), p);
 		final double e = ac.dot2D(ab);
@@ -238,7 +237,7 @@ public class WB_Distance {
 		return ac.dot2D(ac) - e * e / f;
 	}
 
-	public static double getSqDistance2D(final WB_Coordinate p, final WB_Ray2D R) {
+	public static double getSqDistance2D(final WB_Coordinate p, final WB_Ray R) {
 		final WB_Vector ab = R.getDirection();
 		final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
 		final double e = ac.dot2D(ab);

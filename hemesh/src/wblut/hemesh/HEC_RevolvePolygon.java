@@ -2,7 +2,6 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_SimplePolygon2D;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.SimplePolygon;
 
@@ -18,11 +17,6 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 		super();
 		override = true;
 		facets = 6;
-	}
-
-	public HEC_RevolvePolygon setPolygon(final WB_SimplePolygon2D poly) {
-		polygon = poly.toPolygon();
-		return this;
 	}
 
 	public HEC_RevolvePolygon setPolygon(final SimplePolygon poly) {

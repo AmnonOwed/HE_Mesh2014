@@ -53,4 +53,16 @@ public abstract class WB_Linear {
 		}
 		return n;
 	}
+
+	public double a() {
+		return -direction.yd();
+	}
+
+	public double b() {
+		return direction.xd();
+	}
+
+	public double c() {
+		return origin.xd() * direction.yd() - origin.yd() * direction.xd();
+	}
 }

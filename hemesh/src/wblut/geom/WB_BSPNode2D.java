@@ -4,7 +4,7 @@ import javolution.util.FastTable;
 
 public class WB_BSPNode2D {
 
-	protected WB_Line2D partition;
+	protected WB_Line partition;
 
 	protected FastTable<WB_Segment> segments;
 

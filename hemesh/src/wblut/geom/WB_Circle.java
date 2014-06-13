@@ -153,12 +153,12 @@ public class WB_Circle implements WB_Geometry {
 
 	public static WB_Circle getCircleThrough3Points(final WB_Coordinate p0,
 			final WB_Coordinate p1, final WB_Coordinate p2) {
-		final WB_Triangle2D T = new WB_Triangle2D(p0, p1, p2);
+		final WB_Triangle T = new WB_Triangle(p0, p1, p2);
 		return T.getCircumcircle();
 	}
 
-	public static WB_Circle getCircleTangentTo3Lines(final WB_Line2D L0,
-			final WB_Line2D L1, final WB_Line2D L2) {
+	public static WB_Circle getCircleTangentTo3Lines(final WB_Line L0,
+			final WB_Line L1, final WB_Line L2) {
 		final WB_Point p0 = (WB_Point) WB_Intersection
 				.getClosestPoint2D(L0, L1).object;
 		final WB_Point p1 = (WB_Point) WB_Intersection
@@ -166,7 +166,7 @@ public class WB_Circle implements WB_Geometry {
 		final WB_Point p2 = (WB_Point) WB_Intersection
 				.getClosestPoint2D(L0, L2).object;
 
-		final WB_Triangle2D T = new WB_Triangle2D(p0, p1, p2);
+		final WB_Triangle T = new WB_Triangle(p0, p1, p2);
 		return T.getIncircle();
 	}
 
@@ -185,7 +185,7 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleTangentToLineThroughPoint(
-			final WB_Line2D L, final WB_Coordinate p, final double r) {
+			final WB_Line L, final WB_Coordinate p, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>();
 		double cPrime = L.c() + L.a() * p.xd() + L.b() * p.yd();
 		if (WB_Epsilon.isZero(cPrime)) {
@@ -225,7 +225,7 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleTangentTo2Lines(
-			final WB_Line2D L0, final WB_Line2D L1, final double r) {
+			final WB_Line L0, final WB_Line L1, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>(4);
 		final double discrm0 = r;// Math.sqrt(L0.a() * L0.a() + L0.b() * L0.b())
 		// * r;
@@ -288,16 +288,15 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public static ArrayList<WB_Circle> getCircleTangentToLineAndCircle(
-			final WB_Line2D L, final WB_Circle C, final double r) {
+			final WB_Line L, final WB_Circle C, final double r) {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>(8);
 		final double d = WB_Distance.getDistance2D(C.getCenter(), L);
 		if (d > 2 * r + C.getRadius()) {
 			return result;
 		}
-		final WB_Line2D L1 = new WB_Line2D(L.getOrigin().add(
-				L.getDirection().yd(), -L.getDirection().xd(), r),
-				L.getDirection());
-		final WB_Line2D L2 = new WB_Line2D(L.getOrigin().add(
+		final WB_Line L1 = new WB_Line(L.getOrigin().add(L.getDirection().yd(),
+				-L.getDirection().xd(), r), L.getDirection());
+		final WB_Line L2 = new WB_Line(L.getOrigin().add(
 				-L.getDirection().yd(), +L.getDirection().xd(), r),
 				L.getDirection());
 		final WB_Circle C1 = new WB_Circle(C.getCenter(), C.getRadius() + r);

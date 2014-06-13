@@ -782,20 +782,6 @@ public class WB_SimplePolygon implements SimplePolygon {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see wblut.geom.WB_Polygon#toPolygon2D()
-	 */
-	public WB_SimplePolygon2D toPolygon2D() {
-		final WB_Point[] lpoints = new WB_Point[n];
-		for (int i = 0; i < n; i++) {
-			lpoints[i] = P.localPoint2D(points[i]);
-		}
-		return new WB_SimplePolygon2D(lpoints, n);
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see wblut.geom.WB_Polygon#getN()
 	 */
 	public int getN() {
@@ -828,6 +814,15 @@ public class WB_SimplePolygon implements SimplePolygon {
 	public WB_Point[] getPoints() {
 
 		return points;
+	}
+
+	public List<WB_Segment> toSegments() {
+		final List<WB_Segment> segments = new FastTable<WB_Segment>();
+		for (int i = 0, j = n - 1; i < n; j = i, i++) {
+			segments.add(new WB_Segment(points[j], points[i]));
+
+		}
+		return segments;
 	}
 
 }

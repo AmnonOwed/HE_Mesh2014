@@ -7,7 +7,6 @@ import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_IndexedSegment;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_SimplePolygon2D;
 
 public interface SimplePolygon {
 
@@ -24,8 +23,6 @@ public interface SimplePolygon {
 	public int[][] triangulate();
 
 	public List<WB_IndexedSegment> getSegments();
-
-	public WB_SimplePolygon2D toPolygon2D();
 
 	public int getN();
 

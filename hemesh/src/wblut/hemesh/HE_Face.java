@@ -11,7 +11,6 @@ import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon;
-import wblut.geom.WB_SimplePolygon2D;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
@@ -352,11 +351,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		} while (he != _halfedge);
 
 		return new WB_SimplePolygon(points, n);
-	}
-
-	public WB_SimplePolygon2D toPolygon2D() {
-
-		return toPolygon().toPolygon2D();
 	}
 
 	public List<HE_Face> getNeighborFaces() {
