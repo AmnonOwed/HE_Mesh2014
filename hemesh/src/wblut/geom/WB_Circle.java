@@ -113,14 +113,14 @@ public class WB_Circle implements WB_Geometry {
 	@Override
 	public WB_Circle apply(final WB_Transform T) {
 		return geometryfactory.createCircleWithRadius(geometryfactory
-				.createPoint(center).applySelfAsPoint(T), geometryfactory
-				.createVector(normal).applySelfAsNormal(T), radius);
+				.createPoint(center).applyAsPoint(T), geometryfactory
+				.createVector(normal).applyAsNormal(T), radius);
 
 	}
 
 	public WB_Circle applySelf(final WB_Transform T) {
-		center.applySelfAsPoint(T);
-		normal.applySelfAsNormal(T);
+		center.applyAsPoint(T);
+		normal.applyAsNormal(T);
 		return this;
 
 	}

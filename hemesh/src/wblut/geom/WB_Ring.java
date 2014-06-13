@@ -16,12 +16,12 @@ public class WB_Ring extends WB_PolyLine {
 	 * @return direction
 	 */
 	@Override
-	public WB_Vector getDirection(final int i) {
+	public WB_IndexedVector getDirection(final int i) {
 		if ((i < 0) || (i > n - 1)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
 					+ (n - 1) + ".");
 		}
-		return directions.getCoordinate(i);
+		return directions.getVector(i);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class WB_Ring extends WB_PolyLine {
 					+ (n - 1) + ".");
 		}
 		WB_Vector n = geometryfactory.createVector(0, 0, 1);
-		n = n.cross(directions.getCoordinate(i));
+		n = n.cross(directions.getVector(i));
 		final double d = n.getLength();
 		n = n.div(d);
 		if (WB_Epsilon.isZero(d)) {
@@ -189,10 +189,10 @@ public class WB_Ring extends WB_PolyLine {
 		}
 
 		// find highest point
-		WB_Point hiPt = getPoint(0);
+		WB_IndexedPoint hiPt = getPoint(0);
 		int hiIndex = 0;
 		for (int i = 1; i <= nPts; i++) {
-			final WB_Point p = getPoint(i);
+			final WB_IndexedPoint p = getPoint(i);
 			if (p.yd() > hiPt.yd()) {
 				hiPt = p;
 				hiIndex = i;
@@ -214,8 +214,8 @@ public class WB_Ring extends WB_PolyLine {
 			iNext = (iNext + 1) % nPts;
 		} while (getPoint(iNext).equals(hiPt) && iNext != hiIndex);
 
-		final WB_Point prev = getPoint(iPrev);
-		final WB_Point next = getPoint(iNext);
+		final WB_IndexedPoint prev = getPoint(iPrev);
+		final WB_IndexedPoint next = getPoint(iNext);
 
 		/**
 		 * This check catches cases where the ring contains an A-B-A
@@ -256,12 +256,12 @@ public class WB_Ring extends WB_PolyLine {
 
 	}
 
-	public WB_Point getPoint(final int i) {
+	public WB_IndexedPoint getPoint(final int i) {
 		if ((i < 0) || (i > n - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
 					+ " must between 0 and " + (n - 1) + ".");
 		}
-		return points.getCoordinate(i);
+		return points.getPoint(i);
 	}
 
 	public double getd(final int i, final int j) {
@@ -287,7 +287,7 @@ public class WB_Ring extends WB_PolyLine {
 							+ incLengths[n - 1] + " .");
 		}
 		if (t == 0) {
-			return points.getCoordinate(0);
+			return new WB_Point(points.getPoint(0));
 		}
 		int index = 0;
 		while (t > incLengths[index]) {
@@ -297,8 +297,7 @@ public class WB_Ring extends WB_PolyLine {
 		final double d = incLengths[index + 1] - incLengths[index];
 		final double x = t - incLengths[index];
 
-		return points.getCoordinate(index)._addMulSelf(x,
-				directions.getCoordinate(index));
+		return points.getPoint(index).addMul(x, directions.getVector(index));
 	}
 
 	public WB_Point getParametricPointOnLine(final double t) {
@@ -308,11 +307,11 @@ public class WB_Ring extends WB_PolyLine {
 		}
 		final double ft = t - (int) t;
 		if (ft == 0.0) {
-			return points.getCoordinate((int) t);
+			return new WB_Point(points.getPoint((int) t));
 		}
 
-		return points.getCoordinate((int) t)._mulAddMulSelf(1 - ft, ft,
-				points.getCoordinate(1 + (int) t));
+		return points.getPoint((int) t).mulAddMul(1 - ft, ft,
+				points.getPoint(1 + (int) t));
 	}
 
 	public int getNumberOfPoints() {

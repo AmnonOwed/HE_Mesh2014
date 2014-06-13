@@ -146,8 +146,8 @@ public class WB_Triangle implements Triangle {
 
 	@Override
 	public WB_Geometry apply(final WB_Transform T) {
-		return geometryfactory.createTriangle(p1.applySelfAsPoint(T),
-				p2.applySelfAsPoint(T), p3.applySelfAsPoint(T));
+		return geometryfactory.createTriangle(p1.applyAsPoint(T),
+				p2.applyAsPoint(T), p3.applyAsPoint(T));
 	}
 
 	/**

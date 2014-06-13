@@ -279,7 +279,7 @@ public class WB_AABB {
 		}
 	}
 
-	public WB_AABB(final WB_CoordinateSequence<? extends WB_Coordinate> points) {
+	public WB_AABB(final WB_CoordinateSequence points) {
 		init();
 		int id = 0;
 		double val;

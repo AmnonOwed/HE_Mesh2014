@@ -189,18 +189,18 @@ public class WB_Polygon extends WB_Ring {
 
 	public WB_Triangulation2DWithPoints triangulate() {
 
-		final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
+		final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
 				points.size());
-		final List<WB_Point> pts = new FastTable<WB_Point>();
+		final List<WB_IndexedPoint> pts = new FastTable<WB_IndexedPoint>();
 		for (int i = 0; i < n; i++) {
-			pts.add(points.getCoordinate(i));
+			pts.add(points.getPoint(i));
 		}
 		int index = n;
 		final List[] hpts = new FastTable[numberOfHoles];
 		for (int i = 0; i < numberOfHoles; i++) {
 			hpts[i] = new FastTable<WB_Point>();
 			for (int j = 0; j < nph[i]; j++) {
-				hpts[i].add(points.getCoordinate(index++));
+				hpts[i].add(points.getPoint(index++));
 			}
 		}
 		triangles = null;
@@ -212,11 +212,11 @@ public class WB_Polygon extends WB_Ring {
 	public int[][] getTriangles() {
 		if (triangles == null) {
 			WB_Triangulation2DWithPoints triangulation = triangulate();
-			final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
+			final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
 					points.size());
 
 			for (int i = 0; i < points.size(); i++) {
-				pointmap.add(points.getCoordinate(i), i);
+				pointmap.add(points.getPoint(i), i);
 			}
 
 			triangles = triangulation.getTriangles();
@@ -254,7 +254,7 @@ public class WB_Polygon extends WB_Ring {
 		}
 		normal._normalizeSelf();
 		return geometryfactory.createPlane(
-				points.getCoordinate(0).addMul(d, normal), normal);
+				points.getPoint(0).addMul(d, normal), normal);
 
 	}
 
@@ -277,9 +277,9 @@ public class WB_Polygon extends WB_Ring {
 
 	}
 
-	public WB_Point getPoint(final int i) {
+	public WB_IndexedPoint getPoint(final int i) {
 
-		return points.getCoordinate(i);
+		return points.getPoint(i);
 	}
 
 	public double getd(final int i, final int j) {

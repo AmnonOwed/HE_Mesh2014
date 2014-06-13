@@ -4,96 +4,57 @@ import wblut.WB_Epsilon;
 import wblut.math.WB_M33;
 import wblut.math.WB_Math;
 
-public class WB_Vector extends WB_AbstractVector {
+public class WB_IndexedVector extends WB_AbstractSeqVector {
 
-	public static WB_Coordinate X() {
-		return new WB_Vector(1, 0, 0);
+	public WB_IndexedVector(int i, WB_CoordinateSequence seq) {
+		super(i, seq);
 	}
 
-	public static WB_Coordinate Y() {
-		return new WB_Vector(0, 1, 0);
-	}
-
-	public static WB_Coordinate Z() {
-		return new WB_Vector(0, 0, 1);
-	}
-
-	public static WB_Coordinate ZERO() {
-		return new WB_Vector(0, 0, 0);
-	}
-
-	public WB_Vector() {
-		super();
-	}
-
-	public WB_Vector(final double x, final double y) {
-		super(x, y);
-	}
-
-	public WB_Vector(final double x, final double y, final double z) {
-		super(x, y, z);
-	}
-
-	public WB_Vector(final double[] x) {
-		super(x);
-	}
-
-	public WB_Vector(final double[] p1, final double[] p2) {
-		super(p1, p2);
-	}
-
-	public WB_Vector(final WB_Coordinate v) {
-		super(v);
-	}
-
-	public WB_Vector(final WB_Coordinate p1, final WB_Coordinate p2) {
-		super(p1, p2);
-	}
-
-	public WB_Vector _addMulSelf(final double f, final double x,
+	public WB_IndexedVector _addMulSelf(final double f, final double x,
 			final double y, final double z) {
 		_set(xd() + f * x, yd() + f * y, zd() + f * z);
 		return this;
 	}
 
-	public WB_Vector _addMulSelf(final double f, final WB_Coordinate p) {
+	public WB_IndexedVector _addMulSelf(final double f, final WB_Coordinate p) {
 		_set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 
 		return this;
 	}
 
-	public WB_Vector _addSelf(final double x, final double y, final double z) {
+	public WB_IndexedVector _addSelf(final double x, final double y,
+			final double z) {
 		_set(xd() + x, yd() + y, zd() + z);
 		return this;
 	}
 
-	public WB_Vector _addSelf(final WB_Coordinate p) {
+	public WB_IndexedVector _addSelf(final WB_Coordinate p) {
 		_set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 		return this;
 	}
 
-	public WB_Vector _applyAsNormalSelf(final WB_Transform T) {
+	public WB_IndexedVector _applyAsNormalSelf(final WB_Transform T) {
 		T.applyAsNormal(this, this);
 		return this;
 	}
 
-	public WB_Vector _applyAsPointSelf(final WB_Transform T) {
+	public WB_IndexedVector _applyAsPointSelf(final WB_Transform T) {
 		T.applyAsPoint(this, this);
 		return this;
 	}
 
-	public WB_Vector _applyAsVectorSelf(final WB_Transform T) {
+	public WB_IndexedVector _applyAsVectorSelf(final WB_Transform T) {
 		T.applyAsVector(this, this);
 		return this;
 	}
 
-	public WB_Vector _crossSelf(final WB_Coordinate p) {
+	public WB_IndexedVector _crossSelf(final WB_Coordinate p) {
 		_set(yd() * p.zd() - this.zd() * p.yd(), this.zd() * p.xd() - this.xd()
 				* p.zd(), this.xd() * p.yd() - yd() * p.xd());
 		return this;
 	}
 
-	public WB_Vector _divSelf(final double f) {
+	public WB_IndexedVector _divSelf(final double f) {
 		return _mulSelf(1.0 / f);
 	}
 
@@ -101,7 +62,7 @@ public class WB_Vector extends WB_AbstractVector {
 		_mulSelf(-1);
 	}
 
-	public WB_Vector _mulAddMulSelf(final double f, final double g,
+	public WB_IndexedVector _mulAddMulSelf(final double f, final double g,
 			final WB_Coordinate p) {
 		_set(f * xd() + g * p.xd(), f * yd() + g * p.yd(),
 				f * zd() + g * p.zd());
@@ -109,7 +70,7 @@ public class WB_Vector extends WB_AbstractVector {
 		return this;
 	}
 
-	public WB_Vector _mulSelf(final double f) {
+	public WB_IndexedVector _mulSelf(final double f) {
 		_set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
@@ -124,23 +85,24 @@ public class WB_Vector extends WB_AbstractVector {
 		return d;
 	}
 
-	public WB_Vector _scaleSelf(final double f) {
+	public WB_IndexedVector _scaleSelf(final double f) {
 		_mulSelf(f);
 		return this;
 	}
 
-	public WB_Vector _scaleSelf(final double fx, final double fy,
+	public WB_IndexedVector _scaleSelf(final double fx, final double fy,
 			final double fz) {
 		_set(xd() * fx, yd() * fy, zd() * fz);
 		return this;
 	}
 
-	public WB_Vector _subSelf(final double x, final double y, final double z) {
+	public WB_IndexedVector _subSelf(final double x, final double y,
+			final double z) {
 		_set(xd() - x, yd() - y, zd() - z);
 		return this;
 	}
 
-	public WB_Vector _subSelf(final WB_Coordinate v) {
+	public WB_IndexedVector _subSelf(final WB_Coordinate v) {
 		_set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
 		return this;
 	}
@@ -205,13 +167,14 @@ public class WB_Vector extends WB_AbstractVector {
 		result._set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 	}
 
-	public WB_Vector apply(final WB_Transform T) {
+	public WB_Vector applySelf(final WB_Transform T) {
 		return applyAsVector(T);
 	}
 
 	public WB_Vector applyAsNormal(final WB_Transform T) {
 		final WB_Vector result = new WB_Vector();
 		T.applyAsNormal(this, result);
+
 		return result;
 	}
 
@@ -313,10 +276,10 @@ public class WB_Vector extends WB_AbstractVector {
 		if (o == this) {
 			return true;
 		}
-		if (!(o instanceof WB_Vector)) {
+		if (!(o instanceof WB_IndexedVector)) {
 			return false;
 		}
-		final WB_Vector p = (WB_Vector) o;
+		final WB_IndexedVector p = (WB_IndexedVector) o;
 		if (!WB_Epsilon.isEqualAbs(xd(), p.xd())) {
 			return false;
 		}
@@ -449,7 +412,7 @@ public class WB_Vector extends WB_AbstractVector {
 			final double p2y, final double p2z) {
 
 		final WB_Transform raa = new WB_Transform();
-		raa.addRotateAboutAxis(angle, new WB_Vector(p1x, p1y, p1z),
+		raa.addRotateAboutAxis(angle, new WB_Point(p1x, p1y, p1z),
 				new WB_Vector(p2x - p1x, p2y - p1y, p2z - p1z));
 		raa.applySelfAsVector(this);
 	}
@@ -465,7 +428,7 @@ public class WB_Vector extends WB_AbstractVector {
 	}
 
 	public void rotateAboutAxis(final double angle, final WB_Coordinate p,
-			final WB_Vector a) {
+			final WB_IndexedVector a) {
 
 		final WB_Transform raa = new WB_Transform();
 		raa.addRotateAboutAxis(angle, p, a);

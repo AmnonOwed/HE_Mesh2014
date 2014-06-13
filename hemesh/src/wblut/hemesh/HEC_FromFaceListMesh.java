@@ -8,9 +8,9 @@ import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_FaceListMesh;
+import wblut.geom.WB_IndexedPoint;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
-import wblut.geom.WB_Point;
 
 /**
  * Creates a new mesh from a list of vertices and faces. Vertices can be
@@ -200,8 +200,8 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
 		final List<HE_Vertex> uniqueVertices = new FastTable<HE_Vertex>();
 		if (duplicate) {
-			final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
-			WB_KDEntry<WB_Point, Integer> neighbor;
+			final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
+			WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
 			HE_Vertex v = new HE_Vertex(source.getVertex(0));
 			kdtree.add(source.getVertex(0), 0);
 			uniqueVertices.add(v);

@@ -24,6 +24,7 @@ import wblut.geom.WB_Geometry;
 import wblut.geom.WB_GeometryCollection;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Grid3D;
+import wblut.geom.WB_IndexedPoint;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -358,23 +359,24 @@ public class WB_Render3D {
 		retained.beginShape(home.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_Vector v = geometryfactory.createVector();
-		final WB_Point p = geometryfactory.createPoint();
 		final WB_CoordinateSequence seq = lmesh.getVertices();
+		WB_IndexedPoint p = seq.getPoint(0);
+
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 			int id = lmesh.getFace(i)[0];
 			v._set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
-			p._set(seq, id);
+			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[1];
 			v._set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
-			p._set(seq, id);
+			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[2];
 			v._set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
-			p._set(seq, id);
+			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
@@ -386,17 +388,18 @@ public class WB_Render3D {
 		final PShape retained = home.createShape();
 		retained.beginShape(home.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
-		final WB_Point p = geometryfactory.createPoint();
 		final WB_CoordinateSequence seq = lmesh.getVertices();
+		WB_IndexedPoint p = seq.getPoint(0);
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 			int id = lmesh.getFace(i)[0];
-			p._set(seq, id);
+			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[1];
-			p._set(seq, id);
+			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[2];
-			p._set(seq, id);
+			p = seq.getPoint(id);
+			;
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
@@ -1398,7 +1401,7 @@ public class WB_Render3D {
 	}
 
 	public void drawPolylineVertices(final WB_PolyLine P, final double d) {
-		WB_Point v1;
+		WB_IndexedPoint v1;
 		for (int i = 0; i < P.getNumberOfPoints(); i++) {
 			v1 = P.getPoint(i);
 			home.pushMatrix();

@@ -12,7 +12,7 @@ import javolution.util.FastTable;
 public class WB_FaceListMesh implements WB_Geometry {
 	protected int[][] faces;
 	/** points of line. */
-	protected WB_PointSequence vertices;
+	protected WB_CoordinateSequence vertices;
 	protected WB_AABB aabb;
 
 	WB_Vector[] vertexNormals = null;
@@ -48,7 +48,8 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 	}
 
-	protected WB_FaceListMesh(final WB_PointSequence points, final int[][] faces) {
+	protected WB_FaceListMesh(final WB_CoordinateSequence points,
+			final int[][] faces) {
 
 		vertices = geometryfactory.createPointSequence(points);
 		this.faces = new int[faces.length][];
@@ -166,11 +167,11 @@ public class WB_FaceListMesh implements WB_Geometry {
 		final WB_Vector normal = geometryfactory.createVector();
 		final WB_Point center = geometryfactory.createPoint();
 		WB_Vector tmp;
-		WB_Point p0;
-		WB_Point p1;
+		WB_IndexedPoint p0;
+		WB_IndexedPoint p1;
 		for (int i = 0, j = face.length - 1; i < face.length; j = i, i++) {
-			p0 = vertices.getCoordinate(face[j]);
-			p1 = vertices.getCoordinate(face[i]);
+			p0 = vertices.getPoint(face[j]);
+			p1 = vertices.getPoint(face[i]);
 			center._addSelf(p1);
 			tmp = geometryfactory.createVector((p0.yd() - p1.yd())
 					* (p0.zd() + p1.zd()),
@@ -252,7 +253,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 		final WB_Vector center = geometryfactory.createVector(acx, acy, acz);
 		final List rescaled = new FastTable();
 		for (int i = 0; i < vertices.size(); i++) {
-			final WB_Point p = vertices.getCoordinate(i);
+			final WB_IndexedPoint p = vertices.getPoint(i);
 			p._addSelf(-scx, -scy, -scz);
 			p._mulSelf(f);
 			p._addSelf(acx, acy, acz);
@@ -404,11 +405,11 @@ public class WB_FaceListMesh implements WB_Geometry {
 		return vertices.size();
 	}
 
-	public WB_Point getVertex(final int i) {
-		return vertices.getCoordinate(i);
+	public WB_IndexedPoint getVertex(final int i) {
+		return vertices.getPoint(i);
 	}
 
-	public WB_PointSequence getVertices() {
+	public WB_CoordinateSequence getVertices() {
 		return vertices;
 	}
 
@@ -487,13 +488,13 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 		final int nf = faces.length;
 		int i = 0;
-		WB_Point p0, p1, p2;
+		WB_IndexedPoint p0, p1, p2;
 		for (final int[] face : faces) {
 			for (int j = 0; j < face.length; j++) {
-				p0 = vertices.getCoordinate(face[j]);
-				p1 = vertices.getCoordinate(face[(j + 1) % face.length]);
-				p2 = vertices.getCoordinate(face[(j - 1 + face.length)
-						% face.length]);
+				p0 = vertices.getPoint(face[j]);
+				p1 = vertices.getPoint(face[(j + 1) % face.length]);
+				p2 = vertices
+						.getPoint(face[(j - 1 + face.length) % face.length]);
 				final WB_Vector P10 = geometryfactory.createNormalizedVector(
 						p0, p1);
 				final WB_Vector P20 = geometryfactory.createNormalizedVector(
@@ -520,7 +521,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 		}
 
 		faceNormals = new WB_Vector[nf];
-		WB_Point p0, p1;
+		WB_IndexedPoint p0, p1;
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
 			final WB_Vector tmp = geometryfactory.createVector();
@@ -588,7 +589,7 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 		@Override
 		public void run() {
-			WB_Point p0, p1;
+			WB_IndexedPoint p0, p1;
 			for (int i = start; i < end; i++) {
 				final int[] face = faces[i];
 				final WB_Vector tmp = geometryfactory.createVector();

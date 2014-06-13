@@ -2,7 +2,6 @@ package wblut.geom;
 
 import java.util.List;
 
-
 public class WB_VoronoiCell2D {
 	WB_Polygon polygon;
 	int index;
@@ -12,7 +11,7 @@ public class WB_VoronoiCell2D {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	protected WB_VoronoiCell2D(final WB_CoordinateSequence<WB_Point> points,
+	protected WB_VoronoiCell2D(final WB_CoordinateSequence points,
 			final int index, final WB_Point generator, final double area,
 			final WB_Point centroid) {
 		polygon = geometryfactory.createSimplePolygon(points);

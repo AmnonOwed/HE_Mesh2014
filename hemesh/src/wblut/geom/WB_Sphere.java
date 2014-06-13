@@ -71,7 +71,7 @@ public class WB_Sphere implements WB_Geometry {
 	@Override
 	public WB_Sphere apply(final WB_Transform T) {
 		return geometryfactory.createSphereWithRadius(
-				center.applySelfAsPoint(T), radius);
+				center.applyAsPoint(T), radius);
 	}
 
 	/**

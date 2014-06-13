@@ -2488,8 +2488,7 @@ public class WB_GeometryFactory {
 		return createSimplePolygon(coords);
 	}
 
-	public WB_Polygon createSimplePolygon(
-			final WB_CoordinateSequence<WB_Point> coords) {
+	public WB_Polygon createSimplePolygon(final WB_CoordinateSequence coords) {
 
 		return new WB_Polygon(coords);
 	}
@@ -4716,13 +4715,13 @@ public class WB_GeometryFactory {
 	}
 
 	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh) {
-		final List<WB_Point> uniqueVertices = new FastTable<WB_Point>();
+		final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
 		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>();
-		final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
+		final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
 
-		WB_KDEntry<WB_Point, Integer> neighbor;
+		WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
 
-		WB_Point v = mesh.getVertex(0);
+		WB_IndexedPoint v = mesh.getVertex(0);
 		kdtree.add(v, 0);
 		uniqueVertices.add(v);
 		oldnew.put(0, 0);
@@ -8169,7 +8168,7 @@ public class WB_GeometryFactory {
 		return JTSgf.createPolygon(shell, holes);
 	}
 
-	Coordinate toJTSCoordinate(final WB_Point point, final int i) {
+	Coordinate toJTSCoordinate(final WB_Coordinate point, final int i) {
 		return new Coordinate(point.xd(), point.yd(), i);
 	}
 
@@ -8184,7 +8183,7 @@ public class WB_GeometryFactory {
 		final int numVerts = poly.getNumberOfPoints();
 		final WB_Polygon[] polys = new WB_Polygon[2];
 		if (numVerts > 0) {
-			WB_Point a = poly.getPoint(numVerts - 1);
+			WB_Point a = new WB_Point(poly.getPoint(numVerts - 1));
 			WB_Classification aSide = WB_Classify.classifyPointToPlane(P, a);
 
 			WB_Point b;
@@ -8192,7 +8191,7 @@ public class WB_GeometryFactory {
 
 			for (int n = 0; n < numVerts; n++) {
 				WB_Point intersection;
-				b = poly.getPoint(n);
+				b = new WB_Point(poly.getPoint(n));
 				bSide = WB_Classify.classifyPointToPlane(P, b);
 				if (bSide == WB_Classification.FRONT) {
 					if (aSide == WB_Classification.BACK) {
@@ -8288,56 +8287,58 @@ public class WB_GeometryFactory {
 
 	}
 
-	public WB_PointSequence createPointSequence(
+	public WB_CoordinateSequence createPointSequence(
 			final Collection<? extends WB_Coordinate> tuples) {
-		return new WB_PointSequence(tuples);
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_PointSequence createPointSequence(final WB_Coordinate[] tuples) {
-		return new WB_PointSequence(tuples);
+	public WB_CoordinateSequence createPointSequence(
+			final WB_Coordinate[] tuples) {
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_PointSequence createPointSequence(
+	public WB_CoordinateSequence createPointSequence(
 			final WB_CoordinateSequence tuples) {
-		return new WB_PointSequence(tuples);
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_PointSequence createPointSequence(
+	public WB_CoordinateSequence createPointSequence(
 			final List<? extends WB_Coordinate> tuples, final int[] indices) {
 		final List<WB_Coordinate> coords = new FastTable<WB_Coordinate>();
 		for (final int indice : indices) {
 			coords.add(tuples.get(indice));
 		}
-		return new WB_PointSequence(coords);
+		return new WB_CoordinateSequence(coords);
 	}
 
-	public WB_PointSequence createPointSequence(final double[] ordinates) {
+	public WB_CoordinateSequence createPointSequence(final double[] ordinates) {
 
-		return new WB_PointSequence(ordinates);
+		return new WB_CoordinateSequence(ordinates);
 	}
 
-	public WB_PointSequence createPointSequence(final double[][] tuples) {
+	public WB_CoordinateSequence createPointSequence(final double[][] tuples) {
 
-		return new WB_PointSequence(tuples);
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_VectorSequence createVectorSequence(
+	public WB_CoordinateSequence createVectorSequence(
 			final Collection<? extends WB_Coordinate> tuples) {
-		return new WB_VectorSequence(tuples);
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_VectorSequence createVectorSequence(final WB_Coordinate[] tuples) {
-		return new WB_VectorSequence(tuples);
+	public WB_CoordinateSequence createVectorSequence(
+			final WB_Coordinate[] tuples) {
+		return new WB_CoordinateSequence(tuples);
 	}
 
-	public WB_VectorSequence createVectorSequence(final double[] ordinates) {
+	public WB_CoordinateSequence createVectorSequence(final double[] ordinates) {
 
-		return new WB_VectorSequence(ordinates);
+		return new WB_CoordinateSequence(ordinates);
 	}
 
-	public WB_VectorSequence createVectorSequence(final double[][] tuples) {
+	public WB_CoordinateSequence createVectorSequence(final double[][] tuples) {
 
-		return new WB_VectorSequence(tuples);
+		return new WB_CoordinateSequence(tuples);
 	}
 
 	/**

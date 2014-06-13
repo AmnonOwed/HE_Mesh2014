@@ -120,8 +120,8 @@ public class WB_Segment extends WB_Linear implements Segment {
 
 	@Override
 	public WB_Geometry apply(WB_Transform T) {
-		return geometryfactory.createSegment(origin.applySelfAsPoint(T),
-				endpoint.applySelfAsPoint(T));
+		return geometryfactory.createSegment(origin.applyAsPoint(T),
+				endpoint.applyAsPoint(T));
 	}
 
 }

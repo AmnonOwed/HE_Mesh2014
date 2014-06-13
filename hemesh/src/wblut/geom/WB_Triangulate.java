@@ -300,7 +300,7 @@ public class WB_Triangulate {
 		for (int j = 0; j < points.size(); j++) {
 			tmppoints.add(new Point(points.getRaw(i++), points.getRaw(i++),
 					points.getRaw(i++)));
-			tree.add(points.getCoordinate(j), j);
+			tree.add(points.getPoint(j), j);
 
 		}
 		final DelaunayComplex dc = new DelaunayComplex(tmppoints);
@@ -983,11 +983,11 @@ public class WB_Triangulate {
 		WB_Point point = geometryfactory.createPoint();
 
 		for (int i = 0; i < polygon.length; i++) {
-			context.pointTo2D(points, polygon[i], point);
+			context.pointTo2D(points.getPoint(polygon[i]), point);
 
 			coords[i] = new Coordinate(point.xd(), point.yd());
 		}
-		context.pointTo2D(points, polygon[0], point);
+		context.pointTo2D(points.getPoint(polygon[0]), point);
 
 		coords[polygon.length] = new Coordinate(point.xd(), point.yd());
 

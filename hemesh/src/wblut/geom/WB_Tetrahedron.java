@@ -189,7 +189,7 @@ public class WB_Tetrahedron implements WB_Simplex {
 
 	@Override
 	public WB_Geometry apply(final WB_Transform T) {
-		return geometryfactory.createTetrahedron(p1.applySelfAsPoint(T),
-				p2.applySelfAsPoint(T), p3.applySelfAsPoint(T), p4.applySelfAsPoint(T));
+		return geometryfactory.createTetrahedron(p1.applyAsPoint(T),
+				p2.applyAsPoint(T), p3.applyAsPoint(T), p4.applyAsPoint(T));
 	}
 }

@@ -801,16 +801,6 @@ public class WB_Transform {
 		result._set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
-	public void applyAsPoint(final WB_Coordinate p,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd() + T.m14);
-		_yt = (T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd() + T.m24);
-		_zt = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd() + T.m34);
-		double wp = (T.m41 * p.xd() + T.m42 * p.yd() + T.m43 * p.zd() + T.m44);
-		wp = 1.0 / wp;
-		result._setI(i, _xt * wp, _yt * wp, _zt * wp);
-	}
-
 	public void applyAsPoint(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
 		_xt = (T.m11 * x + T.m12 * y + T.m13 * z + T.m14);
@@ -819,44 +809,6 @@ public class WB_Transform {
 		double wp = (T.m41 * x + T.m42 * y + T.m43 * z + T.m44);
 		wp = 1.0 / wp;
 		result._set(_xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyAsPoint(final double x, final double y, final double z,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z + T.m14);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z + T.m24);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z + T.m34);
-		double wp = (T.m41 * x + T.m42 * y + T.m43 * z + T.m44);
-		wp = 1.0 / wp;
-		result._setI(i, _xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyAsPoint(final WB_CoordinateSequence source, final int i,
-			final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z + T.m14);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z + T.m24);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z + T.m34);
-		double wp = (T.m41 * x + T.m42 * y + T.m43 * z + T.m44);
-		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyAsPoint(final WB_CoordinateSequence source, final int i,
-			final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z + T.m14);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z + T.m24);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z + T.m34);
-		double wp = (T.m41 * x + T.m42 * y + T.m43 * z + T.m44);
-		wp = 1.0 / wp;
-		result._setI(j, _xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyAsVector(final WB_Coordinate p,
@@ -875,46 +827,6 @@ public class WB_Transform {
 		result._set(_xt, _yt, _zt);
 	}
 
-	public void applyAsVector(final WB_CoordinateSequence source, final int i,
-			final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z);
-		result._set(_xt, _yt, _zt);
-	}
-
-	public void applyAsVector(final WB_Coordinate p,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd());
-		_yt = (T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd());
-		_zt = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd());
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyAsVector(final double x, final double y, final double z,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z);
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyAsVector(final WB_CoordinateSequence source, final int i,
-			final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m12 * y + T.m13 * z);
-		_yt = (T.m21 * x + T.m22 * y + T.m23 * z);
-		_zt = (T.m31 * x + T.m32 * y + T.m33 * z);
-		result._setI(j, _xt, _yt, _zt);
-	}
-
 	public void applyAsNormal(final WB_Coordinate n,
 			final WB_MutableCoordinate result) {
 		_xt = (invT.m11 * n.xd() + invT.m21 * n.yd() + invT.m31 * n.zd());
@@ -931,46 +843,6 @@ public class WB_Transform {
 		result._set(_xt, _yt, _zt);
 	}
 
-	public void applyAsNormal(final WB_CoordinateSequence source, final int i,
-			final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m21 * y + invT.m31 * z);
-		_yt = (invT.m12 * x + invT.m22 * y + invT.m32 * z);
-		_zt = (invT.m13 * x + invT.m23 * y + invT.m33 * z);
-		result._set(_xt, _yt, _zt);
-	}
-
-	public void applyAsNormal(final WB_Coordinate n,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * n.xd() + invT.m21 * n.yd() + invT.m31 * n.zd());
-		_yt = (invT.m12 * n.xd() + invT.m22 * n.yd() + invT.m32 * n.zd());
-		_zt = (invT.m13 * n.xd() + invT.m23 * n.yd() + invT.m33 * n.zd());
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyAsNormal(final double x, final double y, final double z,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * x + invT.m21 * y + invT.m31 * z);
-		_yt = (invT.m12 * x + invT.m22 * y + invT.m32 * z);
-		_zt = (invT.m13 * x + invT.m23 * y + invT.m33 * z);
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyAsNormal(final WB_CoordinateSequence source, final int i,
-			final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m21 * y + invT.m31 * z);
-		_yt = (invT.m12 * x + invT.m22 * y + invT.m32 * z);
-		_zt = (invT.m13 * x + invT.m23 * y + invT.m33 * z);
-		result._setI(j, _xt, _yt, _zt);
-	}
-
 	public void applyInvAsPoint(final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
 		_xt = (invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd() + invT.m14);
@@ -981,16 +853,6 @@ public class WB_Transform {
 		result._set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
-	public void applyInvAsPoint(final WB_Coordinate p,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd() + invT.m14);
-		_yt = (invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd() + invT.m24);
-		_zt = (invT.m31 * p.xd() + invT.m32 * p.yd() + invT.m33 * p.zd() + invT.m34);
-		double wp = (invT.m41 * p.xd() + invT.m42 * p.yd() + invT.m43 * p.zd() + invT.m44);
-		wp = 1.0 / wp;
-		result._setI(i, _xt * wp, _yt * wp, _zt * wp);
-	}
-
 	public void applyInvAsPoint(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
 		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14);
@@ -999,44 +861,6 @@ public class WB_Transform {
 		double wp = (invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44);
 		wp = 1.0 / wp;
 		result._set(_xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyInvAsPoint(final double x, final double y, final double z,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z + invT.m34);
-		double wp = (invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44);
-		wp = 1.0 / wp;
-		result._setI(i, _xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyInvAsPoint(final WB_CoordinateSequence source,
-			final int i, final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z + invT.m34);
-		double wp = (invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44);
-		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
-	}
-
-	public void applyInvAsPoint(final WB_CoordinateSequence source,
-			final int i, final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z + invT.m14);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z + invT.m24);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z + invT.m34);
-		double wp = (invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44);
-		wp = 1.0 / wp;
-		result._setI(j, _xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyInvAsVector(final WB_Coordinate p,
@@ -1055,46 +879,6 @@ public class WB_Transform {
 		result._set(_xt, _yt, _zt);
 	}
 
-	public void applyInvAsVector(final WB_CoordinateSequence source,
-			final int i, final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z);
-		result._set(_xt, _yt, _zt);
-	}
-
-	public void applyInvAsVector(final WB_Coordinate p,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd());
-		_yt = (invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd());
-		_zt = (invT.m31 * p.xd() + invT.m32 * p.yd() + invT.m33 * p.zd());
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyInvAsVector(final double x, final double y,
-			final double z, final WB_CoordinateSequence result, final int i) {
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z);
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyInvAsVector(final WB_CoordinateSequence source,
-			final int i, final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z);
-		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z);
-		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z);
-		result._setI(j, _xt, _yt, _zt);
-	}
-
 	public void applyInvAsNormal(final WB_Coordinate n,
 			final WB_MutableCoordinate result) {
 		_xt = (T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd());
@@ -1109,46 +893,6 @@ public class WB_Transform {
 		_yt = (T.m12 * x + T.m22 * y + T.m32 * z);
 		_zt = (T.m13 * x + T.m23 * y + T.m33 * z);
 		result._set(_xt, _yt, _zt);
-	}
-
-	public void applyInvAsNormal(final WB_CoordinateSequence source,
-			final int i, final WB_MutableCoordinate result) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m21 * y + T.m31 * z);
-		_yt = (T.m12 * x + T.m22 * y + T.m32 * z);
-		_zt = (T.m13 * x + T.m23 * y + T.m33 * z);
-		result._set(_xt, _yt, _zt);
-	}
-
-	public void applyInvAsNormal(final WB_Coordinate n,
-			final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd());
-		_yt = (T.m12 * n.xd() + T.m22 * n.yd() + T.m32 * n.zd());
-		_zt = (T.m13 * n.xd() + T.m23 * n.yd() + T.m33 * n.zd());
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyInvAsNormal(final double x, final double y,
-			final double z, final WB_CoordinateSequence result, final int i) {
-		_xt = (T.m11 * x + T.m21 * y + T.m31 * z);
-		_yt = (T.m12 * x + T.m22 * y + T.m32 * z);
-		_zt = (T.m13 * x + T.m23 * y + T.m33 * z);
-		result._setI(i, _xt, _yt, _zt);
-	}
-
-	public void applyInvAsNormal(final WB_CoordinateSequence source,
-			final int i, final WB_CoordinateSequence result, final int j) {
-		id = 4 * i;
-		x = source.getRaw(id++);
-		y = source.getRaw(id++);
-		z = source.getRaw(id++);
-		_xt = (T.m11 * x + T.m21 * y + T.m31 * z);
-		_yt = (T.m12 * x + T.m22 * y + T.m32 * z);
-		_zt = (T.m13 * x + T.m23 * y + T.m33 * z);
-		result._setI(j, _xt, _yt, _zt);
 	}
 
 	public WB_Transform(final WB_Transform Trans) {

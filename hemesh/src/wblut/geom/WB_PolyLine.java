@@ -8,9 +8,9 @@ import wblut.WB_Epsilon;
 
 public class WB_PolyLine implements WB_Geometry {
 
-	WB_CoordinateSequence<WB_Point> points;
+	WB_CoordinateSequence points;
 
-	WB_CoordinateSequence<WB_Vector> directions;
+	WB_CoordinateSequence directions;
 
 	double[] incLengths;
 
@@ -21,12 +21,12 @@ public class WB_PolyLine implements WB_Geometry {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	public WB_Point getPoint(final int i) {
+	public WB_IndexedPoint getPoint(final int i) {
 		if ((i < 0) || (i > n - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
 					+ " must between 0 and " + (n - 1) + ".");
 		}
-		return points.getCoordinate(i);
+		return points.getPoint(i);
 	}
 
 	public double getd(final int i, final int j) {
@@ -52,7 +52,7 @@ public class WB_PolyLine implements WB_Geometry {
 							+ incLengths[n - 1] + " .");
 		}
 		if (t == 0) {
-			return points.getCoordinate(0);
+			return new WB_Point(points.getPoint(0));
 		}
 		int index = 0;
 		while (t > incLengths[index]) {
@@ -62,8 +62,7 @@ public class WB_PolyLine implements WB_Geometry {
 		final double d = incLengths[index + 1] - incLengths[index];
 		final double x = t - incLengths[index];
 
-		return points.getCoordinate(index)._addMulSelf(x,
-				directions.getCoordinate(index));
+		return points.getPoint(index).addMul(x, directions.getVector(index));
 	}
 
 	public WB_Point getParametricPointOnLine(final double t) {
@@ -73,19 +72,19 @@ public class WB_PolyLine implements WB_Geometry {
 		}
 		final double ft = t - (int) t;
 		if (ft == 0.0) {
-			return points.getCoordinate((int) t);
+			return new WB_Point(points.getPoint((int) t));
 		}
 
-		return points.getCoordinate((int) t)._mulAddMulSelf(1 - ft, ft,
-				points.getCoordinate(1 + (int) t));
+		return points.getPoint((int) t).mulAddMul(1 - ft, ft,
+				points.getPoint(1 + (int) t));
 	}
 
-	public WB_Vector getDirection(final int i) {
+	public WB_IndexedVector getDirection(final int i) {
 		if ((i < 0) || (i > n - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
 					+ (n - 2) + ".");
 		}
-		return directions.getCoordinate(i);
+		return directions.getVector(i);
 	}
 
 	public WB_Vector getNormal(final int i) {
@@ -94,7 +93,7 @@ public class WB_PolyLine implements WB_Geometry {
 					+ (n - 2) + ".");
 		}
 		WB_Vector normal = geometryfactory.createVector(0, 0, 1);
-		normal = normal.cross(directions.getCoordinate(i));
+		normal = normal.cross(directions.getVector(i));
 		final double d = normal.getLength();
 		normal = normal.div(d);
 		if (WB_Epsilon.isZero(d)) {
@@ -218,9 +217,9 @@ public class WB_PolyLine implements WB_Geometry {
 	@Override
 	public int hashCode() {
 		if (hc == -1) {
-			hc = points.getCoordinate(0).hashCode();
+			hc = points.getPoint(0).hashCode();
 			for (int i = 1; i < points.size(); i++) {
-				hc = 31 * hc + points.getCoordinate(i).hashCode();
+				hc = 31 * hc + points.getPoint(i).hashCode();
 
 			}
 		}

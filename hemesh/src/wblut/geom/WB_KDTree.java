@@ -79,25 +79,27 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 		return root.range(aabb);
 	}
 
-	public WB_KDEntry<T, V>[] getRange(final T center, final double radius) {
+	public WB_KDEntry<T, V>[] getRange(final WB_Coordinate center,
+			final double radius) {
 		double r2 = radius * radius;
 		return root.range(center, r2);
 	}
 
-	public WB_KDEntry<T, V>[] getRange(final T center, final double lower,
-			final double upper) {
+	public WB_KDEntry<T, V>[] getRange(final WB_Coordinate center,
+			final double lower, final double upper) {
 		double lower2 = lower * lower;
 		double upper2 = upper * upper;
 		return root.range(center, lower2, upper2);
 	}
 
-	public WB_KDEntry<T, V>[] getNearestNeighbors(final T coord, final int num) {
+	public WB_KDEntry<T, V>[] getNearestNeighbors(final WB_Coordinate coord,
+			final int num) {
 		QueryResult<T, V> heap = new QueryResult<T, V>(num);
 		root.findNearest(heap, coord);
 		return heap.entries;
 	}
 
-	public WB_KDEntry<T, V> getNearestNeighbor(final T coord) {
+	public WB_KDEntry<T, V> getNearestNeighbor(final WB_Coordinate coord) {
 		QueryResult<T, V> heap = new QueryResult<T, V>(1);
 		root.findNearest(heap, coord);
 		return heap.entries[0];
@@ -225,7 +227,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			return lookup;
 		}
 
-		private V lookup(final T point) {
+		private V lookup(final WB_Coordinate point) {
 			for (int i = 0; i < _binSize; i++) {
 				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(point,
 						_bin[i].coord))) {
@@ -235,7 +237,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			return null;
 		}
 
-		private void findNearest(final QueryResult<T, V> heap, final T data) {
+		private void findNearest(final QueryResult<T, V> heap,
+				final WB_Coordinate data) {
 			if (_binSize == 0) {
 				return;
 			}
@@ -305,7 +308,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			return tmp2;
 		}
 
-		private WB_KDEntry<T, V>[] range(final T center, final double r2) {
+		private WB_KDEntry<T, V>[] range(final WB_Coordinate center,
+				final double r2) {
 			if (_bin == null) {
 				WB_KDEntry<T, V>[] tmp = new WB_KDEntry[0];
 				if (_negative._limits.getDistanceSquare(center) <= r2) {
@@ -342,8 +346,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			return tmp2;
 		}
 
-		private WB_KDEntry<T, V>[] range(final T center, final double lower2,
-				final double upper2) {
+		private WB_KDEntry<T, V>[] range(final WB_Coordinate center,
+				final double lower2, final double upper2) {
 			if (_bin == null) {
 				WB_KDEntry<T, V>[] tmp = new WB_KDEntry[0];
 				if (_negative._limits.getDistanceSquare(center) <= upper2) {
@@ -415,7 +419,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			_isLeaf = false;
 		}
 
-		private void extendBounds(final T coord) {
+		private void extendBounds(final WB_Coordinate coord) {
 			if (_limits == null) {
 				_limits = new WB_AABB(coord);
 			} else {

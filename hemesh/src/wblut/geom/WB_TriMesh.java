@@ -30,7 +30,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		triangulate();
 	}
 
-	protected WB_TriMesh(final WB_PointSequence points, final int[][] faces) {
+	protected WB_TriMesh(final WB_CoordinateSequence points, final int[][] faces) {
 		super(points, faces);
 		triangulate();
 	}
@@ -51,9 +51,9 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		faceNormals = new WB_Vector[nf];
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
-			final WB_Point p0 = vertices.getCoordinate(face[0]);
-			final WB_Point p1 = vertices.getCoordinate(face[1]);
-			final WB_Point p2 = vertices.getCoordinate(face[2]);
+			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
+			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
+			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVector(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVector(p2, p1);
 
@@ -93,9 +93,9 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 		final int nf = faces.length;
 		for (final int[] face : faces) {
-			final WB_Point p0 = vertices.getCoordinate(face[0]);
-			final WB_Point p1 = vertices.getCoordinate(face[1]);
-			final WB_Point p2 = vertices.getCoordinate(face[2]);
+			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
+			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
+			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVector(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVector(p1, p2);
 			final WB_Vector c = geometryfactory.createNormalizedVector(p2, p0);
@@ -132,9 +132,9 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 		final int nf = faces.length;
 		for (final int[] face : faces) {
-			final WB_Point p0 = vertices.getCoordinate(face[0]);
-			final WB_Point p1 = vertices.getCoordinate(face[1]);
-			final WB_Point p2 = vertices.getCoordinate(face[2]);
+			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
+			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
+			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVector(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVector(p1, p2);
 
@@ -178,9 +178,9 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		final int nf = faces.length;
 		int i = 0;
 		for (final int[] face : faces) {
-			final WB_Point p0 = vertices.getCoordinate(face[0]);
-			final WB_Point p1 = vertices.getCoordinate(face[1]);
-			final WB_Point p2 = vertices.getCoordinate(face[2]);
+			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
+			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
+			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector P10 = geometryfactory
 					.createNormalizedVector(p0, p1);
 			final WB_Vector P20 = geometryfactory
@@ -248,14 +248,14 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		for (int i = 0; i < nf; i++) {
 			// Edges
 			final WB_Vector e0 = geometryfactory.createVector(
-					vertices.getCoordinate(faces[i][1]),
-					vertices.getCoordinate(faces[i][2]));
+					vertices.getPoint(faces[i][1]),
+					vertices.getPoint(faces[i][2]));
 			final WB_Vector e1 = geometryfactory.createVector(
-					vertices.getCoordinate(faces[i][2]),
-					vertices.getCoordinate(faces[i][0]));
+					vertices.getPoint(faces[i][2]),
+					vertices.getPoint(faces[i][0]));
 			final WB_Vector e2 = geometryfactory.createVector(
-					vertices.getCoordinate(faces[i][0]),
-					vertices.getCoordinate(faces[i][1]));
+					vertices.getPoint(faces[i][0]),
+					vertices.getPoint(faces[i][1]));
 
 			// Compute corner weights
 			final WB_Vector c = e0.cross(e1);
@@ -313,14 +313,11 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 		for (final int[] face : faces) {
 			pdir1[face[0]] = geometryfactory.createVector(
-					vertices.getCoordinate(face[0]),
-					vertices.getCoordinate(face[1]));
+					vertices.getPoint(face[0]), vertices.getPoint(face[1]));
 			pdir1[face[1]] = geometryfactory.createVector(
-					vertices.getCoordinate(face[1]),
-					vertices.getCoordinate(face[2]));
+					vertices.getPoint(face[1]), vertices.getPoint(face[2]));
 			pdir1[face[2]] = geometryfactory.createVector(
-					vertices.getCoordinate(face[2]),
-					vertices.getCoordinate(face[0]));
+					vertices.getPoint(face[2]), vertices.getPoint(face[0]));
 		}
 
 		for (int i = 0; i < nv; i++) {
@@ -333,14 +330,11 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		for (final int[] face : faces) {
 
 			final WB_Vector e2 = geometryfactory.createVector(
-					vertices.getCoordinate(face[0]),
-					vertices.getCoordinate(face[1]));
+					vertices.getPoint(face[0]), vertices.getPoint(face[1]));
 			final WB_Vector e0 = geometryfactory.createVector(
-					vertices.getCoordinate(face[1]),
-					vertices.getCoordinate(face[2]));
+					vertices.getPoint(face[1]), vertices.getPoint(face[2]));
 			final WB_Vector e1 = geometryfactory.createVector(
-					vertices.getCoordinate(face[2]),
-					vertices.getCoordinate(face[0]));
+					vertices.getPoint(face[2]), vertices.getPoint(face[0]));
 
 			final WB_Vector t = geometryfactory.createNormalizedVector(e0);
 
@@ -415,14 +409,11 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		for (final int[] face : faces) {
 
 			final WB_Vector e2 = geometryfactory.createVector(
-					vertices.getCoordinate(face[0]),
-					vertices.getCoordinate(face[1]));
+					vertices.getPoint(face[0]), vertices.getPoint(face[1]));
 			final WB_Vector e0 = geometryfactory.createVector(
-					vertices.getCoordinate(face[1]),
-					vertices.getCoordinate(face[2]));
+					vertices.getPoint(face[1]), vertices.getPoint(face[2]));
 			final WB_Vector e1 = geometryfactory.createVector(
-					vertices.getCoordinate(face[2]),
-					vertices.getCoordinate(face[0]));
+					vertices.getPoint(face[2]), vertices.getPoint(face[0]));
 
 			final WB_Vector t = geometryfactory.createNormalizedVector(e0);
 
@@ -620,15 +611,16 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 	}
 
-	WB_Vector trinorm(final WB_Point v0, final WB_Point v1, final WB_Point v2) {
+	WB_Vector trinorm(final WB_Coordinate v0, final WB_Coordinate v1,
+			final WB_Coordinate v2) {
 		final WB_Vector a = geometryfactory.createVector(v0, v1);
 		return a.cross(geometryfactory.createVector(v0, v2))._mulSelf(0.5);
 
 	}
 
 	WB_Vector trinorm(final int[] f) {
-		return trinorm(vertices.getCoordinate(f[0]),
-				vertices.getCoordinate(f[1]), vertices.getCoordinate(f[2]));
+		return trinorm(vertices.getPoint(f[0]), vertices.getPoint(f[1]),
+				vertices.getPoint(f[2]));
 	}
 
 	int nextFace(final int v_center, final int f) {

@@ -94,7 +94,7 @@ public class WB_VoronoiCell3D {
 		if (cell != null) {
 			onBoundary = new boolean[cell.getNumberOfVertices()];
 			double d;
-			WB_Point p;
+			WB_IndexedPoint p;
 			pointloop: for (int i = 0; i < cell.getNumberOfVertices(); i++) {
 				p = cell.getVertex(i);
 				for (final WB_Plane WB_Point : planes) {
@@ -126,7 +126,7 @@ public class WB_VoronoiCell3D {
 
 	private void slice(final WB_Plane P) {
 		final WB_Classification[] classifyPoints = ptsPlane(P);
-		final List<WB_Point> newPoints = new ArrayList<WB_Point>();
+		final List<WB_Coordinate> newPoints = new ArrayList<WB_Coordinate>();
 
 		for (int i = 0; i < classifyPoints.length; i++) {
 			if (classifyPoints[i] != WB_Classification.BACK) {
@@ -137,8 +137,8 @@ public class WB_VoronoiCell3D {
 		for (final int[] edge : edges) {
 			if (((classifyPoints[edge[0]] == WB_Classification.BACK) && (classifyPoints[edge[1]] == WB_Classification.FRONT))
 					|| ((classifyPoints[edge[1]] == WB_Classification.BACK) && (classifyPoints[edge[0]] == WB_Classification.FRONT))) {
-				final WB_Point a = cell.getVertex(edge[0]);
-				final WB_Point b = cell.getVertex(edge[1]);
+				final WB_IndexedPoint a = cell.getVertex(edge[0]);
+				final WB_IndexedPoint b = cell.getVertex(edge[1]);
 				newPoints.add((WB_Point) WB_Intersection.getIntersection3D(a,
 						b, P).object);
 				sliced = true;

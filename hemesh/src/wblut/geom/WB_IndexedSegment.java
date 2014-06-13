@@ -118,8 +118,8 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 
 	@Override
 	public WB_Geometry apply(WB_Transform T) {
-		return geometryfactory.createSegment(getOrigin().applySelfAsPoint(T),
-				getEndpoint().applySelfAsPoint(T));
+		return geometryfactory.createSegment(getOrigin().applyAsPoint(T),
+				getEndpoint().applyAsPoint(T));
 	}
 
 }
