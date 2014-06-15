@@ -31,7 +31,7 @@ public class WB_GeodesicMath {
 		}
 		r3._normalizeSelf();
 		WB_Point p0 = gf.createPoint(r3);
-		WB_Point p1 = p0._mulSelf(-1);
+		WB_Point p1 = p0.mul(-1);
 		double dihedral = Math.acos(Math.abs(r1.dot(r2))
 				/ (r1.getLength() * r2.getLength()));
 		p0._addSelf(origin);

@@ -28,6 +28,7 @@ public class WB_GeodesicI {
 	private double radius;
 	private int type;
 	private int div;
+	private boolean flat;
 
 	public WB_GeodesicI(double radius, int v) {
 		this(radius, v, ICOSAHEDRON, EQUALARC);
@@ -42,13 +43,17 @@ public class WB_GeodesicI {
 		this.div = div;
 		int lv = (int) Math.round(Math.log(v) / Math.log(2.0));
 		int cv = (int) Math.pow(2, lv);
-		this.v = (div == 3) ? cv : v;
+		this.v = (div == MIDARC) ? cv : v;
 	}
 
 	public WB_FaceListMesh getMesh() {
 		createMesh();
 		return mesh;
 
+	}
+
+	public void setFlat(boolean b) {
+		flat = b;
 	}
 
 	private void createMesh() {
@@ -199,9 +204,11 @@ public class WB_GeodesicI {
 		for (WB_Point p : points) {
 
 			p._normalizeSelf();
+			if (flat)
+				p._set(WB_Projection.projectOnPlane(p, P));
 			p._mulSelf(radius);
 		}
-		double threshold = 0;
+		double threshold = apices[0].getDistance(apices[1]) / (10 * v);
 		zeropoints.addAll(points);
 
 		WB_Transform T = new WB_Transform();
