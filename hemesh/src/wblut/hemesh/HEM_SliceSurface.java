@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javolution.util.FastMap;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Intersection;
@@ -109,7 +110,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		if (!WB_Intersection.checkIntersection3D(mesh.getAABB(), lP)) {
 			return mesh;
 		}
-		final WB_AABBTree tree = new WB_AABBTree(mesh, 4);
+		final WB_AABBTree tree = new WB_AABBTree(mesh, 64);
 		final HE_Selection faces = new HE_Selection(mesh);
 		faces.addFaces(HE_Intersection.getPotentialIntersectedFaces(tree, lP));
 		faces.collectVertices();
@@ -127,7 +128,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		List<HE_Vertex> faceVertices = new ArrayList<HE_Vertex>();
 		final HE_Selection split = new HE_Selection(mesh);
 
-		final HashMap<Long, Double> edgeInt = new HashMap<Long, Double>();
+		final FastMap<Long, Double> edgeInt = new FastMap<Long, Double>();
 		final Iterator<HE_Edge> eItr = faces.eItr();
 		HE_Edge e;
 		while (eItr.hasNext()) {
@@ -236,7 +237,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			return selection.parent;
 		}
 		WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
-		final WB_AABBTree tree = new WB_AABBTree(selection.parent, 4);
+		final WB_AABBTree tree = new WB_AABBTree(selection.parent, 64);
 		final HE_Selection faces = new HE_Selection(selection.parent);
 		faces.addFaces(HE_Intersection.getPotentialIntersectedFaces(tree, lP));
 
@@ -254,7 +255,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		boolean positiveVertexExists = false;
 		boolean negativeVertexExists = false;
 		WB_Classification tmp;
-		final HashMap<Long, WB_Classification> vertexClass = new HashMap<Long, WB_Classification>();
+		final FastMap<Long, WB_Classification> vertexClass = new FastMap<Long, WB_Classification>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = lsel.vItr();
 		while (vItr.hasNext()) {

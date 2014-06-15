@@ -7,33 +7,18 @@ import wblut.geom.WB_AlphaComplex;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
-/**
- * Creates the convex hull of a collection of points.
- * 
- * @author Frederik Vanhoutte (W:Blut)
- * 
- */
 public class HEC_AlphaShape extends HEC_Creator {
 
-	/** Points. */
 	private WB_Point[] points;
 
-	/** The jpoints. */
 	private WB_Point[] jpoints;
 
-	/** Number of points. */
 	private int numberOfPoints;
 
-	/** The alpha. */
 	private double alpha;
 
-	/** The ac. */
 	private WB_AlphaComplex ac;
 
-	/**
-	 * Instantiates a new HEC_ConvexHull.
-	 * 
-	 */
 	public HEC_AlphaShape() {
 		super();
 		ac = null;
@@ -41,13 +26,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		override = true;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            array of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final WB_Point[] points) {
 		this.points = new WB_Point[points.length];
 		for (int i = 0; i < points.length; i++) {
@@ -58,13 +36,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            array of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final HE_Vertex[] points) {
 		this.points = new WB_Point[points.length];
 		for (int i = 0; i < points.length; i++) {
@@ -75,13 +46,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            any Collection of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final Collection<? extends WB_Point> points) {
 
 		this.points = new WB_Point[points.size()];
@@ -96,13 +60,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            any Collection of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPointsFromVertices(
 			final Collection<HE_Vertex> points) {
 
@@ -118,13 +75,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of double of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final double[][] points) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
@@ -138,13 +88,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of float of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final float[][] points) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
@@ -158,13 +101,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of float of vertex positions
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final int[][] points) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
@@ -178,23 +114,11 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Sets the alpha.
-	 * 
-	 * @param a
-	 *            the a
-	 * @return the hE c_ alpha shape
-	 */
 	public HEC_AlphaShape setAlpha(final double a) {
 		alpha = a;
 		return this;
 	}
 
-	/**
-	 * Gets the alpha.
-	 * 
-	 * @return the alpha
-	 */
 	public double getAlpha() {
 
 		return alpha;
@@ -213,7 +137,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		numberOfPoints = points.length;
 		if (ac == null)
 			ac = new WB_AlphaComplex(jpoints);
-		final int[][] faceIndices = ac.getAlphaShapeFacelist(alpha);
+		final int[][] faceIndices = ac.getAlphaComplexShape(alpha);
 		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(points)
 				.setFaces(faceIndices).setDuplicate(false);
 		final HE_Mesh result = ffl.createBase();
@@ -223,15 +147,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            array of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final WB_Point[] points, double joggle) {
 		this.points = new WB_Point[points.length];
 		jpoints = new WB_Point[points.length];
@@ -247,15 +162,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            array of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final HE_Vertex[] points, double joggle) {
 		this.points = new WB_Point[points.length];
 		jpoints = new WB_Point[points.length];
@@ -270,15 +176,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            any Collection of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(
 			final Collection<? extends WB_Point> points, double joggle) {
 
@@ -297,15 +194,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            any Collection of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPointsFromVertices(
 			final Collection<HE_Vertex> points, double joggle) {
 
@@ -325,15 +213,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of double of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final double[][] points, double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
@@ -350,15 +229,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of float of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final float[][] points, double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
@@ -375,15 +245,6 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Set points that define vertices.
-	 * 
-	 * @param points
-	 *            2D array of float of vertex positions
-	 * @param joggle
-	 *            the joggle
-	 * @return self
-	 */
 	public HEC_AlphaShape setPoints(final int[][] points, double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];

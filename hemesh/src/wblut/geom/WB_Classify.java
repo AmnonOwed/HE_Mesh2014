@@ -126,13 +126,9 @@ public class WB_Classify {
 			final WB_Coordinate q, final WB_Line L) {
 
 		final WB_Predicates pred = new WB_Predicates();
-		final double pside = Math.signum(pred.orientTri(
-				toDouble(L.getOrigin()), toDouble(L.getPointOnLine(100.0)),
-				toDouble(p)));
-		final double qside = Math.signum(pred.orientTri(
-				toDouble(L.getOrigin()), toDouble(L.getPointOnLine(100.0)),
-				toDouble(q)));
-
+		WB_Point pL = L.getPointOnLine(1.0);
+		final double pside = Math.signum(pred.orientTri(L.getOrigin(), pL, p));
+		final double qside = Math.signum(pred.orientTri(L.getOrigin(), pL, q));
 		if ((pside == 0) || (qside == 0) || (pside == qside)) {
 			return WB_Classification.SAME;
 		}

@@ -1,5 +1,6 @@
 package wblut.hemesh;
 
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
@@ -24,7 +25,8 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 		return this;
 	}
 
-	public HEC_RevolvePolygon setAxis(final WB_Point p, final WB_Vector v) {
+	public HEC_RevolvePolygon setAxis(final WB_Coordinate p,
+			final WB_Coordinate v) {
 		axis = new WB_Line(p, v);
 		return this;
 	}

@@ -120,10 +120,10 @@ public class WB_Predicates {
 		errbound *= orientErrorBound;
 
 		if (det >= errbound) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 
 		} else if (-det >= errbound) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		} else {
 			return orientExact(pa, pb, pc, pd);
 		}
@@ -303,7 +303,7 @@ public class WB_Predicates {
 						* cezplus) * dlift;
 		errbound = insphereErrorBound * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return insphereExact(pa, pb, pc, pd, pe);
@@ -550,7 +550,7 @@ public class WB_Predicates {
 						: -(bdxady))) * ((cdz) >= 0.0 ? (cdz) : -(cdz));
 		errbound = o3derrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 		return _orientTetraAdapt(p0, p1, p2, p3, permanent);
 	}
@@ -798,7 +798,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = o3derrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (double) (pa[0] - adx);
@@ -850,7 +850,7 @@ public class WB_Predicates {
 		if ((adxtail == 0.0) && (bdxtail == 0.0) && (cdxtail == 0.0)
 				&& (adytail == 0.0) && (bdytail == 0.0) && (cdytail == 0.0)
 				&& (adztail == 0.0) && (bdztail == 0.0) && (cdztail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = o3derrboundC * permanent + resulterrbound
@@ -865,7 +865,7 @@ public class WB_Predicates {
 						* ((adx * bdytail + bdy * adxtail) - (ady * bdxtail + bdx
 								* adytail)) + cdztail * (adx * bdy - ady * bdx));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		finnow = fin1;
@@ -2069,23 +2069,23 @@ public class WB_Predicates {
 
 		if (detleft > 0.0) {
 			if (detright <= 0.0) {
-				return (det > 0) ? 1 : -1;
+				return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 			} else {
 				detsum = detleft + detright;
 			}
 		} else if (detleft < 0.0) {
 			if (detright >= 0.0) {
-				return (det > 0) ? 1 : -1;
+				return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 			} else {
 				detsum = -detleft - detright;
 			}
 		} else {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = ccwerrboundA * detsum;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _orientTriAdapt(p0, p1, p2, detsum);
@@ -2190,7 +2190,7 @@ public class WB_Predicates {
 		det = _estimate(4, B);
 		errbound = ccwerrboundB * detsum;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (double) (p0[0] - acx);
@@ -2216,7 +2216,7 @@ public class WB_Predicates {
 
 		if ((acxtail == 0.0) && (acytail == 0.0) && (bcxtail == 0.0)
 				&& (bcytail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = ccwerrboundC * detsum + resulterrbound
@@ -2224,7 +2224,7 @@ public class WB_Predicates {
 		det += (acx * bcytail + bcy * acxtail)
 				- (acy * bcxtail + bcx * acytail);
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		s1 = (double) (acxtail * bcy);
@@ -2532,7 +2532,7 @@ public class WB_Predicates {
 						* cezplus) * dlift;
 		errbound = isperrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _insphereTetraAdapt(pa, pb, pc, pd, pe, permanent);
@@ -2992,7 +2992,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = isperrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (double) (pa[0] - aex);
@@ -3059,7 +3059,7 @@ public class WB_Predicates {
 				&& (bextail == 0.0) && (beytail == 0.0) && (beztail == 0.0)
 				&& (cextail == 0.0) && (ceytail == 0.0) && (ceztail == 0.0)
 				&& (dextail == 0.0) && (deytail == 0.0) && (deztail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = isperrboundC * permanent + resulterrbound
@@ -3098,7 +3098,7 @@ public class WB_Predicates {
 						+ cey * ceytail + cez * ceztail)
 						* (dez * ab3 + aez * bd3 + bez * da3)));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _insphereTetraExact(pa, pb, pc, pd, pe);
@@ -4005,7 +4005,7 @@ public class WB_Predicates {
 						: -(bdxady))) * clift;
 		errbound = iccerrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _incircleTriAdapt(p0, p1, p2, q, permanent);
@@ -4276,7 +4276,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = iccerrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (double) (pa[0] - adx);
@@ -4311,7 +4311,7 @@ public class WB_Predicates {
 		cdytail = around + bround;
 		if ((adxtail == 0.0) && (bdxtail == 0.0) && (cdxtail == 0.0)
 				&& (adytail == 0.0) && (bdytail == 0.0) && (cdytail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = iccerrboundC * permanent + resulterrbound
@@ -4331,7 +4331,7 @@ public class WB_Predicates {
 						* (cdx * cdxtail + cdy * cdytail)
 						* (adx * bdy - ady * bdx));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		finnow = fin1;
@@ -5497,7 +5497,7 @@ public class WB_Predicates {
 						: -(bdxady))) * ((cdz) >= 0.0 ? (cdz) : -(cdz));
 		errbound = o3derrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 		try {
 			return _orientTetraAdapt(p0, p1, p2, p3, permanent);
@@ -5736,7 +5736,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = o3derrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (pa.xd() - adx);
@@ -5788,7 +5788,7 @@ public class WB_Predicates {
 		if ((adxtail == 0.0) && (bdxtail == 0.0) && (cdxtail == 0.0)
 				&& (adytail == 0.0) && (bdytail == 0.0) && (cdytail == 0.0)
 				&& (adztail == 0.0) && (bdztail == 0.0) && (cdztail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = o3derrboundC * permanent + resulterrbound
@@ -5803,7 +5803,7 @@ public class WB_Predicates {
 						* ((adx * bdytail + bdy * adxtail) - (ady * bdxtail + bdx
 								* adytail)) + cdztail * (adx * bdy - ady * bdx));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		finnow = fin1;
@@ -6997,26 +6997,26 @@ public class WB_Predicates {
 
 		if (detleft > 0.0) {
 			if (detright <= 0.0) {
-				return (det > 0) ? 1 : -1;
+				return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 			} else {
 				detsum = detleft + detright;
 			}
 		} else if (detleft < 0.0) {
 			if (detright >= 0.0) {
-				return (det > 0) ? 1 : -1;
+				return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 			} else {
 				detsum = -detleft - detright;
 			}
 		} else {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = ccwerrboundA * detsum;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
-
-		return _orientTriAdapt(p0, p1, p2, detsum);
+		det = _orientTriAdapt(p0, p1, p2, detsum);
+		return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 	}
 
 	private double _orientTriAdapt(final WB_Coordinate p0,
@@ -7105,7 +7105,7 @@ public class WB_Predicates {
 		det = _estimate(4, B);
 		errbound = ccwerrboundB * detsum;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (p0.xd() - acx);
@@ -7131,7 +7131,7 @@ public class WB_Predicates {
 
 		if ((acxtail == 0.0) && (acytail == 0.0) && (bcxtail == 0.0)
 				&& (bcytail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = ccwerrboundC * detsum + resulterrbound
@@ -7139,7 +7139,7 @@ public class WB_Predicates {
 		det += (acx * bcytail + bcy * acxtail)
 				- (acy * bcxtail + bcx * acytail);
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		s1 = (acxtail * bcy);
@@ -7421,7 +7421,7 @@ public class WB_Predicates {
 						* cezplus) * dlift;
 		errbound = isperrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _insphereTetraAdapt(pa, pb, pc, pd, pe, permanent);
@@ -7866,7 +7866,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = isperrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (pa.xd() - aex);
@@ -7933,7 +7933,7 @@ public class WB_Predicates {
 				&& (bextail == 0.0) && (beytail == 0.0) && (beztail == 0.0)
 				&& (cextail == 0.0) && (ceytail == 0.0) && (ceztail == 0.0)
 				&& (dextail == 0.0) && (deytail == 0.0) && (deztail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = isperrboundC * permanent + resulterrbound
@@ -7972,7 +7972,7 @@ public class WB_Predicates {
 						+ cey * ceytail + cez * ceztail)
 						* (dez * ab3 + aez * bd3 + bez * da3)));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _insphereTetraExact(pa, pb, pc, pd, pe);
@@ -8773,7 +8773,7 @@ public class WB_Predicates {
 						: -(bdxady))) * clift;
 		errbound = iccerrboundA * permanent;
 		if ((det > errbound) || (-det > errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		return _incircleTriAdapt(p0, p1, p2, q, permanent);
@@ -9030,7 +9030,7 @@ public class WB_Predicates {
 		det = _estimate(finlength, fin1);
 		errbound = iccerrboundB * permanent;
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		bvirt = (pa.xd() - adx);
@@ -9065,7 +9065,7 @@ public class WB_Predicates {
 		cdytail = around + bround;
 		if ((adxtail == 0.0) && (bdxtail == 0.0) && (cdxtail == 0.0)
 				&& (adytail == 0.0) && (bdytail == 0.0) && (cdytail == 0.0)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		errbound = iccerrboundC * permanent + resulterrbound
@@ -9085,7 +9085,7 @@ public class WB_Predicates {
 						* (cdx * cdxtail + cdy * cdytail)
 						* (adx * bdy - ady * bdx));
 		if ((det >= errbound) || (-det >= errbound)) {
-			return (det > 0) ? 1 : -1;
+			return (det > 0) ? 1 : ((det == 0) ? 0 : -1);
 		}
 
 		finnow = fin1;

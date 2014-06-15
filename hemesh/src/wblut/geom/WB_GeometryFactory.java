@@ -7583,36 +7583,25 @@ public class WB_GeometryFactory {
 			final List<? extends WB_Coordinate> points, final double filter) {
 		final WB_AlphaComplex ac = new WB_AlphaComplex(points);
 
-		return ac.getAlphaShapeMesh(filter);
-	}
-
-	public WB_AlphaComplex createAlphaComplex(
-			final List<? extends WB_Coordinate> points) {
-		return new WB_AlphaComplex(points);
-	}
-
-	public WB_FaceListMesh createConcaveHull(final WB_AlphaComplex ac,
-			final double filter) {
-		return ac.getAlphaShapeMesh(filter);
+		return createMesh(points, ac.getAlphaComplexShape(filter));
 	}
 
 	public WB_FaceListMesh createConcaveHull(final WB_Coordinate[] points,
 			final double filter) {
-		final List<WB_Coordinate> list = new FastTable<WB_Coordinate>();
-		for (final WB_Coordinate p : points) {
-			list.add(p);
-		}
-		final WB_AlphaComplex ac = new WB_AlphaComplex(list);
 
-		return ac.getAlphaShapeMesh(filter);
+		final WB_AlphaComplex ac = new WB_AlphaComplex(points);
+		return createMesh(points, ac.getAlphaComplexShape(filter));
 	}
 
-	public WB_AlphaComplex createAlphaComplex(final WB_Coordinate[] points) {
-		final List<WB_Coordinate> list = new FastTable<WB_Coordinate>();
-		for (final WB_Coordinate p : points) {
-			list.add(p);
-		}
-		return new WB_AlphaComplex(list);
+	public WB_FaceListMesh createConcaveHull(
+			final List<? extends WB_Coordinate> points,
+			final WB_AlphaComplex ac, final double filter) {
+		return createMesh(points, ac.getAlphaComplexShape(filter));
+	}
+
+	public WB_FaceListMesh createConcaveHull(final WB_Coordinate[] points,
+			final WB_AlphaComplex ac, final double filter) {
+		return createMesh(points, ac.getAlphaComplexShape(filter));
 	}
 
 	public List<WB_Polygon> createText(final String text,

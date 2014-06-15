@@ -1,7 +1,8 @@
 package wblut.geom;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import javolution.util.FastTable;
 import wblut.hemesh.HE_Face;
 
 public class WB_AABBNode<T extends WB_Coordinate> {
@@ -18,13 +19,13 @@ public class WB_AABBNode<T extends WB_Coordinate> {
 
 	protected WB_Plane separator;
 
-	protected ArrayList<HE_Face> faces;
+	protected List<HE_Face> faces;
 
 	protected boolean isLeaf;
 
 	public WB_AABBNode() {
 		level = -1;
-		faces = new ArrayList<HE_Face>();
+		faces = new FastTable<HE_Face>();
 	}
 
 	public WB_AABB getAABB() {
@@ -43,7 +44,7 @@ public class WB_AABBNode<T extends WB_Coordinate> {
 		return isLeaf;
 	}
 
-	public ArrayList<HE_Face> getFaces() {
+	public List<HE_Face> getFaces() {
 		return faces;
 	}
 

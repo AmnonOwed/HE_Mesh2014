@@ -2,10 +2,7 @@ package wblut.geom;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javolution.util.FastMap;
-import javolution.util.FastTable;
 import wblut.external.ProGAL.AlphaComplex;
 import wblut.external.ProGAL.CTetrahedron;
 import wblut.external.ProGAL.CTriangle;
@@ -222,67 +219,39 @@ public class WB_AlphaComplex {
 		}
 	}
 
-	public int[] getAlphaShape(final double filter) {
-		List<CTriangle> tris = af.getAlphaShape(filter);
-		int[] result = new int[3 * tris.size()];
-		for (int i = 0; i < tris.size(); i++) {
-			CTriangle tri = tris.get(i);
-			for (int j = 0; j < 3; j++) {
-				int index = tree.getNearestNeighbor(convert(tri.getPoint(j))).value;
-				result[3 * i + j] = index;
-			}
-		}
-		return result;
-	}
-
-	public int[][] getAlphaShapeFacelist(final double filter) {
-		List<CTriangle> tris = af.getAlphaShape(filter);
-		int[][] result = new int[tris.size()][3];
-		for (int i = 0; i < tris.size(); i++) {
-			CTriangle tri = tris.get(i);
-			for (int j = 0; j < 3; j++) {
-				int index = tree.getNearestNeighbor(convert(tri.getPoint(j))).value;
-				result[i][j] = index;
-			}
-		}
-		return result;
-	}
-
-	public int[][] getAlphaComplexHull(final double filter) {
+	public int[][] getAlphaComplexShape(final double filter) {
 		List<int[]> tmpresult = new ArrayList<int[]>();
-		List<CTetrahedron> tetras = af.getTetrahedra();
-		int ntetra = tetras.size();
-		for (int i = 0; i < ntetra; i++) {
-			CTetrahedron tetra = tetras.get(i);
-			for (int j = 0; j < 4; j++) {
-				CTriangle tri = tetra.getTriangle(j);
-				CTetrahedron T0 = tri.getAdjacentTetrahedron(0);
-				double a0 = (T0.containsBigPoint()) ? Double.NaN : af
-						.getInAlpha(T0);
-				CTetrahedron T1 = tri.getAdjacentTetrahedron(1);
-				double a1 = (T1.containsBigPoint()) ? Double.NaN : af
-						.getInAlpha(T1);
-				boolean include = false;
-				if (Double.isNaN(a0) && Double.isNaN(a1)) {
-					include = false;
-				} else if (Double.isNaN(a0)) {
-					include = (a1 <= filter);
-				} else if (Double.isNaN(a1)) {
-					include = (a0 <= filter);
-				} else if (((a0 > filter) && (a1 <= filter))
-						|| ((a1 > filter) && (a0 <= filter))) {
-					include = true;
-				}
-				if (include) {
-					int[] tmp = new int[3];
-					for (int k = 0; k < 3; k++) {
-						int index = tree.getNearestNeighbor(convert(tri
-								.getPoint(k))).value;
-						tmp[k] = index;
-					}
-					tmpresult.add(tmp);
-				}
+		List<CTriangle> tris = af.getTriangles();
+		for (CTriangle tri : tris) {
+			CTetrahedron T0 = tri.getAdjacentTetrahedron(0);
+			CTetrahedron T1 = tri.getAdjacentTetrahedron(1);
+
+			double a0 = (T0.containsBigPoint()) ? Double.NaN : af
+					.getInAlpha(T0);
+
+			double a1 = (T1.containsBigPoint()) ? Double.NaN : af
+					.getInAlpha(T1);
+			boolean include = false;
+			if (Double.isNaN(a0) && Double.isNaN(a1)) {
+				include = false;
+			} else if (Double.isNaN(a0)) {
+				include = (a1 <= filter);
+			} else if (Double.isNaN(a1)) {
+				include = (a0 <= filter);
+			} else if (((a0 > filter) && (a1 <= filter))
+					|| ((a1 > filter) && (a0 <= filter))) {
+				include = true;
 			}
+			if (include) {
+				int[] tmp = new int[3];
+				for (int k = 0; k < 3; k++) {
+					int index = tree
+							.getNearestNeighbor(convert(tri.getPoint(k))).value;
+					tmp[k] = index;
+				}
+				tmpresult.add(tmp);
+			}
+			// }
 		}
 		int[][] result = new int[tmpresult.size()][3];
 		for (int i = 0; i < tmpresult.size(); i++) {
@@ -291,29 +260,6 @@ public class WB_AlphaComplex {
 			}
 		}
 		return result;
-	}
-
-	public WB_FaceListMesh getAlphaShapeMesh(final double filter) {
-		final List<CTriangle> tris = af.getAlphaShape(filter);
-		final int[][] result = new int[tris.size()][3];
-		final Map<Integer, Integer> indexkeys = new FastMap<Integer, Integer>();
-		final List<WB_Point> points = new FastTable<WB_Point>();
-		for (int i = 0; i < tris.size(); i++) {
-			final CTriangle tri = tris.get(i);
-			for (int j = 0; j < 3; j++) {
-				final WB_Point point = convert(tri.getPoint(j));
-				final int index = tree.getNearestNeighbor(point).value;
-				final Integer id = indexkeys.get(index);
-				if (id == null) {
-					indexkeys.put(index, points.size());
-					result[i][j] = points.size();
-					points.add(point);
-				} else {
-					result[i][j] = id;
-				}
-			}
-		}
-		return WB_GeometryFactory.instance().createMesh(points, result);
 	}
 
 	private static WB_Point convert(final CVertex v) {
