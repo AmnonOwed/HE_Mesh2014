@@ -125,29 +125,29 @@ public class HEC_Dodecahedron extends HEC_Creator {
 		final double theb = the72 / 2.0; /* pairs of layers offset 36 degrees */
 		double the = 0.0;
 		for (int i = 0; i < 5; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phia);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phia);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 2.5) * Math.cos(phia);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 2.5) * Math.cos(phia);
 			vertices[i][2] = R * Math.sin(phia);
 			the = the + the72;
 		}
 		the = 0.0;
 		for (int i = 5; i < 10; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phib);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phib);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 2.5) * Math.cos(phib);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 2.5) * Math.cos(phib);
 			vertices[i][2] = R * Math.sin(phib);
 			the = the + the72;
 		}
 		the = theb;
 		for (int i = 10; i < 15; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phic);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phic);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 2.5) * Math.cos(phic);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 2.5) * Math.cos(phic);
 			vertices[i][2] = R * Math.sin(phic);
 			the = the + the72;
 		}
 		the = theb;
 		for (int i = 15; i < 20; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phid);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phid);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 2.5) * Math.cos(phid);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 2.5) * Math.cos(phid);
 			vertices[i][2] = R * Math.sin(phid);
 			the = the + the72;
 		}

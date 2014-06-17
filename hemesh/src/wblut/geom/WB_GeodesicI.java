@@ -1,5 +1,6 @@
 package wblut.geom;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 import javolution.util.FastTable;
@@ -28,7 +29,6 @@ public class WB_GeodesicI {
 	private double radius;
 	private int type;
 	private int div;
-	private boolean flat;
 
 	public WB_GeodesicI(double radius, int v) {
 		this(radius, v, ICOSAHEDRON, EQUALARC);
@@ -36,8 +36,11 @@ public class WB_GeodesicI {
 	}
 
 	public WB_GeodesicI(double radius, int v, int type, int div) {
-		assert (v > 0);
-
+		if (v <= 0)
+			throw new InvalidParameterException("v should be 1 or larger.");
+		if (type < 0 || type > 2)
+			throw new InvalidParameterException(
+					"Type should be one of TETRAHEDRON (0), OCTAHEDRON (1) or ICOSAHEDRON (2).");
 		this.type = type;
 		this.radius = radius;
 		this.div = div;
@@ -50,10 +53,6 @@ public class WB_GeodesicI {
 		createMesh();
 		return mesh;
 
-	}
-
-	public void setFlat(boolean b) {
-		flat = b;
 	}
 
 	private void createMesh() {
@@ -204,8 +203,7 @@ public class WB_GeodesicI {
 		for (WB_Point p : points) {
 
 			p._normalizeSelf();
-			if (flat)
-				p._set(WB_Projection.projectOnPlane(p, P));
+
 			p._mulSelf(radius);
 		}
 		double threshold = apices[0].getDistance(apices[1]) / (10 * v);

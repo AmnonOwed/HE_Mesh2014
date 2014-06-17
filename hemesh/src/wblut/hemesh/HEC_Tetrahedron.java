@@ -89,8 +89,8 @@ public class HEC_Tetrahedron extends HEC_Creator {
 		vertices[0][2] = R;
 		double the = 0.0;
 		for (int i = 1; i < 4; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phia);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phia);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 3.0) * Math.cos(phia);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 3.0) * Math.cos(phia);
 			vertices[i][2] = R * Math.sin(phia);
 			the = the + the120;
 		}

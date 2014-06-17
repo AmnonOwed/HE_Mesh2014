@@ -56,15 +56,17 @@ public class HEC_Icosahedron extends HEC_Creator {
 		vertices[11][2] = -R;
 		double the = 0.0;
 		for (int i = 1; i < 6; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(phia);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(phia);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 5.0) * Math.cos(phia);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 5.0) * Math.cos(phia);
 			vertices[i][2] = R * Math.sin(phia);
 			the = the + the72;
 		}
 		the = theb;
 		for (int i = 6; i < 11; i++) {
-			vertices[i][0] = R * Math.cos(the) * Math.cos(-phia);
-			vertices[i][1] = R * Math.sin(the) * Math.cos(-phia);
+			vertices[i][0] = R * Math.cos(the + Math.PI / 5.0)
+					* Math.cos(-phia);
+			vertices[i][1] = R * Math.sin(the + Math.PI / 5.0)
+					* Math.cos(-phia);
 			vertices[i][2] = R * Math.sin(-phia);
 			the = the + the72;
 		}

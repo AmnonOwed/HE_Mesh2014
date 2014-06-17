@@ -4750,6 +4750,43 @@ public class WB_GeometryFactory {
 
 	}
 
+	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh,
+			double threshold) {
+		final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
+		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>();
+		final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
+		double t2 = threshold * threshold;
+		WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
+
+		WB_IndexedPoint v = mesh.getVertex(0);
+		kdtree.add(v, 0);
+		uniqueVertices.add(v);
+		oldnew.put(0, 0);
+
+		int nuv = 1;
+		for (int i = 1; i < mesh.getNumberOfVertices(); i++) {
+			v = mesh.getVertex(i);
+			neighbor = kdtree.getNearestNeighbor(v);
+			if (neighbor.d2 < t2) {
+				oldnew.put(i, neighbor.value);
+			} else {
+				kdtree.add(v, nuv);
+				uniqueVertices.add(v);
+				oldnew.put(i, nuv++);
+			}
+		}
+		final int[][] newfaces = new int[mesh.getNumberOfFaces()][];
+		for (int i = 0; i < mesh.getNumberOfFaces(); i++) {
+			final int[] face = mesh.getFace(i);
+			newfaces[i] = new int[face.length];
+			for (int j = 0; j < face.length; j++) {
+				newfaces[i][j] = oldnew.get(face[j]);
+			}
+		}
+		return createMesh(uniqueVertices, newfaces);
+
+	}
+
 	public WB_FaceListMesh createTriMesh(final WB_Coordinate[] points,
 			final int[][] faces) {
 		return new WB_TriMesh(points, faces);
