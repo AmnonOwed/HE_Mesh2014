@@ -37,7 +37,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 		super();
 		this.source = source;
 		duplicate = true;
-		normalcheck = true;
+		normalcheck = false;
 		override = true;
 	}
 
