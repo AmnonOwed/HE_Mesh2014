@@ -42,7 +42,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		facecolor = -1;
 	}
 
-	public Long key() {
+	public long key() {
 		return super.getKey();
 	}
 

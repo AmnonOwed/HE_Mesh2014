@@ -52,7 +52,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * 
 	 * @return key
 	 */
-	public Long key() {
+	public long key() {
 		return super.getKey();
 	}
 

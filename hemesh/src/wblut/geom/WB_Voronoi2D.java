@@ -83,14 +83,14 @@ public class WB_Voronoi2D {
 
 	private VoronoiHalfedge2D edgeListLeftEnd, edgeListRightEnd;
 
-	private FastTable<WB_IndexedBisector2D> allEdges;
+	private FastTable<WB_IndexedBisector> allEdges;
 
 	private FastMap<WB_Point, Integer> indices;
 
 	public WB_Voronoi2D() {
 	}
 
-	public List<WB_IndexedBisector2D> generateVoronoi(final double minX,
+	public List<WB_IndexedBisector> generateVoronoi(final double minX,
 			final double maxX, final double minY, final double maxY,
 			final WB_Point[] points) {
 		final FastTable<WB_Point> ppoints = new FastTable<WB_Point>();
@@ -100,7 +100,7 @@ public class WB_Voronoi2D {
 		return generateVoronoi(minX, maxX, minY, maxY, ppoints);
 	}
 
-	public List<WB_IndexedBisector2D> generateVoronoi(double minX, double maxX,
+	public List<WB_IndexedBisector> generateVoronoi(double minX, double maxX,
 			double minY, double maxY, final List<WB_Point> points) {
 		double temp = 0;
 		if (minX > maxX) {
@@ -122,13 +122,13 @@ public class WB_Voronoi2D {
 		collectSites(points);
 		createVoronoi2D();
 
-		final List<WB_IndexedBisector2D> result = new FastTable<WB_IndexedBisector2D>();
+		final List<WB_IndexedBisector> result = new FastTable<WB_IndexedBisector>();
 		result.addAll(allEdges);
 		return result;
 	}
 
 	private void collectSites(final List<WB_Point> pointsIn) {
-		allEdges = new FastTable<WB_IndexedBisector2D>();
+		allEdges = new FastTable<WB_IndexedBisector>();
 
 		final FastTable<WB_Point> points = new FastTable<WB_Point>();
 		final WB_KDTree<WB_Point, Integer> kdtree = new WB_KDTree<WB_Point, Integer>();
@@ -685,7 +685,7 @@ public class WB_Voronoi2D {
 				x2 = (e.c - y2) / e.a;
 			}
 		}
-		final WB_IndexedBisector2D ib = new WB_IndexedBisector2D();
+		final WB_IndexedBisector ib = new WB_IndexedBisector();
 		ib.start = new WB_Point(x1, y1);
 		ib.end = new WB_Point(x2, y2);
 		ib.i = e.indices[0];

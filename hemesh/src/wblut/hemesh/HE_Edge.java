@@ -36,7 +36,7 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 	 * @return key
 	 */
 
-	public Long key() {
+	public long key() {
 		return super.getKey();
 	}
 

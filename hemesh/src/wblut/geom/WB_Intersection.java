@@ -2260,15 +2260,15 @@ public class WB_Intersection {
 
 	public static boolean getIntersection2DProper(final WB_Coordinate a,
 			final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
-		if (WB_Predicates2D.orient2d(a, b, c) == 0
-				|| WB_Predicates2D.orient2d(a, b, d) == 0
-				|| WB_Predicates2D.orient2d(c, d, a) == 0
-				|| WB_Predicates2D.orient2d(c, d, b) == 0) {
+		if (WB_Predicates.orient2D(a, b, c) == 0
+				|| WB_Predicates.orient2D(a, b, d) == 0
+				|| WB_Predicates.orient2D(c, d, a) == 0
+				|| WB_Predicates.orient2D(c, d, b) == 0) {
 			return false;
-		} else if (WB_Predicates2D.orient2d(a, b, c)
-				* WB_Predicates2D.orient2d(a, b, d) > 0
-				|| WB_Predicates2D.orient2d(c, d, a)
-						* WB_Predicates2D.orient2d(c, d, b) > 0) {
+		} else if (WB_Predicates.orient2D(a, b, c)
+				* WB_Predicates.orient2D(a, b, d) > 0
+				|| WB_Predicates.orient2D(c, d, a)
+						* WB_Predicates.orient2D(c, d, b) > 0) {
 			return false;
 		} else {
 			return true;

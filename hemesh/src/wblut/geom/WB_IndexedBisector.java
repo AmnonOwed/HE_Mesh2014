@@ -1,6 +1,6 @@
 package wblut.geom;
 
-public class WB_IndexedBisector2D {
+public class WB_IndexedBisector {
 
 	public WB_Point start;
 

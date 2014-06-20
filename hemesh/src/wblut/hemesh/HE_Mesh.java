@@ -1,5 +1,8 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongLongMap;
+import gnu.trove.map.hash.TLongLongHashMap;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -207,10 +210,14 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public HE_Mesh get() {
 		final HE_Mesh result = new HE_Mesh();
-		final FastMap<Long, Long> vertexCorrelation = new FastMap<Long, Long>();
-		final FastMap<Long, Long> faceCorrelation = new FastMap<Long, Long>();
-		final FastMap<Long, Long> halfedgeCorrelation = new FastMap<Long, Long>();
-		final FastMap<Long, Long> edgeCorrelation = new FastMap<Long, Long>();
+		final TLongLongMap vertexCorrelation = new TLongLongHashMap(10, 0.5f,
+				-1L, -1L);
+		final TLongLongMap faceCorrelation = new TLongLongHashMap(10, 0.5f,
+				-1L, -1L);
+		final TLongLongMap halfedgeCorrelation = new TLongLongHashMap(10, 0.5f,
+				-1L, -1L);
+		final TLongLongMap edgeCorrelation = new TLongLongHashMap(10, 0.5f,
+				-1L, -1L);
 		HE_Vertex rv;
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
@@ -2070,7 +2077,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param z
 	 *            z-coordinate of new vertex
 	 */
-	public void splitEdge(final Long key, final double x, final double y,
+	public void splitEdge(final long key, final double x, final double y,
 			final double z) {
 		splitEdge(key, new WB_Point(x, y, z));
 	}
@@ -2095,7 +2102,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 *            key of edge to split.
 	 * @return selection of new vertex and new edge
 	 */
-	public HE_Selection splitEdge(final Long key) {
+	public HE_Selection splitEdge(final long key) {
 		final HE_Edge edge = getEdgeByKey(key);
 		final WB_Point v = edge.getStartVertex().pos.add(edge.getEndVertex());
 		v._mulSelf(0.5);
@@ -2126,7 +2133,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 *            fraction of first part (0..1)
 	 * @return selection of new vertex and new edge
 	 */
-	public HE_Selection splitEdge(final Long key, final double f) {
+	public HE_Selection splitEdge(final long key, final double f) {
 		final HE_Edge edge = getEdgeByKey(key);
 		return splitEdge(edge, f);
 	}
@@ -2247,7 +2254,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param f
 	 *            array of fractions (0..1)
 	 */
-	public void splitEdge(final Long key, final double[] f) {
+	public void splitEdge(final long key, final double[] f) {
 		final HE_Edge edge = getEdgeByKey(key);
 		splitEdge(edge, f);
 	}
@@ -2287,7 +2294,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param f
 	 *            array of fractions (0..1)
 	 */
-	public void splitEdge(final Long key, final float[] f) {
+	public void splitEdge(final long key, final float[] f) {
 		final HE_Edge edge = getEdgeByKey(key);
 		splitEdge(edge, f);
 	}
@@ -2319,7 +2326,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param n
 	 *            number of parts
 	 */
-	public void divideEdge(final Long key, final int n) {
+	public void divideEdge(final long key, final int n) {
 		final HE_Edge edge = getEdgeByKey(key);
 		divideEdge(edge, n);
 	}
@@ -2415,8 +2422,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 *            key of second vertex
 	 * @return new face and edge
 	 */
-	public HE_Selection splitFace(final Long fkey, final Long vkeyi,
-			final Long vkeyj) {
+	public HE_Selection splitFace(final long fkey, final long vkeyi,
+			final long vkeyj) {
 		return splitFace(getFaceByKey(fkey), getVertexByKey(vkeyi),
 				getVertexByKey(vkeyj));
 	}
@@ -2628,7 +2635,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @return selection of new faces and new vertex
 	 */
 
-	public HE_Selection triSplitFace(final Long key, final WB_Point v) {
+	public HE_Selection triSplitFace(final long key, final WB_Point v) {
 		return triSplitFace(getFaceByKey(key), v);
 	}
 
@@ -2645,7 +2652,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 *            z-coordinate of new vertex
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final Long key, final double x,
+	public HE_Selection triSplitFace(final long key, final double x,
 			final double y, final double z) {
 		return triSplitFace(getFaceByKey(key), new WB_Point(x, y, z));
 	}
@@ -3423,7 +3430,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 *            key of face
 	 */
 
-	public void triangulateConcaveFace(final Long key) {
+	public void triangulateConcaveFace(final long key) {
 		triangulateConcaveFace(getFaceByKey(key));
 	}
 
@@ -4804,7 +4811,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 * @param key
 	 *            key of face
 	 */
-	public void triangulate(final Long key) {
+	public void triangulate(final long key) {
 		triangulate(getFaceByKey(key));
 
 	}

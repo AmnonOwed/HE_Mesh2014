@@ -3,9 +3,8 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 
-import wblut.geom.WB_HasData;
-
 import javolution.util.FastTable;
+import wblut.geom.WB_HasData;
 
 public class HE_Loop extends HE_Element implements WB_HasData {
 
@@ -29,7 +28,7 @@ public class HE_Loop extends HE_Element implements WB_HasData {
 	 * 
 	 * @return key
 	 */
-	public Long key() {
+	public long key() {
 		return super.getKey();
 	}
 

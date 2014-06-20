@@ -1,10 +1,12 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongObjectMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_FaceListMesh;
@@ -234,8 +236,8 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 	}
 
 	private void unifyNormals(final int[][] faces) {
+		final TLongObjectMap<int[]> edges = new TLongObjectHashMap<int[]>();
 
-		final FastMap<Long, int[]> edges = new FastMap<Long, int[]>();
 		for (int i = 0; i < faces.length; i++) {
 			final int[] face = faces[i];
 			final int fl = face.length;
@@ -250,6 +252,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 			}
 		}
 		final boolean[] visited = new boolean[faces.length];
+
 		final LinkedList<Integer> queue = new LinkedList<Integer>();
 		boolean facesleft = false;
 		int starti = 0;

@@ -199,7 +199,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * 
 	 * @return key
 	 */
-	public Long key() {
+	public long key() {
 		return super.getKey();
 	}
 

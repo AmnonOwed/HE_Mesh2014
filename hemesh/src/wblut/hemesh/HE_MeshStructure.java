@@ -787,7 +787,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *            edge key
 	 * @return edge
 	 */
-	public final HE_Edge getEdgeByKey(final Long key) {
+	public final HE_Edge getEdgeByKey(final long key) {
 		return edges.getByKey(key);
 	}
 
@@ -825,7 +825,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *            face key
 	 * @return face
 	 */
-	public final HE_Face getFaceByKey(final Long key) {
+	public final HE_Face getFaceByKey(final long key) {
 		return faces.getByKey(key);
 	}
 
@@ -863,7 +863,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *            halfedge key
 	 * @return halfedge
 	 */
-	public final HE_Halfedge getHalfedgeByKey(final Long key) {
+	public final HE_Halfedge getHalfedgeByKey(final long key) {
 		return halfedges.getByKey(key);
 	}
 
@@ -901,7 +901,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *            vertex key
 	 * @return vertex
 	 */
-	public final HE_Vertex getVertexByKey(final Long key) {
+	public final HE_Vertex getVertexByKey(final long key) {
 		return vertices.getByKey(key);
 	}
 
