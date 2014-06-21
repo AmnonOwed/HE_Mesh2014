@@ -866,7 +866,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	public WB_IndexedSegment[] getIndexedSegments() {
 		final WB_IndexedSegment[] result = new WB_IndexedSegment[getNumberOfEdges()];
 		final WB_Point[] points = getVerticesAsPoint();
-		final FastMap<Long, Integer> map = new FastMap<Long, Integer>();
+		final TLongIntMap map = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		map.putAll(vertexKeyToIndex());
 		final Iterator<HE_Edge> eItr = eItr();
 		HE_Edge e;
@@ -888,7 +888,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 */
 	public WB_Frame getFrame() {
 		final WB_Frame frame = new WB_Frame(getVerticesAsPoint());
-		final FastMap<Long, Integer> map = new FastMap<Long, Integer>();
+		final TLongIntMap map = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		map.putAll(vertexKeyToIndex());
 		final Iterator<HE_Edge> eItr = eItr();
 		HE_Edge e;

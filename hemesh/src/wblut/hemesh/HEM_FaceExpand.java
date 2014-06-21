@@ -1,9 +1,11 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongIntMap;
+import gnu.trove.map.hash.TLongIntHashMap;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javolution.util.FastMap;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
@@ -44,7 +46,8 @@ public class HEM_FaceExpand extends HEM_Modifier {
 		}
 
 		Iterator<HE_Face> fItr = mesh.fItr();
-		final FastMap<Long, Integer> halfedgeCorrelation = new FastMap<Long, Integer>();
+		final TLongIntMap halfedgeCorrelation = new TLongIntHashMap(10, 0.5f,
+				-1L, 1);
 		final ArrayList<WB_Point> newVertices = new ArrayList<WB_Point>();
 		HE_Face f;
 		HE_Halfedge he;
@@ -57,14 +60,14 @@ public class HEM_FaceExpand extends HEM_Modifier {
 			f = fItr.next();
 			final WB_Plane planef = f.toPlane(d);
 			he = f.getHalfedge();
-			System.out.println(he);
+
 			fn = f.getFaceNormal();
 			do {
 
 				v = he.getVertex();
-				System.out.println(v + " " + v.getHalfedge());
+
 				vn = v.getVertexNormal();
-				System.out.println(vn);
+
 				final WB_Point p;
 				if (vn.isParallel(fn)) {
 					p = new WB_Point(v);
@@ -83,7 +86,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 								he.getHalfedgeTangent());
 					}
 					p = WB_Intersection.getClosestPoint3D(v, lineff);
-					System.out.println(lineff + " " + p);
+
 				}
 
 				halfedgeCorrelation.put(he.key(), vertexCount);

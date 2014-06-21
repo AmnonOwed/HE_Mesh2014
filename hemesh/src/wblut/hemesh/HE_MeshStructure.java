@@ -955,4 +955,44 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		return _data.get(s);
 	}
 
+	public HE_Path createPathFromIndices(int[] vertices) {
+		HE_Path path = new HE_Path();
+		if (vertices.length > 1) {
+			HE_PathHalfedge phe = new HE_PathHalfedge();
+			HE_Halfedge he = selectHalfedge(getVertexByIndex(vertices[0]),
+					getVertexByIndex(vertices[1]));
+			if (he == null)
+				throw new IllegalArgumentException("Two vertices "
+						+ vertices[0] + " and " + vertices[1]
+						+ " in path are not connected.");
+			phe.setHalfedge(he);
+			path.setPathHalfedge(phe);
+			HE_PathHalfedge prevphe = phe;
+			for (int i = 1; i < vertices.length - 1; i++) {
+				he = selectHalfedge(getVertexByIndex(vertices[i]),
+						getVertexByIndex(vertices[i + 1]));
+				if (he == null)
+					throw new IllegalArgumentException("Two vertices "
+							+ vertices[i] + " and " + vertices[i + 1]
+							+ " in path are not connected.");
+				phe = new HE_PathHalfedge();
+				phe.setHalfedge(he);
+				prevphe.setNext(phe);
+				prevphe = phe;
+			}
+
+		}
+		return path;
+
+	}
+
+	public HE_Halfedge selectHalfedge(HE_Vertex v0, HE_Vertex v1) {
+		List<HE_Halfedge> hes = v0.getHalfedgeStar();
+		for (HE_Halfedge he : hes) {
+			if (he.getEndVertex() == v1)
+				return he;
+		}
+		return null;
+	}
+
 }

@@ -1,5 +1,8 @@
 package wblut.geom;
 
+import gnu.trove.map.TIntIntMap;
+import gnu.trove.map.hash.TIntIntHashMap;
+
 import java.awt.Font;
 import java.awt.Shape;
 import java.awt.font.FontRenderContext;
@@ -10,9 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.external.straightskeleton.Corner;
@@ -4716,7 +4717,7 @@ public class WB_GeometryFactory {
 
 	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh) {
 		final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
-		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>();
+		final TIntIntMap oldnew = new TIntIntHashMap(10, 0.5f, -1, -1);
 		final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
 
 		WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
@@ -4753,7 +4754,7 @@ public class WB_GeometryFactory {
 	public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh,
 			double threshold) {
 		final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
-		final Map<Integer, Integer> oldnew = new FastMap<Integer, Integer>();
+		final TIntIntMap oldnew = new TIntIntHashMap(10, 0.5f, -1, -1);
 		final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
 		double t2 = threshold * threshold;
 		WB_KDEntry<WB_IndexedPoint, Integer> neighbor;

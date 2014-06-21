@@ -270,15 +270,15 @@ public class HEC_FromFacelist extends HEC_Creator {
 			HE_Halfedge he;
 			if (normalcheck) {
 				// Create adjacency table
-				FastMap<Long, Integer[]> edges = new FastMap<Long, Integer[]>();
+				FastMap<Long, int[]> edges = new FastMap<Long, int[]>();
 				for (int i = 0; i < faces.length; i++) {
 					int[] face = faces[i];
 					int fl = face.length;
 					for (int j = 0; j < fl; j++) {
 						long ohash = ohash(face[j], face[(j + 1) % fl]);
-						Integer[] faces = edges.get(ohash);
+						int[] faces = edges.get(ohash);
 						if (faces == null) {
-							edges.put(ohash, new Integer[] { i, -1 });
+							edges.put(ohash, new int[] { i, -1 });
 
 						} else {
 							faces[1] = i;
@@ -301,7 +301,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 						visited[index] = true;
 						for (int j = 0; j < fl; j++) {
 							long ohash = ohash(face[j], face[(j + 1) % fl]);
-							Integer[] ns = edges.get(ohash);
+							int[] ns = edges.get(ohash);
 							if (ns != null) {
 								edges.remove(ohash);// no need to revisit
 													// previous edges

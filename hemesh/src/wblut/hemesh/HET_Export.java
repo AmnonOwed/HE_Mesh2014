@@ -1,5 +1,8 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongIntMap;
+import gnu.trove.map.hash.TLongIntHashMap;
+
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -7,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Iterator;
 
-import javolution.util.FastMap;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
@@ -49,7 +51,7 @@ public class HET_Export {
 		final int nOffset = obj.getCurrNormalOffset() + 1;
 		obj.newObject(new Long(mesh.getKey()).toString());
 		// vertices
-		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>();
+		final TLongIntMap keyToIndex = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Vertex> vItr = triMesh.vItr();
 		HE_Vertex v;
 		int i = 0;
@@ -237,28 +239,28 @@ public class HET_Export {
 	public static void saveToHemesh(final HE_Mesh mesh, final String path) {
 		final HET_HemeshWriter hem = new HET_HemeshWriter();
 		hem.beginSave(path);
-		final FastMap<Long, Integer> vertexKeys = new FastMap<Long, Integer>();
+		final TLongIntMap vertexKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Vertex> vItr = mesh.vItr();
 		int i = 0;
 		while (vItr.hasNext()) {
 			vertexKeys.put(vItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> halfedgeKeys = new FastMap<Long, Integer>();
+		final TLongIntMap halfedgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Halfedge> heItr = mesh.heItr();
 		i = 0;
 		while (heItr.hasNext()) {
 			halfedgeKeys.put(heItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> edgeKeys = new FastMap<Long, Integer>();
+		final TLongIntMap edgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Edge> eItr = mesh.eItr();
 		i = 0;
 		while (eItr.hasNext()) {
 			edgeKeys.put(eItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> faceKeys = new FastMap<Long, Integer>();
+		final TLongIntMap faceKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Face> fItr = mesh.fItr();
 		i = 0;
 		while (fItr.hasNext()) {
@@ -378,28 +380,28 @@ public class HET_Export {
 	public static void saveToBinaryHemesh(final HE_Mesh mesh, final String path) {
 		final HET_BinaryHemeshWriter hem = new HET_BinaryHemeshWriter();
 		hem.beginSave(path);
-		final FastMap<Long, Integer> vertexKeys = new FastMap<Long, Integer>();
+		final TLongIntMap vertexKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Vertex> vItr = mesh.vItr();
 		int i = 0;
 		while (vItr.hasNext()) {
 			vertexKeys.put(vItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> halfedgeKeys = new FastMap<Long, Integer>();
+		final TLongIntMap halfedgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Halfedge> heItr = mesh.heItr();
 		i = 0;
 		while (heItr.hasNext()) {
 			halfedgeKeys.put(heItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> edgeKeys = new FastMap<Long, Integer>();
+		final TLongIntMap edgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Edge> eItr = mesh.eItr();
 		i = 0;
 		while (eItr.hasNext()) {
 			edgeKeys.put(eItr.next().key(), i);
 			i++;
 		}
-		final FastMap<Long, Integer> faceKeys = new FastMap<Long, Integer>();
+		final TLongIntMap faceKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Face> fItr = mesh.fItr();
 		i = 0;
 		while (fItr.hasNext()) {
@@ -520,7 +522,7 @@ public class HET_Export {
 		triMesh.triangulate();
 		final int vOffset = pov.getCurrVertexOffset();
 		pov.beginMesh2(String.format("obj%d", mesh.getKey()));
-		final FastMap<Long, Integer> keyToIndex = new FastMap<Long, Integer>();
+		final TLongIntMap keyToIndex = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Vertex> vItr = triMesh.vItr();
 		final int vcount = mesh.getNumberOfVertices();
 		pov.total(vcount);

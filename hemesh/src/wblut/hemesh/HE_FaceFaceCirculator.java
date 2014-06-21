@@ -15,7 +15,8 @@ public class HE_FaceFaceCirculator implements Iterator<HE_Face> {
 
 	@Override
 	public boolean hasNext() {
-
+		if (_start == null)
+			return false;
 		return ((_current == null) || (_current.getNextInFace() != _start))
 				&& (_start != null);
 	}

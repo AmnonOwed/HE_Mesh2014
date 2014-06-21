@@ -2,6 +2,7 @@ package wblut.hemesh;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import javolution.util.FastMap;
 import wblut.geom.WB_Point;
@@ -22,7 +23,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 	private int numberOfPoints;
 
 	/** The vertex to point index. */
-	public FastMap<Long, Integer> vertexToPointIndex;
+	public Map<Long, Integer> vertexToPointIndex;
 
 	/**
 	 * Instantiates a new HEC_ConvexHull.

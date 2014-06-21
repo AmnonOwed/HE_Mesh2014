@@ -13,8 +13,6 @@
  */
 package wblut.hemesh;
 
-import java.util.Map.Entry;
-
 import javolution.util.FastMap;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_HashGrid;
@@ -712,11 +710,12 @@ public class HEC_IsoGrid extends HEC_Creator {
 		zedges = new FastMap<Integer, HE_Vertex>();
 		int c = 0;
 		int i, j, k, id, cc;
-		for (final Entry<Integer, Double> entry : values.getValues()) {
-			id = entry.getKey();
+		int[] keys = values.getKeys();
+		for (int key = 0; key < keys.length; key++) {
+			id = keys[key];
 			if ((c % 500) == 0) {
 				System.out.println("HEC_IsoSurface: Creating cell " + (c + 1)
-						+ " out of " + values.getValues().size() + ".");
+						+ " out of " + values + ".");
 			}
 			k = id / (values.getW() * values.getH());
 			i = id - k * (values.getW() * values.getH());

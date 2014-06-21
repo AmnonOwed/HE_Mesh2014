@@ -1,5 +1,8 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongDoubleMap;
+import gnu.trove.map.hash.TLongDoubleHashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +65,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	private Map<Long, WB_Vector> _halfedgeNormals;
 
 	/** Extrusion widths. */
-	private Map<Long, Double> _halfedgeEWs;
+	private TLongDoubleMap _halfedgeEWs;
 
 	/** Face centers. */
 	private Map<Long, WB_Point> _faceCenters;
@@ -247,7 +250,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		extruded = new HE_Selection(mesh);
 
 		_halfedgeNormals = new FastMap<Long, WB_Vector>();
-		_halfedgeEWs = new FastMap<Long, Double>();
+		_halfedgeEWs = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
 
 		if ((chamfer == 0) && (d == null) && (heights == null)) {
 			return mesh;
@@ -353,7 +356,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		}
 
 		_halfedgeNormals = new FastMap<Long, WB_Vector>();
-		_halfedgeEWs = new FastMap<Long, Double>();
+		_halfedgeEWs = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
 		if ((chamfer == 0) && flat && heights == null) {
 			return selection.parent;
 		}

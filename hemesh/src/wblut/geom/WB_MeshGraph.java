@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 import javolution.util.FastTable;
-import wblut.hemesh.HEC_Dodecahedron;
 import wblut.hemesh.HE_Mesh;
 
 public class WB_MeshGraph {
@@ -49,6 +48,10 @@ public class WB_MeshGraph {
 	public void computePaths(int i) {
 
 		WB_GVertex source = vertices[i];
+		for (int j = 0; j < vertices.length; j++) {
+			vertices[j].reset();
+
+		}
 		source.minDistance = 0.;
 		PriorityQueue<WB_GVertex> vertexQueue = new PriorityQueue<WB_GVertex>();
 		vertexQueue.add(source);
@@ -92,7 +95,7 @@ public class WB_MeshGraph {
 	}
 
 	public static void main(String[] args) {
-		WB_Geodesic geo = new WB_Geodesic(1.0, 4, 4, WB_Geodesic.ICOSAHEDRON);
+		WB_Geodesic geo = new WB_Geodesic(1.0, 8, 8, WB_Geodesic.ICOSAHEDRON);
 		WB_MeshGraph graph = new WB_MeshGraph(geo.getMesh());
 		for (WB_GVertex v : graph.vertices) {
 			int[] path = graph.getShortestPath(5, v.index);
@@ -103,8 +106,19 @@ public class WB_MeshGraph {
 			}
 			System.out.println(path[path.length - 1] + ".");
 		}
-		HE_Mesh mesh = new HE_Mesh(new HEC_Dodecahedron().setRadius(100));
+		HE_Mesh mesh = new HE_Mesh(geo.getMesh());
+		mesh.smooth();
 		graph = new WB_MeshGraph(mesh);
+		for (WB_GVertex v : graph.vertices) {
+			int[] path = graph.getShortestPath(0, v.index);
+			System.out.println("Distance to " + v + ": " + v.minDistance);
+			System.out.print("Path: ");
+			for (int i = 0; i < path.length - 1; i++) {
+				System.out.print(path[i] + "->");
+			}
+			System.out.println(path[path.length - 1] + ".");
+		}
+
 		for (WB_GVertex v : graph.vertices) {
 			int[] path = graph.getShortestPath(5, v.index);
 			System.out.println("Distance to " + v + ": " + v.minDistance);
@@ -134,6 +148,11 @@ public class WB_MeshGraph {
 
 		public int compareTo(WB_GVertex other) {
 			return Double.compare(minDistance, other.minDistance);
+		}
+
+		public void reset() {
+			minDistance = Double.POSITIVE_INFINITY;
+			previous = null;
 		}
 
 	}

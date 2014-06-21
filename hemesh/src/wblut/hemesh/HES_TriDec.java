@@ -1,9 +1,11 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongDoubleMap;
+import gnu.trove.map.hash.TLongDoubleHashMap;
+
 import java.util.Iterator;
 import java.util.List;
 
-import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
 import wblut.geom.WB_Plane;
@@ -16,7 +18,7 @@ public class HES_TriDec extends HES_Simplifier {
 	private HE_Mesh _mesh;
 	private Heap<HE_Halfedge> heap;
 
-	FastMap<Long, Double> vertexCost;
+	TLongDoubleMap vertexCost;
 
 	private int rep;
 
@@ -84,7 +86,7 @@ public class HES_TriDec extends HES_Simplifier {
 
 	private void buildHeap(HE_MeshStructure sel) {
 		heap = new Heap<HE_Halfedge>();
-		vertexCost = new FastMap<Long, Double>();
+		vertexCost = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
 		final Iterator<HE_Vertex> vItr = sel.vItr();
 
 		double min;

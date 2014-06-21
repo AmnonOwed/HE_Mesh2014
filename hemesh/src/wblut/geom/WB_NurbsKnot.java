@@ -1,9 +1,9 @@
 package wblut.geom;
 
-import java.util.Collections;
-
-import javolution.util.FastMap;
-import javolution.util.FastTable;
+import gnu.trove.list.TDoubleList;
+import gnu.trove.list.array.TDoubleArrayList;
+import gnu.trove.map.TDoubleIntMap;
+import gnu.trove.map.hash.TDoubleIntHashMap;
 import wblut.WB_Epsilon;
 
 public class WB_NurbsKnot {
@@ -283,13 +283,14 @@ public class WB_NurbsKnot {
 			throw new IllegalArgumentException(
 					"Cannot merge knots of different degree.");
 		}
-		final FastMap<Double, Integer> knotvalues = new FastMap<Double, Integer>();
+		final TDoubleIntMap knotvalues = new TDoubleIntHashMap(10, 0.5f,
+				Double.NaN, -1);
 		int total = 0;
 		for (int i = 0; i <= UA.m;) {
 			final double ua = UA.value(i);
 			final int mul = UA.multiplicity(ua);
-			final Integer mulex = knotvalues.get(ua);
-			if (mulex == null) {
+			final int mulex = knotvalues.get(ua);
+			if (mulex < 0) {
 				knotvalues.put(ua, mul);
 				total += mul;
 			} else if (mulex < mul) {
@@ -302,7 +303,7 @@ public class WB_NurbsKnot {
 			final double ub = UB.value(i);
 			final int mul = UB.multiplicity(ub);
 			final Integer mulex = knotvalues.get(ub);
-			if (mulex == null) {
+			if (mulex < 0) {
 				knotvalues.put(ub, mul);
 				total += mul;
 			} else if (mulex < mul) {
@@ -312,9 +313,9 @@ public class WB_NurbsKnot {
 			i += mul;
 		}
 
-		final FastTable<Double> distinctValues = new FastTable<Double>();
+		final TDoubleList distinctValues = new TDoubleArrayList();
 		distinctValues.addAll(knotvalues.keySet());
-		Collections.sort(distinctValues);
+		distinctValues.sort();
 		final double[] allValues = new double[total];
 		int offset = 0;
 		for (int i = 0; i < distinctValues.size(); i++) {

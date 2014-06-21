@@ -3,6 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 
 import wblut.geom.WB_Convex;
+import wblut.geom.WB_Distance;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
@@ -432,6 +433,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	public void setColor(int color) {
 		hecolor = color;
 
+	}
+
+	public double getLength() {
+		return WB_Distance.getDistance3D(getVertex(), getEndVertex());
 	}
 
 }

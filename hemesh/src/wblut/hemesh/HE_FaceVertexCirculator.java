@@ -15,7 +15,8 @@ public class HE_FaceVertexCirculator implements Iterator<HE_Vertex> {
 
 	@Override
 	public boolean hasNext() {
-
+		if (_start == null)
+			return false;
 		return (_current == null) || (_current.getNextInFace() != _start);
 	}
 

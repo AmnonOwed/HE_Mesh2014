@@ -1,13 +1,11 @@
 package wblut.geom;
 
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javolution.util.FastMap;
+import gnu.trove.map.TIntDoubleMap;
+import gnu.trove.map.hash.TIntDoubleHashMap;
 
 public class WB_HashGrid {
 
-	private final FastMap<Integer, Double> values;
+	private final TIntDoubleMap values;
 
 	private final double defaultValue;
 
@@ -19,7 +17,7 @@ public class WB_HashGrid {
 		this.L = L;
 		this.M = M;
 		KL = K * L;
-		values = new FastMap<Integer, Double>();
+		values = new TIntDoubleHashMap(10, 0.5f, -1, Double.NaN);
 		this.defaultValue = defaultValue;
 	}
 
@@ -28,7 +26,7 @@ public class WB_HashGrid {
 		this.L = L;
 		this.M = M;
 		KL = K * L;
-		values = new FastMap<Integer, Double>();
+		values = new TIntDoubleHashMap(10, 0.5f, -1, Double.NaN);
 		defaultValue = -10000000;
 	}
 
@@ -46,8 +44,8 @@ public class WB_HashGrid {
 			final int k) {
 		final int id = safeIndex(i, j, k);
 		if (id > 0) {
-			final Double v = values.get(id);
-			if (v == null) {
+			final double v = values.get(id);
+			if (v == Double.NaN) {
 				values.put(id, value);
 			} else {
 				values.put(id, v + value);
@@ -122,8 +120,13 @@ public class WB_HashGrid {
 		return defaultValue;
 	}
 
-	public Set<Entry<Integer, Double>> getValues() {
-		return values.entrySet();
+	public int[] getKeys() {
+		return values.keys();
+	}
+
+	public int size() {
+		return values.size();
+
 	}
 
 }

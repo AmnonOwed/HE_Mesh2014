@@ -2,8 +2,8 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
-import javolution.util.FastMap;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_FrameNode;
 import wblut.geom.WB_FrameStrut;
@@ -499,7 +499,7 @@ public class HEC_FromFrame extends HEC_Creator {
 							.setPointsFromVertices(hullPoints);
 					final HE_Mesh tmp = new HE_Mesh(ch);
 
-					final FastMap<Long, Integer> vertexToPointIndex = ch.vertexToPointIndex;
+					final Map<Long, Integer> vertexToPointIndex = ch.vertexToPointIndex;
 
 					final Iterator<HE_Face> tmpfItr = tmp.fItr();
 

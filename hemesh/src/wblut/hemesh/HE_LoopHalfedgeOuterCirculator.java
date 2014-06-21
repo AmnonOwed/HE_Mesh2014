@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 public class HE_LoopHalfedgeOuterCirculator implements Iterator<HE_Halfedge> {
 
-	private final HE_LoopHalfedge _start;
-	private HE_LoopHalfedge _current;
+	private final HE_PathHalfedge _start;
+	private HE_PathHalfedge _current;
 
 	public HE_LoopHalfedgeOuterCirculator(final HE_Loop loop) {
 		_start = loop.getLoopHalfedge();
@@ -15,8 +15,9 @@ public class HE_LoopHalfedgeOuterCirculator implements Iterator<HE_Halfedge> {
 
 	@Override
 	public boolean hasNext() {
-
-		return (_current == null) || (_current.getPrevInLoop() != _start);
+		if (_start == null)
+			return false;
+		return (_current == null) || (_current.getPrevInPath() != _start);
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class HE_LoopHalfedgeOuterCirculator implements Iterator<HE_Halfedge> {
 		if (_current == null) {
 			_current = _start;
 		} else {
-			_current = _current.getPrevInLoop();
+			_current = _current.getPrevInPath();
 		}
 		return _current.getHalfedge().getPair();
 	}

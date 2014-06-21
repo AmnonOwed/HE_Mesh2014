@@ -23,6 +23,5 @@ public class HE_HalfedgeIterator implements Iterator<HE_Halfedge> {
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
-
 	}
 }

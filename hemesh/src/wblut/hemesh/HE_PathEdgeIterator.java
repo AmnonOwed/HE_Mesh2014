@@ -2,13 +2,13 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-public class HE_LoopFaceOuterCirculator implements Iterator<HE_Face> {
+public class HE_PathEdgeIterator implements Iterator<HE_Edge> {
 
 	private final HE_PathHalfedge _start;
 	private HE_PathHalfedge _current;
 
-	public HE_LoopFaceOuterCirculator(final HE_Loop loop) {
-		_start = loop.getLoopHalfedge();
+	public HE_PathEdgeIterator(final HE_Path path) {
+		_start = path.getPathHalfedge();
 		_current = null;
 
 	}
@@ -17,17 +17,19 @@ public class HE_LoopFaceOuterCirculator implements Iterator<HE_Face> {
 	public boolean hasNext() {
 		if (_start == null)
 			return false;
-		return (_current == null) || (_current.getPrevInPath() != _start);
+		return (_current == null)
+				|| ((_current.getNextInPath() != _start) && (_current
+						.getNextInPath() != null));
 	}
 
 	@Override
-	public HE_Face next() {
+	public HE_Edge next() {
 		if (_current == null) {
 			_current = _start;
 		} else {
-			_current = _current.getPrevInPath();
+			_current = _current.getNextInPath();
 		}
-		return _current.getHalfedge().getPair().getFace();
+		return _current.getHalfedge().getEdge();
 	}
 
 	@Override

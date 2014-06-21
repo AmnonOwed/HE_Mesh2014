@@ -4,8 +4,8 @@ import java.util.Iterator;
 
 public class HE_LoopVertexCirculator implements Iterator<HE_Vertex> {
 
-	private final HE_LoopHalfedge _start;
-	private HE_LoopHalfedge _current;
+	private final HE_PathHalfedge _start;
+	private HE_PathHalfedge _current;
 
 	public HE_LoopVertexCirculator(final HE_Loop loop) {
 		_start = loop.getLoopHalfedge();
@@ -15,8 +15,9 @@ public class HE_LoopVertexCirculator implements Iterator<HE_Vertex> {
 
 	@Override
 	public boolean hasNext() {
-
-		return (_current == null) || (_current.getNextInLoop() != _start);
+		if (_start == null)
+			return false;
+		return (_current == null) || (_current.getNextInPath() != _start);
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class HE_LoopVertexCirculator implements Iterator<HE_Vertex> {
 		if (_current == null) {
 			_current = _start;
 		} else {
-			_current = _current.getNextInLoop();
+			_current = _current.getNextInPath();
 		}
 		return _current.getHalfedge().getVertex();
 	}

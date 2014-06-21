@@ -16,7 +16,8 @@ public class HE_VertexEdgeCirculator<V extends HE_Vertex> implements
 
 	@Override
 	public boolean hasNext() {
-
+		if (_start == null)
+			return false;
 		return ((_current == null) || (_current.getNextInVertex() != _start))
 				&& (_start != null);
 	}

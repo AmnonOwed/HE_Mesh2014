@@ -23,18 +23,13 @@ public class HEC_SweepTube extends HEC_Creator {
 	/** Steps along curve. */
 	private int steps;
 
-	/** The curve. */
+	/** Sweep curve. */
 	private WB_BSpline curve;
 
-	/** The topcap. */
 	private boolean topcap;
 
-	/** The bottomcap. */
 	private boolean bottomcap;
 
-	/**
-	 * Instantiates a new hE c_ sweep tube.
-	 */
 	public HEC_SweepTube() {
 		super();
 		R = 0;
@@ -45,18 +40,6 @@ public class HEC_SweepTube extends HEC_Creator {
 		override = true;
 	}
 
-	/**
-	 * Instantiates a new hE c_ sweep tube.
-	 * 
-	 * @param R
-	 *            the r
-	 * @param facets
-	 *            the facets
-	 * @param steps
-	 *            the steps
-	 * @param curve
-	 *            the curve
-	 */
 	public HEC_SweepTube(final double R, final int facets, final int steps,
 			final WB_BSpline curve) {
 		this();
@@ -118,13 +101,6 @@ public class HEC_SweepTube extends HEC_Creator {
 		return this;
 	}
 
-	/**
-	 * Sets the curve.
-	 * 
-	 * @param curve
-	 *            the curve
-	 * @return the hE c_ sweep tube
-	 */
 	public HEC_SweepTube setCurve(final WB_BSpline curve) {
 		this.curve = curve;
 		return this;
