@@ -3,6 +3,9 @@ wblut.external.JAMA
 wblut.external.ProGAL
 wblut.external.straightskeleton
 wblut.geom
+wblut.geom.data
+wblut.geom.interfaces
 wblut.hemesh
 wblut.math
+wblut.math.parameter
 wblut.processing
