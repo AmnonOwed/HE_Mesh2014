@@ -81,7 +81,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 			return mesh;
 
 		}
-		final int[][] faces = source.getFaces();
+		final int[][] faces = source.getFacesAsInt();
 
 		final List<HE_Vertex> uniqueVertices = getUniqueVertices(mesh);
 

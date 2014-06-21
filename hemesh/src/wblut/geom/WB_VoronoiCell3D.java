@@ -133,7 +133,7 @@ public class WB_VoronoiCell3D {
 				newPoints.add(cell.getVertex(i));
 			}
 		}
-		final int[][] edges = cell.getEdges();
+		final int[][] edges = cell.getEdgesAsInt();
 		for (final int[] edge : edges) {
 			if (((classifyPoints[edge[0]] == WB_Classification.BACK) && (classifyPoints[edge[1]] == WB_Classification.FRONT))
 					|| ((classifyPoints[edge[1]] == WB_Classification.BACK) && (classifyPoints[edge[0]] == WB_Classification.FRONT))) {

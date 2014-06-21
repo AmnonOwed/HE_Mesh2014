@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import javolution.util.FastTable;
 
-public class WB_FaceListMesh implements WB_Geometry {
+public class WB_FaceListMesh implements WB_Mesh {
 	protected int[][] faces;
 	/** points of line. */
 	protected WB_CoordinateSequence vertices;
@@ -130,31 +130,29 @@ public class WB_FaceListMesh implements WB_Geometry {
 
 	}
 
-	public int[][] getFaces() {
+	public int[][] getFacesAsInt() {
 		return faces;
 	}
 
-	public int[][] getEdges() {
+	public int[][] getEdgesAsInt() {
 		if (faces == null) {
 			return null;
 		}
-		int[] face;
 		int noe = 0;
 
-		for (final int[] face2 : faces) {
-			face = face2;
-			noe += face.length;
+		for (final int[] f : faces) {
+			noe += f.length;
 		}
 		noe /= 2;
 		final int[][] edges = new int[noe][2];
 		int id = 0;
-		for (final int[] face2 : faces) {
-			face = face2;
-			final int fl = face.length;
+		for (final int[] f : faces) {
+
+			final int fl = f.length;
 			for (int j = 0; j < fl; j++) {
-				if (face[j] < face[(j + 1) % fl]) {
-					edges[id][0] = face[j];
-					edges[id++][1] = face[(j + 1) % fl];
+				if (f[j] < f[(j + 1) % fl]) {
+					edges[id][0] = f[j];
+					edges[id++][1] = f[(j + 1) % fl];
 				}
 			}
 		}

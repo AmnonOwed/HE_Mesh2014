@@ -1,6 +1,8 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.TLongLongMap;
+import gnu.trove.map.hash.TLongIntHashMap;
 import gnu.trove.map.hash.TLongLongHashMap;
 
 import java.util.Arrays;
@@ -20,12 +22,14 @@ import wblut.geom.WB_Distance;
 import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryType;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Ray;
@@ -41,7 +45,7 @@ import wblut.geom.WB_Vector;
  * @author Frederik Vanhoutte (W:Blut)
  * 
  */
-public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
+public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -536,7 +540,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 	 */
 	public int[][] getFacesAsInt() {
 		final int[][] result = new int[getNumberOfFaces()][];
-		final FastMap<Long, Integer> vertexKeys = new FastMap<Long, Integer>();
+		final TLongIntMap vertexKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		final Iterator<HE_Vertex> vItr = vItr();
 		int i = 0;
 		while (vItr.hasNext()) {
@@ -5038,6 +5042,78 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData {
 
 			}
 		}
+
+	}
+
+	// WB_Mesh methods
+
+	@Override
+	public WB_GeometryType getType() {
+		return WB_GeometryType.MESH;
+	}
+
+	@Override
+	public int getDimension() {
+		return 3;
+	}
+
+	@Override
+	public int getEmbeddingDimension() {
+
+		return 3;
+	}
+
+	@Override
+	public HE_Mesh apply(WB_Transform T) {
+		HE_Mesh result = get();
+
+		return result.transform(T);
+	}
+
+	@Override
+	public WB_Vector getFaceNormal(int id) {
+		return getFaceByIndex(id).getFaceNormal();
+	}
+
+	@Override
+	public WB_Point getFaceCenter(int id) {
+		return getFaceByIndex(id).getFaceCenter();
+	}
+
+	@Override
+	public WB_Vector getVertexNormal(int i) {
+		return getVertexByIndex(i).getVertexNormal();
+	}
+
+	@Override
+	public WB_Coordinate getVertex(int i) {
+		return getVertexByIndex(i).pos;
+	}
+
+	@Override
+	public int[][] getEdgesAsInt() {
+		final int[][] result = new int[getNumberOfEdges()][2];
+		final TLongIntMap vertexKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
+		final Iterator<HE_Vertex> vItr = vItr();
+		int i = 0;
+		while (vItr.hasNext()) {
+			vertexKeys.put(vItr.next().key(), i);
+			i++;
+		}
+
+		final Iterator<HE_Edge> eItr = eItr();
+		HE_Halfedge he;
+		HE_Edge e;
+		i = 0;
+		while (eItr.hasNext()) {
+			e = eItr.next();
+			he = e.getHalfedge();
+			result[i][0] = vertexKeys.get(he.getVertex().key());
+			he = he.getPair();
+			result[i][1] = vertexKeys.get(he.getVertex().key());
+			i++;
+		}
+		return result;
 
 	}
 

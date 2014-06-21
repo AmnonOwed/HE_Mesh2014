@@ -346,7 +346,7 @@ public class WB_Render3D {
 		if (mesh == null) {
 			return;
 		}
-		for (final int[] face : mesh.getFaces()) {
+		for (final int[] face : mesh.getFacesAsInt()) {
 			drawPolygon(face, mesh.getVertices());
 		}
 

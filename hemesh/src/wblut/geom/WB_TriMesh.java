@@ -37,7 +37,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 	protected WB_TriMesh(final WB_FaceListMesh mesh) {
 		vertices = mesh.getVertices();
-		faces = mesh.getFaces();
+		faces = mesh.getFacesAsInt();
 		aabb = new WB_AABB(vertices);
 		triangulate();
 	}
