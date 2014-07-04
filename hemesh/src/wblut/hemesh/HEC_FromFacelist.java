@@ -241,7 +241,6 @@ public class HEC_FromFacelist extends HEC_Creator {
 				kdtree.add(v.pos, 0);
 				uniqueVertices[0] = v;
 				mesh.add(v);
-				int nuv = 1;
 				for (int i = 1; i < vertices.length; i++) {
 					v = new HE_Vertex(vertices[i]);
 					neighbors = kdtree.getNearestNeighbors(v.pos, 1);
@@ -251,7 +250,6 @@ public class HEC_FromFacelist extends HEC_Creator {
 						kdtree.add(v.pos, i);
 						uniqueVertices[i] = v;
 						mesh.add(uniqueVertices[i]);
-						nuv++;
 					}
 
 				}
@@ -386,21 +384,6 @@ public class HEC_FromFacelist extends HEC_Creator {
 
 		}
 		return mesh;
-	}
-
-	/**
-	 * Hash.
-	 * 
-	 * @param u
-	 *            the u
-	 * @param v
-	 *            the v
-	 * @return the long
-	 */
-	private Long hash(int u, int v) {
-		long A = (u >= 0) ? 2 * u : -2 * u - 1;
-		long B = (v >= 0) ? 2 * v : -2 * v - 1;
-		return (A >= B) ? A * A + A + B : A + B * B;
 	}
 
 	/**

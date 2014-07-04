@@ -189,16 +189,15 @@ public class WB_Polygon extends WB_Ring {
 
 	public WB_Triangulation2DWithPoints triangulate() {
 
-		final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
-				points.size());
 		final List<WB_IndexedPoint> pts = new FastTable<WB_IndexedPoint>();
 		for (int i = 0; i < n; i++) {
 			pts.add(points.getPoint(i));
 		}
 		int index = n;
-		final List[] hpts = new FastTable[numberOfHoles];
+		@SuppressWarnings("unchecked")
+		final List<WB_IndexedPoint>[] hpts = new FastTable[numberOfHoles];
 		for (int i = 0; i < numberOfHoles; i++) {
-			hpts[i] = new FastTable<WB_Point>();
+			hpts[i] = new FastTable<WB_IndexedPoint>();
 			for (int j = 0; j < nph[i]; j++) {
 				hpts[i].add(points.getPoint(index++));
 			}
@@ -221,10 +220,10 @@ public class WB_Polygon extends WB_Ring {
 
 			triangles = triangulation.getTriangles();
 
-			final List<WB_Point> tripoints = triangulation.getPoints();
+			final List<WB_Coordinate> tripoints = triangulation.getPoints();
 			final int[] intmap = new int[tripoints.size()];
 			int index = 0;
-			for (final WB_Point point : tripoints) {
+			for (final WB_Coordinate point : tripoints) {
 				final int found = pointmap.getNearestNeighbor(point).value;
 				intmap[index++] = found;
 			}

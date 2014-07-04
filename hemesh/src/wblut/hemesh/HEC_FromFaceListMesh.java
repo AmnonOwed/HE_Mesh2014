@@ -124,7 +124,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 					he.getVertex().setHalfedge(he);
 				}
 				mesh.add(hef);
-				mesh.cycleHalfedges(faceEdges);
+				HE_Mesh.cycleHalfedges(faceEdges);
 				mesh.addHalfedges(faceEdges);
 			}
 		}
@@ -208,7 +208,6 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 			kdtree.add(source.getVertex(0), 0);
 			uniqueVertices.add(v);
 			mesh.add(v);
-			int nuv = 1;
 			for (int i = 1; i < source.getNumberOfVertices(); i++) {
 				v = new HE_Vertex(source.getVertex(i));
 				v.setLabel(i);
@@ -219,7 +218,6 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 					kdtree.add(source.getVertex(i), i);
 					uniqueVertices.add(v);
 					mesh.add(uniqueVertices.get(i));
-					nuv++;
 				}
 			}
 		} else {

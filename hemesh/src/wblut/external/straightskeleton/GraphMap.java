@@ -14,7 +14,7 @@ import java.util.Map;
  * @author twak
  */
 public class GraphMap<E> {
-	public Map<E, List<E>> map = new LinkedHashMap();
+	public Map<E, List<E>> map = new LinkedHashMap<E, List<E>>();
 
 	public void add(E a, E b) {
 		addEntry(a, b);
@@ -24,7 +24,7 @@ public class GraphMap<E> {
 	private void addEntry(E a, E b) {
 		List<E> res = map.get(a);
 		if (res == null) {
-			res = new ArrayList();
+			res = new ArrayList<E>();
 			map.put(a, res);
 		}
 
@@ -40,7 +40,7 @@ public class GraphMap<E> {
 		map.clear();
 	}
 
-	public void addEntriesFrom(GraphMap otherMap) {
+	public void addEntriesFrom(GraphMap<?> otherMap) {
 		if (otherMap == this)
 			return; // done!
 

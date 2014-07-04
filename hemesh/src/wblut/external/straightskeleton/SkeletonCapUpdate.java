@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import wblut.external.straightskeleton.SkeletonCapUpdate.EdgeInfo;
+import wblut.external.straightskeleton.SkeletonCapUpdate.Segment;
+
 /**
  * Part of campskeleton: http://code.google.com/p/campskeleton/
  * 
@@ -24,10 +27,10 @@ public class SkeletonCapUpdate {
 	double height;
 	// DHash<Edge,Edge> edgeMap; // new-> old between cap (old) -> skeleton
 	// (very old)
-	DHash<Corner, Corner> oBCorner = new DHash();
+	DHash<Corner, Corner> oBCorner = new DHash<Corner, Corner>();
 
 	LoopL<Corner> oldCorners;
-	Map<Edge, EdgeInfo> edgeInfo = new HashMap();
+	Map<Edge, EdgeInfo> edgeInfo = new HashMap<Edge, EdgeInfo>();
 
 	// given in update
 	DHash<Corner, Corner> nOCorner;
@@ -77,7 +80,7 @@ public class SkeletonCapUpdate {
 		// topSegs = new LinkedHashSet(),
 		// bottomSegs = new LinkedHashSet();
 
-		List<Segment> segs = new ArrayList();
+		List<Segment> segs = new ArrayList<Segment>();
 
 		public EdgeInfo(Edge base) {
 			this.base = base;
@@ -174,7 +177,7 @@ public class SkeletonCapUpdate {
 			}
 		}
 
-		Set<Corner> cornersToDelete = new HashSet(skel.liveCorners);
+		Set<Corner> cornersToDelete = new HashSet<Corner>(skel.liveCorners);
 
 		for (Corner c : newPlan.eIterator())
 			collectCorners(c, cornersToDelete);

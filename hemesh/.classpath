@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/processing-2.1.1/core/library/core.jar"/>
-	<classpathentry kind="lib" path="D:/dev/externallibs/jts.jar"/>
-	<classpathentry kind="lib" path="D:/dev/externallibs/javolution-6.1.0.jar"/>
-	<classpathentry kind="lib" path="D:/dev/externallibs/trove-3.1a1.jar"/>
+	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/core.jar"/>
+	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/jts.jar"/>
+	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/javolution-6.1.0.jar"/>
+	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/trove-3.1a1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

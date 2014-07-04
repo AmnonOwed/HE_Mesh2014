@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
@@ -104,14 +105,14 @@ public class WB_Render2D {
 		for (int i = 0; i < P.getNumberOfPoints(); i++) {
 			vertex(P.getPoint(index++));
 		}
-		home.endShape(home.CLOSE);
+		home.endShape(PConstants.CLOSE);
 		final int[] nph = P.getNumberOfPointsPerHole();
 		for (int i = 0; i < P.getNumberOfHoles(); i++) {
 			home.beginShape();
 			for (int j = 0; j < nph[i]; j++) {
 				vertex(P.getPoint(index++));
 			}
-			home.endShape(home.CLOSE);
+			home.endShape(PConstants.CLOSE);
 		}
 
 	}
@@ -122,7 +123,7 @@ public class WB_Render2D {
 	}
 
 	public void drawTriangle(final WB_Triangle T) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(T.p1());
 		vertex(T.p2());
 		vertex(T.p3());
@@ -131,7 +132,7 @@ public class WB_Render2D {
 
 	public void drawTriangle(final WB_Coordinate p1, final WB_Coordinate p2,
 			final WB_Coordinate p3) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(p1);
 		vertex(p2);
 		vertex(p3);
@@ -140,7 +141,7 @@ public class WB_Render2D {
 
 	public void drawTriangle(final int[] tri,
 			final List<? extends WB_Coordinate> points) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(points.get(0));
 		vertex(points.get(1));
 		vertex(points.get(2));
@@ -148,7 +149,7 @@ public class WB_Render2D {
 	}
 
 	public void drawTriangle(final int[] tri, final WB_Coordinate[] points) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(points[0]);
 		vertex(points[1]);
 		vertex(points[2]);
@@ -158,7 +159,7 @@ public class WB_Render2D {
 	public void drawTriangulation(final WB_Triangulation2D tri,
 			final List<? extends WB_Coordinate> points) {
 		final int[][] triangles = tri.getTriangles();
-		home.beginShape(home.TRIANGLES);
+		home.beginShape(PConstants.TRIANGLES);
 		for (final int[] triangle : triangles) {
 			vertex(points.get(triangle[0]));
 			vertex(points.get(triangle[1]));
@@ -186,42 +187,52 @@ public class WB_Render2D {
 		if (geometry instanceof WB_Coordinate) {
 			if (f.length == 0) {
 				drawPoint((WB_Coordinate) geometry);
-			} else if (f.length == 1) {
+			}
+			else if (f.length == 1) {
 				drawPoint((WB_Coordinate) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Segment) {
+		}
+		else if (geometry instanceof WB_Segment) {
 			if (f.length == 0) {
 				drawSegment((WB_Segment) geometry);
 			}
-		} else if (geometry instanceof WB_Ray) {
+		}
+		else if (geometry instanceof WB_Ray) {
 			if (f.length == 1) {
 				drawRay((WB_Ray) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Line) {
+		}
+		else if (geometry instanceof WB_Line) {
 			if (f.length == 1) {
 				drawLine((WB_Line) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Circle) {
+		}
+		else if (geometry instanceof WB_Circle) {
 			if (f.length == 0) {
 				drawCircle((WB_Circle) geometry);
 			}
-		} else if (geometry instanceof WB_Triangle) {
+		}
+		else if (geometry instanceof WB_Triangle) {
 			if (f.length == 0) {
 				drawTriangle((WB_Triangle) geometry);
 			}
-		} else if (geometry instanceof WB_Polygon) {
+		}
+		else if (geometry instanceof WB_Polygon) {
 			if (f.length == 0) {
 				drawPolygon((WB_Polygon) geometry);
 			}
-		} else if (geometry instanceof WB_Ring) {
+		}
+		else if (geometry instanceof WB_Ring) {
 			if (f.length == 0) {
 				drawRing((WB_Ring) geometry);
 			}
-		} else if (geometry instanceof WB_PolyLine) {
+		}
+		else if (geometry instanceof WB_PolyLine) {
 			if (f.length == 0) {
 				drawPolyLine((WB_PolyLine) geometry);
 			}
-		} else if (geometry instanceof WB_GeometryCollection) {
+		}
+		else if (geometry instanceof WB_GeometryCollection) {
 			final WB_GeometryCollection geo = (WB_GeometryCollection) geometry;
 			for (int i = 0; i < geo.getNumberOfGeometries(); i++) {
 				draw(geo.getGeometry(i), f);

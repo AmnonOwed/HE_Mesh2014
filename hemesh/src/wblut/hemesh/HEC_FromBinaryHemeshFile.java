@@ -117,6 +117,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 					f.setHalfedge(halfedges.get(heid));
 				}
 			}
+			dis.close();
 			mesh.addVertices(vertices);
 			mesh.addHalfedges(halfedges);
 			mesh.addEdges(edges);

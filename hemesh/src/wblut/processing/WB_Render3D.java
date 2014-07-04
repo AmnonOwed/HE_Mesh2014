@@ -133,7 +133,7 @@ public class WB_Render3D {
 
 	public void drawSimplePolygon(final WB_Polygon P) {
 		{
-			home.beginShape(home.POLYGON);
+			home.beginShape(PConstants.POLYGON);
 			for (int i = 0; i < P.getNumberOfPoints(); i++) {
 				vertex(P.getPoint(i));
 			}
@@ -156,14 +156,14 @@ public class WB_Render3D {
 		for (int i = 0; i < P.getNumberOfPoints(); i++) {
 			vertex(P.getPoint(index++));
 		}
-		home.endShape(home.CLOSE);
+		home.endShape(PConstants.CLOSE);
 		final int[] nph = P.getNumberOfPointsPerHole();
 		for (int i = 0; i < P.getNumberOfHoles(); i++) {
 			home.beginShape();
 			for (int j = 0; j < nph[i]; j++) {
 				vertex(P.getPoint(index++));
 			}
-			home.endShape(home.CLOSE);
+			home.endShape(PConstants.CLOSE);
 		}
 
 	}
@@ -186,7 +186,7 @@ public class WB_Render3D {
 
 	public void drawTriangle(final WB_Coordinate p1, final WB_Coordinate p2,
 			final WB_Coordinate p3) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(p1);
 		vertex(p2);
 		vertex(p3);
@@ -195,7 +195,7 @@ public class WB_Render3D {
 
 	public void drawTriangle(final int[] tri,
 			final List<? extends WB_Coordinate> points) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(points.get(tri[0]));
 		vertex(points.get(tri[1]));
 		vertex(points.get(tri[2]));
@@ -203,7 +203,7 @@ public class WB_Render3D {
 	}
 
 	public void drawTriangle(final int[] tri, final WB_Coordinate[] points) {
-		home.beginShape(home.TRIANGLE);
+		home.beginShape(PConstants.TRIANGLE);
 		vertex(points[tri[0]]);
 		vertex(points[tri[1]]);
 		vertex(points[tri[2]]);
@@ -213,7 +213,7 @@ public class WB_Render3D {
 	public void drawTriangulation(final WB_Triangulation2D tri,
 			final List<? extends WB_Coordinate> points) {
 		final int[][] triangles = tri.getTriangles();
-		home.beginShape(home.TRIANGLES);
+		home.beginShape(PConstants.TRIANGLES);
 		for (final int[] triangle : triangles) {
 			vertex(points.get(triangle[0]));
 			vertex(points.get(triangle[1]));
@@ -233,7 +233,7 @@ public class WB_Render3D {
 	}
 
 	public void drawPlane(final WB_Plane P, final double d) {
-		home.beginShape(home.QUAD);
+		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
 				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
@@ -332,13 +332,13 @@ public class WB_Render3D {
 	private void drawPolygon(final int[] indices,
 			final WB_CoordinateSequence points) {
 		if (points != null && indices != null) {
-			home.beginShape(home.POLYGON);
+			home.beginShape(PConstants.POLYGON);
 			for (final int indice : indices) {
 				home.vertex((float) points.get(indice, 0),
 						(float) points.get(indice, 1),
 						(float) points.get(indice, 2));
 			}
-			home.endShape(home.CLOSE);
+			home.endShape(PConstants.CLOSE);
 		}
 	}
 
@@ -354,7 +354,7 @@ public class WB_Render3D {
 
 	public PShape toSmoothPShape(final WB_FaceListMesh mesh) {
 		final PShape retained = home.createShape();
-		retained.beginShape(home.TRIANGLES);
+		retained.beginShape(PConstants.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_Vector v = geometryfactory.createVector();
 		final WB_CoordinateSequence seq = lmesh.getVertices();
@@ -384,7 +384,7 @@ public class WB_Render3D {
 
 	public PShape toFacetedPShape(final WB_FaceListMesh mesh) {
 		final PShape retained = home.createShape();
-		retained.beginShape(home.TRIANGLES);
+		retained.beginShape(PConstants.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_CoordinateSequence seq = lmesh.getVertices();
 		WB_IndexedPoint p = seq.getPoint(0);
@@ -407,7 +407,7 @@ public class WB_Render3D {
 
 	public PShape toSmoothPShape(final HE_Mesh mesh) {
 		final PShape retained = home.createShape();
-		retained.beginShape(home.TRIANGLES);
+		retained.beginShape(PConstants.TRIANGLES);
 		final HE_Mesh lmesh = mesh.get();
 		lmesh.triangulate();
 		WB_Vector n = new WB_Vector();
@@ -434,7 +434,7 @@ public class WB_Render3D {
 
 	public PShape toFacetedPShape(final HE_Mesh mesh) {
 		final PShape retained = home.createShape();
-		retained.beginShape(home.TRIANGLES);
+		retained.beginShape(PConstants.TRIANGLES);
 		final HE_Mesh lmesh = mesh.get();
 		lmesh.triangulate();
 		Iterator<HE_Face> fItr = lmesh.fItr();
@@ -514,7 +514,7 @@ public class WB_Render3D {
 		}
 	}
 
-	public void drawGrid(final WB_Grid3D grid) {
+	public void drawGrid(final WB_Grid3D<Object> grid) {
 		float x, y, z;
 		float xl, yl, zl;
 		float xu, yu, zu;
@@ -972,7 +972,7 @@ public class WB_Render3D {
 	}
 
 	public void drawFace(final Long key, final HE_MeshStructure mesh) {
-		List<HE_Vertex> tmpVertices = new ArrayList<HE_Vertex>();
+
 		final HE_Face f = mesh.getFaceByKey(key);
 		if (f != null) {
 			drawFace(f, false);

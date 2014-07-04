@@ -128,7 +128,6 @@ public class HEC_SweepTube extends HEC_Creator {
 		WB_Point onCurve;
 		WB_Vector deriv;
 		WB_Vector oldderiv = new WB_Vector(0, 0, 1);
-		final WB_Vector Z = new WB_Vector(0, 0, 1);
 		final WB_Point origin = new WB_Point(0, 0, 0);
 		for (int i = 0; i < steps + 1; i++) {
 			onCurve = curve.curvePoint(i * ds);

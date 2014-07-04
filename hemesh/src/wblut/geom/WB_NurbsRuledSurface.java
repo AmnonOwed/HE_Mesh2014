@@ -7,17 +7,17 @@ public class WB_NurbsRuledSurface {
 			throw new IllegalArgumentException(
 					"Curves not defined on same parameter range.");
 		}
-		int degree;
+		;
 		final int degreeA = CA.p();
 		final int degreeB = CB.p();
 		if (degreeA < degreeB) {
-			degree = degreeB;
+
 			CA = CA.elevateDegree(degreeB - degreeA);
 		} else if (degreeB < degreeA) {
-			degree = degreeA;
+
 			CB = CB.elevateDegree(degreeA - degreeB);
 		} else {
-			degree = degreeA;
+
 		}
 		final WB_NurbsKnot mergedKnot = WB_NurbsKnot
 				.merge(CA.knot(), CB.knot());
@@ -40,17 +40,17 @@ public class WB_NurbsRuledSurface {
 			throw new IllegalArgumentException(
 					"Curves not defined on same parameter range.");
 		}
-		int degree;
+
 		final int degreeA = CA.p();
 		final int degreeB = CB.p();
 		if (degreeA < degreeB) {
-			degree = degreeB;
+
 			CA = CA.elevateDegree(degreeB - degreeA);
 		} else if (degreeB < degreeA) {
-			degree = degreeA;
+
 			CB = CB.elevateDegree(degreeA - degreeB);
 		} else {
-			degree = degreeA;
+
 		}
 		final WB_NurbsKnot mergedKnot = WB_NurbsKnot
 				.merge(CA.knot(), CB.knot());

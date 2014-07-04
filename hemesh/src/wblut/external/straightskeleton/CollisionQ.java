@@ -77,7 +77,7 @@ public class CollisionQ {
 		HeightEvent next = nextEvent();
 
 		if (next instanceof EdgeCollision) {
-			List<EdgeCollision> coHeighted = new ArrayList();
+			List<EdgeCollision> coHeighted = new ArrayList<EdgeCollision>();
 			EdgeCollision ec = (EdgeCollision) next;
 			coHeighted.add(ec);
 
@@ -219,7 +219,7 @@ public class CollisionQ {
 	}
 
 	boolean holdRemoves = false;
-	List<Corner> removes = new ArrayList();
+	List<Corner> removes = new ArrayList<Corner>();
 
 	public void holdRemoves() {
 		removes.clear();

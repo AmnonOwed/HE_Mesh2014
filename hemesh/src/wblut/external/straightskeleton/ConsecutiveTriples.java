@@ -27,7 +27,7 @@ public class ConsecutiveTriples<E> implements Iterator<Triple<E, E, E>>,
 	 *            is it cyclic? (do we return {end-1, end, start} etc...))
 	 */
 	public ConsecutiveTriples(Iterable<E> input, boolean loop) {
-		List<E> ha = new ArrayList();
+		List<E> ha = new ArrayList<E>();
 		Iterator<E> it = input.iterator();
 		while (it.hasNext())
 			ha.add(it.next());

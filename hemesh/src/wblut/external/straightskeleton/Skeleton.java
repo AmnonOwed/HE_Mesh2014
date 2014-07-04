@@ -14,35 +14,35 @@ import wblut.external.straightskeleton.Output.Face;
 
 /**
  * Part of campskeleton: http://code.google.com/p/campskeleton/
- * 
+ *
  * Original Copyright Notice: http://www.apache.org/licenses/LICENSE-2.0
  */
 /*
  * <pre> Skeleton skel = new Skeleton(edges); skel.skeleton(); </pre>
- * 
+ *
  * get output from
- * 
+ *
  * <pre> getOutput </pre>
- * 
+ *
  * @author twak
  */
 public class Skeleton {
-	public Set<Corner> liveCorners = new LinkedHashSet();
-	public Set<Edge> liveEdges = new LinkedHashSet();
+	public Set<Corner> liveCorners = new LinkedHashSet<Corner>();
+	public Set<Edge> liveEdges = new LinkedHashSet<Edge>();
 	public CollisionQ qu;
 	public double height = 0;
 	// public Set<Edge> inputEdges = new LinkedHashSet();
 
 	// we store the triplets of faces we've already passed out to stop repeats
 	// (insensitive to face order)
-	public Set<EdgeCollision> seen = new LinkedHashSet();
+	public Set<EdgeCollision> seen = new LinkedHashSet<EdgeCollision>();
 
 	// output data
-	public LoopL<Corner> flatTop = new LoopL();
+	public LoopL<Corner> flatTop = new LoopL<Corner>();
 	public Output output = new Output(this);
 
 	// debug
-	public List<CoSitedCollision> debugCollisionOrder = new ArrayList();
+	public List<CoSitedCollision> debugCollisionOrder = new ArrayList<CoSitedCollision>();
 
 	// after a direction change, keep track of the edges here
 	// public MultiMap<Edge, Edge> inputToOutputEdges = new MultiMap();
@@ -69,7 +69,7 @@ public class Skeleton {
 	// setup ( input );
 	// }
 
-	public Skeleton(LoopL<Corner> corners) {
+	public Skeleton(final LoopL<Corner> corners) {
 		setup(corners);
 	}
 
@@ -77,7 +77,8 @@ public class Skeleton {
 	 * @param input
 	 *            list of edges, edges shouldn't be repeated!
 	 */
-	public Skeleton(LoopL<Edge> input, boolean javaGenericsAreABigPileOfShite) {
+	public Skeleton(final LoopL<Edge> input,
+			final boolean javaGenericsAreABigPileOfShite) {
 		setupForEdges(input);
 	}
 
@@ -85,8 +86,8 @@ public class Skeleton {
 	 * @param cap
 	 *            height (flat-topped skeleton) to finish at
 	 */
-	public Skeleton(LoopL<Corner> input, final double cap,
-			boolean javaGenericsAreABigPileOfShite) {
+	public Skeleton(final LoopL<Corner> input, final double cap,
+			final boolean javaGenericsAreABigPileOfShite) {
 		setup(input);
 
 		qu.add(new HeightEvent() {
@@ -97,15 +98,15 @@ public class Skeleton {
 			}
 
 			@Override
-			public boolean process(Skeleton skel) {
-				SkeletonCapUpdate capUpdate = new SkeletonCapUpdate(skel);
+			public boolean process(final Skeleton skel) {
+				final SkeletonCapUpdate capUpdate = new SkeletonCapUpdate(skel);
 
 				flatTop = capUpdate.getCap(cap);
 
 				// DebugDevice.dump("pre cap dump", skel);
 				// this call should remove all geometry, and cap the
 				// remainder...?
-				capUpdate.update(new LoopL(),
+				capUpdate.update(new LoopL<Corner>(),
 						new SetCorrespondence<Corner, Corner>(),
 						new DHash<Corner, Corner>());
 
@@ -119,11 +120,11 @@ public class Skeleton {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param cap
 	 *            height (flat-topped skeleton) to finish at
 	 */
-	public Skeleton(LoopL<Edge> input, final double cap) {
+	public Skeleton(final LoopL<Edge> input, final double cap) {
 		setupForEdges(input);
 
 		qu.add(new HeightEvent() {
@@ -134,13 +135,13 @@ public class Skeleton {
 			}
 
 			@Override
-			public boolean process(Skeleton skel) {
-				SkeletonCapUpdate capUpdate = new SkeletonCapUpdate(skel);
+			public boolean process(final Skeleton skel) {
+				final SkeletonCapUpdate capUpdate = new SkeletonCapUpdate(skel);
 
 				flatTop = capUpdate.getCap(cap);
 				// this call should remove all geometry, and cap the
 				// remainder...?
-				capUpdate.update(new LoopL(),
+				capUpdate.update(new LoopL<Corner>(),
 						new SetCorrespondence<Corner, Corner>(),
 						new DHash<Corner, Corner>());
 
@@ -156,16 +157,16 @@ public class Skeleton {
 	/**
 	 * Stop-gap measure to convert loops of edges (BAD!) to loops of corners
 	 * (GOOD!)
-	 * 
+	 *
 	 * @param input
 	 */
-	public void setupForEdges(LoopL<Edge> input) {
-		LoopL<Corner> corners = new LoopL();
-		for (Loop<Edge> le : input) // input.count()
+	public void setupForEdges(final LoopL<Edge> input) {
+		final LoopL<Corner> corners = new LoopL<Corner>();
+		for (final Loop<Edge> le : input) // input.count()
 		{
-			Loop<Corner> lc = new Loop<Corner>();
+			final Loop<Corner> lc = new Loop<Corner>();
 			corners.add(lc);
-			for (Edge e : le) {
+			for (final Edge e : le) {
 				lc.append(e.start);
 				e.start.nextL = e;
 				e.end.prevL = e;
@@ -179,37 +180,39 @@ public class Skeleton {
 
 	/**
 	 * Sanitize input
-	 * 
+	 *
 	 * @param input
 	 */
-	public void setup(LoopL<Corner> input) {
+	public void setup(final LoopL<Corner> input) {
 		// reset all! (not needed...but maybe in future)
 		height = 0;
 		liveCorners.clear();
 		liveEdges.clear();
 
-		MultiMap<Edge, Corner> allEdges = new MultiMap();
+		final MultiMap<Edge, Corner> allEdges = new MultiMap<Edge, Corner>();
 
-		for (Corner c : input.eIterator())
+		for (final Corner c : input.eIterator()) {
 			// input.count()
 			allEdges.put(c.nextL, c);
+		}
 
 		// combine shared edges into single output faces
-		for (Edge e : allEdges.keySet()) // allEdges.size()
+		for (final Edge e : allEdges.keySet()) // allEdges.size()
 		{
 			e.currentCorners.clear();
-			List<Corner> corners = allEdges.get(e);
-			Corner first = corners.get(0);
+			final List<Corner> corners = allEdges.get(e);
+			final Corner first = corners.get(0);
 
 			output.newEdge(first.nextL, null);
 
-			for (int i = 1; i < corners.size(); i++)
+			for (int i = 1; i < corners.size(); i++) {
 				output.merge(first, corners.get(i));
+			}
 
 			liveEdges.add(e);
 		}
 
-		for (Corner c : input.eIterator()) {
+		for (final Corner c : input.eIterator()) {
 			output.newDefiningSegment(c);
 			liveCorners.add(c);
 			c.nextL.currentCorners.add(c);
@@ -218,7 +221,7 @@ public class Skeleton {
 
 		qu = new CollisionQ(this); // yay closely coupled classes
 
-		for (Edge e : allEdges.keySet()) {
+		for (final Edge e : allEdges.keySet()) {
 			e.machine.addEdge(e, this);
 		}
 
@@ -236,9 +239,7 @@ public class Skeleton {
 		validate();
 		HeightEvent he;
 
-		int i = 0;
-
-		while ((he = qu.poll()) != null)
+		while ((he = qu.poll()) != null) {
 			try {
 				if (he.process(this)) // business happens here
 				{
@@ -248,13 +249,15 @@ public class Skeleton {
 				}
 				// System.out.println("done at " + he.getHeight());
 				refindFaceEventsIfNeeded();
-			} catch (Throwable t) {
+			}
+			catch (final Throwable t) {
 				t.printStackTrace();
 				if (t.getCause() != null) {
 					System.out.println("  caused by:");
 					t.getCause().printStackTrace();
 				}
 			}
+		}
 
 		// build output polygons from constructed graph
 		output.calculate(this);
@@ -264,55 +267,58 @@ public class Skeleton {
 	 * This method returns a set of edges representing a horizontal slice
 	 * through the skeleton at the specified height (given that no other events
 	 * happen bewteen current height and given cap height).
-	 * 
+	 *
 	 * Topology assumed final - eg - we take a copy at of the slice at the given
 	 * height, not processing any more height events
-	 * 
+	 *
 	 * Non destructive - this doesn't change the skeleton. This routine is for
 	 * taking output mid-way through evaluation.
-	 * 
+	 *
 	 * All output edges have the same machines as their originators.
 	 */
 
 	public DHash<Corner, Corner> cornerMap; // contains lookup for results
-											// (new->old)
+	// (new->old)
 	public ManyManyMap<Corner, Corner> segmentMap; // contains lookup for
-													// results ( old -> new )
+	// results ( old -> new )
 
-	public LoopL<Corner> capCopy(double height) {
+	public LoopL<Corner> capCopy(final double height) {
 		segmentMap = new ManyManyMap<Corner, Corner>();
-		cornerMap = new DHash();
+		cornerMap = new DHash<Corner, Corner>();
 
-		LinearForm3D ceiling = new LinearForm3D(0, 0, 1, -height);
+		final LinearForm3D ceiling = new LinearForm3D(0, 0, 1, -height);
 
-		for (Corner c : liveCorners) {
+		for (final Corner c : liveCorners) {
 
 			try {
 				Tuple3d t;
 
 				// don't introduce instabilities if height is already as
 				// requested.
-				if (height == c.z)
+				if (height == c.z) {
 					t = new Point3d(c);
-				else
+				}
+				else {
 					t = ceiling.collide(c.prevL.linearForm, c.nextL.linearForm);
+				}
 
 				cornerMap.put(new Corner(t), c);
-			} catch (RuntimeException e) {
+			}
+			catch (final RuntimeException e) {
 				// assume, they're all coincident?
 				cornerMap.put(new Corner(c.x, c.y, height), c);
 			}
 		}
 
-		Cache<Corner, Edge> edgeCache = new Cache<Corner, Edge>() {
-			Map<Edge, Edge> lowToHighEdge = new HashMap();
+		final Cache<Corner, Edge> edgeCache = new Cache<Corner, Edge>() {
+			Map<Edge, Edge> lowToHighEdge = new HashMap<Edge, Edge>();
 
 			@Override
 			/**
 			 * @param i the low corner
 			 */
-			public Edge create(Corner i) {
-				Edge cached = lowToHighEdge.get(i.nextL);
+			public Edge create(final Corner i) {
+				lowToHighEdge.get(i.nextL);
 
 				// the following two lines reuse an edge when it is referenced
 				// twice. this seems like the better way to do it, but our
@@ -322,13 +328,14 @@ public class Skeleton {
 				// return cached; // this was one edge, (i.nextL), the raised
 				// copy will also be one edge
 
-				Edge edge = new Edge(cornerMap.teg(i), cornerMap.teg(i.nextC));
+				final Edge edge = new Edge(cornerMap.teg(i),
+						cornerMap.teg(i.nextC));
 
 				lowToHighEdge.put(i.nextL, edge);
 
 				edge.setAngle(i.nextL.getAngle());
 				edge.machine = i.nextL.machine; // nextL is null when we have a
-												// non root global
+				// non root global
 				// edge.profileFeatures = new
 				// LinkedHashSet<Feature>(current.nextL.profileFeatures);
 				// edgeMap.put( edge, current.nextL );
@@ -337,15 +344,15 @@ public class Skeleton {
 			}
 		};
 
-		LoopL<Corner> out = new LoopL();
+		final LoopL<Corner> out = new LoopL<Corner>();
 
-		Set<Corner> workingSet = new LinkedHashSet(liveCorners);
+		final Set<Corner> workingSet = new LinkedHashSet<Corner>(liveCorners);
 		while (!workingSet.isEmpty()) {
-			Loop<Corner> loop = new Loop();
+			final Loop<Corner> loop = new Loop<Corner>();
 			out.add(loop);
 			Corner current = workingSet.iterator().next();
 			do {
-				Corner s = cornerMap.teg(current), e = cornerMap
+				final Corner s = cornerMap.teg(current), e = cornerMap
 						.teg(current.nextC);
 
 				// one edge may have two segments, but the topology will not
@@ -353,7 +360,7 @@ public class Skeleton {
 				// so we may store the leading corner to match segments
 				segmentMap.addForwards(current, s);
 
-				Edge edge = edgeCache.get(current);
+				final Edge edge = edgeCache.get(current);
 
 				loop.append(s);
 				s.nextC = e;
@@ -375,8 +382,9 @@ public class Skeleton {
 
 	// when a face is parented, it is flagged here. this allows overriding
 	// classes to get even process this information
-	public void parent(Face child, Face parent) // parent is below (older than)
-												// child...
+	public void parent(final Face child, final Face parent) // parent is below
+															// (older than)
+	// child...
 	{
 		// override me
 	}
@@ -384,7 +392,7 @@ public class Skeleton {
 	/**
 	 * Given an input edge this method returns a list of all the current edges
 	 * that have come from that edge.
-	 * 
+	 *
 	 * It includes all replaceEdges() edges (not sure if this is correct)
 	 */
 	// public List<Edge> findCurrentEdges( Edge inputEdge )
@@ -411,9 +419,9 @@ public class Skeleton {
 	/**
 	 * Adds in the given set of edges, setting their height (z) to the current
 	 * height. These edges may new machines etc...
-	 * 
+	 *
 	 * We assume that all edge/corners are properly connected.
-	 * 
+	 *
 	 * Assume that the area on the sweep plane remains a simple polygon...
 	 */
 	// public void insertPlanAtHeight( LoopL<Corner> corners, double height )
@@ -515,7 +523,7 @@ public class Skeleton {
 
 	/**
 	 * Called whenever a new edge is created, with
-	 * 
+	 *
 	 * @param e
 	 * @param edgeH
 	 */
@@ -528,7 +536,7 @@ public class Skeleton {
 		Corner start, end;
 		Edge nextL, edge, prevL;
 
-		public SEC(Corner start, Edge edge) {
+		public SEC(final Corner start, final Edge edge) {
 			this.start = start;
 			end = start.nextC;
 			prevL = start.prevL;
@@ -541,11 +549,11 @@ public class Skeleton {
 	/**
 	 * Used for replacing one edge with a set of edges. Generally replaced by
 	 * SkeletonCapUpdate for more general topological setups.
-	 * 
+	 *
 	 * For each edge given, it's naturally extrueded to the given eHeight using
 	 * it's neighbouring edges ( assumes all collisions below eHeight complete).
 	 * It's then replaced with a new edge, specified by the edgeCreator factory
-	 * 
+	 *
 	 */
 	// public void replaceEdges( List<Edge> toReplace, EdgeCreator edgeCreator,
 	// double eHeight )
@@ -710,24 +718,26 @@ public class Skeleton {
 
 	private void refindFaceEventsIfNeeded() {
 		// on demand
-		if (!refindFaceEvents)
+		if (!refindFaceEvents) {
 			return;
+		}
 
 		/**
 		 * Very expensive part - refind all collisions (including those already
 		 * processed) MachineEvents remain in their current state
-		 * 
+		 *
 		 * should really only be done for those edges that have changed (change
 		 * for when we integrate eppsteins stuff)
 		 */
 
 		// context collects events that must be processed immediately following
 		// (eg horizontals...)
-		HeightCollision context = new HeightCollision();
+		final HeightCollision context = new HeightCollision();
 
 		qu.clearFaceEvents();
-		for (Corner lc : new CloneConfirmIterator<Corner>(liveCorners))
+		for (final Corner lc : new CloneConfirmIterator<Corner>(liveCorners)) {
 			qu.addCorner(lc, context);
+		}
 
 		// if we are not adding new events (and this isn't adding the input the
 		// first time)
@@ -762,9 +772,9 @@ public class Skeleton {
 	 */
 	public void validate() {
 		if (true) {
-			Set<Corner> all = new LinkedHashSet(liveCorners);
+			final Set<Corner> all = new LinkedHashSet<Corner>(liveCorners);
 			outer: while (!all.isEmpty()) {
-				Corner start = all.iterator().next();
+				final Corner start = all.iterator().next();
 				all.remove(start);
 
 				Corner next = start;
@@ -773,10 +783,10 @@ public class Skeleton {
 
 				do {
 					count++;
-					Corner c = next.nextC;
+					final Corner c = next.nextC;
 					all.remove(c);
 
-					Edge e = next.nextL;
+					final Edge e = next.nextL;
 					try {
 						assert (c.nextC.prevC == c);
 						assert (c.prevC.nextC == c);
@@ -787,26 +797,32 @@ public class Skeleton {
 						// assert ( e.start.nextC == e.end );
 						// assert ( e.end.prevC == e.start );
 						// liveEdges.contains(e)
-						for (Corner d : liveCorners) {
-							if (d.nextL == e || d.prevL == e)
+						for (final Corner d : liveCorners) {
+							if (d.nextL == e || d.prevL == e) {
 								assert (e.currentCorners.contains(d));
-							else
+							}
+							else {
 								assert (!e.currentCorners.contains(d));
+							}
 						}
 
-						for (Corner d : e.currentCorners)
+						for (final Corner d : e.currentCorners) {
 							assert (liveCorners.contains(d));
+						}
 
 						assert (count < 100);
-					} catch (AssertionError f) {
+					}
+					catch (final AssertionError f) {
 						System.err.println(" on edge is " + e);
 						System.err.println(" validate error on corner " + c
 								+ "  on line "
 								+ f.getStackTrace()[0].getLineNumber());
 						f.printStackTrace();
-					} finally {
-						if (count > 100)
+					}
+					finally {
+						if (count > 100) {
 							continue outer;
+						}
 					}
 
 					next = c;
@@ -822,7 +838,7 @@ public class Skeleton {
 			 * Volume maximizing resolution
 			 */
 			@Override
-			public int compare(Edge o1, Edge o2) {
+			public int compare(final Edge o1, final Edge o2) {
 				// if ( max )
 				return Double.compare(o1.getAngle(), o2.getAngle());
 				// else
@@ -832,14 +848,14 @@ public class Skeleton {
 	}
 
 	public LoopL<Corner> findLoopLive() {
-		LoopL<Corner> out = new LoopL<Corner>();
-		Set<Corner> togo = new HashSet(liveCorners);
+		final LoopL<Corner> out = new LoopL<Corner>();
+		final Set<Corner> togo = new HashSet<Corner>(liveCorners);
 
 		while (!togo.isEmpty()) {
-			Loop<Corner> loop = new Loop();
+			final Loop<Corner> loop = new Loop<Corner>();
 			out.add(loop);
 
-			Corner start = togo.iterator().next();
+			final Corner start = togo.iterator().next();
 
 			Corner current = start;
 			do {

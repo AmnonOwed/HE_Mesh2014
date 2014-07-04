@@ -33,12 +33,12 @@ public class Loop<E> implements Iterable<E> {
 
 	public Loopable<E> append(E append) {
 		if (start == null) {
-			start = new Loopable(append);
+			start = new Loopable<E>(append);
 			start.setNext(start);
 			start.setPrev(start);
 			return start;
 		} else {
-			Loopable<E> toAdd = new Loopable(append);
+			Loopable<E> toAdd = new Loopable<E>(append);
 
 			toAdd.setPrev(start.getPrev());
 			toAdd.setNext(start);
@@ -50,7 +50,7 @@ public class Loop<E> implements Iterable<E> {
 	}
 
 	public Loopable<E> addAfter(Loopable<E> loopable, E bar) {
-		Loopable<E> n = new Loopable(bar);
+		Loopable<E> n = new Loopable<E>(bar);
 		n.setPrev(loopable);
 		n.setNext(loopable.next);
 		n.getPrev().setNext(n);
@@ -118,10 +118,10 @@ public class Loop<E> implements Iterable<E> {
 		if (start == null)
 			return;
 
-		Loopable m = start;
+		Loopable<E> m = start;
 
 		do {
-			Loopable tmp = m.next;
+			Loopable<E> tmp = m.next;
 			m.next = m.prev;
 			m.prev = tmp;
 

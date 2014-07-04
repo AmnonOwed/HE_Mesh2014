@@ -32,7 +32,7 @@ public class LoopL<E> extends ArrayList<Loop<E>> {
 
 	public class EIterable implements Iterable<E> {
 		public Iterator<E> iterator() {
-			return new ItIt(LoopL.this);
+			return new ItIt<E>(LoopL.this);
 		}
 	}
 
@@ -100,8 +100,8 @@ public class LoopL<E> extends ArrayList<Loop<E>> {
 			return loopIt != null;
 		}
 
-		public LContext next() {
-			LContext out = new LContext(loopable, loop);
+		public LContext<E> next() {
+			LContext<E> out = new LContext<E>(loopable, loop);
 			findNext();
 			return out;
 		}

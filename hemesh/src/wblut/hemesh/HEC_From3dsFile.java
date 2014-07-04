@@ -1308,7 +1308,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 				int p0 = readUnsignedShort();
 				int p1 = readUnsignedShort();
 				int p2 = readUnsignedShort();
-				int flags = readUnsignedShort();
+				readUnsignedShort();
 				mes.mFace[n] = new int[] { p0, p1, p2 };
 			}
 
@@ -1338,7 +1338,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 		}
 
 		private void read_MSH_MAT_GROUP(Mesh3ds mes) throws Exception3ds {
-			String name = read_NAME();
+			read_NAME();
 
 			int indexes = readUnsignedShort();
 
@@ -1418,21 +1418,18 @@ public class HEC_From3dsFile extends HEC_Creator {
 				mDecode.enter();
 			}
 
-			int node_id = 0;
-			String name = "";
 			int mesh_index = 0;
-			Mesh3ds mes = null;
 
 			while (filePos() < chunk_end) {
 				Head head = read_HEAD();
 				switch (head.id) {
 				case CHUNK_NODE_ID:
-					node_id = read_NODE_ID();
+					read_NODE_ID();
 					break;
 				case CHUNK_NODE_HDR:
-					name = read_NAME();
+					read_NAME();
 
-					mes = mesh(mesh_index);
+					mesh(mesh_index);
 
 					readInt();
 					readUnsignedShort();
@@ -1486,18 +1483,14 @@ public class HEC_From3dsFile extends HEC_Creator {
 				mDecode.enter();
 			}
 
-			int target_node_id = 0;
-			String name = "";
-			int camera_index = 0;
-
 			while (filePos() < chunk_end) {
 				Head head = read_HEAD();
 				switch (head.id) {
 				case CHUNK_NODE_ID:
-					target_node_id = read_NODE_ID();
+					read_NODE_ID();
 					break;
 				case CHUNK_NODE_HDR:
-					name = read_NAME();
+					read_NAME();
 
 					readInt();
 					readUnsignedShort();
@@ -1528,18 +1521,14 @@ public class HEC_From3dsFile extends HEC_Creator {
 				mDecode.enter();
 			}
 
-			int position_node_id = 0;
-			String name = "";
-			int camera_index = 0;
-
 			while (filePos() < chunk_end) {
 				Head head = read_HEAD();
 				switch (head.id) {
 				case CHUNK_NODE_ID:
-					position_node_id = read_NODE_ID();
+					read_NODE_ID();
 					break;
 				case CHUNK_NODE_HDR:
-					name = read_NAME();
+					read_NAME();
 					readInt();
 					readUnsignedShort();
 					if (mDecode != null) {
@@ -1582,7 +1571,7 @@ public class HEC_From3dsFile extends HEC_Creator {
 		}
 
 		private int readTrackHead() throws Exception3ds {
-			int keys, flags;
+			int keys;
 
 			readUnsignedShort();
 

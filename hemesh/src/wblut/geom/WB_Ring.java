@@ -294,7 +294,6 @@ public class WB_Ring extends WB_PolyLine {
 			index++;
 		}
 
-		final double d = incLengths[index + 1] - incLengths[index];
 		final double x = t - incLengths[index];
 
 		return points.getPoint(index).addMul(x, directions.getVector(index));

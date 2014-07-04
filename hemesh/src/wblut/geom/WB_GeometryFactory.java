@@ -7669,7 +7669,7 @@ public class WB_GeometryFactory {
 		final FontRenderContext fontContext = new FontRenderContext(null,
 				false, true);
 		final GlyphVector gv = font.createGlyphVector(fontContext, chs);
-		final List polys = new ArrayList();
+		final List<?> polys = new ArrayList<Object>();
 		final List<WB_Polygon> geometries = new FastTable<WB_Polygon>();
 		for (int i = 0; i < gv.getNumGlyphs(); i++) {
 			geometries

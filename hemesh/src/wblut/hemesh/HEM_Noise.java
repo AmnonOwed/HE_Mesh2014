@@ -36,7 +36,7 @@ public class HEM_Noise extends HEM_Modifier {
 	 * @return this
 	 */
 	public HEM_Noise setDistance(final double d) {
-		this.d = new WB_ConstantParameter(d);
+		this.d = new WB_ConstantParameter<Double>(d);
 		return this;
 	}
 

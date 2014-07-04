@@ -84,7 +84,7 @@ class WB_ShapeReader {
 	}
 
 	public List<WB_Polygon> read(final PathIterator pathIt) {
-		final List pathPtSeq = toCoordinates(pathIt);
+		final List<Coordinate[]> pathPtSeq = toCoordinates(pathIt);
 		final RingTree tree = new RingTree();
 
 		for (int i = 0; i < pathPtSeq.size(); i++) {
@@ -95,8 +95,8 @@ class WB_ShapeReader {
 		return tree.extractPolygons();
 	}
 
-	private static List toCoordinates(final PathIterator pathIt) {
-		final List coordArrays = new ArrayList();
+	private static List<Coordinate[]> toCoordinates(final PathIterator pathIt) {
+		final List<Coordinate[]> coordArrays = new ArrayList<Coordinate[]>();
 		while (!pathIt.isDone()) {
 			final Coordinate[] pts = nextCoordinateArray(pathIt);
 			if (pts == null) {
@@ -144,16 +144,13 @@ class WB_ShapeReader {
 		return coordList.toCoordinateArray();
 	}
 
-	private boolean isHole(final Coordinate[] pts) {
-		return CGAlgorithms.isCCW(pts);
-	}
-
 	// The JTS implementation of ShapeReader does not handle overlapping
 	// polygons well. All code below this point is my solution for this. A
 	// hierarchical tree that orders rings from the outside in. All input has to
 	// be well-ordered: CW for shell, CCW for hole.
 
 	private static class RingNode {
+		@SuppressWarnings("unused")
 		RingNode parent;
 		List<RingNode> children;
 		LinearRing ring;

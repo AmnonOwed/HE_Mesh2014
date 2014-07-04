@@ -1120,7 +1120,7 @@ public class WB_LatLon {
 			throw new IllegalArgumentException();
 		}
 
-		Iterator iter = locations.iterator();
+		Iterator<? extends WB_LatLon> iter = locations.iterator();
 		if (!iter.hasNext())
 			return Collections.emptyList();
 

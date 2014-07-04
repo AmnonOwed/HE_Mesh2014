@@ -1109,7 +1109,7 @@ public abstract class WB_Delaunay {
 
 		if (Neighbors == null && mdim <= 3) {
 			Neighbors = new int[nrs][];
-			Set<Integer> temp = new HashSet();
+			Set<Integer> temp = new HashSet<Integer>();
 			for (int i = 0; i < nrs; i++) {
 				int[] tetras = Vertices[i];
 				for (int j = 0; j < tetras.length; j++) {

@@ -2,8 +2,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-public class HE_VertexFaceCirculator<V extends HE_Vertex> implements
-		Iterator<HE_Face> {
+public class HE_VertexFaceCirculator implements Iterator<HE_Face> {
 
 	private HE_Halfedge _start;
 	private HE_Halfedge _current;

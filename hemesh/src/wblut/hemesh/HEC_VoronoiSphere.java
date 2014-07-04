@@ -293,7 +293,6 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			kdtree.add(points[i], i);
 		}
 
-		int steps;
 		final WB_Point c = new WB_Point(points[index]);
 		WB_Point p;
 		WB_Vector r;
@@ -305,9 +304,9 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			double stepSize = traceStep;
 			int j = index;
 			while (stepSize > WB_Epsilon.EPSILON) {
-				steps = 0;
+
 				while ((j == index) && (d2self < cutoff * cutoff)) {
-					steps++;
+
 					p._addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
 							* r.zd());
 					d2self = WB_Distance.getSqDistance3D(p, c);

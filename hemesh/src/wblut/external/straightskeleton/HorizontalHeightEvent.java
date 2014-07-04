@@ -44,7 +44,7 @@ public class HorizontalHeightEvent extends DirectionHeightEvent {
 		// DebugDevice.dump( "horiz initial cap", cap);
 
 		double step = 100;
-		OffsetSkeleton<Machine> offsetSkel = new OffsetSkeleton(cap, step);
+		OffsetSkeleton<Machine> offsetSkel = new OffsetSkeleton<Machine>(cap, step);
 
 		// all those edges with the machine this height event is in, offset the
 		// given distance (other edges will be 0)
@@ -85,7 +85,7 @@ public class HorizontalHeightEvent extends DirectionHeightEvent {
 			}
 		};
 
-		Map<Corner, Corner> baseCornerToOldFace = new LinkedHashMap();
+		Map<Corner, Corner> baseCornerToOldFace = new LinkedHashMap<Corner, Corner>();
 		// add horizontal face to output mesh - fixme: does this add an extra
 		// face?
 		for (Face f : offsetSkel.outputSkeleton.output.faces.values()) {

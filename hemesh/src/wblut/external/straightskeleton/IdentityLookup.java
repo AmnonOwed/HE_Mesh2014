@@ -13,7 +13,7 @@ import java.util.Map;
  * @author twak
  */
 public class IdentityLookup<E> {
-	public Map<E, E> map = new LinkedHashMap();
+	public Map<E, E> map = new LinkedHashMap<E, E>();
 
 	public void put(E e) {
 		map.put(e, e);

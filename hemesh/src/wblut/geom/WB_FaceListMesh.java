@@ -249,7 +249,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 				/ self.getHeight());
 		f = Math.min(f, AABB.getDepth() / self.getDepth());
 		final WB_Vector center = geometryfactory.createVector(acx, acy, acz);
-		final List rescaled = new FastTable();
+		final List<WB_IndexedPoint> rescaled = new FastTable<WB_IndexedPoint>();
 		for (int i = 0; i < vertices.size(); i++) {
 			final WB_IndexedPoint p = vertices.getPoint(i);
 			p._addSelf(-scx, -scy, -scz);
@@ -622,7 +622,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 	@Override
 	public WB_FaceListMesh apply(final WB_Transform WB_Point) {
-		final FastTable newvertices = new FastTable();
+		final FastTable<WB_Point> newvertices = new FastTable<WB_Point>();
 		int id = 0;
 		WB_Point point;
 		for (int i = 0; i < vertices.size(); i++) {

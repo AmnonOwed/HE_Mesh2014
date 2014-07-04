@@ -31,7 +31,7 @@ public class WB_SelectRender3D {
 		scale = 1;// doesn't work yet
 		selector = (PGraphics3D) home.createGraphics(
 				(int) (home.width * scale), (int) (home.height * scale),
-				home.P3D);
+				PConstants.P3D);
 		selector.beginDraw();
 		selector.background(0);
 		selector.noLights();
@@ -224,12 +224,6 @@ public class WB_SelectRender3D {
 		selector.fill(currentColor);
 		selector.stroke(currentColor);
 
-	}
-
-	private void clear() {
-		selector.background(home.color(0));
-		colorToObject = new HashMap<Integer, Long>();
-		currentColor = -16777216;
 	}
 
 	public void image() {

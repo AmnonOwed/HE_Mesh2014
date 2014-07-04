@@ -16,8 +16,8 @@ import java.util.Set;
  * @author twak
  */
 public class ManyManyMap<A, B> {
-	private MultiMap<A, B> forwards = new MultiMap();
-	private MultiMap<B, A> backwards = new MultiMap();
+	private MultiMap<A, B> forwards = new MultiMap<A, B>();
+	private MultiMap<B, A> backwards = new MultiMap<B, A>();
 
 	public void addForwards(A from, B to) {
 		forwards.put(from, to);
@@ -52,7 +52,7 @@ public class ManyManyMap<A, B> {
 
 			for (Map.Entry<A, List<B>> es : forwards.map.entrySet())
 				for (C c : converter.get(es.getKey()))
-					out.forwards.putAll(c, new ArrayList(es.getValue()), true);
+					out.forwards.putAll(c, new ArrayList<B>(es.getValue()), true);
 
 			for (Map.Entry<B, List<A>> es : backwards.map.entrySet())
 				for (A a : es.getValue())
@@ -78,7 +78,7 @@ public class ManyManyMap<A, B> {
 
 			for (Map.Entry<B, List<A>> es : backwards.map.entrySet())
 				for (C c : converter.get(es.getKey()))
-					out.backwards.putAll(c, new ArrayList(es.getValue()), true);
+					out.backwards.putAll(c, new ArrayList<A>(es.getValue()), true);
 
 			return out;
 		}

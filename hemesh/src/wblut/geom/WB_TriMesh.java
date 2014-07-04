@@ -78,6 +78,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	 * lengths. According to the original paper it is perfect only for spherical
 	 * surface, but it should perform well...
 	 */
+	@SuppressWarnings("unused")
 	private void updateVertexNormalsSqLength() {
 		final int nv = vertices.size();
 		if (vNormalsUpdated) {
@@ -91,7 +92,6 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
 
-		final int nf = faces.length;
 		for (final int[] face : faces) {
 			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
 			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
@@ -117,6 +117,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void updateVertexNormalsArea() {
 		final int nv = vertices.size();
 		if (vNormalsUpdated) {
@@ -130,7 +131,6 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
 
-		final int nf = faces.length;
 		for (final int[] face : faces) {
 			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
 			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
@@ -175,7 +175,6 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
 
-		final int nf = faces.length;
 		int i = 0;
 		for (final int[] face : faces) {
 			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
@@ -205,6 +204,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void updateVertexNormalsNoWeight() {
 		final int nv = vertices.size();
 		if (vNormalsUpdated) {
@@ -218,7 +218,6 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
 
-		final int nf = faces.length;
 		int i = 0;
 		for (final int[] face : faces) {
 			final WB_Vector fn = faceNormals[i];
@@ -302,7 +301,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		updateVertexNormals();
 		updatePointAreas();
 		final int nv = vertices.size();
-		final int nf = faces.length;
+
 		k1min = k2min = Kmin = Double.POSITIVE_INFINITY;
 		k1max = k2max = Kmax = Double.NEGATIVE_INFINITY;
 		curv1 = new double[nv];
@@ -402,7 +401,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		}
 		updateCurvatures();
 		final int nv = vertices.size();
-		final int nf = faces.length;
+
 		dcurv = new double[nv][4];
 
 		int i = 0;

@@ -13,8 +13,8 @@ import java.util.Map;
  * @author twak
  */
 public class DHash<A, B> {
-	public Map<A, B> ab = new LinkedHashMap();
-	public Map<B, A> ba = new LinkedHashMap();
+	public Map<A, B> ab = new LinkedHashMap<A, B>();
+	public Map<B, A> ba = new LinkedHashMap<B, A>();
 
 	public void clear() {
 		ab.clear();
@@ -50,7 +50,7 @@ public class DHash<A, B> {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DHash) {
-			DHash o = (DHash) obj;
+			DHash<?, ?> o = (DHash<?, ?>) obj;
 			return o.ab.equals(ab) && o.ba.equals(ba);
 		}
 		return false;
@@ -79,7 +79,7 @@ public class DHash<A, B> {
 	}
 
 	public DHash<A, B> shallowDupe() {
-		DHash<A, B> out = new DHash();
+		DHash<A, B> out = new DHash<A, B>();
 		out.ab.putAll(ab);
 		out.ba.putAll(ba);
 		return out;

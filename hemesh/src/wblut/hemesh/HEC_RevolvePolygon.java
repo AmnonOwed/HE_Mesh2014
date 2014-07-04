@@ -52,7 +52,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 		if ((polygon == null) || (axis == null)) {
 			return null;
 		}
-		final WB_Vector norm = polygon.getPlane().getNormal();
+
 		final int n = polygon.getN();
 
 		final WB_Point[] points = new WB_Point[n * facets];

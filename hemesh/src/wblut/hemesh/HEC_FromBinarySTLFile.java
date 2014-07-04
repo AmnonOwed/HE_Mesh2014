@@ -148,7 +148,7 @@ public class HEC_FromBinarySTLFile extends HEC_Creator {
 				// ignore colour
 				ds.read(buf, 0, 2);
 			}
-			final HEC_FromTriangles<WB_Triangle> ft = new HEC_FromTriangles<WB_Triangle>();
+			final HEC_FromTriangles ft = new HEC_FromTriangles();
 			ft.setTriangles(triangles);
 			return new HE_Mesh(ft);
 

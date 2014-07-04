@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
 
 import wblut.geom.WB_Point;
-import wblut.geom.WB_Triangle;
 
 public class HEC_FromObjFile extends HEC_Creator {
 
@@ -55,9 +54,9 @@ public class HEC_FromObjFile extends HEC_Creator {
 		InputStream is = createInputStream(file);
 		if (is == null)
 			return new HE_Mesh();
-		final ArrayList<WB_Triangle> triangles = new ArrayList<WB_Triangle>();
-		ArrayList<WB_Point> vertexList = new ArrayList();
-		ArrayList<int[]> faceList = new ArrayList();
+
+		ArrayList<WB_Point> vertexList = new ArrayList<WB_Point>();
+		ArrayList<int[]> faceList = new ArrayList<int[]>();
 		int faceCount = 0;
 
 		// load OBJ file as an array of strings

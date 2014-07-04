@@ -13,10 +13,10 @@ import wblut.geom.interfaces.Triangle;
  *            the generic type
  * @author Frederik Vanhoutte (W:Blut)
  */
-public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
+public class HEC_FromTriangles extends HEC_Creator {
 
 	/** Source triangles. */
-	FastTable<T> triangles;
+	FastTable<Triangle> triangles;
 
 	/**
 	 * Instantiates a new HEC_FromTriangles.
@@ -34,9 +34,9 @@ public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
 	 *            source triangles
 	 * @return self
 	 */
-	public HEC_FromTriangles setTriangles(final T[] ts) {
-		triangles = new FastTable<T>();
-		for (final T tri : ts) {
+	public HEC_FromTriangles setTriangles(final Triangle[] ts) {
+		triangles = new FastTable<Triangle>();
+		for (final Triangle tri : ts) {
 			triangles.add(tri);
 		}
 		return this;
@@ -49,9 +49,10 @@ public class HEC_FromTriangles<T extends Triangle> extends HEC_Creator {
 	 *            source triangles
 	 * @return self
 	 */
-	public HEC_FromTriangles setTriangles(final Collection<T> ts) {
+	public HEC_FromTriangles setTriangles(
+			final Collection<? extends Triangle> ts) {
 
-		triangles = new FastTable<T>();
+		triangles = new FastTable<Triangle>();
 		triangles.addAll(ts);
 		return this;
 	}

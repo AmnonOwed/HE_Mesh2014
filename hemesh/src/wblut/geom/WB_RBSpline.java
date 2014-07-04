@@ -388,7 +388,7 @@ public class WB_RBSpline extends WB_BSpline {
 				bezalfs[i][j] = bezalfs[ph - i][p - j];
 			}
 		}
-		int mh = ph;
+
 		int kind = ph + 1;
 		int r = -1;
 		int a = p;
@@ -416,7 +416,7 @@ public class WB_RBSpline extends WB_BSpline {
 				b++;
 			}
 			final int mul = b - i + 1;
-			mh += mul + t;
+
 			final double ub = knot.value(b);
 			oldr = r;
 			r = p - mul;

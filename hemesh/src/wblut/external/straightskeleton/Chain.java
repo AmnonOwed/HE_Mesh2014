@@ -16,11 +16,12 @@ import java.util.Set;
  */
 public class Chain {
 
-	List<Corner> chain = new ArrayList();
+	List<Corner> chain = new ArrayList<Corner>();
 	boolean loop;
 
 	// marker for having degraided from a loop to a list
-	private final static Chain DELOOP = new Chain(new ArrayList(), false);
+	private final static Chain DELOOP = new Chain(new ArrayList<Corner>(),
+			false);
 
 	public Chain(List<Corner> chain) {
 		this(chain, chain.get(chain.size() - 1).nextC == chain.get(0)); // chain.get(
@@ -41,7 +42,7 @@ public class Chain {
 	private Chain split(int index) {
 		// decompose a loop a the given index
 		if (loop) {
-			List<Corner> nc = new ArrayList();
+			List<Corner> nc = new ArrayList<Corner>();
 			nc.addAll(chain.subList(index, chain.size()));
 			nc.addAll(chain.subList(0, index));
 			loop = false;
@@ -52,7 +53,7 @@ public class Chain {
 		if (index == 0)
 			return null;
 
-		List<Corner> nc = new ArrayList();
+		List<Corner> nc = new ArrayList<Corner>();
 		nc.addAll(chain.subList(0, index));
 		chain = chain.subList(index, chain.size());
 		return new Chain(nc);
@@ -69,7 +70,7 @@ public class Chain {
 	 *         master list before this chain.
 	 */
 	public List<Chain> removeCornersWithoutEdges(Set<Edge> liveEdges) {
-		List<Chain> newChains = new ArrayList();
+		List<Chain> newChains = new ArrayList<Chain>();
 
 		for (;;) {
 			for (int i = 0; i < chain.size(); i++) {
@@ -102,7 +103,7 @@ public class Chain {
 	 * @return a list of additional chains after split has been performed
 	 */
 	public List<Chain> splitChainsIfHorizontal(Set<Corner> horizontals) {
-		List<Chain> newChains = new ArrayList();
+		List<Chain> newChains = new ArrayList<Chain>();
 
 		for (;;) {
 			for (int i = 0; i < chain.size(); i++) {

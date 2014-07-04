@@ -17,7 +17,7 @@ import java.util.Set;
  * @author twak
  */
 public class CloneConfirmIterator<E> implements Iterator<E>, Iterable<E> {
-	Set original;
+	Set<?> original;
 	Iterator<E> it;
 	E next;
 

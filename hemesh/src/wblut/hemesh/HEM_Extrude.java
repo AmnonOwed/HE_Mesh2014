@@ -90,7 +90,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	public HEM_Extrude() {
 		super();
-		d = new WB_ConstantParameter(0.0);
+		d = new WB_ConstantParameter<Double>(0.0);
 		flat = true;
 		thresholdAngle = -1;
 		chamfer = 0;
@@ -110,7 +110,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 * @return self
 	 */
 	public HEM_Extrude setDistance(final double d) {
-		this.d = new WB_ConstantParameter(d);
+		this.d = new WB_ConstantParameter<Double>(d);
 		flat = (WB_Epsilon.isZero(d));
 		return this;
 	}
@@ -308,7 +308,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 							he = f.getHalfedge();
 							do {
-								final HE_Vertex v = he.getVertex();
+
 								he.getVertex().pos._addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
@@ -409,7 +409,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						n = _faceNormals.get(f.key());
 						he = f.getHalfedge();
 						do {
-							final HE_Vertex v = he.getVertex();
+
 							he.getVertex().pos._addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());

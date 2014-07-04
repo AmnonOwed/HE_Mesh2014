@@ -21,7 +21,7 @@ public class HeightCollision implements HeightEvent {
 	double height;
 	List<EdgeCollision> coHeighted;
 
-	private Set<Corner> newHoriz = new LinkedHashSet();
+	private Set<Corner> newHoriz = new LinkedHashSet<Corner>();
 
 	public HeightCollision() {
 	};
@@ -52,7 +52,7 @@ public class HeightCollision implements HeightEvent {
 	public boolean process(Skeleton skel) {
 		boolean changed = false;
 
-		List<CoSitedCollision> coSited = new ArrayList();
+		List<CoSitedCollision> coSited = new ArrayList<CoSitedCollision>();
 
 		// I love the smell of O(n^2) in the morning
 		ec: for (EdgeCollision ec : coHeighted) {
@@ -123,7 +123,7 @@ public class HeightCollision implements HeightEvent {
 	 * @param skel
 	 */
 	public void processHoriz(Skeleton skel) {
-		Set<Chain> chains = new LinkedHashSet();
+		Set<Chain> chains = new LinkedHashSet<Chain>();
 		while (newHoriz.size() > 0)
 			chains.add(CoSitedCollision.buildChain2(newHoriz.iterator().next(),
 					newHoriz));
@@ -133,12 +133,12 @@ public class HeightCollision implements HeightEvent {
 
 		// if there are two lines of events at the same hight (but different
 		// lines), we need them to share their end points.
-		Set<Corner> intraface = new LinkedHashSet();
+		Set<Corner> intraface = new LinkedHashSet<Corner>();
 
 		for (Chain chain : chains) {
 			// if (chain.chain.isEmpty())
 			// continue;
-			List<Edge> priority = new ArrayList();
+			List<Edge> priority = new ArrayList<Edge>();
 			for (Corner c : chain.chain) {
 				// both edges are parallel - these are the only corners added to
 				// newHoriz...
@@ -150,7 +150,7 @@ public class HeightCollision implements HeightEvent {
 			// winners (equal highest priority)
 			Comparator<Edge> hComp = skel.getHorizontalComparator();
 			Collections.sort(priority, hComp);
-			Set<Edge> winners = new LinkedHashSet();
+			Set<Edge> winners = new LinkedHashSet<Edge>();
 			Edge winner = priority.remove(0);
 			winners.add(winner);
 			while (!priority.isEmpty()

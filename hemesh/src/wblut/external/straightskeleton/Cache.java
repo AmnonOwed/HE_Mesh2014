@@ -12,7 +12,7 @@ import java.util.Map;
  * @author twak
  */
 public abstract class Cache<I, O> {
-	public Map<I, O> cache = new LinkedHashMap();
+	public Map<I, O> cache = new LinkedHashMap<I, O>();
 
 	public O get(I in) {
 		O o = cache.get(in);

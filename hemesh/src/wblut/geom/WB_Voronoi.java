@@ -114,7 +114,7 @@ public class WB_Voronoi {
 		final List<CVertex> vertices = dc.getVertices();
 		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
 		for (int i = 0; i < nv; i++) {
-			boolean onConvexHull = false;
+
 			final CVertex v = vertices.get(i);
 			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
 			final List<WB_Point> hullpoints = new ArrayList<WB_Point>();
@@ -122,9 +122,7 @@ public class WB_Voronoi {
 				// if (!tetra.containsBigPoint()) {
 				hullpoints.add(toPoint(tetra.circumcenter()));
 				// }
-				if (tetra.containsBigPoint()) {
-					onConvexHull = true;
-				}
+
 			}
 			final List<WB_Point> finalpoints = new FastTable<WB_Point>();
 			for (int j = 0; j < hullpoints.size(); j++) {
@@ -166,7 +164,7 @@ public class WB_Voronoi {
 
 		final List<WB_VoronoiCell3D> result = new FastTable<WB_VoronoiCell3D>();
 		for (i = 0; i < nv; i++) {
-			boolean onConvexHull = false;
+
 			final CVertex v = vertices.get(i);
 			final Set<CTetrahedron> vertexhull = dc.getVertexHull(v);
 			v.getAdjacentTriangles();
@@ -176,9 +174,7 @@ public class WB_Voronoi {
 				// if (!tetra.containsBigPoint()) {
 				hullpoints.add(toPoint(tetra.circumcenter()));
 				// }
-				if (tetra.containsBigPoint()) {
-					onConvexHull = true;
-				}
+
 			}
 			final List<WB_Point> finalpoints = new FastTable<WB_Point>();
 			for (int j = 0; j < hullpoints.size(); j++) {

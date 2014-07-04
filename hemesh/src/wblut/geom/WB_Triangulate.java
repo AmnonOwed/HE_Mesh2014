@@ -77,7 +77,6 @@ public class WB_Triangulate {
 		final List<CTetrahedron> tetras = dc.getTetrahedra();
 		final List<CTriangle> tris = dc.getTriangles();
 		final List<CEdge> edges = dc.getEdges();
-		final List<CVertex> vertices = dc.getVertices();
 
 		int nt = tetras.size();
 		List<int[]> tmpresult = new ArrayList<int[]>();
@@ -168,7 +167,7 @@ public class WB_Triangulate {
 				edge[2 * i + j] = tmpresult.get(i)[j];
 			}
 		}
-		final List pts = new FastTable();
+		final List<WB_Coordinate> pts = new FastTable<WB_Coordinate>();
 		for (final WB_Coordinate p : points) {
 			pts.add(p);
 		}
@@ -180,7 +179,7 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation3D getTriangulation3D(
 			final List<? extends WB_Coordinate> points) {
-		final WB_Predicates predicates = new WB_Predicates();
+
 		final int n = points.size();
 		final List<Point> tmppoints = new ArrayList<Point>(n);
 		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
@@ -194,7 +193,6 @@ public class WB_Triangulate {
 		final List<CTetrahedron> tetras = dc.getTetrahedra();
 		final List<CTriangle> tris = dc.getTriangles();
 		final List<CEdge> edges = dc.getEdges();
-		final List<CVertex> vertices = dc.getVertices();
 
 		int nt = tetras.size();
 		List<int[]> tmpresult = new ArrayList<int[]>();
@@ -292,7 +290,7 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation3D getTriangulation3D(
 			final WB_CoordinateSequence points) {
-		final WB_Predicates predicates = new WB_Predicates();
+
 		final int n = points.size();
 		final List<Point> tmppoints = new ArrayList<Point>(n);
 		final WB_KDTree<WB_Coordinate, Integer> tree = new WB_KDTree<WB_Coordinate, Integer>();
@@ -307,7 +305,6 @@ public class WB_Triangulate {
 		final List<CTetrahedron> tetras = dc.getTetrahedra();
 		final List<CTriangle> tris = dc.getTriangles();
 		final List<CEdge> edges = dc.getEdges();
-		final List<CVertex> vertices = dc.getVertices();
 
 		int nt = tetras.size();
 		List<int[]> tmpresult = new ArrayList<int[]>();
@@ -678,7 +675,7 @@ public class WB_Triangulate {
 		final GeometryCollection tris = (GeometryCollection) qesd
 				.getTriangles(new GeometryFactory());
 		final Coordinate[] newcoords = tris.getCoordinates();
-		final List uniquePoints = new FastTable();
+		final List<WB_Coordinate> uniquePoints = new FastTable<WB_Coordinate>();
 		final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 		int currentSize = 0;
 		for (final Coordinate newcoord : newcoords) {
@@ -727,7 +724,7 @@ public class WB_Triangulate {
 			E[i][0] = result.get(i)[0];
 			E[i][1] = result.get(i)[1];
 		}
-		final List Points = new FastTable();
+		final List<WB_Coordinate> Points = new FastTable<WB_Coordinate>();
 		for (int i = 0; i < uniquePoints.size(); i++) {
 			Points.add(uniquePoints.get(i));
 		}
@@ -780,7 +777,7 @@ public class WB_Triangulate {
 			 * The candidate new edge is from v0 to v1. First check if this is
 			 * inside the quadrilateral
 			 */
-			final Coordinate[] quadRing = { c0, shared0, c1, shared1 };
+
 			final int dir0 = CGAlgorithms.orientationIndex(c0, c1, shared0);
 			final int dir1 = CGAlgorithms.orientationIndex(c0, c1, shared1);
 			if (dir0 == -dir1) {
@@ -929,7 +926,7 @@ public class WB_Triangulate {
 				.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -963,7 +960,7 @@ public class WB_Triangulate {
 		}
 		final int[][] E = extractEdges(ears);
 
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
@@ -1001,7 +998,7 @@ public class WB_Triangulate {
 		}
 		final int[][] E = extractEdges(ears);
 
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1034,7 +1031,7 @@ public class WB_Triangulate {
 				.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1068,7 +1065,7 @@ public class WB_Triangulate {
 		}
 		final int[][] E = extractEdges(ears);
 
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1107,7 +1104,7 @@ public class WB_Triangulate {
 				holes);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1152,7 +1149,7 @@ public class WB_Triangulate {
 				holes);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1191,7 +1188,7 @@ public class WB_Triangulate {
 				holes);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1235,7 +1232,7 @@ public class WB_Triangulate {
 				holes);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
-		final List Points = new FastTable();
+		final List<WB_Point> Points = new FastTable<WB_Point>();
 		for (int i = 0; i < shellCoords.size() - 1; i++) {
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
@@ -1246,7 +1243,7 @@ public class WB_Triangulate {
 	}
 
 	private static int[][] extractEdges(final int[][] ears) {
-		final List<int[]> result = new ArrayList<int[]>();
+
 		final int f = ears.length;
 		final FastMap<Long, int[]> map = new FastMap<Long, int[]>();
 		for (final int[] ear : ears) {

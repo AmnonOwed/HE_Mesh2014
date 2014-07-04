@@ -20,12 +20,12 @@ import java.util.Set;
  * @author twak
  */
 public class CoSitedCollision {
-	public Set<EdgeCollision> edges = new LinkedHashSet();
+	public Set<EdgeCollision> edges = new LinkedHashSet<EdgeCollision>();
 	public Point3d loc;
 
 	public boolean debugHoriz = false;
 
-	public List<Chain> chains = new ArrayList();
+	public List<Chain> chains = new ArrayList<Chain>();
 
 	private HeightCollision parent;
 
@@ -46,10 +46,10 @@ public class CoSitedCollision {
 	 * @return true if valid chains found at this site
 	 */
 	public boolean findChains(Skeleton skel) {
-		chains = new ArrayList();
+		chains = new ArrayList<Chain>();
 
 		// remove duplicate edges
-		Set<Edge> allEdges = new LinkedHashSet();
+		Set<Edge> allEdges = new LinkedHashSet<Edge>();
 		for (EdgeCollision ec : edges) {
 			allEdges.add(ec.a);
 			allEdges.add(ec.b);
@@ -64,7 +64,7 @@ public class CoSitedCollision {
 		if (allEdges.size() < 3)
 			return false;
 		// fixme: why do we add all starting corners? just to filter them later?
-		Set<Corner> edgeStarts = new LinkedHashSet();
+		Set<Corner> edgeStarts = new LinkedHashSet<Corner>();
 		for (Edge e : allEdges)
 			for (Corner c : e.currentCorners)
 				if (c.nextL == e)
@@ -207,7 +207,7 @@ public class CoSitedCollision {
 			}
 		}
 
-		Map<Edge, Corner> edgeToCorner = new LinkedHashMap();
+		Map<Edge, Corner> edgeToCorner = new LinkedHashMap<Edge, Corner>();
 		for (Chain cc : chains)
 			for (Corner c : cc.chain)
 				edgeToCorner.put(c.nextL, c);
@@ -217,7 +217,7 @@ public class CoSitedCollision {
 		// can check that the input edge triplets still have two consecutive
 		// edges.
 
-		Set<Edge> validEdges = new LinkedHashSet();
+		Set<Edge> validEdges = new LinkedHashSet<Edge>();
 		for (EdgeCollision ec : edges) {
 			// todo: adjacent pairs may not be parallel!
 			if (hasAdjacent(edgeToCorner.get(ec.a), edgeToCorner.get(ec.b),
@@ -232,7 +232,7 @@ public class CoSitedCollision {
 			}
 		}
 
-		List<Chain> chainOrder = new ArrayList(chains);
+		List<Chain> chainOrder = new ArrayList<Chain>(chains);
 
 		// remove parts of chains that aren't a valid triple.
 		for (Chain cc : chainOrder) {
@@ -270,7 +270,7 @@ public class CoSitedCollision {
 								// required?
 			return false;
 
-		Set<Corner> allCorners = new LinkedHashSet();
+		Set<Corner> allCorners = new LinkedHashSet<Corner>();
 		for (Chain cc : chains) {
 			allCorners.addAll(cc.chain); // cc.chain.get(0).nextL.currentCorners
 		}
@@ -322,7 +322,7 @@ public class CoSitedCollision {
 		// in case we are colliding against a smash (no-corner/split
 		// event)-edge, we cache the next-corner before
 		// any alterations
-		Map<Corner, Corner> aNext = new LinkedHashMap();
+		Map<Corner, Corner> aNext = new LinkedHashMap<Corner, Corner>();
 		for (Chain chain : chains) {
 			Corner c = chain.chain.get(chain.chain.size() - 1);
 			aNext.put(c, c.nextC);
@@ -358,7 +358,7 @@ public class CoSitedCollision {
 	public static Chain buildChain2(Corner start, Set<Corner> input) // start.nextL
 																		// start.prevL
 	{
-		List<Corner> chain = new ArrayList();
+		List<Corner> chain = new ArrayList<Corner>();
 
 		// check backwards
 		Corner a = start;

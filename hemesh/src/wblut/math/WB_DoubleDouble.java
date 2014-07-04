@@ -64,7 +64,7 @@ import java.io.Serializable;
  * 
  */
 public strictfp final class WB_DoubleDouble implements Serializable,
-		Comparable, Cloneable {
+		Comparable<Object>, Cloneable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -2751466014056438637L;

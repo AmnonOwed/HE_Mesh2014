@@ -259,10 +259,10 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 		int[][] triangles = triangulation.getTriangles();
 
-		final List<WB_Point> tripoints = triangulation.getPoints();
+		final List<WB_Coordinate> tripoints = triangulation.getPoints();
 		final int[] intmap = new int[tripoints.size()];
 		int index = 0;
-		for (final WB_Point point : tripoints) {
+		for (final WB_Coordinate point : tripoints) {
 			final int found = pointmap.getNearestNeighbor(point).value;
 			intmap[index++] = found;
 		}

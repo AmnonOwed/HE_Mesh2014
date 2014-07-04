@@ -51,7 +51,7 @@ public class WB_NurbsSurfaceOfRevolution {
 			U[i] = 0;
 			U[j] = 1;
 		}
-		final int n = 2 * narcs;
+
 		final double wm = Math.cos(dtheta * 0.5);
 		double angle = 0;
 		final double[] cosines = new double[narcs + 1];
@@ -153,7 +153,7 @@ public class WB_NurbsSurfaceOfRevolution {
 			U[i] = 0;
 			U[j] = 1;
 		}
-		final int n = 2 * narcs;
+
 		final double wm = Math.cos(dtheta * 0.5);
 		double angle = 0;
 		final double[] cosines = new double[narcs + 1];

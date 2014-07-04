@@ -8,8 +8,7 @@ public class WB_Transform {
 
 	private double _xt, _yt, _zt;
 	static WB_GeometryFactory geometryfactory = WB_GeometryFactory.instance();
-	private double x, y, z;
-	private int id;
+
 	private boolean purerot;
 
 	/** Transform matrix. */

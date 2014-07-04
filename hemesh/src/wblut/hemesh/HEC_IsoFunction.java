@@ -305,8 +305,6 @@ public class HEC_IsoFunction extends HEC_Creator {
 
 	private double hresx, hresy, hresz;
 
-	private double hx, hy, hz;
-
 	private double isolevel;
 
 	private double boundary;
@@ -674,9 +672,7 @@ public class HEC_IsoFunction extends HEC_Creator {
 	@Override
 	protected HE_Mesh createBase() {
 		mesh = new HE_Mesh();
-		hx = hresx * dx;
-		hy = hresy * dy;
-		hz = hresz * dz;
+
 		fxi = cfxi - dfx * hresx;
 		fyi = cfyi - dfy * hresy;
 		fzi = cfzi - dfz * hresz;

@@ -59,7 +59,6 @@ public class WB_PolyLine implements WB_Geometry {
 			index++;
 		}
 
-		final double d = incLengths[index + 1] - incLengths[index];
 		final double x = t - incLengths[index];
 
 		return points.getPoint(index).addMul(x, directions.getVector(index));
@@ -177,8 +176,7 @@ public class WB_PolyLine implements WB_Geometry {
 
 		final List<WB_Vector> dirs = new ArrayList<WB_Vector>(points.size() - 1);
 		incLengths = new double[points.size() - 1];
-		final WB_Point p;
-		final WB_Point pn;
+
 		for (int i = 0; i < points.size() - 1; i++) {
 
 			final WB_Vector v = geometryfactory.createVector(

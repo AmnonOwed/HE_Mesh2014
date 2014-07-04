@@ -5,7 +5,7 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.hemesh.HE_Face;
 
-public class WB_AABBNode<T extends WB_Coordinate> {
+public class WB_AABBNode {
 
 	protected int level;
 

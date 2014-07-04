@@ -128,15 +128,14 @@ public class WB_QuickHull3D {
 	private final Vertex[] maxVtxs = new Vertex[3];
 	private final Vertex[] minVtxs = new Vertex[3];
 
-	protected Vector faces = new Vector(16);
-	protected Vector horizon = new Vector(16);
+	protected Vector<Face> faces = new Vector<Face>(16);
+	protected Vector<HalfEdge> horizon = new Vector<HalfEdge>(16);
 
 	private final FastTable<Face> newFaces = new FastTable<Face>();
 	private final VertexList unclaimed = new VertexList();
 	private final VertexList claimed = new VertexList();
 
 	private int numVertices;
-	private int numFaces;
 	private int numPoints;
 
 	private double tolerance;
@@ -213,7 +212,6 @@ public class WB_QuickHull3D {
 		vertexPointIndices = new int[nump];
 		faces.clear();
 		claimed.clear();
-		numFaces = 0;
 		numPoints = nump;
 	}
 
@@ -262,7 +260,7 @@ public class WB_QuickHull3D {
 	public void triangulate() {
 		final double minArea = charLength * 2.2204460492503131e-13;
 		newFaces.clear();
-		for (final Iterator it = faces.iterator(); it.hasNext();) {
+		for (final Iterator<Face> it = faces.iterator(); it.hasNext();) {
 			final Face face = (Face) it.next();
 			if (face.mark == Face.VISIBLE) {
 				face.triangulate(newFaces, minArea);
@@ -338,7 +336,7 @@ public class WB_QuickHull3D {
 	protected void createInitialSimplex() throws IllegalArgumentException {
 		double max = 0;
 		int imax = 0;
-		final long st = System.currentTimeMillis();
+
 		for (int i = 0; i < 3; i++) {
 			final double diff = maxVtxs[i].pos.getd(i) - minVtxs[i].pos.getd(i);
 			if (diff > max) {
@@ -405,8 +403,7 @@ public class WB_QuickHull3D {
 			throw new IllegalArgumentException(
 					"Input points appear to be coplanar");
 		}
-		final long et = System.currentTimeMillis();
-		// System.out.println((et - st));
+
 		final Face[] tris = new Face[4];
 
 		if (nrml.dot(vtx[3].pos) - d0 < 0) {
@@ -508,7 +505,7 @@ public class WB_QuickHull3D {
 	public int[][] getFaces() {
 		final int[][] allFaces = new int[faces.size()][];
 		int k = 0;
-		for (final Iterator it = faces.iterator(); it.hasNext();) {
+		for (final Iterator<Face> it = faces.iterator(); it.hasNext();) {
 			final Face face = (Face) it.next();
 			allFaces[k] = new int[face.numVertices()];
 			getFaceIndices(allFaces[k], face);
@@ -588,8 +585,6 @@ public class WB_QuickHull3D {
 		do {
 			final Face oppFace = hedge.oppositeFace();
 			boolean merge = false;
-			double dist1;
-			final double dist2;
 
 			if (mergeType == NONCONVEX) { // then merge faces if they are
 											// definitively non-convex
@@ -602,7 +597,7 @@ public class WB_QuickHull3D {
 				// wrt to the larger face; otherwise, just mark
 				// the face non-convex for the second pass.
 				if (face.area > oppFace.area) {
-					if ((dist1 = oppFaceDistance(hedge)) > -tolerance) {
+					if ((oppFaceDistance(hedge)) > -tolerance) {
 						merge = true;
 					} else if (oppFaceDistance(hedge.opposite) > -tolerance) {
 						convex = false;
@@ -635,7 +630,7 @@ public class WB_QuickHull3D {
 
 	protected void calculateHorizon(final double eyePntx, final double eyePnty,
 			final double eyePntz, HalfEdge edge0, final Face face,
-			final Vector horizon) {
+			final Vector<HalfEdge> horizon) {
 		deleteFacePoints(face, null);
 		face.mark = Face.DELETED;
 
@@ -669,13 +664,13 @@ public class WB_QuickHull3D {
 	}
 
 	protected void addNewFaces(final List<Face> newFaces, final Vertex eyeVtx,
-			final Vector horizon) {
+			final Vector<HalfEdge> horizon) {
 		newFaces.clear();
 
 		HalfEdge hedgeSidePrev = null;
 		HalfEdge hedgeSideBegin = null;
 
-		for (final Iterator it = horizon.iterator(); it.hasNext();) {
+		for (final Iterator<HalfEdge> it = horizon.iterator(); it.hasNext();) {
 			final HalfEdge horizonHe = (HalfEdge) it.next();
 			final HalfEdge hedgeSide = addAdjoiningFace(eyeVtx, horizonHe);
 
@@ -743,7 +738,7 @@ public class WB_QuickHull3D {
 	}
 
 	protected void buildHull() {
-		int cnt = 0;
+
 		Vertex eyeVtx;
 
 		computeMaxAndMin();
@@ -752,7 +747,6 @@ public class WB_QuickHull3D {
 
 		while ((eyeVtx = nextPointToAdd()) != null) {
 			addPointToHull(eyeVtx);
-			cnt++;
 
 		}
 
@@ -777,14 +771,14 @@ public class WB_QuickHull3D {
 			p.hullindex = -1;
 		}
 		// remove inactive faces and mark active vertices
-		numFaces = 0;
-		for (final Iterator it = faces.iterator(); it.hasNext();) {
+
+		for (final Iterator<Face> it = faces.iterator(); it.hasNext();) {
 			final Face face = (Face) it.next();
 			if (face.mark != Face.VISIBLE) {
 				it.remove();
 			} else {
 				markFaceVertices(face);
-				numFaces++;
+
 			}
 		}
 		// reindex vertices
@@ -1305,30 +1299,6 @@ public class WB_QuickHull3D {
 			return numDiscarded;
 		}
 
-		private double areaSquared(final HalfEdge hedge0, final HalfEdge hedge1) {
-			// return the squared area of the triangle defined
-			// by the half edge hedge0 and the point at the
-			// head of hedge1.
-
-			final Vertex p0 = hedge0.tail();
-			final Vertex p1 = hedge0.head();
-			final Vertex p2 = hedge1.head();
-
-			final double dx1 = p1.pos.xd() - p0.pos.xd();
-			final double dy1 = p1.pos.yd() - p0.pos.yd();
-			final double dz1 = p1.pos.zd() - p0.pos.zd();
-
-			final double dx2 = p2.pos.xd() - p0.pos.xd();
-			final double dy2 = p2.pos.yd() - p0.pos.yd();
-			final double dz2 = p2.pos.zd() - p0.pos.zd();
-
-			final double x = dy1 * dz2 - dz1 * dy2;
-			final double y = dz1 * dx2 - dx1 * dz2;
-			final double z = dx1 * dy2 - dy1 * dx2;
-
-			return x * x + y * y + z * z;
-		}
-
 		protected void triangulate(final List<Face> newFaces,
 				final double minArea) {
 			HalfEdge hedge;
@@ -1338,7 +1308,6 @@ public class WB_QuickHull3D {
 			}
 
 			final Vertex v0 = he0.head();
-			final Face prevFace = null;
 
 			hedge = he0.next;
 			HalfEdge oppPrev = hedge.opposite;
@@ -1662,6 +1631,11 @@ public class WB_QuickHull3D {
 	}
 
 	protected static class InternalErrorException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 4257980575065868777L;
+
 		protected InternalErrorException(final String msg) {
 			super(msg);
 		}

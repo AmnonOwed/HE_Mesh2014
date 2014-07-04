@@ -29,14 +29,14 @@ public class Machine {
 	public Color color; // color used in the ui
 	// a machine will only ever have one pending event in the skeleton.qu,
 	// others are stored here
-	public List<HeightEvent> events = new ArrayList();
+	public List<HeightEvent> events = new ArrayList<HeightEvent>();
 	String description = "unnamed machine";
 	public double currentAngle = Math.PI / 4; // when a edge is added this is
 												// the angle it is given
 	public transient HeightEvent heightEvent;
 	public transient int currentDirection = -1;
 
-	protected Set<Edge> seenEdges = new LinkedHashSet();
+	protected Set<Edge> seenEdges = new LinkedHashSet<Edge>();
 
 	// for pretty output
 	static Color[] rainbow = new Color[] { Color.red, Color.green, Color.blue,
@@ -79,7 +79,7 @@ public class Machine {
 	}
 
 	public List<Edge> findOurEdges(Skeleton skel) {
-		List<Edge> edgesToChange = new ArrayList();
+		List<Edge> edgesToChange = new ArrayList<Edge>();
 
 		for (Edge e : skel.liveEdges)
 			if (e.machine == this)
