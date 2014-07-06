@@ -227,7 +227,7 @@ public class WB_Frame {
 		if (i == j) {
 			throw new IllegalArgumentException(
 					"Strut can't connect a node to itself: " + i + " " + j
-							+ ".");
+					+ ".");
 		}
 		final int nn = nodes.size();
 		if ((i < 0) || (j < 0) || (i >= nn) || (j >= nn)) {
@@ -238,16 +238,19 @@ public class WB_Frame {
 		WB_FrameStrut strut;
 		if (i <= j) {
 			strut = new WB_FrameStrut(nodes.get(i), nodes.get(j), n);
-		} else {
+		}
+		else {
 			strut = new WB_FrameStrut(nodes.get(j), nodes.get(i), n);
 		}
 		if (!nodes.get(i).addStrut(strut)) {
 			System.out.println("WB_Frame : Strut " + i + "-" + j
 					+ " already added.");
-		} else if (!nodes.get(j).addStrut(strut)) {
+		}
+		else if (!nodes.get(j).addStrut(strut)) {
 			System.out.println("WB_Frame : Strut " + i + "-" + j
 					+ " already added.");
-		} else {
+		}
+		else {
 
 			struts.add(strut);
 		}
@@ -428,7 +431,7 @@ public class WB_Frame {
 
 	public WB_Frame refine(final double threshold) {
 		final WB_Frame result = new WB_Frame();
-		final FastTable<WB_Point> npoints = new FastTable<WB_Point>();
+
 		for (final WB_FrameNode node : nodes) {
 			result.addNode(node, node.getValue());
 		}
@@ -452,7 +455,8 @@ public class WB_Frame {
 				result.addStrut(start, n + id);
 				result.addStrut(n + id, end);
 				id++;
-			} else {
+			}
+			else {
 				final int start = strut.getStartIndex();
 				final int end = strut.getEndIndex();
 				result.addStrut(start, end);
@@ -463,19 +467,19 @@ public class WB_Frame {
 
 	}
 
-	public List<WB_Point> toPointCloud(int n, double r, double d, int l,
-			double rr, double dr) {
-		List<WB_Point> points = new FastTable<WB_Point>();
+	public List<WB_Point> toPointCloud(final int n, final double r,
+			final double d, final int l, final double rr, final double dr) {
+		final List<WB_Point> points = new FastTable<WB_Point>();
 
 		double sl, dsl;
 		int divs;
 		WB_Plane P;
 		WB_Vector u, localu, v;
-		WB_Point offset;
+
 		WB_Point p;
-		WB_RandomOnSphere rnd = new WB_RandomOnSphere();
-		double da = 2.0 * Math.PI / n;
-		for (WB_FrameStrut strut : struts) {
+		final WB_RandomOnSphere rnd = new WB_RandomOnSphere();
+		final double da = 2.0 * Math.PI / n;
+		for (final WB_FrameStrut strut : struts) {
 			sl = strut.getLength() - 2 * rr;
 
 			if (sl > 0) {
@@ -484,7 +488,7 @@ public class WB_Frame {
 				P = strut.toPlane();
 				u = P.getU().mul(r);
 				v = strut.toNormVector().get();
-				offset = strut.start().addMul(rr, v);
+				strut.start().addMul(rr, v);
 				v._mulSelf(dsl);
 				for (int i = 0; i <= divs; i++) {
 					for (int j = 0; j < n; j++) {
@@ -499,11 +503,11 @@ public class WB_Frame {
 				}
 			}
 		}
-		for (WB_FrameNode node : nodes) {
+		for (final WB_FrameNode node : nodes) {
 			final HE_Mesh ball = new HE_Mesh(new HEC_Geodesic().setRadius(rr)
 					.setLevel(l).setCenter(node));
 
-			for (WB_Point q : ball.getVerticesAsPoint()) {
+			for (final WB_Point q : ball.getVerticesAsPoint()) {
 				points.add(q._addSelf(rnd.nextVector()._mulSelf(dr)));
 			}
 

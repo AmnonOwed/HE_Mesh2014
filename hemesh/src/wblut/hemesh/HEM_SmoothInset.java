@@ -39,7 +39,7 @@ public class HEM_SmoothInset extends HEM_Modifier {
 		mesh.modify(ext);
 		for (int i = 0; i < rep; i++) {
 
-			ext.extruded.collectEdges();
+			ext.extruded.collectEdgesByFace();
 			final Iterator<HE_Edge> eItr = ext.extruded.eItr();
 			while (eItr.hasNext()) {
 				mesh.divideEdge(eItr.next(), 2);
@@ -65,7 +65,7 @@ public class HEM_SmoothInset extends HEM_Modifier {
 		selection.parent.modifySelected(ext, selection);
 		for (int i = 0; i < rep; i++) {
 
-			ext.extruded.collectEdges();
+			ext.extruded.collectEdgesByFace();
 			final Iterator<HE_Edge> eItr = ext.extruded.eItr();
 			while (eItr.hasNext()) {
 				selection.parent.divideEdge(eItr.next(), 2);

@@ -2188,7 +2188,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 */
 	public HE_Selection splitEdges(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
-		selection.collectEdges();
+		selection.collectEdgesByFace();
 		final Iterator<HE_Edge> eItr = selection.eItr();
 		while (eItr.hasNext()) {
 			selectionOut.union(splitEdge(eItr.next(), 0.5));
@@ -2210,7 +2210,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	public HE_Selection splitEdges(final HE_Selection selection,
 			final double offset) {
 		final HE_Selection selectionOut = new HE_Selection(this);
-		selection.collectEdges();
+		selection.collectEdgesByFace();
 		final Iterator<HE_Edge> eItr = selection.eItr();
 		HE_Edge e;
 		while (eItr.hasNext()) {
@@ -2684,7 +2684,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = getFacesAsArray();
 		HE_Vertex vi = new HE_Vertex();
@@ -2767,7 +2767,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(sel.getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges(orig).getVerticesAsArray());
 		final HE_Face[] faces = sel.getFacesAsArray();
 		for (i = 0; i < n; i++) {
@@ -2849,7 +2849,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = getFacesAsArray();
 		HE_Vertex vi = new HE_Vertex();
@@ -2983,7 +2983,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(sel.getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = sel.getFacesAsArray();
 		HE_Vertex vi = new HE_Vertex();
@@ -3141,7 +3141,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = getFacesAsArray();
 		for (i = 0; i < n; i++) {
@@ -3214,7 +3214,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = getFacesAsArray();
 		for (i = 0; i < n; i++) {
@@ -3290,7 +3290,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(selection.getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges(orig).getVerticesAsArray());
 		final HE_Face[] faces = selection.getFacesAsArray();
 		for (i = 0; i < n; i++) {
@@ -3359,7 +3359,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final HE_Selection orig = new HE_Selection(this);
 		orig.addFaces(selection.getFacesAsArray());
 		orig.collectVertices();
-		orig.collectEdges();
+		orig.collectEdgesByFace();
 		selectionOut.addVertices(splitEdges(orig).getVerticesAsArray());
 		final HE_Face[] faces = selection.getFacesAsArray();
 		for (i = 0; i < n; i++) {

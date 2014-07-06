@@ -8,7 +8,7 @@ import wblut.WB_Epsilon;
 
 /**
  * Class WB_KDTree.
- * 
+ *
  * @param <T>
  *            generic type
  * @param <V>
@@ -38,69 +38,71 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 	}
 
 	public List<WB_AABB> getLeafBounds() {
-		List<WB_AABB> leafs = new ArrayList();
+		final List<WB_AABB> leafs = new ArrayList();
 		root.addLeafBounds(leafs);
 		return leafs;
 	}
 
 	public List<WB_AABB> getAllBounds() {
-		List<WB_AABB> all = new ArrayList();
+		final List<WB_AABB> all = new ArrayList();
 		root.addBox(all, 0);
 		return all;
 	}
 
 	/**
 	 * Get the leaf regions.
-	 * 
+	 *
 	 * @return leaf regions
 	 */
 	public List<WB_AABB> getLeafRegions() {
-		List<WB_AABB> leafs = new ArrayList();
+		final List<WB_AABB> leafs = new ArrayList();
 		root.addLeafRegion(leafs);
 		return leafs;
 	}
 
 	/**
 	 * Get all regions.
-	 * 
+	 *
 	 * @return all regions
 	 */
 	public List<WB_AABB> getAllRegions() {
-		List<WB_AABB> all = new ArrayList();
+		final List<WB_AABB> all = new ArrayList();
 		root.addRegion(all, 0);
 		return all;
 	}
 
+	@SuppressWarnings("unchecked")
 	public V add(final T coord, final V val) {
 		return (V) root.add(new WB_KDEntry(coord, val, -1));
 	}
 
+	@SuppressWarnings("unchecked")
 	public WB_KDEntry<T, V>[] getRange(final WB_AABB aabb) {
 		return root.range(aabb);
 	}
 
 	public WB_KDEntry<T, V>[] getRange(final WB_Coordinate center,
 			final double radius) {
-		double r2 = radius * radius;
+		final double r2 = radius * radius;
 		return root.range(center, r2);
 	}
 
 	public WB_KDEntry<T, V>[] getRange(final WB_Coordinate center,
 			final double lower, final double upper) {
-		double lower2 = lower * lower;
-		double upper2 = upper * upper;
+		final double lower2 = lower * lower;
+		final double upper2 = upper * upper;
 		return root.range(center, lower2, upper2);
 	}
 
 	public WB_KDEntry<T, V>[] getNearestNeighbors(final WB_Coordinate coord,
 			final int num) {
-		QueryResult<T, V> heap = new QueryResult<T, V>(num);
+		final QueryResult<T, V> heap = new QueryResult<T, V>(num);
 		root.findNearest(heap, coord);
 		return heap.entries;
 	}
 
 	public WB_KDEntry<T, V> getNearestNeighbor(final WB_Coordinate coord) {
-		QueryResult<T, V> heap = new QueryResult<T, V>(1);
+		final QueryResult<T, V> heap = new QueryResult<T, V>(1);
 		root.findNearest(heap, coord);
 		return heap.entries[0];
 	}
@@ -146,9 +148,9 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			_limits = null;
 			_isLeaf = true;
 			_binSize = 0;
-			double[] min = new double[_dim];
+			final double[] min = new double[_dim];
 			Arrays.fill(min, Double.NEGATIVE_INFINITY);
-			double[] max = new double[_dim];
+			final double[] max = new double[_dim];
 			Arrays.fill(max, Double.POSITIVE_INFINITY);
 			_region = new WB_AABB(min, max);
 			_id = 0;
@@ -156,10 +158,11 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		private void addLeafBounds(final List<WB_AABB> leafs) {
 			if (_isLeaf) {
-				WB_AABB box = _limits.get();
+				final WB_AABB box = _limits.get();
 				box.setId(_id);
 				leafs.add(box);
-			} else {
+			}
+			else {
 				_positive.addLeafBounds(leafs);
 				_negative.addLeafBounds(leafs);
 			}
@@ -167,17 +170,18 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		private void addLeafRegion(final List<WB_AABB> leafs) {
 			if (_isLeaf) {
-				WB_AABB box = _region.get();
+				final WB_AABB box = _region.get();
 				box.setId(_id);
 				leafs.add(box);
-			} else {
+			}
+			else {
 				_positive.addLeafRegion(leafs);
 				_negative.addLeafRegion(leafs);
 			}
 		}
 
 		private void addBox(final List<WB_AABB> leafs, final int level) {
-			WB_AABB box = _limits.get();
+			final WB_AABB box = _limits.get();
 			box.setId(_id);
 			box.setData("level", new Integer(level));
 			leafs.add(box);
@@ -188,7 +192,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 		}
 
 		private void addRegion(final List<WB_AABB> leafs, final int level) {
-			WB_AABB box = _region.get();
+			final WB_AABB box = _region.get();
 			box.setId(_id);
 			box.setData("level", new Integer(level));
 			leafs.add(box);
@@ -198,21 +202,24 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		private V add(final WB_KDEntry<T, V> entry) {
 			if (_isLeaf) {
 				return addInLeaf(entry);
-			} else {
+			}
+			else {
 				extendBounds(entry.coord);
 				if (entry.coord.getd(_discriminator) > _sliceValue) {
 					return (V) _positive.add(entry);
-				} else {
+				}
+				else {
 					return (V) _negative.add(entry);
 				}
 			}
 		}
 
 		private V addInLeaf(final WB_KDEntry<T, V> entry) {
-			V lookup = lookup(entry.coord);
+			final V lookup = lookup(entry.coord);
 			if (lookup == null) {
 				extendBounds(entry.coord);
 				if (_binSize + 1 > _maximumBinSize) {
@@ -244,11 +251,12 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			}
 			if (_isLeaf) {
 				for (int i = 0; i < _binSize; i++) {
-					double dist = WB_Distance.getSqDistance3D(_bin[i].coord,
-							data);
+					final double dist = WB_Distance.getSqDistance3D(
+							_bin[i].coord, data);
 					heap.tryToAdd(dist, _bin[i]);
 				}
-			} else {
+			}
+			else {
 				if (data.getd(_discriminator) > _sliceValue) {
 					_positive.findNearest(heap, data);
 					if (_negative._binSize == 0) {
@@ -259,7 +267,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 									.getDistanceSquare(heap.size - 1)) {
 						_negative.findNearest(heap, data);
 					}
-				} else {
+				}
+				else {
 					_negative.findNearest(heap, data);
 					if (_positive._binSize == 0) {
 						return;
@@ -277,17 +286,18 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			if (_bin == null) {
 				WB_KDEntry<T, V>[] tmp = new WB_KDEntry[0];
 				if (_negative._limits.intersects(range)) {
-					WB_KDEntry<T, V>[] tmpl = _negative.range(range);
+					final WB_KDEntry<T, V>[] tmpl = _negative.range(range);
 					if (0 == tmp.length) {
 						tmp = tmpl;
 					}
 				}
 				if (_positive._limits.intersects(range)) {
-					WB_KDEntry<T, V>[] tmpr = _positive.range(range);
+					final WB_KDEntry<T, V>[] tmpr = _positive.range(range);
 					if (0 == tmp.length) {
 						tmp = tmpr;
-					} else if (0 < tmpr.length) {
-						WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
+					}
+					else if (0 < tmpr.length) {
+						final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
 								+ tmpr.length];
 						System.arraycopy(tmp, 0, tmp2, 0, tmp.length);
 						System.arraycopy(tmpr, 0, tmp2, tmp.length, tmpr.length);
@@ -296,14 +306,14 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 				}
 				return tmp;
 			}
-			WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
+			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
 				if (range.contains(_bin[i].coord)) {
 					tmp[n++] = _bin[i];
 				}
 			}
-			WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
+			final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
 			System.arraycopy(tmp, 0, tmp2, 0, n);
 			return tmp2;
 		}
@@ -313,17 +323,18 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			if (_bin == null) {
 				WB_KDEntry<T, V>[] tmp = new WB_KDEntry[0];
 				if (_negative._limits.getDistanceSquare(center) <= r2) {
-					WB_KDEntry<T, V>[] tmpl = _negative.range(center, r2);
+					final WB_KDEntry<T, V>[] tmpl = _negative.range(center, r2);
 					if (tmp.length == 0) {
 						tmp = tmpl;
 					}
 				}
 				if (_positive._limits.getDistanceSquare(center) <= r2) {
-					WB_KDEntry<T, V>[] tmpr = _positive.range(center, r2);
+					final WB_KDEntry<T, V>[] tmpr = _positive.range(center, r2);
 					if (tmp.length == 0) {
 						tmp = tmpr;
-					} else if (0 < tmpr.length) {
-						WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
+					}
+					else if (0 < tmpr.length) {
+						final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
 								+ tmpr.length];
 						System.arraycopy(tmp, 0, tmp2, 0, tmp.length);
 						System.arraycopy(tmpr, 0, tmp2, tmp.length, tmpr.length);
@@ -332,16 +343,17 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 				}
 				return tmp;
 			}
-			WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
+			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				double d2 = WB_Distance.getSqDistance3D(center, _bin[i].coord);
+				final double d2 = WB_Distance.getSqDistance3D(center,
+						_bin[i].coord);
 				if (d2 <= r2) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
 				}
 			}
-			WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
+			final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
 			System.arraycopy(tmp, 0, tmp2, 0, n);
 			return tmp2;
 		}
@@ -351,19 +363,20 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			if (_bin == null) {
 				WB_KDEntry<T, V>[] tmp = new WB_KDEntry[0];
 				if (_negative._limits.getDistanceSquare(center) <= upper2) {
-					WB_KDEntry<T, V>[] tmpl = _negative.range(center, lower2,
-							upper2);
+					final WB_KDEntry<T, V>[] tmpl = _negative.range(center,
+							lower2, upper2);
 					if (tmp.length == 0) {
 						tmp = tmpl;
 					}
 				}
 				if (_positive._limits.getDistanceSquare(center) <= upper2) {
-					WB_KDEntry<T, V>[] tmpr = _positive.range(center, lower2,
-							upper2);
+					final WB_KDEntry<T, V>[] tmpr = _positive.range(center,
+							lower2, upper2);
 					if (tmp.length == 0) {
 						tmp = tmpr;
-					} else if (0 < tmpr.length) {
-						WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
+					}
+					else if (0 < tmpr.length) {
+						final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[tmp.length
 								+ tmpr.length];
 						System.arraycopy(tmp, 0, tmp2, 0, tmp.length);
 						System.arraycopy(tmpr, 0, tmp2, tmp.length, tmpr.length);
@@ -372,16 +385,17 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 				}
 				return tmp;
 			}
-			WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
+			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				double d2 = WB_Distance.getSqDistance3D(center, _bin[i].coord);
+				final double d2 = WB_Distance.getSqDistance3D(center,
+						_bin[i].coord);
 				if ((d2 <= upper2) && (d2 >= lower2)) {
 					_bin[i].d2 = d2;
 					tmp[n++] = _bin[i];
 				}
 			}
-			WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
+			final WB_KDEntry<T, V>[] tmp2 = new WB_KDEntry[n];
 			System.arraycopy(tmp, 0, tmp2, 0, n);
 			return tmp2;
 		}
@@ -403,7 +417,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 				if (i == _discriminator) {
 					_negative._region._max[i] = _sliceValue;
 					_positive._region._min[i] = _sliceValue;
-				} else {
+				}
+				else {
 					_negative._region._max[i] = _region._max[i];
 					_positive._region._min[i] = _region._min[i];
 				}
@@ -411,7 +426,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			for (int i = 0; i < _binSize; ++i) {
 				if (_bin[i].coord.getd(_discriminator) > _sliceValue) {
 					_positive.addInLeaf(_bin[i]);
-				} else {
+				}
+				else {
 					_negative.addInLeaf(_bin[i]);
 				}
 			}
@@ -422,7 +438,8 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 		private void extendBounds(final WB_Coordinate coord) {
 			if (_limits == null) {
 				_limits = new WB_AABB(coord);
-			} else {
+			}
+			else {
 				_limits.expandToInclude(coord);
 			}
 		}
@@ -460,7 +477,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			if (size < capacity) {
 				size++;
 			}
-			int j = i + 1;
+			final int j = i + 1;
 			System.arraycopy(distSqs, i, distSqs, j, size - j);
 			distSqs[i] = dist;
 			System.arraycopy(entries, i, entries, j, size - j);
@@ -470,7 +487,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		/**
 		 * Gets the entry.
-		 * 
+		 *
 		 * @param i
 		 *            the i
 		 * @return the entry
@@ -484,7 +501,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		/**
 		 * Gets the distance square.
-		 * 
+		 *
 		 * @param i
 		 *            the i
 		 * @return the distance square
@@ -498,7 +515,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		/**
 		 * Size.
-		 * 
+		 *
 		 * @return the int
 		 */
 		public int size() {

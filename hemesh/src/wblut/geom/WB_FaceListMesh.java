@@ -21,7 +21,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	int[][] vfNeighbors = null;
 	int[][] ffNeighbors = null;
 	boolean vNormalsUpdated, fNormalsUpdated, vvNeighborsUpdated,
-			vfNeighborsUpdated, ffNeighborsUpdated;
+	vfNeighborsUpdated, ffNeighborsUpdated;
 
 	List<int[]> tris;
 	WB_Vector[] pdir1 = null;
@@ -130,10 +130,12 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 	}
 
+	@Override
 	public int[][] getFacesAsInt() {
 		return faces;
 	}
 
+	@Override
 	public int[][] getEdgesAsInt() {
 		if (faces == null) {
 			return null;
@@ -216,6 +218,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 		return polygons;
 	}
 
+	@Override
 	public WB_Point getCenter() {
 		double cx = 0;
 		double cy = 0;
@@ -232,6 +235,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 	}
 
+	@Override
 	public WB_AABB getAABB() {
 		return new WB_AABB(vertices);
 	}
@@ -248,7 +252,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 		double f = Math.min(AABB.getWidth() / self.getWidth(), AABB.getHeight()
 				/ self.getHeight());
 		f = Math.min(f, AABB.getDepth() / self.getDepth());
-		final WB_Vector center = geometryfactory.createVector(acx, acy, acz);
+
 		final List<WB_IndexedPoint> rescaled = new FastTable<WB_IndexedPoint>();
 		for (int i = 0; i < vertices.size(); i++) {
 			final WB_IndexedPoint p = vertices.getPoint(i);
@@ -276,7 +280,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 			face = face2;
 			if (face.length == 3) {
 				addTriangle(face);
-			} else {
+			}
+			else {
 				triangles = WB_Triangulate.getPolygonTriangulation2D(face,
 						vertices, true,
 						geometryfactory.createEmbeddedPlane(getPlane(id)))
@@ -298,6 +303,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 	}
 
+	@SuppressWarnings("unused")
 	private WB_FaceListMesh triangulateMT() {
 		tris = Collections.synchronizedList(new FastTable<int[]>());
 		final int threadCount = Runtime.getRuntime().availableProcessors();
@@ -319,7 +325,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 		try {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		} catch (final InterruptedException e) {
+		}
+		catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 		faces = new int[tris.size()][3];
@@ -350,7 +357,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 				face = faces[i];
 				if (face.length == 3) {
 					addTriangle(face);
-				} else {
+				}
+				else {
 					triangles = WB_Triangulate.getPolygonTriangulation2D(face,
 							vertices, true,
 							geometryfactory.createEmbeddedPlane(getPlane(i)))
@@ -371,13 +379,15 @@ public class WB_FaceListMesh implements WB_Mesh {
 		tris.add(tri);
 	}
 
+	@Override
 	public WB_Vector getFaceNormal(final int id) {
 		if (!fNormalsUpdated) {
 			updateFaceNormalsST();
 		}
-		return (WB_Vector) faceNormals[id];
+		return faceNormals[id];
 	}
 
+	@Override
 	public WB_Point getFaceCenter(final int id) {
 		final WB_Point c = geometryfactory.createPoint();
 		for (int i = 0; i < faces[id].length; i++) {
@@ -388,21 +398,25 @@ public class WB_FaceListMesh implements WB_Mesh {
 		return c;
 	}
 
+	@Override
 	public WB_Vector getVertexNormal(final int i) {
 		if (!vNormalsUpdated) {
 			updateVertexNormals();
 		}
-		return (WB_Vector) vertexNormals[i];
+		return vertexNormals[i];
 	}
 
+	@Override
 	public int getNumberOfFaces() {
 		return faces.length;
 	}
 
+	@Override
 	public int getNumberOfVertices() {
 		return vertices.size();
 	}
 
+	@Override
 	public WB_IndexedPoint getVertex(final int i) {
 		return vertices.getPoint(i);
 	}
@@ -445,14 +459,14 @@ public class WB_FaceListMesh implements WB_Mesh {
 		vfNeighborsUpdated = true;
 		/*
 		 * updateffNeighbors();
-		 * 
+		 *
 		 * for (int i = 0; i < nv; i++) { if (vfNeighbors[i].length == 0)
 		 * continue; int f = vfNeighbors[i][0]; int fPrev = prevFace(i, f);
 		 * while (fPrev >= 0 && fPrev != vfNeighbors[i][0]) { f = fPrev; fPrev =
 		 * prevFace(i, f); } int counter = 0; int fStart = f; do {
 		 * vfNeighbors[i][counter++] = f; f = nextFace(i, f); } while (f >= 0 &&
 		 * f != fStart);
-		 * 
+		 *
 		 * }
 		 */
 
@@ -466,7 +480,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	 * The normal of a vertex v computed as a weighted sum f the incident face
 	 * normals. The weight is simply the angle of the involved wedge. Described
 	 * in:
-	 * 
+	 *
 	 * G. Thurmer, C. A. Wuthrich
 	 * "Computing vertex normals from polygonal facets" Journal of Graphics
 	 * Tools, 1998
@@ -484,7 +498,6 @@ public class WB_FaceListMesh implements WB_Mesh {
 			vertexNormals[i] = geometryfactory.createVector();
 		}
 
-		final int nf = faces.length;
 		int i = 0;
 		WB_IndexedPoint p0, p1, p2;
 		for (final int[] face : faces) {
@@ -498,8 +511,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 				final WB_Vector P20 = geometryfactory.createNormalizedVector(
 						p0, p2);
 				final double w = P10.getAngleNorm(P20);
-				((WB_Vector) vertexNormals[face[j]])._addMulSelf(w,
-						(WB_Vector) faceNormals[i]);
+				vertexNormals[face[j]]._addMulSelf(w, faceNormals[i]);
 			}
 			i++;
 
@@ -567,7 +579,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 		try {
 			executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		} catch (final InterruptedException e) {
+		}
+		catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 
@@ -720,14 +733,14 @@ public class WB_FaceListMesh implements WB_Mesh {
 		if (!curvaturesUpdated) {
 			updateCurvatures();
 		}
-		return (WB_Vector) pdir1[i];
+		return pdir1[i];
 	}
 
 	public WB_Vector k2dir(final int i) {
 		if (!curvaturesUpdated) {
 			updateCurvatures();
 		}
-		return (WB_Vector) pdir2[i];
+		return pdir2[i];
 	}
 
 	public double[] DCurv(final int i) {
@@ -746,7 +759,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	}
 
 	private void updateCurvatures() {
-		WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		final WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
 		tri.updateCurvatures();
 		k1min = tri.k1min;
 		k2min = tri.k2min;
@@ -762,7 +775,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	}
 
 	private void updateDCurvatures() {
-		WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		final WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
 		tri.updateDCurvatures();
 		k1min = tri.k1min;
 		k2min = tri.k2min;

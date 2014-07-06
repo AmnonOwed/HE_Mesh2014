@@ -303,7 +303,7 @@ public class HES_Planar extends HES_Subdividor {
 			}
 		}
 
-		selection.collectEdges();
+		selection.collectEdgesByFace();
 
 		final HE_Selection newVertices = new HE_Selection(selection.parent);
 		final HE_Edge[] edges = selection.getEdgesAsArray();

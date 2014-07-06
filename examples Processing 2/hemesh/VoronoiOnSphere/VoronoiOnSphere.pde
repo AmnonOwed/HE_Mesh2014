@@ -16,15 +16,15 @@ WB_DebugRender3D drender;
 WB_Point[] points;
 int num;
 void setup() {
-  size(800, 800, P3D);
+  size(1920, 1080, P3D);
   smooth(8);
-  WB_RandomSphere rs=new WB_RandomSphere();
+  WB_RandomOnSphere rs=new WB_RandomOnSphere();
   HEC_ConvexHull creator=new HEC_ConvexHull();
   num=500;
   points =new WB_Point[num];
   for (int i=0;i<num;i++) {
    
-    points[i]=rs.nextPoint()._mulSelf(300.0); 
+    points[i]=rs.nextPoint()._mulSelf(400.0); 
   }
   creator.setPoints(points);
   creator.setN(num);  
@@ -44,7 +44,7 @@ void draw() {
   background(255);
   directionalLight(255, 255, 255, 1, 1, -1);
   directionalLight(127, 127, 127, -1, -1, 1);
-  translate(400, 400, 0);
+  translate(width/2, height/2, 0);
   rotateY(mouseX*1.0f/width*TWO_PI);
   rotateX(mouseY*1.0f/height*TWO_PI);
   stroke(0);

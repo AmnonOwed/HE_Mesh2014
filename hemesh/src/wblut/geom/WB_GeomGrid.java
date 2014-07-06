@@ -11,7 +11,7 @@ public class WB_GeomGrid {
 
 	private final FastMap<Integer, WB_GeomGridCell> cells;
 
-	private final int W, H, WH, D, N;
+	private final int W, H, WH, D;
 
 	private final double dx, dy, dz, idx, idy, idz;
 
@@ -72,7 +72,7 @@ public class WB_GeomGrid {
 		this.H = H;
 		this.D = D;
 		WH = W * H;
-		N = W * H * D;
+
 		min = new WB_Point(minx, miny, minz);
 		max = new WB_Point(maxx, maxy, maxz);
 		aabb = new WB_AABB(min, max);
@@ -94,7 +94,8 @@ public class WB_GeomGrid {
 				cell = getNewCellForIndex(id);
 				cell.addPoint(p);
 				cells.put(index, cell);
-			} else {
+			}
+			else {
 				cell.addPoint(p);
 			}
 		}
@@ -109,7 +110,8 @@ public class WB_GeomGrid {
 			if (cell == null) {
 				fatcell.addPoint(p);
 				cells.put(id, fatcell);
-			} else {
+			}
+			else {
 				cell.addPoint(p);
 			}
 		}
@@ -152,7 +154,8 @@ public class WB_GeomGrid {
 			if (cell == null) {
 				fatcell.addSegment(S);
 				cells.put(id, fatcell);
-			} else {
+			}
+			else {
 				cell.addSegment(S);
 			}
 		}
@@ -167,7 +170,8 @@ public class WB_GeomGrid {
 				cell = getNewCellForIndex(id);
 				cell.addSegment(S);
 				cells.put(index, cell);
-			} else {
+			}
+			else {
 				cell.addSegment(S);
 			}
 		}
@@ -275,7 +279,8 @@ public class WB_GeomGrid {
 							if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
 								result.add(cell);
 							}
-						} else if (all) {
+						}
+						else if (all) {
 							cell = getNewCellForIndex(id.i + di, id.j + dj,
 									id.k + dk);
 							if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
@@ -329,7 +334,8 @@ public class WB_GeomGrid {
 									.getCenter(), S) <= r2) {
 								result.add(cell);
 							}
-						} else if (all) {
+						}
+						else if (all) {
 							cell = getNewCellForIndex(di, dj, dk);
 							if (WB_Distance.getSqDistance3D(cell.getAABB()
 									.getCenter(), S) <= r2) {
@@ -388,7 +394,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Safeijk.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the index
@@ -421,7 +427,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Ijk.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the index
@@ -460,7 +466,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Indices traversed.
-	 * 
+	 *
 	 * @param segment
 	 *            the segment
 	 * @return the array list
@@ -515,12 +521,14 @@ public class WB_GeomGrid {
 
 				tnx += tdx;
 
-			} else if ((tny <= tnx) && (tny <= tnz)) {// y crossing comes first
+			}
+			else if ((tny <= tnx) && (tny <= tnz)) {// y crossing comes first
 				current.j += signy;
 
 				tny += tdy;
 
-			} else {// z crossing comes first
+			}
+			else {// z crossing comes first
 				current.k += signz;
 
 				tnz += tdz;
@@ -563,7 +571,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Cells traversed.
-	 * 
+	 *
 	 * @param segment
 	 *            the segment
 	 * @param all
@@ -577,7 +585,8 @@ public class WB_GeomGrid {
 			final WB_GeomGridCell cell = cells.get(index(id));
 			if (cell != null) {
 				result.add(cell);
-			} else if (all) {
+			}
+			else if (all) {
 				result.add(getNewCellForIndex(id));
 			}
 
@@ -588,7 +597,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Gets the new cell for index.
-	 * 
+	 *
 	 * @param id
 	 *            the id
 	 * @return the new cell for index
@@ -603,7 +612,7 @@ public class WB_GeomGrid {
 
 	/**
 	 * Gets the new cell for index.
-	 * 
+	 *
 	 * @param i
 	 *            the i
 	 * @param j

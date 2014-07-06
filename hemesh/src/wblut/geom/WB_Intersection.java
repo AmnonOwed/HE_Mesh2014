@@ -107,7 +107,8 @@ public class WB_Intersection {
 				i.sqDist = Double.POSITIVE_INFINITY;
 				return i;
 			}
-		} else {
+		}
+		else {
 			final double ood = 1.0 / d.xd();
 			double t1 = (aabb.getMinX() - p.xd()) * ood;
 			double t2 = (aabb.getMaxX() - p.xd()) * ood;
@@ -137,7 +138,8 @@ public class WB_Intersection {
 				i.sqDist = Double.POSITIVE_INFINITY;
 				return i;
 			}
-		} else {
+		}
+		else {
 			final double ood = 1.0 / d.yd();
 			double t1 = (aabb.getMinY() - p.yd()) * ood;
 			double t2 = (aabb.getMaxY() - p.yd()) * ood;
@@ -167,7 +169,8 @@ public class WB_Intersection {
 				i.sqDist = Double.POSITIVE_INFINITY;
 				return i;
 			}
-		} else {
+		}
+		else {
 			final double ood = 1.0 / d.zd();
 			double t1 = (aabb.getMinZ() - p.zd()) * ood;
 			double t2 = (aabb.getMaxZ() - p.zd()) * ood;
@@ -217,7 +220,8 @@ public class WB_Intersection {
 			i.dimension = 0;
 			i.sqDist = 0;
 			return i;
-		} else {
+		}
+		else {
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = false;
 			i.t1 = 0;
@@ -244,7 +248,8 @@ public class WB_Intersection {
 			i.t2 = 0;
 			i.sqDist = Float.POSITIVE_INFINITY;
 			return i;
-		} else {
+		}
+		else {
 			final double N1N2 = N1.dot(N2);
 			final double det = 1 - N1N2 * N1N2;
 			final double c1 = (d1 - d2 * N1N2) / det;
@@ -252,7 +257,7 @@ public class WB_Intersection {
 			final WB_Point O = new WB_Point(N1._mulSelf(c1)._addSelf(
 					N2._mulSelf(c2)));
 
-			final WB_Line L = new WB_Line(O, N1xN2);
+			new WB_Line(O, N1xN2);
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = true;
 			i.t1 = 0;
@@ -284,7 +289,8 @@ public class WB_Intersection {
 			i.t2 = 0;
 			i.sqDist = Float.POSITIVE_INFINITY;
 			return i;
-		} else {
+		}
+		else {
 			final WB_Vector N1xN2 = N1.cross(N2);
 			final WB_Vector N2xN3 = N2.cross(N3);
 			final WB_Vector N3xN1 = N3.cross(N1);
@@ -536,12 +542,14 @@ public class WB_Intersection {
 		WB_Plane P;
 		if (!n.isZero()) {
 			P = new WB_Plane(n, n.dot(v0));
-		} else {
+		}
+		else {
 			n = f0.cross(f2);
 			n = f0.cross(n);
 			if (!n.isZero()) {
 				P = new WB_Plane(n, n.dot(v0));
-			} else {
+			}
+			else {
 				final WB_Vector t = T.p3().subToVector(T.p1());
 				final double a1 = T.p1().dot(t);
 				final double a2 = T.p2().dot(t);
@@ -550,23 +558,28 @@ public class WB_Intersection {
 					if (a2 < a3) {
 						return checkIntersection3D(
 								new WB_Segment(T.p1(), T.p3()), AABB);
-					} else {
+					}
+					else {
 						return checkIntersection3D(
 								new WB_Segment(T.p1(), T.p2()), AABB);
 					}
-				} else if (a2 < WB_Math.min(a1, a3)) {
+				}
+				else if (a2 < WB_Math.min(a1, a3)) {
 					if (a1 < a3) {
 						return checkIntersection3D(
 								new WB_Segment(T.p2(), T.p3()), AABB);
-					} else {
+					}
+					else {
 						return checkIntersection3D(
 								new WB_Segment(T.p2(), T.p1()), AABB);
 					}
-				} else {
+				}
+				else {
 					if (a1 < a2) {
 						return checkIntersection3D(
 								new WB_Segment(T.p3(), T.p2()), AABB);
-					} else {
+					}
+					else {
 						return checkIntersection3D(
 								new WB_Segment(T.p3(), T.p1()), AABB);
 					}
@@ -708,7 +721,8 @@ public class WB_Intersection {
 			if (checkIntersection3D(R, current.getAABB())) {
 				if (current.isLeaf()) {
 					result.add(current);
-				} else {
+				}
+				else {
 					if (current.getPosChild() != null) {
 						queue.add(current.getPosChild());
 					}
@@ -783,7 +797,8 @@ public class WB_Intersection {
 			if (checkIntersection3D(L, current.getAABB())) {
 				if (current.isLeaf()) {
 					result.add(current);
-				} else {
+				}
+				else {
 					if (current.getPosChild() != null) {
 						queue.add(current.getPosChild());
 					}
@@ -812,7 +827,8 @@ public class WB_Intersection {
 			if (checkIntersection3D(S, current.getAABB())) {
 				if (current.isLeaf()) {
 					result.add(current);
-				} else {
+				}
+				else {
 					if (current.getPosChild() != null) {
 						queue.add(current.getPosChild());
 					}
@@ -841,7 +857,8 @@ public class WB_Intersection {
 			if (checkIntersection3D(current.getAABB(), P)) {
 				if (current.isLeaf()) {
 					result.add(current);
-				} else {
+				}
+				else {
 					if (current.getPosChild() != null) {
 						queue.add(current.getPosChild());
 					}
@@ -862,7 +879,7 @@ public class WB_Intersection {
 	public static ArrayList<WB_Segment> getIntersection3D(
 			final SimplePolygon poly, final WB_Plane P) {
 
-		final WB_Classification cptp = P.classifyPolygonToPlane(poly);
+		P.classifyPolygonToPlane(poly);
 		final ArrayList<WB_Segment> result = new ArrayList<WB_Segment>();
 		/*
 		 * if (cptp == WB_ClassifyPolygonToPlane.POLYGON_ON_PLANE) { return
@@ -886,7 +903,8 @@ public class WB_Intersection {
 						i = WB_Intersection.getIntersection3D(b, a, P);
 						splitVerts.add((WB_Point) i.object);
 					}
-				} else if (bSide == WB_Classification.BACK) {
+				}
+				else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
 						i = WB_Intersection.getIntersection3D(a, b, P);
 						splitVerts.add((WB_Point) i.object);
@@ -934,7 +952,8 @@ public class WB_Intersection {
 			if (i.intersection) {
 				i.dimension = 0;
 				i.object = S1.getOrigin();
-			} else {
+			}
+			else {
 				i.dimension = 1;
 				i.object = new WB_Segment(S1.getOrigin(), S2.getOrigin());
 			}
@@ -949,7 +968,8 @@ public class WB_Intersection {
 			if (i.intersection) {
 				i.dimension = 0;
 				i.object = S1.getOrigin();
-			} else {
+			}
+			else {
 				i.dimension = 1;
 				i.object = new WB_Segment(S1.getOrigin(), getClosestPoint3D(
 						S1.getOrigin(), S2));
@@ -965,7 +985,8 @@ public class WB_Intersection {
 			if (i.intersection) {
 				i.dimension = 0;
 				i.object = S2.getOrigin();
-			} else {
+			}
+			else {
 				i.dimension = 1;
 				i.object = new WB_Segment(S2.getOrigin(), getClosestPoint3D(
 						S2.getOrigin(), S1));
@@ -982,7 +1003,8 @@ public class WB_Intersection {
 		if (!WB_Epsilon.isZero(denom)) {
 			// Non-parallel segments
 			t1 = WB_Math.clamp((b * f - c * e) / denom, 0, 1);
-		} else {
+		}
+		else {
 			// Parallel segments, non-parallel code handles case where
 			// projections of segments are disjoint.
 			final WB_Line L1 = new WB_Line(S1.getOrigin(), S1.getDirection());
@@ -1019,12 +1041,14 @@ public class WB_Intersection {
 					if (WB_Epsilon.isZeroSq(i.sqDist)) {
 						i.dimension = 0;
 						i.object = start;
-					} else {
+					}
+					else {
 						i.dimension = 1;
 						i.object = new WB_Segment(start, end);
 					}
 					return i;
-				} else {
+				}
+				else {
 					final WB_IntersectionResult i = new WB_IntersectionResult();
 					i.sqDist = WB_Distance.getSqDistance3D(start, end);
 					i.intersection = false;
@@ -1041,10 +1065,12 @@ public class WB_Intersection {
 		final double tnom = b * t1 + f;
 		if (tnom < 0) {
 			t1 = WB_Math.clamp(-c / a, 0, 1);
-		} else if (tnom > e) {
+		}
+		else if (tnom > e) {
 			t2 = 1;
 			t1 = WB_Math.clamp((b - c) / a, 0, 1);
-		} else {
+		}
+		else {
 			t2 = tnom / e;
 		}
 
@@ -1056,7 +1082,8 @@ public class WB_Intersection {
 		if (i.intersection) {
 			i.dimension = 0;
 			i.object = p1;
-		} else {
+		}
+		else {
 			i.dimension = 1;
 			i.object = new WB_Segment(p1, p2);
 		}
@@ -1085,12 +1112,14 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return S.getOrigin().get();
-		} else {
+		}
+		else {
 			final double denom = S.getLength() * S.getLength();
 			if (t >= denom) {
 				t = 1;
 				return S.getEndpoint().get();
-			} else {
+			}
+			else {
 				t = t / denom;
 				return new WB_Point(S.getParametricPointOnSegment(t));
 			}
@@ -1109,12 +1138,14 @@ public class WB_Intersection {
 		double t = ac.dot(ab);
 		if (t <= WB_Epsilon.EPSILON) {
 			return 0;
-		} else {
+		}
+		else {
 			final double denom = S.getLength() * S.getLength();
 			if (t >= (denom - WB_Epsilon.EPSILON)) {
 				t = 1;
 				return 1;
-			} else {
+			}
+			else {
 				t = t / denom;
 				return t;
 			}
@@ -1134,12 +1165,14 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return new WB_Point(a);
-		} else {
+		}
+		else {
 			final double denom = ab.dot(ab);
 			if (t >= denom) {
 				t = 1;
 				return new WB_Point(b);
-			} else {
+			}
+			else {
 				t = t / denom;
 				return new WB_Point(a.xd() + t * ab.xd(), a.yd() + t * ab.yd(),
 						a.zd() + t * ab.zd());
@@ -1166,7 +1199,8 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return R.getOrigin().get();
-		} else {
+		}
+		else {
 			return new WB_Point(R.getPointOnLine(t));
 		}
 	}
@@ -1333,7 +1367,7 @@ public class WB_Intersection {
 		final double v = vb * denom;
 		final double w = vc * denom;
 		return new WB_Point(a)
-				._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
@@ -1401,9 +1435,11 @@ public class WB_Intersection {
 		final double dC2 = WB_Distance.getSqDistance3D(p, C);
 		if ((dA2 < dB2) && (dA2 < dC2)) {
 			return A;
-		} else if ((dB2 < dA2) && (dB2 < dC2)) {
+		}
+		else if ((dB2 < dA2) && (dB2 < dC2)) {
 			return B;
-		} else {
+		}
+		else {
 			return C;
 		}
 
@@ -1569,7 +1605,8 @@ public class WB_Intersection {
 			i.object = p1;
 			i.sqDist = d2;
 			return i;
-		} else {
+		}
+		else {
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = true;
 			i.t1 = t1;
@@ -1633,21 +1670,22 @@ public class WB_Intersection {
 		public WB_Point p0; // the first point of the line
 		public WB_Point p1; // the second point of the line
 		public double s0; // the distance along the line to the first
-							// intersection with the triangle
+		// intersection with the triangle
 		public double s1; // the distance along the line to the second
-							// intersection with the triangle
+		// intersection with the triangle
 	}
 
-	public static WB_IntersectionResult getIntersection3D(Triangle v, Triangle u) {
+	public static WB_IntersectionResult getIntersection3D(final Triangle v,
+			final Triangle u) {
 		// Taken from
 		// http://jgt.akpeters.com/papers/Moller97/tritri.html#ISECTLINE
 
 		// Compute plane equation of first triangle: n1 * x + d1 = 0.
 
-		WB_Plane P1 = factory.createPlane(v);
+		final WB_Plane P1 = factory.createPlane(v);
 
-		WB_Vector n1 = P1.getNormal();
-		double d1 = -P1.d();
+		final WB_Vector n1 = P1.getNormal();
+		final double d1 = -P1.d();
 
 		// Evaluate second triangle with plane equation 1 to determine signed
 		// distances to the plane.
@@ -1655,25 +1693,28 @@ public class WB_Intersection {
 		double du1 = n1.dot(u.p2()) + d1;
 		double du2 = n1.dot(u.p3()) + d1;
 		// Coplanarity robustness check.
-		if (Math.abs(du0) < WB_Epsilon.EPSILON)
+		if (Math.abs(du0) < WB_Epsilon.EPSILON) {
 			du0 = 0;
-		if (Math.abs(du1) < WB_Epsilon.EPSILON)
+		}
+		if (Math.abs(du1) < WB_Epsilon.EPSILON) {
 			du1 = 0;
-		if (Math.abs(du2) < WB_Epsilon.EPSILON)
+		}
+		if (Math.abs(du2) < WB_Epsilon.EPSILON) {
 			du2 = 0;
+		}
 
-		double du0du1 = du0 * du1;
-		double du0du2 = du0 * du2;
+		final double du0du1 = du0 * du1;
+		final double du0du2 = du0 * du2;
 
 		if (du0du1 > 0 && du0du2 > 0) {
 			return empty();
 			// same sign on all of them + != 0 ==> no
 		}
 		// intersection
-		WB_Plane P2 = factory.createPlane(u);
+		final WB_Plane P2 = factory.createPlane(u);
 
-		WB_Vector n2 = P2.getNormal();
-		double d2 = -P2.d();
+		final WB_Vector n2 = P2.getNormal();
+		final double d2 = -P2.d();
 		// Compute plane equation of second triangle: n2 * x + d2 = 0
 
 		// Evaluate first triangle with plane equation 2 to determine signed
@@ -1683,15 +1724,18 @@ public class WB_Intersection {
 		double dv2 = n2.dot(v.p3()) + d2;
 
 		// Coplanarity robustness check.
-		if (Math.abs(dv0) < WB_Epsilon.EPSILON)
+		if (Math.abs(dv0) < WB_Epsilon.EPSILON) {
 			dv0 = 0;
-		if (Math.abs(dv1) < WB_Epsilon.EPSILON)
+		}
+		if (Math.abs(dv1) < WB_Epsilon.EPSILON) {
 			dv1 = 0;
-		if (Math.abs(dv2) < WB_Epsilon.EPSILON)
+		}
+		if (Math.abs(dv2) < WB_Epsilon.EPSILON) {
 			dv2 = 0;
+		}
 
-		double dv0dv1 = dv0 * dv1;
-		double dv0dv2 = dv0 * dv2;
+		final double dv0dv1 = dv0 * dv1;
+		final double dv0dv2 = dv0 * dv2;
 
 		if (dv0dv1 > 0 && dv0dv2 > 0) {
 			return empty();
@@ -1699,13 +1743,13 @@ public class WB_Intersection {
 		}
 
 		// Compute direction of intersection line.
-		WB_Vector ld = n1.cross(n2);
+		final WB_Vector ld = n1.cross(n2);
 
 		// Compute an index to the largest component of line direction.
 		double max = Math.abs(ld.xd());
 		int index = 0;
-		double b = Math.abs(ld.yd());
-		double c = Math.abs(ld.zd());
+		final double b = Math.abs(ld.yd());
+		final double c = Math.abs(ld.zd());
 		if (b > max) {
 			max = b;
 			index = 1;
@@ -1730,7 +1774,8 @@ public class WB_Intersection {
 			up0 = u.p1().yd();
 			up1 = u.p2().yd();
 			up2 = u.p3().yd();
-		} else if (index == 2) {
+		}
+		else if (index == 2) {
 			vp0 = v.p1().zd();
 			vp1 = v.p2().zd();
 			vp2 = v.p3().zd();
@@ -1741,13 +1786,14 @@ public class WB_Intersection {
 		}
 
 		// Compute interval for triangle 1.
-		TriangleIntersection isectA = compute_intervals_isectline(v, vp0, vp1,
-				vp2, dv0, dv1, dv2, dv0dv1, dv0dv2);
+		final TriangleIntersection isectA = compute_intervals_isectline(v, vp0,
+				vp1, vp2, dv0, dv1, dv2, dv0dv1, dv0dv2);
 
 		if (isectA == null) {
 			if (coplanarTriangles(n1, v, u)) {
 				return empty();
-			} else {
+			}
+			else {
 				final WB_IntersectionResult i = new WB_IntersectionResult();
 				i.intersection = true;
 
@@ -1757,67 +1803,83 @@ public class WB_Intersection {
 
 		int smallest1 = 0;
 		if (isectA.s0 > isectA.s1) {
-			double cc = isectA.s0;
+			final double cc = isectA.s0;
 			isectA.s0 = isectA.s1;
 			isectA.s1 = cc;
 			smallest1 = 1;
 		}
 
 		// Compute interval for triangle 2.
-		TriangleIntersection isectB = compute_intervals_isectline(u, up0, up1,
-				up2, du0, du1, du2, du0du1, du0du2);
+		final TriangleIntersection isectB = compute_intervals_isectline(u, up0,
+				up1, up2, du0, du1, du2, du0du1, du0du2);
 
 		int smallest2 = 0;
 		if (isectB.s0 > isectB.s1) {
-			double cc = isectB.s0;
+			final double cc = isectB.s0;
 			isectB.s0 = isectB.s1;
 			isectB.s1 = cc;
 			smallest2 = 1;
 		}
 
-		if (isectA.s1 < isectB.s0 || isectB.s1 < isectA.s0)
+		if (isectA.s1 < isectB.s0 || isectB.s1 < isectA.s0) {
 			return empty();
+		}
 
 		// At this point we know that the triangles intersect: there's an
 		// intersection line, the triangles are not
 		// coplanar, and they overlap.
-		WB_Point[] intersectionVertices = new WB_Point[2];
+		final WB_Point[] intersectionVertices = new WB_Point[2];
 		if (isectB.s0 < isectA.s0) {
-			if (smallest1 == 0)
+			if (smallest1 == 0) {
 				intersectionVertices[0] = isectA.p0;
-			else
+			}
+			else {
 				intersectionVertices[0] = isectA.p1;
+			}
 
 			if (isectB.s1 < isectA.s1) {
-				if (smallest2 == 0)
+				if (smallest2 == 0) {
 					intersectionVertices[1] = isectB.p1;
-				else
+				}
+				else {
 					intersectionVertices[1] = isectB.p0;
-			} else {
-				if (smallest1 == 0)
-					intersectionVertices[1] = isectA.p1;
-				else
-					intersectionVertices[1] = isectA.p0;
+				}
 			}
-		} else {
-			if (smallest2 == 0)
-				intersectionVertices[0] = isectB.p0;
-			else
-				intersectionVertices[0] = isectB.p1;
-
-			if (isectB.s1 > isectA.s1) {
-				if (smallest1 == 0)
+			else {
+				if (smallest1 == 0) {
 					intersectionVertices[1] = isectA.p1;
-				else
+				}
+				else {
 					intersectionVertices[1] = isectA.p0;
-			} else {
-				if (smallest2 == 0)
-					intersectionVertices[1] = isectB.p1;
-				else
-					intersectionVertices[1] = isectB.p0;
+				}
 			}
 		}
-		WB_IntersectionResult ir = new WB_IntersectionResult();
+		else {
+			if (smallest2 == 0) {
+				intersectionVertices[0] = isectB.p0;
+			}
+			else {
+				intersectionVertices[0] = isectB.p1;
+			}
+
+			if (isectB.s1 > isectA.s1) {
+				if (smallest1 == 0) {
+					intersectionVertices[1] = isectA.p1;
+				}
+				else {
+					intersectionVertices[1] = isectA.p0;
+				}
+			}
+			else {
+				if (smallest2 == 0) {
+					intersectionVertices[1] = isectB.p1;
+				}
+				else {
+					intersectionVertices[1] = isectB.p0;
+				}
+			}
+		}
+		final WB_IntersectionResult ir = new WB_IntersectionResult();
 		ir.intersection = true;
 		ir.object = factory.createSegment(intersectionVertices[0],
 				intersectionVertices[1]);
@@ -1826,27 +1888,35 @@ public class WB_Intersection {
 	}
 
 	protected static TriangleIntersection compute_intervals_isectline(
-			Triangle v, double vv0, double vv1, double vv2, double d0,
-			double d1, double d2, double d0d1, double d0d2) {
-		if (d0d1 > 0) // D0, D1 are on the same side, D2 on the other or on the
-						// plane
+			final Triangle v, final double vv0, final double vv1,
+			final double vv2, final double d0, final double d1,
+			final double d2, final double d0d1, final double d0d2) {
+		if (d0d1 > 0) {
+			// plane
 			return intersect(v.p3(), v.p1(), v.p2(), vv2, vv0, vv1, d2, d0, d1);
-		else if (d0d2 > 0)
+		}
+		else if (d0d2 > 0) {
 			return intersect(v.p2(), v.p1(), v.p3(), vv1, vv0, vv2, d1, d0, d2);
-		else if (d1 * d2 > 0 || d0 != 0)
+		}
+		else if (d1 * d2 > 0 || d0 != 0) {
 			return intersect(v.p1(), v.p2(), v.p3(), vv0, vv1, vv2, d0, d1, d2);
-		else if (d1 != 0)
+		}
+		else if (d1 != 0) {
 			return intersect(v.p2(), v.p1(), v.p3(), vv1, vv0, vv2, d1, d0, d2);
-		else if (d2 != 0)
+		}
+		else if (d2 != 0) {
 			return intersect(v.p3(), v.p1(), v.p2(), vv2, vv0, vv1, d2, d0, d1);
-		else
+		}
+		else {
 			return null; // triangles are coplanar
+		}
 	}
 
-	protected static TriangleIntersection intersect(WB_Point v0, WB_Point v1,
-			WB_Point v2, double vv0, double vv1, double vv2, double d0,
-			double d1, double d2) {
-		TriangleIntersection intersection = new TriangleIntersection();
+	protected static TriangleIntersection intersect(final WB_Point v0,
+			final WB_Point v1, final WB_Point v2, final double vv0,
+			final double vv1, final double vv2, final double d0,
+			final double d1, final double d2) {
+		final TriangleIntersection intersection = new TriangleIntersection();
 
 		double tmp = d0 / (d0 - d1);
 		intersection.s0 = vv0 + (vv1 - vv0) * tmp;
@@ -1863,123 +1933,143 @@ public class WB_Intersection {
 		return intersection;
 	}
 
-	protected static boolean coplanarTriangles(WB_Vector n, Triangle v,
-			Triangle u) {
+	protected static boolean coplanarTriangles(final WB_Vector n,
+			final Triangle v, final Triangle u) {
 		// First project onto an axis-aligned plane that maximizes the are of
 		// the triangles.
 		int i0;
 		int i1;
 
-		double[] a = new double[] { Math.abs(n.xd()), Math.abs(n.yd()),
+		final double[] a = new double[] { Math.abs(n.xd()), Math.abs(n.yd()),
 				Math.abs(n.zd()) };
 		if (a[0] > a[1]) // X > Y
 		{
 			if (a[0] > a[2]) { // X is greatest
 				i0 = 1;
 				i1 = 2;
-			} else { // Z is greatest
+			}
+			else { // Z is greatest
 				i0 = 0;
 				i1 = 1;
 			}
-		} else // X < Y
+		}
+		else // X < Y
 		{
 			if (a[2] > a[1]) { // Z is greatest
 				i0 = 0;
 				i1 = 1;
-			} else { // Y is greatest
+			}
+			else { // Y is greatest
 				i0 = 0;
 				i1 = 2;
 			}
 		}
 
 		// Test all edges of triangle 1 against the edges of triangle 2.
-		double[] v0 = new double[] { v.p1().xd(), v.p1().yd(), v.p1().zd() };
-		double[] v1 = new double[] { v.p2().xd(), v.p2().yd(), v.p2().zd() };
-		double[] v2 = new double[] { v.p3().xd(), v.p3().yd(), v.p3().zd() };
+		final double[] v0 = new double[] { v.p1().xd(), v.p1().yd(),
+				v.p1().zd() };
+		final double[] v1 = new double[] { v.p2().xd(), v.p2().yd(),
+				v.p2().zd() };
+		final double[] v2 = new double[] { v.p3().xd(), v.p3().yd(),
+				v.p3().zd() };
 
-		double[] u0 = new double[] { u.p1().xd(), u.p1().yd(), u.p1().zd() };
-		double[] u1 = new double[] { u.p2().xd(), u.p2().yd(), u.p2().zd() };
-		double[] u2 = new double[] { u.p3().xd(), u.p3().yd(), u.p3().zd() };
+		final double[] u0 = new double[] { u.p1().xd(), u.p1().yd(),
+				u.p1().zd() };
+		final double[] u1 = new double[] { u.p2().xd(), u.p2().yd(),
+				u.p2().zd() };
+		final double[] u2 = new double[] { u.p3().xd(), u.p3().yd(),
+				u.p3().zd() };
 
 		boolean tf = triangleEdgeTest(v0, v1, u0, u1, u2, i0, i1);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		tf = triangleEdgeTest(v1, v2, u0, u1, u2, i0, i1);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		tf = triangleEdgeTest(v2, v0, u0, u1, u2, i0, i1);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		// Finally, test whether one triangle is contained in the other one.
 		tf = pointInTri(v0, u0, u1, u2, i0, i1);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		return pointInTri(u0, v0, v1, v2, i0, i1);
 	}
 
-	protected static boolean triangleEdgeTest(double[] v0, double[] v1,
-			double[] u0, double[] u1, double[] u2, int i0, int i1) {
-		double ax = v1[i0] - v0[i0];
-		double ay = v1[i1] - v0[i1];
+	protected static boolean triangleEdgeTest(final double[] v0,
+			final double[] v1, final double[] u0, final double[] u1,
+			final double[] u2, final int i0, final int i1) {
+		final double ax = v1[i0] - v0[i0];
+		final double ay = v1[i1] - v0[i1];
 
 		// Test edge u0:u1 against v0:v1
 		boolean tf = edgeEdgeTest(v0, u0, u1, i0, i1, ax, ay);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		// Test edge u1:u2 against v0:v1
 		tf = edgeEdgeTest(v0, u1, u2, i0, i1, ax, ay);
-		if (tf)
+		if (tf) {
 			return true;
+		}
 
 		// Test edge u2:u0 against v0:v1
 		return edgeEdgeTest(v0, u2, u0, i0, i1, ax, ay);
 	}
 
-	protected static boolean edgeEdgeTest(double[] v0, double[] u0,
-			double[] u1, int i0, int i1, double ax, double ay) {
-		double bx = u0[i0] - u1[i0];
-		double by = u0[i1] - u1[i1];
-		double cx = v0[i0] - u0[i0];
-		double cy = v0[i1] - u0[i1];
+	protected static boolean edgeEdgeTest(final double[] v0, final double[] u0,
+			final double[] u1, final int i0, final int i1, final double ax,
+			final double ay) {
+		final double bx = u0[i0] - u1[i0];
+		final double by = u0[i1] - u1[i1];
+		final double cx = v0[i0] - u0[i0];
+		final double cy = v0[i1] - u0[i1];
 
-		double f = ay * bx - ax * by;
-		double d = by * cx - bx * cy;
+		final double f = ay * bx - ax * by;
+		final double d = by * cx - bx * cy;
 
 		if ((f > 0 && d >= 0 && d <= f) || (f < 0 && d <= 0 && d >= f)) {
-			double e = ax * cy - ay * cx;
+			final double e = ax * cy - ay * cx;
 			if (f > 0) {
-				if (e >= 0 && e <= f)
+				if (e >= 0 && e <= f) {
 					return true;
-			} else {
-				if (e <= 0 && e >= f)
+				}
+			}
+			else {
+				if (e <= 0 && e >= f) {
 					return true;
+				}
 			}
 		}
 
 		return false;
 	}
 
-	protected static boolean pointInTri(double[] v0, double[] u0, double[] u1,
-			double[] u2, int i0, int i1) {
+	protected static boolean pointInTri(final double[] v0, final double[] u0,
+			final double[] u1, final double[] u2, final int i0, final int i1) {
 		double a = u1[i1] - u0[i1];
 		double b = -(u1[i0] - u0[i0]);
 		double c = -a * u0[i0] - b * u0[i1];
-		double d0 = a * v0[i0] + b * v0[i1] + c;
+		final double d0 = a * v0[i0] + b * v0[i1] + c;
 
 		a = u2[i1] - u1[i1];
 		b = -(u2[i0] - u1[i0]);
 		c = -a * u1[i0] - b * u1[i1];
-		double d1 = a * v0[i0] + b * v0[i1] + c;
+		final double d1 = a * v0[i0] + b * v0[i1] + c;
 
 		a = u0[i1] - u2[i1];
 		b = -(u0[i0] - u2[i0]);
 		c = -a * u2[i0] - b * u2[i1];
-		double d2 = a * v0[i0] + b * v0[i1] + c;
+		final double d2 = a * v0[i0] + b * v0[i1] + c;
 
 		return d0 * d1 > 0 && d0 * d2 > 0;
 	}
@@ -2048,7 +2138,8 @@ public class WB_Intersection {
 
 			}
 
-		} else {
+		}
+		else {
 			i.intersection = false;
 			i.t1 = 0;
 			i.t2 = 0;
@@ -2069,7 +2160,8 @@ public class WB_Intersection {
 						(WB_Point) ir2D.object);
 				result[1] = new WB_Segment((WB_Point) ir2D.object,
 						S.getEndpoint());
-			} else if (L.classifyPointToLine2D(S.getOrigin()) == WB_Classification.BACK) {
+			}
+			else if (L.classifyPointToLine2D(S.getOrigin()) == WB_Classification.BACK) {
 				result[1] = new WB_Segment(S.getOrigin(),
 						(WB_Point) ir2D.object);
 				result[0] = new WB_Segment((WB_Point) ir2D.object,
@@ -2095,19 +2187,23 @@ public class WB_Intersection {
 				result[0] = 2;
 				if (u0 < v0) {
 					result[1] = v0;
-				} else {
+				}
+				else {
 					result[1] = u0;
 				}
 				if (u1 > v1) {
 					result[2] = v1;
-				} else {
+				}
+				else {
 					result[2] = u1;
 				}
-			} else {
+			}
+			else {
 				result[0] = 1;
 				result[1] = u0;
 			}
-		} else {
+		}
+		else {
 			result[0] = 1;
 			result[1] = u1;
 		}
@@ -2117,8 +2213,6 @@ public class WB_Intersection {
 
 	public static WB_SimplePolygon[] splitPolygon2D(
 			final WB_SimplePolygon poly, final WB_Line L) {
-		int numFront = 0;
-		int numBack = 0;
 
 		final ArrayList<WB_Point> frontVerts = new ArrayList<WB_Point>(20);
 		final ArrayList<WB_Point> backVerts = new ArrayList<WB_Point>(20);
@@ -2140,17 +2234,19 @@ public class WB_Intersection {
 						WB_Point p1 = null;
 						if (i.dimension == 0) {
 							p1 = (WB_Point) i.object;
-						} else if (i.dimension == 1) {
+						}
+						else if (i.dimension == 1) {
 							p1 = ((Segment) i.object).getOrigin();
 						}
 						frontVerts.add(p1);
-						numFront++;
+
 						backVerts.add(p1);
-						numBack++;
+
 					}
 					frontVerts.add(b);
-					numFront++;
-				} else if (bSide == WB_Classification.BACK) {
+
+				}
+				else if (bSide == WB_Classification.BACK) {
 					if (aSide == WB_Classification.FRONT) {
 						i = getClosestPoint2D(L, new WB_Segment(a, b));
 
@@ -2163,21 +2259,23 @@ public class WB_Intersection {
 						final WB_Point p1 = (WB_Point) i.object;
 
 						frontVerts.add(p1);
-						numFront++;
+
 						backVerts.add(p1);
-						numBack++;
-					} else if (aSide == WB_Classification.ON) {
+
+					}
+					else if (aSide == WB_Classification.ON) {
 						backVerts.add(a);
-						numBack++;
+
 					}
 					backVerts.add(b);
-					numBack++;
-				} else {
+
+				}
+				else {
 					frontVerts.add(b);
-					numFront++;
+
 					if (aSide == WB_Classification.BACK) {
 						backVerts.add(b);
-						numBack++;
+
 					}
 				}
 				a = b;
@@ -2265,12 +2363,14 @@ public class WB_Intersection {
 				|| WB_Predicates.orient2D(c, d, a) == 0
 				|| WB_Predicates.orient2D(c, d, b) == 0) {
 			return false;
-		} else if (WB_Predicates.orient2D(a, b, c)
+		}
+		else if (WB_Predicates.orient2D(a, b, c)
 				* WB_Predicates.orient2D(a, b, d) > 0
 				|| WB_Predicates.orient2D(c, d, a)
-						* WB_Predicates.orient2D(c, d, b) > 0) {
+				* WB_Predicates.orient2D(c, d, b) > 0) {
 			return false;
-		} else {
+		}
+		else {
 			return true;
 		}
 	}
@@ -2283,12 +2383,14 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return S.getOrigin().get();
-		} else {
+		}
+		else {
 			final double denom = S.getLength() * S.getLength();
 			if (t >= denom) {
 				t = 1;
 				return S.getEndpoint().get();
-			} else {
+			}
+			else {
 				t = t / denom;
 				return new WB_Point(S.getParametricPointOnSegment(t));
 			}
@@ -2308,12 +2410,14 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return new WB_Point(a);
-		} else {
+		}
+		else {
 			final double denom = ab.dot(ab);
 			if (t >= denom) {
 				t = 1;
 				return new WB_Point(b);
-			} else {
+			}
+			else {
 				t = t / denom;
 				return new WB_Point(a.xd() + t * ab.xd(), a.yd() + t * ab.yd());
 			}
@@ -2354,7 +2458,8 @@ public class WB_Intersection {
 		if (t <= 0) {
 			t = 0;
 			return R.getOrigin().get();
-		} else {
+		}
+		else {
 			return R.getPointOnLine(t);
 		}
 	}
@@ -2392,26 +2497,31 @@ public class WB_Intersection {
 		if (WB_Epsilon.isZero(a)) {
 
 			t2 = WB_Math.clamp(f / e, 0, 1);
-		} else {
+		}
+		else {
 			final double c = d1.dot(r);
 			if (WB_Epsilon.isZero(e)) {
 
 				t1 = WB_Math.clamp(-c / a, 0, 1);
-			} else {
+			}
+			else {
 				final double b = d1.dot(d2);
 				final double denom = a * e - b * b;
 				if (!WB_Epsilon.isZero(denom)) {
 					t1 = WB_Math.clamp((b * f - c * e) / denom, 0, 1);
-				} else {
+				}
+				else {
 					t1 = 0;
 				}
 				final double tnom = b * t1 + f;
 				if (tnom < 0) {
 					t1 = WB_Math.clamp(-c / a, 0, 1);
-				} else if (tnom > e) {
+				}
+				else if (tnom > e) {
 					t2 = 1;
 					t1 = WB_Math.clamp((b - c) / a, 0, 1);
-				} else {
+				}
+				else {
 					t2 = tnom / e;
 				}
 			}
@@ -2426,7 +2536,8 @@ public class WB_Intersection {
 		if (i.intersection) {
 			i.dimension = 0;
 			i.object = p1;
-		} else {
+		}
+		else {
 			i.dimension = 1;
 			i.object = new WB_Segment(p1, p2);
 		}
@@ -2672,9 +2783,11 @@ public class WB_Intersection {
 		final double dC2 = WB_Distance.getSqDistance2D(p, C);
 		if ((dA2 < dB2) && (dA2 < dC2)) {
 			return A;
-		} else if ((dB2 < dA2) && (dB2 < dC2)) {
+		}
+		else if ((dB2 < dA2) && (dB2 < dC2)) {
 			return B;
-		} else {
+		}
+		else {
 			return C;
 		}
 

@@ -742,7 +742,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 		final HE_Selection sel = new HE_Selection(mesh);
 		sel.addFaces(faces);
-		sel.collectEdges();
+		sel.collectEdgesByFace();
 
 		final List<HE_Edge> originalEdges = sel.getEdgesAsList();
 		final int nf = faces.size();

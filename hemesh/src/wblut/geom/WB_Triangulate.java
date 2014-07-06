@@ -40,7 +40,7 @@ public class WB_Triangulate {
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final WB_Coordinate[] points, double precision) {
+			final WB_Coordinate[] points, final double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
 				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
@@ -48,14 +48,14 @@ public class WB_Triangulate {
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final List<? extends WB_Coordinate> points, double precision) {
+			final List<? extends WB_Coordinate> points, final double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
 				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
 	}
 
 	public static WB_Triangulation3D getTriangulation3D(
-			final WB_CoordinateSequence points, double precision) {
+			final WB_CoordinateSequence points, final double precision) {
 		final WB_Triangulation3D result = new WB_Triangulation3D(
 				WB_Delaunay.getTriangulation3D(points, precision).Tri);
 		return result;
@@ -463,7 +463,7 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation2D getTriangulation2D(
 			final List<? extends WB_Coordinate> points,
-			final WB_Context2D context) {
+					final WB_Context2D context) {
 		final int n = points.size();
 
 		final ArrayList<Coordinate> coords = new ArrayList<Coordinate>(n);
@@ -742,10 +742,6 @@ public class WB_Triangulate {
 			this.shellCoords = Collections.unmodifiableList(shellCoords);
 		}
 
-		public boolean flip(final Triangle t0, final Triangle t1) {
-			return flip(t0, t1, t0.getSharedVertices(t1));
-		}
-
 		public boolean flip(final Triangle ear0, final Triangle ear1,
 				final int[] sharedVertices) {
 			if (sharedVertices == null || sharedVertices.length != 2) {
@@ -810,7 +806,7 @@ public class WB_Triangulate {
 
 		/**
 		 * Constructor. No checking is done on the values supplied.
-		 * 
+		 *
 		 * @param v0
 		 *            first vertex
 		 * @param v1
@@ -826,7 +822,7 @@ public class WB_Triangulate {
 		/**
 		 * Set the vertex indices for this Triangle. No checking is done on the
 		 * values supplied.
-		 * 
+		 *
 		 * @param v0
 		 *            first vertex
 		 * @param v1
@@ -842,7 +838,7 @@ public class WB_Triangulate {
 
 		/**
 		 * Get this Triangle's vertex indices
-		 * 
+		 *
 		 * @return a new array with the vertex indices
 		 */
 		public int[] getVertices() {
@@ -855,7 +851,7 @@ public class WB_Triangulate {
 
 		/**
 		 * Return vertex indices shared with another triangle.
-		 * 
+		 *
 		 * @param other
 		 *            other Triangle
 		 * @return {@code null} if no vertices are shared; otherwise an array
@@ -886,7 +882,7 @@ public class WB_Triangulate {
 
 		/**
 		 * Return a string representation of this Triangle
-		 * 
+		 *
 		 * @return string of the form "Triangle(%d %d %d)"
 		 */
 		@Override
@@ -901,7 +897,7 @@ public class WB_Triangulate {
 
 	/**
 	 * Get the result triangular polygons.
-	 * 
+	 *
 	 * @return triangles as a GeometryCollection
 	 */
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
@@ -923,7 +919,7 @@ public class WB_Triangulate {
 		context.pointTo2D(polygon[0], point);
 		coords[polygon.length] = new Coordinate(point.xd(), point.yd(), 0);
 		final Polygon inputPolygon = new GeometryFactory()
-				.createPolygon(coords);
+		.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
 		final List<WB_Point> Points = new FastTable<WB_Point>();
@@ -951,7 +947,7 @@ public class WB_Triangulate {
 		context.pointTo2D(points[polygon[0]], point);
 		coords[polygon.length] = new Coordinate(point.xd(), point.yd(), 0);
 		final Polygon inputPolygon = new GeometryFactory()
-				.createPolygon(coords);
+		.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		for (int i = 0; i < ears.length; i++) {
 			ears[i][0] = polygon[ears[i][0]];
@@ -989,7 +985,7 @@ public class WB_Triangulate {
 		coords[polygon.length] = new Coordinate(point.xd(), point.yd());
 
 		final Polygon inputPolygon = new GeometryFactory()
-				.createPolygon(coords);
+		.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		for (int i = 0; i < ears.length; i++) {
 			ears[i][0] = polygon[ears[i][0]];
@@ -1010,13 +1006,13 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final List<? extends WB_Coordinate> polygon,
-			final WB_Context2D context) {
+					final WB_Context2D context) {
 		return getPolygonTriangulation2D(polygon, true, context);
 	}
 
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final List<? extends WB_Coordinate> polygon,
-			final boolean optimize, final WB_Context2D context) {
+					final boolean optimize, final WB_Context2D context) {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[polygon.size() + 1];
@@ -1028,7 +1024,7 @@ public class WB_Triangulate {
 		context.pointTo2D(polygon.get(0), point);
 		coords[polygon.size()] = new Coordinate(point.xd(), point.yd(), 0);
 		final Polygon inputPolygon = new GeometryFactory()
-				.createPolygon(coords);
+		.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		final int[][] E = extractEdges(ears);
 		final List<WB_Point> Points = new FastTable<WB_Point>();
@@ -1043,7 +1039,7 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final int[] polygon, final List<? extends WB_Coordinate> points,
-			final boolean optimize, final WB_Context2D context) {
+					final boolean optimize, final WB_Context2D context) {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[polygon.length + 1];
@@ -1056,7 +1052,7 @@ public class WB_Triangulate {
 		coords[polygon.length] = new Coordinate(point.xd(), point.yd(),
 				polygon[0]);
 		final Polygon inputPolygon = new GeometryFactory()
-				.createPolygon(coords);
+		.createPolygon(coords);
 		final int[][] ears = triangulate(inputPolygon, optimize);
 		for (int i = 0; i < ears.length; i++) {
 			ears[i][0] = (int) shellCoords.get(ears[i][0]).z;
@@ -1077,8 +1073,8 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final List<? extends WB_Coordinate> outerPolygon,
-			final List<? extends WB_Coordinate> innerPolygon,
-			final boolean optimize, final WB_Context2D context) {
+					final List<? extends WB_Coordinate> innerPolygon,
+							final boolean optimize, final WB_Context2D context) {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.size() + 1];
@@ -1116,8 +1112,8 @@ public class WB_Triangulate {
 
 	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final List<? extends WB_Coordinate> outerPolygon,
-			final List<? extends WB_Coordinate>[] innerPolygons,
-			final boolean optimize, final WB_Context2D context) {
+					final List<? extends WB_Coordinate>[] innerPolygons,
+							final boolean optimize, final WB_Context2D context) {
 		// Polygon inputPolygon=polygon.;
 
 		final Coordinate[] coords = new Coordinate[outerPolygon.size() + 1];
@@ -1140,7 +1136,7 @@ public class WB_Triangulate {
 					point.yd(), 0);
 
 			final LinearRing hole = new GeometryFactory()
-					.createLinearRing(icoords);
+			.createLinearRing(icoords);
 
 			holes[j] = hole;
 		}
@@ -1224,7 +1220,7 @@ public class WB_Triangulate {
 			new Coordinate(point.xd(), point.yd(), 0);
 
 			final LinearRing hole = new GeometryFactory()
-					.createLinearRing(icoords);
+			.createLinearRing(icoords);
 
 			holes[j] = hole;
 		}
@@ -1274,7 +1270,7 @@ public class WB_Triangulate {
 
 	/**
 	 * Perform the triangulation
-	 * 
+	 *
 	 * @param improve
 	 *            if true, improvement of the triangulation is attempted as a
 	 *            post-processing step
@@ -1338,7 +1334,8 @@ public class WB_Triangulate {
 				k0 = k1;
 				if (k0 == firstK) {
 					finished = true;
-				} else {
+				}
+				else {
 					k1 = k2;
 					k2 = nextShellCoord(k2 + 1);
 				}
@@ -1350,13 +1347,13 @@ public class WB_Triangulate {
 		final int[][] tris = new int[earList.size()][3];
 		for (int i = 0; i < earList.size(); i++) {
 			final int[] tri = earList.get(i).getVertices();
-			boolean flip = false;
+			final boolean flip = false;
 			/*
 			 * if (improve) { if
 			 * (CGAlgorithms.orientationIndex(shellCoords.get(tri[0]),
 			 * shellCoords.get(tri[1]), shellCoords.get(tri[2])) > 0) { flip =
 			 * true;
-			 * 
+			 *
 			 * } }
 			 */
 			if (flip) {
@@ -1364,7 +1361,8 @@ public class WB_Triangulate {
 				tris[i][1] = tri[0];
 				tris[i][2] = tri[2];
 
-			} else {
+			}
+			else {
 				tris[i][0] = tri[0];
 				tris[i][1] = tri[1];
 				tris[i][2] = tri[2];
@@ -1398,7 +1396,7 @@ public class WB_Triangulate {
 	/**
 	 * Check if a candidate edge between two vertices passes through any other
 	 * available vertices.
-	 * 
+	 *
 	 * @param index0
 	 *            first vertex
 	 * @param index1
@@ -1427,7 +1425,7 @@ public class WB_Triangulate {
 	/**
 	 * Get the index of the next available shell coordinate starting from the
 	 * given candidate position.
-	 * 
+	 *
 	 * @param pos
 	 *            candidate position
 	 * @return index of the next available shell coordinate
@@ -1469,7 +1467,7 @@ public class WB_Triangulate {
 	/**
 	 * Returns a list of holes in the input polygon (if any) ordered by y
 	 * coordinate with ties broken using x coordinate.
-	 * 
+	 *
 	 * @param poly
 	 *            input polygon
 	 * @return a list of Geometry objects representing the ordered holes (may be
@@ -1494,7 +1492,7 @@ public class WB_Triangulate {
 	/**
 	 * Join a given hole to the current shell. The hole coordinates are inserted
 	 * into the list of shell coordinates.
-	 * 
+	 *
 	 * @param hole
 	 *            the hole to join
 	 */
@@ -1555,7 +1553,7 @@ public class WB_Triangulate {
 	/**
 	 * Helper method for joinHoleToShell. Insert the hole coordinates into the
 	 * shell coordinate list.
-	 * 
+	 *
 	 * @param shellCoords
 	 *            list of current shell coordinates
 	 * @param shellVertexIndex
@@ -1568,7 +1566,7 @@ public class WB_Triangulate {
 	private static void doJoinHole(final int shellVertexIndex,
 			final Coordinate[] holeCoords, final int holeVertexIndex) {
 		final List<Coordinate> newCoords = new ArrayList<Coordinate>();
-		final List<Integer> newRingIndices = new ArrayList<Integer>();
+
 		newCoords.add(new Coordinate(shellCoords.get(shellVertexIndex)));
 		final int N = holeCoords.length - 1;
 		int i = holeVertexIndex;
@@ -1582,7 +1580,7 @@ public class WB_Triangulate {
 
 	/**
 	 * Return the index of the lowest vertex
-	 * 
+	 *
 	 * @param geom
 	 *            input geometry
 	 * @return index of the first vertex found at lowest point of the geometry
@@ -1609,7 +1607,7 @@ public class WB_Triangulate {
 	}
 
 	private static class IndexedEnvelopeComparator implements
-			Comparator<IndexedEnvelope> {
+	Comparator<IndexedEnvelope> {
 		@Override
 		public int compare(final IndexedEnvelope o1, final IndexedEnvelope o2) {
 			double delta = o1.envelope.getMinY() - o2.envelope.getMinY();
@@ -1634,7 +1632,7 @@ public class WB_Triangulate {
 	}
 
 	private static class IndexedDoubleComparator implements
-			Comparator<IndexedDouble> {
+	Comparator<IndexedDouble> {
 		@Override
 		public int compare(final IndexedDouble o1, final IndexedDouble o2) {
 			final double delta = o1.value - o2.value;

@@ -42,7 +42,7 @@ public class WB_CoordinateSequence {
 	protected WB_CoordinateSequence(final WB_CoordinateSequence tuples) {
 		ordinates = new double[4 * tuples.size()];
 		n = tuples.size();
-		final int index = 0;
+
 		for (int i = 0; i < 4 * n; i++) {
 			ordinates[i] = tuples.getRaw(i);
 
@@ -152,8 +152,7 @@ public class WB_CoordinateSequence {
 
 		final int n = end - start + 1;
 		final double[] subordinates = new double[3 * n];
-		final int id = 0;
-		final int fi;
+
 		System.arraycopy(ordinates, 3 * start, subordinates, 0, 3 * n);
 		subseq.ordinates = subordinates;
 		subseq.n = n;

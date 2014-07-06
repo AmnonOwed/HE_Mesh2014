@@ -83,7 +83,7 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 			return selection.parent;
 		}
 		final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
-		selection.collectEdges();
+		selection.collectEdgesByFace();
 		final Iterator<HE_Edge> eItr = selection.parent.eItr();
 		HE_Edge e;
 		while (eItr.hasNext()) {

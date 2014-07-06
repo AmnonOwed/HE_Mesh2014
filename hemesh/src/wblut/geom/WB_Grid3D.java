@@ -5,7 +5,6 @@ public class WB_Grid3D<T> {
 	private final int Ni, Nj, Nk;
 	private final int Nij;
 	private final double lx, ly, lz;
-	private final double ux, uy, uz;
 	private final double dx, dy, dz;
 
 	public WB_Grid3D(final int Ni, final int Nj, final int Nk, final double lx,
@@ -18,9 +17,6 @@ public class WB_Grid3D<T> {
 		this.lx = lx;
 		this.ly = ly;
 		this.lz = lz;
-		this.ux = ux;
-		this.uy = uy;
-		this.uz = uz;
 		dx = (ux - lx) / Ni;
 		dy = (uy - ly) / Nj;
 		dz = (uz - lz) / Nk;
@@ -47,10 +43,12 @@ public class WB_Grid3D<T> {
 		return Nk;
 	}
 
+	@SuppressWarnings("unchecked")
 	public T getValue(final int i, final int j, final int k) {
 		return (T) values[index(i, j, k)];
 	}
 
+	@SuppressWarnings("unchecked")
 	public T getValueRaw(final int raw) {
 		return (T) values[raw];
 	}

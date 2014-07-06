@@ -114,7 +114,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		final HE_Selection faces = new HE_Selection(mesh);
 		faces.addFaces(HE_Intersection.getPotentialIntersectedFaces(tree, lP));
 		faces.collectVertices();
-		faces.collectEdges();
+		faces.collectEdgesByFace();
 		WB_Classification tmp;
 		final HashMap<Long, WB_Classification> vertexClass = new HashMap<Long, WB_Classification>();
 		HE_Vertex v;
@@ -244,7 +244,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		final HE_Selection lsel = selection.get();
 		lsel.intersect(faces);
 
-		lsel.collectEdges();
+		lsel.collectEdgesByFace();
 		lsel.collectVertices();
 		// empty mesh
 		if (lsel.getNumberOfVertices() == 0) {
