@@ -46,6 +46,23 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		return result;
 	}
 
+	public double[] getIncPathLengths() {
+		final double[] result = new double[getPathOrder() + 1];
+		if (_pathHalfedge == null) {
+			return result;
+		}
+
+		HE_PathHalfedge he = _pathHalfedge;
+		result[0] = 0;
+		int i = 1;
+		do {
+			result[i] = result[i - 1] + he.getHalfedge().getLength();
+			he = he.getNextInPath();
+			i++;
+		} while ((he != _pathHalfedge) && (he != null));
+		return result;
+	}
+
 	public List<HE_Halfedge> getPathHalfedges() {
 		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
 		if (_pathHalfedge == null) {
@@ -130,43 +147,45 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
-	@Override
-	public String toString() {
-		String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
-				+ " vertices: ";
-		HE_PathHalfedge he = _pathHalfedge;
-		if (he != null) {
-			for (int i = 0; i < getPathOrder() - 1; i++) {
-				s += he.getHalfedge().getVertex()._key + "-";
-				he = he.getNextInPath();
-			}
-			s += he.getHalfedge().getEndVertex()._key + ".";
-		}
-		return s;
-	}
+	 @Override
+	 public String toString() {
+		 String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
+				 + " vertices: ";
+		 HE_PathHalfedge he = _pathHalfedge;
+		 if (he != null) {
+			 for (int i = 0; i < getPathOrder() - 1; i++) {
+				 s += he.getHalfedge().getVertex()._key + "-";
+				 he = he.getNextInPath();
+			 }
+			 s += he.getHalfedge().getEndVertex()._key + ".";
+		 }
+		 return s;
+	 }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
-	 */
-	public void setData(final String s, final Object o) {
-		if (_data == null) {
-			_data = new HashMap<String, Object>();
-		}
-		_data.put(s, o);
-	}
+	 /*
+	  * (non-Javadoc)
+	  *
+	  * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
+	  */
+	 @Override
+	 public void setData(final String s, final Object o) {
+		 if (_data == null) {
+			 _data = new HashMap<String, Object>();
+		 }
+		 _data.put(s, o);
+	 }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wblut.core.WB_HasData#getData(java.lang.String)
-	 */
-	public Object getData(final String s) {
-		return _data.get(s);
-	}
+	 /*
+	  * (non-Javadoc)
+	  *
+	  * @see wblut.core.WB_HasData#getData(java.lang.String)
+	  */
+	 @Override
+	 public Object getData(final String s) {
+		 return _data.get(s);
+	 }
 
 }

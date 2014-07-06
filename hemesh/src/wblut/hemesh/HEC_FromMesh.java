@@ -9,22 +9,23 @@ import java.util.List;
 
 import javolution.util.FastTable;
 import wblut.WB_Epsilon;
-import wblut.geom.WB_FaceListMesh;
-import wblut.geom.WB_IndexedPoint;
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.geom.WB_Mesh;
+import wblut.geom.WB_MeshCreator;
 
 /**
  * Creates a new mesh from a list of vertices and faces. Vertices can be
  * duplicate.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
-public class HEC_FromFaceListMesh extends HEC_Creator {
+public class HEC_FromMesh extends HEC_Creator {
 
 	/** Facelist source mesh */
-	private final WB_FaceListMesh source;
+	private final WB_Mesh source;
 
 	/** Duplicate vertices? */
 	private boolean duplicate;
@@ -35,7 +36,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 	/**
 	 * Instantiates a new HEC_Facelist ²
 	 */
-	public HEC_FromFaceListMesh(final WB_FaceListMesh source) {
+	public HEC_FromMesh(final WB_Mesh source) {
 		super();
 		this.source = source;
 		duplicate = true;
@@ -43,33 +44,41 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 		override = true;
 	}
 
+	public HEC_FromMesh(final WB_MeshCreator source) {
+		super();
+		this.source = source.getMesh();
+		duplicate = true;
+		normalcheck = false;
+		override = true;
+	}
+
 	/**
 	 * Duplicate vertices in input?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
 	 */
-	public HEC_FromFaceListMesh setDuplicate(final boolean b) {
+	public HEC_FromMesh setDuplicate(final boolean b) {
 		duplicate = b;
 		return this;
 	}
 
 	/**
 	 * Check face normals?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
 	 */
-	public HEC_FromFaceListMesh setCheckNormals(final boolean b) {
+	public HEC_FromMesh setCheckNormals(final boolean b) {
 		normalcheck = b;
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -108,7 +117,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 			if ((uniqueVertices.get(face[fl - 1]) != uniqueVertices
 					.get(face[fl - 2]))
 					&& (uniqueVertices.get(face[fl - 1]) != uniqueVertices
-							.get(face[0]))) {
+					.get(face[0]))) {
 				locface[li++] = face[fl - 1];
 			}
 
@@ -136,7 +145,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 
 	/**
 	 * Hash.
-	 * 
+	 *
 	 * @param u
 	 *            the u
 	 * @param v
@@ -151,7 +160,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 
 	/**
 	 * Ohash.
-	 * 
+	 *
 	 * @param u
 	 *            the u
 	 * @param v
@@ -173,7 +182,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 
 	/**
 	 * Consistent order.
-	 * 
+	 *
 	 * @param i
 	 *            the i
 	 * @param j
@@ -202,8 +211,8 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 	private List<HE_Vertex> getUniqueVertices(final HE_Mesh mesh) {
 		final List<HE_Vertex> uniqueVertices = new FastTable<HE_Vertex>();
 		if (duplicate) {
-			final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
-			WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
+			final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
+			WB_KDEntry<WB_Coordinate, Integer> neighbor;
 			HE_Vertex v = new HE_Vertex(source.getVertex(0));
 			kdtree.add(source.getVertex(0), 0);
 			uniqueVertices.add(v);
@@ -214,13 +223,15 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 				neighbor = kdtree.getNearestNeighbor(v.pos);
 				if (neighbor.d2 < WB_Epsilon.SQEPSILON) {
 					uniqueVertices.add(uniqueVertices.get(neighbor.value));
-				} else {
+				}
+				else {
 					kdtree.add(source.getVertex(i), i);
 					uniqueVertices.add(v);
 					mesh.add(uniqueVertices.get(i));
 				}
 			}
-		} else {
+		}
+		else {
 			HE_Vertex v;
 			for (int i = 0; i < source.getNumberOfVertices(); i++) {
 				v = new HE_Vertex(source.getVertex(i));
@@ -244,7 +255,8 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 				final int[] efaces = edges.get(ohash);
 				if (efaces == null) {
 					edges.put(ohash, new int[] { i, -1 });
-				} else {
+				}
+				else {
 					efaces[1] = i;
 				}
 			}
@@ -269,7 +281,8 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 					int neighbor;
 					if (ns[0] == index) {
 						neighbor = ns[1];
-					} else {
+					}
+					else {
 						neighbor = ns[0];
 					}
 					if (neighbor > -1) {
@@ -281,7 +294,7 @@ public class HEC_FromFaceListMesh extends HEC_Creator {
 								for (int k = 0; k < fln / 2; k++) {
 									temp = faces[neighbor][k];
 									faces[neighbor][k] = faces[neighbor][fln
-											- k - 1];
+									                                     - k - 1];
 									faces[neighbor][fln - k - 1] = temp;
 								}
 							}

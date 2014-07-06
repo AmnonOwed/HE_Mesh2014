@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.security.InvalidParameterException;
 
-public class WB_Geodesic {
+public class WB_Geodesic implements WB_MeshCreator {
 
 	public static final int TETRAHEDRON = 0;
 	public static final int OCTAHEDRON = 1;
@@ -11,25 +11,28 @@ public class WB_Geodesic {
 	public static final int ICOSAHEDRON = 4;
 
 	private WB_FaceListMesh mesh;
-	private double radius;
-	private int type;
-	private int b;
-	private int c;
+	private final double radius;
+	private final int type;
+	private final int b;
+	private final int c;
 
-	public WB_Geodesic(double radius, int b, int c) {
+	public WB_Geodesic(final double radius, final int b, final int c) {
 		this(radius, b, c, ICOSAHEDRON);
 
 	}
 
-	public WB_Geodesic(double radius, int b, int c, int type) {
-		if ((b + c) <= 0)
+	public WB_Geodesic(final double radius, final int b, final int c,
+			final int type) {
+		if ((b + c) <= 0) {
 			throw new InvalidParameterException("Invalid values for b and c.");
+		}
 		this.b = b;
 		this.c = c;
 		this.type = type;
 		this.radius = radius;
 	}
 
+	@Override
 	public WB_FaceListMesh getMesh() {
 		createMesh();
 		return mesh;
@@ -37,21 +40,25 @@ public class WB_Geodesic {
 
 	private void createMesh() {
 		if (b == c) {
-			WB_GeodesicII geo = new WB_GeodesicII(radius, b + c, type);
+			final WB_GeodesicII geo = new WB_GeodesicII(radius, b + c, type);
 			mesh = geo.getMesh();
-		} else if (b == 0 || c == 0) {
-			if (type == 2 || type == 3)
+		}
+		else if (b == 0 || c == 0) {
+			if (type == 2 || type == 3) {
 				throw new InvalidParameterException(
 						"Invalid type for this class of geodesic.");
-			int ltype = (type == 4) ? 2 : type;
-			WB_GeodesicI geo = new WB_GeodesicI(radius, b + c, ltype, 1);
+			}
+			final int ltype = (type == 4) ? 2 : type;
+			final WB_GeodesicI geo = new WB_GeodesicI(radius, b + c, ltype, 1);
 			mesh = geo.getMesh();
-		} else {
-			if (type == 2 || type == 3)
+		}
+		else {
+			if (type == 2 || type == 3) {
 				throw new InvalidParameterException(
 						"Invalid type for this class of geodesic.");
-			int ltype = (type == 4) ? 2 : type;
-			WB_GeodesicIII geo = new WB_GeodesicIII(radius, b, c, ltype);
+			}
+			final int ltype = (type == 4) ? 2 : type;
+			final WB_GeodesicIII geo = new WB_GeodesicIII(radius, b, c, ltype);
 			mesh = geo.getMesh();
 
 		}

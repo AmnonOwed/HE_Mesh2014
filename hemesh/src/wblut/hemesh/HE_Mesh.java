@@ -86,7 +86,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	}
 
 	public HE_Mesh(final WB_FaceListMesh mesh) {
-		this(new HEC_FromFaceListMesh(mesh));
+		this(new HEC_FromMesh(mesh));
 	}
 
 	// MODIFY
