@@ -8,7 +8,7 @@ import wblut.geom.WB_HasData;
 
 public class HE_Path extends HE_Element implements WB_HasData {
 
-	private HE_PathHalfedge _pathHalfedge;
+	protected HE_PathHalfedge _halfedge;
 
 	private HashMap<String, Object> _data;
 
@@ -16,93 +16,108 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		super();
 	}
 
+	public HE_Path(final HE_Halfedge loop) {
+		super();
+		_halfedge = new HE_PathHalfedge(loop);
+		HE_Halfedge he = loop;
+		final HE_PathHalfedge first = _halfedge;
+		HE_PathHalfedge current = first;
+		HE_PathHalfedge next;
+		while (he.getNextInFace() != loop) {
+			next = new HE_PathHalfedge(he = he.getNextInFace());
+			current.setNext(next);
+			current = next;
+		}
+		current.setNext(first);
+	}
+
 	public long key() {
 		return super.getKey();
 	}
 
-	public int getPathOrder() {
+	public int getOrder() {
 		int result = 0;
-		if (_pathHalfedge == null) {
+		if (_halfedge == null) {
 			return 0;
 		}
-		HE_PathHalfedge he = _pathHalfedge;
+		HE_PathHalfedge he = _halfedge;
 		do {
 			result++;
 			he = he.getNextInPath();
-		} while ((he != _pathHalfedge) && (he != null));
+		} while ((he != _halfedge) && (he != null));
 		return result;
 	}
 
-	public double getPathLength() {
+	public double getLength() {
 		double result = 0;
-		if (_pathHalfedge == null) {
+		if (_halfedge == null) {
 			return result;
 		}
-		HE_PathHalfedge he = _pathHalfedge;
+		HE_PathHalfedge he = _halfedge;
 		do {
 			result += he.getHalfedge().getLength();
 			he = he.getNextInPath();
-		} while ((he != _pathHalfedge) && (he != null));
+		} while ((he != _halfedge) && (he != null));
 		return result;
 	}
 
-	public double[] getIncPathLengths() {
-		final double[] result = new double[getPathOrder() + 1];
-		if (_pathHalfedge == null) {
+	public double[] getIncLengths() {
+		final double[] result = new double[getOrder() + 1];
+		if (_halfedge == null) {
 			return result;
 		}
 
-		HE_PathHalfedge he = _pathHalfedge;
+		HE_PathHalfedge he = _halfedge;
 		result[0] = 0;
 		int i = 1;
 		do {
 			result[i] = result[i - 1] + he.getHalfedge().getLength();
 			he = he.getNextInPath();
 			i++;
-		} while ((he != _pathHalfedge) && (he != null));
+		} while ((he != _halfedge) && (he != null));
 		return result;
 	}
 
-	public List<HE_Halfedge> getPathHalfedges() {
+	public List<HE_Halfedge> getHalfedges() {
 		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
-		if (_pathHalfedge == null) {
+		if (_halfedge == null) {
 			return fhe;
 		}
-		HE_PathHalfedge he = _pathHalfedge;
+		HE_PathHalfedge he = _halfedge;
 		do {
 			if (!fhe.contains(he.getHalfedge())) {
 				fhe.add(he.getHalfedge());
 			}
 			he = he.getNextInPath();
-		} while ((he != _pathHalfedge) && (he != null));
+		} while ((he != _halfedge) && (he != null));
 		return fhe;
 	}
 
 	public List<HE_Edge> getPathEdges() {
 		final List<HE_Edge> fe = new FastTable<HE_Edge>();
-		if (_pathHalfedge == null) {
+		if (_halfedge == null) {
 			return fe;
 		}
-		HE_PathHalfedge he = _pathHalfedge;
+		HE_PathHalfedge he = _halfedge;
 		do {
 			if (!fe.contains(he.getHalfedge().getEdge())) {
 				fe.add(he.getHalfedge().getEdge());
 			}
 			he = he.getNextInPath();
-		} while ((he != _pathHalfedge) && (he != null));
+		} while ((he != _halfedge) && (he != null));
 		return fe;
 	}
 
 	public HE_PathHalfedge getPathHalfedge() {
-		return _pathHalfedge;
+		return _halfedge;
 	}
 
 	public void setPathHalfedge(final HE_PathHalfedge halfedge) {
-		_pathHalfedge = halfedge;
+		_halfedge = halfedge;
 	}
 
 	public void clearPathHalfedge() {
-		_pathHalfedge = null;
+		_halfedge = null;
 
 	}
 
@@ -111,7 +126,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		if (getPathHalfedge() == null) {
 			return ff;
 		}
-		HE_PathHalfedge lhe = _pathHalfedge;
+		HE_PathHalfedge lhe = _halfedge;
 		HE_Halfedge he;
 		do {
 			he = lhe.getHalfedge();
@@ -121,7 +136,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 				}
 			}
 			lhe = lhe.getNextInPath();
-		} while ((lhe != _pathHalfedge) && (lhe != null));
+		} while ((lhe != _halfedge) && (lhe != null));
 		return ff;
 
 	}
@@ -131,7 +146,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		if (getPathHalfedge() == null) {
 			return ff;
 		}
-		HE_PathHalfedge lhe = _pathHalfedge;
+		HE_PathHalfedge lhe = _halfedge;
 		HE_Halfedge hep;
 		do {
 			hep = lhe.getHalfedge().getPair();
@@ -141,51 +156,51 @@ public class HE_Path extends HE_Element implements WB_HasData {
 				}
 			}
 			lhe = lhe.getNextInPath();
-		} while ((lhe != _pathHalfedge) && (lhe != null));
+		} while ((lhe != _halfedge) && (lhe != null));
 		return ff;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
-	 @Override
-	 public String toString() {
-		 String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
-				 + " vertices: ";
-		 HE_PathHalfedge he = _pathHalfedge;
-		 if (he != null) {
-			 for (int i = 0; i < getPathOrder() - 1; i++) {
-				 s += he.getHalfedge().getVertex()._key + "-";
-				 he = he.getNextInPath();
-			 }
-			 s += he.getHalfedge().getEndVertex()._key + ".";
-		 }
-		 return s;
-	 }
+	@Override
+	public String toString() {
+		String s = "HE_Path key: " + key() + ". Connects " + getOrder()
+				+ " vertices: ";
+		HE_PathHalfedge he = _halfedge;
+		if (he != null) {
+			for (int i = 0; i < getOrder() - 1; i++) {
+				s += he.getHalfedge().getVertex()._key + "-";
+				he = he.getNextInPath();
+			}
+			s += he.getHalfedge().getEndVertex()._key + ".";
+		}
+		return s;
+	}
 
-	 /*
-	  * (non-Javadoc)
-	  *
-	  * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
-	  */
-	 @Override
-	 public void setData(final String s, final Object o) {
-		 if (_data == null) {
-			 _data = new HashMap<String, Object>();
-		 }
-		 _data.put(s, o);
-	 }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
+	 */
+	@Override
+	public void setData(final String s, final Object o) {
+		if (_data == null) {
+			_data = new HashMap<String, Object>();
+		}
+		_data.put(s, o);
+	}
 
-	 /*
-	  * (non-Javadoc)
-	  *
-	  * @see wblut.core.WB_HasData#getData(java.lang.String)
-	  */
-	 @Override
-	 public Object getData(final String s) {
-		 return _data.get(s);
-	 }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see wblut.core.WB_HasData#getData(java.lang.String)
+	 */
+	@Override
+	public Object getData(final String s) {
+		return _data.get(s);
+	}
 
 }

@@ -1,5 +1,8 @@
 package wblut.geom;
 
+import java.util.List;
+
+import javolution.util.FastTable;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_Mesh;
 import wblut.hemesh.HE_Selection;
@@ -36,7 +39,8 @@ public class WB_AABBTree {
 				|| (faces.getNumberOfFaces() <= maxNumberOfFaces)) {
 			node.faces.addAll(faces.getFacesAsList());
 			node.isLeaf = true;
-		} else {
+		}
+		else {
 			final HE_Selection pos = new HE_Selection(mesh);
 			final HE_Selection neg = new HE_Selection(mesh);
 			final HE_Selection mid = new HE_Selection(mesh);
@@ -44,9 +48,11 @@ public class WB_AABBTree {
 			if (level % 3 == 0) {
 				dir._set(0, 0, 1);
 
-			} else if (level % 3 == 1) {
+			}
+			else if (level % 3 == 1) {
 				dir._set(0, 1, 0);
-			} else {
+			}
+			else {
 				dir._set(1, 0, 0);
 			}
 
@@ -57,9 +63,11 @@ public class WB_AABBTree {
 						.classifyPolygonToPlane(face.toPolygon());
 				if (cptp == WB_Classification.CROSSING) {
 					mid.add(face);
-				} else if (cptp == WB_Classification.BACK) {
+				}
+				else if (cptp == WB_Classification.BACK) {
 					neg.add(face);
-				} else {
+				}
+				else {
 					pos.add(face);
 				}
 			}
@@ -88,4 +96,65 @@ public class WB_AABBTree {
 	public WB_AABBNode getRoot() {
 		return root;
 	}
+
+	public class WB_AABBNode {
+
+		protected int level;
+
+		protected WB_AABB aabb;
+
+		protected WB_AABBNode positive;
+
+		protected WB_AABBNode negative;
+
+		protected WB_AABBNode mid;
+
+		protected WB_Plane separator;
+
+		protected List<HE_Face> faces;
+
+		protected boolean isLeaf;
+
+		public WB_AABBNode() {
+			level = -1;
+			faces = new FastTable<HE_Face>();
+		}
+
+		public WB_AABB getAABB() {
+			return aabb;
+		}
+
+		public WB_Plane getSeparator() {
+			return separator;
+		}
+
+		public int getLevel() {
+			return level;
+		}
+
+		public boolean isLeaf() {
+			return isLeaf;
+		}
+
+		public List<HE_Face> getFaces() {
+			return faces;
+		}
+
+		public WB_AABBNode getPosChild() {
+			return positive;
+
+		}
+
+		public WB_AABBNode getNegChild() {
+			return negative;
+
+		}
+
+		public WB_AABBNode getMidChild() {
+			return mid;
+
+		}
+
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import wblut.WB_Epsilon;
+import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
@@ -1367,7 +1368,7 @@ public class WB_Intersection {
 		final double v = vb * denom;
 		final double w = vc * denom;
 		return new WB_Point(a)
-		._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+				._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
@@ -2367,7 +2368,7 @@ public class WB_Intersection {
 		else if (WB_Predicates.orient2D(a, b, c)
 				* WB_Predicates.orient2D(a, b, d) > 0
 				|| WB_Predicates.orient2D(c, d, a)
-				* WB_Predicates.orient2D(c, d, b) > 0) {
+						* WB_Predicates.orient2D(c, d, b) > 0) {
 			return false;
 		}
 		else {

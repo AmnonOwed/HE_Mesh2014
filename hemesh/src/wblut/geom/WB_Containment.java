@@ -3,6 +3,7 @@ package wblut.geom;
 import java.util.LinkedList;
 
 import wblut.WB_Epsilon;
+import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Triangle;
 
 public class WB_Containment {
@@ -16,7 +17,8 @@ public class WB_Containment {
 			if (contains(p, current.getAABB())) {
 				if (current.isLeaf()) {
 					return true;
-				} else {
+				}
+				else {
 					if (current.getPosChild() != null) {
 						queue.add(current.getPosChild());
 					}

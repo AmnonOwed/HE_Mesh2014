@@ -95,7 +95,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 			slice.setPlane(P).setOffset(offset);
 			slice.apply(mesh);
 			cut.union(slice.cut);
-			newEdges.union(slice.newEdges);
+			newEdges.union(slice.cutEdges);
 		}
 		cut.cleanSelection();
 		newEdges.cleanSelection();
@@ -128,7 +128,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 			slice.apply(selection);
 
 			cut.union(slice.cut);
-			newEdges.union(slice.newEdges);
+			newEdges.union(slice.cutEdges);
 		}
 		cut.cleanSelection();
 		newEdges.cleanSelection();

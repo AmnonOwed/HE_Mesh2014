@@ -3,8 +3,8 @@ package wblut.hemesh;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.geom.WB_AABBNode;
 import wblut.geom.WB_AABBTree;
+import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;

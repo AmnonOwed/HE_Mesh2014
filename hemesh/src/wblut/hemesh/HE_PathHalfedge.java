@@ -17,6 +17,11 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 		super();
 	}
 
+	public HE_PathHalfedge(final HE_Halfedge he) {
+		super();
+		_he = he;
+	}
+
 	public void clearNext() {
 		if (_next != null) {
 			_next.clearPrev();
@@ -32,7 +37,7 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 		return _he;
 	}
 
-	public void setHalfedge(HE_Halfedge he) {
+	public void setHalfedge(final HE_Halfedge he) {
 		_he = he;
 	}
 
@@ -60,7 +65,7 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -70,9 +75,10 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setData(final String s, final Object o) {
 		if (_data == null) {
 			_data = new HashMap<String, Object>();
@@ -82,9 +88,10 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
+	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
 	}

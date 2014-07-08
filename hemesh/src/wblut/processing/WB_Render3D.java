@@ -10,8 +10,8 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PShape;
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_AABBNode;
 import wblut.geom.WB_AABBTree;
+import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
@@ -262,51 +262,63 @@ public class WB_Render3D {
 		if (geometry instanceof WB_Coordinate) {
 			if (f.length == 0) {
 				drawPoint((WB_Coordinate) geometry);
-			} else if (f.length == 1) {
+			}
+			else if (f.length == 1) {
 				drawPoint((WB_Coordinate) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Segment) {
+		}
+		else if (geometry instanceof WB_Segment) {
 			if (f.length == 0) {
 				drawSegment((WB_Segment) geometry);
 			}
-		} else if (geometry instanceof WB_Ray) {
+		}
+		else if (geometry instanceof WB_Ray) {
 			if (f.length == 1) {
 				drawRay((WB_Ray) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Line) {
+		}
+		else if (geometry instanceof WB_Line) {
 			if (f.length == 1) {
 				drawLine((WB_Line) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_Circle) {
+		}
+		else if (geometry instanceof WB_Circle) {
 			if (f.length == 0) {
 				drawCircle((WB_Circle) geometry);
 			}
-		} else if (geometry instanceof WB_Triangle) {
+		}
+		else if (geometry instanceof WB_Triangle) {
 			if (f.length == 0) {
 				drawTriangle((WB_Triangle) geometry);
 			}
-		} else if (geometry instanceof WB_Polygon) {
+		}
+		else if (geometry instanceof WB_Polygon) {
 			if (f.length == 0) {
 				drawPolygon((WB_Polygon) geometry);
 			}
-		} else if (geometry instanceof WB_Ring) {
+		}
+		else if (geometry instanceof WB_Ring) {
 			if (f.length == 0) {
 				drawRing((WB_Ring) geometry);
 			}
-		} else if (geometry instanceof WB_PolyLine) {
+		}
+		else if (geometry instanceof WB_PolyLine) {
 			if (f.length == 0) {
 				drawPolyLine((WB_PolyLine) geometry);
 			}
-		} else if (geometry instanceof WB_GeometryCollection) {
+		}
+		else if (geometry instanceof WB_GeometryCollection) {
 			final WB_GeometryCollection geo = (WB_GeometryCollection) geometry;
 			for (int i = 0; i < geo.getNumberOfGeometries(); i++) {
 				draw(geo.getGeometry(i), f);
 			}
-		} else if (geometry instanceof WB_Plane) {
+		}
+		else if (geometry instanceof WB_Plane) {
 			if (f.length == 1) {
 				drawPlane((WB_Plane) geometry, f[0]);
 			}
-		} else if (geometry instanceof WB_FaceListMesh) {
+		}
+		else if (geometry instanceof WB_FaceListMesh) {
 			if (f.length == 0) {
 				drawMesh((WB_FaceListMesh) geometry);
 			}
@@ -411,7 +423,7 @@ public class WB_Render3D {
 		final HE_Mesh lmesh = mesh.get();
 		lmesh.triangulate();
 		WB_Vector n = new WB_Vector();
-		Iterator<HE_Face> fItr = lmesh.fItr();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
 		HE_Face f;
 		HE_Vertex v;
 		HE_Halfedge he;
@@ -437,7 +449,7 @@ public class WB_Render3D {
 		retained.beginShape(PConstants.TRIANGLES);
 		final HE_Mesh lmesh = mesh.get();
 		lmesh.triangulate();
-		Iterator<HE_Face> fItr = lmesh.fItr();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
 		HE_Face f;
 		HE_Vertex v;
 		HE_Halfedge he;
@@ -550,7 +562,7 @@ public class WB_Render3D {
 		}
 	}
 
-	public void draw(final WB_AABB AABB) {
+	public void drawAABB(final WB_AABB AABB) {
 		home.pushMatrix();
 		home.translate(AABB.getCenter().xf(), AABB.getCenter().yf(), AABB
 				.getCenter().zf());
@@ -580,20 +592,16 @@ public class WB_Render3D {
 	public void draw(final Collection<WB_Curve> curves, final int steps) {
 		final Iterator<WB_Curve> citr = curves.iterator();
 		while (citr.hasNext()) {
-			draw(citr.next(), steps);
+			drawCurve(citr.next(), steps);
 		}
 	}
 
-	public void draw(final WB_AABBNode node) {
-		draw(node.getAABB());
-	}
-
-	public void draw(final WB_AABBTree tree) {
+	public void drawTree(final WB_AABBTree tree) {
 		drawNode(tree.getRoot());
 
 	}
 
-	public void draw(final WB_AABBTree tree, final int level) {
+	public void drawTree(final WB_AABBTree tree, final int level) {
 		drawNode(tree.getRoot(), level);
 
 	}
@@ -614,7 +622,7 @@ public class WB_Render3D {
 				+ (float) d * v.yf(), p.zf() + (float) d * v.zf());
 	}
 
-	public void draw(final WB_Curve C, final int steps) {
+	public void drawCurve(final WB_Curve C, final int steps) {
 		final int n = Math.max(1, steps);
 		WB_Point p0 = C.curvePoint(0);
 		WB_Point p1;
@@ -627,21 +635,21 @@ public class WB_Render3D {
 
 	}
 
-	public void draw(final WB_Frame frame) {
+	public void drawFrame(final WB_Frame frame) {
 		final ArrayList<WB_FrameStrut> struts = frame.getStruts();
 		for (int i = 0; i < frame.getNumberOfStruts(); i++) {
-			draw(struts.get(i));
+			drawFrameStrut(struts.get(i));
 		}
 	}
 
-	public void draw(final WB_FrameNode node, final double s) {
+	public void drawFrameNode(final WB_FrameNode node, final double s) {
 		home.pushMatrix();
 		home.translate(node.xf(), node.yf(), node.zf());
 		home.box((float) s);
 		home.popMatrix();
 	}
 
-	public void draw(final WB_FrameStrut strut) {
+	public void drawFrameStrut(final WB_FrameStrut strut) {
 		home.line(strut.start().xf(), strut.start().yf(), strut.start().zf(),
 				strut.end().xf(), strut.end().yf(), strut.end().zf());
 	}
@@ -678,7 +686,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw one edge.
-	 * 
+	 *
 	 * @param e
 	 *            edge
 	 */
@@ -690,7 +698,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw one edge.
-	 * 
+	 *
 	 * @param key
 	 *            key of edge
 	 * @param mesh
@@ -707,7 +715,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw edges.
-	 * 
+	 *
 	 * @param meshes
 	 *            the meshes
 	 */
@@ -720,7 +728,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw mesh edges.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 */
@@ -738,7 +746,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw edges of selection.
-	 * 
+	 *
 	 * @param selection
 	 *            selection to draw
 	 */
@@ -755,7 +763,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw mesh edges.
-	 * 
+	 *
 	 * @param label
 	 *            the label
 	 * @param mesh
@@ -804,7 +812,8 @@ public class WB_Render3D {
 					home.vertex(v2.xf(), v2.yf(), v2.zf());
 					home.endShape();
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < tris.length; i++) {
 					tri = tris[i];
 					home.beginShape(PConstants.TRIANGLES);
@@ -848,7 +857,8 @@ public class WB_Render3D {
 					home.vertex(v2.xf(), v2.yf(), v2.zf());
 					home.endShape();
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < tris.length; i++) {
 					tri = tris[i];
 					home.beginShape(PConstants.TRIANGLES);
@@ -895,7 +905,8 @@ public class WB_Render3D {
 					home.vertex(v2.xf(), v2.yf(), v2.zf());
 					home.endShape();
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < tris.length; i++) {
 					tri = tris[i];
 					home.beginShape(PConstants.TRIANGLES);
@@ -943,7 +954,8 @@ public class WB_Render3D {
 					home.vertex(v2.xf(), v2.yf(), v2.zf());
 					home.endShape();
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < tris.length; i++) {
 					tri = tris[i];
 					home.beginShape(PConstants.TRIANGLES);
@@ -966,8 +978,9 @@ public class WB_Render3D {
 	public void drawFace(final Long key, final boolean smooth,
 			final HE_MeshStructure mesh) {
 		final HE_Face f = mesh.getFaceByKey(key);
-		if (f != null)
+		if (f != null) {
 			drawFace(f, smooth);
+		}
 
 	}
 
@@ -1001,7 +1014,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw mesh faces. Typically used with noStroke();
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 */
@@ -1014,7 +1027,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw mesh faces matching label. Typically used with noStroke();
-	 * 
+	 *
 	 * @param label
 	 *            the label
 	 * @param mesh
@@ -1054,7 +1067,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw one face using vertex normals.
-	 * 
+	 *
 	 * @param key
 	 *            key of face
 	 * @param mesh
@@ -1063,8 +1076,9 @@ public class WB_Render3D {
 	public void drawFaceSmooth(final Long key, final HE_MeshStructure mesh) {
 		new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		if (f != null)
+		if (f != null) {
 			drawFace(f, true);
+		}
 	}
 
 	public void drawFaceSmooth(final HE_Face f) {
@@ -1075,8 +1089,9 @@ public class WB_Render3D {
 	public void drawFaceSmoothFC(final Long key, final HE_MeshStructure mesh) {
 		new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		if (f != null)
+		if (f != null) {
 			drawFaceFC(f, true);
+		}
 	}
 
 	public void drawFaceSmoothFC(final HE_Face f) {
@@ -1087,8 +1102,9 @@ public class WB_Render3D {
 	public void drawFaceSmoothVC(final Long key, final HE_MeshStructure mesh) {
 		new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		if (f != null)
+		if (f != null) {
 			drawFaceVC(f, true);
+		}
 	}
 
 	public void drawFaceSmoothVC(final HE_Face f) {
@@ -1099,8 +1115,9 @@ public class WB_Render3D {
 	public void drawFaceSmoothHC(final Long key, final HE_MeshStructure mesh) {
 		new ArrayList<HE_Vertex>();
 		final HE_Face f = mesh.getFaceByKey(key);
-		if (f != null)
+		if (f != null) {
 			drawFaceHC(f, true);
+		}
 	}
 
 	public void drawFaceSmoothHC(final HE_Face f) {
@@ -1110,7 +1127,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw mesh faces using vertex normals. Typically used with noStroke().
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 */
@@ -1146,14 +1163,15 @@ public class WB_Render3D {
 
 	/**
 	 * Draw leaf node.
-	 * 
+	 *
 	 * @param node
 	 *            the node
 	 */
 	private void drawLeafNode(final WB_AABBNode node) {
 		if (node.isLeaf()) {
-			draw(node.getAABB());
-		} else {
+			drawAABB(node.getAABB());
+		}
+		else {
 			if (node.getPosChild() != null) {
 				drawLeafNode(node.getPosChild());
 			}
@@ -1168,7 +1186,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw leafs.
-	 * 
+	 *
 	 * @param tree
 	 *            the tree
 	 */
@@ -1179,12 +1197,12 @@ public class WB_Render3D {
 
 	/**
 	 * Draw node.
-	 * 
+	 *
 	 * @param node
 	 *            the node
 	 */
 	private void drawNode(final WB_AABBNode node) {
-		draw(node.getAABB());
+		drawAABB(node.getAABB());
 
 		if (node.getPosChild() != null) {
 			drawNode(node.getPosChild());
@@ -1199,7 +1217,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw node.
-	 * 
+	 *
 	 * @param node
 	 *            the node
 	 * @param level
@@ -1207,7 +1225,7 @@ public class WB_Render3D {
 	 */
 	private void drawNode(final WB_AABBNode node, final int level) {
 		if (node.getLevel() == level) {
-			draw(node.getAABB());
+			drawAABB(node.getAABB());
 		}
 		if (node.getLevel() < level) {
 			if (node.getPosChild() != null) {
@@ -1224,7 +1242,7 @@ public class WB_Render3D {
 
 	/**
 	 * Draw nodes.
-	 * 
+	 *
 	 * @param frame
 	 *            the frame
 	 * @param s
@@ -1233,7 +1251,7 @@ public class WB_Render3D {
 	public void drawNodes(final WB_Frame frame, final double s) {
 		final ArrayList<WB_FrameNode> nodes = frame.getNodes();
 		for (int i = 0; i < frame.getNumberOfNodes(); i++) {
-			draw(nodes.get(i), s);
+			drawFrameNode(nodes.get(i), s);
 		}
 	}
 
@@ -1245,7 +1263,7 @@ public class WB_Render3D {
 	}
 
 	public void drawPoints(final WB_Coordinate[] points, final double d) {
-		for (WB_Coordinate v : points) {
+		for (final WB_Coordinate v : points) {
 			home.pushMatrix();
 			home.translate((v.xf()), (v.yf()), (v.zf()));
 			home.box((float) d);

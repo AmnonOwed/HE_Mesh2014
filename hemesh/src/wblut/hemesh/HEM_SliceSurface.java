@@ -14,9 +14,9 @@ import wblut.geom.WB_Plane;
 
 /**
  * Planar cut of a mesh. No faces are removed.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_SliceSurface extends HEM_Modifier {
 
@@ -27,7 +27,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	public HE_Selection cut;
 
 	/** Stores new edges. */
-	public HE_Selection newEdges;
+	public HE_Selection cutEdges;
 
 	/**
 	 * Instantiates a new HEM_SliceSurface.
@@ -38,7 +38,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/**
 	 * Set cut plane.
-	 * 
+	 *
 	 * @param P
 	 *            cut plane
 	 * @return self
@@ -48,35 +48,17 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		return this;
 	}
 
-	/**
-	 * Sets the plane.
-	 * 
-	 * @param ox
-	 *            the ox
-	 * @param oy
-	 *            the oy
-	 * @param oz
-	 *            the oz
-	 * @param nx
-	 *            the nx
-	 * @param ny
-	 *            the ny
-	 * @param nz
-	 *            the nz
-	 * @return the hE m_ slice surface
-	 */
 	public HEM_SliceSurface setPlane(final double ox, final double oy,
 			final double oz, final double nx, final double ny, final double nz) {
 		P = new WB_Plane(ox, oy, oz, nx, ny, nz);
 		return this;
 	}
 
-	/** The offset. */
 	private double offset;
 
 	/**
 	 * Set offset.
-	 * 
+	 *
 	 * @param d
 	 *            offset
 	 * @return self
@@ -88,13 +70,13 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		cut = new HE_Selection(mesh);
-		newEdges = new HE_Selection(mesh);
+		cutEdges = new HE_Selection(mesh);
 		// no plane defined
 		if (P == null) {
 			return mesh;
@@ -106,7 +88,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		}
 
 		// check if plane intersects mesh
-		WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
+		final WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
 		if (!WB_Intersection.checkIntersection3D(mesh.getAABB(), lP)) {
 			return mesh;
 		}
@@ -135,20 +117,26 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			e = eItr.next();
 			if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
 				if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
-
-				} else {
+					cutEdges.add(e);
+					e.setLabel(1);
+				}
+				else {
 					edgeInt.put(e.key(), 0.0);
 				}
-			} else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
+			}
+			else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
 				if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 					edgeInt.put(e.key(), 1.0);
-				} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
+				}
+				else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
 					edgeInt.put(e.key(), HE_Intersection.getIntersection(e, lP));
 				}
-			} else {
+			}
+			else {
 				if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 					edgeInt.put(e.key(), 1.0);
-				} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
+				}
+				else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
 					edgeInt.put(e.key(), HE_Intersection.getIntersection(e, lP));
 				}
 			}
@@ -171,11 +159,13 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				if (!split.contains(ce.getStartVertex())) {
 					split.add(ce.getStartVertex());
 				}
-			} else if (u == 1.0) {
+			}
+			else if (u == 1.0) {
 				if (!split.contains(ce.getEndVertex())) {
 					split.add(ce.getEndVertex());
 				}
-			} else {
+			}
+			else {
 				split.add(mesh.splitEdge(ce, u).vItr().next());
 
 			}
@@ -196,7 +186,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 						j++;// if one cut point is found, skip next point.
 						// There should be at least one other vertex in
 						// between for a proper cut.
-					} else {
+					}
+					else {
 						secondVertex = j;
 						break;
 					}
@@ -211,7 +202,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				cut.add(nf);
 				final HE_Edge ne = out.eItr().next();
 				ne.setLabel(1);
-				newEdges.add(ne);
+				cutEdges.add(ne);
 			}
 		}
 
@@ -220,13 +211,13 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
 		cut = new HE_Selection(selection.parent);
-		newEdges = new HE_Selection(selection.parent);
+		cutEdges = new HE_Selection(selection.parent);
 		// no plane defined
 		if (P == null) {
 			return selection.parent;
@@ -236,7 +227,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		if (selection.parent.getNumberOfVertices() == 0) {
 			return selection.parent;
 		}
-		WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
+		final WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
 		final WB_AABBTree tree = new WB_AABBTree(selection.parent, 64);
 		final HE_Selection faces = new HE_Selection(selection.parent);
 		faces.addFaces(HE_Intersection.getPotentialIntersectedFaces(tree, lP));
@@ -282,21 +273,27 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				e = eItr.next();
 				if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
 					if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
-
-					} else {
+						cutEdges.add(e);
+						e.setLabel(1);
+					}
+					else {
 						edgeInt.put(e.key(), 0.0);
 					}
-				} else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
+				}
+				else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
 					if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 						edgeInt.put(e.key(), 1.0);
-					} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
+					}
+					else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
 						edgeInt.put(e.key(),
 								HE_Intersection.getIntersection(e, lP));
 					}
-				} else {
+				}
+				else {
 					if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 						edgeInt.put(e.key(), 1.0);
-					} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
+					}
+					else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
 						edgeInt.put(e.key(),
 								HE_Intersection.getIntersection(e, lP));
 					}
@@ -318,11 +315,13 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					if (!split.contains(ce.getStartVertex())) {
 						split.add(ce.getStartVertex());
 					}
-				} else if (u == 1.0) {
+				}
+				else if (u == 1.0) {
 					if (!split.contains(ce.getEndVertex())) {
 						split.add(ce.getEndVertex());
 					}
-				} else {
+				}
+				else {
 					split.add(lsel.parent.splitEdge(ce, u).vItr().next());
 
 				}
@@ -343,7 +342,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 							j++;// if one cut point is found, skip next point.
 							// There should be at least one other vertex in
 							// between for a proper cut.
-						} else {
+						}
+						else {
 							secondVertex = j;
 							break;
 						}
@@ -358,7 +358,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					final HE_Face nf = out.fItr().next();
 					cut.add(nf);
 					final HE_Edge ne = out.eItr().next();
-					newEdges.add(ne);
+					ne.setLabel(1);
+					cutEdges.add(ne);
 				}
 
 			}
