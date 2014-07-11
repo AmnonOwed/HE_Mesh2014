@@ -4,7 +4,7 @@ import java.util.List;
 
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 
 /**

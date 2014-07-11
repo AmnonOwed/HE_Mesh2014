@@ -14,7 +14,7 @@
 package wblut.hemesh;
 
 import javolution.util.FastMap;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Point;
 
 // TODO: Auto-generated Javadoc

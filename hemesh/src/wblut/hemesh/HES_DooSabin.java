@@ -6,7 +6,7 @@ import gnu.trove.map.hash.TLongIntHashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
 

@@ -1,4 +1,4 @@
-package wblut;
+package wblut.core;
 
 public class WB_Version {
 

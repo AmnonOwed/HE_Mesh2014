@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.Iterator;
 import java.util.List;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 

@@ -3,7 +3,7 @@
  */
 package wblut.geom;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 
 /**
  * @author Frederik Vanhoutte, W:Blut

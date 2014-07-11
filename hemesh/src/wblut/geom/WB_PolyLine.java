@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 
 public class WB_PolyLine implements WB_Geometry {
 

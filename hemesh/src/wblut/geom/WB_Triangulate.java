@@ -9,7 +9,7 @@ import java.util.List;
 
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.external.ProGAL.CEdge;
 import wblut.external.ProGAL.CTetrahedron;
 import wblut.external.ProGAL.CTriangle;

@@ -8,18 +8,19 @@ import wblut.geom.interfaces.SimplePolygon;
 
 /**
  * Creates a new mesh from a list of polygons. Duplicate vertices are fused.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_FromPolygons extends HEC_Creator {
 
 	/** Quads. */
 	private SimplePolygon[] polygons;
+	private boolean checkNormals;
 
 	/**
 	 * Instantiates a new HEC_FromPolygons.
-	 * 
+	 *
 	 */
 	public HEC_FromPolygons() {
 		super();
@@ -28,7 +29,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 
 	/**
 	 * Instantiates a new HEC_FromPolygons.
-	 * 
+	 *
 	 * @param qs
 	 *            the qs
 	 */
@@ -39,7 +40,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 
 	/**
 	 * Instantiates a new hE c_ from polygons.
-	 * 
+	 *
 	 * @param qs
 	 *            the qs
 	 */
@@ -50,7 +51,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 
 	/**
 	 * Sets the source polygons.
-	 * 
+	 *
 	 * @param qs
 	 *            source polygons
 	 * @return self
@@ -62,7 +63,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 
 	/**
 	 * Sets the source polygons.
-	 * 
+	 *
 	 * @param qs
 	 *            source polygons
 	 * @return self
@@ -76,6 +77,11 @@ public class HEC_FromPolygons extends HEC_Creator {
 			polygons[i] = poly;
 			i++;
 		}
+		return this;
+	}
+
+	public HEC_FromPolygons setCheckNormals(final boolean b) {
+		checkNormals = b;
 		return this;
 	}
 
@@ -102,7 +108,8 @@ public class HEC_FromPolygons extends HEC_Creator {
 				}
 				final HEC_FromFacelist ffl = new HEC_FromFacelist()
 						.setVertices(vertices).setFaces(faces)
-						.setDuplicate(true);
+						.setDuplicate(true).setCheckNormals(checkNormals);
+				;
 				return ffl.createBase();
 			}
 		}

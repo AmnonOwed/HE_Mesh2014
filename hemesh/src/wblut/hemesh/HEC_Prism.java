@@ -3,7 +3,7 @@
  */
 package wblut.hemesh;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;

@@ -1,6 +1,6 @@
 package wblut.geom;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 
 public class WB_IndexedPoint extends WB_IndexedVector {
 

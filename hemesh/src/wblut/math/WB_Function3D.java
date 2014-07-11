@@ -1,4 +1,4 @@
-package wblut.math.parameter;
+package wblut.math;
 
 public interface WB_Function3D<T> {
 

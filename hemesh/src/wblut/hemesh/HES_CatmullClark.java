@@ -22,15 +22,15 @@ import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
-import wblut.math.parameter.WB_ConstantParameter;
-import wblut.math.parameter.WB_Parameter;
+import wblut.math.WB_ConstantParameter;
+import wblut.math.WB_Parameter;
 
 // TODO: Auto-generated Javadoc
 /**
  * Catmull-Clark subdivision of a mesh.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HES_CatmullClark extends HES_Subdividor {
@@ -39,7 +39,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 	private boolean keepEdges;
 
 	/** Keep boundary?. */
-	private boolean keepBoundary = true;
+	private boolean keepBoundary = false;
 
 	/** The blend factor. */
 	private WB_Parameter<Double> blendFactor;
@@ -55,7 +55,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/**
 	 * Keep edges of selection fixed when subdividing selection?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
@@ -68,7 +68,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/**
 	 * Keep boundary edges fixed?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
@@ -81,7 +81,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/**
 	 * Sets the blend factor.
-	 * 
+	 *
 	 * @param f
 	 *            the f
 	 * @return the hE s_ catmull clark
@@ -93,7 +93,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/**
 	 * Sets the blend factor.
-	 * 
+	 *
 	 * @param f
 	 *            the f
 	 * @return the hE s_ catmull clark
@@ -105,7 +105,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -159,7 +159,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 						v.key(),
 						gf.createInterpolatedPoint(v, p,
 								blendFactor.value(v.xd(), v.yd(), v.zd())));
-			} else {
+			}
+			else {
 				p = new WB_Point();
 				neighbors = v.getNeighborVertices();
 				final int order = neighbors.size();
@@ -177,7 +178,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 							v.key(),
 							gf.createInterpolatedPoint(v, p,
 									blendFactor.value(v.xd(), v.yd(), v.zd())));
-				} else {
+				}
+				else {
 					newPositions.put(v.key(), v.pos);
 				}
 
@@ -189,7 +191,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 			v = vItr.next();
 			if (keepBoundary) {
 				newPositions.put(v.key(), v.pos);
-			} else {
+			}
+			else {
 				p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
 				double c = 1;
@@ -226,7 +229,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -295,7 +298,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 						v.key(),
 						gf.createInterpolatedPoint(v, p,
 								blendFactor.value(v.xd(), v.yd(), v.zd())));
-			} else {
+			}
+			else {
 				p = new WB_Point();
 				neighbors = v.getNeighborVertices();
 				final int order = neighbors.size();
@@ -313,7 +317,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 							v.key(),
 							gf.createInterpolatedPoint(v, p,
 									blendFactor.value(v.xd(), v.yd(), v.zd())));
-				} else {
+				}
+				else {
 					newPositions.put(v.key(), v.pos);
 				}
 			}
@@ -323,7 +328,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 			v = vItr.next();
 			if (keepBoundary) {
 				newPositions.put(v.key(), v.pos);
-			} else {
+			}
+			else {
 				p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
 				double c = 1;
@@ -355,7 +361,8 @@ public class HES_CatmullClark extends HES_Subdividor {
 			planes = new ArrayList<WB_Plane>();
 			if (keepEdges) {
 				newPositions.put(v.key(), v.pos);
-			} else {
+			}
+			else {
 
 				faceStar = v.getFaceStar();
 				for (int i = 0; i < faceStar.size(); i++) {
@@ -406,11 +413,13 @@ public class HES_CatmullClark extends HES_Subdividor {
 					 * else if (planes.size() == 2) { final WB_Line L =
 					 * WB_Intersect.intersect(planes.get(0), planes.get(1)).L; p
 					 * = WB_ClosestPoint.getClosestPoint(p, L); p.set(v); }
-					 */else {
-						p._set(v);
-					}
+					 */
+					else {
+						 p._set(v);
+					 }
 
-				} else {
+				}
+				else {
 
 					p._set(v);
 				}

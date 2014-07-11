@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;

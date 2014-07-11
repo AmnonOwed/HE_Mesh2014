@@ -227,7 +227,7 @@ public class WB_Frame {
 		if (i == j) {
 			throw new IllegalArgumentException(
 					"Strut can't connect a node to itself: " + i + " " + j
-					+ ".");
+							+ ".");
 		}
 		final int nn = nodes.size();
 		if ((i < 0) || (j < 0) || (i >= nn) || (j >= nn)) {
@@ -505,7 +505,7 @@ public class WB_Frame {
 		}
 		for (final WB_FrameNode node : nodes) {
 			final HE_Mesh ball = new HE_Mesh(new HEC_Geodesic().setRadius(rr)
-					.setLevel(l).setCenter(node));
+					.setB(l).setC(0).setCenter(node));
 
 			for (final WB_Point q : ball.getVerticesAsPoint()) {
 				points.add(q._addSelf(rnd.nextVector()._mulSelf(dr)));

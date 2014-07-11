@@ -1,36 +1,47 @@
 package wblut.hemesh;
 
-import java.util.Iterator;
-
-import wblut.geom.WB_Distance;
-import wblut.geom.WB_Point;
+import wblut.geom.WB_FaceListMesh;
+import wblut.geom.WB_Geodesic;
 
 public class HEC_Geodesic extends HEC_Creator {
 
-	private double R;
+	public static final int TETRAHEDRON = 0;
+	public static final int OCTAHEDRON = 1;
+	public static final int CUBE = 2;
+	public static final int DODECAHEDRON = 3;
+	public static final int ICOSAHEDRON = 4;
 
-	private int level;
-
+	private WB_FaceListMesh mesh;
+	private double radius;
 	private int type;
+	private int b;
+	private int c;
 
 	public HEC_Geodesic() {
 		super();
-		R = 0f;
+		radius = 0f;
+		type = 4;
+		b = c = 4;
 	}
 
-	public HEC_Geodesic(final double R, final int L) {
+	public HEC_Geodesic(final double R) {
 		this();
-		this.R = R;
-		level = L;
+		this.radius = R;
+		b = c = 4;
 	}
 
 	public HEC_Geodesic setRadius(final double R) {
-		this.R = R;
+		this.radius = R;
 		return this;
 	}
 
-	public HEC_Geodesic setLevel(final int L) {
-		level = L;
+	public HEC_Geodesic setB(final int b) {
+		this.b = b;
+		return this;
+	}
+
+	public HEC_Geodesic setC(final int c) {
+		this.c = c;
 		return this;
 	}
 
@@ -42,31 +53,13 @@ public class HEC_Geodesic extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
 	protected HE_Mesh createBase() {
 
-		HE_Mesh result;
-		HEC_Creator ic = new HEC_Icosahedron().setOuterRadius(R);
-		if (type == 1) {
-			ic = new HEC_Tetrahedron().setOuterRadius(R);
-		} else if (type == 2) {
-			ic = new HEC_Octahedron().setOuterRadius(R);
-		}
-		result = ic.createBase();
-		final HES_PlanarMidEdge pmes = new HES_PlanarMidEdge();
-		result.subdivide(pmes, level);
-		final WB_Point bc = new WB_Point(0, 0, 0);
-		HE_Vertex v;
-		final Iterator<HE_Vertex> vItr = result.vItr();
-		while (vItr.hasNext()) {
-			v = vItr.next();
-			final double d = Math.sqrt(WB_Distance.getSqDistance3D(v, bc));
-			v.pos._mulSelf(R / d);
-		}
-
-		return result;
+		final WB_Geodesic geo = new WB_Geodesic(radius, b, c, type);
+		return new HE_Mesh(new HEC_FromMesh(geo));
 	}
 }

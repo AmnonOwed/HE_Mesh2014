@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 
 /**
  * Computes the convex hull of a set of three dimensional points.

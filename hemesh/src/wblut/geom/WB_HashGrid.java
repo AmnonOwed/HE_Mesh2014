@@ -17,8 +17,9 @@ public class WB_HashGrid {
 		this.L = L;
 		this.M = M;
 		KL = K * L;
-		values = new TIntDoubleHashMap(10, 0.5f, -1, Double.NaN);
 		this.defaultValue = defaultValue;
+		values = new TIntDoubleHashMap(10, 0.5f, -1, defaultValue);
+
 	}
 
 	public WB_HashGrid(final int K, final int L, final int M) {
@@ -26,8 +27,9 @@ public class WB_HashGrid {
 		this.L = L;
 		this.M = M;
 		KL = K * L;
-		values = new TIntDoubleHashMap(10, 0.5f, -1, Double.NaN);
+
 		defaultValue = -10000000;
+		values = new TIntDoubleHashMap(10, 0.5f, -1, defaultValue);
 	}
 
 	public boolean setValue(final double value, final int i, final int j,
@@ -45,9 +47,10 @@ public class WB_HashGrid {
 		final int id = safeIndex(i, j, k);
 		if (id > 0) {
 			final double v = values.get(id);
-			if (v == Double.NaN) {
+			if (v == defaultValue) {
 				values.put(id, value);
-			} else {
+			}
+			else {
 				values.put(id, v + value);
 			}
 			return true;
@@ -71,9 +74,8 @@ public class WB_HashGrid {
 		}
 		if (id > 0) {
 			final Double val = values.get(id);
-			if (val != null) {
-				return val.doubleValue();
-			}
+
+			return val.doubleValue();
 
 		}
 		return defaultValue;

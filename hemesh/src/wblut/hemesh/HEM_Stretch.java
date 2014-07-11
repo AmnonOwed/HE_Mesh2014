@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Line;

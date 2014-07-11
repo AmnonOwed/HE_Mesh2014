@@ -13,26 +13,33 @@ public class HE_PathVertexIterator implements Iterator<HE_Vertex> {
 		_current = null;
 		if (_start == null) {
 			endreached = true;
-		} else {
-			endreached = (_start.getNextInPath() == null);
+		}
+		else {
+			endreached = ((_start.getNextInPath() == null) || (_start
+					.getNextInPath() == _start));
 		}
 	}
 
 	@Override
 	public boolean hasNext() {
-		if (_start == null)
+		if (_start == null) {
 			return false;
+		}
 		return (_current == null)
 				|| ((_current.getNextInPath() != _start) && (!endreached));
 	}
 
+	@Override
 	public HE_Vertex next() {
 		if (_current == null) {
 			_current = _start;
-		} else {
-			if (_current.getNextInPath() == null) {
+		}
+		else {
+			if ((_current.getNextInPath() == null)
+					|| (_current.getNextInPath() == _start)) {
 				endreached = true;
-			} else {
+			}
+			else {
 				_current = _current.getNextInPath();
 			}
 		}

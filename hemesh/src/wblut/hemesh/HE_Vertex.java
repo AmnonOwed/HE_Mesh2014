@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSystem;

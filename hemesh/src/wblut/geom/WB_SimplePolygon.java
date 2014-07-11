@@ -3,7 +3,7 @@ package wblut.geom;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.SimplePolygon;
 
 public class WB_SimplePolygon implements SimplePolygon {

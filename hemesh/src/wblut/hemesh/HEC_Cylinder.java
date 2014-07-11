@@ -1,6 +1,6 @@
 package wblut.hemesh;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Vector;
 
 /**

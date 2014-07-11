@@ -1,6 +1,6 @@
 package wblut.hemesh;
 
-import wblut.math.parameter.WB_Function2D;
+import wblut.math.WB_Function2D;
 
 public class HEC_Grid extends HEC_Creator {
 

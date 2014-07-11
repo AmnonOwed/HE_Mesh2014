@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Distance;
@@ -59,7 +59,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -75,8 +75,8 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 
 		final double radius = WB_Distance.getDistance3D(center, aabb.getMax())
 				+ WB_Epsilon.EPSILON;
-		final HE_Mesh sphere = new HE_Mesh(new HEC_Geodesic().setLevel(level)
-				.setRadius(radius).setCenter(wcenter));
+		final HE_Mesh sphere = new HE_Mesh(new HEC_Geodesic().setB(level)
+				.setC(0).setRadius(radius).setCenter(wcenter));
 
 		result = sphere.get();
 		final Iterator<HE_Vertex> vItr = sphere.vItr();
@@ -95,11 +95,13 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 			if (p != null) {
 				if (WB_Distance.getDistance3D(v, p) < radius) {
 					vmod._set(p);
-				} else {
+				}
+				else {
 					undecided.add(vmod);
 				}
 
-			} else {
+			}
+			else {
 				undecided.add(vmod);
 			}
 
@@ -121,7 +123,8 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 				}
 				if (lost) {
 					newundecided.add(v);
-				} else {
+				}
+				else {
 					dist /= decNeighbors;
 					final WB_Vector dv = v.pos.subToVector(wcenter);
 					dv._normalizeSelf();

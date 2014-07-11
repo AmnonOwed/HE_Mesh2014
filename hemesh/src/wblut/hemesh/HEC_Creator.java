@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import processing.core.PApplet;
 import processing.opengl.PGraphics3D;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 

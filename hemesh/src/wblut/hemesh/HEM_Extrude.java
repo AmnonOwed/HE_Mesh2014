@@ -10,7 +10,7 @@ import javolution.context.LogContext;
 import javolution.context.LogContext.Level;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
@@ -20,14 +20,14 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
-import wblut.math.parameter.WB_ConstantParameter;
-import wblut.math.parameter.WB_Parameter;
+import wblut.math.WB_ConstantParameter;
+import wblut.math.WB_Parameter;
 
 /**
  * Extrudes and scales a face along its face normal.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Extrude extends HEM_Modifier {
 
@@ -104,7 +104,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set extrusion distance.
-	 * 
+	 *
 	 * @param d
 	 *            extrusion distance
 	 * @return self
@@ -117,7 +117,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Sets the distance.
-	 * 
+	 *
 	 * @param d
 	 *            the d
 	 * @return the hE m_ extrude
@@ -130,7 +130,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set chamfer factor.
-	 * 
+	 *
 	 * @param c
 	 *            chamfer factor
 	 * @return self
@@ -142,9 +142,9 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set hard edge chamfer distance
-	 * 
+	 *
 	 * Set extrusion distance for hard edge.
-	 * 
+	 *
 	 * @param c
 	 *            extrusion distance
 	 * @return self
@@ -156,7 +156,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set chamfer mode.
-	 * 
+	 *
 	 * @param relative
 	 *            true/false
 	 * @return self
@@ -168,7 +168,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set fuse option: merges coplanar faces.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -180,7 +180,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set peak option.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -192,7 +192,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set threshold angle for hard edge.
-	 * 
+	 *
 	 * @param a
 	 *            threshold angle
 	 * @return self
@@ -204,7 +204,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Set threshold angle for fuse.
-	 * 
+	 *
 	 * @param a
 	 *            threshold angle
 	 * @return self
@@ -216,12 +216,12 @@ public class HEM_Extrude extends HEM_Modifier {
 		return this;
 	}
 
-	public HEM_Extrude setDistances(double[] distances) {
+	public HEM_Extrude setDistances(final double[] distances) {
 		this.heights = distances;
 		return this;
 	}
 
-	public HEM_Extrude setDistances(float[] distances) {
+	public HEM_Extrude setDistances(final float[] distances) {
 		heights = new double[distances.length];
 		for (int i = 0; i < distances.length; i++) {
 			heights[i] = distances[i];
@@ -229,7 +229,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		return this;
 	}
 
-	public HEM_Extrude setDistances(int[] distances) {
+	public HEM_Extrude setDistances(final int[] distances) {
 		heights = new double[distances.length];
 		for (int i = 0; i < distances.length; i++) {
 			heights[i] = distances[i];
@@ -239,7 +239,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -269,9 +269,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -280,7 +280,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		if (chamfer == 0) {
 			return applyStraight(mesh, mesh.getFacesAsList());
 		}
-		List<HE_Face> facelist = mesh.getFacesAsList();
+		final List<HE_Face> facelist = mesh.getFacesAsList();
 		if ((relative == true) && (chamfer == 1)) {
 			return applyPeaked(mesh, facelist);
 		}
@@ -315,11 +315,13 @@ public class HEM_Extrude extends HEM_Modifier {
 						}
 					}
 
-				} else {
+				}
+				else {
 					throw new IllegalArgumentException(
 							"Length of heights array does not correspond to number of extruded faces.");
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < faces.size(); i++) {
 					f = faces.get(i);
 					if (!failedFaces.contains(f)) {
@@ -342,7 +344,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -373,9 +375,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -415,11 +417,13 @@ public class HEM_Extrude extends HEM_Modifier {
 						} while (he != f.getHalfedge());
 
 					}
-				} else {
+				}
+				else {
 					throw new IllegalArgumentException(
 							"Length of heights array does not correspond to number of extruded faces.");
 				}
-			} else {
+			}
+			else {
 				for (int i = 0; i < selFaces.size(); i++) {
 					f = selFaces.get(i);
 					n = _faceNormals.get(f.key());
@@ -441,7 +445,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply straight extrusion.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param faces
@@ -457,11 +461,13 @@ public class HEM_Extrude extends HEM_Modifier {
 				for (int i = 0; i < nf; i++) {
 					applyStraightToOneFace(i, faces, mesh, visited, heights[i]);
 				}
-			} else {
+			}
+			else {
 				throw new IllegalArgumentException(
 						"Length of heights array does not correspond to number of extruded faces.");
 			}
-		} else {
+		}
+		else {
 			for (int i = 0; i < nf; i++) {
 				fc = faces.get(i).getFaceCenter();
 				applyStraightToOneFace(i, faces, mesh, visited,
@@ -473,7 +479,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply straight extrusion to one face.
-	 * 
+	 *
 	 * @param id
 	 *            the id
 	 * @param selfaces
@@ -486,7 +492,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	private boolean applyStraightToOneFace(final int id,
 			final List<HE_Face> selfaces, final HE_Mesh mesh,
-			final boolean[] visited, double d) {
+			final boolean[] visited, final double d) {
 
 		if (visited[id]) {
 			return false;
@@ -559,8 +565,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			final HE_Vertex eov = new HE_Vertex(outerHalfedges.get(i)
 					.getVertex());
 
-			if (n != null)
+			if (n != null) {
 				eov.pos._addMulSelf(d, n);
+			}
 			extOuterVertices.add(eov);
 			newEdges.add(new HE_Edge());
 
@@ -615,13 +622,14 @@ public class HEM_Extrude extends HEM_Modifier {
 			heNew1.setEdge(heOrig2.getEdge());
 			heNew1.getEdge().setHalfedge(heNew1);
 			heNew1.setPair(heOrig2);
-
+			heOrig2.setPair(heNew1);
 			heNew1.setNext(heNew2);
 			heNew2.setVertex(v2);
 			heNew2.setEdge(newEdges.get(cp));
 			if (heNew2.getEdge().getHalfedge() == null) {
 				heNew2.getEdge().setHalfedge(heNew2);
-			} else {
+			}
+			else {
 				heNew2.setPair(heNew2.getEdge().getHalfedge());
 				heNew2.getEdge().getHalfedge().setPair(heNew2);
 			}
@@ -644,7 +652,8 @@ public class HEM_Extrude extends HEM_Modifier {
 			heNew4.setEdge(newEdges.get(c));
 			if (heNew4.getEdge().getHalfedge() == null) {
 				heNew4.getEdge().setHalfedge(heNew4);
-			} else {
+			}
+			else {
 				heNew4.setPair(heNew4.getEdge().getHalfedge());
 				heNew4.getEdge().getHalfedge().setPair(heNew4);
 			}
@@ -663,7 +672,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply peaked extrusion.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param faces
@@ -684,11 +693,13 @@ public class HEM_Extrude extends HEM_Modifier {
 				for (int i = 0; i < nf; i++) {
 					applyPeakToOneFace(i, faces, mesh, heights[i]);
 				}
-			} else {
+			}
+			else {
 				throw new IllegalArgumentException(
 						"Length of heights array does not correspond to number of extruded faces.");
 			}
-		} else {
+		}
+		else {
 			for (int i = 0; i < nf; i++) {
 				fc = faces.get(i).getFaceCenter();
 				applyPeakToOneFace(i, faces, mesh,
@@ -701,7 +712,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply peaked extrusion to one face.
-	 * 
+	 *
 	 * @param id
 	 *            the id
 	 * @param selFaces
@@ -710,7 +721,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 *            the mesh
 	 */
 	private void applyPeakToOneFace(final int id, final List<HE_Face> selFaces,
-			final HE_Mesh mesh, double d) {
+			final HE_Mesh mesh, final double d) {
 		final HE_Face f = selFaces.get(id);
 		final WB_Vector n = _faceNormals.get(f.key());
 		final WB_Point fc = _faceCenters.get(f.key());
@@ -728,7 +739,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply flat extrusion.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param faces
@@ -756,11 +767,13 @@ public class HEM_Extrude extends HEM_Modifier {
 					}
 
 				}
-			} else {
+			}
+			else {
 				throw new IllegalArgumentException(
 						"Length of heights array does not correspond to number of extruded faces.");
 			}
-		} else {
+		}
+		else {
 			for (int i = 0; i < nf; i++) {
 				if (!applyFlatToOneFace(i, faces, mesh)) {
 					failedFaces.add(faces.get(i));
@@ -796,7 +809,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/**
 	 * Apply flat extrusion to one face.
-	 * 
+	 *
 	 * @param id
 	 *            the id
 	 * @param selFaces
@@ -838,7 +851,8 @@ public class HEM_Extrude extends HEM_Modifier {
 				diff._addSelf(v);
 				extFaceVertices.get(i)._set(diff);
 			}
-		} else {
+		}
+		else {
 			final double[] d = new double[n];
 			for (int i = 0; i < n; i++) {
 				d[i] = _halfedgeEWs.get(faceHalfedges.get(i).key());
@@ -858,15 +872,18 @@ public class HEM_Extrude extends HEM_Modifier {
 						extFaceVertices.get(i)._set(
 								poly.getPoint((inew + i) % n));
 					}
-				} else if (poly.n > 2) {
+				}
+				else if (poly.n > 2) {
 					for (int i = 0; i < n; i++) {
 						extFaceVertices.get(i)._set(
 								poly.closestPoint(faceVertices.get(i).pos));
 					}
-				} else {
+				}
+				else {
 					isPossible = false;
 				}
-			} else {
+			}
+			else {
 				WB_Point v1 = new WB_Point(faceVertices.get(n - 1));
 				WB_Point v2 = new WB_Point(faceVertices.get(0));
 				for (int i = 0, j = n - 1; i < n; j = i, i++) {
@@ -926,15 +943,17 @@ public class HEM_Extrude extends HEM_Modifier {
 				heNew1.setEdge(heOrig2.getEdge());
 				heNew1.getEdge().setHalfedge(heNew1);
 				heNew1.setPair(heOrig2);
-
+				heOrig2.setPair(heNew1);
 				heNew1.setNext(heNew2);
 				heNew2.setVertex(v2);
 				heNew2.setEdge(newEdges.get(cp));
 				if (heNew2.getEdge().getHalfedge() == null) {
 					heNew2.getEdge().setHalfedge(heNew2);
-				} else {
+				}
+				else {
 					heNew2.setPair(heNew2.getEdge().getHalfedge());
 					heNew2.getEdge().getHalfedge().setPair(heNew2);
+
 				}
 				v2.setHalfedge(heNew2);
 				heNew2.setFace(fNew);
@@ -955,7 +974,8 @@ public class HEM_Extrude extends HEM_Modifier {
 				heNew4.setEdge(newEdges.get(c));
 				if (heNew4.getEdge().getHalfedge() == null) {
 					heNew4.getEdge().setHalfedge(heNew4);
-				} else {
+				}
+				else {
 					heNew4.setPair(heNew4.getEdge().getHalfedge());
 					heNew4.getEdge().getHalfedge().setPair(heNew4);
 				}

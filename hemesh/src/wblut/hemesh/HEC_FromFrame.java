@@ -11,8 +11,8 @@ import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
-import wblut.math.parameter.WB_ConstantParameter;
-import wblut.math.parameter.WB_Parameter;
+import wblut.math.WB_ConstantParameter;
+import wblut.math.WB_Parameter;
 
 public class HEC_FromFrame extends HEC_Creator {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_BSPTree2D {

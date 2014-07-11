@@ -3,7 +3,7 @@ package wblut.geom;
 import java.util.ArrayList;
 
 import javolution.util.FastMap;
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 

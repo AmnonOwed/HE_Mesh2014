@@ -3,7 +3,7 @@ package wblut.external.ProGAL;
 import java.util.Collection;
 import java.util.List;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 
 /**
  * Part of ProGAL: http://www.diku.dk/~rfonseca/ProGAL/

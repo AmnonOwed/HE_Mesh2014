@@ -28,7 +28,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -93,6 +93,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 				}
 				if (hepairid > -1) {
 					he.setPair(halfedges.get(hepairid));
+					halfedges.get(hepairid).setPair(he);
 				}
 				if (eid > -1) {
 					he.setEdge(edges.get(eid));
@@ -122,7 +123,8 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 			mesh.addHalfedges(halfedges);
 			mesh.addEdges(edges);
 			mesh.addFaces(faces);
-		} catch (final IOException ex) {
+		}
+		catch (final IOException ex) {
 			ex.printStackTrace();
 		}
 

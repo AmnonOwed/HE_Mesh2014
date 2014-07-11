@@ -1,4 +1,4 @@
-package wblut;
+package wblut.core;
 
 import wblut.math.WB_Math;
 

@@ -15,7 +15,7 @@ package wblut.geom;
 
 import java.util.ArrayList;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_Circle implements WB_Geometry {

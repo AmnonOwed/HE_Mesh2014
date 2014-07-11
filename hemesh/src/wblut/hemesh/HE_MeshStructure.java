@@ -14,9 +14,9 @@ import wblut.geom.WB_Vector;
 
 /**
  * Collection of mesh elements. Contains methods to manipulate selections
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HE_MeshStructure extends HE_Element implements WB_HasData {
@@ -94,7 +94,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Add edge.
-	 * 
+	 *
 	 * @param e
 	 *            edge to add
 	 */
@@ -105,7 +105,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Add face.
-	 * 
+	 *
 	 * @param f
 	 *            face to add
 	 */
@@ -116,7 +116,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds Halfedge.
-	 * 
+	 *
 	 * @param he
 	 *            halfedge to add
 	 */
@@ -126,7 +126,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Add vertex.
-	 * 
+	 *
 	 * @param v
 	 *            vertex to add
 	 */
@@ -136,7 +136,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to add as HE_Edge[]
 	 */
@@ -148,7 +148,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to add as FastTable<HE_Edge>
 	 */
@@ -160,7 +160,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to add as HE_Face[]
 	 */
@@ -172,7 +172,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to add as List<HE_Face>
 	 */
@@ -184,7 +184,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to add as HE_Halfedge[]
 	 */
@@ -196,7 +196,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to add as List<HE_Halfedge>
 	 */
@@ -208,7 +208,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to add as HE_Vertex[]
 	 */
@@ -220,7 +220,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Adds vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to add as List<HE_Vertex>
 	 */
@@ -270,7 +270,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Check if structure contains edge.
-	 * 
+	 *
 	 * @param e
 	 *            edge
 	 * @return true, if successful
@@ -281,7 +281,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Check if structure contains face.
-	 * 
+	 *
 	 * @param f
 	 *            face
 	 * @return true, if successful
@@ -292,7 +292,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Check if structure contains halfedge.
-	 * 
+	 *
 	 * @param he
 	 *            halfedge
 	 * @return true, if successful
@@ -303,7 +303,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Check if structure contains vertex.
-	 * 
+	 *
 	 * @param v
 	 *            vertex
 	 * @return true, if successful
@@ -314,7 +314,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get axis-aligned bounding box surrounding mesh.
-	 * 
+	 *
 	 * @return WB_AABB axis-aligned bounding box
 	 */
 
@@ -346,7 +346,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get range of vertex coordinates.
-	 * 
+	 *
 	 * @return array of limit values: min x, min y, min z, max x, max y, max z
 	 */
 	public final double[] getLimits() {
@@ -395,7 +395,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Number of edges.
-	 * 
+	 *
 	 * @return the number of edges
 	 */
 	public final int getNumberOfEdges() {
@@ -404,7 +404,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Number of faces.
-	 * 
+	 *
 	 * @return the number of faces
 	 */
 	public final int getNumberOfFaces() {
@@ -413,7 +413,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Number of halfedges.
-	 * 
+	 *
 	 * @return the number of halfedges
 	 */
 	public final int getNumberOfHalfedges() {
@@ -422,7 +422,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Number of vertices.
-	 * 
+	 *
 	 * @return the number of vertices
 	 */
 	public final int getNumberOfVertices() {
@@ -431,7 +431,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes edge.
-	 * 
+	 *
 	 * @param e
 	 *            edge to remove
 	 */
@@ -441,7 +441,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes face.
-	 * 
+	 *
 	 * @param f
 	 *            face to remove
 	 */
@@ -451,7 +451,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes halfedge.
-	 * 
+	 *
 	 * @param he
 	 *            halfedge to remove
 	 */
@@ -461,7 +461,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes vertex.
-	 * 
+	 *
 	 * @param v
 	 *            vertex to remove
 	 */
@@ -479,7 +479,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to remove as HE_Edge[]
 	 */
@@ -491,7 +491,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to remove as List<HE_Edge>
 	 */
@@ -511,7 +511,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to remove as HE_Face[]
 	 */
@@ -523,7 +523,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to remove as List<HE_Face>
 	 */
@@ -543,7 +543,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to remove as HE_Halfedge[]
 	 */
@@ -555,7 +555,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to remove as FastTable<HE_Halfedge>
 	 */
@@ -575,7 +575,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to remove as HE_Vertex[]
 	 */
@@ -587,7 +587,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Removes vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to remove as FastTable<HE_Vertex>
 	 */
@@ -647,7 +647,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to replace with as HE_Edge[]
 	 */
@@ -660,7 +660,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace edges.
-	 * 
+	 *
 	 * @param edges
 	 *            edges to replace with as List<HE_Edge>
 	 */
@@ -673,7 +673,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to replace with as HE_Face[]
 	 */
@@ -686,7 +686,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace faces.
-	 * 
+	 *
 	 * @param faces
 	 *            faces to replace with as List<HE_Face>
 	 */
@@ -699,7 +699,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to replace with as HE_Halfedge[]
 	 */
@@ -712,7 +712,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace halfedges.
-	 * 
+	 *
 	 * @param halfedges
 	 *            halfedges to replace with as List<HE_Halfedge>
 	 */
@@ -725,7 +725,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to replace with as HE_Vertex[]
 	 */
@@ -738,7 +738,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Replace vertices.
-	 * 
+	 *
 	 * @param vertices
 	 *            vertices to replace with as List<HE_Vertex>
 	 */
@@ -751,7 +751,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Vertex iterator.
-	 * 
+	 *
 	 * @return vertex iterator
 	 */
 	public Iterator<HE_Vertex> vItr() {
@@ -760,7 +760,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Edge iterator.
-	 * 
+	 *
 	 * @return edge iterator
 	 */
 	public Iterator<HE_Edge> eItr() {
@@ -769,7 +769,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Hslfedge iterator.
-	 * 
+	 *
 	 * @return halfedge iterator
 	 */
 	public Iterator<HE_Halfedge> heItr() {
@@ -782,7 +782,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get edge.
-	 * 
+	 *
 	 * @param key
 	 *            edge key
 	 * @return edge
@@ -793,7 +793,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Edges as array.
-	 * 
+	 *
 	 * @return all edges as HE_Edge[]
 	 */
 	public final HE_Edge[] getEdgesAsArray() {
@@ -809,7 +809,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Edges as arrayList.
-	 * 
+	 *
 	 * @return all vertices as FastTable<HE_Edge>
 	 */
 	public final List<HE_Edge> getEdgesAsList() {
@@ -820,7 +820,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get face.
-	 * 
+	 *
 	 * @param key
 	 *            face key
 	 * @return face
@@ -831,7 +831,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Faces as array.
-	 * 
+	 *
 	 * @return all faces as HE_Face[]
 	 */
 	public final HE_Face[] getFacesAsArray() {
@@ -847,7 +847,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Faces as arrayList.
-	 * 
+	 *
 	 * @return all vertices as FastTable<HE_Face>
 	 */
 	public final List<HE_Face> getFacesAsList() {
@@ -858,7 +858,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get halfedge.
-	 * 
+	 *
 	 * @param key
 	 *            halfedge key
 	 * @return halfedge
@@ -869,7 +869,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Halfedges as array.
-	 * 
+	 *
 	 * @return all halfedges as HE_Halfedge[]
 	 */
 	public final HE_Halfedge[] getHalfedgesAsArray() {
@@ -885,7 +885,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Halfedges as arrayList.
-	 * 
+	 *
 	 * @return all vertices as FastTable<HE_Halfedge>
 	 */
 	public final List<HE_Halfedge> getHalfedgesAsList() {
@@ -896,7 +896,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Get vertex.
-	 * 
+	 *
 	 * @param key
 	 *            vertex key
 	 * @return vertex
@@ -907,7 +907,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Vertices as array.
-	 * 
+	 *
 	 * @return all vertices as HE_Vertex[]
 	 */
 	public final HE_Vertex[] getVerticesAsArray() {
@@ -924,7 +924,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/**
 	 * Vertices as arrayList.
-	 * 
+	 *
 	 * @return all vertices as FastTable<HE_Vertex>
 	 */
 	public final List<HE_Vertex> getVerticesAsList() {
@@ -936,9 +936,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setData(final String s, final Object o) {
 		if (_data == null) {
 			_data = new HashMap<String, Object>();
@@ -948,36 +949,40 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
+	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
 	}
 
-	public HE_Path createPathFromIndices(int[] vertices) {
-		HE_Path path = new HE_Path();
+	public HE_Path createPathFromIndices(final int[] vertices) {
+		final HE_Path path = new HE_Path();
 		if (vertices.length > 1) {
 			HE_PathHalfedge phe = new HE_PathHalfedge();
 			HE_Halfedge he = selectHalfedge(getVertexByIndex(vertices[0]),
 					getVertexByIndex(vertices[1]));
-			if (he == null)
+			if (he == null) {
 				throw new IllegalArgumentException("Two vertices "
 						+ vertices[0] + " and " + vertices[1]
-						+ " in path are not connected.");
+								+ " in path are not connected.");
+			}
 			phe.setHalfedge(he);
 			path.setPathHalfedge(phe);
 			HE_PathHalfedge prevphe = phe;
 			for (int i = 1; i < vertices.length - 1; i++) {
 				he = selectHalfedge(getVertexByIndex(vertices[i]),
 						getVertexByIndex(vertices[i + 1]));
-				if (he == null)
+				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-							+ " in path are not connected.");
+									+ " in path are not connected.");
+				}
 				phe = new HE_PathHalfedge();
 				phe.setHalfedge(he);
 				prevphe.setNext(phe);
+				phe.setPrev(prevphe);
 				prevphe = phe;
 			}
 
@@ -986,11 +991,12 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	}
 
-	public HE_Halfedge selectHalfedge(HE_Vertex v0, HE_Vertex v1) {
-		List<HE_Halfedge> hes = v0.getHalfedgeStar();
-		for (HE_Halfedge he : hes) {
-			if (he.getEndVertex() == v1)
+	public HE_Halfedge selectHalfedge(final HE_Vertex v0, final HE_Vertex v1) {
+		final List<HE_Halfedge> hes = v0.getHalfedgeStar();
+		for (final HE_Halfedge he : hes) {
+			if (he.getEndVertex() == v1) {
 				return he;
+			}
 		}
 		return null;
 	}

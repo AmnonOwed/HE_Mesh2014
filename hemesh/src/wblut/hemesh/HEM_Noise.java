@@ -3,9 +3,9 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Vector;
+import wblut.math.WB_ConstantParameter;
+import wblut.math.WB_Parameter;
 import wblut.math.WB_RandomOnSphere;
-import wblut.math.parameter.WB_ConstantParameter;
-import wblut.math.parameter.WB_Parameter;
 
 /**
  * Expands or contracts all vertices along the vertex normals.

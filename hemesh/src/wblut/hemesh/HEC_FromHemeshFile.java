@@ -27,7 +27,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -54,10 +54,12 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 					contents.append(line);
 					contents.append(System.getProperty("line.separator"));
 				}
-			} finally {
+			}
+			finally {
 				input.close();
 			}
-		} catch (final IOException ex) {
+		}
+		catch (final IOException ex) {
 			ex.printStackTrace();
 		}
 
@@ -123,6 +125,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 			}
 			if (hepairid > -1) {
 				he.setPair(halfedges.get(hepairid));
+				halfedges.get(hepairid).setPair(he);
 			}
 			if (eid > -1) {
 				he.setEdge(edges.get(eid));

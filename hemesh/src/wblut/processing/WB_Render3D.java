@@ -94,8 +94,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -236,20 +236,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -788,7 +788,46 @@ public class WB_Render3D {
 	}
 
 	public void drawFace(final HE_Face f, final boolean smooth) {
-		if (f.getFaceOrder() > 2) {
+		final int fo = f.getFaceOrder();
+
+		if (fo < 3) {
+		}
+		else if (f.getFaceOrder() == 3) {
+			final int[] tri = new int[] { 0, 1, 2 };
+			final List<HE_Vertex> vertices = f.getFaceVertices();
+			HE_Vertex v0, v1, v2;
+			WB_Vector n0, n1, n2;
+			if (smooth) {
+				home.beginShape(PConstants.TRIANGLES);
+				v0 = vertices.get(tri[0]);
+				n0 = v0.getVertexNormal();
+				v1 = vertices.get(tri[1]);
+				n1 = v1.getVertexNormal();
+				v2 = vertices.get(tri[2]);
+				n2 = v2.getVertexNormal();
+				home.normal(n0.xf(), n0.yf(), n0.zf());
+				home.vertex(v0.xf(), v0.yf(), v0.zf());
+				home.normal(n1.xf(), n1.yf(), n1.zf());
+				home.vertex(v1.xf(), v1.yf(), v1.zf());
+				home.normal(n2.xf(), n2.yf(), n2.zf());
+				home.vertex(v2.xf(), v2.yf(), v2.zf());
+				home.endShape();
+
+			}
+			else {
+				home.beginShape(PConstants.TRIANGLES);
+				v0 = vertices.get(tri[0]);
+				v1 = vertices.get(tri[1]);
+				v2 = vertices.get(tri[2]);
+				home.vertex(v0.xf(), v0.yf(), v0.zf());
+				home.vertex(v1.xf(), v1.yf(), v1.zf());
+				home.vertex(v2.xf(), v2.yf(), v2.zf());
+				home.endShape();
+
+			}
+
+		}
+		else {
 			final int[][] tris = f.getTriangles();
 			final List<HE_Vertex> vertices = f.getFaceVertices();
 			HE_Vertex v0, v1, v2;

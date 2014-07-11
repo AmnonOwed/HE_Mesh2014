@@ -1,7 +1,7 @@
 /**
  * 
  */
-package wblut.math.parameter;
+package wblut.math;
 
 
 /**

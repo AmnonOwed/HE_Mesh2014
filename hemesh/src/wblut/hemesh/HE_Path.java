@@ -26,9 +26,11 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		while (he.getNextInFace() != loop) {
 			next = new HE_PathHalfedge(he = he.getNextInFace());
 			current.setNext(next);
+			next.setPrev(current);
 			current = next;
 		}
 		current.setNext(first);
+		first.setPrev(current);
 	}
 
 	public long key() {
@@ -162,7 +164,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -182,7 +184,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -195,7 +197,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

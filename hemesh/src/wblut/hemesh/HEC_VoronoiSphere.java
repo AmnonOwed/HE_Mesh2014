@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
@@ -14,9 +14,9 @@ import wblut.math.WB_RandomOnSphere;
 /**
  * Creates the Voronoi cell of one point in a collection of points, constrained
  * by a maximum radius.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_VoronoiSphere extends HEC_Creator {
 
@@ -52,7 +52,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Instantiates a new HEC_VoronoiSphere.
-	 * 
+	 *
 	 */
 	public HEC_VoronoiSphere() {
 		super();
@@ -65,7 +65,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            array of vertex positions
 	 * @return self
@@ -77,7 +77,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of double of vertex positions
 	 * @return self
@@ -96,7 +96,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of float of vertex positions
 	 * @return self
@@ -115,7 +115,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set number of points.
-	 * 
+	 *
 	 * @param N
 	 *            number of points
 	 * @return self
@@ -127,7 +127,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set index of cell to create.
-	 * 
+	 *
 	 * @param i
 	 *            index
 	 * @return self
@@ -139,7 +139,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set level of geodesic sphere in each cell.
-	 * 
+	 *
 	 * @param l
 	 *            recursive level
 	 * @return self
@@ -151,7 +151,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set number of tracer points to use in approximate model.
-	 * 
+	 *
 	 * @param n
 	 *            number of tracer points
 	 * @return self
@@ -163,7 +163,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set initial trace step size.
-	 * 
+	 *
 	 * @param d
 	 *            trace step
 	 * @return self
@@ -175,7 +175,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set maximum radius of cell.
-	 * 
+	 *
 	 * @param c
 	 *            cutoff radius
 	 * @return self
@@ -187,7 +187,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set approximate mode.
-	 * 
+	 *
 	 * @param a
 	 *            true, false
 	 * @return self
@@ -199,7 +199,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Set seed of random generator.
-	 * 
+	 *
 	 * @param seed
 	 *            seed
 	 * @return self
@@ -211,7 +211,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -247,8 +247,9 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			final HEC_ConvexHull ch = new HEC_ConvexHull().setPoints(tracers)
 					.setN(numTracers);
 			result = new HE_Mesh(ch);
-		} else {
-			final HEC_Geodesic gc = new HEC_Geodesic().setLevel(level);
+		}
+		else {
+			final HEC_Geodesic gc = new HEC_Geodesic().setB(level).setC(0);
 			gc.setCenter(points[cellIndex]);
 			gc.setRadius(cutoff);
 			result = new HE_Mesh(gc);
@@ -272,7 +273,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			}
 			final HEM_MultiSlice msm = new HEM_MultiSlice();
 			msm.setPlanes(cutPlanes).setSimpleCap(true)
-					.setCenter(new WB_Point(points[cellIndex]));
+			.setCenter(new WB_Point(points[cellIndex]));
 			result.modify(msm);
 
 		}
@@ -281,7 +282,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 	/**
 	 * Grow the tracers.
-	 * 
+	 *
 	 * @param tracers
 	 *            the tracers
 	 * @param index
@@ -319,7 +320,8 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 							* r.zd());
 					d2self = 0;
 					stepSize /= 2;
-				} else {
+				}
+				else {
 					p._set(c.xd() + cutoff * r.xd(), c.yd() + cutoff * r.yd(),
 							c.zd() + cutoff * r.zd());
 					stepSize = -1;

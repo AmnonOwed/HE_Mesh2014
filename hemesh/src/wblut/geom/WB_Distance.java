@@ -1,6 +1,6 @@
 package wblut.geom;
 
-import wblut.WB_Epsilon;
+import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
 

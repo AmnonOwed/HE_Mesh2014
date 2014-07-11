@@ -11,9 +11,9 @@ import wblut.geom.WB_Vector;
 
 /**
  * Half-edge element of half-edge data structure.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
@@ -50,7 +50,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get key.
-	 * 
+	 *
 	 * @return key
 	 */
 	public long key() {
@@ -59,7 +59,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get previous halfedge in face.
-	 * 
+	 *
 	 * @return previous halfedge
 	 */
 	public HE_Halfedge getPrevInFace() {
@@ -68,7 +68,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get next halfedge in face.
-	 * 
+	 *
 	 * @return next halfedge
 	 */
 	public HE_Halfedge getNextInFace() {
@@ -77,7 +77,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get next halfedge in vertex.
-	 * 
+	 *
 	 * @return next halfedge
 	 */
 	public HE_Halfedge getNextInVertex() {
@@ -89,7 +89,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get previous halfedge in vertex.
-	 * 
+	 *
 	 * @return previous halfedge
 	 */
 	public HE_Halfedge getPrevInVertex() {
@@ -101,7 +101,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get paired halfedge.
-	 * 
+	 *
 	 * @return paired halfedge
 	 */
 	public HE_Halfedge getPair() {
@@ -111,7 +111,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Set next halfedge in face.
-	 * 
+	 *
 	 * @param he
 	 *            next halfedge
 	 */
@@ -122,39 +122,28 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Sets previous halfedge in face, only to be called by setNext.
-	 * 
+	 *
 	 * @param he
 	 *            next halfedge
 	 */
-	private void setPrev(final HE_Halfedge he) {
+	public void setPrev(final HE_Halfedge he) {
 		_prev = he;
 
 	}
 
 	/**
 	 * Mutually pair halfedges.
-	 * 
+	 *
 	 * @param he
 	 *            halfedge to pair
 	 */
 	public void setPair(final HE_Halfedge he) {
 		_pair = he;
-		he.setPairInt(this);
-	}
-
-	/**
-	 * Pair halfedges, only to be called by setPair.
-	 * 
-	 * @param he
-	 *            halfedge to pair
-	 */
-	private void setPairInt(final HE_Halfedge he) {
-		_pair = he;
 	}
 
 	/**
 	 * Get type of face vertex associated with halfedge.
-	 * 
+	 *
 	 * @return HE.FLAT, HE.CONVEX, HE.CONCAVE
 	 */
 	public WB_Convex getHalfedgeType() {
@@ -170,16 +159,19 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		final WB_Vector n;
 		if (_face == null) {
 			n = _pair._face.getFaceNormal()._mulSelf(-1);
-		} else {
+		}
+		else {
 			n = _face.getFaceNormal();
 		}
 		final double dot = n.dot(v);
 
 		if (v.isParallel(vn)) {
 			return WB_Convex.FLAT;
-		} else if (dot > 0) {
+		}
+		else if (dot > 0) {
 			return WB_Convex.CONVEX;
-		} else {
+		}
+		else {
 			return WB_Convex.CONCAVE;
 		}
 
@@ -187,7 +179,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get tangent WB_Vector of halfedge.
-	 * 
+	 *
 	 * @return tangent
 	 */
 	public WB_Vector getHalfedgeTangent() {
@@ -205,7 +197,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get center of halfedge.
-	 * 
+	 *
 	 * @return center
 	 */
 	public WB_Point getHalfedgeCenter() {
@@ -220,7 +212,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get edge of halfedge.
-	 * 
+	 *
 	 * @return edge
 	 */
 	public HE_Edge getEdge() {
@@ -229,7 +221,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Sets the edge.
-	 * 
+	 *
 	 * @param edge
 	 *            the new edge
 	 */
@@ -239,7 +231,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get face of halfedge.
-	 * 
+	 *
 	 * @return face
 	 */
 	public HE_Face getFace() {
@@ -248,7 +240,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Sets the face.
-	 * 
+	 *
 	 * @param face
 	 *            the new face
 	 */
@@ -262,7 +254,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get vertex of halfedge.
-	 * 
+	 *
 	 * @return vertex
 	 */
 	public HE_Vertex getVertex() {
@@ -271,7 +263,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Sets the vertex.
-	 * 
+	 *
 	 * @param vertex
 	 *            the new vertex
 	 */
@@ -281,7 +273,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get end vertex of halfedge.
-	 * 
+	 *
 	 * @return vertex
 	 */
 	public HE_Vertex getEndVertex() {
@@ -340,7 +332,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get halfedge normal.
-	 * 
+	 *
 	 * @return in-face normal of face, points inwards
 	 */
 	public WB_Vector getHalfedgeNormal() {
@@ -354,7 +346,8 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 				return null;
 			}
 			fn = getPair().getFace().getFaceNormal();
-		} else {
+		}
+		else {
 			fn = getFace().getFaceNormal();
 		}
 		final HE_Vertex vn = getNextInFace().getVertex();
@@ -368,7 +361,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get area of faces bounding halfedge.
-	 * 
+	 *
 	 * @return area
 	 */
 	public double getHalfedgeArea() {
@@ -380,7 +373,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/**
 	 * Get angle between adjacent faces.
-	 * 
+	 *
 	 * @return angle
 	 */
 	public double getHalfedgeDihedralAngle() {
@@ -392,7 +385,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -404,9 +397,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setData(final String s, final Object o) {
 		if (_data == null) {
 			_data = new HashMap<String, Object>();
@@ -416,9 +410,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
+	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
 	}
@@ -430,7 +425,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	@Override
-	public void setColor(int color) {
+	public void setColor(final int color) {
 		hecolor = color;
 
 	}
