@@ -11,6 +11,7 @@ float scale;
 
 void setup() {
   size(800, 800, OPENGL);
+  smooth(8);
   background(0); 
 
   S=new RotatingSegment[numseg];
@@ -28,20 +29,20 @@ void draw() {
   rotateY(mouseX*TWO_PI/width-PI);
   strokeWeight(2);
   for (int i=0;i<numseg;i++) {
-    WB_Point3d c=S[i].S.getCenter();
+    WB_Point c=S[i].S.getCenter();
     stroke(0);
-    line(S[i].S.getOrigin().xf(), S[i].S.getOrigin().yf(), S[i].S.getOrigin().zf(), S[i].S.getEnd().xf(), S[i].S.getEnd().yf(), S[i].S.getEnd().zf()); 
+    line(S[i].S.getOrigin().xf(), S[i].S.getOrigin().yf(), S[i].S.getOrigin().zf(), S[i].S.getEndpoint().xf(), S[i].S.getEndpoint().yf(), S[i].S.getEndpoint().zf()); 
   }  
   strokeWeight(2);
   ArrayList<WB_Segment> S2=new ArrayList<WB_Segment>();
   for (int i=0;i<numseg;i++) {
     for (int j=i+1;j<numseg;j++) {       
-      WB_IntersectionResult is=WB_Intersection.getIntersection(S[i].S, S[j].S);
+      WB_IntersectionResult is=WB_Intersection.getIntersection3D(S[i].S, S[j].S);
       if ((is.dimension==1)&&(is.sqDist<40000)&&(is.sqDist>4000)) {
         stroke(255, 0, 0, 255-0.005*(float)is.sqDist);
-        WB_Segment seg=(WB_ExplicitSegment)is.object;
+        WB_Segment seg=(WB_Segment)is.object;
         S2.add(seg);
-        line(seg.getOrigin().xf(), seg.getOrigin().yf(), seg.getOrigin().zf(), seg.getEnd().xf(), seg.getEnd().yf(), seg.getEnd().zf());
+        line(seg.getOrigin().xf(), seg.getOrigin().yf(), seg.getOrigin().zf(), seg.getEndpoint().xf(), seg.getEndpoint().yf(), seg.getEndpoint().zf());
       }
     }
   }
@@ -49,11 +50,11 @@ void draw() {
   int nums2=S2.size();
   for (int i=0;i<nums2;i++) {
     for (int j=i+1;j<nums2;j++) {       
-      WB_IntersectionResult is=WB_Intersection.getIntersection(S2.get(i), S2.get(j));
+      WB_IntersectionResult is=WB_Intersection.getIntersection3D(S2.get(i), S2.get(j));
       if ((is.dimension==1)&&(is.sqDist<40000)&&(is.sqDist>4000)&&(is.t1>0.01)&&(is.t1<0.99)&&(is.t2>0.01)&&(is.t2<.99)) {
         stroke(255, 255-0.0075*(float)is.sqDist);
-        WB_Segment seg=(WB_ExplicitSegment)is.object;
-        line(seg.getOrigin().xf(), seg.getOrigin().yf(), seg.getOrigin().zf(), seg.getEnd().xf(), seg.getEnd().yf(), seg.getEnd().zf());
+        WB_Segment seg=(WB_Segment)is.object;
+        line(seg.getOrigin().xf(), seg.getOrigin().yf(), seg.getOrigin().zf(), seg.getEndpoint().xf(), seg.getEndpoint().yf(), seg.getEndpoint().zf());
       }
     }
   }
@@ -82,58 +83,58 @@ void create() {
     mesh=new HE_Mesh(jc);
   }
 
-  numseg=mesh.numberOfEdges();
-  WB_ExplicitSegment[] segments=mesh.getSegments();
+  numseg=mesh.getNumberOfEdges();
+  WB_Segment[] segments=mesh.getSegments();
   S=new RotatingSegment[numseg];
-  WB_RandomSphere rs=new WB_RandomSphere();
+  WB_RandomOnSphere rs=new WB_RandomOnSphere();
   Iterator<HE_Edge> eItr=mesh.eItr();
   HE_Edge e;
   for (int i=0;i<numseg;i++) {
     e=eItr.next();
     S[i]=new RotatingSegment(segments[i], e.getEdgeNormal(), 0.01, 1);//random(-0.01, 0.01), 1);
   }
-  WB_Point3d v=segments[0].getOrigin();
-  WB_Point3d zero=new WB_Point3d(0, 0, 0);
-  scale=250.0/(float)WB_Distance.distance(zero, v);
+  WB_Point v=segments[0].getOrigin();
+  
+  scale=250.0/(float)v.getLength();
 }
 
 
 
 
 class RotatingSegment {
-  WB_ExplicitSegment S;
-  WB_Vector3d axis;
-  WB_Point3d c;
+  WB_Segment S;
+  WB_Vector axis;
+  WB_Point c;
   float rotVel;
   int count;
   int first;
   int num;
-  WB_Point3d[] history;
-  WB_Point3d start;
-  WB_Point3d end;
+  WB_Point[] history;
+  WB_Point start;
+  WB_Point end;
 
-  RotatingSegment( WB_ExplicitSegment S, WB_Normal3d axis, float rotVel, int num) {
+  RotatingSegment(WB_Segment S, WB_Vector axis, float rotVel, int num) {
     this.S=S;
     c=S.getCenter();
-    this.axis=axis.toVector(); 
+    this.axis=axis.get(); 
     this.rotVel=rotVel;
     this.num=max(1, num);
     this.count=0;
     this.first=0;
-    history=new WB_Point3d[2*num];
+    history=new WB_Point[2*num];
     history[0]=S.getOrigin();
-    history[1]=S.getEnd();
+    history[1]=S.getEndpoint();
     start=S.getOrigin().get();
-    end=S.getEnd().get();
+    end=S.getEndpoint().get();
   }
 
   void update() {
 
-    WB_Point3d o=S.getOrigin();
+    WB_Point o=S.getOrigin();
     o.rotateAboutAxis(rotVel, c, axis);
-    WB_Point3d e=S.getEnd();
+    WB_Point e=S.getEndpoint();
     e.rotateAboutAxis(rotVel, c, axis);
-    S=new WB_ExplicitSegment(o, e);
+    S=new WB_Segment(o, e);
     count++;
     if (count>=num) {
       history[2*first]=o.get();

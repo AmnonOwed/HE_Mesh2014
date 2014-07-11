@@ -12,7 +12,7 @@ WB_Render render;
 int res;
 void setup() {
   size(800, 800, OPENGL);
-  smooth();
+  smooth(8);
 res=20;
   float[][][] values=new float[res+1][res+1][res+1];
   for (int i = 0; i < res+1; i++) {

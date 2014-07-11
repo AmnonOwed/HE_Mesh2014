@@ -10,14 +10,15 @@ WB_AABBTree tree;
 WB_Render render;
 WB_Plane[] planes;
 HEM_MultiSlice modifier;
-WB_RandomSphere rnds;
+WB_RandomOnSphere rnds;
 WB_Ray randomRay;
 boolean growing;
 
 
 void setup() {
   size(800, 800, OPENGL);
-  rnds=new WB_RandomSphere();
+  smooth(8);
+  rnds=new WB_RandomOnSphere();
   createMesh(); 
   render=new WB_Render(this);
   growing=true;
@@ -59,10 +60,10 @@ void createMesh() {
 
 
 void grow() {
-  randomRay=new WB_Ray(new WB_Point3d(0, 0, -150), new WB_Vector3d(random(-1, 1), random(-1, 1), random(-1, 1)));
-  WB_Point3d point=HE_Intersection.getFurthestIntersection( tree, randomRay);
+  randomRay=new WB_Ray(new WB_Point(0, 0, -150), new WB_Vector(random(-1, 1), random(-1, 1), random(-1, 1)));
+  WB_Point point=HE_Intersection.getFurthestIntersection( tree, randomRay);
   if (point!=null) {
-    point.add(randomRay.getDirection(), 50);
+    point._addMulSelf(50,randomRay.getDirection());
     mesh.triSplitFace(HE_Intersection.lastface, point);
     tree=new WB_AABBTree(mesh, 10);
   }

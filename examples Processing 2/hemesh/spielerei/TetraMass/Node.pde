@@ -1,5 +1,5 @@
 class Node {
-  WB_Point3d pos; 
+  WB_Point pos; 
   float radiusfactor;
   Node parent;
   boolean isParent;
@@ -7,7 +7,7 @@ class Node {
   boolean active;
   int generation;
 
-  Node(WB_Point3d pos,  float radiusfactor, Node parent, int id, int gen) { 
+  Node(WB_Point pos,  float radiusfactor, Node parent, int id, int gen) { 
     this.pos = pos;
     this.parent = parent;
     this.radiusfactor=radiusfactor;

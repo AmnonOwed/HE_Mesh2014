@@ -21,6 +21,7 @@ HEC_FromFrame ffc;
 
 void setup() {
   size(800,800, OPENGL);
+  smooth(8);
   background(0);
  reset();
  
@@ -67,7 +68,7 @@ void draw() {
    render.drawFaces(mesh);
   stroke(255, 0, 0);
   render.drawEdges(container);
-  stroke(00);
+  stroke(0);
   render.drawEdges(mesh);
 }
 
@@ -111,7 +112,7 @@ int freeAllNodes() {
 
 void firstNode() {
   frame=new WB_Frame();
-  node = new Node(new WB_Point3d(random(-200,200),random(-200,200),random(-200,200)),1.0, null, 0, 0);
+  node = new Node(new WB_Point(random(-200,200),random(-200,200),random(-200,200)),1.0, null, 0, 0);
   nodes= new ArrayList<Node>(numNodes); 
   nodes.add(node);
   frame.addNode(node.pos,1.0);
@@ -151,38 +152,36 @@ Node findNeighbor(Node node, float rf, HE_Mesh container) {
   float currentradius=startradius;//node.searchradius;
   float shrink= 0.95; 
   int numtries=50;
-  WB_RandomSphere rnd=new WB_RandomSphere();
-  WB_Vector3d v;
+  WB_RandomOnSphere rnd=new WB_RandomOnSphere();
+  WB_Vector v;
   while (currentradius>=minradius) { 
     for (int j=0;j<numtries;j++) {
       int c=(int)random(3.9999999);
       switch(c){
        case 0:
-      v=new WB_Vector3d(1,1,1);
+      v=new WB_Vector(1,1,1);
       break;
       case 1:
-       v=new WB_Vector3d(-1,-1,1);
+       v=new WB_Vector(-1,-1,1);
       break;
       case 2:
-       v=new WB_Vector3d(-1,1,-1);
+       v=new WB_Vector(-1,1,-1);
       break;
       default:
-       v=new WB_Vector3d(1,-1,-1);
+       v=new WB_Vector(1,-1,-1);
       break;
         
       }
-      v.normalize();
+      v._normalizeSelf();
       
       
 
-      v.mult(currentradius);
-      v.normalize();
-      WB_Point3d neighborPos = node.pos.addAndCopy(v, startradius*node.radiusfactor+currentradius);
+      WB_Point neighborPos = node.pos.addMul(startradius*node.radiusfactor+currentradius,v);
       boolean free=(container==null)?true:inside(neighborPos, container);
       if (free) {
         for  (Node currentNode:nodes) {
           if (currentNode != node){
-            if (WB_Distance.sqDistance( neighborPos, currentNode.pos) < (currentradius+startradius*currentNode.radiusfactor)*(currentradius+startradius*currentNode.radiusfactor)) { 
+            if (currentNode.pos.getSqDistance(neighborPos) < (currentradius+startradius*currentNode.radiusfactor)*(currentradius+startradius*currentNode.radiusfactor)) { 
               free=false;
               break;
             }
@@ -205,7 +204,7 @@ void createMesh() {
 
 }
 
-boolean inside(WB_Point3d p, HE_Mesh mesh) {
+boolean inside(WB_Point p, HE_Mesh mesh) {
   boolean b= mesh.contains(p, false);
   return b;
 }

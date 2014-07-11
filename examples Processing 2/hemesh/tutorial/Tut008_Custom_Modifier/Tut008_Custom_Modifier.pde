@@ -31,7 +31,7 @@ void setup(){
     int [][] faces = box.getFacesAsInt();// first index = face index, second index = index of vertex belonging to face
      
     //Do something with the vertices
-    for(int i=0;i<box.numberOfVertices();i++){
+    for(int i=0;i<box.getNumberOfVertices();i++){
      vertices[i][0]*=1.2+.2*sin(HALF_PI/10*i+HALF_PI); 
      vertices[i][1]*=1.2+.2*sin(HALF_PI/17*i);
      vertices[i][2]*=1.2+.2*cos(HALF_PI/25*i);

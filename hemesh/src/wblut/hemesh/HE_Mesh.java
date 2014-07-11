@@ -1361,9 +1361,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-								.getVertex())
+										.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-								.getVertex())) {
+										.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 							e = new HE_Edge();
@@ -1436,9 +1436,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-								.getVertex())
+										.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-								.getVertex())) {
+										.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 							e = new HE_Edge();
@@ -3785,8 +3785,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (!contains(he.getNextInFace())) {
 					if (verbose == true) {
 						System.out
-						.println("External reference (next) in half edge  "
-								+ he.key() + ".");
+								.println("External reference (next) in half edge  "
+										+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3800,8 +3800,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 					if (he.getFace() != he.getNextInFace().getFace()) {
 						if (verbose == true) {
 							System.out
-							.println("Incosistent reference (face) in half edge  "
-									+ he.key() + ".");
+									.println("Incosistent reference (face) in half edge  "
+											+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3828,8 +3828,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (!contains(he.getPair())) {
 					if (verbose == true) {
 						System.out
-						.println("External reference (pair) in half edge  "
-								+ he.key() + ".");
+								.println("External reference (pair) in half edge  "
+										+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3841,16 +3841,16 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (he.getPair().getPair() == null) {
 					if (verbose == true) {
 						System.out
-						.println("No pair reference back to half edge  "
-								+ he.key() + ".");
+								.println("No pair reference back to half edge  "
+										+ he.key() + ".");
 					}
 				}
 				else {
 					if (he.getPair().getPair() != he) {
 						if (verbose == true) {
 							System.out
-							.println("Wrong pair reference back to half edge  "
-									+ he.key() + ".");
+									.println("Wrong pair reference back to half edge  "
+											+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3864,8 +3864,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 					if (he.getEdge() != he.getPair().getEdge()) {
 						if (verbose == true) {
 							System.out
-							.println("Inconsistent reference (edge) in half edge  "
-									+ he.key() + ".");
+									.println("Inconsistent reference (edge) in half edge  "
+											+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3885,8 +3885,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 							.getVertex()) {
 						if (verbose == true) {
 							System.out
-							.println("Inconsistent reference (pair)/(next) in half edge  "
-									+ he.key() + ".");
+									.println("Inconsistent reference (pair)/(next) in half edge  "
+											+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3915,8 +3915,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (!contains(he.getFace())) {
 					if (verbose == true) {
 						System.out
-						.println("External reference (face) in half edge  "
-								+ he.key() + ".");
+								.println("External reference (face) in half edge  "
+										+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3942,8 +3942,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (!contains(he.getVertex())) {
 					if (verbose == true) {
 						System.out
-						.println("External reference (vert) in half edge  "
-								+ he.key() + ".");
+								.println("External reference (vert) in half edge  "
+										+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3969,8 +3969,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				if (!contains(he.getEdge())) {
 					if (verbose == true) {
 						System.out
-						.println("External reference (edge) in half edge  "
-								+ he.key() + ".");
+								.println("External reference (edge) in half edge  "
+										+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -4018,10 +4018,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				lpi = WB_Intersection.getIntersection3D(R, P);
 				if (lpi.intersection) {
 					if (pointIsInFace((WB_Point) lpi.object, face)) {
-						if (!HE_Mesh.pointIsStrictlyInFace(
-								(WB_Point) lpi.object, face)) {
-							return contains(p, isConvex);
-						}
+						/*
+						 * if (!HE_Mesh.pointIsStrictlyInFace( (WB_Point)
+						 * lpi.object, face)) { return contains(p, isConvex); }
+						 */
 						c++;
 					}
 				}
@@ -4502,9 +4502,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 						he.getNextInVertex().getHalfedgeTangent())) {
 					he.getPrevInFace().setNext(he.getNextInFace());
 					he.getPair().getPrevInFace()
-					.setNext(he.getPair().getNextInFace());
+							.setNext(he.getPair().getNextInFace());
 					he.getPair().getNextInFace()
-					.setVertex(he.getNextInFace().getVertex());
+							.setVertex(he.getNextInFace().getVertex());
 					if (he.getFace() != null) {
 						if (he.getFace().getHalfedge() == he) {
 							he.getFace().setHalfedge(he.getNextInFace());
@@ -4514,7 +4514,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 						if (he.getPair().getFace().getHalfedge() == he
 								.getPair()) {
 							he.getPair().getFace()
-							.setHalfedge(he.getPair().getNextInFace());
+									.setHalfedge(he.getPair().getNextInFace());
 						}
 					}
 					vItr.remove();
@@ -5123,7 +5123,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -5136,7 +5136,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

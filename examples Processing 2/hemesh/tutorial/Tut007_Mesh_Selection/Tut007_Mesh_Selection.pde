@@ -22,7 +22,7 @@ void setup() {
   selection=new HE_Selection(box);  
 
   //add faces to selection 
-  Iterator<HE_Face> fItr=box.fItr();
+  HE_FaceIterator fItr=new HE_FaceIterator(box);
   HE_Face f;
   while (fItr.hasNext ()) {
     f=fItr.next();

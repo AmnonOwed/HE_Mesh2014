@@ -8,12 +8,13 @@ import java.util.*;
 HE_Mesh mesh;
 ArrayList<HE_Mesh> meshes;
 WB_Render render;
-WB_Point3d[][] environments;
+WB_Point[][] environments;
 void setup() {
   size(800, 800, OPENGL);
-  mesh=new HE_Mesh(new HEC_Geodesic().setLevel(3).setRadius(300));
+  smooth(8);
+  mesh=new HE_Mesh(new HEC_Geodesic().setB(5).setC(3).setRadius(300));
   meshes=new ArrayList<HE_Mesh>();
-  meshes.add(new HE_Mesh(new HEC_Geodesic().setLevel(3).setRadius(300)));
+  meshes.add(new HE_Mesh(new HEC_Geodesic().setB(5).setC(3).setRadius(300)));
   render=new WB_Render(this);
   collectNeighbors();
   for (int i=0;i<5;i++) {
@@ -36,25 +37,25 @@ void draw() {
     render.drawEdges(meshes.get(i));
   }
   noStroke();
-
+blendMode(ADD);
   render.drawFacesSmooth(mesh);
 noLoop();
 }
 
 void collectNeighbors() {
-  int nv=mesh.numberOfVertices();
-  environments=new WB_Point3d[nv][];
-  WB_Point3d[] vertices=mesh.getVerticesAsPoint();
+  int nv=mesh.getNumberOfVertices();
+  environments=new WB_Point[nv][];
+  WB_Point[] vertices=mesh.getVerticesAsPoint();
   Iterator<HE_Vertex> vItr=mesh.vItr();
   int i=0;
   while (vItr.hasNext ()) {
     if (random(100)<2) {
-      environments[i]=new WB_Point3d[1];
-      environments[i][0]=vItr.next();
+      environments[i]=new WB_Point[1];
+      environments[i][0]=vItr.next().pos;
     }
     else if (random(100)<8) {
-      WB_Point3d[] points=vItr.next().getNeighborsAsPoints();
-      environments[i]=new WB_Point3d[points.length+1];
+      WB_Point[] points=vItr.next().getNeighborsAsPoints();
+      environments[i]=new WB_Point[points.length+1];
       for (int j=0;j<points.length;j++) {
         environments[i][j]=points[j];
       }
@@ -70,9 +71,9 @@ void collectNeighbors() {
 }
 
 void mousePressed() {
-  mesh=new HE_Mesh(new HEC_Geodesic().setLevel(3).setRadius(300));
+  mesh=new HE_Mesh(new HEC_Geodesic().setB(5).setC(3).setRadius(300));
   meshes=new ArrayList<HE_Mesh>();
-  meshes.add(new HE_Mesh(new HEC_Geodesic().setLevel(3).setRadius(300)));
+  meshes.add(new HE_Mesh(new HEC_Geodesic().setB(5).setC(3).setRadius(300)));
   render=new WB_Render(this);
   collectNeighbors();
   for (int i=0;i<5;i++) {
@@ -88,22 +89,22 @@ void keyPressed() {
 }
 
 void average() {
-  int nv=mesh.numberOfVertices();
-  WB_Point3d[] newPos=new WB_Point3d[nv];
+  int nv=mesh.getNumberOfVertices();
+  WB_Point[] newPos=new WB_Point[nv];
   for (int i=0;i<nv;i++) {
     int nn=environments[i].length;
-    newPos[i]=new WB_Point3d();
+    newPos[i]=new WB_Point();
     for (int j=0;j<nn;j++) {
-      newPos[i].add(environments[i][j]);
+      newPos[i]._addSelf(environments[i][j]);
     }
-    newPos[i].mult(1.0/nn);
+    newPos[i]._mulSelf(1.0/nn);
   }  
 
   Iterator<HE_Vertex> vItr=mesh.vItr();
   vItr=mesh.vItr();  
   int i=0;
   while (vItr.hasNext ()) {
-    vItr.next().set(newPos[i]); 
+    vItr.next()._set(newPos[i]); 
     i++;
   }
 }
