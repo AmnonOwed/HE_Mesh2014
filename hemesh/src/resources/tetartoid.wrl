@@ -1,0 +1,112 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "tetrahedral tentagonal dodecahedron"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, 1996.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  ShapeHints {
+    vertexOrdering UNKNOWN_ORDERING
+    creaseAngle    0
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	-0.333333 -0.133333 -0.0666667,
+	-0.333333 0.133333 0.0666667,
+	-0.25 -0.25 -0.25,
+	-0.25 0.25 0.25,
+	-0.166667 -0.166667 0.166667,
+	-0.166667 0.166667 -0.166667,
+	-0.133333 -0.0666667 -0.333333,
+	-0.133333 0.0666667 0.333333,
+	-0.0666667 -0.333333 -0.133333,
+	-0.0666667 0.333333 0.133333,
+	0.0666667 -0.333333 0.133333,
+	0.0666667 0.333333 -0.133333,
+	0.133333 -0.0666667 0.333333,
+	0.133333 0.0666667 -0.333333,
+	0.166667 -0.166667 -0.166667,
+	0.166667 0.166667 0.166667,
+	0.25 -0.25 0.25,
+	0.25 0.25 -0.25,
+	0.333333 -0.133333 0.0666667,
+	0.333333 0.133333 -0.0666667,
+	]
+      }
+    Material {
+      diffuseColor 0.1 0.8 0.1 # green
+      }
+    IndexedFaceSet {
+      coordIndex [
+	0,1,3,7,4,-1,
+	2,6,5,1,0,-1,
+	0,4,10,8,2,-1,
+	5,11,9,3,1,-1,
+	7,12,16,10,4,-1,
+	11,5,6,13,17,-1,
+	8,14,13,6,2,-1,
+	9,15,12,7,3,-1,
+	16,18,14,8,10,-1,
+	19,15,9,11,17,-1,
+	18,19,17,13,14,-1,
+	15,19,18,16,12,-1,
+	]
+      }
+    Material {
+      diffuseColor 0 0 0     # black edges
+      }
+    IndexedLineSet {
+      coordIndex [
+	0,1,-1,
+	0,2,-1,
+	0,4,-1,
+	1,3,-1,
+	1,5,-1,
+	2,6,-1,
+	2,8,-1,
+	3,7,-1,
+	3,9,-1,
+	4,7,-1,
+	4,10,-1,
+	5,6,-1,
+	5,11,-1,
+	6,13,-1,
+	7,12,-1,
+	8,10,-1,
+	8,14,-1,
+	9,11,-1,
+	9,15,-1,
+	10,16,-1,
+	11,17,-1,
+	12,15,-1,
+	12,16,-1,
+	13,14,-1,
+	13,17,-1,
+	14,18,-1,
+	15,19,-1,
+	16,18,-1,
+	17,19,-1,
+	18,19,-1,
+	]
+      }
+    }
+  }

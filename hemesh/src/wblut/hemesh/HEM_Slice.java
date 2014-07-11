@@ -8,9 +8,9 @@ import wblut.geom.WB_Plane;
 
 /**
  * Planar cut of a mesh. Faces on positive side of cut plane are removed.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Slice extends HEM_Modifier {
 
@@ -40,7 +40,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Set offset.
-	 * 
+	 *
 	 * @param d
 	 *            offset
 	 * @return self
@@ -60,7 +60,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Set cut plane.
-	 * 
+	 *
 	 * @param P
 	 *            cut plane
 	 * @return self
@@ -72,7 +72,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Sets the plane.
-	 * 
+	 *
 	 * @param ox
 	 *            the ox
 	 * @param oy
@@ -95,7 +95,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Set reverse option.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -107,7 +107,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Set option to cap holes.
-	 * 
+	 *
 	 * @param b
 	 *            true, false;
 	 * @return self
@@ -120,19 +120,19 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/**
 	 * Sets the simple cap.
-	 * 
+	 *
 	 * @param b
 	 *            the b
 	 * @return the hE m_ slice
 	 */
 	public HEM_Slice setSimpleCap(final Boolean b) {
-		simpleCap = b;
+		simpleCap = true;// b;
 		return this;
 	}
 
 	/**
 	 * Set option to reset mesh center.
-	 * 
+	 *
 	 * @param b
 	 *            true, false;
 	 * @return self
@@ -145,7 +145,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -182,7 +182,8 @@ public class HEM_Slice extends HEM_Modifier {
 			if ((cptp == WB_Classification.FRONT)
 					|| (cptp == WB_Classification.ON)) {
 				newFaces.add(face);
-			} else {
+			}
+			else {
 				if (cut.contains(face)) {
 					cut.remove(face);
 				}
@@ -208,12 +209,14 @@ public class HEM_Slice extends HEM_Modifier {
 				cap.addFaces(mesh.capHoles());
 				mesh.pairHalfedgesAndCreateEdges();
 				mesh.capHalfedges();
-			} else {
+			}
+			else {
 				// TODO
 
 			}
 
-		} else {
+		}
+		else {
 			mesh.pairHalfedgesAndCreateEdges();
 			mesh.capHalfedges();
 		}
@@ -228,7 +231,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */

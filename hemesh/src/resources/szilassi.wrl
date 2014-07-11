@@ -1,0 +1,63 @@
+#VRML V1.0 ascii
+
+Separator{
+    DEF Title Info {
+        string "Szilassi polyhedron"
+        }
+    DEF BackgroundColor Info { 
+        string "0 0 0"
+        }
+    DEF Viewer Info {string "examiner"}
+
+    ShapeHints { 
+        vertexOrdering COUNTERCLOCKWISE
+        shapeType SOLID
+        }
+    Rotation {  
+        rotation   -0.7 0.3 0.4    1.45  
+        }
+    DirectionalLight {  direction  1  0  0  intensity   0.75  }
+    DirectionalLight {  direction  0  1  0  intensity   0.75  }
+    DirectionalLight {  direction -1  0  0  intensity   0.75  }
+    DirectionalLight {  direction  0 -1  0  intensity   0.75  }
+    Coordinate3 {
+       point [
+         -1.200    0.000   1.200  ,
+          1.200    0.000   1.200  ,
+          0.000   -1.260  -1.200  ,
+          0.000    1.260  -1.200  ,
+          0.200   -0.500  -0.800  ,
+         -0.200    0.500  -0.800  ,
+         -0.375   -0.375  -0.300  ,
+          0.375    0.375  -0.300  ,
+          0.450   -0.250   0.200  ,
+         -0.450    0.250   0.200  ,
+         -0.700    0.000   0.200  ,
+          0.700    0.000   0.200  ,
+         -0.700   -0.250   0.200  ,
+          0.700    0.250   0.200  ,
+          ]
+       }
+    Material {
+       diffuseColor [
+           0     0.5   0.9 , 
+           0.9   0     0.4 ,  
+           0.6   0.8   0   ,  
+           0     0.8   0.6 , 
+           0.9   0.2   0   ,
+           0.3   0     0.9 ,
+           1     1     1   ,
+           ] 
+       }
+    MaterialBinding { value PER_FACE }
+    IndexedFaceSet {
+       coordIndex [ 9,  7,  5,  0,  1, 13, -1,
+                   10, 12,  0,  5,  3,  2, -1,
+                    6,  7,  9, 10,  2,  4, -1,
+                    7,  6,  8, 11,  3,  5, -1,
+                   11, 13,  1,  4,  2,  3, -1,
+                    8,  6,  4,  1,  0, 12, -1,
+                   13, 11,  8, 12, 10,  9, -1,
+                  ]
+       }
+    }

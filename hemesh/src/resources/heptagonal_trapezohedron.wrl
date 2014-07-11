@@ -1,0 +1,109 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "heptagonal trapezohedron"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, 1997.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  ShapeHints {
+    vertexOrdering UNKNOWN_ORDERING
+    faceType UNKNOWN_FACE_TYPE
+    creaseAngle 0
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	0.4065942 0.2658714 0.9136089,
+	-0.08053097 0.4790837 0.9136089,
+	-0.471175 0.1183239 0.9136089,
+	0.4065942 -2.418854 0.9136089,
+	0.9941398 0.1183239 0.2614824,
+	0.7326574 0.4790837 0.551706,
+	-0.4065942 2.418854 -0.9136089,
+	-0.849028 0.2132123 0.551706,
+	-0.9781897 -0.2132123 0.2614824,
+	0.849028 -0.2132123 -0.551706,
+	0.9781897 0.2132123 -0.2614824,
+	-0.9941398 -0.1183239 -0.2614824,
+	-0.7326574 -0.4790837 -0.551706,
+	0.08053097 -0.4790837 -0.9136089,
+	0.471175 -0.1183239 -0.9136089,
+	-0.4065942 -0.2658714 -0.9136089,
+	]
+      }
+    Material {
+      diffuseColor 0.4 0.4 1.     # 4-sided faces blue
+      }
+    IndexedFaceSet {
+      coordIndex [
+	3,0,1,2,-1,
+	0,3,4,5,-1,
+	1,0,5,6,-1,
+	2,1,6,7,-1,
+	3,2,7,8,-1,
+	4,3,9,10,-1,
+	5,4,10,6,-1,
+	7,6,11,8,-1,
+	3,8,11,12,-1,
+	9,3,13,14,-1,
+	10,9,14,6,-1,
+	11,6,15,12,-1,
+	3,12,15,13,-1,
+	14,13,15,6,-1,
+	]
+      }
+    Material {
+      diffuseColor 0 0 0     # black edges
+      }
+    IndexedLineSet {
+      coordIndex [
+	0,1,-1,
+	0,3,-1,
+	0,5,-1,
+	1,2,-1,
+	1,6,-1,
+	2,3,-1,
+	2,7,-1,
+	3,4,-1,
+	3,8,-1,
+	3,9,-1,
+	3,12,-1,
+	3,13,-1,
+	4,5,-1,
+	4,10,-1,
+	5,6,-1,
+	6,7,-1,
+	6,10,-1,
+	6,11,-1,
+	6,14,-1,
+	6,15,-1,
+	7,8,-1,
+	8,11,-1,
+	9,10,-1,
+	9,14,-1,
+	11,12,-1,
+	12,15,-1,
+	13,14,-1,
+	13,15,-1,
+	]
+      }
+    }
+  }

@@ -1,0 +1,64 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "tetrahemihexahedron"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, 1997.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  ShapeHints {
+    vertexOrdering UNKNOWN_ORDERING
+    faceType UNKNOWN_FACE_TYPE
+    creaseAngle 0
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	0 0 1.414214,
+	1.414214 0 0,
+	-1.414214 0 0,
+	0 1.414214 0,
+	0 -1.414214 0,
+	0 0 -1.414214,
+	]
+      }
+    Material {
+      diffuseColor 0.9 0.3 0.3     # 3-sided faces red
+      }
+    IndexedFaceSet {
+      coordIndex [
+	3,2,0,-1,
+	0,4,1,-1,
+	5,3,1,-1,
+	2,5,4,-1,
+	]
+      }
+    Material {
+      diffuseColor 0.4 0.4 1.     # 4-sided faces blue
+      }
+    IndexedFaceSet {
+      coordIndex [
+	0,1,5,2,-1,
+	0,3,5,4,-1,
+	1,4,2,3,-1,
+	]
+      }
+    }
+  }

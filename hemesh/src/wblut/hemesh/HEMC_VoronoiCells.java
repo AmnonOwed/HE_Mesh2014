@@ -2,9 +2,7 @@ package wblut.hemesh;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import wblut.geom.WB_Delaunay;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 import wblut.geom.WB_Point;
@@ -47,15 +45,12 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 	/** The limit. */
 	public int limit;
 
-	public double precision;
-
 	/**
 	 * Instantiates a new HEMC_VoronoiCells.
 	 *
 	 */
-	public HEMC_VoronoiCells(final double precision) {
+	public HEMC_VoronoiCells() {
 		super();
-		this.precision = precision;
 	}
 
 	/**
@@ -227,7 +222,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_MultiCreator#create()
 	 */
 	@Override
@@ -248,15 +243,13 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		if (numberOfPoints == 0) {
 			numberOfPoints = points.length;
 		}
-		if (numberOfPoints > 5) {
-			return createWithDelaunay();
-		}
+
 		final ArrayList<HE_Mesh> lresult = new ArrayList<HE_Mesh>();
 		final ArrayList<HE_Selection> linnersel = new ArrayList<HE_Selection>();
 		final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
 		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
 		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-				.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
+		.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
 		if (limit > 0) {
 			final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 			for (int i = 0; i < numberOfPoints; i++) {
@@ -313,58 +306,10 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 			}
 
 			result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
-					.setActive(on).setCells(result));
-		}
-		return result;
-
-	}
-
-	public HE_Mesh[] createWithDelaunay() {
-		HE_Mesh[] result;
-		final WB_Delaunay triangulation = WB_Delaunay.getTriangulation3D(
-				points, precision);
-		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
-		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-		.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
-		HE_Mesh mesh;
-		final List<HE_Mesh> lresult = new ArrayList<HE_Mesh>();
-		final List<HE_Selection> linnersel = new ArrayList<HE_Selection>();
-		final List<HE_Selection> loutersel = new ArrayList<HE_Selection>();
-		for (int i = 0; i < numberOfPoints; i++) {
-			cvc.setCellIndex(i);
-			System.out.println("HEMC_VoronoiCells: creating cell " + (i + 1)
-					+ " of " + numberOfPoints + ".");
-			cvc.setLimitPoints(true).setPointsToUse(triangulation.Neighbors[i]);
-			mesh = cvc.createBase();
-			linnersel.add(cvc.inner);
-			loutersel.add(cvc.outer);
-
-			lresult.add(mesh);
-		}
-		result = new HE_Mesh[lresult.size()];
-		inner = new HE_Selection[lresult.size()];
-		outer = new HE_Selection[lresult.size()];
-		_numberOfMeshes = lresult.size();
-		for (int i = 0; i < _numberOfMeshes; i++) {
-			result[i] = lresult.get(i);
-			inner[i] = linnersel.get(i);
-			outer[i] = loutersel.get(i);
-		}
-
-		if (createSkin) {
-			final boolean[] on = new boolean[_numberOfMeshes];
-			for (int i = 0; i < _numberOfMeshes; i++) {
-				on[i] = true;
-			}
-
-			final HE_Mesh[] temp = new HE_Mesh[result.length + 1];
-			System.arraycopy(result, 0, temp, 0, result.length);
-			temp[result.length] = new HE_Mesh(new HEC_FromVoronoiCells()
 			.setActive(on).setCells(result));
-			result = temp;
 		}
-
 		return result;
+
 	}
 
 }

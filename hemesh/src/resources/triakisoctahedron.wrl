@@ -1,0 +1,125 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "triakisoctahedron"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, 1997.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  ShapeHints {
+    vertexOrdering UNKNOWN_ORDERING
+    faceType UNKNOWN_FACE_TYPE
+    creaseAngle 0
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	0.2810846 1. 0.959683,
+	-0.7609261 -0.7071068 0.959683,
+	0.2810846 -0.1715729 0.959683,
+	1.15844 -0.7071068 0.3975137,
+	-0.6785983 0.4142136 0.6303718,
+	0.9114565 0.4142136 0.1646556,
+	-1.15844 0.7071068 -0.3975137,
+	0.0482265 -1. 0.1646556,
+	0.7609261 0.7071068 -0.959683,
+	-0.9114565 -0.4142136 -0.1646556,
+	-0.0482265 1. -0.1646556,
+	-0.2810846 -1. -0.959683,
+	0.6785983 -0.4142136 -0.6303718,
+	-0.2810846 0.1715729 -0.959683,
+	]
+      }
+    Material {
+      diffuseColor 0.9 0.3 0.3     # 3-sided faces red
+      }
+    IndexedFaceSet {
+      coordIndex [
+	2,0,1,-1,
+	2,3,0,-1,
+	0,4,1,-1,
+	1,3,2,-1,
+	0,3,5,-1,
+	1,4,6,-1,
+	4,0,6,-1,
+	3,1,7,-1,
+	3,8,5,-1,
+	5,8,0,-1,
+	6,9,1,-1,
+	0,10,6,-1,
+	1,11,7,-1,
+	7,11,3,-1,
+	8,3,12,-1,
+	0,8,10,-1,
+	1,9,11,-1,
+	9,6,11,-1,
+	6,10,8,-1,
+	3,11,12,-1,
+	12,11,8,-1,
+	6,13,11,-1,
+	8,13,6,-1,
+	8,11,13,-1,
+	]
+      }
+    Material {
+      diffuseColor 0 0 0     # black edges
+      }
+    IndexedLineSet {
+      coordIndex [
+	0,1,-1,
+	0,2,-1,
+	0,3,-1,
+	0,4,-1,
+	0,5,-1,
+	0,6,-1,
+	0,8,-1,
+	0,10,-1,
+	1,2,-1,
+	1,3,-1,
+	1,4,-1,
+	1,6,-1,
+	1,7,-1,
+	1,9,-1,
+	1,11,-1,
+	2,3,-1,
+	3,5,-1,
+	3,7,-1,
+	3,8,-1,
+	3,11,-1,
+	3,12,-1,
+	4,6,-1,
+	5,8,-1,
+	6,8,-1,
+	6,9,-1,
+	6,10,-1,
+	6,11,-1,
+	6,13,-1,
+	7,11,-1,
+	8,10,-1,
+	8,11,-1,
+	8,12,-1,
+	8,13,-1,
+	9,11,-1,
+	11,12,-1,
+	11,13,-1,
+	]
+      }
+    }
+  }

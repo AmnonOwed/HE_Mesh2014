@@ -70,7 +70,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -146,24 +146,24 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			final HE_Edge ce = mesh.getEdgeByKey(en.getKey());
 			final double u = en.getValue();
 			if (ce.getFirstFace() != null) {
-				if (!split.contains(ce.getFirstFace())) {
-					split.add(ce.getFirstFace());
-				}
+
+				split.add(ce.getFirstFace());
+
 			}
 			if (ce.getSecondFace() != null) {
-				if (!split.contains(ce.getSecondFace())) {
-					split.add(ce.getSecondFace());
-				}
+
+				split.add(ce.getSecondFace());
+
 			}
 			if (u == 0.0) {
-				if (!split.contains(ce.getStartVertex())) {
-					split.add(ce.getStartVertex());
-				}
+
+				split.add(ce.getStartVertex());
+
 			}
 			else if (u == 1.0) {
-				if (!split.contains(ce.getEndVertex())) {
-					split.add(ce.getEndVertex());
-				}
+
+				split.add(ce.getEndVertex());
+
 			}
 			else {
 				split.add(mesh.splitEdge(ce, u).vItr().next());
@@ -211,7 +211,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -303,23 +303,20 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			for (final Map.Entry<Long, Double> en : edgeInt.entrySet()) {
 				final HE_Edge ce = lsel.parent.getEdgeByKey(en.getKey());
 				final double u = en.getValue();
-				if ((!split.contains(ce.getFirstFace()))
-						&& (lsel.contains(ce.getFirstFace()))) {
+				if (lsel.contains(ce.getFirstFace())) {
 					split.add(ce.getFirstFace());
 				}
-				if ((!split.contains(ce.getSecondFace()))
-						&& (lsel.contains(ce.getSecondFace()))) {
+				if (lsel.contains(ce.getSecondFace())) {
 					split.add(ce.getSecondFace());
 				}
 				if (u == 0.0) {
-					if (!split.contains(ce.getStartVertex())) {
-						split.add(ce.getStartVertex());
-					}
+					split.add(ce.getStartVertex());
+
 				}
 				else if (u == 1.0) {
-					if (!split.contains(ce.getEndVertex())) {
-						split.add(ce.getEndVertex());
-					}
+
+					split.add(ce.getEndVertex());
+
 				}
 				else {
 					split.add(lsel.parent.splitEdge(ce, u).vItr().next());

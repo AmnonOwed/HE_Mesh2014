@@ -1,0 +1,124 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "stt3"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, 1996.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  ShapeHints {
+    vertexOrdering UNKNOWN_ORDERING
+    creaseAngle    0
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	-2.7716 -0.7071 -0.90452,
+	-1.1371 -0.94281 0.90452,
+	-1.066 0.70708 2.7135,
+	-0.8528 0.56569 0.18091,
+	-0.71067 0.47141 -1.5076,
+	-0.42641 2.8284 -0.90452,
+	-0.25584 -0.84853 -0.54272,
+	0.42638 -2.8284 0.90455,
+	0.42639 1.4142 0.90453,
+	0.42641 -0.28283 0.90454,
+	0.68225 0.56568 -0.54272,
+	1.066 -0.70711 -2.7136,
+	1.4213 -0.94281 -0.30152,
+	2.7716 0.70712 0.90452,
+	]
+      }
+    Material {
+      diffuseColor .9 .8 0.5 # unknown
+      }
+    IndexedFaceSet {
+      coordIndex [
+	4,5,3,-1,
+	3,2,1,-1,
+	1,7,6,-1,
+	6,11,4,-1,
+	1,0,3,-1,
+	3,5,8,-1,
+	8,2,3,-1,
+	3,0,4,-1,
+	12,11,6,-1,
+	6,0,1,-1,
+	8,13,9,-1,
+	9,7,1,-1,
+	4,0,6,-1,
+	6,7,12,-1,
+	4,11,10,-1,
+	10,13,8,-1,
+	1,2,9,-1,
+	9,13,12,-1,
+	12,13,10,-1,
+	10,5,4,-1,
+	12,7,9,-1,
+	9,2,8,-1,
+	8,5,10,-1,
+	10,11,12,-1,
+	]
+      }
+    Material {
+      diffuseColor 0 0 0     # black edges
+      }
+    IndexedLineSet {
+      coordIndex [
+	0,1,-1,
+	0,3,-1,
+	0,4,-1,
+	0,6,-1,
+	1,2,-1,
+	1,3,-1,
+	1,6,-1,
+	1,7,-1,
+	1,9,-1,
+	2,3,-1,
+	2,8,-1,
+	2,9,-1,
+	3,4,-1,
+	3,5,-1,
+	3,8,-1,
+	4,5,-1,
+	4,6,-1,
+	4,10,-1,
+	4,11,-1,
+	5,8,-1,
+	5,10,-1,
+	6,7,-1,
+	6,11,-1,
+	6,12,-1,
+	7,9,-1,
+	7,12,-1,
+	8,9,-1,
+	8,10,-1,
+	8,13,-1,
+	9,12,-1,
+	9,13,-1,
+	10,11,-1,
+	10,12,-1,
+	10,13,-1,
+	11,12,-1,
+	12,13,-1,
+	]
+      }
+    }
+  }

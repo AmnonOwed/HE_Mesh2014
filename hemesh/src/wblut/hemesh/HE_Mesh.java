@@ -1522,17 +1522,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	public List<HE_Face> capHoles() {
 		final List<HE_Face> caps = new FastTable<HE_Face>();
 		final List<HE_Halfedge> unpairedEdges = getUnpairedHalfedges();
-		List<HE_Halfedge> loopedHalfedges;
+		HE_RAS<HE_Halfedge> loopedHalfedges;
 		HE_Halfedge start;
 		HE_Halfedge he;
 		HE_Halfedge hen;
 		HE_Face nf;
-		List<HE_Halfedge> newHalfedges;
+		HE_RAS<HE_Halfedge> newHalfedges;
 		HE_Halfedge phe;
 		HE_Halfedge nhe;
 		HE_Edge ne;
 		while (unpairedEdges.size() > 0) {
-			loopedHalfedges = new FastTable<HE_Halfedge>();
+			loopedHalfedges = new HE_RAS<HE_Halfedge>();
 			start = unpairedEdges.get(0);
 			loopedHalfedges.add(start);
 			he = start;
@@ -1542,12 +1542,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				for (int i = 0; i < unpairedEdges.size(); i++) {
 					hen = unpairedEdges.get(i);
 					if (hen.getVertex() == he.getNextInFace().getVertex()) {
-						if (!loopedHalfedges.contains(hen)) {
-							loopedHalfedges.add(hen);
-						}
-						else {
-							stuck = true;
-						}
+
+						loopedHalfedges.add(hen);
+
 						break;
 					}
 				}
@@ -1561,7 +1558,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			nf = new HE_Face();
 			add(nf);
 			caps.add(nf);
-			newHalfedges = new FastTable<HE_Halfedge>();
+			newHalfedges = new HE_RAS<HE_Halfedge>();
 			for (int i = 0; i < loopedHalfedges.size(); i++) {
 				phe = loopedHalfedges.get(i);
 				nhe = new HE_Halfedge();
@@ -1581,7 +1578,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				phe.setEdge(ne);
 
 			}
-			cycleHalfedgesReverse(newHalfedges);
+			cycleHalfedgesReverse(newHalfedges.getObjects());
 
 		}
 		return caps;
@@ -1593,9 +1590,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 * @return self
 	 */
 	public HE_Mesh cleanUnusedElementsByFace() {
-		final List<HE_Vertex> cleanedVertices = new FastTable<HE_Vertex>();
-		final List<HE_Halfedge> cleanedHalfedges = new FastTable<HE_Halfedge>();
-		final List<HE_Edge> cleanedEdges = new FastTable<HE_Edge>();
+		final HE_RAS<HE_Vertex> cleanedVertices = new HE_RAS<HE_Vertex>();
+		final HE_RAS<HE_Halfedge> cleanedHalfedges = new HE_RAS<HE_Halfedge>();
+		final HE_RAS<HE_Edge> cleanedEdges = new HE_RAS<HE_Edge>();
 
 		HE_Halfedge he;
 		HE_Edge e;
@@ -1636,9 +1633,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 				}
 			}
 		}
-		replaceVertices(cleanedVertices);
-		replaceHalfedges(cleanedHalfedges);
-		replaceEdges(cleanedEdges);
+		replaceVertices(cleanedVertices.getObjects());
+		replaceHalfedges(cleanedHalfedges.getObjects());
+		replaceEdges(cleanedEdges.getObjects());
 		return this;
 	}
 

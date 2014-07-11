@@ -1,0 +1,60 @@
+#VRML V1.0 ascii
+
+Separator {
+  DEF Title Info {
+    string "disphenoid, tetragonal"
+    }
+  DEF SceneInfo Info {
+    string "(c) George W. Hart, Jun. 1996.  george@li.net"
+    string "Dept. Computer Science, Hofstra University."
+    string "Freely distributable for noncommercial purposes."
+    }
+  DEF BackgroundColor Info { # blue sky
+    string "0.2 0.5 1"
+    }
+  DEF Viewer Info {
+    string "examiner"
+    }
+  DirectionalLight {
+    direction -.5 -1 0
+    intensity 0.75
+    }
+  DirectionalLight {
+    direction .5 1 0
+    intensity 0.75
+    }
+  Separator {
+    Coordinate3 {
+	point [
+	1.414 0   1.7,
+	-1.414 0  1.7,
+	1 -1 -1.7,
+	-1 1 -1.7,
+	]
+      }
+    Material {
+      diffuseColor 1. 0.7 0.6     # 3-sided faces
+      }
+    IndexedFaceSet {
+      coordIndex [
+	0,1,2,-1,
+	0,2,3,-1,
+	0,3,1,-1,
+	1,3,2,-1,
+	]
+      }
+    Material {
+      diffuseColor 0 0 0     # black edges
+      }
+    IndexedLineSet {
+      coordIndex [
+	0,1,-1,
+	0,2,-1,
+	0,3,-1,
+	1,2,-1,
+	1,3,-1,
+	2,3,-1,
+	]
+      }
+    }
+  }
