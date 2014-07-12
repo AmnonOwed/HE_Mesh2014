@@ -2,13 +2,13 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 /**
  * Stretch and compress a mesh. Determined by a ground plane, a stretch factor

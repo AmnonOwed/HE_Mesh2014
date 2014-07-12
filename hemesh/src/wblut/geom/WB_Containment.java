@@ -2,9 +2,9 @@ package wblut.geom;
 
 import java.util.LinkedList;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Triangle;
+import wblut.math.WB_Epsilon;
 
 public class WB_Containment {
 

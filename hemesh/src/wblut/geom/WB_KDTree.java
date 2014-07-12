@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 /**
  * Class WB_KDTree.

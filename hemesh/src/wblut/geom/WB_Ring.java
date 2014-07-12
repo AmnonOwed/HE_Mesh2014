@@ -3,7 +3,7 @@ package wblut.geom;
 import java.util.ArrayList;
 import java.util.List;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 public class WB_Ring extends WB_PolyLine {
 

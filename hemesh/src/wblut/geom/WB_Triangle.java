@@ -1,7 +1,7 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.Triangle;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_Triangle implements Triangle {

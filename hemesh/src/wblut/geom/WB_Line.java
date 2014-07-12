@@ -2,8 +2,8 @@ package wblut.geom;
 
 import java.util.ArrayList;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.Segment;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_Line extends WB_Linear {

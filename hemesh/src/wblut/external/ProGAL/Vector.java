@@ -2,7 +2,7 @@ package wblut.external.ProGAL;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 /**
  * Part of ProGAL: http://www.diku.dk/~rfonseca/ProGAL/

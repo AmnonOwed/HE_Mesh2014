@@ -3,10 +3,10 @@ package wblut.hemesh;
 import java.util.Iterator;
 import java.util.List;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_Point;
+import wblut.math.WB_Epsilon;
 
 public class HEM_Soapfilm extends HEM_Modifier {
 

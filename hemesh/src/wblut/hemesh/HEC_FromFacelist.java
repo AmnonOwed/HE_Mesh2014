@@ -7,10 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javolution.util.FastMap;
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 import wblut.geom.WB_Point;
+import wblut.math.WB_Epsilon;
 
 /**
  * Creates a new mesh from a list of vertices and faces. Vertices can be

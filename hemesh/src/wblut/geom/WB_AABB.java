@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 public class WB_AABB {
 

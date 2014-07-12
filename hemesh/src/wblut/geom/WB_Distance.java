@@ -1,8 +1,8 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
+import wblut.math.WB_Epsilon;
 
 public class WB_Distance {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory

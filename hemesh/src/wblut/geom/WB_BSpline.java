@@ -1,7 +1,7 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
 import wblut.math.WB_Binomial;
+import wblut.math.WB_Epsilon;
 
 public class WB_BSpline implements WB_Curve {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();

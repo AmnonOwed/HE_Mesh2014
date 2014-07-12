@@ -1,6 +1,6 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 public class WB_Classify {
 

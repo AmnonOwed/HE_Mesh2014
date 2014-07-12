@@ -1,6 +1,5 @@
 package wblut.math;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_MutableCoordinate;
 import wblut.geom.WB_Point;

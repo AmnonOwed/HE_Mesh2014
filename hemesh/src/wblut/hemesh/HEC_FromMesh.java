@@ -8,12 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
 import wblut.geom.WB_Mesh;
 import wblut.geom.WB_MeshCreator;
+import wblut.math.WB_Epsilon;
 
 /**
  * Creates a new mesh from a list of vertices and faces. Vertices can be

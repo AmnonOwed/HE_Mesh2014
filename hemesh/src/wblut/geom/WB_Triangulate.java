@@ -9,13 +9,13 @@ import java.util.List;
 
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.external.ProGAL.CEdge;
 import wblut.external.ProGAL.CTetrahedron;
 import wblut.external.ProGAL.CTriangle;
 import wblut.external.ProGAL.CVertex;
 import wblut.external.ProGAL.DelaunayComplex;
 import wblut.external.ProGAL.Point;
+import wblut.math.WB_Epsilon;
 
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.geom.Coordinate;

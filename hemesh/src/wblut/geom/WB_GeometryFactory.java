@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.external.straightskeleton.Corner;
 import wblut.external.straightskeleton.Edge;
 import wblut.external.straightskeleton.Loop;
@@ -31,6 +30,7 @@ import wblut.geom.data.WB_JohnsonPolyhedraData03;
 import wblut.geom.data.WB_JohnsonPolyhedraData04;
 import wblut.geom.data.WB_PolyhedraData;
 import wblut.geom.interfaces.Triangle;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 import com.vividsolutions.jts.densify.Densifier;

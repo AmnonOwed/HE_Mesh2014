@@ -1,6 +1,6 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 public abstract class WB_Linear {
 

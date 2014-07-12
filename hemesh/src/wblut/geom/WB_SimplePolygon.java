@@ -3,8 +3,8 @@ package wblut.geom;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.geom.interfaces.SimplePolygon;
+import wblut.math.WB_Epsilon;
 
 public class WB_SimplePolygon implements SimplePolygon {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory

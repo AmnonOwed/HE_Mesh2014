@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_Intersection {

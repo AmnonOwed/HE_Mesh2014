@@ -4,8 +4,8 @@ import java.util.List;
 
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_KDTree.WB_KDEntry;
+import wblut.math.WB_Epsilon;
 
 /**
  * Stripped version of Zhenyu Pan's JAVA transcription of Shane O'Sullivan's C

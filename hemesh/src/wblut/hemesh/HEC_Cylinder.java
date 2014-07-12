@@ -1,7 +1,7 @@
 package wblut.hemesh;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 /**
  * Cylinder.

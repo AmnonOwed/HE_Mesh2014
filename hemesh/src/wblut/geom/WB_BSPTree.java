@@ -5,9 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.hemesh.HEMC_SplitMesh;
 import wblut.hemesh.HE_Mesh;
+import wblut.math.WB_Epsilon;
 
 public class WB_BSPTree {
 

@@ -6,9 +6,9 @@ import gnu.trove.map.hash.TLongIntHashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
+import wblut.math.WB_Epsilon;
 
 public class HES_DooSabin extends HES_Subdividor {
 

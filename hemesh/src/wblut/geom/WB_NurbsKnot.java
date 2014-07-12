@@ -4,7 +4,7 @@ import gnu.trove.list.TDoubleList;
 import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.TDoubleIntMap;
 import gnu.trove.map.hash.TDoubleIntHashMap;
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 public class WB_NurbsKnot {
 

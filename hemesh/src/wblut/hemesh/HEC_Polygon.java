@@ -1,9 +1,9 @@
 package wblut.hemesh;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.SimplePolygon;
+import wblut.math.WB_Epsilon;
 
 public class HEC_Polygon extends HEC_Creator {
 

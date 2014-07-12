@@ -3,13 +3,13 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 public class HEC_ShrinkWrap extends HEC_Creator {
 

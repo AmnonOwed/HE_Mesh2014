@@ -10,7 +10,6 @@ import javolution.context.LogContext;
 import javolution.context.LogContext.Level;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_Intersection;
@@ -21,6 +20,7 @@ import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
 import wblut.math.WB_ConstantParameter;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Parameter;
 
 /**

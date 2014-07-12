@@ -1,7 +1,7 @@
 package wblut.geom;
 
-import wblut.core.WB_Epsilon;
 import wblut.math.WB_Binomial;
+import wblut.math.WB_Epsilon;
 
 public class WB_RBSpline extends WB_BSpline {
 

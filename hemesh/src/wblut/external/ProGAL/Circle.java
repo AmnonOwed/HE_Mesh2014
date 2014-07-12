@@ -1,6 +1,6 @@
 package wblut.external.ProGAL;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 /*
  * If the circle has center c, radius r, and unit-length normal vector n, compute unit-length vectors u and v so that {u,v,n} are mutually

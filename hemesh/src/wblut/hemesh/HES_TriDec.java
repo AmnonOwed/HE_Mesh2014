@@ -7,10 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.core.WB_Epsilon;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 public class HES_TriDec extends HES_Simplifier {
 

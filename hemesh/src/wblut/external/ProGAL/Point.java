@@ -1,6 +1,6 @@
 package wblut.external.ProGAL;
 
-import wblut.core.WB_Epsilon;
+import wblut.math.WB_Epsilon;
 
 /**
  * Part of ProGAL: http://www.diku.dk/~rfonseca/ProGAL/

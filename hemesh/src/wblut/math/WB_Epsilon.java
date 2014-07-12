@@ -1,6 +1,5 @@
-package wblut.core;
+package wblut.math;
 
-import wblut.math.WB_Math;
 
 /**
  * WB_Epsilon contains functions for tolerance based floating point
