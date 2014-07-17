@@ -9,9 +9,9 @@ import wblut.math.WB_RandomOnSphere;
 
 /**
  * Expands or contracts all vertices along the vertex normals.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HEM_Noise extends HEM_Modifier {
@@ -30,7 +30,7 @@ public class HEM_Noise extends HEM_Modifier {
 
 	/**
 	 * Set distance to move vertices.
-	 * 
+	 *
 	 * @param d
 	 *            distance
 	 * @return this
@@ -42,7 +42,7 @@ public class HEM_Noise extends HEM_Modifier {
 
 	/**
 	 * Sets the distance.
-	 * 
+	 *
 	 * @param d
 	 *            the d
 	 * @return the hE m_ noise
@@ -54,7 +54,7 @@ public class HEM_Noise extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -70,7 +70,7 @@ public class HEM_Noise extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			n = rs.nextVector();
-			v.pos._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
+			v.getPoint()._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
 		}
 		mesh.resetFaces();
 		return mesh;
@@ -78,7 +78,7 @@ public class HEM_Noise extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class HEM_Noise extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			n = rs.nextVector();
-			v.pos._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
+			v.getPoint()._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
 		}
 		selection.parent.resetFaces();
 		return selection.parent;

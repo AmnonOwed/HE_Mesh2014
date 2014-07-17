@@ -8,9 +8,9 @@ import wblut.geom.WB_Plane;
 
 /**
  * Bend a mesh. Determined by a ground plane, a bend axis and an angle factor.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Bend extends HEM_Modifier {
 
@@ -35,7 +35,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/**
 	 * Set ground plane.
-	 * 
+	 *
 	 * @param P
 	 *            ground plane
 	 * @return self
@@ -47,7 +47,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/**
 	 * Sets the ground plane.
-	 * 
+	 *
 	 * @param ox
 	 *            the ox
 	 * @param oy
@@ -70,7 +70,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/**
 	 * Set bend axis.
-	 * 
+	 *
 	 * @param a
 	 *            bend axis
 	 * @return self
@@ -82,7 +82,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/**
 	 * Sets the bend axis.
-	 * 
+	 *
 	 * @param p1x
 	 *            the p1x
 	 * @param p1y
@@ -107,7 +107,7 @@ public class HEM_Bend extends HEM_Modifier {
 	/**
 	 * Set angle factor, ratio of bend angle in degrees to distance to ground
 	 * plane.
-	 * 
+	 *
 	 * @param f
 	 *            direction
 	 * @return self
@@ -119,7 +119,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/**
 	 * Positive only? Only apply modifier to positive side of ground plane.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -131,7 +131,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -143,7 +143,7 @@ public class HEM_Bend extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.pos.rotateAboutAxis(d * angleFactor,
+					v.getPoint().rotateAboutAxis(d * angleFactor,
 							bendAxis.getOrigin(),
 							bendAxis.getOrigin().add(bendAxis.getDirection()));
 				}
@@ -155,7 +155,7 @@ public class HEM_Bend extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -169,7 +169,7 @@ public class HEM_Bend extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.pos.rotateAboutAxis(d * angleFactor,
+					v.getPoint().rotateAboutAxis(d * angleFactor,
 							bendAxis.getOrigin(),
 							bendAxis.getOrigin().add(bendAxis.getDirection()));
 				}

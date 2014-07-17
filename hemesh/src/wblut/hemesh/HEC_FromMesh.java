@@ -34,7 +34,7 @@ public class HEC_FromMesh extends HEC_Creator {
 	private boolean normalcheck;
 
 	/**
-	 * Instantiates a new HEC_Facelist ²
+	 * Instantiates a new HEC_Facelist ï¿½
 	 */
 	public HEC_FromMesh(final WB_Mesh source) {
 		super();
@@ -78,7 +78,7 @@ public class HEC_FromMesh extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -117,7 +117,7 @@ public class HEC_FromMesh extends HEC_Creator {
 			if ((uniqueVertices.get(face[fl - 1]) != uniqueVertices
 					.get(face[fl - 2]))
 					&& (uniqueVertices.get(face[fl - 1]) != uniqueVertices
-					.get(face[0]))) {
+							.get(face[0]))) {
 				locface[li++] = face[fl - 1];
 			}
 
@@ -220,7 +220,7 @@ public class HEC_FromMesh extends HEC_Creator {
 			for (int i = 1; i < source.getNumberOfVertices(); i++) {
 				v = new HE_Vertex(source.getVertex(i));
 				v.setLabel(i);
-				neighbor = kdtree.getNearestNeighbor(v.pos);
+				neighbor = kdtree.getNearestNeighbor(v);
 				if (neighbor.d2 < WB_Epsilon.SQEPSILON) {
 					uniqueVertices.add(uniqueVertices.get(neighbor.value));
 				}
@@ -294,7 +294,7 @@ public class HEC_FromMesh extends HEC_Creator {
 								for (int k = 0; k < fln / 2; k++) {
 									temp = faces[neighbor][k];
 									faces[neighbor][k] = faces[neighbor][fln
-									                                     - k - 1];
+											- k - 1];
 									faces[neighbor][fln - k - 1] = temp;
 								}
 							}

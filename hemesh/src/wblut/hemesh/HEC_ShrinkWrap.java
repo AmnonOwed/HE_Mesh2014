@@ -59,7 +59,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -126,7 +126,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 				}
 				else {
 					dist /= decNeighbors;
-					final WB_Vector dv = v.pos.subToVector(wcenter);
+					final WB_Vector dv = v.getPoint().subToVector(wcenter);
 					dv._normalizeSelf();
 					v._set(wcenter.addMul(dist, dv));
 				}

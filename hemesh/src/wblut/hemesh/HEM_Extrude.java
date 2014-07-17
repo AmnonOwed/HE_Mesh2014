@@ -309,7 +309,8 @@ public class HEM_Extrude extends HEM_Modifier {
 							he = f.getHalfedge();
 							do {
 
-								he.getVertex().pos._addMulSelf(heights[i], n);
+								he.getVertex().getPoint()
+								._addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -330,7 +331,9 @@ public class HEM_Extrude extends HEM_Modifier {
 						he = f.getHalfedge();
 						do {
 							final HE_Vertex v = he.getVertex();
-							he.getVertex().pos._addMulSelf(
+							he.getVertex()
+							.getPoint()
+							._addMulSelf(
 									d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
@@ -412,7 +415,8 @@ public class HEM_Extrude extends HEM_Modifier {
 						he = f.getHalfedge();
 						do {
 
-							he.getVertex().pos._addMulSelf(heights[i], n);
+							he.getVertex().getPoint()
+							._addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -431,7 +435,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					he = f.getHalfedge();
 					do {
 						final HE_Vertex v = he.getVertex();
-						he.getVertex().pos._addMulSelf(
+						v.getPoint()._addMulSelf(
 								d.value(v.xd(), v.yd(), v.zd()), n);
 						he = he.getNextInFace();
 					} while (he != f.getHalfedge());
@@ -566,7 +570,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					.getVertex());
 
 			if (n != null) {
-				eov.pos._addMulSelf(d, n);
+				eov.getPoint()._addMulSelf(d, n);
 			}
 			extOuterVertices.add(eov);
 			newEdges.add(new HE_Edge());
@@ -577,7 +581,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		for (int i = 0; i < vertices.size(); i++) {
 			final HE_Vertex v = vertices.get(i);
 			if (!outerVertices.contains(v)) {
-				v.pos._addMulSelf(d, n);
+				v.getPoint()._addMulSelf(d, n);
 			}
 
 		}
@@ -866,7 +870,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				final WB_SimplePolygon poly = new WB_SimplePolygon(vPos, n);
 				poly.trimConvexPolygon(d);
 				if (poly.n == n) {
-					final int inew = poly.closestIndex(faceVertices.get(0).pos);
+					final int inew = poly.closestIndex(faceVertices.get(0));
 
 					for (int i = 0; i < n; i++) {
 						extFaceVertices.get(i)._set(
@@ -876,7 +880,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				else if (poly.n > 2) {
 					for (int i = 0; i < n; i++) {
 						extFaceVertices.get(i)._set(
-								poly.closestPoint(faceVertices.get(i).pos));
+								poly.closestPoint(faceVertices.get(i)));
 					}
 				}
 				else {
@@ -889,7 +893,8 @@ public class HEM_Extrude extends HEM_Modifier {
 				for (int i = 0, j = n - 1; i < n; j = i, i++) {
 					final WB_Vector n1 = faceHalfedgeNormals.get(j);
 					final WB_Vector n2 = faceHalfedgeNormals.get(i);
-					final WB_Point v3 = faceVertices.get((i + 1) % n).pos;
+					final WB_Point v3 = faceVertices.get((i + 1) % n)
+							.getPoint();
 					final WB_Segment S1 = new WB_Segment(v1.addMul(d[j], n1),
 							v2.addMul(d[j], n1));
 					final WB_Segment S2 = new WB_Segment(v2.addMul(d[i], n2),

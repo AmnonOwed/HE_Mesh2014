@@ -2534,7 +2534,7 @@ public class WB_Intersection {
 		final WB_Point p1 = S1.getParametricPointOnSegment(t1);
 		final WB_Point p2 = S2.getParametricPointOnSegment(t2);
 		i.sqDist = WB_Distance.getSqDistance2D(p1, p2);
-		if (i.intersection) {
+		if (WB_Epsilon.isZeroSq(i.sqDist)) {
 			i.dimension = 0;
 			i.object = p1;
 		}
@@ -2616,6 +2616,32 @@ public class WB_Intersection {
 			final WB_Line L) {
 
 		return getClosestPoint2D(L, S);
+	}
+
+	public static WB_IntersectionResult getClosestPoint3D(final WB_Line L,
+			final Segment S) {
+		final WB_IntersectionResult i = getClosestPoint3D(L,
+				new WB_Line(S.getOrigin(), S.getDirection()));
+		if (i.dimension == 0) {
+			return i;
+		}
+		if (i.t2 <= WB_Epsilon.EPSILON) {
+			i.t2 = 0;
+			i.object = new WB_Segment(((Segment) i.object).getOrigin(), S
+					.getOrigin().get());
+			i.sqDist = ((Segment) i.object).getLength();
+			i.sqDist *= i.sqDist;
+			i.intersection = false;
+		}
+		if (i.t2 >= S.getLength() - WB_Epsilon.EPSILON) {
+			i.t2 = 1;
+			i.object = new WB_Segment(((Segment) i.object).getOrigin(), S
+					.getEndpoint().get());
+			i.sqDist = ((Segment) i.object).getLength();
+			i.sqDist *= i.sqDist;
+			i.intersection = false;
+		}
+		return i;
 	}
 
 	// POINT-TRIANGLE
@@ -2911,6 +2937,80 @@ public class WB_Intersection {
 
 		}
 		return closest;
+	}
+
+	public static WB_IntersectionResult getClosestPoint3D(final Segment S1,
+			final Segment S2) {
+		final WB_Point d1 = S1.getEndpoint().sub(S1.getOrigin());
+		final WB_Point d2 = S2.getEndpoint().sub(S2.getOrigin());
+		final WB_Point r = S1.getOrigin().sub(S2.getOrigin());
+		final double a = d1.dot(d1);
+		final double e = d2.dot(d2);
+		final double f = d2.dot(r);
+
+		if (WB_Epsilon.isZero(a) || WB_Epsilon.isZero(e)) {
+			final WB_IntersectionResult i = new WB_IntersectionResult();
+			i.intersection = false;
+			i.t1 = 0;
+			i.t2 = 0;
+			i.object = new WB_Segment(S1.getOrigin().get(), S2.getOrigin()
+					.get());
+			i.dimension = 1;
+			i.sqDist = r.getSqLength();
+			return i;
+		}
+
+		double t1 = 0;
+		double t2 = 0;
+		if (WB_Epsilon.isZero(a)) {
+
+			t2 = WB_Math.clamp(f / e, 0, 1);
+		}
+		else {
+			final double c = d1.dot(r);
+			if (WB_Epsilon.isZero(e)) {
+
+				t1 = WB_Math.clamp(-c / a, 0, 1);
+			}
+			else {
+				final double b = d1.dot(d2);
+				final double denom = a * e - b * b;
+				if (!WB_Epsilon.isZero(denom)) {
+					t1 = WB_Math.clamp((b * f - c * e) / denom, 0, 1);
+				}
+				else {
+					t1 = 0;
+				}
+				final double tnom = b * t1 + f;
+				if (tnom < 0) {
+					t1 = WB_Math.clamp(-c / a, 0, 1);
+				}
+				else if (tnom > e) {
+					t2 = 1;
+					t1 = WB_Math.clamp((b - c) / a, 0, 1);
+				}
+				else {
+					t2 = tnom / e;
+				}
+			}
+		}
+		final WB_IntersectionResult i = new WB_IntersectionResult();
+		i.intersection = (t1 > 0) && (t1 < 1) && (t2 > 0) && (t2 < 1);
+		i.t1 = t1;
+		i.t2 = t2;
+		final WB_Point p1 = S1.getParametricPointOnSegment(t1);
+		final WB_Point p2 = S2.getParametricPointOnSegment(t2);
+		i.sqDist = WB_Distance.getSqDistance2D(p1, p2);
+		if (WB_Epsilon.isZeroSq(i.sqDist)) {
+			i.dimension = 0;
+			i.object = p1;
+		}
+		else {
+			i.dimension = 1;
+			i.object = new WB_Segment(p1, p2);
+		}
+		return i;
+
 	}
 
 }

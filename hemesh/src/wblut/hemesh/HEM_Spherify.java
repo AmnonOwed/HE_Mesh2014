@@ -41,7 +41,7 @@ public class HEM_Spherify extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEM_Modifier#apply(wblut.hemesh.core.HE_Mesh)
 	 */
 	@Override
@@ -50,15 +50,15 @@ public class HEM_Spherify extends HEM_Modifier {
 		HE_Vertex v;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(gf.createInterpolatedPoint(v.pos,
-					sphere.projectToSphere(v), factor));
+			v._set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
+					factor));
 		}
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seewblut.hemesh.modifiers.HEM_Modifier#applySelected(wblut.hemesh.core.
 	 * HE_Selection)
 	 */
@@ -68,8 +68,8 @@ public class HEM_Spherify extends HEM_Modifier {
 		HE_Vertex v;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(gf.createInterpolatedPoint(v.pos,
-					sphere.projectToSphere(v), factor));
+			v._set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
+					factor));
 		}
 		return selection.parent;
 	}

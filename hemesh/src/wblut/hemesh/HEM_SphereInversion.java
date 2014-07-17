@@ -53,7 +53,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEM_Modifier#modify(wblut.hemesh.core.HE_Mesh)
 	 */
@@ -73,18 +73,19 @@ public class HEM_SphereInversion extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (linear) {
-				d = v.pos.subToVector(center);
+				d = v.getPoint().subToVector(center);
 				d._normalizeSelf();
 				surf = new WB_Point(center)._addMulSelf(r, d);
 				d = surf.subToVector(v)._mulSelf(2);
-				v.pos._addSelf(d);
-			} else {
-				d = v.pos.subToVector(center);
+				v.getPoint()._addSelf(d);
+			}
+			else {
+				d = v.getPoint().subToVector(center);
 				ri = d.getLength();
 				d._normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
 				v._set(center);
-				v.pos._addMulSelf(rf, d);
+				v.getPoint()._addMulSelf(rf, d);
 			}
 
 		}
@@ -93,7 +94,7 @@ public class HEM_SphereInversion extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEM_Modifier#modifySelected(wblut.hemesh.core.
 	 * HE_Mesh, wblut.hemesh.core.HE_Selection)
@@ -114,18 +115,19 @@ public class HEM_SphereInversion extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (linear) {
-				d = v.pos.subToVector(center);
+				d = v.getPoint().subToVector(center);
 				d._normalizeSelf();
 				surf = new WB_Point(center)._addMulSelf(r, d);
-				d = v.pos.subToVector(surf);
-				v.pos._addSelf(d);
-			} else {
-				d = v.pos.subToVector(center);
+				d = v.getPoint().subToVector(surf);
+				v.getPoint()._addSelf(d);
+			}
+			else {
+				d = v.getPoint().subToVector(center);
 				ri = d.getLength();
 				d._normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
-				v.pos._set(center);
-				v.pos._addMulSelf(rf, d);
+				v.getPoint()._set(center);
+				v.getPoint()._addMulSelf(rf, d);
 			}
 
 		}

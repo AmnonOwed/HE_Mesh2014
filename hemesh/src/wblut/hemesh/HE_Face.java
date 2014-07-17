@@ -16,9 +16,9 @@ import wblut.math.WB_Math;
 
 /**
  * Face element of half-edge data structure.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
@@ -62,7 +62,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return _center;
 	}
 
-	public WB_Point getFaceCenter(double d) {
+	public WB_Point getFaceCenter(final double d) {
 		if (_halfedge == null) {
 			return null;
 		}
@@ -135,7 +135,8 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		int coord = 3;
 		if (x >= y && x >= z) {
 			coord = 1;
-		} else if (y >= x && y >= z) {
+		}
+		else if (y >= x && y >= z) {
 			coord = 2;
 		}
 		HE_Halfedge he = _halfedge;
@@ -277,11 +278,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		reset();
 	}
 
-	public void push(WB_Coordinate c) {
+	public void push(final WB_Coordinate c) {
 		HE_Halfedge he = _halfedge;
 
 		do {
-			he.getVertex().pos._addSelf(c);
+			he.getVertex().getPoint()._addSelf(c);
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
@@ -380,7 +381,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -403,9 +404,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setData(final String s, final Object o) {
 		if (_data == null) {
 			_data = new HashMap<String, Object>();
@@ -415,9 +417,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
+	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
 	}
@@ -429,21 +432,22 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	@Override
-	public void setColor(int color) {
+	public void setColor(final int color) {
 		facecolor = color;
 
 	}
 
 	/**
 	 * Checks if is boundary.
-	 * 
+	 *
 	 * @return true, if is boundary
 	 */
 	public boolean isBoundary() {
 		HE_Halfedge he = _halfedge;
 		do {
-			if (he.getPair().getFace() == null)
+			if (he.getPair().getFace() == null) {
 				return true;
+			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);
 		return false;

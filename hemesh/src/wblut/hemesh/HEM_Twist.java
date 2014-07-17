@@ -9,9 +9,9 @@ import wblut.geom.WB_Vector;
 
 /**
  * Twist a mesh. Determined by a twist axis and an angle factor.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Twist extends HEM_Modifier {
 
@@ -30,7 +30,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	/**
 	 * Set twist axis.
-	 * 
+	 *
 	 * @param a
 	 *            twist axis
 	 * @return self
@@ -47,7 +47,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	public HEM_Twist setTwistAxisFromPoints(final WB_Coordinate a,
 			final WB_Coordinate b) {
-		WB_Vector axis = new WB_Vector(a, b);
+		final WB_Vector axis = new WB_Vector(a, b);
 		axis._normalizeSelf();
 		twistAxis = new WB_Line(a, axis);
 		return this;
@@ -56,7 +56,7 @@ public class HEM_Twist extends HEM_Modifier {
 	/**
 	 * Set angle factor, ratio of twist angle in degrees to distance to twist
 	 * axis.
-	 * 
+	 *
 	 * @param f
 	 *            direction
 	 * @return self
@@ -68,7 +68,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -79,7 +79,8 @@ public class HEM_Twist extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, twistAxis);
-				v.pos.rotateAboutAxis(d * angleFactor, twistAxis.getOrigin(),
+				v.getPoint().rotateAboutAxis(d * angleFactor,
+						twistAxis.getOrigin(),
 						twistAxis.getOrigin().add(twistAxis.getDirection()));
 			}
 		}
@@ -89,7 +90,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -102,7 +103,8 @@ public class HEM_Twist extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, twistAxis);
-				v.pos.rotateAboutAxis(d * angleFactor, twistAxis.getOrigin(),
+				v.getPoint().rotateAboutAxis(d * angleFactor,
+						twistAxis.getOrigin(),
 						twistAxis.getOrigin().add(twistAxis.getDirection()));
 			}
 		}

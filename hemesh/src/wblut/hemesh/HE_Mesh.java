@@ -17,6 +17,7 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
@@ -491,7 +492,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	/**
 	 * Return all vertex positions.
 	 *
-	 * @return array of WB_Point, no copies are made.
+	 * @return array of WB_Cooridnate, no copies are made.
 	 */
 	public WB_Point[] getVerticesAsPoint() {
 		final WB_Point[] result = new WB_Point[getNumberOfVertices()];
@@ -500,7 +501,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			result[i] = v.pos;
+			result[i] = v.getPoint();
 			i++;
 		}
 		return result;
@@ -732,7 +733,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(values[i][0], values[i][1], values[i][2]);
+			v._set(values[i][0], values[i][1], values[i][2]);
 			i++;
 		}
 
@@ -751,7 +752,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(values[i]);
+			v._set(values[i]);
 			i++;
 		}
 		;
@@ -770,7 +771,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(values[i][0], values[i][1], values[i][2]);
+			v._set(values[i][0], values[i][1], values[i][2]);
 			i++;
 
 		}
@@ -790,7 +791,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v.pos._set(values[i][0], values[i][1], values[i][2]);
+			v._set(values[i][0], values[i][1], values[i][2]);
 			i++;
 
 		}
@@ -842,9 +843,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		while (fItr.hasNext()) {
 			f = fItr.next();
 			result.add(WB_GeometryFactory.instance().createTriangle(
-					f.getHalfedge().getVertex().pos,
-					f.getHalfedge().getNextInFace().getVertex().pos,
-					f.getHalfedge().getPrevInFace().getVertex().pos));
+					f.getHalfedge().getVertex(),
+					f.getHalfedge().getNextInFace().getVertex(),
+					f.getHalfedge().getPrevInFace().getVertex()));
 		}
 		return result;
 	}
@@ -943,7 +944,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		_center._addSelf(x, y, z);
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
-			vItr.next().pos._addSelf(x, y, z);
+			vItr.next().getPoint()._addSelf(x, y, z);
 		}
 		return this;
 	}
@@ -976,8 +977,10 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		}
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
-			vItr.next().pos._addSelf(x - _center.xd(), y - _center.yd(), z
-					- _center.zd());
+			vItr.next()
+					.getPoint()
+					._addSelf(x - _center.xd(), y - _center.yd(),
+							z - _center.zd());
 		}
 		_center._set(x, y, z);
 		return this;
@@ -1797,7 +1800,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			final HE_Face fp = hePair.getFace();
 			final HE_Vertex v = he.getVertex();
 			final HE_Vertex vp = hePair.getVertex();
-			vp.pos._addSelf(v)._mulSelf(0.5);
+			vp.getPoint()._addSelf(v)._mulSelf(0.5);
 
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
 			for (int i = 0; i < tmp.size(); i++) {
@@ -1853,7 +1856,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 					if ((!e.isBoundary()) || strict) {
 						return false;
 					}
-					vp.pos._addSelf(v)._mulSelf(0.5);
+					vp.getPoint()._addSelf(v)._mulSelf(0.5);
 				}
 				else {
 					vp.set(v);
@@ -1861,7 +1864,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			}
 			else {
 				if (!vp.isBoundary()) {
-					vp.pos._addSelf(v)._mulSelf(0.5);
+					vp.getPoint()._addSelf(v)._mulSelf(0.5);
 				}
 
 			}
@@ -2035,7 +2038,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 *            position of new vertex
 	 * @return selection of new vertex and new edge
 	 */
-	public HE_Selection splitEdge(final HE_Edge edge, final WB_Point v) {
+	public HE_Selection splitEdge(final HE_Edge edge, final WB_Coordinate v) {
 		final HE_Selection out = new HE_Selection(this);
 		final HE_Halfedge he0 = edge.getHalfedge();
 		final HE_Halfedge he1 = he0.getPair();
@@ -2131,8 +2134,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 * @return selection of new vertex and new edge
 	 */
 	public HE_Selection splitEdge(final HE_Edge edge) {
-		final WB_Point v = edge.getStartVertex().pos.add(edge.getEndVertex());
-		v._mulSelf(0.5);
+		final WB_Point v = gf.createMidpoint(edge.getStartVertex(),
+				edge.getEndVertex());
+
 		return splitEdge(edge, v);
 	}
 
@@ -2145,8 +2149,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 */
 	public HE_Selection splitEdge(final long key) {
 		final HE_Edge edge = getEdgeByKey(key);
-		final WB_Point v = edge.getStartVertex().pos.add(edge.getEndVertex());
-		v._mulSelf(0.5);
+		final WB_Point v = gf.createMidpoint(edge.getStartVertex(),
+				edge.getEndVertex());
 		return splitEdge(edge, v);
 	}
 
@@ -2281,7 +2285,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			final double fi = fArray[i];
 			if ((fi > 0) && (fi < 1)) {
 				v = new HE_Vertex(gf.createInterpolatedPoint(v0, v1, fi));
-				e = (splitEdge(e, v.pos).eItr().next());
+				e = (splitEdge(e, v).eItr().next());
 			}
 		}
 
@@ -2321,7 +2325,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			final double fi = fArray[i];
 			if ((fi > 0) && (fi < 1)) {
 				v = new HE_Vertex(gf.createInterpolatedPoint(v0, v1, fi));
-				e = (splitEdge(e, v.pos).eItr().next());
+				e = (splitEdge(e, v).eItr().next());
 			}
 		}
 
@@ -4054,10 +4058,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 *            the f
 	 * @return true/false
 	 */
-	public static boolean pointIsStrictlyInFace(final WB_Point p,
+	public static boolean pointIsStrictlyInFace(final WB_Coordinate p,
 			final HE_Face f) {
 		final WB_SimplePolygon poly = f.toPolygon();
-		final int[][] tris = poly.triangulate();
 		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
 				WB_Intersection.getClosestPoint3D(p, f.toPolygon())))) {
 			return false;
@@ -4709,13 +4712,13 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 *
 	 * @return WB_KDTree
 	 */
-	public WB_KDTree<WB_Point, Long> getVertexTree() {
-		final WB_KDTree<WB_Point, Long> tree = new WB_KDTree<WB_Point, Long>();
+	public WB_KDTree<WB_Coordinate, Long> getVertexTree() {
+		final WB_KDTree<WB_Coordinate, Long> tree = new WB_KDTree<WB_Coordinate, Long>();
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			tree.add(v.pos, v.key());
+			tree.add(v, v.key());
 		}
 		return tree;
 	}
@@ -4782,8 +4785,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	 *            KD-tree from mesh (from vertexTree())
 	 */
 	public void addPointInClosestFace(final WB_Point p,
-			final WB_KDTree<WB_Point, Long> vertexTree) {
-		final WB_KDEntry<WB_Point, Long>[] closestVertex = vertexTree
+			final WB_KDTree<WB_Coordinate, Long> vertexTree) {
+		final WB_KDEntry<WB_Coordinate, Long>[] closestVertex = vertexTree
 				.getNearestNeighbors(p, 1);
 		final HE_Vertex v = getVertexByKey(closestVertex[0].value);
 		final List<HE_Face> faces = v.getFaceStar();
@@ -4801,7 +4804,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			}
 		}
 		final HE_Vertex nv = triSplitFace(face, p).vItr().next();
-		vertexTree.add(nv.pos, nv.key());
+		vertexTree.add(nv, nv.key());
 	}
 
 	public List<HE_Face> getSharedFaces(final HE_Vertex v1, final HE_Vertex v2) {
@@ -4821,7 +4824,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		final List<WB_SimplePolygon> polygons = new FastTable<WB_SimplePolygon>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
 		final List<HE_Halfedge> loop = new FastTable<HE_Halfedge>();
-		final List<WB_Point> points = new FastTable<WB_Point>();
+		final List<WB_Coordinate> points = new FastTable<WB_Coordinate>();
 		while (halfedges.size() > 0) {
 
 			points.clear();
@@ -4829,7 +4832,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 			HE_Halfedge he = halfedges.get(0);
 			do {
 				loop.add(he);
-				points.add(he.getVertex().pos);
+				points.add(he.getVertex());
 				he = he.getNextInFace();
 				if (loop.contains(he)) {
 					break;
@@ -5217,7 +5220,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 
 	@Override
 	public WB_Coordinate getVertex(final int i) {
-		return getVertexByIndex(i).pos;
+		return getVertexByIndex(i);
 	}
 
 	@Override
@@ -5245,6 +5248,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 		}
 		return result;
 
+	}
+
+	@Override
+	public WB_CoordinateSequence getPoints() {
+
+		return gf.createPointSequence(getVertices());
 	}
 
 }

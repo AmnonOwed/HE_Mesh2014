@@ -36,7 +36,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	}
 
 	protected WB_TriMesh(final WB_FaceListMesh mesh) {
-		vertices = mesh.getVertices();
+		vertices = mesh.getPoints();
 		faces = mesh.getFacesAsInt();
 		aabb = new WB_AABB(vertices);
 		triangulate();
@@ -156,7 +156,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	 * The normal of a vertex v computed as a weighted sum f the incident face
 	 * normals. The weight is simply the angle of the involved wedge. Described
 	 * in:
-	 * 
+	 *
 	 * G. Thurmer, C. A. Wuthrich
 	 * "Computing vertex normals from polygonal facets" Journal of Graphics
 	 * Tools, 1998
@@ -269,15 +269,18 @@ public class WB_TriMesh extends WB_FaceListMesh {
 				y = -0.25 * l2[2] * area / e0.dot(e2);
 				z = -0.25 * l2[1] * area / e0.dot(e1);
 				x = area - y - z;
-			} else if (ew[1] <= 0.0f) {
+			}
+			else if (ew[1] <= 0.0f) {
 				z = -0.25 * l2[0] * area / e1.dot(e0);
 				x = -0.25 * l2[2] * area / e1.dot(e2);
 				y = area - z - x;
-			} else if (ew[2] <= 0.0f) {
+			}
+			else if (ew[2] <= 0.0f) {
 				x = -0.25 * l2[1] * area / e2.dot(e1);
 				y = -0.25 * l2[0] * area / e2.dot(e0);
 				z = area - x - y;
-			} else {
+			}
+			else {
 				final double ewscale = 0.5f * area / (ew[0] + ew[1] + ew[2]);
 				x = ewscale * (ew[1] + ew[2]);
 				y = ewscale * (ew[2] + ew[0]);
@@ -658,7 +661,8 @@ public class WB_TriMesh extends WB_FaceListMesh {
 						return false;
 					}
 					rdiag[i] = 1.0 / sum;
-				} else {
+				}
+				else {
 					A[j][i] = sum;
 				}
 			}
@@ -775,7 +779,8 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 		if (Math.abs(ks.xd()) >= Math.abs(ks.yd())) {
 			pdir1._set(rOldU.mulAddMul(c, -s, rOldV));
-		} else {
+		}
+		else {
 			ks._set(ks.yd(), ks.zd(), ks.xd());
 
 			pdir1._set(rOldU.mulAddMul(s, c, rOldV));

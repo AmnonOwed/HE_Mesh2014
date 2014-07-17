@@ -10,9 +10,9 @@ import wblut.geom.WB_Vector;
 /**
  * Skew a mesh. Determined by a ground plane, a skew direction and a skew
  * factor.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Skew extends HEM_Modifier {
 
@@ -37,7 +37,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Set ground plane.
-	 * 
+	 *
 	 * @param P
 	 *            ground plane
 	 * @return self
@@ -49,7 +49,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Sets the ground plane.
-	 * 
+	 *
 	 * @param ox
 	 *            the ox
 	 * @param oy
@@ -72,7 +72,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Set skew direction.
-	 * 
+	 *
 	 * @param p
 	 *            direction
 	 * @return self
@@ -85,7 +85,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Sets the skew direction.
-	 * 
+	 *
 	 * @param vx
 	 *            the vx
 	 * @param vy
@@ -103,7 +103,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Set skew factor, ratio of skew distance to distance to ground plane.
-	 * 
+	 *
 	 * @param f
 	 *            direction
 	 * @return self
@@ -115,7 +115,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/**
 	 * Positive only? Only apply modifier to positive side of ground plane.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -127,7 +127,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -140,7 +140,7 @@ public class HEM_Skew extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.pos._addSelf(skewDirection.mul(d * skewFactor));
+					v.getPoint()._addSelf(skewDirection.mul(d * skewFactor));
 				}
 			}
 		}
@@ -150,7 +150,7 @@ public class HEM_Skew extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -165,7 +165,7 @@ public class HEM_Skew extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.pos._addSelf(skewDirection.mul(d * skewFactor));
+					v.getPoint()._addSelf(skewDirection.mul(d * skewFactor));
 				}
 			}
 		}

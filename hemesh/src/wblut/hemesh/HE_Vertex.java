@@ -18,14 +18,14 @@ import wblut.math.WB_M33;
 
 /**
  * Vertex element of half-edge mesh.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		WB_HasData, WB_HasColor {
 
-	public WB_Point pos;
+	private final WB_Point pos;
 
 	/** Halfedge associated with this vertex. */
 	private HE_Halfedge _halfedge;
@@ -46,7 +46,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Instantiates a new HE_Vertex at position x, y, z.
-	 * 
+	 *
 	 * @param x
 	 *            x-coordinate of vertex
 	 * @param y
@@ -62,7 +62,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Instantiates a new HE_Vertex at position v.
-	 * 
+	 *
 	 * @param v
 	 *            position of vertex
 	 */
@@ -78,7 +78,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get halfedge associated with this vertex.
-	 * 
+	 *
 	 * @return halfedge
 	 */
 	public HE_Halfedge getHalfedge() {
@@ -87,7 +87,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Sets the halfedge associated with this vertex.
-	 * 
+	 *
 	 * @param halfedge
 	 *            the new halfedge
 	 */
@@ -97,7 +97,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Set position to v.
-	 * 
+	 *
 	 * @param v
 	 *            position
 	 */
@@ -105,14 +105,14 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		pos._set(v);
 	}
 
-	public WB_Point getOffset(double d) {
+	public WB_Point getOffset(final double d) {
 		return new WB_Point(pos)._addMulSelf(d, getVertexNormal());
 
 	}
 
 	/**
 	 * Get vertex type. Returns stored value if update status is true.
-	 * 
+	 *
 	 * @return HE.VertexType.FLAT: vertex is flat in all faces,
 	 *         HE.VertexType.CONVEX: vertex is convex in all faces,
 	 *         HE.VertexType.CONCAVE: vertex is concave in all faces,
@@ -147,9 +147,11 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			final double d = v.dot(c);
 			if (Math.abs(d) < WB_Epsilon.EPSILON) {
 				nflat++;
-			} else if (d < 0) {
+			}
+			else if (d < 0) {
 				nconcave++;
-			} else {
+			}
+			else {
 				nconvex++;
 			}
 
@@ -157,17 +159,21 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		if (nconcave > 0) {
 			if (nconvex > 0) {
 				return WB_Convex.SADDLE;
-			} else {
+			}
+			else {
 				if (nflat > 0) {
 					return WB_Convex.FLATCONCAVE;
-				} else {
+				}
+				else {
 					return WB_Convex.CONCAVE;
 				}
 			}
-		} else if (nconvex > 0) {
+		}
+		else if (nconvex > 0) {
 			if (nflat > 0) {
 				return WB_Convex.FLATCONVEX;
-			} else {
+			}
+			else {
 				return WB_Convex.CONVEX;
 			}
 		}
@@ -196,7 +202,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get key.
-	 * 
+	 *
 	 * @return key
 	 */
 	public long key() {
@@ -205,7 +211,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get halfedges in vertex.
-	 * 
+	 *
 	 * @return halfedges
 	 */
 	public List<HE_Halfedge> getHalfedgeStar() {
@@ -225,7 +231,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get edges in vertex.
-	 * 
+	 *
 	 * @return edges
 	 */
 	public List<HE_Edge> getEdgeStar() {
@@ -246,7 +252,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get faces in vertex.
-	 * 
+	 *
 	 * @return faces
 	 */
 	public List<HE_Face> getFaceStar() {
@@ -268,7 +274,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get neighboring vertices.
-	 * 
+	 *
 	 * @return neighbors
 	 */
 	public List<HE_Vertex> getNeighborVertices() {
@@ -289,7 +295,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Gets the neighbors as points.
-	 * 
+	 *
 	 * @return the neighbors as points
 	 */
 	public WB_Point[] getNeighborsAsPoints() {
@@ -309,7 +315,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get number of edges in vertex.
-	 * 
+	 *
 	 * @return number of edges
 	 */
 	public int getVertexOrder() {
@@ -331,7 +337,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/**
 	 * Get area of faces bounding vertex.
-	 * 
+	 *
 	 * @return area
 	 */
 	public double getVertexArea() {
@@ -357,6 +363,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
+	@Override
 	public void setData(final String s, final Object o) {
 		if (_data == null) {
 			_data = new HashMap<String, Object>();
@@ -369,20 +376,22 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
+	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
 	}
 
 	/**
 	 * Checks if is boundary.
-	 * 
+	 *
 	 * @return true, if is boundary
 	 */
 	public boolean isBoundary() {
 		HE_Halfedge he = _halfedge;
 		do {
-			if (he.getFace() == null)
+			if (he.getFace() == null) {
 				return true;
+			}
 			he = he.getNextInVertex();
 		} while (he != _halfedge);
 		return false;
@@ -390,7 +399,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	}
 
 	public WB_Point getPoint() {
-		return geometryfactory.createPoint(pos);
+		return pos;
 	}
 
 	@Override
@@ -484,55 +493,56 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	}
 
 	@Override
-	public void _setX(double x) {
+	public void _setX(final double x) {
 		pos._setX(x);
 
 	}
 
 	@Override
-	public void _setY(double y) {
+	public void _setY(final double y) {
 		pos._setY(y);
 
 	}
 
 	@Override
-	public void _setZ(double z) {
+	public void _setZ(final double z) {
 		pos._setZ(z);
 
 	}
 
 	@Override
-	public void _setW(double w) {
+	public void _setW(final double w) {
 		pos._setW(w);
 
 	}
 
 	@Override
-	public void _setCoord(int i, double v) {
+	public void _setCoord(final int i, final double v) {
 		pos._setCoord(i, v);
 
 	}
 
 	@Override
-	public void _set(WB_Coordinate p) {
+	public void _set(final WB_Coordinate p) {
 		pos._set(p);
 
 	}
 
 	@Override
-	public void _set(double x, double y) {
+	public void _set(final double x, final double y) {
 		pos._set(x, y);
 
 	}
 
 	@Override
-	public void _set(double x, double y, double z) {
+	public void _set(final double x, final double y, final double z) {
 		pos._set(x, y, z);
 
 	}
 
 	@Override
-	public void _set(double x, double y, double z, double w) {
+	public void _set(final double x, final double y, final double z,
+			final double w) {
 		pos._set(x, y, z, w);
 
 	}
@@ -544,25 +554,29 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	}
 
 	@Override
-	public void setColor(int color) {
+	public void setColor(final int color) {
 		vertexcolor = color;
 
 	}
 
 	public WB_CoordinateSystem getCS() {
-		WB_Vector normal = getVertexNormal();
-		if (normal == null)
+		final WB_Vector normal = getVertexNormal();
+		if (normal == null) {
 			return null;
+		}
 		WB_Vector t2 = new WB_Vector();
 
-		if (Math.abs(normal.xd()) < Math.abs(normal.yd()))
+		if (Math.abs(normal.xd()) < Math.abs(normal.yd())) {
 			t2._setX(1.0);
-		else
+		}
+		else {
 			t2._setY(1.0);
-		WB_Vector t1 = normal.cross(t2);
-		double n = t1.getLength();
-		if (n < WB_Epsilon.EPSILON)
+		}
+		final WB_Vector t1 = normal.cross(t2);
+		final double n = t1.getLength();
+		if (n < WB_Epsilon.EPSILON) {
 			return null;
+		}
 		t1._mulSelf(1.0 / n);
 		t2 = normal.cross(t1);
 		return geometryfactory.createCSFromOXYZ(this, t1, t2, normal);
@@ -574,21 +588,23 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			return null;
 		}
 		WB_Vector normal = new WB_Vector();
-		WB_Vector[] temp = new WB_Vector[3];
-		for (int i = 0; i < 3; i++)
+		final WB_Vector[] temp = new WB_Vector[3];
+		for (int i = 0; i < 3; i++) {
 			temp[i] = new WB_Vector();
-		HE_Vertex d = _halfedge.getEndVertex();
+		}
+		final HE_Vertex d = _halfedge.getEndVertex();
 		do {
 			_halfedge = _halfedge.getNextInVertex();
-			if (_halfedge.getFace() == null)
+			if (_halfedge.getFace() == null) {
 				continue;
-			double area = computeNormal3D(pos, _halfedge.getEndVertex().pos,
-					_halfedge.getPrevInFace().getVertex().pos, temp[0],
-					temp[1], temp[2]);
+			}
+			final double area = computeNormal3D(pos,
+					_halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
+					.getVertex().pos, temp[0], temp[1], temp[2]);
 
 			normal._addMulSelf(area, temp[2]);
 		} while (_halfedge.getEndVertex() != d);
-		double n = normal.getLength();
+		final double n = normal.getLength();
 		if (n < WB_Epsilon.EPSILON) {
 			HE_Halfedge he = _halfedge;
 			normal = geometryfactory.createVector();
@@ -630,14 +646,14 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 * Returns the discrete Gaussian curvature and the mean normal. These
 	 * discrete operators are described in "Discrete Differential-Geometry
 	 * Operators for Triangulated 2-Manifolds", Mark Meyer, Mathieu Desbrun,
-	 * Peter Schröder, and Alan H. Barr.
+	 * Peter Schrï¿½der, and Alan H. Barr.
 	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf
 	 * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf Note: on a
 	 * sphere, the Gaussian curvature is very accurate, but not the mean
 	 * curvature. Guoliang Xu suggests improvements in his papers
 	 * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
 	 */
-	public double getGaussianCurvature(WB_Vector meanCurvatureVector) {
+	public double getGaussianCurvature(final WB_Vector meanCurvatureVector) {
 
 		meanCurvatureVector._set(0, 0, 0);
 		WB_Point vect1 = new WB_Point();
@@ -647,36 +663,40 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		double mixed = 0.0;
 		double gauss = 0.0;
 		HE_Halfedge ot = getHalfedge();
-		HE_Vertex d = ot.getEndVertex();
+		final HE_Vertex d = ot.getEndVertex();
 		do {
 			ot = ot.getNextInVertex();
-			if (ot.getFace() == null)
+			if (ot.getFace() == null) {
 				continue;
+			}
 			if (ot.getPair().getFace() == null) {
 				meanCurvatureVector._set(0, 0, 0);
 				return 0.0;
 			}
-			HE_Vertex p1 = ot.getEndVertex();
-			HE_Vertex p2 = ot.getPrevInFace().getVertex();
+			final HE_Vertex p1 = ot.getEndVertex();
+			final HE_Vertex p2 = ot.getPrevInFace().getVertex();
 			vect1 = p1.pos.sub(pos);
 			vect2 = p2.pos.sub(p1.pos);
 			vect3 = pos.sub(p2.pos);
-			double c12 = vect1.dot(vect2);
-			double c23 = vect2.dot(vect3);
-			double c31 = vect3.dot(vect1);
+			final double c12 = vect1.dot(vect2);
+			final double c23 = vect2.dot(vect3);
+			final double c31 = vect3.dot(vect1);
 			// Override vect2
 			vect2 = vect1.cross(vect3);
-			double area = 0.5 * vect2.getLength();
-			if (c31 > 0.0)
+			final double area = 0.5 * vect2.getLength();
+			if (c31 > 0.0) {
 				mixed += 0.5 * area;
-			else if (c12 > 0.0 || c23 > 0.0)
+			}
+			else if (c12 > 0.0 || c23 > 0.0) {
 				mixed += 0.25 * area;
+			}
 			else {
 				// Non-obtuse triangle
-				if (area > 0.0 && area > -WB_Epsilon.EPSILON * (c12 + c23))
+				if (area > 0.0 && area > -WB_Epsilon.EPSILON * (c12 + c23)) {
 					mixed -= 0.125 * 0.5
 							* (c12 * vect3.dot(vect3) + c23 * vect1.dot(vect1))
 							/ area;
+				}
 			}
 			gauss += Math.abs(Math.atan2(2.0 * area, -c31));
 
@@ -690,9 +710,10 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	public WB_CoordinateSystem getCurvatureDirections() {
 
-		WB_CoordinateSystem tangent = getCS();
-		if (tangent == null)
+		final WB_CoordinateSystem tangent = getCS();
+		if (tangent == null) {
 			return null;
+		}
 		// To compute B eigenvectors, we search for the minimum of
 		// E(a,b,c) = sum omega_ij (T(d_ij) B d_ij - kappa_ij)^2
 		// d_ij is the unit direction of the edge ij in the tangent
@@ -709,10 +730,11 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		// but we found that Kh is much less accurate than Kg on
 		// a sphere, so we do not use this identity.
 		// (1/2) grad E = G (a b c) - H
-		WB_Vector vect1 = findOptimalSolution(tangent.getZ(), tangent.getX(),
-				tangent.getY());
-		if (vect1 == null)
+		final WB_Vector vect1 = findOptimalSolution(tangent.getZ(),
+				tangent.getX(), tangent.getY());
+		if (vect1 == null) {
 			return null;
+		}
 		// We can eventually compute eigenvectors of B(a b; b c).
 		// Let first compute the eigenvector associated to K1
 		double e1, e2;
@@ -720,37 +742,42 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			if (Math.abs(vect1.xd()) < Math.abs(vect1.zd())) {
 				e1 = 0.0;
 				e2 = 1.0;
-			} else {
+			}
+			else {
 				e1 = 1.0;
 				e2 = 0.0;
 			}
-		} else {
+		}
+		else {
 			e2 = 1.0;
-			double delta = Math
+			final double delta = Math
 					.sqrt((vect1.xd() - vect1.zd()) * (vect1.xd() - vect1.zd())
 							+ 4.0 * vect1.yd() * vect1.yd());
 			double K1;
-			if (vect1.xd() + vect1.zd() < 0.0)
+			if (vect1.xd() + vect1.zd() < 0.0) {
 				K1 = 0.5 * (vect1.xd() + vect1.zd() - delta);
-			else
+			}
+			else {
 				K1 = 0.5 * (vect1.xd() + vect1.zd() + delta);
+			}
 			e1 = (K1 - vect1.xd()) / vect1.yd();
-			double n = Math.sqrt(e1 * e1 + e2 * e2);
+			final double n = Math.sqrt(e1 * e1 + e2 * e2);
 			e1 /= n;
 			e2 /= n;
 		}
 
-		WB_Vector t1 = tangent.getX();
-		WB_Vector t2 = tangent.getY();
+		final WB_Vector t1 = tangent.getX();
+		final WB_Vector t2 = tangent.getY();
 
-		WB_Vector X = t1.mulAddMul(e1, e2, t2);
-		WB_Vector Y = t1.mulAddMul(-e2, e1, t2);
+		final WB_Vector X = t1.mulAddMul(e1, e2, t2);
+		final WB_Vector Y = t1.mulAddMul(-e2, e1, t2);
 
 		return geometryfactory.createCSFromOXYZ(this, X, Y, tangent.getZ());
 	}
 
-	private static double computeNormal3D(WB_Point p0, WB_Point p1,
-			WB_Point p2, WB_Vector tempD1, WB_Vector tempD2, WB_Vector ret) {
+	private static double computeNormal3D(final WB_Point p0, final WB_Point p1,
+			final WB_Point p2, WB_Vector tempD1, WB_Vector tempD2,
+			final WB_Vector ret) {
 		tempD1 = p1.subToVector(p2);
 		tempD2 = p2.subToVector(p0);
 		tempD1.crossInto(tempD2, ret);
@@ -762,54 +789,58 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 						+ tempD2.yd() * tempD2.yd() + tempD2.zd() * tempD2.zd())) {
 			ret._mulSelf(1.0 / norm);
 
-		} else {
+		}
+		else {
 			ret._set(0, 0, 0);
 			norm = 0.0;
 		}
 		return 0.5 * norm;
 	}
 
-	private WB_Vector findOptimalSolution(WB_Vector normal, WB_Vector t1,
-			WB_Vector t2) {
+	private WB_Vector findOptimalSolution(final WB_Vector normal,
+			final WB_Vector t1, final WB_Vector t2) {
 
 		WB_Vector vect1 = new WB_Vector();
 		WB_Vector vect2 = new WB_Vector();
 		WB_Vector vect3 = new WB_Vector();
-		WB_Vector g0 = new WB_Vector();
-		WB_Vector g1 = new WB_Vector();
-		WB_Vector g2 = new WB_Vector();
-		WB_Vector h = new WB_Vector();
+		final WB_Vector g0 = new WB_Vector();
+		final WB_Vector g1 = new WB_Vector();
+		final WB_Vector g2 = new WB_Vector();
+		final WB_Vector h = new WB_Vector();
 
 		HE_Halfedge ot = getHalfedge();
-		HE_Vertex d = ot.getEndVertex();
+		final HE_Vertex d = ot.getEndVertex();
 		do {
 			ot = ot.getNextInVertex();
-			if (ot.getFace() == null)
+			if (ot.getFace() == null) {
 				continue;
-			WB_Point p1 = ot.getEndVertex().pos;
-			WB_Point p2 = ot.getPrevInFace().getVertex().pos;
+			}
+			final WB_Point p1 = ot.getEndVertex().pos;
+			final WB_Point p2 = ot.getPrevInFace().getVertex().pos;
 
 			vect1 = new WB_Vector(this, p1);
 			vect2 = new WB_Vector(p1, p2);
 			vect3 = new WB_Vector(p2, this);
 
-			double c12 = vect1.dot(vect2);
-			double c23 = vect2.dot(vect3);
+			final double c12 = vect1.dot(vect2);
+			final double c23 = vect2.dot(vect3);
 			// Override vect2
 			vect2 = vect1.cross(vect3);
-			double area = 0.5 * vect2.getLength();
-			double len2 = vect1.dot(vect1);
-			if (len2 < WB_Epsilon.SQEPSILON)
+			final double area = 0.5 * vect2.getLength();
+			final double len2 = vect1.dot(vect1);
+			if (len2 < WB_Epsilon.SQEPSILON) {
 				continue;
-			double kappa = 2.0 * vect1.dot(normal) / len2;
+			}
+			final double kappa = 2.0 * vect1.dot(normal) / len2;
 			double d1 = vect1.dot(t1);
 			double d2 = vect1.dot(t2);
-			double n = Math.sqrt(d1 * d1 + d2 * d2);
-			if (n < WB_Epsilon.EPSILON)
+			final double n = Math.sqrt(d1 * d1 + d2 * d2);
+			if (n < WB_Epsilon.EPSILON) {
 				continue;
+			}
 			d1 /= n;
 			d2 /= n;
-			double omega = 0.5
+			final double omega = 0.5
 					* (c12 * vect3.dot(vect3) + c23 * vect1.dot(vect1)) / area;
 			g0._addSelf(omega * d1 * d1 * d1 * d1, omega * 2.0 * d1 * d1 * d1
 					* d2, omega * d1 * d1 * d2 * d2);
@@ -824,8 +855,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		WB_M33 G = new WB_M33(g0.xd(), g1.xd(), g2.xd(), g0.yd(), g1.yd(),
 				g2.yd(), g0.zd(), g1.zd(), g2.zd());
 		G = G.inverse();
-		if (G == null)
+		if (G == null) {
 			return null;
+		}
 		return WB_M33.mulToPoint(G, h);
 	}
 

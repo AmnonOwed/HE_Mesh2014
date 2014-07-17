@@ -138,13 +138,13 @@ public class HES_Planar extends HES_Subdividor {
 						final double t = 0.5 + (randomGen.nextDouble() - 0.5)
 								* range;
 						tmp._mulSelf(t);
-						fv.pos._addSelf(tmp);
+						fv.getPoint()._addSelf(tmp);
 						c += t;
 						he = he.getNextInFace();
 					} while (he != face.getHalfedge());
-					fv.pos._divSelf(c);
+					fv.getPoint()._divSelf(c);
 					trial++;
-				} while ((!HE_Mesh.pointIsStrictlyInFace(fv.pos, face))
+				} while ((!HE_Mesh.pointIsStrictlyInFace(fv, face))
 						&& (trial < 10));
 				if (trial == 10) {
 					fv._set(face.getFaceCenter());
@@ -293,13 +293,13 @@ public class HES_Planar extends HES_Subdividor {
 						final double t = 0.5 + (randomGen.nextDouble() - 0.5)
 								* range;
 						tmp._mulSelf(t);
-						fv.pos._addSelf(tmp);
+						fv.getPoint()._addSelf(tmp);
 						c += t;
 						he = he.getNextInFace();
 					} while (he != face.getHalfedge());
-					fv.pos._divSelf(c);
+					fv.getPoint()._divSelf(c);
 					trial++;
-				} while ((!HE_Mesh.pointIsStrictlyInFace(fv.pos, face))
+				} while ((!HE_Mesh.pointIsStrictlyInFace(fv, face))
 						&& (trial < 10));
 				if (trial == 10) {
 					fv._set(face.getFaceCenter());

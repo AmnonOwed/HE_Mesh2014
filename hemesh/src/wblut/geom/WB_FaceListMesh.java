@@ -21,7 +21,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	int[][] vfNeighbors = null;
 	int[][] ffNeighbors = null;
 	boolean vNormalsUpdated, fNormalsUpdated, vvNeighborsUpdated,
-	vfNeighborsUpdated, ffNeighborsUpdated;
+			vfNeighborsUpdated, ffNeighborsUpdated;
 
 	List<int[]> tris;
 	WB_Vector[] pdir1 = null;
@@ -421,7 +421,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 		return vertices.getPoint(i);
 	}
 
-	public WB_CoordinateSequence getVertices() {
+	@Override
+	public WB_CoordinateSequence getPoints() {
 		return vertices;
 	}
 
@@ -459,14 +460,14 @@ public class WB_FaceListMesh implements WB_Mesh {
 		vfNeighborsUpdated = true;
 		/*
 		 * updateffNeighbors();
-		 *
+		 * 
 		 * for (int i = 0; i < nv; i++) { if (vfNeighbors[i].length == 0)
 		 * continue; int f = vfNeighbors[i][0]; int fPrev = prevFace(i, f);
 		 * while (fPrev >= 0 && fPrev != vfNeighbors[i][0]) { f = fPrev; fPrev =
 		 * prevFace(i, f); } int counter = 0; int fStart = f; do {
 		 * vfNeighbors[i][counter++] = f; f = nextFace(i, f); } while (f >= 0 &&
 		 * f != fStart);
-		 *
+		 * 
 		 * }
 		 */
 

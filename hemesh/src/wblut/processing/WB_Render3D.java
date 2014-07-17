@@ -26,6 +26,7 @@ import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Grid3D;
 import wblut.geom.WB_IndexedPoint;
 import wblut.geom.WB_Line;
+import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_PolyLine;
@@ -354,12 +355,12 @@ public class WB_Render3D {
 		}
 	}
 
-	public void drawMesh(final WB_FaceListMesh mesh) {
+	public void drawMesh(final WB_Mesh mesh) {
 		if (mesh == null) {
 			return;
 		}
 		for (final int[] face : mesh.getFacesAsInt()) {
-			drawPolygon(face, mesh.getVertices());
+			drawPolygon(face, mesh.getPoints());
 		}
 
 	}
@@ -369,7 +370,7 @@ public class WB_Render3D {
 		retained.beginShape(PConstants.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 		final WB_Vector v = geometryfactory.createVector();
-		final WB_CoordinateSequence seq = lmesh.getVertices();
+		final WB_CoordinateSequence seq = lmesh.getPoints();
 		WB_IndexedPoint p = seq.getPoint(0);
 
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
@@ -398,7 +399,7 @@ public class WB_Render3D {
 		final PShape retained = home.createShape();
 		retained.beginShape(PConstants.TRIANGLES);
 		final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
-		final WB_CoordinateSequence seq = lmesh.getVertices();
+		final WB_CoordinateSequence seq = lmesh.getPoints();
 		WB_IndexedPoint p = seq.getPoint(0);
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 			int id = lmesh.getFace(i)[0];
@@ -656,10 +657,10 @@ public class WB_Render3D {
 
 	public void drawBezierEdges(final HE_MeshStructure mesh) {
 		HE_Halfedge he;
-		WB_Point p0;
-		WB_Point p1;
-		WB_Point p2;
-		WB_Point p3;
+		WB_Coordinate p0;
+		WB_Coordinate p1;
+		WB_Coordinate p2;
+		WB_Coordinate p3;
 		HE_Face f;
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
@@ -671,8 +672,8 @@ public class WB_Render3D {
 
 			do {
 
-				p1 = he.getVertex().pos;
-				p2 = he.getVertex().pos;
+				p1 = he.getVertex();
+				p2 = he.getVertex();
 				p3 = he.getHalfedgeCenter();
 
 				home.bezierVertex(p1.xf(), p1.yf(), p1.zf(), p2.xf(), p2.yf(),

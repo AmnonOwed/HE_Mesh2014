@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
@@ -39,6 +40,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	private HashMap<String, Object> _data;
 
 	private int hecolor;
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	/**
 	 * Instantiates a new HE_Halfedge.
@@ -151,9 +153,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		if (_vertex == null) {
 			return null;
 		}
-		WB_Vector v = _vertex.pos.subToVector(getPrevInFace()._vertex);
+		WB_Vector v = _vertex.getPoint().subToVector(getPrevInFace()._vertex);
 		v._normalizeSelf();
-		final WB_Vector vn = getNextInFace()._vertex.pos.subToVector(_vertex);
+		final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector(
+				_vertex);
 		vn._normalizeSelf();
 		v = v.cross(vn);
 		final WB_Vector n;
@@ -188,7 +191,8 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 					: _edge.getEdgeTangent().mul(-1);
 		}
 		if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
-			final WB_Vector v = _pair.getVertex().pos.subToVector(_vertex);
+			final WB_Vector v = _pair.getVertex().getPoint()
+					.subToVector(_vertex);
 			v._normalizeSelf();
 			return v;
 		}
@@ -205,7 +209,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 			return _edge.getEdgeCenter();
 		}
 		if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
-			return _next.getVertex().pos.add(_vertex)._mulSelf(0.5);
+			return gf.createMidpoint(_next.getVertex(), _vertex);
 		}
 		return null;
 	}
@@ -385,7 +389,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -397,7 +401,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -410,7 +414,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

@@ -14,9 +14,9 @@ import wblut.math.WB_Epsilon;
  * Stretch and compress a mesh. Determined by a ground plane, a stretch factor
  * and a compression factor. Most commonly, the ground plane normal is the
  * stretch direction.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Stretch extends HEM_Modifier {
 
@@ -44,7 +44,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/**
 	 * Set ground plane.
-	 * 
+	 *
 	 * @param P
 	 *            ground plane
 	 * @return self
@@ -56,7 +56,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/**
 	 * Sets the ground plane.
-	 * 
+	 *
 	 * @param ox
 	 *            the ox
 	 * @param oy
@@ -79,7 +79,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/**
 	 * Set stretch factor along stretch direction.
-	 * 
+	 *
 	 * @param f
 	 *            the f
 	 * @return self
@@ -92,7 +92,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/**
 	 * Set compression factor perpendicular to stretch direction.
-	 * 
+	 *
 	 * @param f
 	 *            the f
 	 * @return self
@@ -106,7 +106,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/**
 	 * Positive only? Only apply modifier to positive side of ground plane.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -118,7 +118,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -139,13 +139,13 @@ public class HEM_Stretch extends HEM_Modifier {
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > WB_Epsilon.EPSILON)) {
 					p = WB_Intersection.getClosestPoint3D(v, groundPlane);
-					v.pos._subSelf(p);
-					v.pos._mulSelf(stretchFactor);
-					v.pos._addSelf(p);
+					v.getPoint()._subSelf(p);
+					v.getPoint()._mulSelf(stretchFactor);
+					v.getPoint()._addSelf(p);
 					p = WB_Intersection.getClosestPoint3D(v, L);
-					v.pos._subSelf(p);
-					v.pos._mulSelf(1 / compressionFactor);
-					v.pos._addSelf(p);
+					v.getPoint()._subSelf(p);
+					v.getPoint()._mulSelf(1 / compressionFactor);
+					v.getPoint()._addSelf(p);
 				}
 			}
 		}
@@ -154,7 +154,7 @@ public class HEM_Stretch extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -176,13 +176,13 @@ public class HEM_Stretch extends HEM_Modifier {
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > WB_Epsilon.EPSILON)) {
 					p = WB_Intersection.getClosestPoint3D(v, groundPlane);
-					v.pos._subSelf(p);
-					v.pos._mulSelf(stretchFactor);
-					v.pos._addSelf(p);
+					v.getPoint()._subSelf(p);
+					v.getPoint()._mulSelf(stretchFactor);
+					v.getPoint()._addSelf(p);
 					p = WB_Intersection.getClosestPoint3D(v, L);
-					v.pos._subSelf(p);
-					v.pos._mulSelf(1 / compressionFactor);
-					v.pos._addSelf(p);
+					v.getPoint()._subSelf(p);
+					v.getPoint()._mulSelf(1 / compressionFactor);
+					v.getPoint()._addSelf(p);
 				}
 			}
 		}

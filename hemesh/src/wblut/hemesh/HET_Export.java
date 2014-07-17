@@ -10,15 +10,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Iterator;
 
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 
 /**
- * 
+ *
  * Collection of export functions.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
- * 
+ *
  */
 public class HET_Export {
 
@@ -38,7 +39,7 @@ public class HET_Export {
 	 */
 	/**
 	 * Saves the mesh as OBJ format by appending it to the given mesh.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param obj
@@ -58,7 +59,7 @@ public class HET_Export {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			keyToIndex.put(v.key(), i);
-			obj.vertex(v.pos);
+			obj.vertex(v);
 			i++;
 		}
 
@@ -77,23 +78,23 @@ public class HET_Export {
 					keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
 							.key())
 							+ vOffset,
-					keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
-							.key())
-							+ vOffset,
-					keyToIndex.get(f.getHalfedge().getVertex().key()) + nOffset,
-					keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
-							.key())
-							+ nOffset,
-					keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
-							.key())
-							+ nOffset);
+							keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
+									.key())
+									+ vOffset,
+									keyToIndex.get(f.getHalfedge().getVertex().key()) + nOffset,
+									keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
+											.key())
+											+ nOffset,
+											keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
+													.key())
+													+ nOffset);
 		}
 	}
 
 	/**
 	 * Saves the mesh as OBJ format to the given {@link OutputStream}. Currently
 	 * no texture coordinates are supported or written. Karsten Schmidt, 2011
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param stream
@@ -109,7 +110,7 @@ public class HET_Export {
 	/**
 	 * Saves the mesh as OBJ format to the given file path. Existing files will
 	 * be overwritten. Karsten Schmidt, 2011
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param path
@@ -124,7 +125,7 @@ public class HET_Export {
 
 	/**
 	 * Export mesh to binary STL file. Heav(i/en)ly inspired by Marius Watz
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param path
@@ -168,10 +169,11 @@ public class HET_Export {
 				f = fItr.next();
 
 				final WB_Vector n = f.getFaceNormal();
-				final WB_Point v1 = f.getHalfedge().getVertex().pos;
-				final WB_Point v2 = f.getHalfedge().getNextInFace().getVertex().pos;
-				final WB_Point v3 = f.getHalfedge().getNextInFace()
-						.getNextInFace().getVertex().pos;
+				final WB_Coordinate v1 = f.getHalfedge().getVertex();
+				final WB_Coordinate v2 = f.getHalfedge().getNextInFace()
+						.getVertex();
+				final WB_Coordinate v3 = f.getHalfedge().getNextInFace()
+						.getNextInFace().getVertex();
 				buf.rewind();
 				buf.putFloat(n.xf());
 				buf.putFloat(n.yf());
@@ -197,7 +199,8 @@ public class HET_Export {
 			out.close();
 			System.out.println("HET_Export.saveToSTL:done saving");
 
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -207,7 +210,7 @@ public class HET_Export {
 	 * Saves the mesh as simpleMesh format to the given file path. Existing
 	 * files will be overwritten. The file gives the vertex coordinates and an
 	 * indexed facelist.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param path
@@ -230,7 +233,7 @@ public class HET_Export {
 	 * will be overwritten. The file contains the vertex coordinates and all
 	 * half-edge interconnection information. Larger than a simpleMesh but much
 	 * quicker to rebuild.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param path
@@ -277,7 +280,8 @@ public class HET_Export {
 			v = vItr.next();
 			if (v.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(v.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -293,7 +297,8 @@ public class HET_Export {
 			he = heItr.next();
 			if (he.getVertex() == null) {
 				vid = -1;
-			} else {
+			}
+			else {
 				vid = vertexKeys.get(he.getVertex().key());
 				if (vid == null) {
 					vid = -1;
@@ -301,7 +306,8 @@ public class HET_Export {
 			}
 			if (he.getNextInFace() == null) {
 				henextid = -1;
-			} else {
+			}
+			else {
 				henextid = halfedgeKeys.get(he.getNextInFace().key());
 				if (henextid == null) {
 					henextid = -1;
@@ -309,7 +315,8 @@ public class HET_Export {
 			}
 			if (he.getPair() == null) {
 				hepairid = -1;
-			} else {
+			}
+			else {
 				hepairid = halfedgeKeys.get(he.getPair().key());
 				if (hepairid == null) {
 					hepairid = -1;
@@ -317,7 +324,8 @@ public class HET_Export {
 			}
 			if (he.getEdge() == null) {
 				eid = -1;
-			} else {
+			}
+			else {
 				eid = edgeKeys.get(he.getEdge().key());
 				if (eid == null) {
 					eid = -1;
@@ -325,7 +333,8 @@ public class HET_Export {
 			}
 			if (he.getFace() == null) {
 				fid = -1;
-			} else {
+			}
+			else {
 				fid = faceKeys.get(he.getFace().key());
 				if (fid == null) {
 					fid = -1;
@@ -340,7 +349,8 @@ public class HET_Export {
 			e = eItr.next();
 			if (e.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(e.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -354,7 +364,8 @@ public class HET_Export {
 			f = fItr.next();
 			if (f.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(f.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -371,7 +382,7 @@ public class HET_Export {
 	 * all half-edge interconnection information. About the same size of a
 	 * simpleMesh but a lot quicker to rebuild. Due to compression about half as
 	 * fast as an ordinary hemesh file but only a third in size.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param path
@@ -418,7 +429,8 @@ public class HET_Export {
 			v = vItr.next();
 			if (v.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(v.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -434,7 +446,8 @@ public class HET_Export {
 			he = heItr.next();
 			if (he.getVertex() == null) {
 				vid = -1;
-			} else {
+			}
+			else {
 				vid = vertexKeys.get(he.getVertex().key());
 				if (vid == null) {
 					vid = -1;
@@ -442,7 +455,8 @@ public class HET_Export {
 			}
 			if (he.getNextInFace() == null) {
 				henextid = -1;
-			} else {
+			}
+			else {
 				henextid = halfedgeKeys.get(he.getNextInFace().key());
 				if (henextid == null) {
 					henextid = -1;
@@ -450,7 +464,8 @@ public class HET_Export {
 			}
 			if (he.getPair() == null) {
 				hepairid = -1;
-			} else {
+			}
+			else {
 				hepairid = halfedgeKeys.get(he.getPair().key());
 				if (hepairid == null) {
 					hepairid = -1;
@@ -458,7 +473,8 @@ public class HET_Export {
 			}
 			if (he.getEdge() == null) {
 				eid = -1;
-			} else {
+			}
+			else {
 				eid = edgeKeys.get(he.getEdge().key());
 				if (eid == null) {
 					eid = -1;
@@ -466,7 +482,8 @@ public class HET_Export {
 			}
 			if (he.getFace() == null) {
 				fid = -1;
-			} else {
+			}
+			else {
 				fid = faceKeys.get(he.getFace().key());
 				if (fid == null) {
 					fid = -1;
@@ -481,7 +498,8 @@ public class HET_Export {
 			e = eItr.next();
 			if (e.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(e.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -495,7 +513,8 @@ public class HET_Export {
 			f = fItr.next();
 			if (f.getHalfedge() == null) {
 				heid = -1;
-			} else {
+			}
+			else {
 				heid = halfedgeKeys.get(f.getHalfedge().key());
 				if (heid == null) {
 					heid = -1;
@@ -508,7 +527,7 @@ public class HET_Export {
 
 	/**
 	 * Saves the mesh as PovRAY mesh2 format by appending it to the given mesh.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param pov
@@ -553,16 +572,16 @@ public class HET_Export {
 					keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
 							.key())
 							+ vOffset,
-					keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
-							.key())
-							+ vOffset);
+							keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
+									.key())
+									+ vOffset);
 		}
 		pov.endSection();
 	}
 
 	/**
 	 * Saves the mesh as PovRAY format to the given {@link PrintWriter}.
-	 * 
+	 *
 	 * @param mesh
 	 *            HE_Mesh
 	 * @param pw
@@ -574,7 +593,7 @@ public class HET_Export {
 
 	/**
 	 * Saves the mesh as PovRAY format to the given {@link PrintWriter}.
-	 * 
+	 *
 	 * @param mesh
 	 *            HE_Mesh
 	 * @param pw

@@ -51,7 +51,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		this.points = new WB_Point[points.size()];
 
 		int i = 0;
-		for (WB_Point p : points) {
+		for (final WB_Point p : points) {
 			this.points[i] = p.get();
 			i++;
 		}
@@ -67,7 +67,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		final Iterator<HE_Vertex> itr = points.iterator();
 		int i = 0;
 		while (itr.hasNext()) {
-			this.points[i] = itr.next().get().pos;
+			this.points[i] = itr.next().get().getPoint();
 			i++;
 		}
 		jpoints = this.points;
@@ -126,7 +126,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -135,8 +135,9 @@ public class HEC_AlphaShape extends HEC_Creator {
 			return new HE_Mesh();
 		}
 		numberOfPoints = points.length;
-		if (ac == null)
+		if (ac == null) {
 			ac = new WB_AlphaComplex(jpoints);
+		}
 		final int[][] faceIndices = ac.getAlphaComplexShape(alpha);
 		final HEC_FromFacelist ffl = new HEC_FromFacelist().setVertices(points)
 				.setFaces(faceIndices).setDuplicate(false);
@@ -147,7 +148,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 
 	}
 
-	public HEC_AlphaShape setPoints(final WB_Point[] points, double joggle) {
+	public HEC_AlphaShape setPoints(final WB_Point[] points, final double joggle) {
 		this.points = new WB_Point[points.length];
 		jpoints = new WB_Point[points.length];
 		WB_Vector v;
@@ -162,7 +163,8 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	public HEC_AlphaShape setPoints(final HE_Vertex[] points, double joggle) {
+	public HEC_AlphaShape setPoints(final HE_Vertex[] points,
+			final double joggle) {
 		this.points = new WB_Point[points.length];
 		jpoints = new WB_Point[points.length];
 		WB_Vector v;
@@ -170,20 +172,20 @@ public class HEC_AlphaShape extends HEC_Creator {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
 			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
 			this.points[i] = new WB_Point(points[i]);
-			jpoints[i] = points[i].get().pos._addSelf(v);
+			jpoints[i] = points[i].get().getPoint()._addSelf(v);
 		}
 		ac = null;
 		return this;
 	}
 
 	public HEC_AlphaShape setPoints(
-			final Collection<? extends WB_Point> points, double joggle) {
+			final Collection<? extends WB_Point> points, final double joggle) {
 
 		this.points = new WB_Point[points.size()];
 		jpoints = new WB_Point[points.size()];
 		WB_Vector v;
 		int i = 0;
-		for (WB_Point p : points) {
+		for (final WB_Point p : points) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
 			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
 			this.points[i] = p;
@@ -195,7 +197,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 	}
 
 	public HEC_AlphaShape setPointsFromVertices(
-			final Collection<HE_Vertex> points, double joggle) {
+			final Collection<HE_Vertex> points, final double joggle) {
 
 		this.points = new WB_Point[points.size()];
 		this.jpoints = new WB_Point[points.size()];
@@ -205,7 +207,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		while (itr.hasNext()) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
 			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
-			this.points[i] = itr.next().pos;
+			this.points[i] = itr.next().getPoint();
 			jpoints[i] = this.points[i].get()._addSelf(v);
 			i++;
 		}
@@ -213,7 +215,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	public HEC_AlphaShape setPoints(final double[][] points, double joggle) {
+	public HEC_AlphaShape setPoints(final double[][] points, final double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
 		this.jpoints = new WB_Point[n];
@@ -229,7 +231,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	public HEC_AlphaShape setPoints(final float[][] points, double joggle) {
+	public HEC_AlphaShape setPoints(final float[][] points, final double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
 		this.jpoints = new WB_Point[n];
@@ -245,7 +247,7 @@ public class HEC_AlphaShape extends HEC_Creator {
 		return this;
 	}
 
-	public HEC_AlphaShape setPoints(final int[][] points, double joggle) {
+	public HEC_AlphaShape setPoints(final int[][] points, final double joggle) {
 		final int n = points.length;
 		this.points = new WB_Point[n];
 		this.jpoints = new WB_Point[n];

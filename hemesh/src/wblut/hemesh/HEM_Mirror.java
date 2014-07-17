@@ -54,7 +54,7 @@ public class HEM_Mirror extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -91,7 +91,8 @@ public class HEM_Mirror extends HEM_Modifier {
 			if ((cptp == WB_Classification.FRONT)
 					|| (cptp == WB_Classification.ON)) {
 				newFaces.add(face);
-			} else {
+			}
+			else {
 				if (cut.contains(face)) {
 					cut.remove(face);
 				}
@@ -112,12 +113,12 @@ public class HEM_Mirror extends HEM_Modifier {
 		mesh.removeFaces(facesToRemove);
 		mesh.cleanUnusedElementsByFace();
 		mesh.capHalfedges();
-		HE_Mesh mirrormesh = mesh.get();
-		List<HE_Vertex> vertices = mirrormesh.getVerticesAsList();
-		for (HE_Vertex v : vertices) {
-			WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
-			WB_Vector dv = v.pos.subToVector(p);
-			v.pos._addMulSelf(-2, dv);
+		final HE_Mesh mirrormesh = mesh.get();
+		final List<HE_Vertex> vertices = mirrormesh.getVerticesAsList();
+		for (final HE_Vertex v : vertices) {
+			final WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
+			final WB_Vector dv = v.getPoint().subToVector(p);
+			v.getPoint()._addMulSelf(-2, dv);
 		}
 		mirrormesh.flipAllFaces();
 
@@ -133,7 +134,7 @@ public class HEM_Mirror extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */

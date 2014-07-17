@@ -40,7 +40,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -66,7 +66,8 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 					if (f.getLabel() == -1) {
 						tmpfaces.add(f);
 						nv += f.getFaceOrder();
-					} else if (!on[f.getLabel()]) {
+					}
+					else if (!on[f.getLabel()]) {
 						tmpfaces.add(f);
 						nv += f.getFaceOrder();
 					}
@@ -84,14 +85,14 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			labels[i] = f.getLabel();
 			HE_Halfedge he = f.getHalfedge();
 			for (int j = 0; j < f.getFaceOrder(); j++) {
-				vertices[cid] = he.getVertex().pos;
+				vertices[cid] = he.getVertex().getPoint();
 				faces[i][j] = cid;
 				he = he.getNextInFace();
 				cid++;
 			}
 		}
 		final HEC_FromFacelist ffl = new HEC_FromFacelist()
-				.setVertices(vertices).setFaces(faces).setDuplicate(true);
+		.setVertices(vertices).setFaces(faces).setDuplicate(true);
 		final HE_Mesh result = ffl.createBase();
 		final Iterator<HE_Face> fItr = result.fItr();
 		int i = 0;

@@ -9,9 +9,9 @@ import wblut.geom.WB_Point;
 
 /**
  * Catmull-Clark subdivision of a mesh.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HES_Smooth extends HES_Subdividor {
@@ -40,7 +40,7 @@ public class HES_Smooth extends HES_Subdividor {
 
 	/**
 	 * Keep edges of selection fixed when subdividing selection?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
@@ -53,7 +53,7 @@ public class HES_Smooth extends HES_Subdividor {
 
 	/**
 	 * Keep boundary edges fixed?.
-	 * 
+	 *
 	 * @param b
 	 *            true/false
 	 * @return self
@@ -66,7 +66,7 @@ public class HES_Smooth extends HES_Subdividor {
 
 	/**
 	 * Set vertex weights?.
-	 * 
+	 *
 	 * @param origWeight
 	 *            weight of original vertex
 	 * @param neigWeight
@@ -83,7 +83,7 @@ public class HES_Smooth extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -119,8 +119,9 @@ public class HES_Smooth extends HES_Subdividor {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (keepBoundary) {
-				newPositions[id] = v.pos;
-			} else {
+				newPositions[id] = v.getPoint();
+			}
+			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
 				p._mulSelf(origWeight);
@@ -135,7 +136,8 @@ public class HES_Smooth extends HES_Subdividor {
 						nc++;
 					}
 				}
-				newPositions[id] = (nc > 1) ? p._scaleSelf(1.0 / c) : v.pos;
+				newPositions[id] = (nc > 1) ? p._scaleSelf(1.0 / c) : v
+						.getPoint();
 			}
 			id++;
 		}
@@ -156,7 +158,7 @@ public class HES_Smooth extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -202,8 +204,9 @@ public class HES_Smooth extends HES_Subdividor {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (keepBoundary) {
-				newPositions.add(v.pos);
-			} else {
+				newPositions.add(v.getPoint());
+			}
+			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
 				p._mulSelf(origWeight);
@@ -218,7 +221,8 @@ public class HES_Smooth extends HES_Subdividor {
 						nc++;
 					}
 				}
-				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v.pos);
+				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v
+						.getPoint());
 			}
 			id++;
 		}
@@ -226,8 +230,9 @@ public class HES_Smooth extends HES_Subdividor {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if ((keepEdges) || (v.getVertexType() != WB_Convex.FLAT)) {
-				newPositions.add(v.pos);
-			} else {
+				newPositions.add(v.getPoint());
+			}
+			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
 				p._mulSelf(origWeight);
@@ -253,7 +258,8 @@ public class HES_Smooth extends HES_Subdividor {
 						}
 					}
 				}
-				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v.pos);
+				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v
+						.getPoint());
 			}
 			id++;
 		}

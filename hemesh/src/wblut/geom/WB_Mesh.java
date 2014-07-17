@@ -18,6 +18,8 @@ public interface WB_Mesh extends WB_Geometry {
 
 	public WB_Coordinate getVertex(final int i);
 
+	public WB_CoordinateSequence getPoints();
+
 	public int[][] getFacesAsInt();
 
 	public int[][] getEdgesAsInt();

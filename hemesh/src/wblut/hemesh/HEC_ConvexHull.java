@@ -10,9 +10,9 @@ import wblut.geom.WB_QuickHull3D;
 
 /**
  * Creates the convex hull of a collection of points.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_ConvexHull extends HEC_Creator {
 
@@ -27,7 +27,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Instantiates a new HEC_ConvexHull.
-	 * 
+	 *
 	 */
 	public HEC_ConvexHull() {
 		super();
@@ -36,7 +36,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            array of vertex positions
 	 * @return self
@@ -50,7 +50,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            array of vertex positions
 	 * @return self
@@ -65,7 +65,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            any Collection of vertex positions
 	 * @return self
@@ -83,7 +83,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            any Collection of vertex positions
 	 * @return self
@@ -95,7 +95,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 		final Iterator<HE_Vertex> itr = points.iterator();
 		int i = 0;
 		while (itr.hasNext()) {
-			this.points[i] = itr.next().pos;
+			this.points[i] = itr.next().getPoint();
 			i++;
 		}
 		return this;
@@ -103,7 +103,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of double of vertex positions
 	 * @return self
@@ -122,7 +122,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of float of vertex positions
 	 * @return self
@@ -141,7 +141,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set points that define vertices.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of float of vertex positions
 	 * @return self
@@ -160,7 +160,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/**
 	 * Set number of points.
-	 * 
+	 *
 	 * @param N
 	 *            number of points
 	 * @return self
@@ -172,7 +172,7 @@ public class HEC_ConvexHull extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -191,10 +191,10 @@ public class HEC_ConvexHull extends HEC_Creator {
 		}
 		final WB_QuickHull3D hull = new WB_QuickHull3D(points);
 		final int[][] faceIndices = hull.getFaces();
-		int[] originalindices = hull.getVertexPointIndices();
+		final int[] originalindices = hull.getVertexPointIndices();
 		final HEC_FromFacelist ffl = new HEC_FromFacelist()
-				.setVertices(hull.getVertices()).setFaces(faceIndices)
-				.setDuplicate(false).setCheckNormals(false);
+		.setVertices(hull.getVertices()).setFaces(faceIndices)
+		.setDuplicate(false).setCheckNormals(false);
 		final HE_Mesh result = ffl.createBase();
 
 		vertexToPointIndex = new FastMap<Long, Integer>();

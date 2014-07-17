@@ -19,7 +19,7 @@ public class HEM_Inflate extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
@@ -54,7 +54,7 @@ public class HEM_Inflate extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -64,7 +64,7 @@ public class HEM_Inflate extends HEM_Modifier {
 			box = mesh.getAABB();
 		}
 
-		WB_KDTree<HE_Vertex, Integer> tree = new WB_KDTree<HE_Vertex, Integer>();
+		final WB_KDTree<HE_Vertex, Integer> tree = new WB_KDTree<HE_Vertex, Integer>();
 		Iterator<HE_Vertex> vItr = mesh.vItr();
 		HE_Vertex v;
 		int id = 0;
@@ -87,14 +87,15 @@ public class HEM_Inflate extends HEM_Modifier {
 
 				for (int i = 0; i < neighbors.length; i++) {
 					if (neighbors[i].coord != v) {
-						WB_Vector tmp = neighbors[i].coord.pos.subToVector(v);
+						final WB_Vector tmp = neighbors[i].coord.getPoint()
+								.subToVector(v);
 						tmp._normalizeSelf();
 						dv._addSelf(tmp);
 					}
 				}
 				dv._normalizeSelf();
 				dv._mulSelf(factor);
-				newPositions[id] = v.pos.add(dv);
+				newPositions[id] = v.getPoint().add(dv);
 
 				id++;
 
@@ -116,7 +117,7 @@ public class HEM_Inflate extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -129,7 +130,7 @@ public class HEM_Inflate extends HEM_Modifier {
 			box = selection.parent.getAABB();
 		}
 
-		WB_KDTree<HE_Vertex, Integer> tree = new WB_KDTree<HE_Vertex, Integer>();
+		final WB_KDTree<HE_Vertex, Integer> tree = new WB_KDTree<HE_Vertex, Integer>();
 		Iterator<HE_Vertex> vItr = selection.parent.vItr();
 		HE_Vertex v;
 		int id = 0;
@@ -137,30 +138,31 @@ public class HEM_Inflate extends HEM_Modifier {
 			tree.add(vItr.next(), id++);
 		}
 		final WB_Point[] newPositions = new WB_Point[selection
-				.getNumberOfVertices()];
+		                                             .getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
 		for (int r = 0; r < iter; r++) {
 			vItr = selection.vItr();
-			HE_Vertex n;
+			final HE_Vertex n;
 			WB_KDTree.WB_KDEntry<HE_Vertex, Integer>[] neighbors;
 			id = 0;
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				WB_Vector dv = new WB_Vector(v);
+				final WB_Vector dv = new WB_Vector(v);
 				neighbors = tree.getRange(v, radius);
 				for (int i = 0; i < neighbors.length; i++) {
 					if (neighbors[i].coord != v) {
-						WB_Vector tmp = neighbors[i].coord.pos.subToVector(v);
+						final WB_Vector tmp = neighbors[i].coord.getPoint()
+								.subToVector(v);
 						tmp._normalizeSelf();
 						dv._addSelf(tmp);
 					}
 				}
 				dv._normalizeSelf();
 				dv._mulSelf(factor);
-				newPositions[id] = v.pos.add(dv);
+				newPositions[id] = v.getPoint().add(dv);
 				id++;
 			}
 			vItr = selection.vItr();

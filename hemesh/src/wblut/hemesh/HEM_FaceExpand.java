@@ -17,7 +17,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
@@ -36,7 +36,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -73,16 +73,18 @@ public class HEM_FaceExpand extends HEM_Modifier {
 					p = new WB_Point(v);
 					p._addMulSelf(d, fn);
 
-				} else {
+				}
+				else {
 					final WB_Plane planef2 = he.getPair().getFace().toPlane(d);
 					final WB_IntersectionResult ir = WB_Intersection
 							.getIntersection3D(planef, planef2);
 					final WB_Line lineff;
 					if (ir.dimension == 1) {
 						lineff = (WB_Line) ir.object;
-					} else {
+					}
+					else {
 						en = he.getEdge().getEdgeNormal();
-						lineff = new WB_Line(v.pos.addMul(d, en),
+						lineff = new WB_Line(v.getPoint().addMul(d, en),
 								he.getHalfedgeTangent());
 					}
 					p = WB_Intersection.getClosestPoint3D(v, lineff);
@@ -97,9 +99,9 @@ public class HEM_FaceExpand extends HEM_Modifier {
 			} while (he != f.getHalfedge());
 		}
 		final int[][] faces = new int[mesh.getNumberOfFaces()
-				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
+		                              + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
 		final int[] labels = new int[mesh.getNumberOfFaces()
-				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
+		                             + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
 		final int[] noe = { mesh.getNumberOfFaces(), mesh.getNumberOfEdges(),
 				mesh.getNumberOfVertices() };
 		int currentFace = 0;
@@ -162,7 +164,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)

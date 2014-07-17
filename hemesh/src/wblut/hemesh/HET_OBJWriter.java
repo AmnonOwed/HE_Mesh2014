@@ -21,9 +21,9 @@ package wblut.hemesh;
  * Extremely bare bones Wavefront OBJ 3D format exporter. Purely handles the
  * writing of data to the .obj file, but does not have any form of mesh
  * management. See {@link TriangleMesh} for details.
- * 
+ *
  * Needs to get some more TLC in future versions.
- * 
+ *
  * @see TriangleMesh#saveAsOBJ(OBJWriter)
  */
 
@@ -32,8 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Vector;
+import wblut.geom.WB_Coordinate;
 
 /**
  * The Class HET_OBJWriter.
@@ -54,7 +53,7 @@ public class HET_OBJWriter {
 
 	/**
 	 * Begin save.
-	 * 
+	 *
 	 * @param stream
 	 *            the stream
 	 */
@@ -62,14 +61,15 @@ public class HET_OBJWriter {
 		try {
 			objStream = stream;
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Begin save.
-	 * 
+	 *
 	 * @param fn
 	 *            the fn
 	 */
@@ -77,7 +77,8 @@ public class HET_OBJWriter {
 		try {
 			objStream = new FileOutputStream(fn);
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -91,14 +92,15 @@ public class HET_OBJWriter {
 			objWriter.close();
 			objStream.flush();
 			objStream.close();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Face.
-	 * 
+	 *
 	 * @param a
 	 *            the a
 	 * @param b
@@ -119,7 +121,7 @@ public class HET_OBJWriter {
 
 	/**
 	 * Face with normals.
-	 * 
+	 *
 	 * @param a
 	 *            the a
 	 * @param b
@@ -141,7 +143,7 @@ public class HET_OBJWriter {
 
 	/**
 	 * Gets the curr normal offset.
-	 * 
+	 *
 	 * @return the curr normal offset
 	 */
 	public int getCurrNormalOffset() {
@@ -150,7 +152,7 @@ public class HET_OBJWriter {
 
 	/**
 	 * Gets the curr vertex offset.
-	 * 
+	 *
 	 * @return the curr vertex offset
 	 */
 	public int getCurrVertexOffset() {
@@ -169,7 +171,7 @@ public class HET_OBJWriter {
 
 	/**
 	 * New object.
-	 * 
+	 *
 	 * @param name
 	 *            the name
 	 */
@@ -179,22 +181,22 @@ public class HET_OBJWriter {
 
 	/**
 	 * Normal.
-	 * 
+	 *
 	 * @param n
 	 *            the n
 	 */
-	public void normal(final WB_Vector n) {
+	public void normal(final WB_Coordinate n) {
 		objWriter.println("vn " + n.xd() + " " + n.yd() + " " + n.zd());
 		numNormalsWritten++;
 	}
 
 	/**
 	 * Vertex.
-	 * 
+	 *
 	 * @param v
 	 *            the v
 	 */
-	public void vertex(final WB_Point v) {
+	public void vertex(final WB_Coordinate v) {
 		objWriter.println("v " + v.xd() + " " + v.yd() + " " + v.zd());
 		numVerticesWritten++;
 	}

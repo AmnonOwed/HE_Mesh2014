@@ -8,9 +8,9 @@ import wblut.geom.WB_Point;
 
 /**
  * Simple Laplacian smooth modifier. Does not add new vertices.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
- * 
+ *
  */
 public class HEM_InvSmooth extends HEM_Modifier {
 
@@ -22,13 +22,13 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
 	/**
 	 * Sets the auto rescale.
-	 * 
+	 *
 	 * @param b
 	 *            the b
 	 * @return the hE m_ smooth
@@ -41,7 +41,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 	/**
 	 * Sets the iterations.
-	 * 
+	 *
 	 * @param r
 	 *            the r
 	 * @return the hE m_ smooth
@@ -54,7 +54,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v.pos._addSelf(v.pos.sub(newPositions[id++]));
+				v.getPoint()._addSelf(v.getPoint().sub(newPositions[id++]));
 			}
 
 		}
@@ -107,7 +107,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -120,7 +120,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 			box = selection.parent.getAABB();
 		}
 		final WB_Point[] newPositions = new WB_Point[selection
-				.getNumberOfVertices()];
+		                                             .getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
@@ -155,7 +155,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 			id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v.pos._addSelf(v.pos.sub(newPositions[id++]));
+				v.getPoint()._addSelf(v.getPoint().sub(newPositions[id++]));
 			}
 		}
 		selection.parent.resetCenter();

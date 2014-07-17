@@ -60,7 +60,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		return this;
 	}
 
-	public HEM_Lattice setBulge(final double inner, double outer) {
+	public HEM_Lattice setBulge(final double inner, final double outer) {
 		ibulge = inner;
 		obulge = outer;
 		return this;
@@ -175,8 +175,8 @@ public class HEM_Lattice extends HEM_Modifier {
 					heoc = heo.get(j);
 					heon = heo.get((j + 1) % nvo);
 
-					final int cic = poly.closestIndex(heoc.getVertex().pos);
-					final int cin = poly.closestIndex(heon.getVertex().pos);
+					final int cic = poly.closestIndex(heoc.getVertex());
+					final int cin = poly.closestIndex(heon.getVertex());
 					heic = hei.get(cin);
 
 					hein = hei.get(cic);
@@ -190,7 +190,8 @@ public class HEM_Lattice extends HEM_Modifier {
 					if (cic == cin) {
 						heoi.setNext(heio);
 						heoi.setFace(fNew);
-					} else {
+					}
+					else {
 						heoi.setNext(heic);
 						heoi.setFace(fNew);
 						heic.setNext(heio);
@@ -323,8 +324,8 @@ public class HEM_Lattice extends HEM_Modifier {
 					heoc = heo.get(j);
 					heon = heo.get((j + 1) % nvo);
 
-					final int cic = poly.closestIndex(heoc.getVertex().pos);
-					final int cin = poly.closestIndex(heon.getVertex().pos);
+					final int cic = poly.closestIndex(heoc.getVertex());
+					final int cin = poly.closestIndex(heon.getVertex());
 					heic = hei.get(cin);
 
 					hein = hei.get(cic);
@@ -338,7 +339,8 @@ public class HEM_Lattice extends HEM_Modifier {
 					if (cic == cin) {
 						heoi.setNext(heio);
 						heoi.setFace(fNew);
-					} else {
+					}
+					else {
 						heoi.setNext(heic);
 						heoi.setFace(fNew);
 						heic.setNext(heio);

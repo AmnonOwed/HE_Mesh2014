@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
@@ -16,7 +17,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
@@ -34,7 +35,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -45,7 +46,8 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			box = mesh.getAABB();
 		}
 
-		final WB_Point[] newPositions = new WB_Point[mesh.getNumberOfVertices()];
+		final WB_Coordinate[] newPositions = new WB_Coordinate[mesh
+				.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
@@ -59,8 +61,9 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				if (outer.contains(v)) {
-					newPositions[id] = v.pos;
-				} else {
+					newPositions[id] = v;
+				}
+				else {
 					newPositions[id] = minDirichletEnergy(v);
 				}
 				id++;
@@ -82,7 +85,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -94,8 +97,8 @@ public class HEM_Soapfilm extends HEM_Modifier {
 		if (autoRescale) {
 			box = selection.parent.getAABB();
 		}
-		final WB_Point[] newPositions = new WB_Point[selection
-				.getNumberOfVertices()];
+		final WB_Coordinate[] newPositions = new WB_Coordinate[selection
+		                                                       .getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
@@ -110,8 +113,9 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				if (outer.contains(v)) {
-					newPositions[id] = v.pos;
-				} else {
+					newPositions[id] = v;
+				}
+				else {
 					newPositions[id] = minDirichletEnergy(v);
 				}
 				id++;
@@ -147,16 +151,14 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			neighbor = he.getEndVertex();
 			{
 				corner = he.getPrevInFace().getVertex();
-				cota = WB_CoordinateMath.cosAngleBetween(corner.pos.xd(),
-						corner.pos.yd(), corner.pos.zd(), neighbor.pos.xd(),
-						neighbor.pos.yd(), neighbor.pos.zd(), v.xd(), v.yd(),
-						v.zd());
+				cota = WB_CoordinateMath.cosAngleBetween(corner.xd(),
+						corner.yd(), corner.zd(), neighbor.xd(), neighbor.yd(),
+						neighbor.zd(), v.xd(), v.yd(), v.zd());
 				cotsum += cota / Math.sqrt(1 - cota * cota);
 				corner = he.getPair().getPrevInFace().getVertex();
-				cotb = WB_CoordinateMath.cosAngleBetween(corner.pos.xd(),
-						corner.pos.yd(), corner.pos.zd(), neighbor.pos.xd(),
-						neighbor.pos.yd(), neighbor.pos.zd(), v.xd(), v.yd(),
-						v.zd());
+				cotb = WB_CoordinateMath.cosAngleBetween(corner.xd(),
+						corner.yd(), corner.zd(), neighbor.xd(), neighbor.yd(),
+						neighbor.zd(), v.xd(), v.yd(), v.zd());
 				cotsum += cotb / Math.sqrt(1 - cotb * cotb);
 			}
 			result._addMulSelf(cotsum, neighbor);
