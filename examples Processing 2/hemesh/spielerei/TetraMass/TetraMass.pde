@@ -85,6 +85,9 @@ if (key=='+') {
    frame.smoothBiNodes();
     createMesh();
   }
+  else if(key=='m'){
+    mesh.smooth();
+  }
   else {
    reset();
   }

@@ -23,6 +23,7 @@ import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_GeometryType;
+import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
 import wblut.geom.WB_Intersection;
@@ -47,7 +48,8 @@ import wblut.math.WB_Epsilon;
  * @author Frederik Vanhoutte (W:Blut)
  *
  */
-public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
+public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
+WB_HasColor, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -60,6 +62,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 
 	/** The _data. */
 	private HashMap<String, Object> _data;
+
+	private int meshcolor;
 
 	/**
 	 * Instantiates a new HE_Mesh.
@@ -5254,6 +5258,18 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData, WB_Mesh {
 	public WB_CoordinateSequence getPoints() {
 
 		return gf.createPointSequence(getVertices());
+	}
+
+	@Override
+	public int getColor() {
+
+		return meshcolor;
+	}
+
+	@Override
+	public void setColor(final int color) {
+		meshcolor = color;
+
 	}
 
 }
