@@ -2,13 +2,16 @@ package wblut.processing;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
-import processing.core.PGraphics;
+import processing.core.PMatrix3D;
 import processing.core.PShape;
+import processing.opengl.PGraphics3D;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
@@ -44,21 +47,30 @@ import wblut.geom.interfaces.Triangle;
 import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_Halfedge;
+import wblut.hemesh.HE_Intersection;
 import wblut.hemesh.HE_Mesh;
 import wblut.hemesh.HE_MeshStructure;
 import wblut.hemesh.HE_Selection;
 import wblut.hemesh.HE_Vertex;
 
 public class WB_Render3D {
-	private final PGraphics home;
+	private final PGraphics3D home;
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
 	public WB_Render3D(final PApplet home) {
-		this.home = home.g;
+		if (home.g == null) {
+			throw new IllegalArgumentException(
+					"WB_Render3D can only be used after size()");
+		}
+		if (!(home.g instanceof PGraphics3D)) {
+			throw new IllegalArgumentException(
+					"WB_Render3D can only be with P3D, OPENGL or derived ProcessingPGraphics object");
+		}
+		this.home = (PGraphics3D) home.g;
 	}
 
-	public WB_Render3D(final PGraphics home) {
+	public WB_Render3D(final PGraphics3D home) {
 		this.home = home;
 	}
 
@@ -95,8 +107,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -237,20 +249,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -1618,6 +1630,201 @@ public class WB_Render3D {
 			home.box((float) d);
 			home.popMatrix();
 
+		}
+	}
+
+	// -----------------------------------------------------------------------Ray
+	// Picker
+	// Code written by Alberto Massa
+	// Adapted by Frederik Vanhoutte
+
+	// -----------------------------------------------------------------------
+	// Comparator
+	class EyeProximityComparator implements Comparator<HE_Face> {
+		@Override
+		public int compare(final HE_Face o1, final HE_Face o2) {
+			final WB_Segment s1 = new WB_Segment(unproject.ptStartPos,
+					o1.getFaceCenter());
+			final WB_Segment s2 = new WB_Segment(unproject.ptStartPos,
+					o2.getFaceCenter());
+			final double l1 = s1.getLength();
+			final double l2 = s2.getLength();
+			if (l1 < l2) {
+				return -1;
+			}
+			if (l1 > l2) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+
+	Unproject unproject = new Unproject();
+	WB_Ray mouseRay3d = null;
+	HE_Face selectedFace = null;
+
+	private WB_Ray computePickingRay(final int x, final int y) {
+		selectedFace = null;
+		unproject.captureViewMatrix(home);
+		unproject.calculatePickPoints(x, y, home.height);
+		return new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
+	}
+
+	public HE_Face pickFace(final HE_Mesh mesh, final int x, final int y) {
+		this.mouseRay3d = computePickingRay(x, y);
+		final List<HE_Face> possible_faces = HE_Intersection
+				.getPotentialIntersectedFaces(mesh, mouseRay3d);
+		// System.out.println("faces that could intersect the ray: "
+		// + possible_faces.size());
+
+		// faces that actually interesets the ray
+		final List<HE_Face> faces = new ArrayList<HE_Face>();
+		for (final HE_Face f : possible_faces) {
+			final WB_Point intersection_point = HE_Intersection
+					.getIntersection(f, mouseRay3d);
+			// System.out.println(intersection_point);
+			if (intersection_point != null) {
+				faces.add(f);
+			}
+		}
+
+		// System.out.println("faces that instersect the ray: " + faces.size());
+		Collections.sort(faces, new EyeProximityComparator());
+		if (faces.size() > 0) {
+			this.selectedFace = faces.get(0);
+		}
+		else {
+			this.selectedFace = null;
+		}
+		return this.selectedFace;
+	}
+
+	public void drawPickingRay() {
+		if (mouseRay3d != null) {
+			home.pushStyle();
+			home.noFill();
+			home.stroke(0, 0, 0);
+			// strokeWeight(10);
+			// gfx.ray(mouseRay3d, 100000);
+			drawRay(mouseRay3d, 100000);
+			home.popStyle();
+		}
+
+		if (selectedFace != null) {
+			home.pushStyle();
+			home.noStroke();
+			home.fill(255, 0, 0);
+			drawFace(selectedFace);
+			home.popStyle();
+		}
+	}
+
+	// -----------------------------------------------------------------------
+	// Unproject
+	private class Unproject {
+
+		private boolean m_bValid = false;
+		private final PMatrix3D m_pMatrix = new PMatrix3D();
+
+		private final int[] m_aiViewport = new int[4];
+
+		// Store the near and far ray positions.
+		public WB_Point ptStartPos = new WB_Point();
+		public WB_Point ptEndPos = new WB_Point();
+
+		public boolean calculatePickPoints(final int x, final int y,
+				final int height) {
+			// Calculate positions on the near and far 3D
+			// frustum planes.
+			m_bValid = true; // Have to do both in order to reset PVector on
+			// error.
+			if (!gluUnProject(x, height - y, 0.0, ptStartPos)) {
+				m_bValid = false;
+			}
+			if (!gluUnProject(x, height - y, 1.0, ptEndPos)) {
+				m_bValid = false;
+			}
+			return m_bValid;
+		}
+
+		public void captureViewMatrix(final PGraphics3D g3d) {
+			// Call this to capture the selection matrix after
+			// you have called perspective() or ortho() and applied
+			// your pan, zoom and camera angles - but before
+			// you start drawing or playing with the
+			// matrices any further.
+
+			if (g3d != null) { // Check for a valid 3D canvas.
+
+				// Capture current projection matrix.
+				m_pMatrix.set(g3d.projection);
+
+				// Multiply by current modelview matrix.
+				m_pMatrix.apply(g3d.modelview);
+
+				// Invert the resultant matrix.
+				m_pMatrix.invert();
+
+				// Store the viewport.
+				m_aiViewport[0] = 0;
+				m_aiViewport[1] = 0;
+				m_aiViewport[2] = g3d.width;
+				m_aiViewport[3] = g3d.height;
+			}
+
+		}
+
+		// Maintain own projection matrix.
+		public PMatrix3D getMatrix() {
+			return m_pMatrix;
+		}
+
+		// -------------------------
+
+		// Maintain own viewport data.
+		public int[] getViewport() {
+			return m_aiViewport;
+		}
+
+		// -------------------------
+
+		public boolean gluUnProject(final double winx, final double winy,
+				final double winz, final WB_Point result) {
+
+			final double[] in = new double[4];
+			final double[] out = new double[4];
+
+			// Transform to normalized screen coordinates (-1 to 1).
+			in[0] = ((winx - m_aiViewport[0]) / m_aiViewport[2]) * 2.0 - 1.0;
+			in[1] = ((winy - m_aiViewport[1]) / m_aiViewport[3]) * 2.0 - 1.0;
+			in[2] = ((winz > 1) ? 1.0 : ((winz < 0) ? 0.0 : winz)) * 2.0 - 1.0;
+			in[3] = 1.0;
+
+			// Calculate homogeneous coordinates.
+			out[0] = m_pMatrix.m00 * in[0] + m_pMatrix.m01 * in[1]
+					+ m_pMatrix.m02 * in[2] + m_pMatrix.m03 * in[3];
+			out[1] = m_pMatrix.m10 * in[0] + m_pMatrix.m11 * in[1]
+					+ m_pMatrix.m12 * in[2] + m_pMatrix.m13 * in[3];
+			out[2] = m_pMatrix.m20 * in[0] + m_pMatrix.m21 * in[1]
+					+ m_pMatrix.m22 * in[2] + m_pMatrix.m23 * in[3];
+			out[3] = m_pMatrix.m30 * in[0] + m_pMatrix.m31 * in[1]
+					+ m_pMatrix.m32 * in[2] + m_pMatrix.m33 * in[3];
+
+			if (out[3] == 0.0) { // Check for an invalid result.
+				result._set(0, 0, 0);
+				return false;
+			}
+
+			// Scale to world coordinates.
+			out[3] = 1.0 / out[3];
+			result._set(out[0] * out[3], out[1] * out[3], out[2] * out[3]);
+			return true;
+
+		}
+
+		// True if near and far points calculated.
+		public boolean isValid() {
+			return m_bValid;
 		}
 	}
 
