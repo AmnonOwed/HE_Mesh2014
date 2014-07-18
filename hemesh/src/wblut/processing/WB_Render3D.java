@@ -2,7 +2,6 @@ package wblut.processing;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -46,6 +45,7 @@ import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
 import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
+import wblut.hemesh.HE_FaceIntersection;
 import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_Intersection;
 import wblut.hemesh.HE_Mesh;
@@ -1253,7 +1253,7 @@ public class WB_Render3D {
 	 * @param node
 	 *            the node
 	 */
-	private void drawNode(final WB_AABBNode node) {
+	public void drawNode(final WB_AABBNode node) {
 		drawAABB(node.getAABB());
 
 		if (node.getPosChild() != null) {
@@ -1659,64 +1659,70 @@ public class WB_Render3D {
 		}
 	}
 
-	Unproject unproject = new Unproject();
-	WB_Ray mouseRay3d = null;
-	HE_Face selectedFace = null;
+	private final Unproject unproject = new Unproject();
 
-	private WB_Ray computePickingRay(final int x, final int y) {
-		selectedFace = null;
+	public WB_Ray getPickingRay(final int x, final int y) {
 		unproject.captureViewMatrix(home);
 		unproject.calculatePickPoints(x, y, home.height);
 		return new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
 	}
 
-	public HE_Face pickFace(final HE_Mesh mesh, final int x, final int y) {
-		this.mouseRay3d = computePickingRay(x, y);
-		final List<HE_Face> possible_faces = HE_Intersection
-				.getPotentialIntersectedFaces(mesh, mouseRay3d);
-		// System.out.println("faces that could intersect the ray: "
-		// + possible_faces.size());
+	public HE_Face pickClosestFace(final HE_Mesh mesh, final int x, final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
 
-		// faces that actually interesets the ray
-		final List<HE_Face> faces = new ArrayList<HE_Face>();
-		for (final HE_Face f : possible_faces) {
-			final WB_Point intersection_point = HE_Intersection
-					.getIntersection(f, mouseRay3d);
-			// System.out.println(intersection_point);
-			if (intersection_point != null) {
-				faces.add(f);
-			}
-		}
-
-		// System.out.println("faces that instersect the ray: " + faces.size());
-		Collections.sort(faces, new EyeProximityComparator());
-		if (faces.size() > 0) {
-			this.selectedFace = faces.get(0);
-		}
-		else {
-			this.selectedFace = null;
-		}
-		return this.selectedFace;
+		final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
+				mesh, mouseRay3d);
+		return (p == null) ? null : p.face;
 	}
 
-	public void drawPickingRay() {
-		if (mouseRay3d != null) {
-			home.pushStyle();
-			home.noFill();
-			home.stroke(0, 0, 0);
-			// strokeWeight(10);
-			// gfx.ray(mouseRay3d, 100000);
-			drawRay(mouseRay3d, 100000);
-			home.popStyle();
-		}
+	public HE_Face pickFurthestFace(final HE_Mesh mesh, final int x, final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
 
-		if (selectedFace != null) {
-			home.pushStyle();
-			home.noStroke();
-			home.fill(255, 0, 0);
-			drawFace(selectedFace);
-			home.popStyle();
+		final HE_FaceIntersection p = HE_Intersection.getFurthestIntersection(
+				mesh, mouseRay3d);
+		return (p == null) ? null : p.face;
+	}
+
+	public HE_Face pickClosestFace(final WB_AABBTree meshtree, final int x,
+			final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
+
+		final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
+				meshtree, mouseRay3d);
+		return (p == null) ? null : p.face;
+	}
+
+	public HE_Face pickFurthestFace(final WB_AABBTree meshtree, final int x,
+			final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
+
+		final HE_FaceIntersection p = HE_Intersection.getFurthestIntersection(
+				meshtree, mouseRay3d);
+		return (p == null) ? null : p.face;
+	}
+
+	public List<HE_Face> pickFaces(final HE_Mesh mesh, final int x, final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
+
+		final List<HE_FaceIntersection> p = HE_Intersection.getIntersection(
+				mesh, mouseRay3d);
+		final List<HE_Face> result = new ArrayList<HE_Face>();
+		for (final HE_FaceIntersection fi : p) {
+			result.add(fi.face);
 		}
+		return result;
+	}
+
+	public List<HE_Face> pickFaces(final WB_AABBTree meshtree, final int x,
+			final int y) {
+		final WB_Ray mouseRay3d = getPickingRay(x, y);
+		final List<HE_FaceIntersection> p = HE_Intersection.getIntersection(
+				meshtree, mouseRay3d);
+		final List<HE_Face> result = new ArrayList<HE_Face>();
+		for (final HE_FaceIntersection fi : p) {
+			result.add(fi.face);
+		}
+		return result;
 	}
 
 	// -----------------------------------------------------------------------

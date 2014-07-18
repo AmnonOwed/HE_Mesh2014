@@ -10,6 +10,7 @@ import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Projection;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
@@ -354,6 +355,29 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		return new WB_SimplePolygon(points, n);
 	}
 
+	public WB_SimplePolygon toPlanarPolygon() {
+		final int n = getFaceOrder();
+
+		if (n == 0) {
+			return null;
+		}
+
+		final WB_Point[] points = new WB_Point[n];
+		if (!_sorted) {
+			sort();
+		}
+		final WB_Plane P = toPlane();
+		int i = 0;
+		HE_Halfedge he = _halfedge;
+		do {
+			points[i] = WB_Projection.projectOnPlane(he.getVertex(), P);
+			he = he.getNextInFace();
+			i++;
+		} while (he != _halfedge);
+
+		return new WB_SimplePolygon(points, n);
+	}
+
 	public List<HE_Face> getNeighborFaces() {
 		if (!isSorted()) {
 			sort();
@@ -381,7 +405,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -404,7 +428,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -417,7 +441,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

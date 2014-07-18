@@ -59,7 +59,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -91,7 +91,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 			v = vItr.next();
 			vmod = vmodItr.next();
 			R = new WB_Ray(v, v.getVertexNormal()._mulSelf(-1));
-			final WB_Point p = HE_Intersection.getClosestIntersection(tree, R);
+			final WB_Point p = HE_Intersection.getClosestIntersection(tree, R).point;
 			if (p != null) {
 				if (WB_Distance.getDistance3D(v, p) < radius) {
 					vmod._set(p);

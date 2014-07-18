@@ -1451,6 +1451,7 @@ public class WB_Intersection {
 	public static WB_Point getClosestPoint3D(final WB_Coordinate p,
 			final SimplePolygon poly) {
 		final int[][] tris = poly.triangulate();
+
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Point closest = new WB_Point();
@@ -1460,7 +1461,7 @@ public class WB_Intersection {
 			T = tris[i];
 			tmp = getClosestPointToTriangle3D(p, poly.getPoint(T[0]),
 					poly.getPoint(T[1]), poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getDistance3D(tmp, p);
+			final double d2 = WB_Distance.getSqDistance3D(tmp, p);
 			if (d2 < dmax2) {
 				closest = tmp;
 				dmax2 = d2;
@@ -1481,7 +1482,7 @@ public class WB_Intersection {
 		for (int i = 0; i < n; i++) {
 			T = tris.get(i);
 			tmp = getClosestPoint3D(p, T);
-			final double d2 = WB_Distance.getDistance3D(tmp, p);
+			final double d2 = WB_Distance.getSqDistance3D(tmp, p);
 			if (d2 < dmax2) {
 				closest = tmp;
 				dmax2 = d2;
@@ -3010,6 +3011,62 @@ public class WB_Intersection {
 			i.object = new WB_Segment(p1, p2);
 		}
 		return i;
+
+	}
+
+	public static WB_IntersectionResult getIntersection3D(final WB_Ray ray,
+			final WB_SimplePolygon poly) {
+		final WB_IntersectionResult ir = getIntersection3D(ray, poly.getPlane());
+		if (ir.intersection == false) {
+			return ir;
+		}
+		final WB_Point p = (WB_Point) ir.object;
+		final WB_Point q = getClosestPoint3D(p, poly);
+		final double d2 = WB_Distance.getSqDistance3D(q, p);
+
+		if (WB_Epsilon.isZeroSq(d2)) {
+			return ir;
+		}
+		ir.intersection = false;
+		return ir;
+
+	}
+
+	public static WB_IntersectionResult getIntersection3D(final WB_Line line,
+			final WB_SimplePolygon poly) {
+		final WB_IntersectionResult ir = getIntersection3D(line,
+				poly.getPlane());
+		if (ir.intersection == false) {
+			return ir;
+		}
+		final WB_Point p = (WB_Point) ir.object;
+		final WB_Point q = getClosestPoint3D(p, poly);
+		final double d2 = WB_Distance.getSqDistance3D(q, p);
+
+		if (WB_Epsilon.isZeroSq(d2)) {
+			return ir;
+		}
+		ir.intersection = false;
+		return ir;
+
+	}
+
+	public static WB_IntersectionResult getIntersection3D(
+			final WB_Segment segment, final WB_SimplePolygon poly) {
+		final WB_IntersectionResult ir = getIntersection3D(segment,
+				poly.getPlane());
+		if (ir.intersection == false) {
+			return ir;
+		}
+		final WB_Point p = (WB_Point) ir.object;
+		final WB_Point q = getClosestPoint3D(p, poly);
+		final double d2 = WB_Distance.getSqDistance3D(q, p);
+
+		if (WB_Epsilon.isZeroSq(d2)) {
+			return ir;
+		}
+		ir.intersection = false;
+		return ir;
 
 	}
 

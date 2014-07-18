@@ -4049,7 +4049,7 @@ WB_HasColor, WB_Mesh {
 	 * @return true/false
 	 */
 	public static boolean pointIsInFace(final WB_Point p, final HE_Face f) {
-		return WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+		return WB_Epsilon.isZero(WB_Distance.getDistance3D(p,
 				WB_Intersection.getClosestPoint3D(p, f.toPolygon())));
 	}
 
