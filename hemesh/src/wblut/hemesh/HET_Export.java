@@ -609,4 +609,40 @@ public class HET_Export {
 		obj.endSave();
 	}
 
+	public static void saveToSTL(final HE_Mesh mesh, final String path) {
+		saveToSTL(mesh, path, NONE);
+	}
+
+	public static int NONE = -1;
+	public static int DEFAULT = 0;
+	public static int MATERIALISE = 1;
+
+	public static void saveToSTL(final HE_Mesh mesh, final String path,
+			final int colormodel) {
+		final HET_STLWriter stl = new HET_STLWriter(
+				(colormodel == 1) ? HET_STLWriter.MATERIALISE
+						: (colormodel == 0) ? HET_STLWriter.DEFAULT
+								: HET_STLWriter.NONE,
+								HET_STLWriter.DEFAULT_BUFFER);
+		final HE_Mesh save = mesh.get();
+		save.triangulate();
+		stl.beginSave(path, save.getNumberOfFaces());
+		saveToSTLColor(save, stl);
+		stl.endSave();
+	}
+
+	public static void saveToSTLColor(final HE_Mesh mesh,
+			final HET_STLWriter stl) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(mesh);
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			stl.face(f.getHalfedge().getVertex(), f.getHalfedge()
+					.getNextInFace().getVertex(), f.getHalfedge()
+					.getPrevInFace().getVertex(), f.getFaceNormal(),
+					f.getColor());
+		}
+
+	}
+
 }

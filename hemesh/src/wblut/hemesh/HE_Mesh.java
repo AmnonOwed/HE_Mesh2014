@@ -49,7 +49,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-WB_HasColor, WB_Mesh {
+		WB_HasColor, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -250,6 +250,7 @@ WB_HasColor, WB_Mesh {
 			rf = new HE_Face();
 			result.add(rf);
 			rf.setLabel(f.getLabel());
+			rf.setColor(f.getColor());
 			faceCorrelation.put(f.key(), rf.key());
 		}
 		HE_Halfedge rhe;
@@ -982,9 +983,9 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			vItr.next()
-					.getPoint()
-					._addSelf(x - _center.xd(), y - _center.yd(),
-							z - _center.zd());
+			.getPoint()
+			._addSelf(x - _center.xd(), y - _center.yd(),
+					z - _center.zd());
 		}
 		_center._set(x, y, z);
 		return this;
@@ -1368,9 +1369,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 							e = new HE_Edge();
@@ -1443,9 +1444,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 							e = new HE_Edge();
@@ -2456,6 +2457,7 @@ WB_HasColor, WB_Mesh {
 			face.setHalfedge(hei);
 			faceNew.setHalfedge(hej);
 			faceNew.setLabel(face.getLabel());
+			faceNew.setColor(face.getColor());
 			assignFaceToLoop(faceNew, hej);
 			add(he0new);
 			add(he1new);
@@ -2531,6 +2533,7 @@ WB_HasColor, WB_Mesh {
 				else {
 					f = new HE_Face();
 					f.setLabel(face.getLabel());
+					f.setColor(face.getColor());
 					add(f);
 					out.add(f);
 				}
@@ -2772,6 +2775,7 @@ WB_HasColor, WB_Mesh {
 				else {
 					fc = new HE_Face();
 					fc.setLabel(f.getLabel());
+					fc.setColor(f.getColor());
 					add(fc);
 				}
 				he0[c] = he;
@@ -2856,6 +2860,7 @@ WB_HasColor, WB_Mesh {
 					f = new HE_Face();
 					add(f);
 					f.setLabel(face.getLabel());
+					f.setColor(face.getColor());
 					sel.add(f);
 				}
 				he0[c] = he;
@@ -2931,6 +2936,7 @@ WB_HasColor, WB_Mesh {
 
 					final HE_Face fn = new HE_Face();
 					fn.setLabel(f.getLabel());
+					fn.setColor(f.getColor());
 					add(fn);
 					he0[c] = he;
 					he.setFace(fn);
@@ -2992,6 +2998,7 @@ WB_HasColor, WB_Mesh {
 					else {
 						fc = new HE_Face();
 						fc.setLabel(f.getLabel());
+						fc.setColor(f.getColor());
 						add(fc);
 					}
 					he0[c] = he;
@@ -3073,6 +3080,7 @@ WB_HasColor, WB_Mesh {
 
 					final HE_Face fn = new HE_Face();
 					fn.setLabel(f.getLabel());
+					fn.setColor(f.getColor());
 					add(fn);
 					sel.add(fn);
 					he0[c] = he;
@@ -3135,6 +3143,7 @@ WB_HasColor, WB_Mesh {
 					else {
 						fc = new HE_Face();
 						fc.setLabel(f.getLabel());
+						fc.setColor(f.getColor());
 						add(fc);
 						sel.add(fc);
 					}
@@ -3234,6 +3243,7 @@ WB_HasColor, WB_Mesh {
 
 				final HE_Face f = new HE_Face();
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3311,6 +3321,7 @@ WB_HasColor, WB_Mesh {
 
 				final HE_Face f = new HE_Face();
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3393,6 +3404,7 @@ WB_HasColor, WB_Mesh {
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				selection.add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3467,6 +3479,7 @@ WB_HasColor, WB_Mesh {
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				selection.add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3804,8 +3817,8 @@ WB_HasColor, WB_Mesh {
 				if (!contains(he.getNextInFace())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (next) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (next) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3819,8 +3832,8 @@ WB_HasColor, WB_Mesh {
 					if (he.getFace() != he.getNextInFace().getFace()) {
 						if (verbose == true) {
 							System.out
-									.println("Incosistent reference (face) in half edge  "
-											+ he.key() + ".");
+							.println("Incosistent reference (face) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3847,8 +3860,8 @@ WB_HasColor, WB_Mesh {
 				if (!contains(he.getPair())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (pair) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (pair) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3860,16 +3873,16 @@ WB_HasColor, WB_Mesh {
 				if (he.getPair().getPair() == null) {
 					if (verbose == true) {
 						System.out
-								.println("No pair reference back to half edge  "
-										+ he.key() + ".");
+						.println("No pair reference back to half edge  "
+								+ he.key() + ".");
 					}
 				}
 				else {
 					if (he.getPair().getPair() != he) {
 						if (verbose == true) {
 							System.out
-									.println("Wrong pair reference back to half edge  "
-											+ he.key() + ".");
+							.println("Wrong pair reference back to half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3883,8 +3896,8 @@ WB_HasColor, WB_Mesh {
 					if (he.getEdge() != he.getPair().getEdge()) {
 						if (verbose == true) {
 							System.out
-									.println("Inconsistent reference (edge) in half edge  "
-											+ he.key() + ".");
+							.println("Inconsistent reference (edge) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3904,8 +3917,8 @@ WB_HasColor, WB_Mesh {
 							.getVertex()) {
 						if (verbose == true) {
 							System.out
-									.println("Inconsistent reference (pair)/(next) in half edge  "
-											+ he.key() + ".");
+							.println("Inconsistent reference (pair)/(next) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -3934,8 +3947,8 @@ WB_HasColor, WB_Mesh {
 				if (!contains(he.getFace())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (face) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (face) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3961,8 +3974,8 @@ WB_HasColor, WB_Mesh {
 				if (!contains(he.getVertex())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (vert) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (vert) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -3988,8 +4001,8 @@ WB_HasColor, WB_Mesh {
 				if (!contains(he.getEdge())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (edge) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (edge) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -4520,9 +4533,9 @@ WB_HasColor, WB_Mesh {
 						he.getNextInVertex().getHalfedgeTangent())) {
 					he.getPrevInFace().setNext(he.getNextInFace());
 					he.getPair().getPrevInFace()
-							.setNext(he.getPair().getNextInFace());
+					.setNext(he.getPair().getNextInFace());
 					he.getPair().getNextInFace()
-							.setVertex(he.getNextInFace().getVertex());
+					.setVertex(he.getNextInFace().getVertex());
 					if (he.getFace() != null) {
 						if (he.getFace().getHalfedge() == he) {
 							he.getFace().setHalfedge(he.getNextInFace());
@@ -4532,7 +4545,7 @@ WB_HasColor, WB_Mesh {
 						if (he.getPair().getFace().getHalfedge() == he
 								.getPair()) {
 							he.getPair().getFace()
-									.setHalfedge(he.getPair().getNextInFace());
+							.setHalfedge(he.getPair().getNextInFace());
 						}
 					}
 					vItr.remove();
@@ -5025,6 +5038,7 @@ WB_HasColor, WB_Mesh {
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
@@ -5078,6 +5092,7 @@ WB_HasColor, WB_Mesh {
 				final HE_Face f = new HE_Face();
 				add(f);
 				f.setLabel(face.getLabel());
+				f.setColor(face.getColor());
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
@@ -5141,7 +5156,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -5154,7 +5169,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
