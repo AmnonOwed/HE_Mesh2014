@@ -412,7 +412,7 @@ public class WB_Distance {
 	public static double getSqDistanceToLine3D(final WB_Coordinate p,
 			final WB_Line L) {
 		final WB_Vector ab = L.getDirection();
-		final WB_Vector ac = geometryfactory.createVector(L.getOrigin(), p);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(L.getOrigin(), p);
 		final double e = ac.dot(ab);
 		final double f = ab.dot(ab);
 		return ac.dot(ac) - e * e / f;
@@ -478,8 +478,8 @@ public class WB_Distance {
 	 */
 	public static double getSqDistanceToRay3D(final WB_Coordinate p,
 			final WB_Coordinate a, final WB_Coordinate b) {
-		final WB_Vector ab = geometryfactory.createVector(a, b);
-		final WB_Vector ac = geometryfactory.createVector(a, p);
+		final WB_Vector ab = geometryfactory.createVectorFromTo(a, b);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(a, p);
 		final double e = ac.dot(ab);
 		if (e <= 0) {
 			return ac.dot(ac);
@@ -500,7 +500,7 @@ public class WB_Distance {
 	public static double getSqDistanceToRay3D(final WB_Coordinate p,
 			final WB_Ray R) {
 		final WB_Vector ab = R.getDirection();
-		final WB_Vector ac = geometryfactory.createVector(R.getOrigin(), p);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(R.getOrigin(), p);
 		final double e = ac.dot(ab);
 		if (e <= 0) {
 			return ac.dot(ac);
@@ -537,9 +537,9 @@ public class WB_Distance {
 	 */
 	public static double getSqDistanceToSegment3D(final WB_Coordinate p,
 			final WB_Coordinate a, final WB_Coordinate b) {
-		final WB_Vector ab = geometryfactory.createVector(a, b);
-		final WB_Vector ac = geometryfactory.createVector(a, p);
-		final WB_Vector bc = geometryfactory.createVector(b, p);
+		final WB_Vector ab = geometryfactory.createVectorFromTo(a, b);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(a, p);
+		final WB_Vector bc = geometryfactory.createVectorFromTo(b, p);
 		final double e = ac.dot(ab);
 		if (e <= 0) {
 			return ac.dot(ac);

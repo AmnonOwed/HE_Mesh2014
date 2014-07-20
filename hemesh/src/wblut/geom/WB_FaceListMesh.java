@@ -507,9 +507,9 @@ public class WB_FaceListMesh implements WB_Mesh {
 				p1 = vertices.getPoint(face[(j + 1) % face.length]);
 				p2 = vertices
 						.getPoint(face[(j - 1 + face.length) % face.length]);
-				final WB_Vector P10 = geometryfactory.createNormalizedVector(
+				final WB_Vector P10 = geometryfactory.createNormalizedVectorFromTo(
 						p0, p1);
-				final WB_Vector P20 = geometryfactory.createNormalizedVector(
+				final WB_Vector P20 = geometryfactory.createNormalizedVectorFromTo(
 						p0, p2);
 				final double w = P10.getAngleNorm(P20);
 				vertexNormals[face[j]]._addMulSelf(w, faceNormals[i]);

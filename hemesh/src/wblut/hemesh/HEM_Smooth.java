@@ -9,7 +9,7 @@ import wblut.geom.WB_Point;
 public class HEM_Smooth extends HEM_Modifier {
 
 	private boolean autoRescale;
-
+	private boolean keepBoundary;
 	private int iter;
 
 	/*
@@ -26,6 +26,12 @@ public class HEM_Smooth extends HEM_Modifier {
 
 	public HEM_Smooth setIterations(final int r) {
 		iter = r;
+		return this;
+
+	}
+
+	public HEM_Smooth setKeepBoundary(final boolean b) {
+		keepBoundary = b;
 		return this;
 
 	}
@@ -54,16 +60,21 @@ public class HEM_Smooth extends HEM_Modifier {
 			WB_Point p;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				p = new WB_Point(v);
-				neighbors = v.getNeighborVertices();
-				p._mulSelf(neighbors.size());
+				if (v.isBoundary() && keepBoundary) {
+					newPositions[id] = v.getPoint();
 
-				for (int i = 0; i < neighbors.size(); i++) {
-					p._addSelf(neighbors.get(i));
 				}
+				else {
+					p = new WB_Point(v);
+					neighbors = v.getNeighborVertices();
+					p._mulSelf(neighbors.size());
 
-				newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+					for (int i = 0; i < neighbors.size(); i++) {
+						p._addSelf(neighbors.get(i));
+					}
 
+					newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+				}
 				id++;
 
 			}
@@ -111,21 +122,26 @@ public class HEM_Smooth extends HEM_Modifier {
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				final WB_Point p = new WB_Point(v);
+				if (v.isBoundary() && keepBoundary) {
+					newPositions[id] = v.getPoint();
 
-				neighbors = v.getNeighborVertices();
-				final Iterator<HE_Vertex> nItr = neighbors.iterator();
-				while (nItr.hasNext()) {
-					n = nItr.next();
-					if (!selection.contains(n)) {
-						nItr.remove();
+				}
+				else {
+					neighbors = v.getNeighborVertices();
+					final Iterator<HE_Vertex> nItr = neighbors.iterator();
+					while (nItr.hasNext()) {
+						n = nItr.next();
+						if (!selection.contains(n)) {
+							nItr.remove();
+						}
 					}
-				}
-				p._mulSelf(neighbors.size());
-				for (int i = 0; i < neighbors.size(); i++) {
-					p._addSelf(neighbors.get(i));
-				}
+					p._mulSelf(neighbors.size());
+					for (int i = 0; i < neighbors.size(); i++) {
+						p._addSelf(neighbors.get(i));
+					}
 
-				newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+					newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+				}
 				id++;
 			}
 			vItr = selection.vItr();

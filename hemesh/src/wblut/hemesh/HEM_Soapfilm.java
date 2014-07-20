@@ -1,5 +1,8 @@
 package wblut.hemesh;
 
+import gnu.trove.map.TLongObjectMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,7 +20,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
@@ -35,7 +38,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -46,8 +49,9 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			box = mesh.getAABB();
 		}
 
-		final WB_Coordinate[] newPositions = new WB_Coordinate[mesh
-				.getNumberOfVertices()];
+		final TLongObjectMap<WB_Coordinate> newPositions = new TLongObjectHashMap<WB_Coordinate>(
+				10, 0.5f, 0L);
+
 		if (iter < 1) {
 			iter = 1;
 		}
@@ -55,26 +59,26 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 			Iterator<HE_Vertex> vItr = mesh.vItr();
 			HE_Vertex v;
-			int id = 0;
 			final HE_Selection sel = mesh.selectAllFaces();
 			final List<HE_Vertex> outer = sel.getOuterVertices();
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				if (outer.contains(v)) {
-					newPositions[id] = v;
+					newPositions.put(v.getKey(), v);
 				}
 				else {
-					newPositions[id] = minDirichletEnergy(v);
+					newPositions.put(v.getKey(), minDirichletEnergy(v));
 				}
-				id++;
+
 			}
 			vItr = mesh.vItr();
-			id = 0;
+
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v._set(newPositions[id]);
-				id++;
+				v._set(newPositions.get(v.getKey()));
+
 			}
+
 		}
 		mesh.resetCenter();
 		if (autoRescale) {
@@ -85,7 +89,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -97,8 +101,10 @@ public class HEM_Soapfilm extends HEM_Modifier {
 		if (autoRescale) {
 			box = selection.parent.getAABB();
 		}
-		final WB_Coordinate[] newPositions = new WB_Coordinate[selection
-		                                                       .getNumberOfVertices()];
+
+		final TLongObjectMap<WB_Coordinate> newPositions = new TLongObjectHashMap<WB_Coordinate>(
+				10, 0.5f, 0L);
+
 		if (iter < 1) {
 			iter = 1;
 		}
@@ -106,26 +112,26 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
-			int id = 0;
+
 			final HE_Selection sel = selection.parent.selectAllFaces();
 			final List<HE_Vertex> outer = sel.getOuterVertices();
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
 				if (outer.contains(v)) {
-					newPositions[id] = v;
+					newPositions.put(v.getKey(), v);
 				}
 				else {
-					newPositions[id] = minDirichletEnergy(v);
+					newPositions.put(v.getKey(), minDirichletEnergy(v));
 				}
-				id++;
+
 			}
 			vItr = selection.vItr();
-			id = 0;
+
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v._set(newPositions[id]);
-				id++;
+				v._set(newPositions.get(v.getKey()));
+
 			}
 		}
 		selection.parent.resetCenter();

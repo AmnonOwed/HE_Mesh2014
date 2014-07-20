@@ -1,6 +1,5 @@
 package wblut.hemesh;
 
-import wblut.geom.WB_Frame;
 import wblut.math.WB_ConstantParameter;
 import wblut.math.WB_Parameter;
 
@@ -15,8 +14,6 @@ public class HEM_Wireframe extends HEM_Modifier {
 	private WB_Parameter<Double> angleFactor;
 
 	private double fillFactor;
-
-	private WB_Frame frame;
 
 	private double fidget;
 
@@ -91,7 +88,7 @@ public class HEM_Wireframe extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -116,7 +113,7 @@ public class HEM_Wireframe extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @seewblut.hemesh.modifiers.HEM_Modifier#applySelected(wblut.hemesh.core.
 	 * HE_Selection)
 	 */

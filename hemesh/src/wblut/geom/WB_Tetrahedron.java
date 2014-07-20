@@ -79,18 +79,18 @@ public class WB_Tetrahedron implements WB_Simplex {
 	/** Get the volume of the tetrahedron. */
 
 	public double getVolume() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		return Math.abs(a.dot(b._crossSelf(c))) / 6.0;
 	}
 
 	/** Calculate the radius of the circumsphere. */
 
 	public double getCircumradius() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
 		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
 		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
@@ -101,9 +101,9 @@ public class WB_Tetrahedron implements WB_Simplex {
 	/** Find the center of the circumscribing sphere. */
 
 	public WB_Point getCircumcenter() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
 		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
 		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
@@ -114,9 +114,9 @@ public class WB_Tetrahedron implements WB_Simplex {
 	/** Find the circumscribing sphere */
 
 	public WB_Sphere getCircumsphere() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
 		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
 		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
@@ -127,9 +127,9 @@ public class WB_Tetrahedron implements WB_Simplex {
 	/** Calculate the radius of the insphere. */
 
 	public double getInradius() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector bXc = b.cross(c);
 		final double sixV = Math.abs(a.dot(bXc));
 		c._crossSelf(a);
@@ -142,9 +142,9 @@ public class WB_Tetrahedron implements WB_Simplex {
 	/** Find the center of the inscribed sphere. */
 
 	public WB_Point getIncenter() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector bXc = b.cross(c);
 		final WB_Vector cXa = c.cross(a);
 		final WB_Vector aXb = a.cross(b);
@@ -160,9 +160,9 @@ public class WB_Tetrahedron implements WB_Simplex {
 	}
 
 	public WB_Sphere getInsphere() {
-		final WB_Vector a = geometryfactory.createVector(p1, p4);
-		final WB_Vector b = geometryfactory.createVector(p2, p4);
-		final WB_Vector c = geometryfactory.createVector(p3, p4);
+		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
+		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
+		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector bXc = b.cross(c);
 		final WB_Vector cXa = c.cross(a);
 		final WB_Vector aXb = a.cross(b);

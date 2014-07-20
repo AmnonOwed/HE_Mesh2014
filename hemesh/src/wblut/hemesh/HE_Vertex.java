@@ -1,6 +1,7 @@
 package wblut.hemesh;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
@@ -291,6 +292,32 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			he = he.getNextInVertex();
 		} while (he != getHalfedge());
 		return vv;
+	}
+
+	public List<HE_Vertex> getVertexStar() {
+		return getNeighborVertices();
+
+	}
+
+	public List<HE_Vertex> getNextNeighborVertices() {
+		final List<HE_Vertex> result = new FastTable<HE_Vertex>();
+		if (getHalfedge() == null) {
+			return result;
+		}
+		final List<HE_Vertex> vv = getNeighborVertices();
+		for (final HE_Vertex v : vv) {
+			result.addAll(v.getNeighborVertices());
+		}
+
+		final Iterator<HE_Vertex> vitr = result.iterator();
+		HE_Vertex w;
+		while (vitr.hasNext()) {
+			w = vitr.next();
+			if ((w == this) || (vv.contains(w))) {
+				vitr.remove();
+			}
+		}
+		return result;
 	}
 
 	/**

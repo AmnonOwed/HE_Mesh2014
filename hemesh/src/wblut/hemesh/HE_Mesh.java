@@ -1838,15 +1838,6 @@ WB_HasColor, WB_Mesh {
 
 	}
 
-	/**
-	 * Collapse edge bp.
-	 *
-	 * @param e
-	 *            the e
-	 * @param strict
-	 *            the strict
-	 * @return true, if successful
-	 */
 	public boolean collapseEdgeBP(final HE_Edge e, final boolean strict) {
 		if (contains(e)) {
 			final HE_Halfedge he = e.getHalfedge();
@@ -1967,6 +1958,23 @@ WB_HasColor, WB_Mesh {
 		}
 	}
 
+	public void collapseDegenerateEdges(final double d) {
+		final FastTable<HE_Edge> edgesToRemove = new FastTable<HE_Edge>();
+		final Iterator<HE_Edge> eItr = eItr();
+		HE_Edge e;
+		final double d2 = d * d;
+		while (eItr.hasNext()) {
+			e = eItr.next();
+			if (WB_Distance.getSqDistance3D(e.getStartVertex(),
+					e.getEndVertex()) < d2) {
+				edgesToRemove.add(e);
+			}
+		}
+		for (int i = 0; i < edgesToRemove.size(); i++) {
+			collapseEdge(edgesToRemove.get(i));
+		}
+	}
+
 	/**
 	 * Delete face and remove all references.
 	 *
@@ -1997,10 +2005,7 @@ WB_HasColor, WB_Mesh {
 		final HE_Halfedge he2n = e.getHalfedge().getPair().getNextInFace();
 		final HE_Halfedge he1p = e.getHalfedge().getPrevInFace();
 		final HE_Halfedge he2p = e.getHalfedge().getPair().getPrevInFace();
-		he1p.setNext(he2n);
-		he2p.setNext(he1n);
-		he2n.setPrev(he1p);
-		he1n.setPrev(he2p);
+
 		HE_Vertex v = he1.getVertex();
 		if (v.getHalfedge() == he1) {
 			v.setHalfedge(he1.getNextInVertex());
@@ -2010,6 +2015,12 @@ WB_HasColor, WB_Mesh {
 		if (v.getHalfedge() == he2) {
 			v.setHalfedge(he2.getNextInVertex());
 		}
+
+		he1p.setNext(he2n);
+		he2p.setNext(he1n);
+		he2n.setPrev(he1p);
+		he1n.setPrev(he2p);
+
 		if ((e.getFirstFace() != null) && (e.getSecondFace() != null)) {
 			f = new HE_Face();
 			add(f);
