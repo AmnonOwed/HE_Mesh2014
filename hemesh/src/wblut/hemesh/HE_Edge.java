@@ -8,6 +8,7 @@ import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Math;
 
 /**
  * Edge element of half-edge data structure.
@@ -206,12 +207,12 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 		}
 		final WB_Vector n1 = (getFirstFace() != null) ? getFirstFace()
 				.getFaceNormal() : new WB_Vector(0, 0, 0);
-				final WB_Vector n2 = (getSecondFace() != null) ? getSecondFace()
-						.getFaceNormal() : new WB_Vector(0, 0, 0);
-						final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
-								n1.zd() + n2.zd());
-						n._normalizeSelf();
-						return n;
+		final WB_Vector n2 = (getSecondFace() != null) ? getSecondFace()
+				.getFaceNormal() : new WB_Vector(0, 0, 0);
+		final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
+				n1.zd() + n2.zd());
+		n._normalizeSelf();
+		return n;
 	}
 
 	/**
@@ -251,13 +252,13 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 		else {
 			final WB_Vector n1 = getFirstFace().getFaceNormal();
 			final WB_Vector n2 = getSecondFace().getFaceNormal();
-			return Math.PI - Math.acos(n1.dot(n2));
+			return Math.PI - Math.acos(WB_Math.clamp(n1.dot(n2), -1, 1));
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -279,7 +280,7 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -292,7 +293,7 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

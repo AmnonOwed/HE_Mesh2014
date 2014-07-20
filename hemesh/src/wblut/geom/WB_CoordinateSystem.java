@@ -1,6 +1,7 @@
 package wblut.geom;
 
 import wblut.math.WB_Epsilon;
+import wblut.math.WB_Math;
 
 public class WB_CoordinateSystem {
 
@@ -66,7 +67,8 @@ public class WB_CoordinateSystem {
 	}
 
 	protected void set(final WB_Coordinate origin, final WB_Coordinate x,
-			final WB_Coordinate y, final WB_Coordinate z, WB_CoordinateSystem CS) {
+			final WB_Coordinate y, final WB_Coordinate z,
+			final WB_CoordinateSystem CS) {
 		_origin = new WB_Point(origin);
 		_X = new WB_Vector(x);
 		_Y = new WB_Vector(y);
@@ -312,8 +314,9 @@ public class WB_CoordinateSystem {
 		lX._normalizeSelf();
 		final WB_Vector tmp = lX.cross(_X);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_X.dot(lX)), tmp);
-		} else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_X.dot(lX), -1, 1)), tmp);
+		}
+		else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
 			flipX();
 		}
 		return this;
@@ -324,8 +327,9 @@ public class WB_CoordinateSystem {
 		lY._normalizeSelf();
 		final WB_Vector tmp = lY.cross(_Y);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_Y.dot(lY)), tmp);
-		} else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_Y.dot(lY), -1, 1)), tmp);
+		}
+		else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
 			flipY();
 		}
 		return this;
@@ -336,8 +340,9 @@ public class WB_CoordinateSystem {
 		lZ._normalizeSelf();
 		final WB_Vector tmp = lZ.cross(_Z);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_Z.dot(lZ)), tmp);
-		} else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_Z.dot(lZ), -1, 1)), tmp);
+		}
+		else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
 			flipZ();
 		}
 		return this;
@@ -412,8 +417,9 @@ public class WB_CoordinateSystem {
 		lX._normalizeSelf();
 		final WB_Vector tmp = lX.cross(_X);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_X.dot(lX)), tmp);
-		} else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_X.dot(lX), -1, 1)), tmp);
+		}
+		else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
 			flipX();
 		}
 		return this;
@@ -425,8 +431,9 @@ public class WB_CoordinateSystem {
 		lY._normalizeSelf();
 		final WB_Vector tmp = lY.cross(_Y);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_Y.dot(lY)), tmp);
-		} else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_Y.dot(lY), -1, 1)), tmp);
+		}
+		else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
 			flipY();
 		}
 		return this;
@@ -438,8 +445,9 @@ public class WB_CoordinateSystem {
 		lZ._normalizeSelf();
 		final WB_Vector tmp = lZ.cross(_Z);
 		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
-			rotate(-Math.acos(_Z.dot(lZ)), tmp);
-		} else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
+			rotate(-Math.acos(WB_Math.clamp(_Z.dot(lZ), -1, 1)), tmp);
+		}
+		else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
 			flipZ();
 		}
 		return this;
@@ -462,7 +470,7 @@ public class WB_CoordinateSystem {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

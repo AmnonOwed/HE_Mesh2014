@@ -58,7 +58,8 @@ public class WB_FrameNode extends WB_Point {
 		for (int i = 0; i < struts.size(); i++) {
 			if (struts.get(i).start() == this) {
 				result.add(struts.get(i).end());
-			} else {
+			}
+			else {
 				result.add(struts.get(i).start());
 			}
 		}
@@ -92,19 +93,22 @@ public class WB_FrameNode extends WB_Point {
 		if (n == 1) {
 			return 2 * Math.PI;
 
-		} else if (n == 2) {
+		}
+		else if (n == 2) {
 			final WB_Vector u = nnodes.get(0).subToVector(this);
 			final WB_Vector w = nnodes.get(1).subToVector(this);
 			u._normalizeSelf();
 			w._normalizeSelf();
 
-			final double udw = u.dot(w);
+			final double udw = WB_Math.clamp(u.dot(w), -1, 1);
 			if (udw < WB_Epsilon.EPSILON - 1) {
 				return Math.PI;
-			} else {
+			}
+			else {
 				return Math.acos(udw);
 			}
-		} else {
+		}
+		else {
 			double minAngle = Double.MAX_VALUE;
 
 			final WB_Vector u = nnodes.get(i).subToVector(this);

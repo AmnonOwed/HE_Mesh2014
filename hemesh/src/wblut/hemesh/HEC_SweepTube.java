@@ -4,12 +4,13 @@ import wblut.geom.WB_BSpline;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
+import wblut.math.WB_Math;
 
 /**
  * Circle swept along curve.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HEC_SweepTube extends HEC_Creator {
@@ -52,7 +53,7 @@ public class HEC_SweepTube extends HEC_Creator {
 
 	/**
 	 * Set fixed radius.
-	 * 
+	 *
 	 * @param R
 	 *            radius
 	 * @return self
@@ -64,7 +65,7 @@ public class HEC_SweepTube extends HEC_Creator {
 
 	/**
 	 * Set vertical divisions.
-	 * 
+	 *
 	 * @param steps
 	 *            vertical divisions
 	 * @return self
@@ -76,7 +77,7 @@ public class HEC_SweepTube extends HEC_Creator {
 
 	/**
 	 * Set number of sides.
-	 * 
+	 *
 	 * @param facets
 	 *            number of sides
 	 * @return self
@@ -88,7 +89,7 @@ public class HEC_SweepTube extends HEC_Creator {
 
 	/**
 	 * Set capping options.
-	 * 
+	 *
 	 * @param topcap
 	 *            create top cap?
 	 * @param bottomcap
@@ -108,7 +109,7 @@ public class HEC_SweepTube extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -142,11 +143,13 @@ public class HEC_SweepTube extends HEC_Creator {
 							onCurve));
 				}
 				deriv._normalizeSelf();
-			} else {
+			}
+			else {
 				deriv = curve.curveFirstDeriv(i * ds);
 			}
 			final WB_Vector axis = oldderiv.cross(deriv);
-			final double angle = Math.acos(oldderiv.dot(deriv));
+			final double angle = Math.acos(WB_Math.clamp(oldderiv.dot(deriv),
+					-1, 1));
 			for (int j = 0; j < facets; j++) {
 				if (!WB_Epsilon.isZeroSq(axis.getSqLength())) {
 					basevertices[j].rotateAboutAxis(angle, origin, axis);

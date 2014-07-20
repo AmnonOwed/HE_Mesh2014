@@ -19,24 +19,29 @@ public class WB_Quaternion {
 	// Cached computations.
 	private int hashCode;
 
-	public WB_Quaternion(double x, double y, double z, double w) {
+	public WB_Quaternion(final double x, final double y, final double z,
+			final double w) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
 	}
 
-	public final boolean equals(Object obj) {
-		if (this == obj)
+	@Override
+	public final boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null || obj.getClass() != this.getClass())
+		}
+		if (obj == null || obj.getClass() != this.getClass()) {
 			return false;
+		}
 
-		WB_Quaternion that = (WB_Quaternion) obj;
+		final WB_Quaternion that = (WB_Quaternion) obj;
 		return (this.x == that.x) && (this.y == that.y) && (this.z == that.z)
 				&& (this.w == that.w);
 	}
 
+	@Override
 	public final int hashCode() {
 		if (this.hashCode == 0) {
 			int result;
@@ -54,7 +59,8 @@ public class WB_Quaternion {
 		return this.hashCode;
 	}
 
-	public static WB_Quaternion fromArray(double[] compArray, int offset) {
+	public static WB_Quaternion fromArray(final double[] compArray,
+			final int offset) {
 		if (compArray == null) {
 
 			throw new IllegalArgumentException();
@@ -69,7 +75,7 @@ public class WB_Quaternion {
 				compArray[2 + offset], compArray[3 + offset]);
 	}
 
-	public final double[] toArray(double[] compArray, int offset) {
+	public final double[] toArray(final double[] compArray, final int offset) {
 		if (compArray == null) {
 
 			throw new IllegalArgumentException();
@@ -86,8 +92,9 @@ public class WB_Quaternion {
 		return compArray;
 	}
 
+	@Override
 	public final String toString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("(");
 		sb.append(this.x).append(", ");
 		sb.append(this.y).append(", ");
@@ -129,7 +136,8 @@ public class WB_Quaternion {
 		return this.w;
 	}
 
-	public static WB_Quaternion fromAxisAngle(WB_Angle angle, WB_Coordinate axis) {
+	public static WB_Quaternion fromAxisAngle(final WB_Angle angle,
+			final WB_Coordinate axis) {
 		if (angle == null) {
 
 			throw new IllegalArgumentException();
@@ -141,8 +149,8 @@ public class WB_Quaternion {
 		return fromAxisAngle(angle, axis.xd(), axis.yd(), axis.zd(), true);
 	}
 
-	public static WB_Quaternion fromAxisAngle(WB_Angle angle, double axisX,
-			double axisY, double axisZ) {
+	public static WB_Quaternion fromAxisAngle(final WB_Angle angle,
+			final double axisX, final double axisY, final double axisZ) {
 		if (angle == null) {
 
 			throw new IllegalArgumentException();
@@ -150,15 +158,15 @@ public class WB_Quaternion {
 		return fromAxisAngle(angle, axisX, axisY, axisZ, true);
 	}
 
-	private static WB_Quaternion fromAxisAngle(WB_Angle angle, double axisX,
-			double axisY, double axisZ, boolean normalize) {
+	private static WB_Quaternion fromAxisAngle(final WB_Angle angle,
+			double axisX, double axisY, double axisZ, final boolean normalize) {
 		if (angle == null) {
 
 			throw new IllegalArgumentException();
 		}
 
 		if (normalize) {
-			double length = Math.sqrt((axisX * axisX) + (axisY * axisY)
+			final double length = Math.sqrt((axisX * axisX) + (axisY * axisY)
 					+ (axisZ * axisZ));
 			if (!isZero(length) && (length != 1.0)) {
 				axisX /= length;
@@ -167,18 +175,18 @@ public class WB_Quaternion {
 			}
 		}
 
-		double s = angle.sinHalfAngle();
-		double c = angle.cosHalfAngle();
+		final double s = angle.sinHalfAngle();
+		final double c = angle.cosHalfAngle();
 		return new WB_Quaternion(axisX * s, axisY * s, axisZ * s, c);
 	}
 
-	public static WB_Quaternion fromMatrix(WB_M33 matrix) {
+	public static WB_Quaternion fromMatrix(final WB_M33 matrix) {
 		if (matrix == null) {
 
 			throw new IllegalArgumentException();
 		}
 
-		double t = 1.0 + matrix.m11 + matrix.m22 + matrix.m33;
+		final double t = 1.0 + matrix.m11 + matrix.m22 + matrix.m33;
 		double x, y, z, w;
 		double s;
 		final double EPSILON = 0.00000001;
@@ -188,19 +196,22 @@ public class WB_Quaternion {
 			y = (matrix.m13 - matrix.m31) / s;
 			z = (matrix.m21 - matrix.m12) / s;
 			w = s / 4.0;
-		} else if ((matrix.m11 > matrix.m22) && (matrix.m11 > matrix.m33)) {
+		}
+		else if ((matrix.m11 > matrix.m22) && (matrix.m11 > matrix.m33)) {
 			s = 2.0 * Math.sqrt(1.0 + matrix.m11 - matrix.m22 - matrix.m33);
 			x = s / 4.0;
 			y = (matrix.m21 + matrix.m12) / s;
 			z = (matrix.m13 + matrix.m31) / s;
 			w = (matrix.m32 - matrix.m23) / s;
-		} else if (matrix.m22 > matrix.m33) {
+		}
+		else if (matrix.m22 > matrix.m33) {
 			s = 2.0 * Math.sqrt(1.0 + matrix.m22 - matrix.m11 - matrix.m33);
 			x = (matrix.m21 + matrix.m12) / s;
 			y = s / 4.0;
 			z = (matrix.m32 + matrix.m23) / s;
 			w = (matrix.m13 - matrix.m31) / s;
-		} else {
+		}
+		else {
 			s = 2.0 * Math.sqrt(1.0 + matrix.m33 - matrix.m11 - matrix.m22);
 			x = (matrix.m13 + matrix.m31) / s;
 			y = (matrix.m32 + matrix.m23) / s;
@@ -215,7 +226,7 @@ public class WB_Quaternion {
 	 * angles represent rotation about their respective unit-axes. The angles
 	 * are applied in the order X, Y, Z. Angles can be extracted by calling
 	 * {@link #getRotationX}, {@link #getRotationY}, {@link #getRotationZ}.
-	 * 
+	 *
 	 * @param x
 	 *            WB_Angle rotation about unit-X axis.
 	 * @param y
@@ -224,19 +235,19 @@ public class WB_Quaternion {
 	 *            WB_Angle rotation about unit-Z axis.
 	 * @return WB_Quaternion representation of the combined X-Y-Z rotation.
 	 */
-	public static WB_Quaternion fromRotationXYZ(WB_Angle x, WB_Angle y,
-			WB_Angle z) {
+	public static WB_Quaternion fromRotationXYZ(final WB_Angle x,
+			final WB_Angle y, final WB_Angle z) {
 		if (x == null || y == null || z == null) {
 
 			throw new IllegalArgumentException();
 		}
 
-		double cx = x.cosHalfAngle();
-		double cy = y.cosHalfAngle();
-		double cz = z.cosHalfAngle();
-		double sx = x.sinHalfAngle();
-		double sy = y.sinHalfAngle();
-		double sz = z.sinHalfAngle();
+		final double cx = x.cosHalfAngle();
+		final double cy = y.cosHalfAngle();
+		final double cz = z.cosHalfAngle();
+		final double sx = x.sinHalfAngle();
+		final double sy = y.sinHalfAngle();
+		final double sz = z.sinHalfAngle();
 
 		// The order in which the three Euler angles are applied is critical.
 		// This can be thought of as multiplying
@@ -272,10 +283,10 @@ public class WB_Quaternion {
 		// qz = (cx * cy * sz) + (sx * sy * cz);
 		//
 
-		double qw = (cx * cy * cz) + (sx * sy * sz);
-		double qx = (sx * cy * cz) - (cx * sy * sz);
-		double qy = (cx * sy * cz) + (sx * cy * sz);
-		double qz = (cx * cy * sz) - (sx * sy * cz);
+		final double qw = (cx * cy * cz) + (sx * sy * sz);
+		final double qx = (sx * cy * cz) - (cx * sy * sz);
+		final double qy = (cx * sy * cz) + (sx * cy * sz);
+		final double qz = (cx * cy * sz) - (sx * sy * cz);
 
 		return new WB_Quaternion(qx, qy, qz, qw);
 	}
@@ -284,7 +295,7 @@ public class WB_Quaternion {
 	 * Returns a WB_Quaternion created from latitude and longitude rotations.
 	 * Latitude and longitude can be extracted from a WB_Quaternion by calling
 	 * {@link #getLatLon}.
-	 * 
+	 *
 	 * @param latitude
 	 *            WB_Angle rotation of latitude.
 	 * @param longitude
@@ -292,16 +303,17 @@ public class WB_Quaternion {
 	 * @return WB_Quaternion representing combined latitude and longitude
 	 *         rotation.
 	 */
-	public static WB_Quaternion fromLatLon(WB_Angle latitude, WB_Angle longitude) {
+	public static WB_Quaternion fromLatLon(final WB_Angle latitude,
+			final WB_Angle longitude) {
 		if (latitude == null || longitude == null) {
 
 			throw new IllegalArgumentException();
 		}
 
-		double clat = latitude.cosHalfAngle();
-		double clon = longitude.cosHalfAngle();
-		double slat = latitude.sinHalfAngle();
-		double slon = longitude.sinHalfAngle();
+		final double clat = latitude.cosHalfAngle();
+		final double clon = longitude.cosHalfAngle();
+		final double slat = latitude.sinHalfAngle();
+		final double slon = longitude.sinHalfAngle();
 
 		// The order in which the lat/lon angles are applied is critical. This
 		// can be thought of as multiplying two
@@ -335,15 +347,15 @@ public class WB_Quaternion {
 		// qz = - slat * slon;
 		//
 
-		double qw = clat * clon;
-		double qx = clat * slon;
-		double qy = slat * clon;
-		double qz = 0.0 - slat * slon;
+		final double qw = clat * clon;
+		final double qx = clat * slon;
+		final double qy = slat * clon;
+		final double qz = 0.0 - slat * slon;
 
 		return new WB_Quaternion(qx, qy, qz, qw);
 	}
 
-	public final WB_Quaternion add(WB_Quaternion quaternion) {
+	public final WB_Quaternion add(final WB_Quaternion quaternion) {
 		if (quaternion == null) {
 
 			throw new IllegalArgumentException();
@@ -353,7 +365,7 @@ public class WB_Quaternion {
 				this.z + quaternion.z, this.w + quaternion.w);
 	}
 
-	public final WB_Quaternion subtract(WB_Quaternion quaternion) {
+	public final WB_Quaternion subtract(final WB_Quaternion quaternion) {
 		if (quaternion == null) {
 			throw new IllegalArgumentException();
 		}
@@ -362,12 +374,12 @@ public class WB_Quaternion {
 				this.z - quaternion.z, this.w - quaternion.w);
 	}
 
-	public final WB_Quaternion multiplyComponents(double value) {
+	public final WB_Quaternion multiplyComponents(final double value) {
 		return new WB_Quaternion(this.x * value, this.y * value,
 				this.z * value, this.w * value);
 	}
 
-	public final WB_Quaternion multiply(WB_Quaternion quaternion) {
+	public final WB_Quaternion multiply(final WB_Quaternion quaternion) {
 		if (quaternion == null) {
 
 			throw new IllegalArgumentException();
@@ -384,7 +396,7 @@ public class WB_Quaternion {
 				- (this.z * quaternion.z));
 	}
 
-	public final WB_Quaternion divideComponents(double value) {
+	public final WB_Quaternion divideComponents(final double value) {
 		if (isZero(value)) {
 			throw new IllegalArgumentException();
 		}
@@ -393,7 +405,7 @@ public class WB_Quaternion {
 				this.z / value, this.w / value);
 	}
 
-	public final WB_Quaternion divideComponents(WB_Quaternion quaternion) {
+	public final WB_Quaternion divideComponents(final WB_Quaternion quaternion) {
 		if (quaternion == null) {
 
 			throw new IllegalArgumentException();
@@ -423,17 +435,18 @@ public class WB_Quaternion {
 	}
 
 	public final WB_Quaternion normalize() {
-		double length = this.getLength();
+		final double length = this.getLength();
 		// Vector has zero length.
 		if (isZero(length)) {
 			return this;
-		} else {
+		}
+		else {
 			return new WB_Quaternion(this.x / length, this.y / length, this.z
 					/ length, this.w / length);
 		}
 	}
 
-	public final double dot(WB_Quaternion quaternion) {
+	public final double dot(final WB_Quaternion quaternion) {
 		if (quaternion == null) {
 
 			throw new IllegalArgumentException();
@@ -444,44 +457,49 @@ public class WB_Quaternion {
 	}
 
 	public final WB_Quaternion getInverse() {
-		double length = this.getLength();
+		final double length = this.getLength();
 		// Vector has zero length.
 		if (isZero(length)) {
 			return this;
-		} else {
+		}
+		else {
 			return new WB_Quaternion((0.0 - this.x) / length, (0.0 - this.y)
 					/ length, (0.0 - this.z) / length, this.w / length);
 		}
 	}
 
-	public static WB_Quaternion mix(double amount, WB_Quaternion value1,
-			WB_Quaternion value2) {
+	public static WB_Quaternion mix(final double amount,
+			final WB_Quaternion value1, final WB_Quaternion value2) {
 		if ((value1 == null) || (value2 == null)) {
 			throw new IllegalArgumentException();
 		}
 
-		if (amount < 0.0)
+		if (amount < 0.0) {
 			return value1;
-		else if (amount > 1.0)
+		}
+		else if (amount > 1.0) {
 			return value2;
+		}
 
-		double t1 = 1.0 - amount;
+		final double t1 = 1.0 - amount;
 		return new WB_Quaternion((value1.x * t1) + (value2.x * amount),
 				(value1.y * t1) + (value2.y * amount), (value1.z * t1)
-						+ (value2.z * amount), (value1.w * t1)
-						+ (value2.w * amount));
+				+ (value2.z * amount), (value1.w * t1)
+				+ (value2.w * amount));
 	}
 
-	public static WB_Quaternion slerp(double amount, WB_Quaternion value1,
-			WB_Quaternion value2) {
+	public static WB_Quaternion slerp(final double amount,
+			final WB_Quaternion value1, final WB_Quaternion value2) {
 		if ((value1 == null) || (value2 == null)) {
 			throw new IllegalArgumentException();
 		}
 
-		if (amount < 0.0)
+		if (amount < 0.0) {
 			return value1;
-		else if (amount > 1.0)
+		}
+		else if (amount > 1.0) {
 			return value2;
+		}
 
 		double dot = value1.dot(value2);
 		double x2, y2, z2, w2;
@@ -491,7 +509,8 @@ public class WB_Quaternion {
 			y2 = 0.0 - value2.y;
 			z2 = 0.0 - value2.z;
 			w2 = 0.0 - value2.w;
-		} else {
+		}
+		else {
 			x2 = value2.x;
 			y2 = value2.y;
 			z2 = value2.z;
@@ -503,11 +522,12 @@ public class WB_Quaternion {
 		final double EPSILON = 0.0001;
 		if ((1.0 - dot) > EPSILON) // standard case (slerp)
 		{
-			double angle = Math.acos(dot);
-			double sinAngle = Math.sin(angle);
+			final double angle = Math.acos(dot);
+			final double sinAngle = Math.sin(angle);
 			t1 = Math.sin((1.0 - amount) * angle) / sinAngle;
 			t2 = Math.sin(amount * angle) / sinAngle;
-		} else // just lerp
+		}
+		else // just lerp
 		{
 			t1 = 1.0 - amount;
 			t2 = amount;
@@ -525,13 +545,15 @@ public class WB_Quaternion {
 	public final WB_Angle getAngle() {
 		double w = this.w;
 
-		double length = this.getLength();
-		if (!isZero(length) && (length != 1.0))
+		final double length = this.getLength();
+		if (!isZero(length) && (length != 1.0)) {
 			w /= length;
+		}
 
-		double radians = 2.0 * Math.acos(w);
-		if (Double.isNaN(radians))
+		final double radians = 2.0 * Math.acos(WB_Math.clamp(w, -1, 1));
+		if (Double.isNaN(radians)) {
 			return null;
+		}
 
 		return WB_Angle.fromRadians(radians);
 	}
@@ -541,14 +563,14 @@ public class WB_Quaternion {
 		double y = this.y;
 		double z = this.z;
 
-		double length = this.getLength();
+		final double length = this.getLength();
 		if (!isZero(length) && (length != 1.0)) {
 			x /= length;
 			y /= length;
 			z /= length;
 		}
 
-		double vecLength = Math.sqrt((x * x) + (y * y) + (z * z));
+		final double vecLength = Math.sqrt((x * x) + (y * y) + (z * z));
 		if (!isZero(vecLength) && (vecLength != 1.0)) {
 			x /= vecLength;
 			y /= vecLength;
@@ -559,42 +581,46 @@ public class WB_Quaternion {
 	}
 
 	public final WB_Angle getRotationX() {
-		double radians = Math.atan2((2.0 * this.x * this.w)
+		final double radians = Math.atan2((2.0 * this.x * this.w)
 				- (2.0 * this.y * this.z), 1.0 - 2.0 * (this.x * this.x) - 2.0
 				* (this.z * this.z));
-		if (Double.isNaN(radians))
+		if (Double.isNaN(radians)) {
 			return null;
+		}
 
 		return WB_Angle.fromRadians(radians);
 	}
 
 	public final WB_Angle getRotationY() {
-		double radians = Math.atan2((2.0 * this.y * this.w)
+		final double radians = Math.atan2((2.0 * this.y * this.w)
 				- (2.0 * this.x * this.z), 1.0 - (2.0 * this.y * this.y)
 				- (2.0 * this.z * this.z));
-		if (Double.isNaN(radians))
+		if (Double.isNaN(radians)) {
 			return null;
+		}
 
 		return WB_Angle.fromRadians(radians);
 	}
 
 	public final WB_Angle getRotationZ() {
-		double radians = Math.asin((2.0 * this.x * this.y)
+		final double radians = Math.asin((2.0 * this.x * this.y)
 				+ (2.0 * this.z * this.w));
-		if (Double.isNaN(radians))
+		if (Double.isNaN(radians)) {
 			return null;
+		}
 
 		return WB_Angle.fromRadians(radians);
 	}
 
 	public final WB_LatLon getLatLon() {
-		double latRadians = Math.asin((2.0 * this.y * this.w)
+		final double latRadians = Math.asin((2.0 * this.y * this.w)
 				- (2.0 * this.x * this.z));
-		double lonRadians = Math.atan2((2.0 * this.y * this.z)
+		final double lonRadians = Math.atan2((2.0 * this.y * this.z)
 				+ (2.0 * this.x * this.w), (this.w * this.w)
 				- (this.x * this.x) - (this.y * this.y) + (this.z * this.z));
-		if (Double.isNaN(latRadians) || Double.isNaN(lonRadians))
+		if (Double.isNaN(latRadians) || Double.isNaN(lonRadians)) {
 			return null;
+		}
 
 		return WB_LatLon.fromRadians(latRadians, lonRadians);
 	}
@@ -603,7 +629,7 @@ public class WB_Quaternion {
 
 	private static final Double NegativeZero = -0.0d;
 
-	private static boolean isZero(double value) {
+	private static boolean isZero(final double value) {
 		return (PositiveZero.compareTo(value) == 0)
 				|| (NegativeZero.compareTo(value) == 0);
 	}
