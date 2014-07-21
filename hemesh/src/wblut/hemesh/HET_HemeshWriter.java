@@ -1,5 +1,6 @@
 package wblut.hemesh;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,16 +16,18 @@ public class HET_HemeshWriter {
 		try {
 			hemeshStream = stream;
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void beginSave(final String fn) {
+	public void beginSave(final String fn, final String name) {
 		try {
-			hemeshStream = new FileOutputStream(fn);
+			hemeshStream = new FileOutputStream(new File(fn, name));
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -35,7 +38,8 @@ public class HET_HemeshWriter {
 			hemeshWriter.close();
 			hemeshStream.flush();
 			hemeshStream.close();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -20,7 +20,6 @@ import java.util.Iterator;
 import wblut.geom.WB_Point;
 import wblut.math.WB_MTRandom;
 
-// TODO: Auto-generated Javadoc
 /**
  * Planar subdivision of a mesh. Divides all edges in half. Non-triangular faces
  * are divided in new faces connecting each vertex with the two adjacent mid
@@ -112,7 +111,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -263,7 +262,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)

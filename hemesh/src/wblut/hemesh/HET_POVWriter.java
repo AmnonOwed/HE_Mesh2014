@@ -17,16 +17,17 @@ package wblut.hemesh;
 /**
  * Bare bones PovRAY 3D format exporter. Purely handles the writing of data to
  * the .inc file, as a mesh2 object. See {@link HET_Export} for details.
- * 
+ *
  * @see HET_Export#saveAsPOV(HE_Mesh, HET_POVWriter, boolean)
  */
+import java.io.File;
 import java.io.PrintWriter;
 
 import wblut.geom.WB_Coordinate;
 
 /**
  * Class HET_POVWriter.
- * 
+ *
  * @author Martin Prout
  */
 public class HET_POVWriter {
@@ -45,10 +46,21 @@ public class HET_POVWriter {
 
 	/**
 	 * Handles PrintWriter input.
-	 * 
+	 *
 	 * @param pw
 	 *            the pw
 	 */
+
+	public void beginSave(final String path, final String name) {
+		try {
+			povWriter = new PrintWriter(new File(path, name));
+			handleBeginSave();
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void beginSave(final PrintWriter pw) {
 		povWriter = pw;
 		handleBeginSave();
@@ -64,7 +76,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Begin the mesh2 output as a PovRAY declaration.
-	 * 
+	 *
 	 * @param name
 	 *            the name
 	 */
@@ -85,7 +97,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Output start of normal_vectors.
-	 * 
+	 *
 	 * @param count
 	 *            the count
 	 */
@@ -96,7 +108,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Output start of face_indices.
-	 * 
+	 *
 	 * @param count
 	 *            the count
 	 */
@@ -107,7 +119,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Used to output total count vertex_vector, normal_vector & face_indices.
-	 * 
+	 *
 	 * @param count
 	 *            the count
 	 */
@@ -117,7 +129,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Face vertex indices.
-	 * 
+	 *
 	 * @param a
 	 *            the a
 	 * @param b
@@ -131,7 +143,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Gets the curr normal offset.
-	 * 
+	 *
 	 * @return the curr normal offset
 	 */
 	public int getCurrNormalOffset() {
@@ -140,7 +152,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Gets the curr vertex offset.
-	 * 
+	 *
 	 * @return the curr vertex offset
 	 */
 	public int getCurrVertexOffset() {
@@ -158,7 +170,7 @@ public class HET_POVWriter {
 
 	/**
 	 * New object.
-	 * 
+	 *
 	 * @param name
 	 *            the name
 	 */
@@ -168,7 +180,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Triangle normals.
-	 * 
+	 *
 	 * @param n
 	 *            the n
 	 */
@@ -179,7 +191,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Triangle vertices.
-	 * 
+	 *
 	 * @param v
 	 *            the v
 	 */
@@ -190,7 +202,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Builds the vector.
-	 * 
+	 *
 	 * @param a
 	 *            the a
 	 * @param b
@@ -210,7 +222,7 @@ public class HET_POVWriter {
 
 	/**
 	 * Builds the vector.
-	 * 
+	 *
 	 * @param n
 	 *            the n
 	 * @return the string builder

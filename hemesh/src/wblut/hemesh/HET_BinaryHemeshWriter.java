@@ -1,15 +1,16 @@
 package wblut.hemesh;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.DeflaterOutputStream;
 
 /**
  * Helper class for HE_Export.saveToBinaryHemesh.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
- * 
+ *
  */
 
 public class HET_BinaryHemeshWriter {
@@ -22,7 +23,7 @@ public class HET_BinaryHemeshWriter {
 
 	/**
 	 * Begin save.
-	 * 
+	 *
 	 * @param stream
 	 *            the stream
 	 */
@@ -30,22 +31,24 @@ public class HET_BinaryHemeshWriter {
 		try {
 			hemeshStream = stream;
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Begin save.
-	 * 
+	 *
 	 * @param fn
 	 *            the fn
 	 */
-	public void beginSave(final String fn) {
+	public void beginSave(final String fn, final String name) {
 		try {
-			hemeshStream = new FileOutputStream(fn);
+			hemeshStream = new FileOutputStream(new File(fn, name));
 			handleBeginSave();
-		} catch (final Exception e) {
+		}
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -59,7 +62,8 @@ public class HET_BinaryHemeshWriter {
 			hemeshWriter.close();
 			hemeshStream.flush();
 			hemeshStream.close();
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -74,7 +78,7 @@ public class HET_BinaryHemeshWriter {
 
 	/**
 	 * Vertex.
-	 * 
+	 *
 	 * @param v
 	 *            the v
 	 * @param heid
@@ -86,14 +90,15 @@ public class HET_BinaryHemeshWriter {
 			hemeshWriter.writeDouble(v.yd());
 			hemeshWriter.writeDouble(v.zd());
 			hemeshWriter.writeInt(heid);
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Halfedge.
-	 * 
+	 *
 	 * @param vid
 	 *            the vid
 	 * @param henextid
@@ -113,42 +118,45 @@ public class HET_BinaryHemeshWriter {
 			hemeshWriter.writeInt(hepairid);
 			hemeshWriter.writeInt(edgeid);
 			hemeshWriter.writeInt(faceid);
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Edge.
-	 * 
+	 *
 	 * @param heid
 	 *            the heid
 	 */
 	public void edge(final int heid) {
 		try {
 			hemeshWriter.writeInt(heid);
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Face.
-	 * 
+	 *
 	 * @param heid
 	 *            the heid
 	 */
 	public void face(final int heid) {
 		try {
 			hemeshWriter.writeInt(heid);
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Sizes.
-	 * 
+	 *
 	 * @param v1
 	 *            the v1
 	 * @param v2
@@ -164,7 +172,8 @@ public class HET_BinaryHemeshWriter {
 			hemeshWriter.writeInt(v2);
 			hemeshWriter.writeInt(v3);
 			hemeshWriter.writeInt(v4);
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
