@@ -210,31 +210,42 @@ public class WB_Polygon extends WB_Ring {
 
 	public int[][] getTriangles() {
 		if (triangles == null) {
-			WB_Triangulation2DWithPoints triangulation = triangulate();
-			final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
-					points.size());
-
-			for (int i = 0; i < points.size(); i++) {
-				pointmap.add(points.getPoint(i), i);
+			if (size() < 3) {
+				return new int[][] { { 0, 0, 0 } };
 			}
-
-			triangles = triangulation.getTriangles();
-
-			final List<WB_Coordinate> tripoints = triangulation.getPoints();
-			final int[] intmap = new int[tripoints.size()];
-			int index = 0;
-			for (final WB_Coordinate point : tripoints) {
-				final int found = pointmap.getNearestNeighbor(point).value;
-				intmap[index++] = found;
+			else if (size() == 3) {
+				return new int[][] { { 0, 1, 2 } };
 			}
-			for (final int[] T : triangles) {
-				T[0] = intmap[T[0]];
-				T[1] = intmap[T[1]];
-				T[2] = intmap[T[2]];
+			else if (size() == 4) {
+				return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
 			}
+			else {
 
+				final WB_Triangulation2DWithPoints triangulation = triangulate();
+				final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
+						points.size());
+
+				for (int i = 0; i < points.size(); i++) {
+					pointmap.add(points.getPoint(i), i);
+				}
+
+				triangles = triangulation.getTriangles();
+
+				final List<WB_Coordinate> tripoints = triangulation.getPoints();
+				final int[] intmap = new int[tripoints.size()];
+				int index = 0;
+				for (final WB_Coordinate point : tripoints) {
+					final int found = pointmap.getNearestNeighbor(point).value;
+					intmap[index++] = found;
+				}
+				for (final int[] T : triangles) {
+					T[0] = intmap[T[0]];
+					T[1] = intmap[T[1]];
+					T[2] = intmap[T[2]];
+				}
+
+			}
 		}
-
 		return triangles;
 	}
 
@@ -244,11 +255,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-							* (points.get(j, 2) + points.get(i, 2)),
+					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-							* (points.get(j, 0) + points.get(i, 0)),
+					* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-							* (points.get(j, 1) + points.get(i, 1)));
+					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();
@@ -263,11 +274,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-							* (points.get(j, 2) + points.get(i, 2)),
+					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-							* (points.get(j, 0) + points.get(i, 0)),
+					* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-							* (points.get(j, 1) + points.get(i, 1)));
+					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();
@@ -276,16 +287,19 @@ public class WB_Polygon extends WB_Ring {
 
 	}
 
+	@Override
 	public WB_IndexedPoint getPoint(final int i) {
 
 		return points.getPoint(i);
 	}
 
+	@Override
 	public double getd(final int i, final int j) {
 
 		return points.get(i, j);
 	}
 
+	@Override
 	public float getf(final int i, final int j) {
 
 		return (float) points.get(i, j);

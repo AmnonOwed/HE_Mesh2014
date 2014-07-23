@@ -23,7 +23,7 @@ public class HEM_Diagrid extends HEM_Modifier {
 
 	/**
 	 * Set the lower limit dihedral angle
-	 * 
+	 *
 	 * @param a
 	 *            : limit angle in radius, edges with dihedral angle lower than
 	 *            this angle are not removed. Default value is PI/2
@@ -55,7 +55,7 @@ public class HEM_Diagrid extends HEM_Modifier {
 	public HE_Mesh apply(final HE_Selection selection) {
 		selection.collectEdgesByFace();
 		selection.parent.triSplitFaces(selection);
-		final HE_RAS<HE_Edge> border = new HE_RAS<HE_Edge>();
+		final HE_RAS<HE_Edge> border = new HE_RASTrove<HE_Edge>();
 		border.addAll(selection.getOuterEdges());
 		final HE_EdgeIterator eitr = new HE_EdgeIterator(selection);
 		HE_Edge e;

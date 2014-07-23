@@ -23,10 +23,10 @@ public class HE_Selection extends HE_MeshStructure {
 	public HE_Selection(final HE_Mesh parent) {
 		super();
 		this.parent = parent;
-		vertices = new HE_RAS<HE_Vertex>(1024);
-		halfedges = new HE_RAS<HE_Halfedge>(1024);
-		edges = new HE_RAS<HE_Edge>(1024);
-		faces = new HE_RAS<HE_Face>(1024);
+		vertices = new HE_RASTrove<HE_Vertex>();
+		halfedges = new HE_RASTrove<HE_Halfedge>();
+		edges = new HE_RASTrove<HE_Edge>();
+		faces = new HE_RASTrove<HE_Face>();
 	}
 
 	/**
@@ -286,28 +286,28 @@ public class HE_Selection extends HE_MeshStructure {
 	 *            selection to check
 	 */
 	public void intersect(final HE_Selection sel) {
-		final HE_RAS<HE_Face> newFaces = new HE_RAS<HE_Face>();
+		final HE_RAS<HE_Face> newFaces = new HE_RASTrove<HE_Face>();
 		for (final HE_Face f : sel.faces) {
 			if (faces.contains(f)) {
 				newFaces.add(f);
 			}
 		}
 		faces = newFaces;
-		final HE_RAS<HE_Edge> newEdges = new HE_RAS<HE_Edge>();
+		final HE_RAS<HE_Edge> newEdges = new HE_RASTrove<HE_Edge>();
 		for (final HE_Edge e : sel.edges) {
 			if (edges.contains(e)) {
 				newEdges.add(e);
 			}
 		}
 		edges = newEdges;
-		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RAS<HE_Halfedge>();
+		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RASTrove<HE_Halfedge>();
 		for (final HE_Halfedge he : sel.halfedges) {
 			if (halfedges.contains(he)) {
 				newHalfedges.add(he);
 			}
 		}
 		edges = newEdges;
-		final HE_RAS<HE_Vertex> newVertices = new HE_RAS<HE_Vertex>();
+		final HE_RAS<HE_Vertex> newVertices = new HE_RASTrove<HE_Vertex>();
 		for (final HE_Vertex v : sel.vertices) {
 			if (vertices.contains(v)) {
 				newVertices.add(v);
@@ -566,7 +566,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 * @return inverted face selection
 	 */
 	public HE_Selection invertFaces() {
-		final HE_RAS<HE_Face> newFaces = new HE_RAS<HE_Face>();
+		final HE_RAS<HE_Face> newFaces = new HE_RASTrove<HE_Face>();
 		for (final HE_Face f : parent.faces) {
 
 			if (!contains(f)) {
@@ -584,7 +584,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 */
 	public HE_Selection invertEdges() {
 
-		final HE_RAS<HE_Edge> newEdges = new HE_RAS<HE_Edge>();
+		final HE_RAS<HE_Edge> newEdges = new HE_RASTrove<HE_Edge>();
 		for (final HE_Edge e : parent.edges) {
 
 			if (!contains(e)) {
@@ -602,7 +602,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 */
 	public HE_Selection invertVertices() {
 
-		final HE_RAS<HE_Vertex> newVertices = new HE_RAS<HE_Vertex>();
+		final HE_RAS<HE_Vertex> newVertices = new HE_RASTrove<HE_Vertex>();
 		for (final HE_Vertex v : parent.vertices) {
 
 			if (!contains(v)) {
@@ -620,7 +620,7 @@ public class HE_Selection extends HE_MeshStructure {
 	 */
 	public HE_Selection invertHalfedges() {
 
-		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RAS<HE_Halfedge>();
+		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RASTrove<HE_Halfedge>();
 		for (final HE_Halfedge he : parent.halfedges) {
 
 			if (!contains(he)) {
@@ -639,7 +639,7 @@ public class HE_Selection extends HE_MeshStructure {
 
 	public HE_Selection cleanSelection() {
 
-		final HE_RAS<HE_Face> newFaces = new HE_RAS<HE_Face>();
+		final HE_RAS<HE_Face> newFaces = new HE_RASTrove<HE_Face>();
 		for (final HE_Face f : faces) {
 			if (parent.contains(f)) {
 				newFaces.add(f);
@@ -647,7 +647,7 @@ public class HE_Selection extends HE_MeshStructure {
 		}
 		faces = newFaces;
 
-		final HE_RAS<HE_Edge> newEdges = new HE_RAS<HE_Edge>();
+		final HE_RAS<HE_Edge> newEdges = new HE_RASTrove<HE_Edge>();
 		for (final HE_Edge e : edges) {
 			if (parent.contains(e)) {
 				newEdges.add(e);
@@ -655,7 +655,7 @@ public class HE_Selection extends HE_MeshStructure {
 		}
 		edges = newEdges;
 
-		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RAS<HE_Halfedge>();
+		final HE_RAS<HE_Halfedge> newHalfedges = new HE_RASTrove<HE_Halfedge>();
 		for (final HE_Halfedge he : halfedges) {
 			if (parent.contains(he)) {
 				newHalfedges.add(he);
@@ -663,7 +663,7 @@ public class HE_Selection extends HE_MeshStructure {
 		}
 		halfedges = newHalfedges;
 
-		final HE_RAS<HE_Vertex> newVertices = new HE_RAS<HE_Vertex>();
+		final HE_RAS<HE_Vertex> newVertices = new HE_RASTrove<HE_Vertex>();
 		for (final HE_Vertex v : vertices) {
 			if (parent.contains(v)) {
 				newVertices.add(v);

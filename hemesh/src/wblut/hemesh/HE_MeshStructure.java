@@ -33,10 +33,10 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public HE_MeshStructure() {
 		super();
-		vertices = new HE_RAS<HE_Vertex>(1024);
-		halfedges = new HE_RAS<HE_Halfedge>(1024);
-		edges = new HE_RAS<HE_Edge>(1024);
-		faces = new HE_RAS<HE_Face>(1024);
+		vertices = new HE_RASTrove<HE_Vertex>();
+		halfedges = new HE_RASTrove<HE_Halfedge>();
+		edges = new HE_RASTrove<HE_Edge>();
+		faces = new HE_RASTrove<HE_Face>();
 	}
 
 	public HE_MeshStructure(final HE_MeshStructure ms) {
@@ -244,28 +244,28 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * Clear edges.
 	 */
 	public final void clearEdges() {
-		edges = new HE_RAS<HE_Edge>(1024);
+		edges = new HE_RASTrove<HE_Edge>();
 	}
 
 	/**
 	 * Clear faces.
 	 */
 	public final void clearFaces() {
-		faces = new HE_RAS<HE_Face>(1024);
+		faces = new HE_RASTrove<HE_Face>();
 	}
 
 	/**
 	 * Clear halfedges.
 	 */
 	public final void clearHalfedges() {
-		halfedges = new HE_RAS<HE_Halfedge>(1024);
+		halfedges = new HE_RASTrove<HE_Halfedge>();
 	}
 
 	/**
 	 * Clear vertices.
 	 */
 	public final void clearVertices() {
-		vertices = new HE_RAS<HE_Vertex>(1024);
+		vertices = new HE_RASTrove<HE_Vertex>();
 	}
 
 	/**
@@ -755,7 +755,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @return vertex iterator
 	 */
 	public Iterator<HE_Vertex> vItr() {
-		return vertices.objects.iterator();
+		return vertices.iterator();
 	}
 
 	/**
@@ -764,7 +764,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @return edge iterator
 	 */
 	public Iterator<HE_Edge> eItr() {
-		return edges.objects.iterator();
+		return edges.iterator();
 	}
 
 	/**
@@ -773,11 +773,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @return halfedge iterator
 	 */
 	public Iterator<HE_Halfedge> heItr() {
-		return halfedges.objects.iterator();
+		return halfedges.iterator();
 	}
 
 	public Iterator<HE_Face> fItr() {
-		return faces.objects.iterator();
+		return faces.iterator();
 	}
 
 	/**

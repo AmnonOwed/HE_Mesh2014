@@ -1540,7 +1540,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		HE_Halfedge nhe;
 		HE_Edge ne;
 		while (unpairedEdges.size() > 0) {
-			loopedHalfedges = new HE_RAS<HE_Halfedge>();
+			loopedHalfedges = new HE_RASTrove<HE_Halfedge>();
 			start = unpairedEdges.get(0);
 			loopedHalfedges.add(start);
 			he = start;
@@ -1566,7 +1566,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			nf = new HE_Face();
 			add(nf);
 			caps.add(nf);
-			newHalfedges = new HE_RAS<HE_Halfedge>();
+			newHalfedges = new HE_RASTrove<HE_Halfedge>();
 			for (int i = 0; i < loopedHalfedges.size(); i++) {
 				phe = loopedHalfedges.get(i);
 				nhe = new HE_Halfedge();
@@ -1598,9 +1598,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @return self
 	 */
 	public HE_Mesh cleanUnusedElementsByFace() {
-		final HE_RAS<HE_Vertex> cleanedVertices = new HE_RAS<HE_Vertex>();
-		final HE_RAS<HE_Halfedge> cleanedHalfedges = new HE_RAS<HE_Halfedge>();
-		final HE_RAS<HE_Edge> cleanedEdges = new HE_RAS<HE_Edge>();
+		final HE_RAS<HE_Vertex> cleanedVertices = new HE_RASTrove<HE_Vertex>();
+		final HE_RAS<HE_Halfedge> cleanedHalfedges = new HE_RASTrove<HE_Halfedge>();
+		final HE_RAS<HE_Edge> cleanedEdges = new HE_RASTrove<HE_Edge>();
 
 		HE_Halfedge he;
 		HE_Edge e;

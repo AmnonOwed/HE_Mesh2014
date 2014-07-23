@@ -1,7 +1,5 @@
 package wblut.hemesh;
 
-import java.util.HashMap;
-
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
@@ -28,7 +26,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	private HE_Halfedge _next;
 
 	/** Previous halfedge in face. */
-	private HE_Halfedge _prev;
+	// private HE_Halfedge _prev;
 
 	/** Associated edge. */
 	private HE_Edge _edge;
@@ -37,7 +35,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	private HE_Face _face;
 
 	/** The _data. */
-	private HashMap<String, Object> _data;
+	// private HashMap<String, Object> _data;
 
 	private int hecolor;
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
@@ -65,7 +63,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return previous halfedge
 	 */
 	public HE_Halfedge getPrevInFace() {
-		return _prev;
+		HE_Halfedge he = this;
+		do {
+			he = he.getNextInFace();
+		} while (he.getNextInFace() != this);
+		return he;
 	}
 
 	/**
@@ -95,9 +97,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return previous halfedge
 	 */
 	public HE_Halfedge getPrevInVertex() {
-		if (_prev == null) {
-			return null;
-		}
+
 		return getPrevInFace().getPair();
 	}
 
@@ -129,7 +129,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 *            next halfedge
 	 */
 	public void setPrev(final HE_Halfedge he) {
-		_prev = he;
+		// _prev = he;
 
 	}
 
@@ -298,7 +298,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * Clear prev
 	 */
 	public void clearPrev() {
-		_prev = null;
+		// _prev = null;
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -401,25 +401,25 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
 	public void setData(final String s, final Object o) {
-		if (_data == null) {
-			_data = new HashMap<String, Object>();
-		}
-		_data.put(s, o);
+		// if (_data == null) {
+		// _data = new HashMap<String, Object>();
+		// }
+		// _data.put(s, o);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
 	public Object getData(final String s) {
-		return _data.get(s);
+		return null;// _data.get(s);
 	}
 
 	@Override

@@ -26,8 +26,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	/** Halfedge associated with this face. */
 	private HE_Halfedge _halfedge;
 
-	private boolean _sorted;
-
 	private HashMap<String, Object> _data;
 
 	private int facecolor;
@@ -191,9 +189,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public List<HE_Vertex> getFaceVertices() {
-		if (!_sorted) {
-			sort();
-		}
+
 		final List<HE_Vertex> fv = new FastTable<HE_Vertex>();
 		if (_halfedge == null) {
 			return fv;
@@ -229,9 +225,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public List<HE_Halfedge> getFaceHalfedges() {
-		if (!_sorted) {
-			sort();
-		}
+
 		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
 		if (_halfedge == null) {
 			return fhe;
@@ -250,9 +244,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public List<HE_Edge> getFaceEdges() {
-		if (!_sorted) {
-			sort();
-		}
+
 		final List<HE_Edge> fe = new FastTable<HE_Edge>();
 		if (_halfedge == null) {
 			return fe;
@@ -291,7 +283,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public void clearHalfedge() {
 		_halfedge = null;
-		_sorted = false;
+
 	}
 
 	public WB_Plane toPlane() {
@@ -315,7 +307,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 				}
 			} while (he != _halfedge);
 			_halfedge = leftmost;
-			_sorted = true;
+
 		}
 	}
 
@@ -328,7 +320,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public void reset() {
 		triangles = null;
-		_sorted = false;
+
 	}
 
 	public WB_SimplePolygon toPolygon() {
@@ -338,9 +330,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 
 		final WB_Point[] points = new WB_Point[n];
-		if (!_sorted) {
-			sort();
-		}
 
 		int i = 0;
 		HE_Halfedge he = _halfedge;
@@ -363,9 +352,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 
 		final WB_Point[] points = new WB_Point[n];
-		if (!_sorted) {
-			sort();
-		}
+
 		final WB_Plane P = toPlane();
 		int i = 0;
 		HE_Halfedge he = _halfedge;
@@ -379,9 +366,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public List<HE_Face> getNeighborFaces() {
-		if (!isSorted()) {
-			sort();
-		}
+
 		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getHalfedge() == null) {
 			return ff;
@@ -420,10 +405,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		s += he.getVertex()._key + ".";
 
 		return s;
-	}
-
-	public boolean isSorted() {
-		return _sorted;
 	}
 
 	/*
