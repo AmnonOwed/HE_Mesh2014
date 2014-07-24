@@ -6,9 +6,9 @@ import java.util.Map;
 
 /**
  * Turns a solid into a rudimentary shelled structure.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_Shell extends HEM_Modifier {
 
@@ -26,7 +26,7 @@ public class HEM_Shell extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -53,7 +53,6 @@ public class HEM_Shell extends HEM_Modifier {
 		innerMesh.flipAllFaces();
 		mesh.addVertices(innerMesh.getVerticesAsArray());
 		mesh.addFaces(innerMesh.getFacesAsArray());
-		mesh.addEdges(innerMesh.getEdgesAsArray());
 		mesh.addHalfedges(innerMesh.getHalfedgesAsArray());
 		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet()
 				.iterator();
@@ -90,7 +89,7 @@ public class HEM_Shell extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

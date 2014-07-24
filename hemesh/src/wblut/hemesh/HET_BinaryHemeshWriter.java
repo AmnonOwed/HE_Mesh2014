@@ -111,12 +111,11 @@ public class HET_BinaryHemeshWriter {
 	 *            the faceid
 	 */
 	public void halfedge(final int vid, final int henextid, final int hepairid,
-			final int edgeid, final int faceid) {
+			final int faceid) {
 		try {
 			hemeshWriter.writeInt(vid);
 			hemeshWriter.writeInt(henextid);
 			hemeshWriter.writeInt(hepairid);
-			hemeshWriter.writeInt(edgeid);
 			hemeshWriter.writeInt(faceid);
 		}
 		catch (final IOException e) {
@@ -166,12 +165,11 @@ public class HET_BinaryHemeshWriter {
 	 * @param v4
 	 *            the v4
 	 */
-	public void sizes(final int v1, final int v2, final int v3, final int v4) {
+	public void sizes(final int v1, final int v2, final int v3) {
 		try {
 			hemeshWriter.writeInt(v1);
 			hemeshWriter.writeInt(v2);
 			hemeshWriter.writeInt(v3);
-			hemeshWriter.writeInt(v4);
 		}
 		catch (final IOException e) {
 			e.printStackTrace();

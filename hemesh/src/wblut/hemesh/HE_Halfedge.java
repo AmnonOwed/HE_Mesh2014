@@ -7,6 +7,7 @@ import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Math;
 
 /**
  * Half-edge element of half-edge data structure.
@@ -194,6 +195,15 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		return null;
 	}
 
+	public WB_Vector getEdgeTangent() {
+		final WB_Vector v = getHalfedgeTangent();
+		if (v == null) {
+			return null;
+		}
+
+		return isEdge() ? v : v._mulSelf(-1);
+	}
+
 	/**
 	 * Get center of halfedge.
 	 *
@@ -207,13 +217,25 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		return null;
 	}
 
+	public WB_Point getEdgeCenter() {
+
+		if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
+			return gf.createMidpoint(_next.getVertex(), _vertex);
+		}
+		return null;
+	}
+
 	/**
 	 * Get edge of halfedge.
 	 *
 	 * @return edge
 	 */
-	public HE_Edge getEdge() {
-		return new HE_Edge(this);
+	public HE_Halfedge getEdge() {
+		if (isEdge()) {
+			return this;
+		}
+
+		return _pair;
 	}
 
 	/**
@@ -245,6 +267,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return vertex
 	 */
 	public HE_Vertex getVertex() {
+		return _vertex;
+	}
+
+	public HE_Vertex getStartVertex() {
 		return _vertex;
 	}
 
@@ -329,12 +355,12 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 		final WB_Vector n1 = (he1._face != null) ? he1._face.getFaceNormal()
 				: new WB_Vector(0, 0, 0);
-				final WB_Vector n2 = (he2._face != null) ? he2._face.getFaceNormal()
+		final WB_Vector n2 = (he2._face != null) ? he2._face.getFaceNormal()
 				: new WB_Vector(0, 0, 0);
-						final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
-								n1.zd() + n2.zd());
-						n._normalizeSelf();
-						return n;
+		final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
+				n1.zd() + n2.zd());
+		n._normalizeSelf();
+		return n;
 	}
 
 	/**
@@ -372,10 +398,8 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return area
 	 */
 	public double getHalfedgeArea() {
-		if (getEdge() == null) {
-			return 0;
-		}
-		return 0.5 * getEdge().getEdgeArea();
+
+		return 0.5 * getEdgeArea();
 	}
 
 	/**
@@ -384,27 +408,25 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return angle
 	 */
 	public double getHalfedgeDihedralAngle() {
-		if (getEdge() == null) {
-			return Double.NaN;
-		}
-		return getEdge().getDihedralAngle();
+
+		return getEdgeDihedralAngle();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
 	public String toString() {
-		return "HE_Halfedge key: " + key() + ", belongs to edge "
-				+ getEdge().key() + ", paired with halfedge " + getPair().key()
-				+ ". Vertex: " + getVertex().key() + ".";
+		return "HE_Halfedge key: " + key() + ", paired with halfedge "
+				+ getPair().key() + ". Vertex: " + getVertex().key()
+				+ ". Is this an edge: " + isEdge() + ".";
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -417,7 +439,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -459,6 +481,73 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Get area of faces bounding edge.
+	 *
+	 * @return area
+	 */
+	public double getEdgeArea() {
+		if (_pair == null) {
+			return Double.NaN;
+		}
+		HE_Halfedge he1, he2;
+		if (isEdge()) {
+			he1 = this;
+			he2 = _pair;
+		}
+		else {
+			he1 = _pair;
+			he2 = this;
+		}
+
+		if ((he1._face == null) && (he2._face == null)) {
+			return Double.NaN;
+		}
+
+		double result = 0;
+		int n = 0;
+		if (he1._face != null) {
+			result += he1._face.getFaceArea();
+			n++;
+		}
+		if (he2._face != null) {
+			result += he2._face.getFaceArea();
+			n++;
+		}
+
+		return result / n;
+
+	}
+
+	/**
+	 * Return angle between adjacent faces.
+	 *
+	 * @return angle
+	 */
+	public double getEdgeDihedralAngle() {
+		if (_pair == null) {
+			return Double.NaN;
+		}
+		HE_Halfedge he1, he2;
+		if (isEdge()) {
+			he1 = this;
+			he2 = _pair;
+		}
+		else {
+			he1 = _pair;
+			he2 = this;
+		}
+
+		if ((he1._face == null) && (he2._face == null)) {
+			return Double.NaN;
+		}
+		else {
+			final WB_Vector n1 = he1._face.getFaceNormal();
+			final WB_Vector n2 = he2._face.getFaceNormal();
+			return Math.PI - Math.acos(WB_Math.clamp(n1.dot(n2), -1, 1));
+		}
 	}
 
 }

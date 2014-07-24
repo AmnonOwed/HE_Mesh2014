@@ -111,8 +111,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		final HE_Selection split = new HE_Selection(mesh);
 
 		final FastMap<Long, Double> edgeInt = new FastMap<Long, Double>();
-		final Iterator<HE_Edge> eItr = faces.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = faces.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
@@ -143,16 +143,16 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		}
 
 		for (final Map.Entry<Long, Double> en : edgeInt.entrySet()) {
-			final HE_Edge ce = mesh.getEdgeByKey(en.getKey());
+			final HE_Halfedge ce = mesh.getHalfedgeByKey(en.getKey());
 			final double u = en.getValue();
-			if (ce.getFirstFace() != null) {
+			if (ce.getFace() != null) {
 
-				split.add(ce.getFirstFace());
+				split.add(ce.getFace());
 
 			}
-			if (ce.getSecondFace() != null) {
+			if (ce.getPair().getFace() != null) {
 
-				split.add(ce.getSecondFace());
+				split.add(ce.getPair().getFace());
 
 			}
 			if (u == 0.0) {
@@ -200,7 +200,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 						faceVertices.get(secondVertex));
 				final HE_Face nf = out.fItr().next();
 				cut.add(nf);
-				final HE_Edge ne = out.eItr().next();
+				final HE_Halfedge ne = out.eItr().next();
 				ne.setLabel(1);
 				cutEdges.add(ne);
 			}
@@ -267,8 +267,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			final HE_Selection split = new HE_Selection(lsel.parent);
 
 			final HashMap<Long, Double> edgeInt = new HashMap<Long, Double>();
-			final Iterator<HE_Edge> eItr = lsel.eItr();
-			HE_Edge e;
+			final Iterator<HE_Halfedge> eItr = lsel.eItr();
+			HE_Halfedge e;
 			while (eItr.hasNext()) {
 				e = eItr.next();
 				if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
@@ -301,13 +301,14 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			}
 
 			for (final Map.Entry<Long, Double> en : edgeInt.entrySet()) {
-				final HE_Edge ce = lsel.parent.getEdgeByKey(en.getKey());
+				final HE_Halfedge ce = lsel.parent
+						.getHalfedgeByKey(en.getKey());
 				final double u = en.getValue();
-				if (lsel.contains(ce.getFirstFace())) {
-					split.add(ce.getFirstFace());
+				if (lsel.contains(ce.getFace())) {
+					split.add(ce.getFace());
 				}
-				if (lsel.contains(ce.getSecondFace())) {
-					split.add(ce.getSecondFace());
+				if (lsel.contains(ce.getPair().getFace())) {
+					split.add(ce.getPair().getFace());
 				}
 				if (u == 0.0) {
 					split.add(ce.getStartVertex());
@@ -354,7 +355,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 					final HE_Face nf = out.fItr().next();
 					cut.add(nf);
-					final HE_Edge ne = out.eItr().next();
+					final HE_Halfedge ne = out.eItr().next();
 					ne.setLabel(1);
 					cutEdges.add(ne);
 				}

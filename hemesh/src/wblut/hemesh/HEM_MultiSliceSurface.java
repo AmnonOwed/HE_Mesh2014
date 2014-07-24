@@ -8,9 +8,9 @@ import wblut.geom.WB_Plane;
 
 /**
  * Multiple planar cuts of a mesh. No faces are removed.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_MultiSliceSurface extends HEM_Modifier {
 
@@ -28,7 +28,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
 	/**
 	 * Set offset.
-	 * 
+	 *
 	 * @param d
 	 *            offset
 	 * @return self
@@ -47,7 +47,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
 	/**
 	 * Set cut planes from an arrayList of WB_Plane.
-	 * 
+	 *
 	 * @param planes
 	 *            arrayList of WB_Plane
 	 * @return self
@@ -60,7 +60,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
 	/**
 	 * Set cut planes from an array of WB_Plane.
-	 * 
+	 *
 	 * @param planes
 	 *            array of WB_Plane
 	 * @return self
@@ -75,7 +75,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -99,7 +99,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 		}
 		cut.cleanSelection();
 		newEdges.cleanSelection();
-		final Iterator<HE_Edge> eItr = newEdges.eItr();
+		final Iterator<HE_Halfedge> eItr = newEdges.eItr();
 		while (eItr.hasNext()) {
 			eItr.next().setLabel(1);
 		}
@@ -108,7 +108,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -132,7 +132,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 		}
 		cut.cleanSelection();
 		newEdges.cleanSelection();
-		final Iterator<HE_Edge> eItr = newEdges.eItr();
+		final Iterator<HE_Halfedge> eItr = newEdges.eItr();
 		while (eItr.hasNext()) {
 			eItr.next().setLabel(1);
 		}

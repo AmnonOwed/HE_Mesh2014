@@ -111,7 +111,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -156,7 +156,7 @@ public class HES_Planar extends HES_Subdividor {
 		final int n = mesh.getNumberOfEdges();
 		final HE_Selection orig = new HE_Selection(mesh);
 		orig.addVertices(mesh.getVerticesAsList());
-		final HE_Edge[] origE = mesh.getEdgesAsArray();
+		final HE_Halfedge[] origE = mesh.getEdgesAsArray();
 		for (int i = 0; i < n; i++) {
 			if (random) {
 				final double f = 0.5 + (randomGen.nextDouble() - 0.5) * range;
@@ -207,11 +207,6 @@ public class HES_Planar extends HES_Subdividor {
 					newHEp.setVertex(origHE1.getVertex());
 					newHE.setPair(newHEp);
 					newHEp.setPair(newHE);
-					final HE_Edge e = new HE_Edge();
-					mesh.add(e);
-					e.setHalfedge(newHE);
-					newHE.setEdge(e);
-					newHEp.setEdge(e);
 					newHEp.setFace(centerFace);
 					centerFace.setHalfedge(newHEp);
 					origHE1 = origHE3;
@@ -262,7 +257,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -313,7 +308,7 @@ public class HES_Planar extends HES_Subdividor {
 		selection.collectEdgesByFace();
 
 		final HE_Selection newVertices = new HE_Selection(selection.parent);
-		final HE_Edge[] edges = selection.getEdgesAsArray();
+		final HE_Halfedge[] edges = selection.getEdgesAsArray();
 		final int ne = selection.getNumberOfEdges();
 		for (int i = 0; i < ne; i++) {
 			HE_Vertex v;
@@ -368,11 +363,6 @@ public class HES_Planar extends HES_Subdividor {
 					newHEp.setVertex(origHE1.getVertex());
 					newHE.setPair(newHEp);
 					newHEp.setPair(newHE);
-					final HE_Edge e = new HE_Edge();
-					selection.parent.add(e);
-					e.setHalfedge(newHE);
-					newHE.setEdge(e);
-					newHEp.setEdge(e);
 					newHEp.setFace(centerFace);
 					centerFace.setHalfedge(newHEp);
 					origHE1 = origHE3;

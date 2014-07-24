@@ -17,7 +17,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
@@ -36,7 +36,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -99,9 +99,9 @@ public class HEM_FaceExpand extends HEM_Modifier {
 			} while (he != f.getHalfedge());
 		}
 		final int[][] faces = new int[mesh.getNumberOfFaces()
-		                              + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
+				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
 		final int[] labels = new int[mesh.getNumberOfFaces()
-		                             + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
+				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
 		final int[] noe = { mesh.getNumberOfFaces(), mesh.getNumberOfEdges(),
 				mesh.getNumberOfVertices() };
 		int currentFace = 0;
@@ -119,21 +119,19 @@ public class HEM_FaceExpand extends HEM_Modifier {
 			} while (he != f.getHalfedge());
 			currentFace++;
 		}
-		final Iterator<HE_Edge> eItr = mesh.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
 		int currentEdge = 0;
 		while (eItr.hasNext()) {
 
 			e = eItr.next();
 			faces[currentFace] = new int[4];
-			faces[currentFace][3] = halfedgeCorrelation.get(e.getHalfedge()
+			faces[currentFace][3] = halfedgeCorrelation.get(e.key());
+			faces[currentFace][2] = halfedgeCorrelation.get(e.getNextInFace()
 					.key());
-			faces[currentFace][2] = halfedgeCorrelation.get(e.getHalfedge()
+			faces[currentFace][1] = halfedgeCorrelation.get(e.getPair().key());
+			faces[currentFace][0] = halfedgeCorrelation.get(e.getPair()
 					.getNextInFace().key());
-			faces[currentFace][1] = halfedgeCorrelation.get(e.getHalfedge()
-					.getPair().key());
-			faces[currentFace][0] = halfedgeCorrelation.get(e.getHalfedge()
-					.getPair().getNextInFace().key());
 			labels[currentFace] = currentEdge;
 			currentEdge++;
 			currentFace++;
@@ -164,7 +162,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)

@@ -10,9 +10,9 @@ import wblut.geom.WB_Vector;
 
 /**
  * Chamfer all convex edges.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_ChamferEdges extends HEM_Modifier {
 
@@ -29,7 +29,7 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 
 	/**
 	 * Set chamfer distance along edge normals.
-	 * 
+	 *
 	 * @param d
 	 *            distance
 	 * @return self
@@ -50,16 +50,16 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 			return mesh;
 		}
 		final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
-		final Iterator<HE_Edge> eItr = mesh.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if ((e.getStartVertex().getVertexType() == WB_Convex.CONVEX)
+			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
 					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
 				final WB_Point O = new WB_Point(N)._mulSelf(-distance);
 				N._mulSelf(-1);
-				O._addSelf(e.getEdgeCenter());
+				O._addSelf(e.getHalfedgeCenter());
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}
@@ -84,16 +84,16 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 		}
 		final ArrayList<WB_Plane> cutPlanes = new ArrayList<WB_Plane>();
 		selection.collectEdgesByFace();
-		final Iterator<HE_Edge> eItr = selection.parent.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = selection.parent.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if ((e.getStartVertex().getVertexType() == WB_Convex.CONVEX)
+			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
 					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
 				final WB_Point O = new WB_Point(N)._mulSelf(-distance);
 				N._mulSelf(-1);
-				O._addSelf(e.getEdgeCenter());
+				O._addSelf(e.getHalfedgeCenter());
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}

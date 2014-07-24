@@ -43,7 +43,7 @@ public class HET_Export {
 				(colormodel == 1) ? HET_STLWriter.MATERIALISE
 						: (colormodel == 0) ? HET_STLWriter.DEFAULT
 								: HET_STLWriter.NONE,
-				HET_STLWriter.DEFAULT_BUFFER);
+								HET_STLWriter.DEFAULT_BUFFER);
 		stl.beginSave(path, name, mesh.getNumberOfFaces());
 		saveToSTLWithFaceColor(mesh, stl);
 		stl.endSave();
@@ -115,13 +115,7 @@ public class HET_Export {
 			halfedgeKeys.put(heItr.next().key(), i);
 			i++;
 		}
-		final TLongIntMap edgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
-		Iterator<HE_Edge> eItr = mesh.eItr();
-		i = 0;
-		while (eItr.hasNext()) {
-			edgeKeys.put(eItr.next().key(), i);
-			i++;
-		}
+
 		final TLongIntMap faceKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Face> fItr = mesh.fItr();
 		i = 0;
@@ -130,7 +124,7 @@ public class HET_Export {
 			i++;
 		}
 		hem.sizes(mesh.getNumberOfVertices(), mesh.getNumberOfHalfedges(),
-				mesh.getNumberOfEdges(), mesh.getNumberOfFaces());
+				mesh.getNumberOfFaces());
 
 		vItr = mesh.vItr();
 		HE_Vertex v;
@@ -151,7 +145,9 @@ public class HET_Export {
 
 		heItr = mesh.heItr();
 		HE_Halfedge he;
-		Integer vid, henextid, hepairid, eid, fid;
+		Integer vid, henextid, hepairid;
+		final Integer eid;
+		Integer fid;
 		while (heItr.hasNext()) {
 			he = heItr.next();
 			if (he.getVertex() == null) {
@@ -181,15 +177,7 @@ public class HET_Export {
 					hepairid = -1;
 				}
 			}
-			if (he.getEdge() == null) {
-				eid = -1;
-			}
-			else {
-				eid = edgeKeys.get(he.getEdge().key());
-				if (eid == null) {
-					eid = -1;
-				}
-			}
+
 			if (he.getFace() == null) {
 				fid = -1;
 			}
@@ -199,24 +187,9 @@ public class HET_Export {
 					fid = -1;
 				}
 			}
-			hem.halfedge(vid, henextid, hepairid, eid, fid);
+			hem.halfedge(vid, henextid, hepairid, fid);
 		}
 
-		eItr = mesh.eItr();
-		HE_Edge e;
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			if (e.getHalfedge() == null) {
-				heid = -1;
-			}
-			else {
-				heid = halfedgeKeys.get(e.getHalfedge().key());
-				if (heid == null) {
-					heid = -1;
-				}
-			}
-			hem.edge(heid);
-		}
 		fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -265,13 +238,7 @@ public class HET_Export {
 			halfedgeKeys.put(heItr.next().key(), i);
 			i++;
 		}
-		final TLongIntMap edgeKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
-		Iterator<HE_Edge> eItr = mesh.eItr();
-		i = 0;
-		while (eItr.hasNext()) {
-			edgeKeys.put(eItr.next().key(), i);
-			i++;
-		}
+
 		final TLongIntMap faceKeys = new TLongIntHashMap(10, 0.5f, -1L, -1);
 		Iterator<HE_Face> fItr = mesh.fItr();
 		i = 0;
@@ -280,7 +247,7 @@ public class HET_Export {
 			i++;
 		}
 		hem.sizes(mesh.getNumberOfVertices(), mesh.getNumberOfHalfedges(),
-				mesh.getNumberOfEdges(), mesh.getNumberOfFaces());
+				mesh.getNumberOfFaces());
 
 		vItr = mesh.vItr();
 		HE_Vertex v;
@@ -301,7 +268,7 @@ public class HET_Export {
 
 		heItr = mesh.heItr();
 		HE_Halfedge he;
-		Integer vid, henextid, hepairid, eid, fid;
+		Integer vid, henextid, hepairid, fid;
 		while (heItr.hasNext()) {
 			he = heItr.next();
 			if (he.getVertex() == null) {
@@ -331,15 +298,7 @@ public class HET_Export {
 					hepairid = -1;
 				}
 			}
-			if (he.getEdge() == null) {
-				eid = -1;
-			}
-			else {
-				eid = edgeKeys.get(he.getEdge().key());
-				if (eid == null) {
-					eid = -1;
-				}
-			}
+
 			if (he.getFace() == null) {
 				fid = -1;
 			}
@@ -349,24 +308,9 @@ public class HET_Export {
 					fid = -1;
 				}
 			}
-			hem.halfedge(vid, henextid, hepairid, eid, fid);
+			hem.halfedge(vid, henextid, hepairid, fid);
 		}
 
-		eItr = mesh.eItr();
-		HE_Edge e;
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			if (e.getHalfedge() == null) {
-				heid = -1;
-			}
-			else {
-				heid = halfedgeKeys.get(e.getHalfedge().key());
-				if (heid == null) {
-					heid = -1;
-				}
-			}
-			hem.edge(heid);
-		}
 		fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -443,9 +387,9 @@ public class HET_Export {
 					keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
 							.key())
 							+ vOffset,
-					keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
-							.key())
-							+ vOffset);
+							keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
+									.key())
+									+ vOffset);
 		}
 		pov.endSection();
 	}

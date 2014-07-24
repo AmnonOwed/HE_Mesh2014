@@ -28,7 +28,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -43,7 +43,6 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 					new InflaterInputStream(fis));
 			final int numVertices = dis.readInt();
 			final int numHalfedges = dis.readInt();
-			final int numEdges = dis.readInt();
 			final int numFaces = dis.readInt();
 
 			final FastTable<HE_Vertex> vertices = new FastTable<HE_Vertex>();
@@ -61,7 +60,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 			}
 
 			double x, y, z;
-			int heid, vid, henextid, hepairid, eid, fid;
+			int heid, vid, henextid, hepairid, fid;
 			HE_Vertex v;
 			for (int i = 0; i < numVertices; i++) {
 				v = vertices.get(i);
@@ -80,7 +79,6 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 				vid = dis.readInt();
 				henextid = dis.readInt();
 				hepairid = dis.readInt();
-				eid = dis.readInt();
 				fid = dis.readInt();
 				if (vid > -1) {
 					he.setVertex(vertices.get(vid));

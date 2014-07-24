@@ -239,7 +239,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -269,9 +269,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-				.put(he.key(),
-						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-								: chamfer);
+						.put(he.key(),
+								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+										: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -310,7 +310,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							do {
 
 								he.getVertex().getPoint()
-								._addMulSelf(heights[i], n);
+										._addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -332,9 +332,9 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 							final HE_Vertex v = he.getVertex();
 							he.getVertex()
-							.getPoint()
-							._addMulSelf(
-									d.value(v.xd(), v.yd(), v.zd()), n);
+									.getPoint()
+									._addMulSelf(
+											d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 					}
@@ -347,7 +347,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -378,9 +378,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-				.put(he.key(),
-						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-								: chamfer);
+						.put(he.key(),
+								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+										: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -416,7 +416,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 
 							he.getVertex().getPoint()
-							._addMulSelf(heights[i], n);
+									._addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -546,7 +546,6 @@ public class HEM_Extrude extends HEM_Modifier {
 		final List<HE_Halfedge> pairHalfedges = new FastTable<HE_Halfedge>();
 		final List<HE_Vertex> outerVertices = new FastTable<HE_Vertex>();
 		final List<HE_Vertex> extOuterVertices = new FastTable<HE_Vertex>();
-		final List<HE_Edge> newEdges = new FastTable<HE_Edge>();
 
 		for (int i = 0; i < neighborhood.size(); i++) {
 			HE_Halfedge he = neighborhood.get(i).getHalfedge();
@@ -573,10 +572,8 @@ public class HEM_Extrude extends HEM_Modifier {
 				eov.getPoint()._addMulSelf(d, n);
 			}
 			extOuterVertices.add(eov);
-			newEdges.add(new HE_Edge());
 
 		}
-		mesh.addEdges(newEdges);
 		mesh.addVertices(extOuterVertices);
 		for (int i = 0; i < vertices.size(); i++) {
 			final HE_Vertex v = vertices.get(i);
@@ -595,6 +592,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			}
 
 		}
+		final List<HE_Halfedge> newhes = new FastTable<HE_Halfedge>();
 		for (int c = 0; c < outerHalfedges.size(); c++) {
 			final HE_Face fNew = new HE_Face();
 
@@ -606,7 +604,6 @@ public class HEM_Extrude extends HEM_Modifier {
 			final HE_Halfedge heNew2 = new HE_Halfedge();
 			final HE_Halfedge heNew3 = new HE_Halfedge();
 			final HE_Halfedge heNew4 = new HE_Halfedge();
-			final HE_Edge eNew = new HE_Edge();
 
 			HE_Halfedge hen = heOrig1.getNextInFace();
 			int cp = -1;
@@ -623,29 +620,18 @@ public class HEM_Extrude extends HEM_Modifier {
 			v1.setHalfedge(heNew1);
 			heNew1.setFace(fNew);
 			fNew.setHalfedge(heNew1);
-			heNew1.setEdge(heOrig2.getEdge());
-			heNew1.getEdge().setHalfedge(heNew1);
 			heNew1.setPair(heOrig2);
 			heOrig2.setPair(heNew1);
 			heNew1.setNext(heNew2);
 			heNew2.setVertex(v2);
-			heNew2.setEdge(newEdges.get(cp));
-			if (heNew2.getEdge().getHalfedge() == null) {
-				heNew2.getEdge().setHalfedge(heNew2);
-			}
-			else {
-				heNew2.setPair(heNew2.getEdge().getHalfedge());
-				heNew2.getEdge().getHalfedge().setPair(heNew2);
-			}
+
 			v2.setHalfedge(heNew2);
 			heNew2.setFace(fNew);
 			heNew2.setNext(heNew3);
 			heNew3.setVertex(v3);
 			v3.setHalfedge(heNew3);
 			heNew3.setFace(fNew);
-			heNew3.setEdge(eNew);
-			heOrig1.setEdge(eNew);
-			eNew.setHalfedge(heNew3);
+
 			heNew3.setPair(heOrig1);
 			heOrig1.setPair(heNew3);
 			heNew3.setNext(heNew4);
@@ -653,23 +639,20 @@ public class HEM_Extrude extends HEM_Modifier {
 			v4.setHalfedge(heNew4);
 			heNew4.setFace(fNew);
 			heNew4.setNext(heNew1);
-			heNew4.setEdge(newEdges.get(c));
-			if (heNew4.getEdge().getHalfedge() == null) {
-				heNew4.getEdge().setHalfedge(heNew4);
-			}
-			else {
-				heNew4.setPair(heNew4.getEdge().getHalfedge());
-				heNew4.getEdge().getHalfedge().setPair(heNew4);
-			}
+
 			heOrig1.setVertex(v4);
 			mesh.add(fNew);
-			mesh.add(eNew);
+
 			mesh.add(heNew1);
 			mesh.add(heNew2);
 			mesh.add(heNew3);
 			mesh.add(heNew4);
+			newhes.add(heNew1);
+			newhes.add(heNew2);
+			newhes.add(heNew3);
+			newhes.add(heNew4);
 		}
-
+		mesh.pairHalfedgesAndCreateEdges(newhes);
 		return true;
 
 	}
@@ -759,7 +742,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		sel.addFaces(faces);
 		sel.collectEdgesByFace();
 
-		final List<HE_Edge> originalEdges = sel.getEdgesAsList();
+		final List<HE_Halfedge> originalEdges = sel.getEdgesAsList();
 		final int nf = faces.size();
 		WB_Point fc;
 		if (heights != null) {
@@ -789,10 +772,10 @@ public class HEM_Extrude extends HEM_Modifier {
 
 		if (fuse) {
 			for (int i = 0; i < originalEdges.size(); i++) {
-				final HE_Edge e = originalEdges.get(i);
+				final HE_Halfedge e = originalEdges.get(i);
 
-				final HE_Face f1 = e.getHalfedge().getFace();
-				final HE_Face f2 = e.getHalfedge().getPair().getFace();
+				final HE_Face f1 = e.getFace();
+				final HE_Face f2 = e.getPair().getFace();
 				if ((f1 != null) && (f2 != null)) {
 					if ((f1.getLabel() == 2) && (f2.getLabel() == 2)) {
 						if ((f1.getFaceNormal().cross((f2.getFaceNormal()))
@@ -914,14 +897,8 @@ public class HEM_Extrude extends HEM_Modifier {
 		if (isPossible) {
 			extruded.add(f);
 			f.setLabel(1);
-			final List<HE_Edge> newEdges = new FastTable<HE_Edge>();
-			final List<HE_Edge> newEdges2 = new FastTable<HE_Edge>();
-			he = f.getHalfedge();
-			do {
-				he = he.getNextInFace();
-				newEdges.add(new HE_Edge());
-			} while (he != f.getHalfedge());
-			mesh.addEdges(newEdges);
+			final List<HE_Halfedge> newhes = new FastTable<HE_Halfedge>();
+
 			int c = 0;
 			he = f.getHalfedge();
 			do {
@@ -934,8 +911,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				final HE_Halfedge heNew2 = new HE_Halfedge();
 				final HE_Halfedge heNew3 = new HE_Halfedge();
 				final HE_Halfedge heNew4 = new HE_Halfedge();
-				final HE_Edge eNew = new HE_Edge();
-				newEdges2.add(eNew);
+
 				final int cp = (c + 1) % faceVertices.size();
 				final HE_Vertex v1 = faceVertices.get(c);
 				final HE_Vertex v2 = faceVertices.get(cp);
@@ -945,30 +921,16 @@ public class HEM_Extrude extends HEM_Modifier {
 				v1.setHalfedge(heNew1);
 				heNew1.setFace(fNew);
 				fNew.setHalfedge(heNew1);
-				heNew1.setEdge(heOrig2.getEdge());
-				heNew1.getEdge().setHalfedge(heNew1);
 				heNew1.setPair(heOrig2);
 				heOrig2.setPair(heNew1);
 				heNew1.setNext(heNew2);
 				heNew2.setVertex(v2);
-				heNew2.setEdge(newEdges.get(cp));
-				if (heNew2.getEdge().getHalfedge() == null) {
-					heNew2.getEdge().setHalfedge(heNew2);
-				}
-				else {
-					heNew2.setPair(heNew2.getEdge().getHalfedge());
-					heNew2.getEdge().getHalfedge().setPair(heNew2);
-
-				}
 				v2.setHalfedge(heNew2);
 				heNew2.setFace(fNew);
 				heNew2.setNext(heNew3);
 				heNew3.setVertex(v3);
 				v3.setHalfedge(heNew3);
 				heNew3.setFace(fNew);
-				heNew3.setEdge(eNew);
-				heOrig1.setEdge(eNew);
-				eNew.setHalfedge(heNew3);
 				heNew3.setPair(heOrig1);
 				heOrig1.setPair(heNew3);
 				heNew3.setNext(heNew4);
@@ -976,31 +938,32 @@ public class HEM_Extrude extends HEM_Modifier {
 				v4.setHalfedge(heNew4);
 				heNew4.setFace(fNew);
 				heNew4.setNext(heNew1);
-				heNew4.setEdge(newEdges.get(c));
-				if (heNew4.getEdge().getHalfedge() == null) {
-					heNew4.getEdge().setHalfedge(heNew4);
-				}
-				else {
-					heNew4.setPair(heNew4.getEdge().getHalfedge());
-					heNew4.getEdge().getHalfedge().setPair(heNew4);
-				}
+
 				heOrig1.setVertex(v4);
 				mesh.add(fNew);
-				mesh.add(eNew);
+
 				mesh.add(v3);
 				mesh.add(heNew1);
 				mesh.add(heNew2);
 				mesh.add(heNew3);
 				mesh.add(heNew4);
+				newhes.add(heNew1);
+				newhes.add(heNew2);
+				newhes.add(heNew3);
+				newhes.add(heNew4);
 				he = he.getNextInFace();
 				c++;
 			} while (he != f.getHalfedge());
-			final List<HE_Edge> edgesToRemove = new FastTable<HE_Edge>();
-			for (int i = 0; i < newEdges2.size(); i++) {
-				final HE_Edge e = newEdges2.get(i);
-				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
-						e.getStartVertex(), e.getEndVertex()))) {
-					edgesToRemove.add(e);
+			mesh.pairHalfedgesAndCreateEdges(newhes);
+
+			final List<HE_Halfedge> edgesToRemove = new FastTable<HE_Halfedge>();
+			for (int i = 0; i < newhes.size(); i++) {
+				final HE_Halfedge e = newhes.get(i);
+				if (e.isEdge()) {
+					if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
+							e.getStartVertex(), e.getEndVertex()))) {
+						edgesToRemove.add(e);
+					}
 				}
 			}
 			for (int i = 0; i < edgesToRemove.size(); i++) {

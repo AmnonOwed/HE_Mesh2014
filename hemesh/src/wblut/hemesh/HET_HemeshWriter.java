@@ -53,9 +53,9 @@ public class HET_HemeshWriter {
 	}
 
 	public void halfedge(final int vid, final int henextid, final int hepairid,
-			final int edgeid, final int faceid) {
+			final int faceid) {
 		hemeshWriter.println(vid + " " + henextid + " " + hepairid + " "
-				+ edgeid + " " + faceid);
+				+ faceid);
 	}
 
 	public void edge(final int heid) {
@@ -66,7 +66,7 @@ public class HET_HemeshWriter {
 		hemeshWriter.println(heid);
 	}
 
-	public void sizes(final int v1, final int v2, final int v3, final int v4) {
-		hemeshWriter.println(v1 + " " + v2 + " " + v3 + " " + v4);
+	public void sizes(final int v1, final int v2, final int v3) {
+		hemeshWriter.println(v1 + " " + v2 + " " + v3);
 	}
 }

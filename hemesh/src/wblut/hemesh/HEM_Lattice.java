@@ -83,7 +83,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -132,7 +132,6 @@ public class HEM_Lattice extends HEM_Modifier {
 		final HE_Face[] origFaces = mesh.getFacesAsArray();
 		mesh.addVertices(innerMesh.getVerticesAsArray());
 		mesh.addFaces(innerMesh.getFacesAsArray());
-		mesh.addEdges(innerMesh.getEdgesAsArray());
 		mesh.addHalfedges(innerMesh.getHalfedgesAsArray());
 		HE_Face fo;
 		HE_Face fi;
@@ -245,7 +244,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -282,7 +281,6 @@ public class HEM_Lattice extends HEM_Modifier {
 		final HE_Face[] origFaces = selection.parent.getFacesAsArray();
 		selection.parent.addVertices(innerMesh.getVerticesAsArray());
 		selection.parent.addFaces(innerMesh.getFacesAsArray());
-		selection.parent.addEdges(innerMesh.getEdgesAsArray());
 		selection.parent.addHalfedges(innerMesh.getHalfedgesAsArray());
 		HE_Face fo;
 		HE_Face fi;

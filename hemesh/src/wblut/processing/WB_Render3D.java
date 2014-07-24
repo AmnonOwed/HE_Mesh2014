@@ -43,7 +43,6 @@ import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
 import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
-import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceIntersection;
 import wblut.hemesh.HE_Halfedge;
@@ -107,8 +106,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -249,20 +248,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -703,7 +702,7 @@ public class WB_Render3D {
 	 * @param e
 	 *            edge
 	 */
-	public void drawEdge(final HE_Edge e) {
+	public void drawEdge(final HE_Halfedge e) {
 		home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
 				.getStartVertex().zf(), e.getEndVertex().xf(), e.getEndVertex()
 				.yf(), e.getEndVertex().zf());

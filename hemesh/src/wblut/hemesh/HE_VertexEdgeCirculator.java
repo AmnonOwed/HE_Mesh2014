@@ -2,12 +2,12 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 
-public class HE_VertexEdgeCirculator implements Iterator<HE_Edge> {
+public class HE_VertexEdgeCirculator implements Iterator<HE_Halfedge> {
 
-	private HE_Halfedge _start;
+	private final HE_Halfedge _start;
 	private HE_Halfedge _current;
 
-	public HE_VertexEdgeCirculator(HE_Vertex v) {
+	public HE_VertexEdgeCirculator(final HE_Vertex v) {
 		_start = v.getHalfedge();
 		_current = null;
 
@@ -15,20 +15,25 @@ public class HE_VertexEdgeCirculator implements Iterator<HE_Edge> {
 
 	@Override
 	public boolean hasNext() {
-		if (_start == null)
+		if (_start == null) {
 			return false;
+		}
 		return ((_current == null) || (_current.getNextInVertex() != _start))
 				&& (_start != null);
 	}
 
 	@Override
-	public HE_Edge next() {
+	public HE_Halfedge next() {
 		if (_current == null) {
 			_current = _start;
-		} else {
+		}
+		else {
 			_current = _current.getNextInVertex();
 		}
-		return _current.getEdge();
+		if (_current.isEdge()) {
+			return _current;
+		}
+		return _current.getPair();
 	}
 
 	@Override

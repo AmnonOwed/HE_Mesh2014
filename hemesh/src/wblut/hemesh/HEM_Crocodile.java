@@ -15,7 +15,7 @@ public class HEM_Crocodile extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
@@ -38,7 +38,7 @@ public class HEM_Crocodile extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -50,7 +50,7 @@ public class HEM_Crocodile extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -61,12 +61,12 @@ public class HEM_Crocodile extends HEM_Modifier {
 		HE_Vertex v;
 		if (chamfer == 0.5) {
 
-			List<HE_Edge> star;
+			List<HE_Halfedge> star;
 
 			while (vitr.hasNext()) {
 				v = vitr.next();
 				star = v.getEdgeStar();
-				for (final HE_Edge e : star) {
+				for (final HE_Halfedge e : star) {
 					umbrellapoints.put(e._key, e.getEdgeCenter());
 				}
 
@@ -93,9 +93,9 @@ public class HEM_Crocodile extends HEM_Modifier {
 			}
 
 			for (final long he : umbrellapoints.keySet()) {
-				selection.parent
-				.splitEdge(selection.parent.getHalfedgeByKey(he)
-						.getEdge(), umbrellapoints.get(he));
+				selection.parent.splitEdge(
+						selection.parent.getHalfedgeByKey(he),
+						umbrellapoints.get(he));
 			}
 
 		}

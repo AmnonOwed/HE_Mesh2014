@@ -95,15 +95,18 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		return fhe;
 	}
 
-	public List<HE_Edge> getPathEdges() {
-		final List<HE_Edge> fe = new FastTable<HE_Edge>();
+	public List<HE_Halfedge> getPathEdges() {
+		final List<HE_Halfedge> fe = new FastTable<HE_Halfedge>();
 		if (_halfedge == null) {
 			return fe;
 		}
 		HE_PathHalfedge he = _halfedge;
 		do {
-			if (!fe.contains(he.getHalfedge().getEdge())) {
-				fe.add(he.getHalfedge().getEdge());
+			if (he.getHalfedge().isEdge()) {
+				fe.add(he.getHalfedge());
+			}
+			else {
+				fe.add(he.getHalfedge().getPair());
 			}
 			he = he.getNextInPath();
 		} while ((he != _halfedge) && (he != null));

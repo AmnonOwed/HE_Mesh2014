@@ -41,10 +41,10 @@ public class HEM_Diagrid extends HEM_Modifier {
 		mesh.triSplitFaces();
 
 		final HE_EdgeIterator eitr = new HE_EdgeIterator(sel);
-		HE_Edge e;
+		HE_Halfedge e;
 		while (eitr.hasNext()) {
 			e = eitr.next();
-			if (!e.isBoundary() && e.getDihedralAngle() > (limitAngle)) {
+			if (!e.isBoundary() && e.getEdgeDihedralAngle() > (limitAngle)) {
 				mesh.deleteEdge(e);
 			}
 		}
@@ -55,13 +55,13 @@ public class HEM_Diagrid extends HEM_Modifier {
 	public HE_Mesh apply(final HE_Selection selection) {
 		selection.collectEdgesByFace();
 		selection.parent.triSplitFaces(selection);
-		final HE_RAS<HE_Edge> border = new HE_RASTrove<HE_Edge>();
+		final HE_RAS<HE_Halfedge> border = new HE_RASTrove<HE_Halfedge>();
 		border.addAll(selection.getOuterEdges());
 		final HE_EdgeIterator eitr = new HE_EdgeIterator(selection);
-		HE_Edge e;
+		HE_Halfedge e;
 		while (eitr.hasNext()) {
 			e = eitr.next();
-			if (!border.contains(e) && e.getDihedralAngle() > (limitAngle)) {
+			if (!border.contains(e) && e.getEdgeDihedralAngle() > (limitAngle)) {
 				selection.parent.deleteEdge(e);
 			}
 		}

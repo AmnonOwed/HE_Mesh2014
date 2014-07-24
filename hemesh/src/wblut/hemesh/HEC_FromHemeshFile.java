@@ -27,7 +27,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -71,7 +71,6 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		id++;
 		final int numVertices = Integer.parseInt(subresult[0]);
 		final int numHalfedges = Integer.parseInt(subresult[1]);
-		final int numEdges = Integer.parseInt(subresult[2]);
 		final int numFaces = Integer.parseInt(subresult[3]);
 		final HE_Mesh mesh = new HE_Mesh();
 		final FastTable<HE_Vertex> vertices = new FastTable<HE_Vertex>();
@@ -89,7 +88,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		}
 
 		double x, y, z;
-		int heid, vid, henextid, hepairid, eid, fid;
+		int heid, vid, henextid, hepairid, fid;
 		HE_Vertex v;
 		for (int i = 0; i < numVertices; i++) {
 			v = vertices.get(i);
@@ -111,7 +110,6 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 			vid = Integer.parseInt(subresult[0]);
 			henextid = Integer.parseInt(subresult[1]);
 			hepairid = Integer.parseInt(subresult[2]);
-			eid = Integer.parseInt(subresult[3]);
 			fid = Integer.parseInt(subresult[4]);
 			if (vid > -1) {
 				he.setVertex(vertices.get(vid));

@@ -2362,7 +2362,7 @@ WB_HasColor, WB_Mesh {
 		HE_Halfedge hejPrev;
 		HE_Halfedge he0new;
 		HE_Halfedge he1new;
-		final HE_Edge edgeNew;
+
 		HE_Face faceNew;
 		HE_Halfedge he;
 		if ((hei.getNextInFace() != hej) || (hei.getPrevInFace() != hej)) {
@@ -3733,22 +3733,6 @@ WB_HasColor, WB_Mesh {
 						}
 					}
 				}
-				if ((he.getEdge() != null) && (he.getPair().getEdge() != null)) {
-					if (he.getEdge() != he.getPair().getEdge()) {
-						if (verbose == true) {
-							System.out
-									.println("Inconsistent reference (edge) in half edge  "
-											+ he.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						}
-						else {
-							return false;
-						}
-
-					}
-				}
 			}
 
 			if ((he.getNextInFace() != null) && (he.getPair() != null)) {
@@ -3824,18 +3808,6 @@ WB_HasColor, WB_Mesh {
 					else {
 						return false;
 					}
-				}
-			}
-			if (he.getEdge() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference (edge) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
 				}
 			}
 

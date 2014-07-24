@@ -73,7 +73,7 @@ public class HE_Intersection {
 
 	}
 
-	public static double getIntersection(final HE_Edge e, final WB_Plane P) {
+	public static double getIntersection(final HE_Halfedge e, final WB_Plane P) {
 		final WB_IntersectionResult i = WB_Intersection.getIntersection3D(
 				e.getStartVertex(), e.getEndVertex(), P);
 
