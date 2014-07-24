@@ -8,7 +8,7 @@ import wblut.geom.interfaces.Triangle;
 
 /**
  * Creates a new mesh from a list of triangles. Duplicate vertices are fused.
- * 
+ *
  * @param <T>
  *            the generic type
  * @author Frederik Vanhoutte (W:Blut)
@@ -20,7 +20,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 
 	/**
 	 * Instantiates a new HEC_FromTriangles.
-	 * 
+	 *
 	 */
 	public HEC_FromTriangles() {
 		super();
@@ -29,7 +29,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 
 	/**
 	 * Sets the source triangles.
-	 * 
+	 *
 	 * @param ts
 	 *            source triangles
 	 * @return self
@@ -44,7 +44,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 
 	/**
 	 * Sets the source triangles.
-	 * 
+	 *
 	 * @param ts
 	 *            source triangles
 	 * @return self
@@ -59,7 +59,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -77,10 +77,11 @@ public class HEC_FromTriangles extends HEC_Creator {
 				faces[i][1] = 3 * i + 1;
 				faces[i][2] = 3 * i + 2;
 			}
-			System.out.println("HEC_FromTriangles: passing " + triangles.size()
-					+ " triangles as faces.");
+			// System.out.println("HEC_FromTriangles: passing " +
+			// triangles.size()
+			// + " triangles as faces.");
 			final HEC_FromFacelist ffl = new HEC_FromFacelist()
-					.setVertices(vertices).setFaces(faces).setDuplicate(true);
+			.setVertices(vertices).setFaces(faces).setDuplicate(true);
 			return ffl.createBase();
 		}
 		return null;

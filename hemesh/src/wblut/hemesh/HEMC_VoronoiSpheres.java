@@ -7,9 +7,9 @@ import wblut.geom.WB_Point;
 /**
  * Creates the Voronoi cell of a collection of points, constrained by a maximum
  * radius.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 
 public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
@@ -37,7 +37,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Instantiates a new HEMC_VoronoiSpheres.
-	 * 
+	 *
 	 */
 	public HEMC_VoronoiSpheres() {
 		super();
@@ -49,7 +49,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            array of vertex positions
 	 * @return self
@@ -61,7 +61,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of double of vertex positions
 	 * @return self
@@ -80,7 +80,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set points that define cell centers.
-	 * 
+	 *
 	 * @param points
 	 *            2D array of float of vertex positions
 	 * @return self
@@ -99,7 +99,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set number of points.
-	 * 
+	 *
 	 * @param N
 	 *            number of points
 	 * @return self
@@ -111,7 +111,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set level of geodesic sphere in each cell.
-	 * 
+	 *
 	 * @param l
 	 *            recursive level
 	 * @return self
@@ -123,7 +123,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set number of tracer points to use in approximate model.
-	 * 
+	 *
 	 * @param n
 	 *            number of tracer points
 	 * @return self
@@ -135,7 +135,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set initial trace step size.
-	 * 
+	 *
 	 * @param d
 	 *            trace step
 	 * @return self
@@ -147,7 +147,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set maximum radius of cell.
-	 * 
+	 *
 	 * @param c
 	 *            cutoff radius
 	 * @return self
@@ -159,7 +159,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/**
 	 * Set approximate mode.
-	 * 
+	 *
 	 * @param a
 	 *            true, false
 	 * @return self
@@ -171,7 +171,7 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_MultiCreator#create()
 	 */
 	@Override
@@ -192,11 +192,12 @@ public class HEMC_VoronoiSpheres extends HEMC_MultiCreator {
 		final HEC_VoronoiSphere cvc = new HEC_VoronoiSphere();
 
 		cvc.setPoints(points).setN(numberOfPoints).setLevel(level)
-				.setCutoff(cutoff).setApprox(approx).setNumTracers(numTracers)
-				.setTraceStep(traceStep);
+		.setCutoff(cutoff).setApprox(approx).setNumTracers(numTracers)
+		.setTraceStep(traceStep);
 		for (int i = 0; i < numberOfPoints; i++) {
-			System.out.println("HEMC_VoronoiSpheres: creating cell " + (i + 1)
-					+ " of " + numberOfPoints + ".");
+			// System.out.println("HEMC_VoronoiSpheres: creating cell " + (i +
+			// 1)
+			// + " of " + numberOfPoints + ".");
 			cvc.setCellIndex(i);
 			final HE_Mesh mesh = cvc.createBase();
 			if (mesh.getNumberOfVertices() > 0) {

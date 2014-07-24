@@ -222,7 +222,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_MultiCreator#create()
 	 */
 	@Override
@@ -249,7 +249,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
 		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
 		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-		.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
+				.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
 		if (limit > 0) {
 			final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 			for (int i = 0; i < numberOfPoints; i++) {
@@ -258,8 +258,8 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 
 			for (int i = 0; i < numberOfPoints; i++) {
 				cvc.setCellIndex(i);
-				System.out.println("HEMC_VoronoiCells: creating cell "
-						+ (i + 1) + " of " + numberOfPoints + ".");
+				// System.out.println("HEMC_VoronoiCells: creating cell "
+				// + (i + 1) + " of " + numberOfPoints + ".");
 				final WB_KDEntry<WB_Point, Integer>[] closest = tree
 						.getNearestNeighbors(points[i], limit);
 				final ArrayList<Integer> indicesToUse = new ArrayList<Integer>();
@@ -279,8 +279,8 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		else {
 			for (int i = 0; i < numberOfPoints; i++) {
 				cvc.setCellIndex(i);
-				System.out.println("HEMC_VoronoiCells: creating cell "
-						+ (i + 1) + " of " + numberOfPoints + ".");
+				// System.out.println("HEMC_VoronoiCells: creating cell "
+				// + (i + 1) + " of " + numberOfPoints + ".");
 				final HE_Mesh mesh = cvc.createBase();
 				linnersel.add(cvc.inner);
 				loutersel.add(cvc.outer);
@@ -306,7 +306,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 			}
 
 			result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
-			.setActive(on).setCells(result));
+					.setActive(on).setCells(result));
 		}
 		return result;
 

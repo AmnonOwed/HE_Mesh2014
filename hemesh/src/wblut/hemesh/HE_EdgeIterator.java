@@ -18,21 +18,38 @@ public class HE_EdgeIterator implements Iterator<HE_Halfedge> {
 
 	@Override
 	public boolean hasNext() {
-		if (_itr.hasNext() == false) {
-			return false;
-		}
-		while (!nexthe.isEdge()) {
-			if (_itr.hasNext() == false) {
+		do {
+
+			// reached end of list, status of nexthe is irrelevant
+			if (!_itr.hasNext()) {
 				return false;
+			}
+
+			// reached one but last element of list, status of nexthe is only
+			// thing that matters
+			if (!_nitr.hasNext()) {
+				return nexthe.isEdge();
+			}
+
+			// somewhere in the middle, if nexhthe is an edge, stop here.
+			// Otherwise progress until nexthe is an edge
+			if (nexthe.isEdge()) {
+				return true;
 			}
 			_itr.next();
 			nexthe = _nitr.next();
-		}
-		return true;
+
+		} while (true);
+
 	}
 
 	@Override
 	public HE_Halfedge next() {
+
+		if (_nitr.hasNext()) {
+			nexthe = _nitr.next();
+		}
+
 		return _itr.next();
 	}
 

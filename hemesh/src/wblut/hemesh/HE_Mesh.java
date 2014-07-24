@@ -13,6 +13,9 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 import javolution.util.FastTable;
+
+import org.apache.log4j.Logger;
+
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Convex;
@@ -49,7 +52,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-WB_HasColor, WB_Mesh {
+		WB_HasColor, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -62,6 +65,8 @@ WB_HasColor, WB_Mesh {
 
 	/** The _data. */
 	private HashMap<String, Object> _data;
+
+	static Logger logger = Logger.getLogger(HE_Mesh.class);
 
 	private int meshcolor;
 
@@ -951,9 +956,9 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			vItr.next()
-					.getPoint()
-					._addSelf(x - _center.xd(), y - _center.yd(),
-							z - _center.zd());
+			.getPoint()
+			._addSelf(x - _center.xd(), y - _center.yd(),
+					z - _center.zd());
 		}
 		_center._set(x, y, z);
 		return this;
@@ -1337,9 +1342,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -1375,8 +1380,8 @@ WB_HasColor, WB_Mesh {
 		final FastMap<Long, VertexInfo> vertexLists = new FastMap<Long, VertexInfo>();
 		HE_Vertex v;
 		VertexInfo vi;
-		System.out.println("HE_Mesh : collating " + unpairedHalfedges.size()
-				+ " unpaired halfedges per vertex.");
+		// System.out.println("HE_Mesh : collating " + unpairedHalfedges.size()
+		// + " unpaired halfedges per vertex.");
 		for (final HE_Halfedge he : unpairedHalfedges) {
 			v = he.getVertex();
 			vi = vertexLists.get(v.key());
@@ -1398,7 +1403,7 @@ WB_HasColor, WB_Mesh {
 		HE_Halfedge he;
 		HE_Halfedge he2;
 
-		System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
+		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
 		for (final VertexInfo vInfo : vertexLists.values()) {
 
 			for (int i = 0; i < vInfo.out.size(); i++) {
@@ -1408,9 +1413,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -2018,7 +2023,7 @@ WB_HasColor, WB_Mesh {
 		add(vNew);
 		add(he0new);
 		add(he1new);
-
+		out.add(he0new.isEdge() ? he0new : he1new);
 		out.add(vNew);
 
 		return out;
@@ -2389,7 +2394,7 @@ WB_HasColor, WB_Mesh {
 			add(he1new);
 
 			add(faceNew);
-
+			out.add(he0new.isEdge() ? he0new : he1new);
 			out.add(faceNew);
 			he = face.getHalfedge();
 			do {
@@ -3524,298 +3529,8 @@ WB_HasColor, WB_Mesh {
 	 * @return true or false
 	 */
 	public boolean validate(final boolean verbose, final boolean force) {
-		boolean result = true;
-		if (verbose == true) {
-			System.out.println("Checking face (" + getNumberOfFaces()
-					+ ") properties");
-		}
 
-		HE_Face face;
-		final Iterator<HE_Face> fItr = fItr();
-		while (fItr.hasNext()) {
-			face = fItr.next();
-			if (face.getHalfedge() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference in face " + face.key()
-							+ ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-
-			}
-			else {
-				if (!contains(face.getHalfedge())) {
-					if (verbose == true) {
-						System.out.println("External reference in face "
-								+ face.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-				else {
-					if (face.getHalfedge().getFace() != null) {
-						if (face.getHalfedge().getFace() != face) {
-							if (verbose == true) {
-								System.out.println("Wrong reference in face "
-										+ face.key() + ".");
-							}
-							if (force == true) {
-								result = false;
-							}
-							else {
-								return false;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if (verbose == true) {
-			System.out.println("Checking vertex (" + getNumberOfVertices()
-					+ ") properties");
-		}
-		HE_Vertex v;
-		final Iterator<HE_Vertex> vItr = vItr();
-		while (vItr.hasNext()) {
-			v = vItr.next();
-			if (v.getHalfedge() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference in vertex  " + v.key()
-							+ ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				if (!contains(v.getHalfedge())) {
-					if (verbose == true) {
-						System.out.println("External reference in vertex  "
-								+ v.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-				if (v.getHalfedge().getVertex() != null) {
-					if (v.getHalfedge().getVertex() != v) {
-						if (verbose == true) {
-							System.out.println("Wrong reference in vertex  "
-									+ v.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						}
-						else {
-							return false;
-						}
-					}
-				}
-			}
-		}
-
-		if (verbose == true) {
-			System.out.println("Checking edge (" + getNumberOfEdges()
-					+ ") properties");
-		}
-
-		if (verbose == true) {
-			System.out.println("Checking half edge (" + getNumberOfHalfedges()
-					+ ") properties");
-		}
-		HE_Halfedge he;
-		final Iterator<HE_Halfedge> heItr = heItr();
-		while (heItr.hasNext()) {
-			he = heItr.next();
-			if (he.getNextInFace() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference (next) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				if (!contains(he.getNextInFace())) {
-					if (verbose == true) {
-						System.out
-								.println("External reference (next) in half edge  "
-										+ he.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-				if ((he.getFace() != null)
-						&& (he.getNextInFace().getFace() != null)) {
-					if (he.getFace() != he.getNextInFace().getFace()) {
-						if (verbose == true) {
-							System.out
-									.println("Incosistent reference (face) in half edge  "
-											+ he.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						}
-						else {
-							return false;
-						}
-					}
-				}
-			}
-			if (he.getPair() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference (pair) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				if (!contains(he.getPair())) {
-					if (verbose == true) {
-						System.out
-								.println("External reference (pair) in half edge  "
-										+ he.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-				if (he.getPair().getPair() == null) {
-					if (verbose == true) {
-						System.out
-								.println("No pair reference back to half edge  "
-										+ he.key() + ".");
-					}
-				}
-				else {
-					if (he.getPair().getPair() != he) {
-						if (verbose == true) {
-							System.out
-									.println("Wrong pair reference back to half edge  "
-											+ he.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						}
-						else {
-							return false;
-						}
-					}
-				}
-			}
-
-			if ((he.getNextInFace() != null) && (he.getPair() != null)) {
-				if ((he.getNextInFace().getVertex() != null)
-						&& (he.getPair().getVertex() != null)) {
-					if (he.getNextInFace().getVertex() != he.getPair()
-							.getVertex()) {
-						if (verbose == true) {
-							System.out
-									.println("Inconsistent reference (pair)/(next) in half edge  "
-											+ he.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						}
-						else {
-							return false;
-						}
-					}
-				}
-			}
-			if (he.getFace() == null) {
-
-				if (verbose == true) {
-					System.out.println("Null reference (face) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-
-			}
-			else {
-				if (!contains(he.getFace())) {
-					if (verbose == true) {
-						System.out
-								.println("External reference (face) in half edge  "
-										+ he.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-			}
-			if (he.getVertex() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference (vert) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				if (!contains(he.getVertex())) {
-					if (verbose == true) {
-						System.out
-								.println("External reference (vert) in half edge  "
-										+ he.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					}
-					else {
-						return false;
-					}
-				}
-			}
-
-		}
-		if (verbose == true) {
-			System.out.println("Validation complete!");
-		}
-		return result;
+		return HET_Diagnosis.validate(this);
 	}
 
 	/**
@@ -4332,9 +4047,9 @@ WB_HasColor, WB_Mesh {
 						he.getNextInVertex().getHalfedgeTangent())) {
 					he.getPrevInFace().setNext(he.getNextInFace());
 					he.getPair().getPrevInFace()
-							.setNext(he.getPair().getNextInFace());
+					.setNext(he.getPair().getNextInFace());
 					he.getPair().getNextInFace()
-							.setVertex(he.getNextInFace().getVertex());
+					.setVertex(he.getNextInFace().getVertex());
 					if (he.getFace() != null) {
 						if (he.getFace().getHalfedge() == he) {
 							he.getFace().setHalfedge(he.getNextInFace());
@@ -4344,7 +4059,7 @@ WB_HasColor, WB_Mesh {
 						if (he.getPair().getFace().getHalfedge() == he
 								.getPair()) {
 							he.getPair().getFace()
-									.setHalfedge(he.getPair().getNextInFace());
+							.setHalfedge(he.getPair().getNextInFace());
 						}
 					}
 					vItr.remove();
@@ -4931,7 +4646,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -4944,7 +4659,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

@@ -20,6 +20,7 @@ public class HE_RASJavolution<E extends HE_Element> extends HE_RAS<E> {
 	FastMap<Long, Integer> indices;// TLongIntMap indices;
 
 	public HE_RASJavolution() {
+
 		objects = new FastTable<E>();
 		indices = new FastSortedMap<Long, Integer>().parallel(); // TLongIntHashMap(10,
 		// 0.5f,
