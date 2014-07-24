@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javolution.context.LogContext;
-import javolution.context.LogContext.Level;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
@@ -29,7 +27,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	public HEM_Lattice() {
 		super();
-		LogContext.enter().setLevel(Level.INFO);
+
 		d = 0;
 		sew = 0;
 		thresholdAngle = -1;
@@ -83,7 +81,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -244,7 +242,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

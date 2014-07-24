@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/javolution-6.1.0.jar"/>
 	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/jts.jar"/>
 	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/trove-3.1a1.jar"/>
+	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -134,7 +134,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 			avgFC.put(v.key(), afc);
 		}
 
-		mesh.quadSplitFaces();
+		mesh.splitFacesQuad();
 		final FastMap<Long, WB_Coordinate> newPositions = new FastMap<Long, WB_Coordinate>();
 		final HE_Selection all = mesh.selectAllFaces();
 		final List<HE_Vertex> boundary = all.getOuterVertices();
@@ -261,7 +261,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 			afc._divSelf(c);
 			avgFC.put(v.key(), afc);
 		}
-		selection.parent.quadSplitFaces(selection);
+		selection.parent.splitFacesQuad(selection);
 		final FastMap<Long, WB_Coordinate> newPositions = new FastMap<Long, WB_Coordinate>();
 		selection.collectVertices();
 		final List<HE_Vertex> boundary = selection.getBoundaryVertices();

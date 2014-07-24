@@ -88,7 +88,7 @@ public class HES_Smooth extends HES_Subdividor {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		mesh.quadSplitFaces();
+		mesh.splitFacesQuad();
 		final WB_Point[] newPositions = new WB_Point[mesh.getNumberOfVertices()];
 		final HE_Selection all = mesh.selectAllFaces();
 		final List<HE_Vertex> boundary = all.getOuterVertices();
@@ -165,7 +165,7 @@ public class HES_Smooth extends HES_Subdividor {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		selection.parent.quadSplitFaces(selection);
+		selection.parent.splitFacesQuad(selection);
 		final List<WB_Point> newPositions = new ArrayList<WB_Point>();
 		final List<HE_Vertex> boundary = selection.getBoundaryVertices();
 		final List<HE_Vertex> outer = selection.getOuterVertices();

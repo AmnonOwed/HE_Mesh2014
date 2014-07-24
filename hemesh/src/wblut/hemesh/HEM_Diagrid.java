@@ -38,7 +38,7 @@ public class HEM_Diagrid extends HEM_Modifier {
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		final HE_Selection sel = mesh.selectAllEdges();
-		mesh.triSplitFaces();
+		mesh.splitFacesTri();
 
 		final HE_EdgeIterator eitr = new HE_EdgeIterator(sel);
 		HE_Halfedge e;
@@ -54,7 +54,7 @@ public class HEM_Diagrid extends HEM_Modifier {
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
 		selection.collectEdgesByFace();
-		selection.parent.triSplitFaces(selection);
+		selection.parent.splitFacesTri(selection);
 		final HE_RAS<HE_Halfedge> border = new HE_RASTrove<HE_Halfedge>();
 		border.addAll(selection.getOuterEdges());
 		final HE_EdgeIterator eitr = new HE_EdgeIterator(selection);

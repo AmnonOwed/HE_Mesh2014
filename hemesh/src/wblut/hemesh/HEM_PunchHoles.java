@@ -1,7 +1,5 @@
 package wblut.hemesh;
 
-import javolution.context.LogContext;
-import javolution.context.LogContext.Level;
 
 public class HEM_PunchHoles extends HEM_Modifier {
 
@@ -17,7 +15,7 @@ public class HEM_PunchHoles extends HEM_Modifier {
 
 	public HEM_PunchHoles() {
 		super();
-		LogContext.enter().setLevel(Level.INFO);
+
 		sew = 0;
 		thresholdAngle = -1;
 		fuseAngle = Math.PI / 36;
@@ -54,7 +52,7 @@ public class HEM_PunchHoles extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -76,7 +74,7 @@ public class HEM_PunchHoles extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

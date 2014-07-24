@@ -6,8 +6,6 @@ import gnu.trove.map.hash.TLongDoubleHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javolution.context.LogContext;
-import javolution.context.LogContext.Level;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
@@ -239,12 +237,12 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		LogContext.enter().setLevel(Level.INFO);
+
 		mesh.resetFaceLabels();
 		walls = new HE_Selection(mesh);
 		extruded = new HE_Selection(mesh);
@@ -269,9 +267,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -310,7 +308,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							do {
 
 								he.getVertex().getPoint()
-										._addMulSelf(heights[i], n);
+								._addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -332,9 +330,9 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 							final HE_Vertex v = he.getVertex();
 							he.getVertex()
-									.getPoint()
-									._addMulSelf(
-											d.value(v.xd(), v.yd(), v.zd()), n);
+							.getPoint()
+							._addMulSelf(
+									d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 					}
@@ -347,12 +345,12 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		LogContext.enter().setLevel(Level.INFO);
+
 		selection.parent.resetFaceLabels();
 		walls = new HE_Selection(selection.parent);
 		extruded = new HE_Selection(selection.parent);
@@ -378,9 +376,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -416,7 +414,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 
 							he.getVertex().getPoint()
-									._addMulSelf(heights[i], n);
+							._addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -715,7 +713,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 		walls.add(f);
 		f.setLabel(4);
-		final HE_Face[] newFaces = mesh.triSplitFace(f,
+		final HE_Face[] newFaces = mesh.splitFaceTri(f,
 				fc._addSelf(n._mulSelf(d))).getFacesAsArray();
 		for (final HE_Face newFace : newFaces) {
 			newFace.setLabel(4);

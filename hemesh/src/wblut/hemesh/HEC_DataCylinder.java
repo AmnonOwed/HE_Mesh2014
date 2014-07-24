@@ -339,7 +339,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 					final double datapoint = data[currentfacet][currentstep];
 					final WB_Point p = currentFace.getFaceCenter();
 					p._addMulSelf(datapoint, currentFace.getFaceNormal());
-					mesh.triSplitFace(currentFace, p);
+					mesh.splitFaceTri(currentFace, p);
 				}
 			}
 		} else {

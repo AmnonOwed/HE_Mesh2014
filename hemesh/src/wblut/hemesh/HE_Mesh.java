@@ -2431,7 +2431,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            new vertex
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final HE_Face face, final WB_Point v) {
+	public HE_Selection splitFaceTri(final HE_Face face, final WB_Point v) {
 		HE_Halfedge he = face.getHalfedge();
 		final HE_Vertex vi = new HE_Vertex(v);
 		vi.setLabel(2);
@@ -2510,9 +2510,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            z-coordinate of new vertex
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final HE_Face face, final double x,
+	public HE_Selection splitFaceTri(final HE_Face face, final double x,
 			final double y, final double z) {
-		return triSplitFace(face, new WB_Point(x, y, z));
+		return splitFaceTri(face, new WB_Point(x, y, z));
 	}
 
 	/**
@@ -2522,8 +2522,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            face
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final HE_Face face) {
-		return triSplitFace(face, face.getFaceCenter());
+	public HE_Selection splitFaceTri(final HE_Face face) {
+		return splitFaceTri(face, face.getFaceCenter());
 	}
 
 	/**
@@ -2535,8 +2535,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            offset along face normal
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final HE_Face face, final double d) {
-		return triSplitFace(face,
+	public HE_Selection splitFaceTri(final HE_Face face, final double d) {
+		return splitFaceTri(face,
 				face.getFaceCenter()._addMulSelf(d, face.getFaceNormal()));
 	}
 
@@ -2547,12 +2547,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            offset along face normal
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFaces(final double d) {
+	public HE_Selection splitFacesTri(final double d) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final HE_Face[] faces = getFacesAsArray();
 		final int n = getNumberOfFaces();
 		for (int i = 0; i < n; i++) {
-			selectionOut.union(triSplitFace(faces[i], d));
+			selectionOut.union(splitFaceTri(faces[i], d));
 
 		}
 		return selectionOut;
@@ -2563,12 +2563,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFaces() {
+	public HE_Selection splitFacesTri() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final HE_Face[] faces = getFacesAsArray();
 		final int n = getNumberOfFaces();
 		for (int i = 0; i < n; i++) {
-			selectionOut.union(triSplitFace(faces[i]));
+			selectionOut.union(splitFaceTri(faces[i]));
 
 		}
 		return selectionOut;
@@ -2581,13 +2581,13 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            face selection to split
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFaces(final HE_Selection selection) {
+	public HE_Selection splitFacesTri(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final HE_Face[] faces = selection.getFacesAsArray();
 		final int n = selection.getNumberOfFaces();
 		for (int i = 0; i < n; i++) {
 
-			selectionOut.union(triSplitFace(faces[i]));
+			selectionOut.union(splitFaceTri(faces[i]));
 
 		}
 		selection.union(selectionOut);
@@ -2603,14 +2603,14 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            offset along face normal
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFaces(final HE_Selection selection,
+	public HE_Selection splitFacesTri(final HE_Selection selection,
 			final double d) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final HE_Face[] faces = selection.getFacesAsArray();
 		final int n = selection.getNumberOfFaces();
 		for (int i = 0; i < n; i++) {
 
-			selectionOut.union(triSplitFace(faces[i], d));
+			selectionOut.union(splitFaceTri(faces[i], d));
 
 		}
 		selection.union(selectionOut);
@@ -2627,8 +2627,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @return selection of new faces and new vertex
 	 */
 
-	public HE_Selection triSplitFace(final long key, final WB_Point v) {
-		return triSplitFace(getFaceByKey(key), v);
+	public HE_Selection splitFaceTri(final long key, final WB_Point v) {
+		return splitFaceTri(getFaceByKey(key), v);
 	}
 
 	/**
@@ -2644,9 +2644,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            z-coordinate of new vertex
 	 * @return selection of new faces and new vertex
 	 */
-	public HE_Selection triSplitFace(final long key, final double x,
+	public HE_Selection splitFaceTri(final long key, final double x,
 			final double y, final double z) {
-		return triSplitFace(getFaceByKey(key), new WB_Point(x, y, z));
+		return splitFaceTri(getFaceByKey(key), new WB_Point(x, y, z));
 	}
 
 	/**
@@ -2654,7 +2654,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection quadSplitFaces() {
+	public HE_Selection splitFacesQuad() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -2739,7 +2739,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            selection to split
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection quadSplitFaces(final HE_Selection sel) {
+	public HE_Selection splitFacesQuad(final HE_Selection sel) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = sel.getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -2823,7 +2823,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection hybridSplitFaces() {
+	public HE_Selection splitFacesHybrid() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -2962,7 +2962,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            the sel
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection hybridSplitFaces(final HE_Selection sel) {
+	public HE_Selection splitFacesHybrid(final HE_Selection sel) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = sel.getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -3093,26 +3093,26 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 	}
 
-	public HE_Selection centerFaceSplit() {
+	public HE_Selection splitFacesCenter() {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
 		modify(ext);
 		return ext.extruded;
 	}
 
-	public HE_Selection centerFaceSplitHole() {
+	public HE_Selection splitFacesCenterHole() {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
 		modify(ext);
 		delete(ext.extruded);
 		return ext.walls;
 	}
 
-	public HE_Selection centerFaceSplit(final HE_Selection faces) {
+	public HE_Selection splitFacesCenter(final HE_Selection faces) {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
 		modifySelected(ext, faces);
 		return ext.extruded;
 	}
 
-	public HE_Selection centerFaceSplitHole(final HE_Selection faces) {
+	public HE_Selection splitFacesCenterHole(final HE_Selection faces) {
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
 		modifySelected(ext, faces);
 		delete(ext.extruded);
@@ -3124,7 +3124,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midEdgeSplitFaces() {
+	public HE_Selection splitFacesMidEdge() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3197,7 +3197,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midEdgeSplitFacesHole() {
+	public HE_Selection splitFacesMidEdgeHole() {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3274,7 +3274,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            selection to split
 	 * @return selection of new faces and new vertices
 	 */
-	public HE_Selection midEdgeSplitFaces(final HE_Selection selection) {
+	public HE_Selection splitFacesMidEdge(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = selection.getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -3344,7 +3344,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		return selectionOut;
 	}
 
-	public HE_Selection midEdgeSplitFacesHole(final HE_Selection selection) {
+	public HE_Selection splitFacesMidEdgeHole(final HE_Selection selection) {
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = selection.getNumberOfFaces();
 		final int[] faceOrders = new int[n];
@@ -4325,7 +4325,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				;
 			}
 		}
-		final HE_Vertex nv = triSplitFace(face, p).vItr().next();
+		final HE_Vertex nv = splitFaceTri(face, p).vItr().next();
 		vertexTree.add(nv, nv.key());
 	}
 
