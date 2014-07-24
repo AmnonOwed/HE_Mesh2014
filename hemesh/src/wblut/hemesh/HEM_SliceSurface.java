@@ -70,7 +70,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -202,7 +202,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				cut.add(nf);
 				final HE_Halfedge ne = out.eItr().next();
 				ne.setLabel(1);
-				cutEdges.add(ne);
+				cutEdges.addHalfedges(out.getEdges());
 			}
 		}
 
@@ -211,7 +211,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

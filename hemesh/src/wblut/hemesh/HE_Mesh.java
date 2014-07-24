@@ -2006,7 +2006,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		he1new.setVertex(vNew);
 		vNew.setHalfedge(he0new);
 		he0new.setNext(he0.getNextInFace());
+		he0new.setLabel(he0.getLabel());
 		he1new.setNext(he1.getNextInFace());
+		he1new.setLabel(he1.getLabel());
 		he0.setNext(he0new);
 		he1.setNext(he1new);
 		he0.setPair(he1new);
@@ -2024,6 +2026,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		add(he0new);
 		add(he1new);
 		out.add(he0new.isEdge() ? he0new : he1new);
+		out.add(he0.isEdge() ? he0 : he1);
 		out.add(vNew);
 
 		return out;
@@ -2395,6 +2398,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 			add(faceNew);
 			out.add(he0new.isEdge() ? he0new : he1new);
+			out.add(hei.isEdge() ? hei : hej);
 			out.add(faceNew);
 			he = face.getHalfedge();
 			do {
