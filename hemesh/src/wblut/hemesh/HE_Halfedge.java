@@ -28,9 +28,6 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	/** Previous halfedge in face. */
 	// private HE_Halfedge _prev;
 
-	/** Associated edge. */
-	private HE_Edge _edge;
-
 	/** Associated face. */
 	private HE_Face _face;
 
@@ -120,6 +117,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	public void setNext(final HE_Halfedge he) {
 		_next = he;
 		he.setPrev(this);
+
 	}
 
 	/**
@@ -186,10 +184,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return tangent
 	 */
 	public WB_Vector getHalfedgeTangent() {
-		if (_edge != null) {
-			return (_edge.getHalfedge() == this) ? _edge.getEdgeTangent()
-					: _edge.getEdgeTangent().mul(-1);
-		}
+
 		if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
 			final WB_Vector v = _pair.getVertex().getPoint()
 					.subToVector(_vertex);
@@ -205,9 +200,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return center
 	 */
 	public WB_Point getHalfedgeCenter() {
-		if (_edge != null) {
-			return _edge.getEdgeCenter();
-		}
+
 		if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
 			return gf.createMidpoint(_next.getVertex(), _vertex);
 		}
@@ -220,17 +213,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 * @return edge
 	 */
 	public HE_Edge getEdge() {
-		return _edge;
-	}
-
-	/**
-	 * Sets the edge.
-	 *
-	 * @param edge
-	 *            the new edge
-	 */
-	public void setEdge(final HE_Edge edge) {
-		_edge = edge;
+		return new HE_Edge(this);
 	}
 
 	/**
@@ -310,13 +293,6 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	/**
-	 * Clear edge.
-	 */
-	public void clearEdge() {
-		_edge = null;
-	}
-
-	/**
 	 * Clear face.
 	 */
 	public void clearFace() {
@@ -332,6 +308,33 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 */
 	public void clearVertex() {
 		_vertex = null;
+	}
+
+	public WB_Vector getEdgeNormal() {
+		if (_pair == null) {
+			return null;
+		}
+		HE_Halfedge he1, he2;
+		if (isEdge()) {
+			he1 = this;
+			he2 = _pair;
+		}
+		else {
+			he1 = _pair;
+			he2 = this;
+		}
+
+		if ((he1._face == null) && (he2._face == null)) {
+			return null;
+		}
+		final WB_Vector n1 = (he1._face != null) ? he1._face.getFaceNormal()
+				: new WB_Vector(0, 0, 0);
+				final WB_Vector n2 = (he2._face != null) ? he2._face.getFaceNormal()
+				: new WB_Vector(0, 0, 0);
+						final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
+								n1.zd() + n2.zd());
+						n._normalizeSelf();
+						return n;
 	}
 
 	/**
@@ -436,6 +439,26 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public double getLength() {
 		return WB_Distance.getDistance3D(getVertex(), getEndVertex());
+	}
+
+	public boolean isEdge() {
+		if (_face == null || _pair == null) {
+			return false;
+		}
+		if (_pair._face == null) {
+			return true;
+		}
+		return (_key < _pair._key);
+	}
+
+	public boolean isBoundary() {
+		if (_face == null || _pair == null) {
+			return false;
+		}
+		if (_pair._face == null) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -8,15 +8,15 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.opengl.PGraphics3D;
 import wblut.geom.WB_GeometryFactory;
-import wblut.hemesh.HE_Edge;
 import wblut.hemesh.HE_Face;
+import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_MeshStructure;
 import wblut.hemesh.HE_Vertex;
 
 public class WB_SelectRender3D {
 	private final PApplet home;
-	private PGraphics3D selector;
-	private int[] samples;
+	private final PGraphics3D selector;
+	private final int[] samples;
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
@@ -25,7 +25,7 @@ public class WB_SelectRender3D {
 
 	/** The color to object. */
 	protected HashMap<Integer, Long> colorToObject;
-	private double scale;
+	private final double scale;
 
 	public WB_SelectRender3D(final PApplet home) {
 		scale = 1;// doesn't work yet
@@ -45,7 +45,7 @@ public class WB_SelectRender3D {
 
 	/**
 	 * Draw one face.
-	 * 
+	 *
 	 * @param f
 	 *            face
 	 */
@@ -71,7 +71,7 @@ public class WB_SelectRender3D {
 
 	/**
 	 * Draw mesh faces. Typically used with noStroke();
-	 * 
+	 *
 	 * @param selector
 	 *            selector tool
 	 * @param mesh
@@ -98,7 +98,7 @@ public class WB_SelectRender3D {
 
 	/**
 	 * Draw mesh edges.
-	 * 
+	 *
 	 * @param selector
 	 *            selector tool
 	 * @param mesh
@@ -106,21 +106,21 @@ public class WB_SelectRender3D {
 	 * @return key of edge at mouse position
 	 */
 
-	public void drawEdges(final HE_MeshStructure mesh, double d) {
+	public void drawEdges(final HE_MeshStructure mesh, final double d) {
 		selector.beginDraw();
 		selector.setMatrix(home.getMatrix());
 		selector.scale((float) scale);
 		selector.clear();
 		selector.strokeWeight((float) d);
-		final Iterator<HE_Edge> eItr = mesh.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
 
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			setKey(e.key());
-			selector.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-					.getStartVertex().zf(), e.getEndVertex().xf(), e
-					.getEndVertex().yf(), e.getEndVertex().zf());
+			selector.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+					.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+					.getEndVertex().zf());
 
 		}
 		selector.endDraw();
@@ -128,7 +128,7 @@ public class WB_SelectRender3D {
 
 	/**
 	 * Draw mesh vertices as box.
-	 * 
+	 *
 	 * @param selector
 	 *            selector tool
 	 * @param d
@@ -158,42 +158,46 @@ public class WB_SelectRender3D {
 
 	public long getKeyAA(final int x, final int y) {
 
-		int locx = (int) (x * scale);
-		int locy = (int) (y * scale);
+		final int locx = (int) (x * scale);
+		final int locy = (int) (y * scale);
 		selector.loadPixels();
 		// COLOR -16777216 (black) to -1 => ID -1 (no object) to 16777214
 		samples[0] = selector.pixels[locy * selector.width + locx];
 
-		int lx = (locx <= 0) ? 0 : locx - 1;
-		int ly = (locy <= 0) ? 0 : locy - 1;
-		int ux = (locx >= selector.width - 1) ? locx : locx + 1;
-		int uy = (locy >= selector.height - 1) ? locy : locy + 1;
+		final int lx = (locx <= 0) ? 0 : locx - 1;
+		final int ly = (locy <= 0) ? 0 : locy - 1;
+		final int ux = (locx >= selector.width - 1) ? locx : locx + 1;
+		final int uy = (locy >= selector.height - 1) ? locy : locy + 1;
 		samples[1] = selector.pixels[ly * selector.width + lx];
-		if (samples[0] != samples[1])
+		if (samples[0] != samples[1]) {
 			return -1;
+		}
 		samples[2] = selector.pixels[ly * selector.width + ux];
-		if (samples[0] != samples[2])
+		if (samples[0] != samples[2]) {
 			return -1;
+		}
 		samples[3] = selector.pixels[uy * selector.width + lx];
-		if (samples[0] != samples[3])
+		if (samples[0] != samples[3]) {
 			return -1;
+		}
 		samples[4] = selector.pixels[uy * selector.width + ux];
-		if (samples[0] != samples[4])
+		if (samples[0] != samples[4]) {
 			return -1;
-		Long selection = colorToObject.get(samples[0]);
+		}
+		final Long selection = colorToObject.get(samples[0]);
 		return (selection == null) ? -1 : selection;
 
 	}
 
 	public long getKey(final int x, final int y) {
 
-		int locx = (int) (x * scale);
-		int locy = (int) (y * scale);
+		final int locx = (int) (x * scale);
+		final int locy = (int) (y * scale);
 		selector.loadPixels();
 		// COLOR -16777216 (black) to -1 => ID -1 (no object) to 16777214
 		samples[0] = selector.pixels[locy * selector.width + locx];
 
-		Long selection = colorToObject.get(samples[0]);
+		final Long selection = colorToObject.get(samples[0]);
 		return (selection == null) ? -1 : selection;
 
 	}
@@ -208,7 +212,7 @@ public class WB_SelectRender3D {
 
 	/**
 	 * Set the key.
-	 * 
+	 *
 	 * @param i
 	 *            new key
 	 */

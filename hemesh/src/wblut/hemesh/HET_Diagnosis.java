@@ -2,14 +2,14 @@ package wblut.hemesh;
 
 /**
  * The Class HET_Diagnosis.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
  */
 public class HET_Diagnosis {
 
 	/**
 	 * Check consistency of datastructure of closed mesh.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @return true or false
@@ -20,7 +20,7 @@ public class HET_Diagnosis {
 
 	/**
 	 * Check consistency of datastructure of surface.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @return true or false
@@ -31,7 +31,7 @@ public class HET_Diagnosis {
 
 	/**
 	 * Check consistency of datastructure.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @return true or false
@@ -42,7 +42,7 @@ public class HET_Diagnosis {
 
 	/**
 	 * Validate surface.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @return true, if successful
@@ -53,7 +53,7 @@ public class HET_Diagnosis {
 
 	/**
 	 * Check consistency of datastructure.
-	 * 
+	 *
 	 * @param mesh
 	 *            the mesh
 	 * @param verbose
@@ -72,7 +72,7 @@ public class HET_Diagnosis {
 					+ ") properties");
 		}
 
-		for (HE_Face face : mesh.faces) {
+		for (final HE_Face face : mesh.faces) {
 			if (face.getHalfedge() == null) {
 				if (verbose == true) {
 					System.out.println("Null reference in face " + face.key()
@@ -80,11 +80,13 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
 
-			} else {
+			}
+			else {
 				if (!mesh.contains(face.getHalfedge())) {
 					if (verbose == true) {
 						System.out.println("External reference in face "
@@ -92,10 +94,12 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
-				} else {
+				}
+				else {
 					if (face.getHalfedge().getFace() != null) {
 						if (face.getHalfedge().getFace() != face) {
 							if (verbose == true) {
@@ -104,7 +108,8 @@ public class HET_Diagnosis {
 							}
 							if (force == true) {
 								result = false;
-							} else {
+							}
+							else {
 								return false;
 							}
 						}
@@ -118,7 +123,7 @@ public class HET_Diagnosis {
 					+ ") properties");
 		}
 
-		for (HE_Vertex v : mesh.vertices) {
+		for (final HE_Vertex v : mesh.vertices) {
 			if (v.getHalfedge() == null) {
 				if (verbose == true) {
 					System.out.println("Null reference in vertex  " + v.key()
@@ -126,10 +131,12 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
-			} else {
+			}
+			else {
 				if (!mesh.contains(v.getHalfedge())) {
 					if (verbose == true) {
 						System.out.println("External reference in vertex  "
@@ -137,7 +144,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -149,7 +157,8 @@ public class HET_Diagnosis {
 						}
 						if (force == true) {
 							result = false;
-						} else {
+						}
+						else {
 							return false;
 						}
 					}
@@ -162,51 +171,12 @@ public class HET_Diagnosis {
 					+ ") properties");
 		}
 
-		for (HE_Edge e : mesh.edges) {
-			if (e.getHalfedge() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference in edge  " + e.key()
-							+ ".");
-				}
-				if (force == true) {
-					result = false;
-				} else {
-					return false;
-				}
-			} else {
-				if (!mesh.contains(e.getHalfedge())) {
-					if (verbose == true) {
-						System.out.println("External reference in edge  "
-								+ e.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					} else {
-						return false;
-					}
-				}
-				if (e.getHalfedge().getEdge() != null) {
-					if (e.getHalfedge().getEdge() != e) {
-						if (verbose == true) {
-							System.out.println("Wrong reference in edge  "
-									+ e.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						} else {
-							return false;
-						}
-					}
-				}
-			}
-		}
-
 		if (verbose == true) {
 			System.out.println("Checking half edge ("
 					+ mesh.getNumberOfHalfedges() + ") properties");
 		}
 
-		for (HE_Halfedge he : mesh.halfedges) {
+		for (final HE_Halfedge he : mesh.halfedges) {
 
 			if (he.getNextInFace() == null) {
 				if (verbose == true) {
@@ -215,10 +185,12 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
-			} else {
+			}
+			else {
 				if (!mesh.contains(he.getNextInFace())) {
 					if (verbose == true) {
 						System.out
@@ -227,7 +199,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -241,7 +214,8 @@ public class HET_Diagnosis {
 						}
 						if (force == true) {
 							result = false;
-						} else {
+						}
+						else {
 							return false;
 						}
 					}
@@ -254,10 +228,12 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
-			} else {
+			}
+			else {
 				if (!mesh.contains(he.getPrevInFace())) {
 					if (verbose == true) {
 						System.out
@@ -266,7 +242,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -280,7 +257,8 @@ public class HET_Diagnosis {
 						}
 						if (force == true) {
 							result = false;
-						} else {
+						}
+						else {
 							return false;
 						}
 					}
@@ -293,7 +271,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -306,10 +285,12 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
-			} else {
+			}
+			else {
 				if (!mesh.contains(he.getPair())) {
 					if (verbose == true) {
 						System.out
@@ -318,7 +299,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -328,7 +310,8 @@ public class HET_Diagnosis {
 								.println("No pair reference back to half edge  "
 										+ he.key() + ".");
 					}
-				} else {
+				}
+				else {
 					if (he.getPair().getPair() != he) {
 						if (verbose == true) {
 							System.out
@@ -337,24 +320,10 @@ public class HET_Diagnosis {
 						}
 						if (force == true) {
 							result = false;
-						} else {
+						}
+						else {
 							return false;
 						}
-					}
-				}
-				if ((he.getEdge() != null) && (he.getPair().getEdge() != null)) {
-					if (he.getEdge() != he.getPair().getEdge()) {
-						if (verbose == true) {
-							System.out
-									.println("Inconsistent reference (edge) in half edge  "
-											+ he.key() + ".");
-						}
-						if (force == true) {
-							result = false;
-						} else {
-							return false;
-						}
-
 					}
 				}
 			}
@@ -371,7 +340,8 @@ public class HET_Diagnosis {
 						}
 						if (force == true) {
 							result = false;
-						} else {
+						}
+						else {
 							return false;
 						}
 					}
@@ -386,12 +356,14 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
 
-			} else {
+			}
+			else {
 				if (!mesh.contains(he.getFace())) {
 					if (verbose == true) {
 						System.out
@@ -400,7 +372,8 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
@@ -412,10 +385,12 @@ public class HET_Diagnosis {
 				}
 				if (force == true) {
 					result = false;
-				} else {
+				}
+				else {
 					return false;
 				}
-			} else {
+			}
+			else {
 				if (!mesh.contains(he.getVertex())) {
 					if (verbose == true) {
 						System.out
@@ -424,35 +399,13 @@ public class HET_Diagnosis {
 					}
 					if (force == true) {
 						result = false;
-					} else {
+					}
+					else {
 						return false;
 					}
 				}
 			}
-			if (he.getEdge() == null) {
-				if (verbose == true) {
-					System.out.println("Null reference (edge) in half edge  "
-							+ he.key() + ".");
-				}
-				if (force == true) {
-					result = false;
-				} else {
-					return false;
-				}
-			} else {
-				if (!mesh.contains(he.getEdge())) {
-					if (verbose == true) {
-						System.out
-								.println("External reference (edge) in half edge  "
-										+ he.key() + ".");
-					}
-					if (force == true) {
-						result = false;
-					} else {
-						return false;
-					}
-				}
-			}
+
 		}
 		if (verbose == true) {
 			System.out.println("Validation complete!");

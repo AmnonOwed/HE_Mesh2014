@@ -243,17 +243,24 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	public List<HE_Edge> getFaceEdges() {
+	public List<HE_Halfedge> getFaceEdges() {
 
-		final List<HE_Edge> fe = new FastTable<HE_Edge>();
+		final List<HE_Halfedge> fe = new FastTable<HE_Halfedge>();
 		if (_halfedge == null) {
 			return fe;
 		}
 		HE_Halfedge he = _halfedge;
 		do {
+			if (he.isEdge()) {
+				if (!fe.contains(he)) {
+					fe.add(he);
+				}
+			}
+			else {
+				if (!fe.contains(he.getPair())) {
+					fe.add(he.getPair());
+				}
 
-			if (!fe.contains(he.getEdge())) {
-				fe.add(he.getEdge());
 			}
 			he = he.getNextInFace();
 		} while (he != _halfedge);

@@ -26,11 +26,9 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 	private HashMap<String, Object> _data;
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
-	/**
-	 * Instantiates a new HE_Edge.
-	 */
-	public HE_Edge() {
+	public HE_Edge(final HE_Halfedge he) {
 		super();
+		_halfedge = he;
 	}
 
 	/**
@@ -136,17 +134,6 @@ public class HE_Edge extends HE_Element implements WB_HasData {
 
 	public HE_Halfedge getHalfedge() {
 		return _halfedge;
-	}
-
-	/**
-	 * Sets the halfedge.
-	 *
-	 * @param halfedge
-	 *            the new halfedge
-	 */
-
-	public void setHalfedge(final HE_Halfedge halfedge) {
-		_halfedge = halfedge;
 	}
 
 	/**

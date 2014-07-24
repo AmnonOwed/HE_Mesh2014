@@ -24,7 +24,7 @@ import wblut.math.WB_M33;
  *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-		WB_HasData, WB_HasColor {
+WB_HasData, WB_HasColor {
 
 	private final WB_Point pos;
 
@@ -185,7 +185,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -235,16 +235,24 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 *
 	 * @return edges
 	 */
-	public List<HE_Edge> getEdgeStar() {
+	public List<HE_Halfedge> getEdgeStar() {
 
-		final List<HE_Edge> ve = new FastTable<HE_Edge>();
+		final List<HE_Halfedge> ve = new FastTable<HE_Halfedge>();
 		if (getHalfedge() == null) {
 			return ve;
 		}
 		HE_Halfedge he = getHalfedge();
 		do {
-			if (!ve.contains(he.getEdge())) {
-				ve.add(he.getEdge());
+			if (he.isEdge()) {
+				if (!ve.contains(he)) {
+					ve.add(he);
+				}
+			}
+			else {
+				if (!ve.contains(he.getPair())) {
+					ve.add(he.getPair());
+				}
+
 			}
 			he = he.getNextInVertex();
 		} while (he != getHalfedge());
@@ -387,7 +395,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -400,7 +408,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -627,7 +635,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			}
 			final double area = computeNormal3D(pos,
 					_halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
-					.getVertex().pos, temp[0], temp[1], temp[2]);
+							.getVertex().pos, temp[0], temp[1], temp[2]);
 
 			normal._addMulSelf(area, temp[2]);
 		} while (_halfedge.getEndVertex() != d);

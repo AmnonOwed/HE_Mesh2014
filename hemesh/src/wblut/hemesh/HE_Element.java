@@ -32,4 +32,11 @@ public abstract class HE_Element {
 
 	}
 
+	@Override
+	public int hashCode() {
+
+		return (int) _key;
+
+	}
+
 }

@@ -23,7 +23,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	public HE_RAS<HE_Vertex> vertices;
 	public HE_RAS<HE_Halfedge> halfedges;
-	public HE_RAS<HE_Edge> edges;
 	public HE_RAS<HE_Face> faces;
 	/** The _data. */
 	private HashMap<String, Object> _data;
@@ -35,15 +34,13 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		super();
 		vertices = new HE_RASTrove<HE_Vertex>();
 		halfedges = new HE_RASTrove<HE_Halfedge>();
-		edges = new HE_RASTrove<HE_Edge>();
+
 		faces = new HE_RASTrove<HE_Face>();
 	}
 
 	public HE_MeshStructure(final HE_MeshStructure ms) {
 		this();
-		for (final HE_Edge e : ms.edges) {
-			add(e);
-		}
+
 		for (final HE_Face f : ms.faces) {
 			add(f);
 		}
@@ -60,15 +57,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		final HE_MeshStructure msc = ms.get();
 		vertices = msc.vertices;
 		halfedges = msc.halfedges;
-		edges = msc.edges;
 		faces = msc.faces;
 	}
 
 	public HE_MeshStructure get() {
 		final HE_MeshStructure copy = new HE_MeshStructure();
-		for (final HE_Edge e : edges) {
-			copy.add(e);
-		}
 		for (final HE_Face f : faces) {
 			copy.add(f);
 		}
@@ -89,17 +82,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 				add(f);
 			}
 		}
-
-	}
-
-	/**
-	 * Add edge.
-	 *
-	 * @param e
-	 *            edge to add
-	 */
-	public final void add(final HE_Edge e) {
-		edges.add(e);
 
 	}
 
@@ -132,30 +114,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public final void add(final HE_Vertex v) {
 		vertices.add(v);
-	}
-
-	/**
-	 * Adds edges.
-	 *
-	 * @param edges
-	 *            edges to add as HE_Edge[]
-	 */
-	public final void addEdges(final HE_Edge[] edges) {
-		for (final HE_Edge edge : edges) {
-			add(edge);
-		}
-	}
-
-	/**
-	 * Adds edges.
-	 *
-	 * @param edges
-	 *            edges to add as FastTable<HE_Edge>
-	 */
-	public final void addEdges(final List<HE_Edge> edges) {
-		for (int i = 0; i < edges.size(); i++) {
-			add(edges.get(i));
-		}
 	}
 
 	/**
@@ -235,16 +193,8 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public void clear() {
 		clearVertices();
-		clearEdges();
 		clearHalfedges();
 		clearFaces();
-	}
-
-	/**
-	 * Clear edges.
-	 */
-	public final void clearEdges() {
-		edges = new HE_RASTrove<HE_Edge>();
 	}
 
 	/**
@@ -266,17 +216,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public final void clearVertices() {
 		vertices = new HE_RASTrove<HE_Vertex>();
-	}
-
-	/**
-	 * Check if structure contains edge.
-	 *
-	 * @param e
-	 *            edge
-	 * @return true, if successful
-	 */
-	public final boolean contains(final HE_Edge e) {
-		return edges.contains(e);
 	}
 
 	/**
@@ -326,10 +265,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 				result[5]);
 		return new WB_AABB(min, max);
 
-	}
-
-	public final HE_Edge getEdgeByIndex(final int i) {
-		return edges.get(i);
 	}
 
 	public final HE_Face getFaceByIndex(final int i) {
@@ -399,7 +334,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @return the number of edges
 	 */
 	public final int getNumberOfEdges() {
-		return edges.size();
+		return halfedges.size() / 2;
 	}
 
 	/**
@@ -430,16 +365,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
 
 	/**
-	 * Removes edge.
-	 *
-	 * @param e
-	 *            edge to remove
-	 */
-	public final void remove(final HE_Edge e) {
-		edges.remove(e);
-	}
-
-	/**
 	 * Removes face.
 	 *
 	 * @param f
@@ -467,38 +392,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public final void remove(final HE_Vertex v) {
 		vertices.remove(v);
-	}
-
-	public final void removeEdge(final int i) {
-		if (i >= edges.size()) {
-			throw new IllegalArgumentException("Edge index " + i
-					+ " out of range!");
-		}
-		edges.removeAt(i);
-	}
-
-	/**
-	 * Removes edges.
-	 *
-	 * @param edges
-	 *            edges to remove as HE_Edge[]
-	 */
-	public final void removeEdges(final HE_Edge[] edges) {
-		for (final HE_Edge edge : edges) {
-			remove(edge);
-		}
-	}
-
-	/**
-	 * Removes edges.
-	 *
-	 * @param edges
-	 *            edges to remove as List<HE_Edge>
-	 */
-	public final void removeEdges(final List<HE_Edge> edges) {
-		for (int i = 0; i < edges.size(); i++) {
-			remove(edges.get(i));
-		}
 	}
 
 	public final void removeFace(final int i) {
@@ -606,15 +499,21 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
 
 	public final List<HE_Edge> getEdges() {
-		return edges.getObjects();
+		final List<HE_Edge> edges = new FastTable<HE_Edge>();
+		final HE_HalfedgeIterator heitr = new HE_HalfedgeIterator(this);
+		HE_Halfedge he;
+		while (heitr.hasNext()) {
+			he = heitr.next();
+			if (he.isEdge()) {
+				edges.add(new HE_Edge(he));
+			}
+		}
+
+		return edges;
 	}
 
 	public final List<HE_Face> getFaces() {
 		return faces.getObjects();
-	}
-
-	public final boolean containsEdge(final long key) {
-		return edges.containsKey(key);
 	}
 
 	public final boolean containsFace(final long key) {
@@ -629,10 +528,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		return vertices.containsKey(key);
 	}
 
-	public final int getIndex(final HE_Edge e) {
-		return edges.getIndex(e);
-	}
-
 	public final int getIndex(final HE_Face f) {
 		return faces.getIndex(f);
 	}
@@ -643,32 +538,6 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	public final int getIndex(final HE_Vertex v) {
 		return vertices.getIndex(v);
-	}
-
-	/**
-	 * Replace edges.
-	 *
-	 * @param edges
-	 *            edges to replace with as HE_Edge[]
-	 */
-	public final void replaceEdges(final HE_Edge[] edges) {
-		clearEdges();
-		for (final HE_Edge edge : edges) {
-			add(edge);
-		}
-	}
-
-	/**
-	 * Replace edges.
-	 *
-	 * @param edges
-	 *            edges to replace with as List<HE_Edge>
-	 */
-	public final void replaceEdges(final List<HE_Edge> edges) {
-		clearEdges();
-		for (int i = 0; i < edges.size(); i++) {
-			add(edges.get(i));
-		}
 	}
 
 	/**
@@ -763,8 +632,8 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *
 	 * @return edge iterator
 	 */
-	public Iterator<HE_Edge> eItr() {
-		return edges.iterator();
+	public Iterator<HE_Halfedge> eItr() {
+		return new HE_EdgeIterator(this);
 	}
 
 	/**
@@ -781,28 +650,21 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
 
 	/**
-	 * Get edge.
-	 *
-	 * @param key
-	 *            edge key
-	 * @return edge
-	 */
-	public final HE_Edge getEdgeByKey(final long key) {
-		return edges.getByKey(key);
-	}
-
-	/**
 	 * Edges as array.
 	 *
-	 * @return all edges as HE_Edge[]
+	 * @return all edges as HE_Halfedge[]
 	 */
-	public final HE_Edge[] getEdgesAsArray() {
-		final HE_Edge[] edges = new HE_Edge[getNumberOfEdges()];
-		final Iterator<HE_Edge> eItr = this.edges.iterator();
+	public final HE_Halfedge[] getEdgesAsArray() {
+		final HE_Halfedge[] edges = new HE_Halfedge[getNumberOfEdges()];
+		final Iterator<HE_Halfedge> eItr = heItr();
 		int i = 0;
+		HE_Halfedge he;
 		while (eItr.hasNext()) {
-			edges[i] = eItr.next();
-			i++;
+			he = eItr.next();
+			if (he.isEdge()) {
+				edges[i] = he;
+				i++;
+			}
 		}
 		return edges;
 	}
@@ -810,11 +672,20 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Edges as arrayList.
 	 *
-	 * @return all vertices as FastTable<HE_Edge>
+	 * @return all vertices as FastTable<HE_Halfedge>
 	 */
-	public final List<HE_Edge> getEdgesAsList() {
-		final List<HE_Edge> edges = new FastTable<HE_Edge>();
-		edges.addAll(this.edges);
+	public final List<HE_Halfedge> getEdgesAsList() {
+		final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
+		final Iterator<HE_Halfedge> eItr = heItr();
+		int i = 0;
+		HE_Halfedge he;
+		while (eItr.hasNext()) {
+			he = eItr.next();
+			if (he.isEdge()) {
+				edges.add(he);
+				i++;
+			}
+		}
 		return (edges);
 	}
 
@@ -936,7 +807,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -949,7 +820,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -966,7 +837,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 			if (he == null) {
 				throw new IllegalArgumentException("Two vertices "
 						+ vertices[0] + " and " + vertices[1]
-						+ " in path are not connected.");
+								+ " in path are not connected.");
 			}
 			phe.setHalfedge(he);
 			path.setPathHalfedge(phe);
@@ -977,7 +848,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-							+ " in path are not connected.");
+									+ " in path are not connected.");
 				}
 				phe = new HE_PathHalfedge();
 				phe.setHalfedge(he);

@@ -27,7 +27,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -83,10 +83,6 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		for (int i = 0; i < numHalfedges; i++) {
 			halfedges.add(new HE_Halfedge());
 		}
-		final FastTable<HE_Edge> edges = new FastTable<HE_Edge>();
-		for (int i = 0; i < numEdges; i++) {
-			edges.add(new HE_Edge());
-		}
 		final FastTable<HE_Face> faces = new FastTable<HE_Face>();
 		for (int i = 0; i < numFaces; i++) {
 			faces.add(new HE_Face());
@@ -127,21 +123,8 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 				he.setPair(halfedges.get(hepairid));
 				halfedges.get(hepairid).setPair(he);
 			}
-			if (eid > -1) {
-				he.setEdge(edges.get(eid));
-			}
 			if (fid > -1) {
 				he.setFace(faces.get(fid));
-			}
-			id++;
-		}
-		HE_Edge e;
-		for (int i = 0; i < numEdges; i++) {
-			e = edges.get(i);
-			subresult = result[id].split("\\s");
-			heid = Integer.parseInt(subresult[0]);
-			if (heid > -1) {
-				e.setHalfedge(halfedges.get(heid));
 			}
 			id++;
 		}
@@ -157,7 +140,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		}
 		mesh.addVertices(vertices);
 		mesh.addHalfedges(halfedges);
-		mesh.addEdges(edges);
+
 		mesh.addFaces(faces);
 		return mesh;
 

@@ -710,23 +710,6 @@ public class WB_Render3D {
 	}
 
 	/**
-	 * Draw one edge.
-	 *
-	 * @param key
-	 *            key of edge
-	 * @param mesh
-	 *            the mesh
-	 */
-	public void drawEdge(final Long key, final HE_MeshStructure mesh) {
-		final HE_Edge e = mesh.getEdgeByKey(key);
-		if (e != null) {
-			home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-					.getStartVertex().zf(), e.getEndVertex().xf(), e
-					.getEndVertex().yf(), e.getEndVertex().zf());
-		}
-	}
-
-	/**
 	 * Draw edges.
 	 *
 	 * @param meshes
@@ -746,13 +729,13 @@ public class WB_Render3D {
 	 *            the mesh
 	 */
 	public void drawEdges(final HE_MeshStructure mesh) {
-		final Iterator<HE_Edge> eItr = mesh.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-					.getStartVertex().zf(), e.getEndVertex().xf(), e
-					.getEndVertex().yf(), e.getEndVertex().zf());
+			home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+					.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+					.getEndVertex().zf());
 
 		}
 	}
@@ -764,13 +747,13 @@ public class WB_Render3D {
 	 *            selection to draw
 	 */
 	public void drawEdges(final HE_Selection selection) {
-		final Iterator<HE_Edge> eItr = selection.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = selection.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-					.getStartVertex().zf(), e.getEndVertex().xf(), e
-					.getEndVertex().yf(), e.getEndVertex().zf());
+			home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+					.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+					.getEndVertex().zf());
 		}
 	}
 
@@ -783,14 +766,14 @@ public class WB_Render3D {
 	 *            the mesh
 	 */
 	public void drawEdges(final int label, final HE_MeshStructure mesh) {
-		final Iterator<HE_Edge> eItr = mesh.eItr();
-		HE_Edge e;
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			if (e.getLabel() == label) {
-				home.line(e.getStartVertex().xf(), e.getStartVertex().yf(), e
-						.getStartVertex().zf(), e.getEndVertex().xf(), e
-						.getEndVertex().yf(), e.getEndVertex().zf());
+				home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+						.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+						.getEndVertex().zf());
 			}
 
 		}
