@@ -71,7 +71,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 		id++;
 		final int numVertices = Integer.parseInt(subresult[0]);
 		final int numHalfedges = Integer.parseInt(subresult[1]);
-		final int numFaces = Integer.parseInt(subresult[3]);
+		final int numFaces = Integer.parseInt(subresult[2]);
 		final HE_Mesh mesh = new HE_Mesh();
 		final FastTable<HE_Vertex> vertices = new FastTable<HE_Vertex>();
 		for (int i = 0; i < numVertices; i++) {
@@ -110,7 +110,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 			vid = Integer.parseInt(subresult[0]);
 			henextid = Integer.parseInt(subresult[1]);
 			hepairid = Integer.parseInt(subresult[2]);
-			fid = Integer.parseInt(subresult[4]);
+			fid = Integer.parseInt(subresult[3]);
 			if (vid > -1) {
 				he.setVertex(vertices.get(vid));
 			}

@@ -119,6 +119,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 					cutEdges.add(e);
 					e.setLabel(1);
+					e.getPair().setLabel(1);
 				}
 				else {
 					edgeInt.put(e.key(), 0.0);
@@ -202,7 +203,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				cut.add(nf);
 				final HE_Halfedge ne = out.eItr().next();
 				ne.setLabel(1);
-				cutEdges.addHalfedges(out.getEdges());
+				cutEdges.add(ne);
 			}
 		}
 
