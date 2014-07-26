@@ -98,7 +98,8 @@ public class HET_STLWriter {
 	public void beginSave(final String fn, final String name, final int numFaces) {
 
 		try {
-			beginSave(new FileOutputStream(new File(fn, name)), numFaces);
+			beginSave(new FileOutputStream(new File(fn, name + ".stl")),
+					numFaces);
 		}
 		catch (final FileNotFoundException e) {
 			e.printStackTrace();
@@ -285,7 +286,7 @@ public class HET_STLWriter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see toxi.geom.mesh.STLColorModel#formatHeader(byte[])
 		 */
 		@Override
@@ -302,7 +303,7 @@ public class HET_STLWriter {
 
 		/*
 		 * (non-Javadoc)
-		 * 
+		 *
 		 * @see toxi.geom.mesh.STLColorModel#formatRGB(int)
 		 */
 		@Override

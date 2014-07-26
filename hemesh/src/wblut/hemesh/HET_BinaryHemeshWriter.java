@@ -45,7 +45,8 @@ public class HET_BinaryHemeshWriter {
 	 */
 	public void beginSave(final String fn, final String name) {
 		try {
-			hemeshStream = new FileOutputStream(new File(fn, name));
+			hemeshStream = new FileOutputStream(new File(fn, name
+					+ ".binhemesh"));
 			handleBeginSave();
 		}
 		catch (final Exception e) {

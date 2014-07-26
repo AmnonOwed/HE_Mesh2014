@@ -53,7 +53,7 @@ public class HET_POVWriter {
 
 	public void beginSave(final String path, final String name) {
 		try {
-			povWriter = new PrintWriter(new File(path, name));
+			povWriter = new PrintWriter(new File(path, name + ".pov"));
 			handleBeginSave();
 		}
 		catch (final Exception e) {

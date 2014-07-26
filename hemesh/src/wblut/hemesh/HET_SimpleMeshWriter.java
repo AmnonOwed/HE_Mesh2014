@@ -47,7 +47,7 @@ public class HET_SimpleMeshWriter {
 	 */
 	public void beginSave(final String fn, final String name) {
 		try {
-			simpleMeshStream = new FileOutputStream(new File(fn, name));
+			simpleMeshStream = new FileOutputStream(new File(fn, name + ".txt"));
 			handleBeginSave();
 		}
 		catch (final Exception e) {

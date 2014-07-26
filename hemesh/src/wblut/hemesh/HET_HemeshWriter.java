@@ -24,7 +24,7 @@ public class HET_HemeshWriter {
 
 	public void beginSave(final String fn, final String name) {
 		try {
-			hemeshStream = new FileOutputStream(new File(fn, name));
+			hemeshStream = new FileOutputStream(new File(fn, name + ".hemesh"));
 			handleBeginSave();
 		}
 		catch (final Exception e) {

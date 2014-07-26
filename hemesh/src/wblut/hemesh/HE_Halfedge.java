@@ -414,7 +414,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -426,7 +426,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -439,7 +439,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -540,7 +540,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 			he2 = this;
 		}
 
-		if ((he1._face == null) && (he2._face == null)) {
+		if ((he1._face == null) || (he2._face == null)) {
 			return Double.NaN;
 		}
 		else {

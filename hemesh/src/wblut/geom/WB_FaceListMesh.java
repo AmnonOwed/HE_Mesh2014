@@ -21,7 +21,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	int[][] vfNeighbors = null;
 	int[][] ffNeighbors = null;
 	boolean vNormalsUpdated, fNormalsUpdated, vvNeighborsUpdated,
-			vfNeighborsUpdated, ffNeighborsUpdated;
+	vfNeighborsUpdated, ffNeighborsUpdated;
 
 	List<int[]> tris;
 	WB_Vector[] pdir1 = null;
@@ -460,14 +460,14 @@ public class WB_FaceListMesh implements WB_Mesh {
 		vfNeighborsUpdated = true;
 		/*
 		 * updateffNeighbors();
-		 * 
+		 *
 		 * for (int i = 0; i < nv; i++) { if (vfNeighbors[i].length == 0)
 		 * continue; int f = vfNeighbors[i][0]; int fPrev = prevFace(i, f);
 		 * while (fPrev >= 0 && fPrev != vfNeighbors[i][0]) { f = fPrev; fPrev =
 		 * prevFace(i, f); } int counter = 0; int fStart = f; do {
 		 * vfNeighbors[i][counter++] = f; f = nextFace(i, f); } while (f >= 0 &&
 		 * f != fStart);
-		 * 
+		 *
 		 * }
 		 */
 
@@ -507,10 +507,10 @@ public class WB_FaceListMesh implements WB_Mesh {
 				p1 = vertices.getPoint(face[(j + 1) % face.length]);
 				p2 = vertices
 						.getPoint(face[(j - 1 + face.length) % face.length]);
-				final WB_Vector P10 = geometryfactory.createNormalizedVectorFromTo(
-						p0, p1);
-				final WB_Vector P20 = geometryfactory.createNormalizedVectorFromTo(
-						p0, p2);
+				final WB_Vector P10 = geometryfactory
+						.createNormalizedVectorFromTo(p0, p1);
+				final WB_Vector P20 = geometryfactory
+						.createNormalizedVectorFromTo(p0, p2);
 				final double w = P10.getAngleNorm(P20);
 				vertexNormals[face[j]]._addMulSelf(w, faceNormals[i]);
 			}

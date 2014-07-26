@@ -760,6 +760,11 @@ public class WB_Triangulate {
 				i++;
 			}
 			final int v0 = vertices[i];
+			boolean reverse = false;
+			if (vertices[(i + 1) % 3] == sharedVertices[0]) {
+				reverse = true;
+			}
+
 			final Coordinate c0 = shellCoords.get(v0);
 			i = 0;
 			vertices = ear1.getVertices();
@@ -780,14 +785,22 @@ public class WB_Triangulate {
 				// The candidate edge is inside. Compare its length to
 				// the current shared edge and swap them if the candidate
 				// is shorter.
+
 				if (c0.distance(c1) < shared0.distance(shared1)) {
 					// System.out.println("Flip from:");
 					// System.out.println(ear0.vertices[0] + " "
 					// + ear0.vertices[1] + " " + ear0.vertices[2]);
 					// System.out.println(ear1.vertices[0] + " "
 					// + ear1.vertices[1] + " " + ear1.vertices[2]);
-					ear0.setVertices(sharedVertices[0], v0, v1);
-					ear1.setVertices(v1, v0, sharedVertices[1]);
+					if (reverse) {
+						ear0.setVertices(sharedVertices[0], v1, v0);
+						ear1.setVertices(v0, v1, sharedVertices[1]);
+
+					}
+					else {
+						ear0.setVertices(sharedVertices[0], v0, v1);
+						ear1.setVertices(v1, v0, sharedVertices[1]);
+					}
 					// System.out.println("to:");
 					// System.out.println(ear0.vertices[0] + " "
 					// + ear0.vertices[1] + " " + ear0.vertices[2]);
@@ -1347,26 +1360,26 @@ public class WB_Triangulate {
 		final int[][] tris = new int[earList.size()][3];
 		for (int i = 0; i < earList.size(); i++) {
 			final int[] tri = earList.get(i).getVertices();
-			final boolean flip = false;
+			final boolean flip = true;
+
 			/*
 			 * if (improve) { if
 			 * (CGAlgorithms.orientationIndex(shellCoords.get(tri[0]),
 			 * shellCoords.get(tri[1]), shellCoords.get(tri[2])) > 0) { flip =
-			 * true;
+			 * false;
 			 * 
 			 * } }
+			 * 
+			 * if (flip) {
 			 */
-			if (flip) {
-				tris[i][0] = tri[1];
-				tris[i][1] = tri[0];
-				tris[i][2] = tri[2];
+			tris[i][0] = tri[0];
+			tris[i][1] = tri[1];
+			tris[i][2] = tri[2];
 
-			}
-			else {
-				tris[i][0] = tri[0];
-				tris[i][1] = tri[1];
-				tris[i][2] = tri[2];
-			}
+			/*
+			 * } else { tris[i][0] = tri[0]; tris[i][1] = tri[1]; tris[i][2] =
+			 * tri[2]; }
+			 */
 
 		}
 		return tris;

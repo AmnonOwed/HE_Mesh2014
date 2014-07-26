@@ -6,6 +6,7 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
@@ -31,6 +32,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	private int facecolor;
 
 	private int[][] triangles;
+
+	private static WB_Coordinate c;
+	private static WB_Coordinate p1;
+	private static WB_Coordinate p2;
 
 	/**
 	 * Instantiates a new HE_Face.
@@ -320,7 +325,32 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public int[][] getTriangles() {
 		if (triangles == null) {
-			triangles = toPolygon().triangulate();
+			final int fo = getFaceOrder();
+			if (fo < 3) {
+				return new int[][] { { 0, 0, 0 } };
+			}
+			else if (fo == 3) {
+				return new int[][] { { 0, 1, 2 } };
+			}
+			else if (fo == 4) {
+				p1 = _halfedge.getStartVertex();
+				c = _halfedge.getEndVertex();
+				p2 = _halfedge.getNextInFace().getEndVertex();
+
+				if (WB_CoordinateMath.angleBetweenNorm(c.xd(), c.yd(), c.zd(),
+						p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd()) >= 0) {
+					return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
+
+				}
+				else {
+					return new int[][] { { 0, 1, 3 }, { 1, 2, 3 } };
+
+				}
+			}
+			else {
+
+				triangles = toPolygon().triangulate();
+			}
 		}
 		return triangles;
 	}

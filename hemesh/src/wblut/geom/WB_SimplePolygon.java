@@ -23,6 +23,10 @@ public class WB_SimplePolygon implements SimplePolygon {
 	/** Status of stored plane. */
 	private boolean updated;
 
+	private static WB_Coordinate c;
+	private static WB_Coordinate p1;
+	private static WB_Coordinate p2;
+
 	/**
 	 * Instantiates a new WB_Polygon.
 	 */
@@ -249,6 +253,28 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	@Override
 	public int[][] triangulate() {
+
+		if (n < 3) {
+			return new int[][] { { 0, 0, 0 } };
+		}
+		else if (n == 3) {
+			return new int[][] { { 0, 1, 2 } };
+		}
+		else if (n == 4) {
+			p1 = points[0];
+			c = points[1];
+			p2 = points[2];
+
+			if (WB_CoordinateMath.angleBetweenNorm(c.xd(), c.yd(), c.zd(),
+					p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd()) >= 0) {
+				return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
+
+			}
+			else {
+				return new int[][] { { 0, 1, 3 }, { 1, 2, 3 } };
+
+			}
+		}
 
 		final List<WB_Point> pts = new FastTable<WB_Point>();
 		for (int i = 0; i < n; i++) {
@@ -755,7 +781,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getSegments()
 	 */
 	@Override
@@ -801,7 +827,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getN()
 	 */
 	@Override
@@ -811,7 +837,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getPoint(int)
 	 */
 	@Override
@@ -821,7 +847,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getIndex(int)
 	 */
 	@Override
@@ -831,7 +857,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getPoints()
 	 */
 	@Override

@@ -237,11 +237,9 @@ public class WB_Intersection {
 	public static WB_IntersectionResult getIntersection3D(final WB_Plane P1,
 			final WB_Plane P2) {
 
-		final WB_Vector N1 = P1.getNormal().get();
-		final WB_Vector N2 = P2.getNormal().get();
+		final WB_Vector N1 = P1.getNormal();
+		final WB_Vector N2 = P2.getNormal();
 		final WB_Vector N1xN2 = new WB_Vector(N1.cross(N2));
-		final double d1 = P1.d();
-		final double d2 = P2.d();
 		if (WB_Epsilon.isZeroSq(N1xN2.getSqLength())) {
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = false;
@@ -251,12 +249,13 @@ public class WB_Intersection {
 			return i;
 		}
 		else {
+			final double d1 = P1.d();
+			final double d2 = P2.d();
 			final double N1N2 = N1.dot(N2);
 			final double det = 1 - N1N2 * N1N2;
 			final double c1 = (d1 - d2 * N1N2) / det;
 			final double c2 = (d2 - d1 * N1N2) / det;
-			final WB_Point O = new WB_Point(N1._mulSelf(c1)._addSelf(
-					N2._mulSelf(c2)));
+			final WB_Point O = new WB_Point(N1.mul(c1)._addSelf(N2.mul(c2)));
 
 			new WB_Line(O, N1xN2);
 			final WB_IntersectionResult i = new WB_IntersectionResult();
@@ -1368,7 +1367,7 @@ public class WB_Intersection {
 		final double v = vb * denom;
 		final double w = vc * denom;
 		return new WB_Point(a)
-				._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
@@ -2369,7 +2368,7 @@ public class WB_Intersection {
 		else if (WB_Predicates.orient2D(a, b, c)
 				* WB_Predicates.orient2D(a, b, d) > 0
 				|| WB_Predicates.orient2D(c, d, a)
-						* WB_Predicates.orient2D(c, d, b) > 0) {
+				* WB_Predicates.orient2D(c, d, b) > 0) {
 			return false;
 		}
 		else {

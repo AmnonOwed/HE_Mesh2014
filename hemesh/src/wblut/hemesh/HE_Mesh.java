@@ -2830,6 +2830,7 @@ WB_HasColor, WB_Mesh {
 	 * @return selection of new faces and new vertices
 	 */
 	public HE_Selection splitFacesHybrid() {
+		logger.debug("Entering splitFacesHybrid().");
 		final HE_Selection selectionOut = new HE_Selection(this);
 		final int n = getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -2848,12 +2849,17 @@ WB_HasColor, WB_Mesh {
 		orig.addFaces(getFacesAsArray());
 		orig.collectVertices();
 		orig.collectEdgesByFace();
+		logger.debug("Starting split of " + orig.getNumberOfEdges() + " edges.");
 		selectionOut.addVertices(splitEdges().getVerticesAsArray());
 		final HE_Face[] faces = getFacesAsArray();
 		HE_Vertex vi = new HE_Vertex();
+		int fo;
+		logger.debug("Starting split of " + n + " faces.");
 		for (i = 0; i < n; i++) {
 			f = faces[i];
-			if (f.getFaceOrder() == 3) {
+			fo = f.getFaceOrder() / 2;
+			if (fo == 3) {
+				logger.debug("Splitting 3-face in 4 triangles.");
 				HE_Halfedge startHE = f.getHalfedge();
 				while (orig.contains(startHE.getVertex())) {
 					startHE = startHE.getNextInFace();
@@ -2901,7 +2907,11 @@ WB_HasColor, WB_Mesh {
 
 			}
 
-			else if (f.getFaceOrder() > 3) {
+			else if (fo > 3) {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Splitting " + Integer.toString(fo)
+							+ "-face in " + Integer.toString(fo) + " quads.");
+				}
 				vi = new HE_Vertex(faceCenters[i]);
 				vi.setLabel(2);
 				add(vi);
@@ -2956,7 +2966,9 @@ WB_HasColor, WB_Mesh {
 				}
 			}
 		}
+		logger.debug("Pairing all new unpaired halfedges.");
 		pairHalfedgesAndCreateEdges();
+		logger.debug("Exiting splitFacesHybrid().");
 		return selectionOut;
 
 	}
@@ -3528,13 +3540,9 @@ WB_HasColor, WB_Mesh {
 	/**
 	 * Check consistency of datastructure.
 	 *
-	 * @param verbose
-	 *            true: print to console, HE.SILENT: no output
-	 * @param force
-	 *            true: full scan, HE.BREAK: stop on first error
 	 * @return true or false
 	 */
-	public boolean validate(final boolean verbose, final boolean force) {
+	public boolean validate() {
 
 		return HET_Diagnosis.validate(this);
 	}
@@ -4791,6 +4799,11 @@ WB_HasColor, WB_Mesh {
 	@Override
 	public void setColor(final int color) {
 		meshcolor = color;
+
+	}
+
+	public int getGenus() {
+		return (2 - (getNumberOfVertices() - getNumberOfEdges() + getNumberOfFaces())) / 2;
 
 	}
 

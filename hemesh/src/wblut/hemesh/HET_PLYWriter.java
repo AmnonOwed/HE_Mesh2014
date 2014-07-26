@@ -137,7 +137,7 @@ public class HET_PLYWriter {
 	public static void saveMesh(final HE_Mesh mesh, final String path,
 			final String name) {
 		try {
-			saveMesh(mesh, createOutputStream(new File(path, name)));
+			saveMesh(mesh, createOutputStream(new File(path, name + ".ply")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();

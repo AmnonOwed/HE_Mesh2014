@@ -11,6 +11,9 @@ public class WB_Polygon extends WB_Ring {
 	int[][] triangles;
 	int numberOfHoles;
 	int[] nph;
+	private static WB_Coordinate c;
+	private static WB_Coordinate p1;
+	private static WB_Coordinate p2;
 
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
@@ -210,15 +213,28 @@ public class WB_Polygon extends WB_Ring {
 
 	public int[][] getTriangles() {
 		if (triangles == null) {
-			if (size() < 3) {
+			if (n < 3) {
 				return new int[][] { { 0, 0, 0 } };
 			}
-			else if (size() == 3) {
+			else if (n == 3) {
 				return new int[][] { { 0, 1, 2 } };
 			}
-			else if (size() == 4) {
-				return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
+			else if (n == 4) {
+				p1 = getPoint(0);
+				c = getPoint(1);
+				p2 = getPoint(2);
+
+				if (WB_CoordinateMath.angleBetweenNorm(c.xd(), c.yd(), c.zd(),
+						p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd()) >= 0) {
+					return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
+
+				}
+				else {
+					return new int[][] { { 0, 1, 3 }, { 1, 2, 3 } };
+
+				}
 			}
+
 			else {
 
 				final WB_Triangulation2DWithPoints triangulation = triangulate();
@@ -255,11 +271,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-					* (points.get(j, 2) + points.get(i, 2)),
+							* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-					* (points.get(j, 0) + points.get(i, 0)),
+							* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-					* (points.get(j, 1) + points.get(i, 1)));
+							* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();
@@ -274,11 +290,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-					* (points.get(j, 2) + points.get(i, 2)),
+							* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-					* (points.get(j, 0) + points.get(i, 0)),
+							* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-					* (points.get(j, 1) + points.get(i, 1)));
+							* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();
