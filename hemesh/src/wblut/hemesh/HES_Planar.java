@@ -111,7 +111,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -182,14 +182,12 @@ public class HES_Planar extends HES_Subdividor {
 				HE_Halfedge origHE1 = startHE;
 				final HE_Face centerFace = new HE_Face();
 				newFaces.add(centerFace);
-				centerFace.setLabel(face.getLabel());
-				centerFace.setColor(face.getColor());
+				centerFace.copyProperties(face);
 				final ArrayList<HE_Halfedge> faceHalfedges = new ArrayList<HE_Halfedge>();
 				do {
 					final HE_Face newFace = new HE_Face();
 					newFaces.add(newFace);
-					newFace.setLabel(face.getLabel());
-					newFace.setColor(face.getColor());
+					newFace.copyProperties(face);
 					newFace.setHalfedge(origHE1);
 					final HE_Halfedge origHE2 = origHE1.getNextInFace();
 					final HE_Halfedge origHE3 = origHE2.getNextInFace();
@@ -218,8 +216,7 @@ public class HES_Planar extends HES_Subdividor {
 				do {
 					final HE_Face newFace = new HE_Face();
 					newFaces.add(newFace);
-					newFace.setLabel(face.getLabel());
-					newFace.setColor(face.getColor());
+					newFace.copyProperties(face);
 					newFace.setHalfedge(origHE1);
 					final HE_Halfedge origHE2 = origHE1.getNextInFace();
 					final HE_Halfedge origHE3 = origHE2.getNextInFace();
@@ -257,7 +254,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -337,15 +334,13 @@ public class HES_Planar extends HES_Subdividor {
 			if ((face.getFaceOrder() == 6) && keepTriangles) {
 				HE_Halfedge origHE1 = startHE;
 				final HE_Face centerFace = new HE_Face();
-				centerFace.setLabel(face.getLabel());
-				centerFace.setColor(face.getColor());
+				centerFace.copyProperties(face);
 				newFaces.add(centerFace);
 				final ArrayList<HE_Halfedge> faceHalfedges = new ArrayList<HE_Halfedge>();
 				do {
 					final HE_Face newFace = new HE_Face();
 					newFaces.add(newFace);
-					newFace.setLabel(face.getLabel());
-					newFace.setColor(face.getColor());
+					newFace.copyProperties(face);
 					newFace.setHalfedge(origHE1);
 					final HE_Halfedge origHE2 = origHE1.getNextInFace();
 					final HE_Halfedge origHE3 = origHE2.getNextInFace();
@@ -374,8 +369,7 @@ public class HES_Planar extends HES_Subdividor {
 				do {
 					final HE_Face newFace = new HE_Face();
 					newFaces.add(newFace);
-					newFace.setLabel(face.getLabel());
-					newFace.setColor(face.getColor());
+					newFace.copyProperties(face);
 					newFace.setHalfedge(origHE1);
 					final HE_Halfedge origHE2 = origHE1.getNextInFace();
 					final HE_Halfedge origHE3 = origHE2.getNextInFace();

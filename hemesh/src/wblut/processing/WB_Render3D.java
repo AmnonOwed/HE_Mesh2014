@@ -106,8 +106,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -248,20 +248,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -771,7 +771,7 @@ public class WB_Render3D {
 	 * @param mesh
 	 *            the mesh
 	 */
-	public void drawEdges(final int label, final HE_MeshStructure mesh) {
+	public void drawEdgesWithLabel(final int label, final HE_MeshStructure mesh) {
 		final Iterator<HE_Halfedge> eItr = mesh.eItr();
 		HE_Halfedge e;
 		while (eItr.hasNext()) {
@@ -783,6 +783,23 @@ public class WB_Render3D {
 			}
 
 		}
+
+	}
+
+	public void drawEdgesWithInternalLabel(final int label,
+			final HE_MeshStructure mesh) {
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
+		while (eItr.hasNext()) {
+			e = eItr.next();
+			if (e.getInternalLabel() == label) {
+				home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+						.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+						.getEndVertex().zf());
+			}
+
+		}
+
 	}
 
 	public void drawFace(final HE_Face f) {
@@ -1074,7 +1091,7 @@ public class WB_Render3D {
 	 * @param mesh
 	 *            the mesh
 	 */
-	public void drawFaces(final int label, final HE_MeshStructure mesh) {
+	public void drawFacesWithLabel(final int label, final HE_MeshStructure mesh) {
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -1082,6 +1099,20 @@ public class WB_Render3D {
 			if (f.getLabel() == label) {
 				drawFace(f);
 			}
+
+		}
+	}
+
+	public void drawFacesWithInternalLabel(final int label,
+			final HE_MeshStructure mesh) {
+		final Iterator<HE_Face> fItr = mesh.fItr();
+		HE_Face f;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			if (f.getInternalLabel() == label) {
+				drawFace(f);
+			}
+
 		}
 	}
 

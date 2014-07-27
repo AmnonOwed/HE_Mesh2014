@@ -24,7 +24,7 @@ import wblut.math.WB_M33;
  *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-WB_HasData, WB_HasColor {
+		WB_HasData, WB_HasColor {
 
 	private final WB_Point pos;
 
@@ -185,7 +185,7 @@ WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -395,7 +395,7 @@ WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -408,7 +408,7 @@ WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -635,7 +635,7 @@ WB_HasData, WB_HasColor {
 			}
 			final double area = computeNormal3D(pos,
 					_halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
-							.getVertex().pos, temp[0], temp[1], temp[2]);
+					.getVertex().pos, temp[0], temp[1], temp[2]);
 
 			normal._addMulSelf(area, temp[2]);
 		} while (_halfedge.getEndVertex() != d);
@@ -894,6 +894,11 @@ WB_HasData, WB_HasColor {
 			return null;
 		}
 		return WB_M33.mulToPoint(G, h);
+	}
+
+	public void copyProperties(final HE_Vertex el) {
+		super.copyProperties(el);
+		vertexcolor = el.getColor();
 	}
 
 }

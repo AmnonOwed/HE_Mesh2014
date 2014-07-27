@@ -832,7 +832,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		final HE_Path path = new HE_Path();
 		if (vertices.length > 1) {
 			HE_PathHalfedge phe = new HE_PathHalfedge();
-			HE_Halfedge he = selectHalfedge(getVertexByIndex(vertices[0]),
+			HE_Halfedge he = searchHalfedgeFromTo(getVertexByIndex(vertices[0]),
 					getVertexByIndex(vertices[1]));
 			if (he == null) {
 				throw new IllegalArgumentException("Two vertices "
@@ -843,7 +843,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 			path.setPathHalfedge(phe);
 			HE_PathHalfedge prevphe = phe;
 			for (int i = 1; i < vertices.length - 1; i++) {
-				he = selectHalfedge(getVertexByIndex(vertices[i]),
+				he = searchHalfedgeFromTo(getVertexByIndex(vertices[i]),
 						getVertexByIndex(vertices[i + 1]));
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
@@ -862,7 +862,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	}
 
-	public HE_Halfedge selectHalfedge(final HE_Vertex v0, final HE_Vertex v1) {
+	public HE_Halfedge searchHalfedgeFromTo(final HE_Vertex v0, final HE_Vertex v1) {
 		final List<HE_Halfedge> hes = v0.getHalfedgeStar();
 		for (final HE_Halfedge he : hes) {
 			if (he.getEndVertex() == v1) {

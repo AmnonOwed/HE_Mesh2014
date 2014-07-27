@@ -496,4 +496,9 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
+	public void copyProperties(final HE_Face el) {
+		super.copyProperties(el);
+		facecolor = el.getColor();
+	}
+
 }

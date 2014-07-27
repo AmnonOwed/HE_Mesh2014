@@ -64,4 +64,9 @@ public abstract class HE_Element {
 		return ((HE_Element) other).getKey() == _key;
 	}
 
+	public void copyProperties(final HE_Element el) {
+		_label = el.getLabel();
+		_internalLabel = el.getInternalLabel();
+	}
+
 }
