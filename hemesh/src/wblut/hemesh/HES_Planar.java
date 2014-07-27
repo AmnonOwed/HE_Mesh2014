@@ -111,7 +111,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -247,7 +247,7 @@ public class HES_Planar extends HES_Subdividor {
 					origHE1 = origHE3;
 				} while (origHE1 != startHE);
 			}
-			face.setLabel(0);
+			face.setInternalLabel(0);
 
 		}// end of face loop
 		mesh.pairHalfedgesAndCreateEdges();
@@ -257,7 +257,7 @@ public class HES_Planar extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)

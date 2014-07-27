@@ -2021,7 +2021,7 @@ WB_HasColor, WB_Mesh {
 		if (he1.getFace() != null) {
 			he1new.setFace(he1.getFace());
 		}
-		vNew.setLabel(1);
+		vNew.setInternalLabel(1);
 		add(vNew);
 		add(he0new);
 		add(he1new);
@@ -2386,8 +2386,8 @@ WB_HasColor, WB_Mesh {
 			hejPrev.setNext(he0new);
 			he0new.setPair(he1new);
 			he1new.setPair(he0new);
-			he0new.setLabel(1);
-			he1new.setLabel(1);
+			he0new.setInternalLabel(1);
+			he1new.setInternalLabel(1);
 			he0new.setFace(face);
 			faceNew = new HE_Face();
 			face.setHalfedge(hei);
@@ -2440,7 +2440,7 @@ WB_HasColor, WB_Mesh {
 	public HE_Selection splitFaceTri(final HE_Face face, final WB_Point v) {
 		HE_Halfedge he = face.getHalfedge();
 		final HE_Vertex vi = new HE_Vertex(v);
-		vi.setLabel(2);
+		vi.setInternalLabel(2);
 		final HE_Selection out = new HE_Selection(this);
 		int c = 0;
 		boolean onEdge = false;
@@ -2685,7 +2685,7 @@ WB_HasColor, WB_Mesh {
 		for (i = 0; i < n; i++) {
 			f = faces[i];
 			vi = new HE_Vertex(faceCenters[i]);
-			vi.setLabel(2);
+			vi.setInternalLabel(2);
 			add(vi);
 			selectionOut.add(vi);
 			HE_Halfedge startHE = f.getHalfedge();
@@ -2770,7 +2770,7 @@ WB_HasColor, WB_Mesh {
 			face = faces[i];
 			final HE_Vertex vi = new HE_Vertex(faceCenters[i]);
 			add(vi);
-			vi.setLabel(2);
+			vi.setInternalLabel(2);
 			selectionOut.add(vi);
 			HE_Halfedge startHE = face.getHalfedge();
 			while (orig.contains(startHE.getVertex())) {
@@ -2913,7 +2913,7 @@ WB_HasColor, WB_Mesh {
 							+ "-face in " + Integer.toString(fo) + " quads.");
 				}
 				vi = new HE_Vertex(faceCenters[i]);
-				vi.setLabel(2);
+				vi.setInternalLabel(2);
 				add(vi);
 				selectionOut.add(vi);
 				HE_Halfedge startHE = f.getHalfedge();
@@ -3055,7 +3055,7 @@ WB_HasColor, WB_Mesh {
 
 			else if (f.getFaceOrder() > 3) {
 				vi = new HE_Vertex(faceCenters[i]);
-				vi.setLabel(2);
+				vi.setInternalLabel(2);
 				add(vi);
 				selectionOut.add(vi);
 				HE_Halfedge startHE = f.getHalfedge();
@@ -4142,6 +4142,48 @@ WB_HasColor, WB_Mesh {
 	}
 
 	/**
+	 * Reset labels.
+	 */
+	public void resetInternalLabels() {
+		resetVertexInternalLabels();
+		resetFaceInternalLabels();
+		resetEdgeInternalLabels();
+	}
+
+	/**
+	 * Reset vertex labels.
+	 */
+	public void resetVertexInternalLabels() {
+		final Iterator<HE_Vertex> vItr = vItr();
+		while (vItr.hasNext()) {
+			vItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
+	 * Reset face labels.
+	 */
+	public void resetFaceInternalLabels() {
+		final Iterator<HE_Face> fItr = fItr();
+		while (fItr.hasNext()) {
+			fItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
+	 * Reset edge labels.
+	 */
+	public void resetEdgeInternalLabels() {
+		final Iterator<HE_Halfedge> eItr = eItr();
+		while (eItr.hasNext()) {
+			eItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
 	 * Label all faces of a selection.
 	 *
 	 * @param sel
@@ -4157,7 +4199,7 @@ WB_HasColor, WB_Mesh {
 	}
 
 	/**
-	 * Update selection to include all face swith given label.
+	 * Update selection to include all faces with given label.
 	 *
 	 * @param sel
 	 *            selection to update

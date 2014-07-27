@@ -6,7 +6,7 @@ import wblut.math.WB_Math;
 
 public class WB_IndexedVector extends WB_AbstractSeqVector {
 
-	public WB_IndexedVector(int i, WB_CoordinateSequence seq) {
+	public WB_IndexedVector(final int i, final WB_CoordinateSequence seq) {
 		super(i, seq);
 	}
 
@@ -79,7 +79,8 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
 		final double d = getLength();
 		if (WB_Epsilon.isZero(d)) {
 			_set(0, 0, 0);
-		} else {
+		}
+		else {
 			_set(xd() / d, yd() / d, zd() / d);
 		}
 		return d;
@@ -273,23 +274,19 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
 
 	@Override
 	public boolean equals(final Object o) {
+
+		if (o == null) {
+			return false;
+		}
 		if (o == this) {
 			return true;
 		}
 		if (!(o instanceof WB_IndexedVector)) {
 			return false;
 		}
-		final WB_IndexedVector p = (WB_IndexedVector) o;
-		if (!WB_Epsilon.isEqualAbs(xd(), p.xd())) {
-			return false;
-		}
-		if (!WB_Epsilon.isEqualAbs(yd(), p.yd())) {
-			return false;
-		}
-		if (!WB_Epsilon.isEqualAbs(zd(), p.zd())) {
-			return false;
-		}
-		return true;
+
+		return ((WB_IndexedVector) o).getIndex() == getIndex();
+
 	}
 
 	public WB_Vector get() {
@@ -365,12 +362,12 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
 	}
 
 	public boolean isParallel(final WB_Coordinate p) {
-		double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
+		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
 		return (cross(p).getSqLength() / (pm2 * getSqLength()) < WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isParallel(final WB_Coordinate p, final double t) {
-		double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
+		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
 		return (cross(p).getSqLength() / (pm2 * getSqLength()) < t
 				+ WB_Epsilon.SQEPSILON);
 	}
@@ -497,7 +494,8 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
 			final WB_Vector a = new WB_Vector(1, 0, -xd() / zd());
 			a._normalizeSelf();
 			return a;
-		} else {
+		}
+		else {
 			return new WB_Vector(0, 0, 1);
 		}
 

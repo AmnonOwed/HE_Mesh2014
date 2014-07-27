@@ -227,7 +227,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -261,7 +261,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 				HE_Vertex v;
 				for (int i = 0; i < vertices.length; i++) {
 					v = new HE_Vertex(vertices[i]);
-					v.setLabel(i);
+					v.setInternalLabel(i);
 					uniqueVertices[i] = v;
 					mesh.add(uniqueVertices[i]);
 				}
@@ -328,7 +328,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 											for (int k = 0; k < fln / 2; k++) {
 												temp = faces[neighbor][k];
 												faces[neighbor][k] = faces[neighbor][fln
-												                                     - k - 1];
+														- k - 1];
 												faces[neighbor][fln - k - 1] = temp;
 											}
 										}
@@ -353,7 +353,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 			for (final int[] face : faces) {
 				final ArrayList<HE_Halfedge> faceEdges = new ArrayList<HE_Halfedge>();
 				final HE_Face hef = new HE_Face();
-				hef.setLabel(id);
+				hef.setInternalLabel(id);
 				id++;
 				final int fl = face.length;
 				final int[] locface = new int[fl];
