@@ -4,15 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import javolution.util.FastTable;
+
+import org.apache.log4j.Logger;
+
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Projection;
 import wblut.geom.WB_SimplePolygon;
+import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
@@ -36,6 +39,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	private static WB_Coordinate c;
 	private static WB_Coordinate p1;
 	private static WB_Coordinate p2;
+	private static Logger logger = Logger.getLogger(HE_Face.class);
 
 	/**
 	 * Instantiates a new HE_Face.
@@ -324,21 +328,43 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public int[][] getTriangles() {
+		logger.debug("Starting getTriangles() in face " + getKey() + ".");
 		if (triangles == null) {
+			logger.debug("Triangles not calculated, starting face triangulation.");
 			final int fo = getFaceOrder();
 			if (fo < 3) {
+				logger.warn("HE_Face " + getKey() + " has only " + fo
+						+ " vertices.");
 				return new int[][] { { 0, 0, 0 } };
 			}
 			else if (fo == 3) {
+				logger.debug("Trivial triangulation of triangle face.");
 				return new int[][] { { 0, 1, 2 } };
 			}
 			else if (fo == 4) {
-				p1 = _halfedge.getStartVertex();
-				c = _halfedge.getEndVertex();
-				p2 = _halfedge.getNextInFace().getEndVertex();
+				logger.debug("Triangulation of quad face.");
+				final WB_Point[] points = new WB_Point[4];
 
-				if (WB_CoordinateMath.angleBetweenNorm(c.xd(), c.yd(), c.zd(),
-						p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd()) >= 0) {
+				int i = 0;
+				HE_Halfedge he = _halfedge;
+				do {
+					points[i] = new WB_Point(he.getVertex().xd(), he
+							.getVertex().yd(), he.getVertex().zd());
+
+					he = he.getNextInFace();
+					i++;
+				} while (he != _halfedge);
+				logger.trace("Checking if quad face is convex.");
+				final boolean p0inside = WB_Triangle.pointInTriangleBary3D(
+						points[0], points[1], points[2], points[3]);
+				logger.trace("p0 in triangle p1p2p3: " + p0inside + ".");
+				final boolean p2inside = WB_Triangle.pointInTriangleBary3D(
+						points[2], points[1], points[0], points[3]);
+				logger.trace("p2 in triangle p1p0p3: " + p2inside + ".");
+
+				if (p0inside || p2inside)
+
+				{
 					return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
 
 				}
@@ -348,10 +374,12 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 				}
 			}
 			else {
-
+				logger.debug("Starting triangulation of face with " + fo
+						+ " faces.");
 				triangles = toPolygon().triangulate();
 			}
 		}
+		logger.debug("Returning triangles.");
 		return triangles;
 	}
 
