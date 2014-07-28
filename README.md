@@ -14,6 +14,10 @@ You need to add some other external *.jar files to the properties of your Eclips
 * `trove-3.1a1.jar`: A collection of high speed primitive based collections. Download here: http://hemesh.wblut.com/trove-3.1a1.zip
   (http://trove.starlight-systems.com/)
 
-## Build-of-the-day HE_Mesh 2014
+* `log4j-1.2.17.jar`: Apache logging library for Java. Download here: http://hemesh.wblut.com/log4j-1.2.17.zip
+  (http://logging.apache.org/log4j/1.2/)
+
+
+## Build-of-the-day HE_Mesh 2014 (28/07/2014)
 
 Download a recent built here: http://hemesh.wblut.com/hemesh.zip.
