@@ -26,7 +26,7 @@ import wblut.math.WB_M33;
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		WB_HasData, WB_HasColor {
 
-	private final WB_Point pos;
+	private WB_Point pos;
 
 	/** Halfedge associated with this vertex. */
 	private HE_Halfedge _halfedge;
@@ -899,6 +899,13 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	public void copyProperties(final HE_Vertex el) {
 		super.copyProperties(el);
 		vertexcolor = el.getColor();
+	}
+
+	@Override
+	public void clear() {
+		_data = null;
+		_halfedge = null;
+		pos = null;
 	}
 
 }

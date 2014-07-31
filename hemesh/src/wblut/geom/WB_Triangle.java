@@ -1,5 +1,7 @@
 package wblut.geom;
 
+import org.apache.log4j.Logger;
+
 import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
@@ -32,6 +34,8 @@ public class WB_Triangle implements Triangle {
 
 	/** Cosine of angle C. */
 	private double cosC;
+
+	private static Logger logger = Logger.getLogger(WB_Triangle.class);
 
 	protected WB_Triangle() {
 
@@ -330,18 +334,18 @@ public class WB_Triangle implements Triangle {
 		switch (coord) {
 		case 1:
 			area = (p1.yd() * (p2.zd() - p3.zd()))
-			+ (p2.yd() * (p3.zd() - p1.zd()))
-			+ (p3.yd() * (p1.zd() - p2.zd()));
+					+ (p2.yd() * (p3.zd() - p1.zd()))
+					+ (p3.yd() * (p1.zd() - p2.zd()));
 			break;
 		case 2:
 			area = (p1.xd() * (p2.zd() - p3.zd()))
-			+ (p2.xd() * (p3.zd() - p1.zd()))
-			+ (p3.xd() * (p1.zd() - p2.zd()));
+					+ (p2.xd() * (p3.zd() - p1.zd()))
+					+ (p3.xd() * (p1.zd() - p2.zd()));
 			break;
 		case 3:
 			area = (p1.xd() * (p2.yd() - p3.yd()))
-			+ (p2.xd() * (p3.yd() - p1.yd()))
-			+ (p3.xd() * (p1.yd() - p2.yd()));
+					+ (p2.xd() * (p3.yd() - p1.yd()))
+					+ (p3.xd() * (p1.yd() - p2.yd()));
 			break;
 
 		}

@@ -20,7 +20,7 @@ public interface SimplePolygon {
 
 	public WB_Convex isConvex(final int i);
 
-	public int[][] triangulate();
+	public int[][] getTriangles();
 
 	public List<WB_IndexedSegment> getSegments();
 

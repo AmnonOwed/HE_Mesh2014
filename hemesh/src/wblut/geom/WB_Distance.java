@@ -269,7 +269,7 @@ public class WB_Distance {
 
 	public static double getSqDistance3D(final WB_Coordinate p,
 			final SimplePolygon poly) {
-		final int[][] tris = poly.triangulate();
+		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Coordinate tmp;

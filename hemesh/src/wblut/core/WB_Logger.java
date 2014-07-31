@@ -23,36 +23,44 @@ public class WB_Logger {
 		return log;
 	}
 
-	static public void setLevel(final Level level) {
+	static public WB_Logger setLevel(final Level level) {
 		logger.setLevel(level);
+		return log;
 	}
 
-	static public void setDebug() {
+	static public WB_Logger setDebug() {
 		logger.setLevel(Level.DEBUG);
+		return log;
 	}
 
-	static public void setInfo() {
+	static public WB_Logger setInfo() {
 		logger.setLevel(Level.INFO);
+		return log;
 	}
 
-	static public void setTrace() {
+	static public WB_Logger setTrace() {
 		logger.setLevel(Level.TRACE);
+		return log;
 	}
 
-	static public void setWarning() {
+	static public WB_Logger setWarning() {
 		logger.setLevel(Level.WARN);
+		return log;
 	}
 
-	static public void setError() {
+	static public WB_Logger setError() {
 		logger.setLevel(Level.ERROR);
+		return log;
 	}
 
-	static public void setFatal() {
+	static public WB_Logger setFatal() {
 		logger.setLevel(Level.FATAL);
+		return log;
 	}
 
-	static public void setOff() {
+	static public WB_Logger setOff() {
 		logger.setLevel(Level.OFF);
+		return log;
 	}
 
 }

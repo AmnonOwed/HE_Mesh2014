@@ -1449,7 +1449,7 @@ public class WB_Intersection {
 
 	public static WB_Point getClosestPoint3D(final WB_Coordinate p,
 			final SimplePolygon poly) {
-		final int[][] tris = poly.triangulate();
+		final int[][] tris = poly.getTriangles();
 
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
@@ -1494,7 +1494,7 @@ public class WB_Intersection {
 
 	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
 			final SimplePolygon poly) {
-		final int[][] tris = poly.triangulate();
+		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Point closest = new WB_Point();
@@ -2824,7 +2824,7 @@ public class WB_Intersection {
 
 	public static WB_Point getClosestPoint2D(final WB_Coordinate p,
 			final WB_SimplePolygon poly) {
-		final int[][] tris = poly.triangulate();
+		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Point closest = new WB_Point();
@@ -2868,7 +2868,7 @@ public class WB_Intersection {
 
 	public static WB_Point getClosestPointOnPeriphery2D(final WB_Coordinate p,
 			final WB_SimplePolygon poly) {
-		final int[][] tris = poly.triangulate();
+		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
 		double dmax2 = Double.POSITIVE_INFINITY;
 		WB_Point closest = new WB_Point();

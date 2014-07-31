@@ -62,6 +62,7 @@ public class HE_RASJavolution<E extends HE_Element> extends HE_RAS<E> {
 			return null;
 		}
 		final E res = objects.get(id);
+		res.clear();
 		indices.remove(res._key);
 		final E last = objects.remove(objects.size() - 1);
 		// skip filling the hole if last is removed
@@ -77,13 +78,15 @@ public class HE_RASJavolution<E extends HE_Element> extends HE_RAS<E> {
 		if (item == null) {
 			return false;
 		}
+
 		// @SuppressWarnings(value = "element-type-mismatch")
 		final Integer retrieval = indices.get(item._key);
-		;
+
 		final int id = (retrieval == null) ? -1 : retrieval;
 		if (id == -1) {
 			return false;
 		}
+		item.clear();
 		removeAt(id);
 		return true;
 	}

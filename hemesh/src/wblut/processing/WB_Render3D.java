@@ -106,8 +106,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -248,20 +248,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -402,7 +402,6 @@ public class WB_Render3D {
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
-		retained.disableStyle();
 		return retained;
 	}
 
@@ -425,7 +424,6 @@ public class WB_Render3D {
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
-		retained.disableStyle();
 		return retained;
 	}
 
@@ -452,7 +450,60 @@ public class WB_Render3D {
 
 		}
 		retained.endShape();
-		retained.disableStyle();
+		return retained;
+	}
+
+	public PShape toSmoothPShapeWithFaceColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		WB_Vector n = new WB_Vector();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			retained.fill(f.getColor());
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				n = v.getVertexNormal();
+				retained.normal(n.xf(), n.yf(), n.zf());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
+		return retained;
+	}
+
+	public PShape toSmoothPShapeWithVertexColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		WB_Vector n = new WB_Vector();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				retained.fill(v.getColor());
+				n = v.getVertexNormal();
+				retained.normal(n.xf(), n.yf(), n.zf());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
 		return retained;
 	}
 
@@ -476,7 +527,54 @@ public class WB_Render3D {
 
 		}
 		retained.endShape();
-		retained.disableStyle();
+		return retained;
+	}
+
+	public PShape toFacetedPShapeWithFaceColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			retained.fill(f.getColor());
+			do {
+				v = he.getVertex();
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
+		return retained;
+	}
+
+	public PShape toFacetedPShapeWithVertexColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				retained.fill(v.getColor());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
 		return retained;
 	}
 

@@ -69,4 +69,6 @@ public abstract class HE_Element {
 		_internalLabel = el.getInternalLabel();
 	}
 
+	public abstract void clear();
+
 }

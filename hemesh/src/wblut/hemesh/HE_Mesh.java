@@ -1871,6 +1871,50 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		}
 	}
 
+	public void deleteTwoEdgeVertex(final HE_Vertex v) {
+		if (contains(v) && v.getVertexOrder() == 2) {
+			final HE_Halfedge he0 = v.getHalfedge();
+			final HE_Halfedge he1 = he0.getNextInVertex();
+			final HE_Halfedge he0n = he0.getNextInFace();
+			final HE_Halfedge he1n = he1.getNextInFace();
+			final HE_Halfedge he0p = he0.getPair();
+			final HE_Halfedge he1p = he1.getPair();
+			he0p.setNext(he1n);
+			he1p.setNext(he0n);
+			if (he0.getFace() != null) {
+				he0.getFace().setHalfedge(he1p);
+			}
+			if (he1.getFace() != null) {
+				he1.getFace().setHalfedge(he0p);
+			}
+			he0n.getVertex().setHalfedge(he0n);
+			he1n.getVertex().setHalfedge(he1n);
+			he0p.setPair(he1p);
+			he1p.setPair(he0p);
+			remove(he0);
+			remove(he1);
+			remove(v);
+		}
+
+	}
+
+	public void deleteTwoEdgeVertices() {
+		final HE_VertexIterator vitr = new HE_VertexIterator(this);
+		HE_Vertex v;
+		final List<HE_Vertex> toremove = new FastTable<HE_Vertex>();
+		while (vitr.hasNext()) {
+			v = vitr.next();
+			if (v.getVertexOrder() == 2) {
+				toremove.add(v);
+			}
+		}
+
+		for (final HE_Vertex vtr : toremove) {
+			deleteTwoEdgeVertex(vtr);
+		}
+
+	}
+
 	/**
 	 * Fix halfedge vertex assignment.
 	 */

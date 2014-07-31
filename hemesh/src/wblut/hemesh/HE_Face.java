@@ -15,7 +15,7 @@ import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Projection;
 import wblut.geom.WB_SimplePolygon;
-import wblut.geom.WB_Triangle;
+import wblut.geom.WB_Triangulate;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
@@ -36,9 +36,6 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	private int[][] triangles;
 
-	private static WB_Coordinate c;
-	private static WB_Coordinate p1;
-	private static WB_Coordinate p2;
 	private static Logger logger = Logger.getLogger(HE_Face.class);
 
 	/**
@@ -354,29 +351,14 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 					he = he.getNextInFace();
 					i++;
 				} while (he != _halfedge);
-				logger.trace("Checking if quad face is convex.");
-				final boolean p0inside = WB_Triangle.pointInTriangleBary3D(
-						points[0], points[1], points[2], points[3]);
-				logger.trace("p0 in triangle p1p2p3: " + p0inside + ".");
-				final boolean p2inside = WB_Triangle.pointInTriangleBary3D(
-						points[2], points[1], points[0], points[3]);
-				logger.trace("p2 in triangle p1p0p3: " + p2inside + ".");
 
-				if (p0inside || p2inside)
-
-				{
-					return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
-
-				}
-				else {
-					return new int[][] { { 0, 1, 3 }, { 1, 2, 3 } };
-
-				}
+				return WB_Triangulate.triangulateQuad(points[0], points[1],
+						points[2], points[3]);
 			}
 			else {
 				logger.debug("Starting triangulation of face with " + fo
 						+ " faces.");
-				triangles = toPolygon().triangulate();
+				triangles = toPolygon().getTriangles();
 			}
 		}
 		logger.debug("Returning triangles.");
@@ -527,6 +509,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	public void copyProperties(final HE_Face el) {
 		super.copyProperties(el);
 		facecolor = el.getColor();
+	}
+
+	@Override
+	public void clear() {
+		_data = null;
+		_halfedge = null;
+		triangles = null;
 	}
 
 }
