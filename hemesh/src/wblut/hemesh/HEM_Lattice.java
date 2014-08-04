@@ -234,7 +234,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 		}
 
-		mesh.pairHalfedgesAndCreateEdges();
+		mesh.pairHalfedges();
 
 		return mesh;
 
@@ -355,7 +355,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 			}
 		}
-		selection.parent.pairHalfedgesAndCreateEdges();
+		selection.parent.pairHalfedges();
 
 		return selection.parent;
 	}

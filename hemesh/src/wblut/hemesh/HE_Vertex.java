@@ -908,4 +908,18 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		pos = null;
 	}
 
+	public double getUmbrellaAngle() {
+		double result = 0;
+		HE_Halfedge he = _halfedge;
+		if (he == null) {
+			return 0;
+		}
+		do {
+			result += he.getAngle();
+			he = he.getNextInVertex();
+		} while (he != _halfedge);
+		return result;
+
+	}
+
 }

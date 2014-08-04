@@ -82,7 +82,7 @@ public class HEM_Shell extends HEM_Modifier {
 
 		}
 
-		mesh.pairHalfedgesAndCreateEdges();
+		mesh.pairHalfedges();
 		return mesh;
 
 	}

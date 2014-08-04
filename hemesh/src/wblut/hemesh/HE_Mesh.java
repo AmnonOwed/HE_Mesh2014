@@ -1,9 +1,12 @@
 package wblut.hemesh;
 
+import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.TLongLongMap;
+import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongIntHashMap;
 import gnu.trove.map.hash.TLongLongHashMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -1292,7 +1295,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	/**
 	 * Try to pair all unpaired halfedges.
 	 */
-	public void pairHalfedgesAndCreateEdges() {
+	public void pairHalfedges() {
 		class VertexInfo {
 			FastTable<HE_Halfedge> out;
 			FastTable<HE_Halfedge> in;
@@ -1304,7 +1307,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 		}
 
-		final FastMap<Long, VertexInfo> vertexLists = new FastMap<Long, VertexInfo>();
+		final TLongObjectMap<VertexInfo> vertexLists = new TLongObjectHashMap<VertexInfo>(
+				1024, 0.5f, -1L);
 
 		final List<HE_Halfedge> unpairedHalfedges = getUnpairedHalfedges();
 		HE_Vertex v;
@@ -1333,9 +1337,11 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		HE_Halfedge he2;
 
 		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
-
-		for (final VertexInfo vInfo : vertexLists.values()) {
-
+		final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
+		VertexInfo vInfo;
+		while (vitr.hasNext()) {
+			vitr.advance();
+			vInfo = vitr.value();
 			for (int i = 0; i < vInfo.out.size(); i++) {
 				he = vInfo.out.get(i);
 				if (he.getPair() == null) {
@@ -1365,8 +1371,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @param unpairedHalfedges
 	 *            the unpaired halfedges
 	 */
-	public void pairHalfedgesAndCreateEdges(
-			final List<HE_Halfedge> unpairedHalfedges) {
+	public void pairHalfedges(final List<HE_Halfedge> unpairedHalfedges) {
 		class VertexInfo {
 			FastTable<HE_Halfedge> out;
 			FastTable<HE_Halfedge> in;
@@ -1378,7 +1383,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 		}
 
-		final FastMap<Long, VertexInfo> vertexLists = new FastMap<Long, VertexInfo>();
+		final TLongObjectMap<VertexInfo> vertexLists = new TLongObjectHashMap<VertexInfo>(
+				1024, 0.5f, -1L);
+
 		HE_Vertex v;
 		VertexInfo vi;
 		// System.out.println("HE_Mesh : collating " + unpairedHalfedges.size()
@@ -1404,8 +1411,11 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		HE_Halfedge he;
 		HE_Halfedge he2;
 
-		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
-		for (final VertexInfo vInfo : vertexLists.values()) {
+		final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
+		VertexInfo vInfo;
+		while (vitr.hasNext()) {
+			vitr.advance();
+			vInfo = vitr.value();
 
 			for (int i = 0; i < vInfo.out.size(); i++) {
 				he = vInfo.out.get(i);
@@ -1653,14 +1663,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			final HE_Halfedge hePair = he.getPair();
 			final HE_Face f = he.getFace();
 			final HE_Face fp = hePair.getFace();
+
 			final HE_Vertex v = he.getVertex();
 			final HE_Vertex vp = hePair.getVertex();
 
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
-			for (int i = 0; i < tmp.size(); i++) {
-				tmp.get(i).setVertex(vp);
-			}
-			vp.setHalfedge(hePair.getNextInVertex());
+
 			final HE_Halfedge hen = he.getNextInFace();
 			final HE_Halfedge hep = he.getPrevInFace();
 			final HE_Halfedge hePairn = hePair.getNextInFace();
@@ -1676,10 +1684,17 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			hen.setPrev(hep);
 			hePairp.setNext(hePairn);
 			hePairn.setPrev(hePairp);
+
+			for (int i = 0; i < tmp.size(); i++) {
+				tmp.get(i).setVertex(vp);
+			}
+			vp.setHalfedge(hen);
+
 			remove(he);
 			remove(hePair);
 
 			remove(v);
+
 			deleteTwoEdgeFace(f);
 			deleteTwoEdgeFace(fp);
 			return true;
@@ -2775,7 +2790,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -2860,7 +2875,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -3006,7 +3021,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			}
 		}
 		logger.debug("Pairing all new unpaired halfedges.");
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		logger.debug("Exiting splitFacesHybrid().");
 		return selectionOut;
 
@@ -3143,7 +3158,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				}
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -4666,7 +4681,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				add(he3);
 			}
 
-			pairHalfedgesAndCreateEdges();
+			pairHalfedges();
 		}
 	}
 
@@ -4726,7 +4741,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 	}
 
 	/**
@@ -4741,7 +4756,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 	}
 
 	/**

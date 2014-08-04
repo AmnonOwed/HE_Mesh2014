@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PMatrix3D;
@@ -56,6 +58,8 @@ public class WB_Render3D {
 	private final PGraphics3D home;
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
+
+	private static Logger logger = Logger.getLogger(WB_Render3D.class);
 
 	public WB_Render3D(final PApplet home) {
 		if (home.g == null) {
@@ -906,12 +910,14 @@ public class WB_Render3D {
 
 	public void drawFace(final HE_Face f, final boolean smooth) {
 		final int fo = f.getFaceOrder();
-
-		if (fo < 3) {
+		final List<HE_Vertex> vertices = f.getFaceVertices();
+		if (fo < 3 || vertices.size() < 3) {
+			logger.warn("Face " + f.getKey() + " has face order " + fo
+					+ " and " + vertices.size() + "vertices.");
 		}
-		else if (f.getFaceOrder() == 3) {
+		else if (fo == 3) {
 			final int[] tri = new int[] { 0, 1, 2 };
-			final List<HE_Vertex> vertices = f.getFaceVertices();
+
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
 			if (smooth) {
@@ -946,7 +952,7 @@ public class WB_Render3D {
 		}
 		else {
 			final int[][] tris = f.getTriangles();
-			final List<HE_Vertex> vertices = f.getFaceVertices();
+
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
 			int[] tri;

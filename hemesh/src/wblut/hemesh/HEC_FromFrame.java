@@ -601,7 +601,7 @@ public class HEC_FromFrame extends HEC_Creator {
 		createVertices();
 		createNodes();
 		createStruts();
-		mesh.pairHalfedgesAndCreateEdges();
+		mesh.pairHalfedges();
 		if (!cap) {
 			mesh.capHalfedges();
 		}

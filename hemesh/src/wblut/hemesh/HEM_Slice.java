@@ -207,7 +207,7 @@ public class HEM_Slice extends HEM_Modifier {
 		if (capHoles) {
 			if (simpleCap) {
 				cap.addFaces(mesh.capHoles());
-				mesh.pairHalfedgesAndCreateEdges();
+				mesh.pairHalfedges();
 				mesh.capHalfedges();
 			}
 			else {
@@ -217,7 +217,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 		}
 		else {
-			mesh.pairHalfedgesAndCreateEdges();
+			mesh.pairHalfedges();
 			mesh.capHalfedges();
 		}
 

@@ -651,7 +651,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			newhes.add(heNew3);
 			newhes.add(heNew4);
 		}
-		mesh.pairHalfedgesAndCreateEdges(newhes);
+		mesh.pairHalfedges(newhes);
 		return true;
 
 	}
@@ -955,7 +955,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				he = he.getNextInFace();
 				c++;
 			} while (he != f.getHalfedge());
-			mesh.pairHalfedgesAndCreateEdges(newhes);
+			mesh.pairHalfedges(newhes);
 
 			final List<HE_Halfedge> edgesToRemove = new FastTable<HE_Halfedge>();
 			for (int i = 0; i < newhes.size(); i++) {
