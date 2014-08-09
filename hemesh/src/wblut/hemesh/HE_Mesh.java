@@ -55,7 +55,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-		WB_HasColor, WB_Mesh {
+WB_HasColor, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -960,9 +960,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			vItr.next()
-			.getPoint()
-			._addSelf(x - _center.xd(), y - _center.yd(),
-					z - _center.zd());
+					.getPoint()
+					._addSelf(x - _center.xd(), y - _center.yd(),
+							z - _center.zd());
 		}
 		_center._set(x, y, z);
 		return this;
@@ -1349,9 +1349,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-								.getVertex())
+										.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-								.getVertex())) {
+										.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -1424,9 +1424,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-								.getVertex())
+										.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-								.getVertex())) {
+										.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -4173,9 +4173,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 						he.getNextInVertex().getHalfedgeTangent())) {
 					he.getPrevInFace().setNext(he.getNextInFace());
 					he.getPair().getPrevInFace()
-					.setNext(he.getPair().getNextInFace());
+							.setNext(he.getPair().getNextInFace());
 					he.getPair().getNextInFace()
-					.setVertex(he.getNextInFace().getVertex());
+							.setVertex(he.getNextInFace().getVertex());
 					if (he.getFace() != null) {
 						if (he.getFace().getHalfedge() == he) {
 							he.getFace().setHalfedge(he.getNextInFace());
@@ -4185,7 +4185,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 						if (he.getPair().getFace().getHalfedge() == he
 								.getPair()) {
 							he.getPair().getFace()
-							.setHalfedge(he.getPair().getNextInFace());
+									.setHalfedge(he.getPair().getNextInFace());
 						}
 					}
 					vItr.remove();
@@ -4771,7 +4771,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -4784,7 +4784,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

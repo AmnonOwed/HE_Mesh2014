@@ -6,6 +6,7 @@ import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PMatrix;
 import processing.opengl.PGraphics3D;
 import wblut.geom.WB_GeometryFactory;
 import wblut.hemesh.HE_Face;
@@ -78,9 +79,9 @@ public class WB_SelectRender3D {
 	 *            the mesh
 	 * @return key of face at mouse position
 	 */
-	public void drawFaces(final HE_MeshStructure mesh) {
+	public void drawFaces(final HE_MeshStructure mesh, final PMatrix matrix) {
 		selector.beginDraw();
-		selector.setMatrix(home.getMatrix());
+		selector.setMatrix(matrix);// home.getMatrix());
 		selector.scale((float) scale);
 		selector.clear();
 		final Iterator<HE_Face> fItr = mesh.fItr();

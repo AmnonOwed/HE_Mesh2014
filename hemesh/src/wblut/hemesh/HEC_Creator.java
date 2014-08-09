@@ -16,7 +16,7 @@ import wblut.math.WB_Math;
  * @author Frederik Vanhoutte (W:Blut)
  *
  */
-public abstract class HEC_Creator {
+public abstract class HEC_Creator implements HE_Machine {
 
 	/** Calling applet. */
 	public PApplet home;
@@ -233,6 +233,17 @@ public abstract class HEC_Creator {
 			}
 		}
 		return base;
+	}
+
+	@Override
+	public HE_Mesh apply(final HE_Mesh mesh) {
+		mesh.set(create());
+		return mesh;
+	}
+
+	@Override
+	public HE_Mesh apply(final HE_Selection sel) {
+		return create();
 	}
 
 }
