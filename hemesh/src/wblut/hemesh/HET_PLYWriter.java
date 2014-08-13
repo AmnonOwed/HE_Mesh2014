@@ -320,7 +320,7 @@ public class HET_PLYWriter {
 			final String path, final String name) {
 		try {
 			saveMeshWithFaceColor(mesh, createOutputStream(new File(path, name
-					+ ".wrl")));
+					+ ".ply")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
