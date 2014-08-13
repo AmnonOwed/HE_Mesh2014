@@ -855,13 +855,22 @@ public class WB_Render3D {
 	 *            selection to draw
 	 */
 	public void drawEdges(final HE_Selection selection) {
-		final Iterator<HE_Halfedge> eItr = selection.eItr();
+		final Iterator<HE_Face> fItr = selection.fItr();
 		HE_Halfedge e;
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
-					.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
-					.getEndVertex().zf());
+		HE_Face f;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			e = f.getHalfedge();
+			do {
+
+				if (e.isEdge() || e.isBoundary()
+						|| !selection.contains(e.getPair().getFace())) {
+					home.line(e.getVertex().xf(), e.getVertex().yf(), e
+							.getVertex().zf(), e.getEndVertex().xf(), e
+							.getEndVertex().yf(), e.getEndVertex().zf());
+				}
+				e = e.getNextInFace();
+			} while (e != f.getHalfedge());
 		}
 	}
 

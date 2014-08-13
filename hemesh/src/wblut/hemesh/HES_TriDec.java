@@ -71,12 +71,16 @@ public class HES_TriDec extends HES_Simplifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		if (mesh.getNumberOfVertices() <= goal) {
+			return mesh;
+		}
+
 		_mesh = mesh;
 		_mesh.triangulate();
 		_mesh.resetVertexInternalLabels();
@@ -87,42 +91,76 @@ public class HES_TriDec extends HES_Simplifier {
 		HE_Vertex v;
 		Entry entry;
 		List<HE_Vertex> vertices;
-		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0) {
-			boolean valid;
-			if (heap.size() > 0 && _mesh.getNumberOfVertices() > 4) {
+		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+				&& _mesh.getNumberOfVertices() > 4) {
+			boolean valid = false;
 
-				do {
-					entry = heap.pop();
-					v = entry.v;
-					valid = mesh.contains(v)
-							&& (entry.version == v.getInternalLabel());
+			do {
+				entry = heap.pop();
+				v = entry.v;
+				valid = mesh.contains(v)
+						&& (entry.version == v.getInternalLabel());
 
-				} while (heap.size() > 0 && !valid);
-				if (valid) {
-					vertices = v.getNeighborVertices();
-					// vertices.addAll(v.getNextNeighborVertices());
-					if (_mesh.collapseHalfedge(v.getHalfedge())) {
-						vertexCost.remove(v.key());
-						counter++;
-						updateHeap(vertices);
-					}
+			} while (heap.size() > 0 && !valid);
+			if (valid) {
+				vertices = v.getNeighborVertices();
+				// vertices.addAll(v.getNextNeighborVertices());
+				if (_mesh.collapseHalfedge(v.getHalfedge())) {
+					vertexCost.remove(v.key());
+					counter++;
+					updateHeap(vertices, null);
 				}
 			}
 		}
+
 		return _mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Selection
 	 * )
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+		if (selection.parent.getNumberOfVertices() <= goal) {
+			return selection.parent;
+		}
 
-		return apply(selection.parent);
+		_mesh = selection.parent;
+		_mesh.triangulate();
+		_mesh.resetVertexInternalLabels();
+		if (_mesh.getNumberOfVertices() <= 4) {
+			return _mesh;
+		}
+		buildHeap(selection);
+		HE_Vertex v;
+		Entry entry;
+		List<HE_Vertex> vertices;
+		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+				&& _mesh.getNumberOfVertices() > 4) {
+			boolean valid = false;
+			do {
+				entry = heap.pop();
+				v = entry.v;
+				valid = selection.contains(v)
+						&& (entry.version == v.getInternalLabel());
+
+			} while (heap.size() > 0 && !valid);
+			if (valid) {
+				vertices = v.getNeighborVertices();
+				// vertices.addAll(v.getNextNeighborVertices());
+				if (_mesh.collapseHalfedge(v.getHalfedge())) {
+					vertexCost.remove(v.key());
+					selection.remove(v);
+					counter++;
+					updateHeap(vertices, selection);
+				}
+			}
+		}
+		return _mesh;
 
 	}
 
@@ -148,8 +186,8 @@ public class HES_TriDec extends HES_Simplifier {
 			minhe = vstar.get(0);
 			min = Double.POSITIVE_INFINITY;
 			if (v.isBoundary()) { // Only consider collapsing along boundary for
-									// boundary vertices, never collapse
-									// boundary inward
+				// boundary vertices, never collapse
+				// boundary inward
 				for (int i = 0; i < vstar.size(); i++) {
 					if (vstar.get(i).isBoundary()) {
 						c = halfedgeCollapseCost(vstar.get(i));
@@ -182,50 +220,55 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 	}
 
-	private void updateHeap(final List<HE_Vertex> vertices) {
+	private void updateHeap(final List<HE_Vertex> vertices,
+			final HE_MeshStructure selection) {
 		double min;
 		double c;
 		HE_Halfedge minhe;
 		List<HE_Halfedge> vstar;
 		double vvi;
 		for (final HE_Vertex v : vertices) {
-			vvi = visualImportance(v);
-			v.setInternalLabel(counter);
-			vertexCost.remove(v.key());
-			vstar = v.getHalfedgeStar();
-			minhe = vstar.get(0);
-			min = Double.POSITIVE_INFINITY;
-			if (v.isBoundary()) { // Only consider collapsing along boundary for
-									// boundary vertices, never collapse
-									// boundary inward
-				for (int i = 0; i < vstar.size(); i++) {
-					if (vstar.get(i).isBoundary()) {
+			if (selection == null || selection.contains(v)) {
+				vvi = visualImportance(v);
+				v.setInternalLabel(counter);
+				vertexCost.remove(v.key());
+				vstar = v.getHalfedgeStar();
+				minhe = vstar.get(0);
+				min = Double.POSITIVE_INFINITY;
+				if (v.isBoundary()) { // Only consider collapsing along boundary
+					// for
+					// boundary vertices, never collapse
+					// boundary inward
+					for (int i = 0; i < vstar.size(); i++) {
+						if (vstar.get(i).isBoundary()) {
+							c = halfedgeCollapseCost(vstar.get(i));
+
+							if (c < min) {
+								min = c;
+								minhe = vstar.get(i);
+							}
+						}
+					}
+				}
+				else {
+					for (int i = 0; i < vstar.size(); i++) {
+
 						c = halfedgeCollapseCost(vstar.get(i));
 
 						if (c < min) {
 							min = c;
 							minhe = vstar.get(i);
 						}
-					}
-				}
-			}
-			else {
-				for (int i = 0; i < vstar.size(); i++) {
 
-					c = halfedgeCollapseCost(vstar.get(i));
-
-					if (c < min) {
-						min = c;
-						minhe = vstar.get(i);
 					}
 
 				}
 
-			}
-			if (min != Double.POSITIVE_INFINITY) {
-				vertexCost.put(v.key(), min * vvi);
-				v.setHalfedge(minhe);
-				heap.push(min * vvi, v);
+				if (min != Double.POSITIVE_INFINITY) {
+					vertexCost.put(v.key(), min * vvi);
+					v.setHalfedge(minhe);
+					heap.push(min * vvi, v);
+				}
 			}
 
 		}

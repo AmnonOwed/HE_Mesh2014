@@ -18,7 +18,7 @@ public abstract class HE_Element {
 
 	}
 
-	protected final void setInternalLabel(final int label) {
+	public final void setInternalLabel(final int label) {
 		_internalLabel = label;
 
 	}

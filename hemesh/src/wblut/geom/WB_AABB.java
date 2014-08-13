@@ -704,7 +704,7 @@ public class WB_AABB {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -712,7 +712,7 @@ public class WB_AABB {
 		String string = "WB_AABB [";
 		int i = 0;
 		for (i = 0; i < 3 - 1; i++) {
-			string += _min[0] + ":" + _max[0] + ", ";
+			string += _min[i] + ":" + _max[i] + ", ";
 		}
 		string += _min[i] + ":" + _max[i] + "]";
 		return string;
@@ -902,8 +902,8 @@ public class WB_AABB {
 				.xd() > p2.xd() ? p1.xd() : p2.xd())))
 				&& ((q.yd() >= (p1.yd() < p2.yd() ? p1.yd() : p2.yd())) && (q
 						.yd() <= (p1.yd() > p2.yd() ? p1.yd() : p2.yd())))
-						&& ((q.zd() >= (p1.zd() < p2.zd() ? p1.zd() : p2.zd())) && (q
-								.zd() <= (p1.zd() > p2.zd() ? p1.yd() : p2.zd())))) {
+				&& ((q.zd() >= (p1.zd() < p2.zd() ? p1.zd() : p2.zd())) && (q
+						.zd() <= (p1.zd() > p2.zd() ? p1.yd() : p2.zd())))) {
 			return true;
 		}
 		return false;
@@ -1124,7 +1124,7 @@ public class WB_AABB {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

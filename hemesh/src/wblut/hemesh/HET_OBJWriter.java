@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.zip.GZIPOutputStream;
 
 import wblut.geom.WB_Coordinate;
 
@@ -75,12 +76,41 @@ public class HET_OBJWriter {
 	 */
 	public static void beginSave(final String fn, final String name) {
 		try {
-			objStream = new FileOutputStream(new File(fn, name + ".obj"));
-			mtlStream = new FileOutputStream(new File(fn, name + ".mtl"));
+			objStream = createOutputStream(new File(fn, name + ".obj"));
+			mtlStream = createOutputStream(new File(fn, name + ".mtl"));
 			handleBeginSave();
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	static public OutputStream createOutputStream(final File file)
+			throws IOException {
+		if (file == null) {
+			throw new IllegalArgumentException("file can't be null");
+		}
+		createDirectories(file);
+		OutputStream stream = new FileOutputStream(file);
+		if (file.getName().toLowerCase().endsWith(".gz")) {
+			stream = new GZIPOutputStream(stream);
+		}
+		return stream;
+	}
+
+	static public void createDirectories(final File file) {
+		try {
+			final String parentName = file.getParent();
+			if (parentName != null) {
+				final File parent = new File(parentName);
+				if (!parent.exists()) {
+					parent.mkdirs();
+				}
+			}
+		}
+		catch (final SecurityException se) {
+			System.err.println("No permissions to create "
+					+ file.getAbsolutePath());
 		}
 	}
 
@@ -281,14 +311,14 @@ public class HET_OBJWriter {
 			he = f.getHalfedge();
 			faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 					keyToIndex.get(he.getNextInFace().getVertex().key())
-							+ vOffset,
+					+ vOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-					+ vOffset, keyToIndex.get(he.getVertex().key())
-							+ nOffset,
-					keyToIndex.get(he.getNextInFace().getVertex().key())
+							+ vOffset, keyToIndex.get(he.getVertex().key())
 					+ nOffset,
+					keyToIndex.get(he.getNextInFace().getVertex().key())
+							+ nOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-					+ nOffset);
+							+ nOffset);
 		}
 		endSave();
 	}
@@ -329,14 +359,14 @@ public class HET_OBJWriter {
 			objWriter.println("usemtl f" + (fi++));
 			faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 					keyToIndex.get(he.getNextInFace().getVertex().key())
-							+ vOffset,
+					+ vOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-					+ vOffset, keyToIndex.get(he.getVertex().key())
-							+ nOffset,
-					keyToIndex.get(he.getNextInFace().getVertex().key())
+							+ vOffset, keyToIndex.get(he.getVertex().key())
 					+ nOffset,
+					keyToIndex.get(he.getNextInFace().getVertex().key())
+							+ nOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-					+ nOffset);
+							+ nOffset);
 		}
 		endSave();
 	}
@@ -377,14 +407,14 @@ public class HET_OBJWriter {
 			he = f.getHalfedge();
 			faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 					keyToIndex.get(he.getNextInFace().getVertex().key())
-					+ vOffset,
+							+ vOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-							+ vOffset, keyToIndex.get(he.getVertex().key())
-					+ nOffset,
-					keyToIndex.get(he.getNextInFace().getVertex().key())
+					+ vOffset, keyToIndex.get(he.getVertex().key())
 							+ nOffset,
+					keyToIndex.get(he.getNextInFace().getVertex().key())
+					+ nOffset,
 					keyToIndex.get(he.getPrevInFace().getVertex().key())
-							+ nOffset);
+					+ nOffset);
 		}
 		endSave();
 	}
