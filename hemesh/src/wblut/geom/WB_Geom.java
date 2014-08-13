@@ -8,9 +8,11 @@ public class WB_Geom {
 			final WB_Coordinate b, final WB_Coordinate c) {
 		if (WB_Geom.coincident2D(a, c)) {
 			return true;
-		} else if (WB_Geom.coincident2D(b, c)) {
+		}
+		else if (WB_Geom.coincident2D(b, c)) {
 			return true;
-		} else {
+		}
+		else {
 			if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 				final double d = projectedDistanceNorm(c, a, b);
 				if (0 < d && d < 1) {
@@ -25,9 +27,11 @@ public class WB_Geom {
 			final WB_Coordinate b, final WB_Coordinate c) {
 		if (WB_Geom.coincident2D(a, c)) {
 			return true;
-		} else if (WB_Geom.coincident2D(b, c)) {
+		}
+		else if (WB_Geom.coincident2D(b, c)) {
 			return true;
-		} else {
+		}
+		else {
 			if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 				final double d = projectedDistanceNorm(c, a, b);
 				if (0 < d && d < 1) {

@@ -96,7 +96,7 @@ public class HEC_Dual extends HEC_Creator {
 			HE_Mesh.cycleHalfedges(faceHalfedges);
 			result.addHalfedges(faceHalfedges);
 		}
-		result.pairHalfedgesAndCreateEdges();
+		result.pairHalfedges();
 		result.moveTo(source.getCenter());
 		result.flipAllFaces();
 		return result;

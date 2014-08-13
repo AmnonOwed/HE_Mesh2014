@@ -70,7 +70,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -118,8 +118,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
 				if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 					cutEdges.add(e);
-					e.setLabel(1);
-					e.getPair().setLabel(1);
+					e.setInternalLabel(1);
+					e.getPair().setInternalLabel(1);
 				}
 				else {
 					edgeInt.put(e.key(), 0.0);
@@ -202,7 +202,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				final HE_Face nf = out.fItr().next();
 				cut.add(nf);
 				final HE_Halfedge ne = out.eItr().next();
-				ne.setLabel(1);
+				ne.setInternalLabel(1);
 				cutEdges.add(ne);
 			}
 		}
@@ -212,7 +212,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -275,7 +275,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
 					if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
 						cutEdges.add(e);
-						e.setLabel(1);
+						e.setInternalLabel(1);
 					}
 					else {
 						edgeInt.put(e.key(), 0.0);
@@ -357,7 +357,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					final HE_Face nf = out.fItr().next();
 					cut.add(nf);
 					final HE_Halfedge ne = out.eItr().next();
-					ne.setLabel(1);
+					ne.setInternalLabel(1);
 					cutEdges.add(ne);
 				}
 

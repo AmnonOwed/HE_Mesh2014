@@ -1,5 +1,7 @@
 package wblut.geom;
 
+import org.apache.log4j.Logger;
+
 import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
@@ -32,6 +34,8 @@ public class WB_Triangle implements Triangle {
 
 	/** Cosine of angle C. */
 	private double cosC;
+
+	private static Logger logger = Logger.getLogger(WB_Triangle.class);
 
 	protected WB_Triangle() {
 
@@ -68,14 +72,17 @@ public class WB_Triangle implements Triangle {
 
 	}
 
+	@Override
 	public WB_Point p1() {
 		return p1;
 	}
 
+	@Override
 	public WB_Point p2() {
 		return p2;
 	}
 
+	@Override
 	public WB_Point p3() {
 		return p3;
 	}
@@ -124,9 +131,11 @@ public class WB_Triangle implements Triangle {
 	public WB_Point getPoint(final int i) {
 		if (i == 0) {
 			return p1;
-		} else if (i == 1) {
+		}
+		else if (i == 1) {
 			return p2;
-		} else if (i == 2) {
+		}
+		else if (i == 2) {
 			return p3;
 		}
 		return null;
@@ -146,9 +155,10 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get plane of triangle.
-	 * 
+	 *
 	 * @return WB_Plane
 	 */
+	@Override
 	public WB_Plane getPlane() {
 		final WB_Plane P = new WB_Plane(p1, p2, p3);
 		if (P.getNormal().getSqLength() < WB_Epsilon.SQEPSILON) {
@@ -159,27 +169,30 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get centroid.
-	 * 
+	 *
 	 * @return centroid
 	 */
+	@Override
 	public WB_Point getCentroid() {
 		return getPointFromTrilinear(b * c, c * a, a * b);
 	}
 
 	/**
 	 * Get circumcenter.
-	 * 
+	 *
 	 * @return circumcenter
 	 */
+	@Override
 	public WB_Point getCircumcenter() {
 		return getPointFromTrilinear(cosA, cosB, cosC);
 	}
 
 	/**
 	 * Get orthocenter.
-	 * 
+	 *
 	 * @return orthocenter
 	 */
+	@Override
 	public WB_Point getOrthocenter() {
 		final double a2 = a * a;
 		final double b2 = b * b;
@@ -191,7 +204,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get point from trilinear coordinates.
-	 * 
+	 *
 	 * @param x
 	 *            the x
 	 * @param y
@@ -200,6 +213,7 @@ public class WB_Triangle implements Triangle {
 	 *            the z
 	 * @return point
 	 */
+	@Override
 	public WB_Point getPointFromTrilinear(final double x, final double y,
 			final double z) {
 
@@ -217,7 +231,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get point from barycentric coordinates.
-	 * 
+	 *
 	 * @param x
 	 *            the x
 	 * @param y
@@ -226,6 +240,7 @@ public class WB_Triangle implements Triangle {
 	 *            the z
 	 * @return point
 	 */
+	@Override
 	public WB_Point getPointFromBarycentric(final double x, final double y,
 			final double z) {
 
@@ -253,11 +268,12 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Barycentric.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point
 	 */
+	@Override
 	public WB_Point getBarycentric(final WB_Coordinate p) {
 		final WB_Vector m = p3.subToVector(p1).cross(p2.subToVector(p1));
 		double nu, nv, ood;
@@ -270,13 +286,15 @@ public class WB_Triangle implements Triangle {
 			nv = WB_Triangle.twiceSignedTriArea2D(p.yd(), p.zd(), p3.yd(),
 					p3.zd(), p1.yd(), p1.zd());
 			ood = 1.0 / m.xd();
-		} else if (y >= x && y >= z) {
+		}
+		else if (y >= x && y >= z) {
 			nu = WB_Triangle.twiceSignedTriArea2D(p.xd(), p.zd(), p2.xd(),
 					p2.zd(), p3.xd(), p3.zd());
 			nv = WB_Triangle.twiceSignedTriArea2D(p.xd(), p.zd(), p3.xd(),
 					p3.zd(), p1.xd(), p1.zd());
 			ood = -1.0 / m.yd();
-		} else {
+		}
+		else {
 			nu = WB_Triangle.twiceSignedTriArea2D(p.xd(), p.yd(), p2.xd(),
 					p2.yd(), p3.xd(), p3.yd());
 			nv = WB_Triangle.twiceSignedTriArea2D(p.xd(), p.yd(), p3.xd(),
@@ -291,7 +309,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Gets the area.
-	 * 
+	 *
 	 * @return the area
 	 */
 	public double getArea() {
@@ -308,7 +326,8 @@ public class WB_Triangle implements Triangle {
 		int coord = 3;
 		if (x >= y && x >= z) {
 			coord = 1;
-		} else if (y >= x && y >= z) {
+		}
+		else if (y >= x && y >= z) {
 			coord = 2;
 		}
 
@@ -347,7 +366,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get circumcircle.
-	 * 
+	 *
 	 * @return circumcircle
 	 */
 	public WB_Circle getCircumcircle() {
@@ -378,7 +397,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get incircle.
-	 * 
+	 *
 	 * @return incircle
 	 */
 	public WB_Circle getIncircle() {
@@ -398,7 +417,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Get incenter.
-	 * 
+	 *
 	 * @return incenter
 	 */
 	public WB_Point getIncenter() {
@@ -407,7 +426,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Check if points p1 and p2 lie on same side of line A-B.
-	 * 
+	 *
 	 * @param p1
 	 *            the p1
 	 * @param p2
@@ -434,7 +453,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Check if point p lies in triangle A-B-C.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @param A
@@ -472,7 +491,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Point in triangle2 d.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @param T
@@ -486,7 +505,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Check if point p lies in triangle A-B-C using barycentric coordinates.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @param A
@@ -498,6 +517,43 @@ public class WB_Triangle implements Triangle {
 	 * @return true, false
 	 */
 	public static boolean pointInTriangleBary2D(final WB_Coordinate p,
+			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
+
+		if (p == A) {
+			return false;
+		}
+		if (p == B) {
+			return false;
+		}
+		if (p == C) {
+			return false;
+		}
+		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
+			return false;
+		}
+		// Compute vectors
+		final WB_Point v0 = new WB_Point(C)._subSelf(A);
+		final WB_Point v1 = new WB_Point(B)._subSelf(A);
+		final WB_Point v2 = new WB_Point(p)._subSelf(A);
+
+		// Compute dot products
+		final double dot00 = v0.dot2D(v0);
+		final double dot01 = v0.dot2D(v1);
+		final double dot02 = v0.dot2D(v2);
+		final double dot11 = v1.dot2D(v1);
+		final double dot12 = v1.dot2D(v2);
+
+		// Compute barycentric coordinates
+		final double invDenom = 1.0 / (dot00 * dot11 - dot01 * dot01);
+		final double u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+		final double v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+		// Check if point is in triangle
+		return (u > WB_Epsilon.EPSILON) && (v > WB_Epsilon.EPSILON)
+				&& (u + v < 1 - WB_Epsilon.EPSILON);
+	}
+
+	public static boolean pointInTriangleBary3D(final WB_Coordinate p,
 			final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
 
 		if (p == A) {
@@ -536,7 +592,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Point in triangle bary2 d.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @param T
@@ -548,9 +604,14 @@ public class WB_Triangle implements Triangle {
 		return pointInTriangleBary2D(p, T.p1, T.p2, T.p3);
 	}
 
+	public static boolean pointInTriangleBary3D(final WB_Coordinate p,
+			final WB_Triangle T) {
+		return pointInTriangleBary3D(p, T.p1, T.p2, T.p3);
+	}
+
 	/**
 	 * Twice signed tri area2 d.
-	 * 
+	 *
 	 * @param p1
 	 *            the p1
 	 * @param p2
@@ -567,7 +628,7 @@ public class WB_Triangle implements Triangle {
 
 	/**
 	 * Twice signed tri area2 d.
-	 * 
+	 *
 	 * @param x1
 	 *            the x1
 	 * @param y1

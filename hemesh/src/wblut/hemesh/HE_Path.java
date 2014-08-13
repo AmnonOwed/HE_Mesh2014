@@ -37,7 +37,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		return super.getKey();
 	}
 
-	public int getOrder() {
+	public int getPathOrder() {
 		int result = 0;
 		if (_halfedge == null) {
 			return 0;
@@ -50,7 +50,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		return result;
 	}
 
-	public double getLength() {
+	public double getPathLength() {
 		double result = 0;
 		if (_halfedge == null) {
 			return result;
@@ -63,8 +63,8 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		return result;
 	}
 
-	public double[] getIncLengths() {
-		final double[] result = new double[getOrder() + 1];
+	public double[] getPathIncLengths() {
+		final double[] result = new double[getPathOrder() + 1];
 		if (_halfedge == null) {
 			return result;
 		}
@@ -89,6 +89,21 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		do {
 			if (!fhe.contains(he.getHalfedge())) {
 				fhe.add(he.getHalfedge());
+			}
+			he = he.getNextInPath();
+		} while ((he != _halfedge) && (he != null));
+		return fhe;
+	}
+
+	public List<HE_Vertex> getPathVertices() {
+		final List<HE_Vertex> fhe = new FastTable<HE_Vertex>();
+		if (_halfedge == null) {
+			return fhe;
+		}
+		HE_PathHalfedge he = _halfedge;
+		do {
+			if (!fhe.contains(he.getHalfedge())) {
+				fhe.add(he.getHalfedge().getVertex());
 			}
 			he = he.getNextInPath();
 		} while ((he != _halfedge) && (he != null));
@@ -126,7 +141,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	}
 
-	public List<HE_Face> getInnerFaces() {
+	public List<HE_Face> getPathInnerFaces() {
 		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getPathHalfedge() == null) {
 			return ff;
@@ -146,7 +161,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	}
 
-	public List<HE_Face> getOuterFaces() {
+	public List<HE_Face> getPathOuterFaces() {
 		final List<HE_Face> ff = new FastTable<HE_Face>();
 		if (getPathHalfedge() == null) {
 			return ff;
@@ -172,11 +187,11 @@ public class HE_Path extends HE_Element implements WB_HasData {
 	 */
 	@Override
 	public String toString() {
-		String s = "HE_Path key: " + key() + ". Connects " + getOrder()
+		String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
 				+ " vertices: ";
 		HE_PathHalfedge he = _halfedge;
 		if (he != null) {
-			for (int i = 0; i < getOrder() - 1; i++) {
+			for (int i = 0; i < getPathOrder() - 1; i++) {
 				s += he.getHalfedge().getVertex()._key + "-";
 				he = he.getNextInPath();
 			}
@@ -206,6 +221,12 @@ public class HE_Path extends HE_Element implements WB_HasData {
 	@Override
 	public Object getData(final String s) {
 		return _data.get(s);
+	}
+
+	@Override
+	public void clear() {
+		_data = null;
+		_halfedge = null;
 	}
 
 }

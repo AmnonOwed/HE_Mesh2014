@@ -78,7 +78,7 @@ public class HEC_FromMesh extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -102,7 +102,7 @@ public class HEC_FromMesh extends HEC_Creator {
 		for (final int[] face : faces) {
 			final ArrayList<HE_Halfedge> faceEdges = new ArrayList<HE_Halfedge>();
 			final HE_Face hef = new HE_Face();
-			hef.setLabel(id);
+			hef.setInternalLabel(id);
 			id++;
 			final int fl = face.length;
 			final int[] locface = new int[fl];
@@ -117,7 +117,7 @@ public class HEC_FromMesh extends HEC_Creator {
 			if ((uniqueVertices.get(face[fl - 1]) != uniqueVertices
 					.get(face[fl - 2]))
 					&& (uniqueVertices.get(face[fl - 1]) != uniqueVertices
-							.get(face[0]))) {
+					.get(face[0]))) {
 				locface[li++] = face[fl - 1];
 			}
 
@@ -137,7 +137,7 @@ public class HEC_FromMesh extends HEC_Creator {
 				mesh.addHalfedges(faceEdges);
 			}
 		}
-		mesh.pairHalfedgesAndCreateEdges();
+		mesh.pairHalfedges();
 		mesh.capHalfedges();
 
 		return mesh;
@@ -219,7 +219,7 @@ public class HEC_FromMesh extends HEC_Creator {
 			mesh.add(v);
 			for (int i = 1; i < source.getNumberOfVertices(); i++) {
 				v = new HE_Vertex(source.getVertex(i));
-				v.setLabel(i);
+				v.setInternalLabel(i);
 				neighbor = kdtree.getNearestNeighbor(v);
 				if (neighbor.d2 < WB_Epsilon.SQEPSILON) {
 					uniqueVertices.add(uniqueVertices.get(neighbor.value));
@@ -235,7 +235,7 @@ public class HEC_FromMesh extends HEC_Creator {
 			HE_Vertex v;
 			for (int i = 0; i < source.getNumberOfVertices(); i++) {
 				v = new HE_Vertex(source.getVertex(i));
-				v.setLabel(i);
+				v.setInternalLabel(i);
 				uniqueVertices.add(v);
 				mesh.add(v);
 			}
@@ -294,7 +294,7 @@ public class HEC_FromMesh extends HEC_Creator {
 								for (int k = 0; k < fln / 2; k++) {
 									temp = faces[neighbor][k];
 									faces[neighbor][k] = faces[neighbor][fln
-											- k - 1];
+									                                     - k - 1];
 									faces[neighbor][fln - k - 1] = temp;
 								}
 							}

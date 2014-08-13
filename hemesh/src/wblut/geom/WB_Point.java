@@ -40,12 +40,14 @@ public class WB_Point extends WB_Vector {
 		super(v);
 	}
 
+	@Override
 	public WB_Point _addMulSelf(final double f, final double x, final double y,
 			final double z) {
 		_set(xd() + f * x, yd() + f * y, zd() + f * z);
 		return this;
 	}
 
+	@Override
 	public WB_Point _addMulSelf(final double f, final WB_Coordinate p) {
 		_set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 
@@ -60,11 +62,13 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point _addSelf(final double x, final double y, final double z) {
 		_set(xd() + x, yd() + y, zd() + z);
 		return this;
 	}
 
+	@Override
 	public WB_Point _addSelf(final WB_Coordinate p) {
 		_set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 		return this;
@@ -76,21 +80,25 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point _applyAsNormalSelf(final WB_Transform T) {
 		T.applyAsNormal(this, this);
 		return this;
 	}
 
+	@Override
 	public WB_Point _applyAsPointSelf(final WB_Transform T) {
 		T.applyAsPoint(this, this);
 		return this;
 	}
 
+	@Override
 	public WB_Point _applyAsVectorSelf(final WB_Transform T) {
 		T.applyAsVector(this, this);
 		return this;
 	}
 
+	@Override
 	public WB_Point _crossSelf(final WB_Coordinate p) {
 		_set(yd() * p.zd() - zd() * p.yd(), zd() * p.xd() - xd() * p.zd(), xd()
 				* p.yd() - yd() * p.xd());
@@ -105,14 +113,17 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point _divSelf(final double f) {
 		return _mulSelf(1.0 / f);
 	}
 
+	@Override
 	public void _invert() {
 		_mulSelf(-1.0);
 	}
 
+	@Override
 	public WB_Point _mulAddMulSelf(final double f, final double g,
 			final WB_Coordinate p) {
 		_set(f * xd() + g * p.xd(), f * yd() + g * p.yd(),
@@ -129,26 +140,31 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point _mulSelf(final double f) {
 		_set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
 
+	@Override
 	public WB_Point _scaleSelf(final double f) {
 
 		return _mulSelf(f);
 	}
 
+	@Override
 	public WB_Point _scaleSelf(final double fx, final double fy, final double fz) {
 		_set(xd() * fx, yd() * fy, zd() * fz);
 		return this;
 	}
 
+	@Override
 	public WB_Point _subSelf(final double x, final double y, final double z) {
 		_set(xd() - x, yd() - y, zd() - z);
 		return this;
 	}
 
+	@Override
 	public WB_Point _subSelf(final WB_Coordinate v) {
 		_set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
 		return this;
@@ -160,10 +176,12 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point add(final double x, final double y, final double z) {
 		return new WB_Point(this.xd() + x, this.yd() + y, this.zd() + z);
 	}
 
+	@Override
 	public WB_Point add(final WB_Coordinate p) {
 		return new WB_Point(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 	}
@@ -174,12 +192,14 @@ public class WB_Point extends WB_Vector {
 				+ seq.get(i, 2));
 	}
 
+	@Override
 	public WB_Point addMul(final double f, final double x, final double y,
 			final double z) {
 		return new WB_Point(this.xd() + f * x, this.yd() + f * y, this.zd() + f
 				* z);
 	}
 
+	@Override
 	public WB_Point addMul(final double f, final WB_Coordinate p) {
 		return new WB_Point(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f
 				* p.zd());
@@ -191,10 +211,12 @@ public class WB_Point extends WB_Vector {
 				zd() + f * seq.get(i, 2));
 	}
 
+	@Override
 	public WB_Point apply(final WB_Transform T) {
 		return applyAsPoint(T);
 	}
 
+	@Override
 	public WB_Point cross(final WB_Coordinate p) {
 		return new WB_Point(yd() * p.zd() - zd() * p.yd(), zd() * p.xd() - xd()
 				* p.zd(), xd() * p.yd() - yd() * p.xd());
@@ -206,12 +228,16 @@ public class WB_Point extends WB_Vector {
 				- yd() * seq.get(i, 0));
 	}
 
+	@Override
 	public WB_Point div(final double f) {
 		return mul(1.0 / f);
 	}
 
 	@Override
 	public boolean equals(final Object o) {
+		if (o == null) {
+			return false;
+		}
 		if (o == this) {
 			return true;
 		}
@@ -231,6 +257,7 @@ public class WB_Point extends WB_Vector {
 		return true;
 	}
 
+	@Override
 	public WB_Point get() {
 		return new WB_Point(this);
 	}
@@ -278,11 +305,13 @@ public class WB_Point extends WB_Vector {
 		return this;
 	}
 
+	@Override
 	public WB_Point mul(final double f) {
 
 		return new WB_Point(xd() * f, yd() * f, zd() * f);
 	}
 
+	@Override
 	public WB_Point mulAddMul(final double f, final double g,
 			final WB_Coordinate p) {
 		return new WB_Point(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f
@@ -295,6 +324,7 @@ public class WB_Point extends WB_Vector {
 				* seq.get(i, 1), f * zd() + g * seq.get(i, 2));
 	}
 
+	@Override
 	public void rotateAboutAxis(final double angle, final double p1x,
 			final double p1y, final double p1z, final double p2x,
 			final double p2y, final double p2z) {
@@ -305,6 +335,7 @@ public class WB_Point extends WB_Vector {
 		raa.applySelfAsPoint(this);
 	}
 
+	@Override
 	public void rotateAboutAxis(final double angle, final WB_Coordinate p1,
 			final WB_Coordinate p2) {
 
@@ -315,6 +346,7 @@ public class WB_Point extends WB_Vector {
 
 	}
 
+	@Override
 	public void rotateAboutAxis(final double angle, final WB_Coordinate p,
 			final WB_Vector a) {
 
@@ -325,10 +357,12 @@ public class WB_Point extends WB_Vector {
 
 	}
 
+	@Override
 	public WB_Point sub(final double x, final double y, final double z) {
 		return new WB_Point(this.xd() - x, this.yd() - y, this.zd() - z);
 	}
 
+	@Override
 	public WB_Point sub(final WB_Coordinate p) {
 		return new WB_Point(xd() - p.xd(), yd() - p.yd(), zd() - p.zd());
 	}
@@ -364,18 +398,21 @@ public class WB_Point extends WB_Vector {
 		return new WB_Vector(xd(), yd(), zd());
 	}
 
+	@Override
 	public WB_Point applyAsNormal(final WB_Transform T) {
 		final WB_Point result = new WB_Point();
 		T.applyAsNormal(this, result);
 		return result;
 	}
 
+	@Override
 	public WB_Point applyAsPoint(final WB_Transform T) {
 		final WB_Point result = new WB_Point();
 		T.applyAsPoint(this, result);
 		return result;
 	}
 
+	@Override
 	public WB_Point applyAsVector(final WB_Transform T) {
 		final WB_Point result = new WB_Point();
 		T.applyAsVector(this, result);

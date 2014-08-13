@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PMatrix3D;
@@ -56,6 +58,8 @@ public class WB_Render3D {
 	private final PGraphics3D home;
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
+
+	private static Logger logger = Logger.getLogger(WB_Render3D.class);
 
 	public WB_Render3D(final PApplet home) {
 		if (home.g == null) {
@@ -402,7 +406,6 @@ public class WB_Render3D {
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
-		retained.disableStyle();
 		return retained;
 	}
 
@@ -425,7 +428,6 @@ public class WB_Render3D {
 			retained.vertex(p.xf(), p.yf(), p.zf());
 		}
 		retained.endShape();
-		retained.disableStyle();
 		return retained;
 	}
 
@@ -452,7 +454,60 @@ public class WB_Render3D {
 
 		}
 		retained.endShape();
-		retained.disableStyle();
+		return retained;
+	}
+
+	public PShape toSmoothPShapeWithFaceColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		WB_Vector n = new WB_Vector();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			retained.fill(f.getColor());
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				n = v.getVertexNormal();
+				retained.normal(n.xf(), n.yf(), n.zf());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
+		return retained;
+	}
+
+	public PShape toSmoothPShapeWithVertexColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		WB_Vector n = new WB_Vector();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				retained.fill(v.getColor());
+				n = v.getVertexNormal();
+				retained.normal(n.xf(), n.yf(), n.zf());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
 		return retained;
 	}
 
@@ -476,7 +531,54 @@ public class WB_Render3D {
 
 		}
 		retained.endShape();
-		retained.disableStyle();
+		return retained;
+	}
+
+	public PShape toFacetedPShapeWithFaceColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			retained.fill(f.getColor());
+			do {
+				v = he.getVertex();
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
+		return retained;
+	}
+
+	public PShape toFacetedPShapeWithVertexColor(final HE_Mesh mesh) {
+		final PShape retained = home.createShape();
+		retained.beginShape(PConstants.TRIANGLES);
+		final HE_Mesh lmesh = mesh.get();
+		lmesh.triangulate();
+		final Iterator<HE_Face> fItr = lmesh.fItr();
+		HE_Face f;
+		HE_Vertex v;
+		HE_Halfedge he;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			he = f.getHalfedge();
+			do {
+				v = he.getVertex();
+				retained.fill(v.getColor());
+				retained.vertex(v.xf(), v.yf(), v.zf());
+				he = he.getNextInFace();
+			} while (he != f.getHalfedge());
+
+		}
+		retained.endShape();
 		return retained;
 	}
 
@@ -753,13 +855,22 @@ public class WB_Render3D {
 	 *            selection to draw
 	 */
 	public void drawEdges(final HE_Selection selection) {
-		final Iterator<HE_Halfedge> eItr = selection.eItr();
+		final Iterator<HE_Face> fItr = selection.fItr();
 		HE_Halfedge e;
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
-					.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
-					.getEndVertex().zf());
+		HE_Face f;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			e = f.getHalfedge();
+			do {
+
+				if (e.isEdge() || e.isBoundary()
+						|| !selection.contains(e.getPair().getFace())) {
+					home.line(e.getVertex().xf(), e.getVertex().yf(), e
+							.getVertex().zf(), e.getEndVertex().xf(), e
+							.getEndVertex().yf(), e.getEndVertex().zf());
+				}
+				e = e.getNextInFace();
+			} while (e != f.getHalfedge());
 		}
 	}
 
@@ -771,7 +882,7 @@ public class WB_Render3D {
 	 * @param mesh
 	 *            the mesh
 	 */
-	public void drawEdges(final int label, final HE_MeshStructure mesh) {
+	public void drawEdgesWithLabel(final int label, final HE_MeshStructure mesh) {
 		final Iterator<HE_Halfedge> eItr = mesh.eItr();
 		HE_Halfedge e;
 		while (eItr.hasNext()) {
@@ -783,6 +894,23 @@ public class WB_Render3D {
 			}
 
 		}
+
+	}
+
+	public void drawEdgesWithInternalLabel(final int label,
+			final HE_MeshStructure mesh) {
+		final Iterator<HE_Halfedge> eItr = mesh.eItr();
+		HE_Halfedge e;
+		while (eItr.hasNext()) {
+			e = eItr.next();
+			if (e.getInternalLabel() == label) {
+				home.line(e.getVertex().xf(), e.getVertex().yf(), e.getVertex()
+						.zf(), e.getEndVertex().xf(), e.getEndVertex().yf(), e
+						.getEndVertex().zf());
+			}
+
+		}
+
 	}
 
 	public void drawFace(final HE_Face f) {
@@ -791,12 +919,14 @@ public class WB_Render3D {
 
 	public void drawFace(final HE_Face f, final boolean smooth) {
 		final int fo = f.getFaceOrder();
-
-		if (fo < 3) {
+		final List<HE_Vertex> vertices = f.getFaceVertices();
+		if (fo < 3 || vertices.size() < 3) {
+			logger.warn("Face " + f.getKey() + " has face order " + fo
+					+ " and " + vertices.size() + "vertices.");
 		}
-		else if (f.getFaceOrder() == 3) {
+		else if (fo == 3) {
 			final int[] tri = new int[] { 0, 1, 2 };
-			final List<HE_Vertex> vertices = f.getFaceVertices();
+
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
 			if (smooth) {
@@ -831,7 +961,7 @@ public class WB_Render3D {
 		}
 		else {
 			final int[][] tris = f.getTriangles();
-			final List<HE_Vertex> vertices = f.getFaceVertices();
+
 			HE_Vertex v0, v1, v2;
 			WB_Vector n0, n1, n2;
 			int[] tri;
@@ -1074,7 +1204,7 @@ public class WB_Render3D {
 	 * @param mesh
 	 *            the mesh
 	 */
-	public void drawFaces(final int label, final HE_MeshStructure mesh) {
+	public void drawFacesWithLabel(final int label, final HE_MeshStructure mesh) {
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -1082,6 +1212,20 @@ public class WB_Render3D {
 			if (f.getLabel() == label) {
 				drawFace(f);
 			}
+
+		}
+	}
+
+	public void drawFacesWithInternalLabel(final int label,
+			final HE_MeshStructure mesh) {
+		final Iterator<HE_Face> fItr = mesh.fItr();
+		HE_Face f;
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			if (f.getInternalLabel() == label) {
+				drawFace(f);
+			}
+
 		}
 	}
 

@@ -107,12 +107,12 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		mesh.resetVertexLabels();
+		mesh.resetVertexInternalLabels();
 		final HashMap<Long, WB_Point> avgFC = new HashMap<Long, WB_Point>();
 		HE_Vertex v;
 		Iterator<HE_Vertex> vItr = mesh.vItr();
@@ -145,7 +145,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 		vItr = inner.iterator();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			if (v.getLabel() == -1) {
+			if (v.getInternalLabel() == -1) {
 				p = avgFC.get(v.key());
 				neighbors = v.getNeighborVertices();
 				final int order = neighbors.size();
@@ -170,7 +170,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				for (int i = 0; i < order; i++) {
 					n = neighbors.get(i);
 					p._addSelf(n);
-					if (n.getLabel() == -1) {
+					if (n.getInternalLabel() == -1) {
 						edgePoint = true;
 					}
 				}
@@ -230,7 +230,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -238,7 +238,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
 
-		selection.parent.resetVertexLabels();
+		selection.parent.resetVertexInternalLabels();
 		final HashMap<Long, WB_Point> avgFC = new HashMap<Long, WB_Point>();
 		HE_Vertex v;
 		Iterator<HE_Vertex> vItr = selection.parent.vItr();
@@ -283,7 +283,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 		vItr = inner.iterator();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			if (v.getLabel() == -1) {
+			if (v.getInternalLabel() == -1) {
 				p = avgFC.get(v.key());
 				neighbors = v.getNeighborVertices();
 				final int order = neighbors.size();
@@ -308,7 +308,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 				for (int i = 0; i < order; i++) {
 					n = neighbors.get(i);
 					p._addSelf(n);
-					if (n.getLabel() == -1) {
+					if (n.getInternalLabel() == -1) {
 						edgePoint = true;
 					}
 				}

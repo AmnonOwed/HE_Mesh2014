@@ -16,14 +16,15 @@ public class HES_TriDec extends HES_Simplifier {
 
 	private double _lambda;
 	private HE_Mesh _mesh;
-	private Heap<HE_Halfedge> heap;
+	private Heap heap;
 
 	TLongDoubleMap vertexCost;
 
-	private int rep;
+	private int goal;
+	int counter;
 
 	public HES_TriDec() {
-		_lambda = 10;
+		_lambda = 20;
 
 	}
 
@@ -32,60 +33,140 @@ public class HES_TriDec extends HES_Simplifier {
 		return this;
 	}
 
-	public HES_TriDec setRep(final int r) {
-		rep = r;
+	public HES_TriDec setGoal(final int r) {
+		goal = r;
 		return this;
+
+	}
+
+	public static double[] getVertexColor(final HE_Mesh mesh) {
+
+		final HE_VertexIterator vItr = mesh.vItr();
+		final double[] values = new double[mesh.getNumberOfVertices()];
+		double min = Double.POSITIVE_INFINITY;
+		double max = Double.NEGATIVE_INFINITY;
+		HE_Vertex v;
+		double vvi;
+		int i = 0;
+		while (vItr.hasNext()) {
+			v = vItr.next();
+			vvi = visualImportance(v);
+			values[i++] = vvi;
+			if (vvi < min) {
+				min = vvi;
+			}
+			if (vvi > max) {
+				max = vvi;
+			}
+		}
+		final double range = max - min;
+		final boolean monochrome = WB_Epsilon.isZero(range);
+		final double invrange = (monochrome) ? 0 : 1.0 / range;
+		for (i = 0; i < mesh.getNumberOfVertices(); i++) {
+			values[i] = (monochrome) ? 0 : (values[i] - min) * invrange;
+		}
+		return values;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		if (mesh.getNumberOfVertices() <= goal) {
+			return mesh;
+		}
+
 		_mesh = mesh;
 		_mesh.triangulate();
-		if (_mesh.getNumberOfVertices() < 4) {
+		_mesh.resetVertexInternalLabels();
+		if (_mesh.getNumberOfVertices() <= 4) {
 			return _mesh;
 		}
 		buildHeap(_mesh);
-		HE_Halfedge he;
+		HE_Vertex v;
+		Entry entry;
 		List<HE_Vertex> vertices;
-		for (int i = 0; i < rep; i++) {
-			if (heap.size() > 0) {
-				do {
-					he = heap.pop();
-				} while (!_mesh.contains(he));
-				vertices = he.getVertex().getNeighborVertices();
-				if (_mesh.collapseHalfedge(he)) {
-					vertexCost.remove(he.getVertex().key());
-					// heap.remove(he);
-					updateHeap(vertices);
+		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+				&& _mesh.getNumberOfVertices() > 4) {
+			boolean valid = false;
+
+			do {
+				entry = heap.pop();
+				v = entry.v;
+				valid = mesh.contains(v)
+						&& (entry.version == v.getInternalLabel());
+
+			} while (heap.size() > 0 && !valid);
+			if (valid) {
+				vertices = v.getNeighborVertices();
+				// vertices.addAll(v.getNextNeighborVertices());
+				if (_mesh.collapseHalfedge(v.getHalfedge())) {
+					vertexCost.remove(v.key());
+					counter++;
+					updateHeap(vertices, null);
 				}
 			}
 		}
+
 		return _mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Selection
 	 * )
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+		if (selection.parent.getNumberOfVertices() <= goal) {
+			return selection.parent;
+		}
 
-		return apply(selection.parent);
+		_mesh = selection.parent;
+		_mesh.triangulate();
+		_mesh.resetVertexInternalLabels();
+		if (_mesh.getNumberOfVertices() <= 4) {
+			return _mesh;
+		}
+		buildHeap(selection);
+		HE_Vertex v;
+		Entry entry;
+		List<HE_Vertex> vertices;
+		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+				&& _mesh.getNumberOfVertices() > 4) {
+			boolean valid = false;
+			do {
+				entry = heap.pop();
+				v = entry.v;
+				valid = selection.contains(v)
+						&& (entry.version == v.getInternalLabel());
+
+			} while (heap.size() > 0 && !valid);
+			if (valid) {
+				vertices = v.getNeighborVertices();
+				// vertices.addAll(v.getNextNeighborVertices());
+				if (_mesh.collapseHalfedge(v.getHalfedge())) {
+					vertexCost.remove(v.key());
+					selection.remove(v);
+					counter++;
+					updateHeap(vertices, selection);
+				}
+			}
+		}
+		return _mesh;
 
 	}
 
 	private void buildHeap(final HE_MeshStructure sel) {
-		heap = new Heap<HE_Halfedge>();
+		counter = 0;
+		heap = new Heap();
 		vertexCost = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
 		final Iterator<HE_Vertex> vItr = sel.vItr();
 
@@ -97,53 +178,103 @@ public class HES_TriDec extends HES_Simplifier {
 		double vvi;
 		while (vItr.hasNext()) {
 			v = vItr.next();
+
+			v.setInternalLabel(counter);
 			vvi = visualImportance(v);
 
-			vertexCost.put(v.key(), vvi);
 			vstar = v.getHalfedgeStar();
 			minhe = vstar.get(0);
-			min = halfedgeCollapseCost(vstar.get(0));
+			min = Double.POSITIVE_INFINITY;
+			if (v.isBoundary()) { // Only consider collapsing along boundary for
+				// boundary vertices, never collapse
+				// boundary inward
+				for (int i = 0; i < vstar.size(); i++) {
+					if (vstar.get(i).isBoundary()) {
+						c = halfedgeCollapseCost(vstar.get(i));
 
-			for (int i = 1; i < vstar.size(); i++) {
-				c = halfedgeCollapseCost(vstar.get(i));
-				if (c < min) {
-					min = c;
-					minhe = vstar.get(i);
+						if (c < min) {
+							min = c;
+							minhe = vstar.get(i);
+						}
+					}
 				}
 			}
-			heap.push(min * vvi, minhe);
+			else {
+				for (int i = 0; i < vstar.size(); i++) {
 
+					c = halfedgeCollapseCost(vstar.get(i));
+
+					if (c < min) {
+						min = c;
+						minhe = vstar.get(i);
+					}
+
+				}
+
+			}
+			if (min != Double.POSITIVE_INFINITY) {
+				vertexCost.put(v.key(), min * vvi);
+				v.setHalfedge(minhe);
+				heap.push(min * vvi, v);
+			}
 		}
 	}
 
-	private void updateHeap(final List<HE_Vertex> vertices) {
+	private void updateHeap(final List<HE_Vertex> vertices,
+			final HE_MeshStructure selection) {
 		double min;
 		double c;
 		HE_Halfedge minhe;
 		List<HE_Halfedge> vstar;
 		double vvi;
 		for (final HE_Vertex v : vertices) {
-			vvi = visualImportance(v);
-			vertexCost.remove(v.key());
-			vertexCost.put(v.key(), vvi);
-			vstar = v.getHalfedgeStar();
-			minhe = vstar.get(0);
+			if (selection == null || selection.contains(v)) {
+				vvi = visualImportance(v);
+				v.setInternalLabel(counter);
+				vertexCost.remove(v.key());
+				vstar = v.getHalfedgeStar();
+				minhe = vstar.get(0);
+				min = Double.POSITIVE_INFINITY;
+				if (v.isBoundary()) { // Only consider collapsing along boundary
+					// for
+					// boundary vertices, never collapse
+					// boundary inward
+					for (int i = 0; i < vstar.size(); i++) {
+						if (vstar.get(i).isBoundary()) {
+							c = halfedgeCollapseCost(vstar.get(i));
 
-			// heap.remove(vstar.get(0));
-			min = halfedgeCollapseCost(vstar.get(0));
-			for (int i = 1; i < vstar.size(); i++) {
-				c = halfedgeCollapseCost(vstar.get(i));
-				// heap.remove(vstar.get(i));
-				if (c < min) {
-					min = c;
-					minhe = vstar.get(i);
+							if (c < min) {
+								min = c;
+								minhe = vstar.get(i);
+							}
+						}
+					}
+				}
+				else {
+					for (int i = 0; i < vstar.size(); i++) {
+
+						c = halfedgeCollapseCost(vstar.get(i));
+
+						if (c < min) {
+							min = c;
+							minhe = vstar.get(i);
+						}
+
+					}
+
+				}
+
+				if (min != Double.POSITIVE_INFINITY) {
+					vertexCost.put(v.key(), min * vvi);
+					v.setHalfedge(minhe);
+					heap.push(min * vvi, v);
 				}
 			}
-			heap.push(min * vvi, minhe);
+
 		}
 	}
 
-	private double visualImportance(final HE_Vertex v) {
+	private static double visualImportance(final HE_Vertex v) {
 		final List<HE_Face> faces = v.getFaceStar();
 		final WB_Vector nom = new WB_Vector();
 		double denom = 0.0;
@@ -162,49 +293,21 @@ public class HES_TriDec extends HES_Simplifier {
 	}
 
 	private double halfedgeCollapseCost(final HE_Halfedge he) {
-		final List<HE_Face> faces = new FastTable<HE_Face>();
+
 		final HE_Face f = he.getFace();
 		final HE_Face fp = he.getPair().getFace();
-		if ((f == null) || (fp == null)) {
-			return Double.POSITIVE_INFINITY;
-		}
+
 		double cost = 0.0;
-		HE_Halfedge helooper = he.getNextInVertex();
-		WB_Triangle T;
-		WB_Plane P;
-		do {
-			final HE_Face fl = helooper.getFace();
-			if (fl != null) {
-				if ((fl != f) && (fl != fp)) {
-					T = new WB_Triangle(he.getEndVertex(), helooper
-							.getNextInFace().getVertex(), helooper
-							.getNextInFace().getNextInFace().getVertex());
-					P = T.getPlane();
-					if (P == null) {
-						cost += 0.5 * (T.getArea() + fl.getFaceArea());
-					}
-					else {
-						cost += 0.5
-								* (T.getArea() + fl.getFaceArea())
-								* (1.0 - fl.getFaceNormal().dot(
-										T.getPlane().getNormal()));
-					}
-
-				}
-			}
-			else {
-				return Double.POSITIVE_INFINITY;
-			}
-			helooper = helooper.getNextInVertex();
-
-		} while (helooper != he);
-
 		HE_Halfedge boundary;
 		WB_Vector v1;
 		WB_Vector v2;
+		HE_Halfedge helooper = he.getNextInVertex();
+		WB_Triangle T;
+		WB_Plane P;
 		if ((f == null) || (fp == null)) {
 			boundary = he.getNextInVertex();
-			while ((he.getFace() != null) && (he.getPair().getFace() != null)) {
+			while ((boundary.getFace() != null)
+					&& (boundary.getPair().getFace() != null)) {
 				boundary = boundary.getNextInVertex();
 			}
 			v1 = he.getEndVertex().getPoint().subToVector(he.getVertex());
@@ -214,42 +317,71 @@ public class HES_TriDec extends HES_Simplifier {
 			v2._normalizeSelf();
 			cost += he.getEdge().getLength() * (1.0 - v1.dot(v2)) * _lambda;
 		}
+		else {
+			do {
+				final HE_Face fl = helooper.getFace();
+				if (fl != null) {
+					if ((fl != f) && (fl != fp)) {
+						T = new WB_Triangle(he.getEndVertex(), helooper
+								.getNextInFace().getVertex(), helooper
+								.getNextInFace().getNextInFace().getVertex());
+						P = T.getPlane();
+						if (P == null) {
+							cost += 0.5 * (T.getArea() + fl.getFaceArea());
+						}
+						else {
+							cost += 0.5
+									* (T.getArea() + fl.getFaceArea())
+									* (1.0 - fl.getFaceNormal().dot(
+											T.getPlane().getNormal()));
+						}
+
+					}
+				}
+				else {
+					return Double.POSITIVE_INFINITY;
+				}
+				helooper = helooper.getNextInVertex();
+
+			} while (helooper != he);
+		}
+
 		return cost;
 
 	}
 
-	public class Heap<E> {
+	public class Heap {
 
-		private final List<E> heap;
+		private final List<Entry> heap;
 
 		private final List<Double> keys;
 
 		public Heap() {
-			heap = new FastTable<E>();
+			heap = new FastTable<Entry>();
 			keys = new FastTable<Double>();
 		}
 
-		public void push(final Double key, final E obj) {
+		public void push(final Double key, final HE_Vertex obj) {
 
-			heap.add(obj);
+			heap.add(new Entry(obj, obj.getInternalLabel()));
 			keys.add(key);
 			pushUp(heap.size() - 1);
 		}
 
-		public E pop() {
+		public Entry pop() {
 			if (heap.size() > 0) {
 				swap(0, heap.size() - 1);
-				final E result = heap.remove(heap.size() - 1);
+				final Entry store = heap.remove(heap.size() - 1);
 				keys.remove(heap.size());
 				pushDown(0);
-				return result;
+				return store;
 			}
 			else {
 				return null;
 			}
 		}
 
-		public E getFirst() {
+		public Entry getFirst() {
 			return heap.get(0);
 		}
 
@@ -257,7 +389,7 @@ public class HES_TriDec extends HES_Simplifier {
 			return keys.get(0);
 		}
 
-		public E get(final int index) {
+		public Entry get(final int index) {
 			return heap.get(index);
 		}
 
@@ -282,7 +414,7 @@ public class HES_TriDec extends HES_Simplifier {
 		}
 
 		protected void swap(final int i, final int j) {
-			final E tmp = heap.get(i);
+			final Entry tmp = heap.get(i);
 			heap.set(i, heap.get(j));
 			heap.set(j, tmp);
 			final Double tmpv = keys.get(i);
@@ -315,38 +447,6 @@ public class HES_TriDec extends HES_Simplifier {
 			}
 		}
 
-		public void remove(final E obj) {
-			final int i = heap.indexOf(obj);
-			if (i > -1) {
-				heap.remove(i);
-				keys.remove(i);
-			}
-			rebuild();
-
-		}
-
-		public void removeNoRebuild(final E obj) {
-			final int i = heap.indexOf(obj);
-			if (i > -1) {
-				heap.remove(i);
-				keys.remove(i);
-			}
-
-		}
-
-		public void rebuild() {
-			final List<E> cheap = new FastTable<E>();
-			final List<Double> ckeys = new FastTable<Double>();
-			cheap.addAll(heap);
-			ckeys.addAll(keys);
-			heap.clear();
-			keys.clear();
-			for (int i = 0; i < cheap.size(); i++) {
-				push(ckeys.get(i), cheap.get(i));
-			}
-
-		}
-
 		@Override
 		public String toString() {
 			final StringBuffer s = new StringBuffer("Heap:\n");
@@ -362,6 +462,18 @@ public class HES_TriDec extends HES_Simplifier {
 				s.append(" ");
 			}
 			return s.toString();
+		}
+
+	}
+
+	class Entry {
+		HE_Vertex v;
+		int version;
+
+		Entry(final HE_Vertex v, final int i) {
+
+			this.v = v;
+			version = i;
 		}
 
 	}

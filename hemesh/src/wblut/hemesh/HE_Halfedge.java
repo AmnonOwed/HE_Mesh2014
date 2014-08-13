@@ -1,6 +1,8 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Convex;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasColor;
@@ -550,4 +552,28 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 	}
 
+	public void copyProperties(final HE_Vertex el) {
+		super.copyProperties(el);
+		hecolor = el.getColor();
+	}
+
+	@Override
+	public void clear() {
+		_face = null;
+		_next = null;
+		_pair = null;
+		_vertex = null;
+	}
+
+	public double getAngle() {
+		final WB_Coordinate c = getVertex();
+		final WB_Coordinate p1 = getEndVertex();
+		final WB_Coordinate p2 = this.getPrevInFace().getVertex();
+		if (c == null) {
+			return Double.NaN;
+		}
+		return WB_CoordinateMath.angleBetween(c.xd(), c.yd(), c.zd(), p1.xd(),
+				p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd());
+
+	}
 }

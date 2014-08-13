@@ -191,6 +191,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	/**
 	 * Clear entire structure.
 	 */
+	@Override
 	public void clear() {
 		clearVertices();
 		clearHalfedges();
@@ -623,8 +624,8 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *
 	 * @return vertex iterator
 	 */
-	public Iterator<HE_Vertex> vItr() {
-		return vertices.iterator();
+	public HE_VertexIterator vItr() {
+		return new HE_VertexIterator(this);
 	}
 
 	/**
@@ -632,7 +633,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *
 	 * @return edge iterator
 	 */
-	public Iterator<HE_Halfedge> eItr() {
+	public HE_EdgeIterator eItr() {
 		return new HE_EdgeIterator(this);
 	}
 
@@ -641,12 +642,12 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 *
 	 * @return halfedge iterator
 	 */
-	public Iterator<HE_Halfedge> heItr() {
-		return halfedges.iterator();
+	public HE_HalfedgeIterator heItr() {
+		return new HE_HalfedgeIterator(this);
 	}
 
-	public Iterator<HE_Face> fItr() {
-		return faces.iterator();
+	public HE_FaceIterator fItr() {
+		return new HE_FaceIterator(this);
 	}
 
 	/**
@@ -807,7 +808,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -820,7 +821,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -832,23 +833,24 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		final HE_Path path = new HE_Path();
 		if (vertices.length > 1) {
 			HE_PathHalfedge phe = new HE_PathHalfedge();
-			HE_Halfedge he = selectHalfedge(getVertexByIndex(vertices[0]),
+			HE_Halfedge he = searchHalfedgeFromTo(
+					getVertexByIndex(vertices[0]),
 					getVertexByIndex(vertices[1]));
 			if (he == null) {
 				throw new IllegalArgumentException("Two vertices "
 						+ vertices[0] + " and " + vertices[1]
-						+ " in path are not connected.");
+								+ " in path are not connected.");
 			}
 			phe.setHalfedge(he);
 			path.setPathHalfedge(phe);
 			HE_PathHalfedge prevphe = phe;
 			for (int i = 1; i < vertices.length - 1; i++) {
-				he = selectHalfedge(getVertexByIndex(vertices[i]),
+				he = searchHalfedgeFromTo(getVertexByIndex(vertices[i]),
 						getVertexByIndex(vertices[i + 1]));
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-							+ " in path are not connected.");
+									+ " in path are not connected.");
 				}
 				phe = new HE_PathHalfedge();
 				phe.setHalfedge(he);
@@ -862,7 +864,8 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	}
 
-	public HE_Halfedge selectHalfedge(final HE_Vertex v0, final HE_Vertex v1) {
+	public HE_Halfedge searchHalfedgeFromTo(final HE_Vertex v0,
+			final HE_Vertex v1) {
 		final List<HE_Halfedge> hes = v0.getHalfedgeStar();
 		for (final HE_Halfedge he : hes) {
 			if (he.getEndVertex() == v1) {

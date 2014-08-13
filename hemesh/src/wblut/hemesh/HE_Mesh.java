@@ -1,9 +1,12 @@
 package wblut.hemesh;
 
+import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.TLongLongMap;
+import gnu.trove.map.TLongObjectMap;
 import gnu.trove.map.hash.TLongIntHashMap;
 import gnu.trove.map.hash.TLongLongHashMap;
+import gnu.trove.map.hash.TLongObjectHashMap;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,7 +69,7 @@ WB_HasColor, WB_Mesh {
 	/** The _data. */
 	private HashMap<String, Object> _data;
 
-	static Logger logger = Logger.getLogger(HE_Mesh.class);
+	private static Logger logger = Logger.getLogger(HE_Mesh.class);
 
 	private int meshcolor;
 
@@ -243,6 +246,7 @@ WB_HasColor, WB_Mesh {
 			v = vItr.next();
 			rv = new HE_Vertex(v);
 			result.add(rv);
+			rv.copyProperties(v);
 			vertexCorrelation.put(v.key(), rv.key());
 		}
 		HE_Face rf;
@@ -252,8 +256,7 @@ WB_HasColor, WB_Mesh {
 			f = fItr.next();
 			rf = new HE_Face();
 			result.add(rf);
-			rf.setLabel(f.getLabel());
-			rf.setColor(f.getColor());
+			rf.copyProperties(f);
 			faceCorrelation.put(f.key(), rf.key());
 		}
 		HE_Halfedge rhe;
@@ -263,6 +266,7 @@ WB_HasColor, WB_Mesh {
 			he = heItr.next();
 			rhe = new HE_Halfedge();
 			result.add(rhe);
+			rhe.copyProperties(he);
 			halfedgeCorrelation.put(he.key(), rhe.key());
 		}
 
@@ -1291,7 +1295,7 @@ WB_HasColor, WB_Mesh {
 	/**
 	 * Try to pair all unpaired halfedges.
 	 */
-	public void pairHalfedgesAndCreateEdges() {
+	public void pairHalfedges() {
 		class VertexInfo {
 			FastTable<HE_Halfedge> out;
 			FastTable<HE_Halfedge> in;
@@ -1303,7 +1307,8 @@ WB_HasColor, WB_Mesh {
 
 		}
 
-		final FastMap<Long, VertexInfo> vertexLists = new FastMap<Long, VertexInfo>();
+		final TLongObjectMap<VertexInfo> vertexLists = new TLongObjectHashMap<VertexInfo>(
+				1024, 0.5f, -1L);
 
 		final List<HE_Halfedge> unpairedHalfedges = getUnpairedHalfedges();
 		HE_Vertex v;
@@ -1332,9 +1337,11 @@ WB_HasColor, WB_Mesh {
 		HE_Halfedge he2;
 
 		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
-
-		for (final VertexInfo vInfo : vertexLists.values()) {
-
+		final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
+		VertexInfo vInfo;
+		while (vitr.hasNext()) {
+			vitr.advance();
+			vInfo = vitr.value();
 			for (int i = 0; i < vInfo.out.size(); i++) {
 				he = vInfo.out.get(i);
 				if (he.getPair() == null) {
@@ -1364,8 +1371,7 @@ WB_HasColor, WB_Mesh {
 	 * @param unpairedHalfedges
 	 *            the unpaired halfedges
 	 */
-	public void pairHalfedgesAndCreateEdges(
-			final List<HE_Halfedge> unpairedHalfedges) {
+	public void pairHalfedges(final List<HE_Halfedge> unpairedHalfedges) {
 		class VertexInfo {
 			FastTable<HE_Halfedge> out;
 			FastTable<HE_Halfedge> in;
@@ -1377,7 +1383,9 @@ WB_HasColor, WB_Mesh {
 
 		}
 
-		final FastMap<Long, VertexInfo> vertexLists = new FastMap<Long, VertexInfo>();
+		final TLongObjectMap<VertexInfo> vertexLists = new TLongObjectHashMap<VertexInfo>(
+				1024, 0.5f, -1L);
+
 		HE_Vertex v;
 		VertexInfo vi;
 		// System.out.println("HE_Mesh : collating " + unpairedHalfedges.size()
@@ -1403,8 +1411,11 @@ WB_HasColor, WB_Mesh {
 		HE_Halfedge he;
 		HE_Halfedge he2;
 
-		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
-		for (final VertexInfo vInfo : vertexLists.values()) {
+		final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
+		VertexInfo vInfo;
+		while (vitr.hasNext()) {
+			vitr.advance();
+			vInfo = vitr.value();
 
 			for (int i = 0; i < vInfo.out.size(); i++) {
 				he = vInfo.out.get(i);
@@ -1652,14 +1663,12 @@ WB_HasColor, WB_Mesh {
 			final HE_Halfedge hePair = he.getPair();
 			final HE_Face f = he.getFace();
 			final HE_Face fp = hePair.getFace();
+
 			final HE_Vertex v = he.getVertex();
 			final HE_Vertex vp = hePair.getVertex();
 
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
-			for (int i = 0; i < tmp.size(); i++) {
-				tmp.get(i).setVertex(vp);
-			}
-			vp.setHalfedge(hePair.getNextInVertex());
+
 			final HE_Halfedge hen = he.getNextInFace();
 			final HE_Halfedge hep = he.getPrevInFace();
 			final HE_Halfedge hePairn = hePair.getNextInFace();
@@ -1675,10 +1684,17 @@ WB_HasColor, WB_Mesh {
 			hen.setPrev(hep);
 			hePairp.setNext(hePairn);
 			hePairn.setPrev(hePairp);
+
+			for (int i = 0; i < tmp.size(); i++) {
+				tmp.get(i).setVertex(vp);
+			}
+			vp.setHalfedge(hen);
+
 			remove(he);
 			remove(hePair);
 
 			remove(v);
+
 			deleteTwoEdgeFace(f);
 			deleteTwoEdgeFace(fp);
 			return true;
@@ -1870,6 +1886,50 @@ WB_HasColor, WB_Mesh {
 		}
 	}
 
+	public void deleteTwoEdgeVertex(final HE_Vertex v) {
+		if (contains(v) && v.getVertexOrder() == 2) {
+			final HE_Halfedge he0 = v.getHalfedge();
+			final HE_Halfedge he1 = he0.getNextInVertex();
+			final HE_Halfedge he0n = he0.getNextInFace();
+			final HE_Halfedge he1n = he1.getNextInFace();
+			final HE_Halfedge he0p = he0.getPair();
+			final HE_Halfedge he1p = he1.getPair();
+			he0p.setNext(he1n);
+			he1p.setNext(he0n);
+			if (he0.getFace() != null) {
+				he0.getFace().setHalfedge(he1p);
+			}
+			if (he1.getFace() != null) {
+				he1.getFace().setHalfedge(he0p);
+			}
+			he0n.getVertex().setHalfedge(he0n);
+			he1n.getVertex().setHalfedge(he1n);
+			he0p.setPair(he1p);
+			he1p.setPair(he0p);
+			remove(he0);
+			remove(he1);
+			remove(v);
+		}
+
+	}
+
+	public void deleteTwoEdgeVertices() {
+		final HE_VertexIterator vitr = new HE_VertexIterator(this);
+		HE_Vertex v;
+		final List<HE_Vertex> toremove = new FastTable<HE_Vertex>();
+		while (vitr.hasNext()) {
+			v = vitr.next();
+			if (v.getVertexOrder() == 2) {
+				toremove.add(v);
+			}
+		}
+
+		for (final HE_Vertex vtr : toremove) {
+			deleteTwoEdgeVertex(vtr);
+		}
+
+	}
+
 	/**
 	 * Fix halfedge vertex assignment.
 	 */
@@ -2006,9 +2066,9 @@ WB_HasColor, WB_Mesh {
 		he1new.setVertex(vNew);
 		vNew.setHalfedge(he0new);
 		he0new.setNext(he0.getNextInFace());
-		he0new.setLabel(he0.getLabel());
+		he0new.copyProperties(he0);
 		he1new.setNext(he1.getNextInFace());
-		he1new.setLabel(he1.getLabel());
+		he1new.copyProperties(he1);
 		he0.setNext(he0new);
 		he1.setNext(he1new);
 		he0.setPair(he1new);
@@ -2021,7 +2081,7 @@ WB_HasColor, WB_Mesh {
 		if (he1.getFace() != null) {
 			he1new.setFace(he1.getFace());
 		}
-		vNew.setLabel(1);
+		vNew.setInternalLabel(1);
 		add(vNew);
 		add(he0new);
 		add(he1new);
@@ -2386,14 +2446,13 @@ WB_HasColor, WB_Mesh {
 			hejPrev.setNext(he0new);
 			he0new.setPair(he1new);
 			he1new.setPair(he0new);
-			he0new.setLabel(1);
-			he1new.setLabel(1);
+			he0new.setInternalLabel(1);
+			he1new.setInternalLabel(1);
 			he0new.setFace(face);
 			faceNew = new HE_Face();
 			face.setHalfedge(hei);
 			faceNew.setHalfedge(hej);
-			faceNew.setLabel(face.getLabel());
-			faceNew.setColor(face.getColor());
+			faceNew.copyProperties(face);
 			assignFaceToLoop(faceNew, hej);
 			add(he0new);
 			add(he1new);
@@ -2440,7 +2499,7 @@ WB_HasColor, WB_Mesh {
 	public HE_Selection splitFaceTri(final HE_Face face, final WB_Point v) {
 		HE_Halfedge he = face.getHalfedge();
 		final HE_Vertex vi = new HE_Vertex(v);
-		vi.setLabel(2);
+		vi.setInternalLabel(2);
 		final HE_Selection out = new HE_Selection(this);
 		int c = 0;
 		boolean onEdge = false;
@@ -2469,8 +2528,7 @@ WB_HasColor, WB_Mesh {
 				}
 				else {
 					f = new HE_Face();
-					f.setLabel(face.getLabel());
-					f.setColor(face.getColor());
+					f.copyProperties(face);
 					add(f);
 					out.add(f);
 				}
@@ -2685,7 +2743,7 @@ WB_HasColor, WB_Mesh {
 		for (i = 0; i < n; i++) {
 			f = faces[i];
 			vi = new HE_Vertex(faceCenters[i]);
-			vi.setLabel(2);
+			vi.setInternalLabel(2);
 			add(vi);
 			selectionOut.add(vi);
 			HE_Halfedge startHE = f.getHalfedge();
@@ -2706,8 +2764,7 @@ WB_HasColor, WB_Mesh {
 				}
 				else {
 					fc = new HE_Face();
-					fc.setLabel(f.getLabel());
-					fc.setColor(f.getColor());
+					fc.copyProperties(f);
 					add(fc);
 				}
 				he0[c] = he;
@@ -2733,7 +2790,7 @@ WB_HasColor, WB_Mesh {
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -2770,7 +2827,7 @@ WB_HasColor, WB_Mesh {
 			face = faces[i];
 			final HE_Vertex vi = new HE_Vertex(faceCenters[i]);
 			add(vi);
-			vi.setLabel(2);
+			vi.setInternalLabel(2);
 			selectionOut.add(vi);
 			HE_Halfedge startHE = face.getHalfedge();
 			while (orig.contains(startHE.getVertex())) {
@@ -2791,8 +2848,7 @@ WB_HasColor, WB_Mesh {
 				else {
 					f = new HE_Face();
 					add(f);
-					f.setLabel(face.getLabel());
-					f.setColor(face.getColor());
+					f.copyProperties(face);
 					sel.add(f);
 				}
 				he0[c] = he;
@@ -2819,7 +2875,7 @@ WB_HasColor, WB_Mesh {
 				he1[j].setNext(he2[j]);
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -2859,7 +2915,7 @@ WB_HasColor, WB_Mesh {
 			f = faces[i];
 			fo = f.getFaceOrder() / 2;
 			if (fo == 3) {
-				logger.debug("Splitting 3-face in 4 triangles.");
+				logger.trace("Splitting 3-face in 4 triangles.");
 				HE_Halfedge startHE = f.getHalfedge();
 				while (orig.contains(startHE.getVertex())) {
 					startHE = startHE.getNextInFace();
@@ -2873,8 +2929,7 @@ WB_HasColor, WB_Mesh {
 				do {
 
 					final HE_Face fn = new HE_Face();
-					fn.setLabel(f.getLabel());
-					fn.setColor(f.getColor());
+					fn.copyProperties(f);
 					add(fn);
 					he0[c] = he;
 					he.setFace(fn);
@@ -2909,11 +2964,11 @@ WB_HasColor, WB_Mesh {
 
 			else if (fo > 3) {
 				if (logger.isDebugEnabled()) {
-					logger.debug("Splitting " + Integer.toString(fo)
+					logger.trace("Splitting " + Integer.toString(fo)
 							+ "-face in " + Integer.toString(fo) + " quads.");
 				}
 				vi = new HE_Vertex(faceCenters[i]);
-				vi.setLabel(2);
+				vi.setInternalLabel(2);
 				add(vi);
 				selectionOut.add(vi);
 				HE_Halfedge startHE = f.getHalfedge();
@@ -2934,8 +2989,7 @@ WB_HasColor, WB_Mesh {
 					}
 					else {
 						fc = new HE_Face();
-						fc.setLabel(f.getLabel());
-						fc.setColor(f.getColor());
+						fc.copyProperties(f);
 						add(fc);
 					}
 					he0[c] = he;
@@ -2967,7 +3021,7 @@ WB_HasColor, WB_Mesh {
 			}
 		}
 		logger.debug("Pairing all new unpaired halfedges.");
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		logger.debug("Exiting splitFacesHybrid().");
 		return selectionOut;
 
@@ -3018,8 +3072,7 @@ WB_HasColor, WB_Mesh {
 				do {
 
 					final HE_Face fn = new HE_Face();
-					fn.setLabel(f.getLabel());
-					fn.setColor(f.getColor());
+					fn.copyProperties(f);
 					add(fn);
 					sel.add(fn);
 					he0[c] = he;
@@ -3055,7 +3108,7 @@ WB_HasColor, WB_Mesh {
 
 			else if (f.getFaceOrder() > 3) {
 				vi = new HE_Vertex(faceCenters[i]);
-				vi.setLabel(2);
+				vi.setInternalLabel(2);
 				add(vi);
 				selectionOut.add(vi);
 				HE_Halfedge startHE = f.getHalfedge();
@@ -3076,8 +3129,7 @@ WB_HasColor, WB_Mesh {
 					}
 					else {
 						fc = new HE_Face();
-						fc.setLabel(f.getLabel());
-						fc.setColor(f.getColor());
+						fc.copyProperties(f);
 						add(fc);
 						sel.add(fc);
 					}
@@ -3106,7 +3158,7 @@ WB_HasColor, WB_Mesh {
 				}
 			}
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 		return selectionOut;
 
 	}
@@ -3176,8 +3228,7 @@ WB_HasColor, WB_Mesh {
 			do {
 
 				final HE_Face f = new HE_Face();
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3249,8 +3300,7 @@ WB_HasColor, WB_Mesh {
 			do {
 
 				final HE_Face f = new HE_Face();
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3327,8 +3377,7 @@ WB_HasColor, WB_Mesh {
 
 				final HE_Face f = new HE_Face();
 				add(f);
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				selection.add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3397,8 +3446,7 @@ WB_HasColor, WB_Mesh {
 
 				final HE_Face f = new HE_Face();
 				add(f);
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				selection.add(f);
 				he0[c] = he;
 				he.setFace(f);
@@ -3711,7 +3759,7 @@ WB_HasColor, WB_Mesh {
 	 *            the label
 	 * @return the h e_ selection
 	 */
-	public HE_Selection selectFaces(final int label) {
+	public HE_Selection selectFacesWithLabel(final int label) {
 		final HE_Selection _selection = new HE_Selection(this);
 
 		HE_Face f;
@@ -3719,6 +3767,20 @@ WB_HasColor, WB_Mesh {
 		while (fItr.hasNext()) {
 			f = fItr.next();
 			if (f.getLabel() == label) {
+				_selection.add(f);
+			}
+		}
+		return _selection;
+	}
+
+	public HE_Selection selectFacesWithInternalLabel(final int label) {
+		final HE_Selection _selection = new HE_Selection(this);
+
+		HE_Face f;
+		final Iterator<HE_Face> fItr = fItr();
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			if (f.getInternalLabel() == label) {
 				_selection.add(f);
 			}
 		}
@@ -3770,7 +3832,7 @@ WB_HasColor, WB_Mesh {
 	 *            the label
 	 * @return the h e_ selection
 	 */
-	public HE_Selection selectOtherFaces(final int label) {
+	public HE_Selection selectFacesWithOtherLabel(final int label) {
 		final HE_Selection _selection = new HE_Selection(this);
 
 		HE_Face f;
@@ -3778,6 +3840,20 @@ WB_HasColor, WB_Mesh {
 		while (fItr.hasNext()) {
 			f = fItr.next();
 			if (f.getLabel() != label) {
+				_selection.add(f);
+			}
+		}
+		return _selection;
+	}
+
+	public HE_Selection selectFacesWithOtherInternalLabel(final int label) {
+		final HE_Selection _selection = new HE_Selection(this);
+
+		HE_Face f;
+		final Iterator<HE_Face> fItr = fItr();
+		while (fItr.hasNext()) {
+			f = fItr.next();
+			if (f.getInternalLabel() != label) {
 				_selection.add(f);
 			}
 		}
@@ -3824,7 +3900,7 @@ WB_HasColor, WB_Mesh {
 	 *            the label
 	 * @return the h e_ selection
 	 */
-	public HE_Selection selectVertices(final int label) {
+	public HE_Selection selectVerticesWithLabel(final int label) {
 		final HE_Selection _selection = new HE_Selection(this);
 
 		HE_Vertex v;
@@ -3845,7 +3921,7 @@ WB_HasColor, WB_Mesh {
 	 *            the label
 	 * @return the h e_ selection
 	 */
-	public HE_Selection selectOtherVertices(final int label) {
+	public HE_Selection selectVerticesWithOtherLabel(final int label) {
 		final HE_Selection _selection = new HE_Selection(this);
 
 		HE_Vertex v;
@@ -3853,6 +3929,41 @@ WB_HasColor, WB_Mesh {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (v.getLabel() != label) {
+				_selection.add(v);
+			}
+		}
+		return _selection;
+	}
+
+	public HE_Selection selectVerticesWithInternalLabel(final int label) {
+		final HE_Selection _selection = new HE_Selection(this);
+
+		HE_Vertex v;
+		final Iterator<HE_Vertex> vItr = vItr();
+		while (vItr.hasNext()) {
+			v = vItr.next();
+			if (v.getInternalLabel() == label) {
+				_selection.add(v);
+			}
+		}
+		return _selection;
+	}
+
+	/**
+	 * Select all vertices except with given label.
+	 *
+	 * @param label
+	 *            the label
+	 * @return the h e_ selection
+	 */
+	public HE_Selection selectVerticesWithOtherInternalLabel(final int label) {
+		final HE_Selection _selection = new HE_Selection(this);
+
+		HE_Vertex v;
+		final Iterator<HE_Vertex> vItr = vItr();
+		while (vItr.hasNext()) {
+			v = vItr.next();
+			if (v.getInternalLabel() != label) {
 				_selection.add(v);
 			}
 		}
@@ -3999,6 +4110,7 @@ WB_HasColor, WB_Mesh {
 		final List<HE_Halfedge> halfedges = sel.getOuterHalfedgesInside();
 		final HE_Face newFace = new HE_Face();
 		add(newFace);
+		newFace.copyProperties(sel.faces.get(0));
 		newFace.setHalfedge(halfedges.get(0));
 		for (int i = 0; i < halfedges.size(); i++) {
 			final HE_Halfedge hei = halfedges.get(i);
@@ -4142,6 +4254,48 @@ WB_HasColor, WB_Mesh {
 	}
 
 	/**
+	 * Reset labels.
+	 */
+	public void resetInternalLabels() {
+		resetVertexInternalLabels();
+		resetFaceInternalLabels();
+		resetEdgeInternalLabels();
+	}
+
+	/**
+	 * Reset vertex labels.
+	 */
+	public void resetVertexInternalLabels() {
+		final Iterator<HE_Vertex> vItr = vItr();
+		while (vItr.hasNext()) {
+			vItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
+	 * Reset face labels.
+	 */
+	public void resetFaceInternalLabels() {
+		final Iterator<HE_Face> fItr = fItr();
+		while (fItr.hasNext()) {
+			fItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
+	 * Reset edge labels.
+	 */
+	public void resetEdgeInternalLabels() {
+		final Iterator<HE_Halfedge> eItr = eItr();
+		while (eItr.hasNext()) {
+			eItr.next().setInternalLabel(-1);
+		}
+
+	}
+
+	/**
 	 * Label all faces of a selection.
 	 *
 	 * @param sel
@@ -4153,27 +4307,6 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Face> fItr = sel.fItr();
 		while (fItr.hasNext()) {
 			fItr.next().setLabel(label);
-		}
-	}
-
-	/**
-	 * Update selection to include all face swith given label.
-	 *
-	 * @param sel
-	 *            selection to update
-	 * @param label
-	 *            label to search
-	 */
-	public void updateFaceSelection(final HE_Selection sel, final int label) {
-
-		final Iterator<HE_Face> fItr = fItr();
-		HE_Face f;
-		sel.clear();
-		while (fItr.hasNext()) {
-			f = fItr.next();
-			if (f.getLabel() == label) {
-				sel.add(f);
-			}
 		}
 	}
 
@@ -4204,26 +4337,6 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = sel.vItr();
 		while (vItr.hasNext()) {
 			vItr.next().setLabel(label);
-		}
-	}
-
-	/**
-	 * Update vertex selection.
-	 *
-	 * @param sel
-	 *            the sel
-	 * @param label
-	 *            the label
-	 */
-	public void updateVertexSelection(final HE_Selection sel, final int label) {
-		final Iterator<HE_Vertex> vItr = vItr();
-		HE_Vertex v;
-		sel.clear();
-		while (vItr.hasNext()) {
-			v = vItr.next();
-			if (v.getLabel() == label) {
-				sel.add(v);
-			}
 		}
 	}
 
@@ -4545,8 +4658,7 @@ WB_HasColor, WB_Mesh {
 				final int[] tri = tris[i];
 				final HE_Face f = new HE_Face();
 				add(f);
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
@@ -4569,7 +4681,7 @@ WB_HasColor, WB_Mesh {
 				add(he3);
 			}
 
-			pairHalfedgesAndCreateEdges();
+			pairHalfedges();
 		}
 	}
 
@@ -4595,8 +4707,7 @@ WB_HasColor, WB_Mesh {
 				final int[] tri = tris[i];
 				final HE_Face f = new HE_Face();
 				add(f);
-				f.setLabel(face.getLabel());
-				f.setColor(face.getColor());
+				f.copyProperties(face);
 				final HE_Halfedge he1 = new HE_Halfedge();
 				final HE_Halfedge he2 = new HE_Halfedge();
 				final HE_Halfedge he3 = new HE_Halfedge();
@@ -4630,7 +4741,7 @@ WB_HasColor, WB_Mesh {
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 	}
 
 	/**
@@ -4645,7 +4756,7 @@ WB_HasColor, WB_Mesh {
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i]);
 		}
-		pairHalfedgesAndCreateEdges();
+		pairHalfedges();
 	}
 
 	/**
@@ -4799,6 +4910,176 @@ WB_HasColor, WB_Mesh {
 	@Override
 	public void setColor(final int color) {
 		meshcolor = color;
+
+	}
+
+	public void setFaceColor(final int color) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(this);
+		while (fitr.hasNext()) {
+			fitr.next().setColor(color);
+		}
+
+	}
+
+	public void setVertexColor(final int color) {
+		final HE_VertexIterator vitr = new HE_VertexIterator(this);
+		while (vitr.hasNext()) {
+			vitr.next().setColor(color);
+		}
+
+	}
+
+	public void setHalfedgeColor(final int color) {
+		final HE_HalfedgeIterator heitr = new HE_HalfedgeIterator(this);
+		while (heitr.hasNext()) {
+			heitr.next().setColor(color);
+		}
+
+	}
+
+	public void setFaceColorWithLabel(final int color, final int i) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(this);
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setFaceColorWithInternalLabel(final int color, final int i) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(this);
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setVertexColorWithLabel(final int color, final int i) {
+		final HE_VertexIterator fitr = new HE_VertexIterator(this);
+		HE_Vertex f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setVertexColorWithInternalLabel(final int color, final int i) {
+		final HE_VertexIterator fitr = new HE_VertexIterator(this);
+		HE_Vertex f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setHalfedgeColorWithLabel(final int color, final int i) {
+		final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
+		HE_Halfedge f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setHalfedgeColorWithInternalLabel(final int color, final int i) {
+		final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
+		HE_Halfedge f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() == i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setFaceColorWithOtherLabel(final int color, final int i) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(this);
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() != i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setFaceColorWithOtherInternalLabel(final int color, final int i) {
+		final HE_FaceIterator fitr = new HE_FaceIterator(this);
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() != i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setVertexColorWithOtherLabel(final int color, final int i) {
+		final HE_VertexIterator fitr = new HE_VertexIterator(this);
+		HE_Vertex f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() != i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setVertexColorWithOtherInternalLabel(final int color,
+			final int i) {
+		final HE_VertexIterator fitr = new HE_VertexIterator(this);
+		HE_Vertex f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() != i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setHalfedgeColorWithOtherLabel(final int color, final int i) {
+		final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
+		HE_Halfedge f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getLabel() != i) {
+				f.setColor(color);
+			}
+		}
+
+	}
+
+	public void setHalfedgeColorWithOtherInternalLabel(final int color,
+			final int i) {
+		final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
+		HE_Halfedge f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (f.getInternalLabel() != i) {
+				f.setColor(color);
+			}
+		}
 
 	}
 

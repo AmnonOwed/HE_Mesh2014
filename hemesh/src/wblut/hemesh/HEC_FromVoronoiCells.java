@@ -40,7 +40,7 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -63,11 +63,11 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 				final Iterator<HE_Face> fItr = m.fItr();
 				while (fItr.hasNext()) {
 					final HE_Face f = fItr.next();
-					if (f.getLabel() == -1) {
+					if (f.getInternalLabel() == -1) {
 						tmpfaces.add(f);
 						nv += f.getFaceOrder();
 					}
-					else if (!on[f.getLabel()]) {
+					else if (!on[f.getInternalLabel()]) {
 						tmpfaces.add(f);
 						nv += f.getFaceOrder();
 					}
@@ -78,11 +78,16 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 		final WB_Point[] vertices = new WB_Point[nv];
 		final int[][] faces = new int[tmpfaces.size()][];
 		final int[] labels = new int[tmpfaces.size()];
+		final int[] intlabels = new int[tmpfaces.size()];
+		final int[] colors = new int[tmpfaces.size()];
 		int cid = 0;
 		for (int i = 0; i < tmpfaces.size(); i++) {
 			final HE_Face f = tmpfaces.get(i);
 			faces[i] = new int[f.getFaceOrder()];
 			labels[i] = f.getLabel();
+			intlabels[i] = f.getInternalLabel();
+			colors[i] = f.getColor();
+
 			HE_Halfedge he = f.getHalfedge();
 			for (int j = 0; j < f.getFaceOrder(); j++) {
 				vertices[cid] = he.getVertex().getPoint();
@@ -92,12 +97,16 @@ public class HEC_FromVoronoiCells extends HEC_Creator {
 			}
 		}
 		final HEC_FromFacelist ffl = new HEC_FromFacelist()
-		.setVertices(vertices).setFaces(faces).setDuplicate(true);
+				.setVertices(vertices).setFaces(faces).setDuplicate(true);
 		final HE_Mesh result = ffl.createBase();
 		final Iterator<HE_Face> fItr = result.fItr();
 		int i = 0;
+		HE_Face f;
 		while (fItr.hasNext()) {
-			fItr.next().setLabel(labels[i]);
+			f = fItr.next();
+			f.setLabel(labels[i]);
+			f.setInternalLabel(intlabels[i]);
+			f.setColor(colors[i]);
 			i++;
 		}
 		return result;

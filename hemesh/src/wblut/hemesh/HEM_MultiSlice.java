@@ -12,9 +12,9 @@ import wblut.geom.WB_Point;
 /**
  * Multiple planar cuts of a mesh. Faces on positive side of cut plane are
  * removed.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEM_MultiSlice extends HEM_Modifier {
 
@@ -50,7 +50,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set offset.
-	 * 
+	 *
 	 * @param d
 	 *            offset
 	 * @return self
@@ -69,7 +69,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set cut planes from an arrayList of WB_Plane.
-	 * 
+	 *
 	 * @param planes
 	 *            arrayList of WB_Plane
 	 * @return self
@@ -82,7 +82,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set cut planes from an array of WB_Plane.
-	 * 
+	 *
 	 * @param planes
 	 *            arrayList of WB_Plane
 	 * @return self
@@ -97,7 +97,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set labels of cut planes. Cap faces will be labeled.
-	 * 
+	 *
 	 * @param labels
 	 *            array of int
 	 * @return self
@@ -109,7 +109,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set reverse option.
-	 * 
+	 *
 	 * @param b
 	 *            true, false
 	 * @return self
@@ -121,7 +121,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set center for cut plane sorting.
-	 * 
+	 *
 	 * @param c
 	 *            center
 	 * @return self
@@ -133,7 +133,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set option to cap holes.
-	 * 
+	 *
 	 * @param b
 	 *            true, false;
 	 * @return self
@@ -146,7 +146,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Sets the simple cap.
-	 * 
+	 *
 	 * @param b
 	 *            the b
 	 * @return the hE m_ multi slice
@@ -158,7 +158,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 	/**
 	 * Set option to reset mesh center.
-	 * 
+	 *
 	 * @param b
 	 *            true, false;
 	 * @return self
@@ -189,7 +189,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
 		}
 		Iterator<HE_Face> fItr = mesh.fItr();
-		mesh.resetFaceLabels();
+		mesh.resetFaceInternalLabels();
 		final HEM_Slice slice = new HEM_Slice();
 		slice.setReverse(reverse).setCap(capHoles).setOffset(offset)
 				.setSimpleCap(simpleCap);
@@ -236,7 +236,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 				fItr = slice.cap.fItr();
 				while (fItr.hasNext()) {
 
-					fItr.next().setLabel(labels[i]);
+					fItr.next().setInternalLabel(labels[i]);
 
 				}
 			}
@@ -247,9 +247,10 @@ public class HEM_MultiSlice extends HEM_Modifier {
 		HE_Face f;
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (f.getLabel() == -1) {
+			if (f.getInternalLabel() == -1) {
 				origFaces.add(f);
-			} else {
+			}
+			else {
 				newFaces.add(f);
 			}
 		}

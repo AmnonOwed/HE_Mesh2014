@@ -32,10 +32,10 @@ package wblut.hemesh;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.zip.GZIPOutputStream;
 
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Vector;
@@ -95,13 +95,41 @@ public class HET_STLWriter {
 
 	}
 
+	static public OutputStream createOutputStream(final File file)
+			throws IOException {
+		if (file == null) {
+			throw new IllegalArgumentException("file can't be null");
+		}
+		createDirectories(file);
+		OutputStream stream = new FileOutputStream(file);
+		if (file.getName().toLowerCase().endsWith(".gz")) {
+			stream = new GZIPOutputStream(stream);
+		}
+		return stream;
+	}
+
+	static public void createDirectories(final File file) {
+		try {
+			final String parentName = file.getParent();
+			if (parentName != null) {
+				final File parent = new File(parentName);
+				if (!parent.exists()) {
+					parent.mkdirs();
+				}
+			}
+		}
+		catch (final SecurityException se) {
+			System.err.println("No permissions to create "
+					+ file.getAbsolutePath());
+		}
+	}
+
 	public void beginSave(final String fn, final String name, final int numFaces) {
 
 		try {
-			beginSave(new FileOutputStream(new File(fn, name + ".stl")),
-					numFaces);
+			beginSave(createOutputStream(new File(fn, name + ".stl")), numFaces);
 		}
-		catch (final FileNotFoundException e) {
+		catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}

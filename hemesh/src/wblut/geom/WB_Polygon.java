@@ -220,19 +220,9 @@ public class WB_Polygon extends WB_Ring {
 				return new int[][] { { 0, 1, 2 } };
 			}
 			else if (n == 4) {
-				p1 = getPoint(0);
-				c = getPoint(1);
-				p2 = getPoint(2);
-
-				if (WB_CoordinateMath.angleBetweenNorm(c.xd(), c.yd(), c.zd(),
-						p1.xd(), p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd()) >= 0) {
-					return new int[][] { { 0, 1, 2 }, { 0, 2, 3 } };
-
-				}
-				else {
-					return new int[][] { { 0, 1, 3 }, { 1, 2, 3 } };
-
-				}
+				return WB_Triangulate.triangulateQuad(points.getPoint(0),
+						points.getPoint(1), points.getPoint(2),
+						points.getPoint(3));
 			}
 
 			else {
@@ -271,11 +261,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-							* (points.get(j, 2) + points.get(i, 2)),
+					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-							* (points.get(j, 0) + points.get(i, 0)),
+					* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-							* (points.get(j, 1) + points.get(i, 1)));
+					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();
@@ -290,11 +280,11 @@ public class WB_Polygon extends WB_Ring {
 
 			normal._addSelf(
 					(points.get(j, 1) - points.get(i, 1))
-							* (points.get(j, 2) + points.get(i, 2)),
+					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
-							* (points.get(j, 0) + points.get(i, 0)),
+					* (points.get(j, 0) + points.get(i, 0)),
 					(points.get(j, 0) - points.get(i, 0))
-							* (points.get(j, 1) + points.get(i, 1)));
+					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
 		normal._normalizeSelf();

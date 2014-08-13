@@ -118,7 +118,8 @@ public class WB_Vector extends WB_AbstractVector {
 		final double d = getLength();
 		if (WB_Epsilon.isZero(d)) {
 			_set(0, 0, 0);
-		} else {
+		}
+		else {
 			_set(xd() / d, yd() / d, zd() / d);
 		}
 		return d;
@@ -310,6 +311,9 @@ public class WB_Vector extends WB_AbstractVector {
 
 	@Override
 	public boolean equals(final Object o) {
+		if (o == null) {
+			return false;
+		}
 		if (o == this) {
 			return true;
 		}
@@ -402,12 +406,12 @@ public class WB_Vector extends WB_AbstractVector {
 	}
 
 	public boolean isParallel(final WB_Coordinate p) {
-		double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
+		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
 		return (cross(p).getSqLength() / (pm2 * getSqLength()) < WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isParallel(final WB_Coordinate p, final double t) {
-		double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
+		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
 		return (cross(p).getSqLength() / (pm2 * getSqLength()) < t
 				+ WB_Epsilon.SQEPSILON);
 	}
@@ -534,7 +538,8 @@ public class WB_Vector extends WB_AbstractVector {
 			final WB_Vector a = new WB_Vector(1, 0, -xd() / zd());
 			a._normalizeSelf();
 			return a;
-		} else {
+		}
+		else {
 			return new WB_Vector(0, 0, 1);
 		}
 
