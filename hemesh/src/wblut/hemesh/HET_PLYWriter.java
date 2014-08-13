@@ -242,7 +242,7 @@ public class HET_PLYWriter {
 			final String path, final String name) {
 		try {
 			saveMeshWithVertexColor(mesh, createOutputStream(new File(path,
-					name)));
+					name + ".ply")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -319,8 +319,8 @@ public class HET_PLYWriter {
 	public static void saveMeshWithFaceColor(final HE_Mesh mesh,
 			final String path, final String name) {
 		try {
-			saveMeshWithFaceColor(mesh,
-					createOutputStream(new File(path, name)));
+			saveMeshWithFaceColor(mesh, createOutputStream(new File(path, name
+					+ ".wrl")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();

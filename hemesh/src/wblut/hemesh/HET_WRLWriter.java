@@ -239,7 +239,7 @@ public class HET_WRLWriter {
 	public static void saveMesh(final HE_Mesh mesh, final String path,
 			final String name) {
 		try {
-			saveMesh(mesh, createOutputStream(new File(path, name)));
+			saveMesh(mesh, createOutputStream(new File(path, name + ".wrl")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
@@ -250,7 +250,7 @@ public class HET_WRLWriter {
 			final String path, final String name) {
 		try {
 			saveMeshWithVertexColor(mesh, createOutputStream(new File(path,
-					name)));
+					name + ".wrl")));
 		}
 		catch (final IOException e) {
 			e.printStackTrace();
