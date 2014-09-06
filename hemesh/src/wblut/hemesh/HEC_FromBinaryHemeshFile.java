@@ -68,7 +68,7 @@ public class HEC_FromBinaryHemeshFile extends HEC_Creator {
 				y = dis.readDouble();
 				z = dis.readDouble();
 				heid = dis.readInt();
-				v._set(x, y, z);
+				v.set(x, y, z);
 				if (heid > -1) {
 					v.setHalfedge(halfedges.get(heid));
 				}

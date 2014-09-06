@@ -428,7 +428,7 @@ public class HEC_IsoFunction extends HEC_Creator {
 		final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
 		final WB_Point p1 = new WB_Point(i * dx + dx, j * dy, k * dz);
 		xedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		xedge.getPoint()._addSelf(offset);
+		xedge.getPoint().addSelf(offset);
 		mesh.add(xedge);
 		xedges.put(index(i, j, k), xedge);
 		return xedge;
@@ -446,7 +446,7 @@ public class HEC_IsoFunction extends HEC_Creator {
 		final WB_Point p1 = new WB_Point(i * dx, j * dy + dy, k * dz);
 
 		yedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		yedge.getPoint()._addSelf(offset);
+		yedge.getPoint().addSelf(offset);
 		mesh.add(yedge);
 		yedges.put(index(i, j, k), yedge);
 		return yedge;
@@ -465,7 +465,7 @@ public class HEC_IsoFunction extends HEC_Creator {
 		final WB_Point p1 = new WB_Point(i * dx, j * dy, k * dz + dz);
 
 		zedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		zedge.getPoint()._addSelf(offset);
+		zedge.getPoint().addSelf(offset);
 		mesh.add(zedge);
 		zedges.put(index(i, j, k), zedge);
 		return zedge;

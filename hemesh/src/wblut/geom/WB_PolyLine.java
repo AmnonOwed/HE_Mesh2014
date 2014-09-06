@@ -93,7 +93,7 @@ public class WB_PolyLine implements WB_Geometry {
 		}
 		WB_Vector normal = geometryfactory.createVector(0, 0, 1);
 		normal = normal.cross(directions.getVector(i));
-		final double d = normal.getLength();
+		final double d = normal.getLength3D();
 		normal = normal.div(d);
 		if (WB_Epsilon.isZero(d)) {
 			normal = geometryfactory.createVector(1, 0, 0);
@@ -183,9 +183,9 @@ public class WB_PolyLine implements WB_Geometry {
 					points.get(i + 1, 0) - points.get(i, 0),
 					points.get(i + 1, 1) - points.get(i, 1),
 					points.get(i + 1, 2) - points.get(i, 2));
-			incLengths[i] = (i == 0) ? v.getLength() : incLengths[i - 1]
-					+ v.getLength();
-			v._normalizeSelf();
+			incLengths[i] = (i == 0) ? v.getLength3D() : incLengths[i - 1]
+					+ v.getLength3D();
+			v.normalizeSelf();
 			dirs.add(v);
 		}
 		directions = geometryfactory.createVectorSequence(dirs);

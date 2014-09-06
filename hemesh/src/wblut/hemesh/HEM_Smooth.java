@@ -67,13 +67,13 @@ public class HEM_Smooth extends HEM_Modifier {
 				else {
 					p = new WB_Point(v);
 					neighbors = v.getNeighborVertices();
-					p._mulSelf(neighbors.size());
+					p.mulSelf(neighbors.size());
 
 					for (int i = 0; i < neighbors.size(); i++) {
-						p._addSelf(neighbors.get(i));
+						p.addSelf(neighbors.get(i));
 					}
 
-					newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+					newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
 				}
 				id++;
 
@@ -81,7 +81,7 @@ public class HEM_Smooth extends HEM_Modifier {
 			vItr = mesh.vItr();
 			id = 0;
 			while (vItr.hasNext()) {
-				vItr.next()._set(newPositions[id]);
+				vItr.next().set(newPositions[id]);
 				id++;
 			}
 
@@ -135,19 +135,19 @@ public class HEM_Smooth extends HEM_Modifier {
 							nItr.remove();
 						}
 					}
-					p._mulSelf(neighbors.size());
+					p.mulSelf(neighbors.size());
 					for (int i = 0; i < neighbors.size(); i++) {
-						p._addSelf(neighbors.get(i));
+						p.addSelf(neighbors.get(i));
 					}
 
-					newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+					newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
 				}
 				id++;
 			}
 			vItr = selection.vItr();
 			id = 0;
 			while (vItr.hasNext()) {
-				vItr.next()._set(newPositions[id]);
+				vItr.next().set(newPositions[id]);
 				id++;
 			}
 		}

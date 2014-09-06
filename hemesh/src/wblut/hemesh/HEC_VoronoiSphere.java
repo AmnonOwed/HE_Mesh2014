@@ -240,8 +240,8 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 			dir = new WB_Vector[numTracers];
 			for (int i = 0; i < numTracers; i++) {
 				dir[i] = new WB_Vector(tracers[i]);
-				dir[i]._normalizeSelf();
-				tracers[i]._addSelf(points[cellIndex]);
+				dir[i].normalizeSelf();
+				tracers[i].addSelf(points[cellIndex]);
 			}
 			grow(tracers, cellIndex);
 			final HEC_ConvexHull ch = new HEC_ConvexHull().setPoints(tracers)
@@ -258,15 +258,15 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 				if (cellIndex != j) {
 
 					final WB_Vector N = new WB_Vector(points[cellIndex]);
-					N._subSelf(points[j]);
+					N.subSelf(points[j]);
 
-					N._normalizeSelf();
+					N.normalizeSelf();
 					final WB_Point O = new WB_Point(points[cellIndex]); // plane
 					// origin=point
 					// halfway
 					// between point i and point j
-					O._addSelf(points[j]);
-					O._mulSelf(0.5);
+					O.addSelf(points[j]);
+					O.mulSelf(0.5);
 					final WB_Plane P = new WB_Plane(O, N);
 					cutPlanes.add(P);
 				}
@@ -308,7 +308,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 
 				while ((j == index) && (d2self < cutoff * cutoff)) {
 
-					p._addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
+					p.addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
 							* r.zd());
 					d2self = WB_Distance.getSqDistance3D(p, c);
 					final WB_KDEntry<WB_Point, Integer>[] closest = kdtree
@@ -316,13 +316,13 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 					j = closest[1].value;
 				}
 				if (j != index) {
-					p._subSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
+					p.subSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
 							* r.zd());
 					d2self = 0;
 					stepSize /= 2;
 				}
 				else {
-					p._set(c.xd() + cutoff * r.xd(), c.yd() + cutoff * r.yd(),
+					p.set(c.xd() + cutoff * r.xd(), c.yd() + cutoff * r.yd(),
 							c.zd() + cutoff * r.zd());
 					stepSize = -1;
 

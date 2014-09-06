@@ -1179,13 +1179,13 @@ public abstract class WB_Delaunay {
 			int[] tetra;
 			for (int i = 0; i < ntris; i++) {
 				tetra = Tri[i];
-				p0._set(samples[0][tetra[0]], samples[1][tetra[0]],
+				p0.set(samples[0][tetra[0]], samples[1][tetra[0]],
 						samples[2][tetra[0]]);
-				p1._set(samples[0][tetra[1]], samples[1][tetra[1]],
+				p1.set(samples[0][tetra[1]], samples[1][tetra[1]],
 						samples[2][tetra[1]]);
-				p2._set(samples[0][tetra[2]], samples[1][tetra[2]],
+				p2.set(samples[0][tetra[2]], samples[1][tetra[2]],
 						samples[2][tetra[2]]);
-				p3._set(samples[0][tetra[3]], samples[1][tetra[3]],
+				p3.set(samples[0][tetra[3]], samples[1][tetra[3]],
 						samples[2][tetra[3]]);
 				CS = pred.circumsphereTetra(p0, p1, p2, p3);
 				circumcenters[i] = CS.getCenter();
@@ -1204,11 +1204,11 @@ public abstract class WB_Delaunay {
 			int[] tri;
 			for (int i = 0; i < ntris; i++) {
 				tri = Tri[i];
-				p0._set(samples[0][tri[0]], samples[1][tri[0]],
+				p0.set(samples[0][tri[0]], samples[1][tri[0]],
 						samples[2][tri[0]]);
-				p1._set(samples[0][tri[1]], samples[1][tri[1]],
+				p1.set(samples[0][tri[1]], samples[1][tri[1]],
 						samples[2][tri[1]]);
-				p2._set(samples[0][tri[2]], samples[1][tri[2]],
+				p2.set(samples[0][tri[2]], samples[1][tri[2]],
 						samples[2][tri[2]]);
 				CS = pred.circumsphereTri(p0, p1, p2);
 				circumcenters[i] = CS.getCenter();

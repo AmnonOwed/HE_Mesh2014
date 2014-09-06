@@ -79,7 +79,7 @@ public class HEM_Skew extends HEM_Modifier {
 	 */
 	public HEM_Skew setSkewDirection(final WB_Coordinate p) {
 		skewDirection = new WB_Vector(p);
-		skewDirection._normalizeSelf();
+		skewDirection.normalizeSelf();
 		return this;
 	}
 
@@ -97,7 +97,7 @@ public class HEM_Skew extends HEM_Modifier {
 	public HEM_Skew setSkewDirection(final double vx, final double vy,
 			final double vz) {
 		skewDirection = new WB_Vector(vx, vy, vz);
-		skewDirection._normalizeSelf();
+		skewDirection.normalizeSelf();
 		return this;
 	}
 
@@ -140,7 +140,7 @@ public class HEM_Skew extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.getPoint()._addSelf(skewDirection.mul(d * skewFactor));
+					v.getPoint().addSelf(skewDirection.mul(d * skewFactor));
 				}
 			}
 		}
@@ -165,7 +165,7 @@ public class HEM_Skew extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > 0)) {
-					v.getPoint()._addSelf(skewDirection.mul(d * skewFactor));
+					v.getPoint().addSelf(skewDirection.mul(d * skewFactor));
 				}
 			}
 		}

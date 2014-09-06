@@ -150,11 +150,11 @@ public class HEM_Lattice extends HEM_Modifier {
 				fi = mesh.getFaceByKey(innerKey);
 				if (obulge != 0) {
 					no = fo.getFaceNormal();
-					fo.push(no._mulSelf(obulge));
+					fo.push(no.mulSelf(obulge));
 				}
 				if (ibulge != 0) {
 					ni = fi.getFaceNormal();
-					fi.push(ni._mulSelf(ibulge));
+					fi.push(ni.mulSelf(ibulge));
 				}
 				final int nvo = fo.getFaceOrder();
 				final int nvi = fi.getFaceOrder();
@@ -297,11 +297,11 @@ public class HEM_Lattice extends HEM_Modifier {
 				fi = selection.parent.getFaceByKey(innerKey);
 				if (obulge != 0) {
 					no = fo.getFaceNormal();
-					fo.push(no._mulSelf(obulge));
+					fo.push(no.mulSelf(obulge));
 				}
 				if (ibulge != 0) {
 					ni = fi.getFaceNormal();
-					fi.push(ni._mulSelf(ibulge));
+					fi.push(ni.mulSelf(ibulge));
 				}
 
 				final int nvo = fo.getFaceOrder();

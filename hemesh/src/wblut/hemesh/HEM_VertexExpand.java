@@ -44,7 +44,7 @@ public class HEM_VertexExpand extends HEM_Modifier {
 
 			v = vItr.next();
 			n = vnItr.next();
-			v.getPoint()._addSelf(n._mulSelf(d));
+			v.getPoint().addSelf(n.mulSelf(d));
 		}
 		return mesh;
 	}
@@ -68,7 +68,7 @@ public class HEM_VertexExpand extends HEM_Modifier {
 		while (vItr.hasNext()) {
 
 			v = vItr.next();
-			v.getPoint()._addSelf(v.getVertexNormal()._mulSelf(d));
+			v.getPoint().addSelf(v.getVertexNormal().mulSelf(d));
 		}
 
 		return selection.parent;

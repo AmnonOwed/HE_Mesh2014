@@ -46,14 +46,14 @@ public class WB_AABBTree {
 			final HE_Selection mid = new HE_Selection(mesh);
 			final WB_Vector dir = new WB_Vector();
 			if (level % 3 == 0) {
-				dir._set(0, 0, 1);
+				dir.set(0, 0, 1);
 
 			}
 			else if (level % 3 == 1) {
-				dir._set(0, 1, 0);
+				dir.set(0, 1, 0);
 			}
 			else {
-				dir._set(1, 0, 0);
+				dir.set(1, 0, 0);
 			}
 
 			node.separator = new WB_Plane(new WB_Point(node.aabb.getCenter()),

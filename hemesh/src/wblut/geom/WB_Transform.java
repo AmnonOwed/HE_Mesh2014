@@ -159,7 +159,7 @@ public class WB_Transform {
 	 */
 	public WB_Transform addRotate(final double angle, final WB_Coordinate axis) {
 		final WB_Vector a = new WB_Vector(axis);
-		a._normalizeSelf();
+		a.normalizeSelf();
 		final double s = Math.sin(angle);
 		final double c = Math.cos(angle);
 		final WB_M44 tmp = new WB_M44(a.xd() * a.xd() + (1.f - a.xd() * a.xd())
@@ -212,9 +212,9 @@ public class WB_Transform {
 	public WB_Transform addObjectToWorld(final WB_Coordinate origin,
 			final WB_Coordinate up, final WB_Coordinate front) {
 		final WB_Vector dir = new WB_Vector(origin, front);
-		dir._normalizeSelf();
+		dir.normalizeSelf();
 		final WB_Vector tup = new WB_Vector(origin, up);
-		tup._normalizeSelf();
+		tup.normalizeSelf();
 		final WB_Vector right = dir.cross(tup);
 		final WB_Vector newUp = right.cross(dir);
 
@@ -358,7 +358,7 @@ public class WB_Transform {
 	public WB_Transform addShear(final WB_Plane P, final WB_Coordinate v,
 			final double angle) {
 		final WB_Vector lv = new WB_Vector(v);
-		lv._normalizeSelf();
+		lv.normalizeSelf();
 		double tana = Math.tan(angle);
 		final WB_M33 tmp = P.getNormal().tensor(lv);
 		final double Qn = P.getOrigin().dot(P.getNormal());
@@ -589,7 +589,7 @@ public class WB_Transform {
 		final double z = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd() + T.m34);
 		double wp = (T.m41 * p.xd() + T.m42 * p.yd() + T.m43 * p.zd() + T.m44);
 		wp = 1.0 / wp;
-		p._set(x * wp, y * wp, z * wp);
+		p.set(x * wp, y * wp, z * wp);
 	}
 
 	/**
@@ -635,7 +635,7 @@ public class WB_Transform {
 		final double x = (T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd());
 		final double y = (T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd());
 		final double z = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd());
-		p._set(x, y, z);
+		p.set(x, y, z);
 	}
 
 	/**
@@ -687,7 +687,7 @@ public class WB_Transform {
 				* n.zd());
 		final double z = (invT.m13 * n.xd() + invT.m23 * n.yd() + invT.m33
 				* n.zd());
-		n._set(x, y, z);
+		n.set(x, y, z);
 	}
 
 	/**
@@ -768,7 +768,7 @@ public class WB_Transform {
 				zz, 0, 0, 0, 0, 1);
 		T = tmp.mult(T);
 		invT = invT.mult(invtmp);
-		addTranslate(o1._subSelf(o2));
+		addTranslate(o1.subSelf(o2));
 		return this;
 	}
 
@@ -797,7 +797,7 @@ public class WB_Transform {
 		_zt = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd() + T.m34);
 		double wp = (T.m41 * p.xd() + T.m42 * p.yd() + T.m43 * p.zd() + T.m44);
 		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
+		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyAsPoint(final double x, final double y, final double z,
@@ -807,7 +807,7 @@ public class WB_Transform {
 		_zt = (T.m31 * x + T.m32 * y + T.m33 * z + T.m34);
 		double wp = (T.m41 * x + T.m42 * y + T.m43 * z + T.m44);
 		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
+		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyAsVector(final WB_Coordinate p,
@@ -815,7 +815,7 @@ public class WB_Transform {
 		_xt = (T.m11 * p.xd() + T.m12 * p.yd() + T.m13 * p.zd());
 		_yt = (T.m21 * p.xd() + T.m22 * p.yd() + T.m23 * p.zd());
 		_zt = (T.m31 * p.xd() + T.m32 * p.yd() + T.m33 * p.zd());
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyAsVector(final double x, final double y, final double z,
@@ -823,7 +823,7 @@ public class WB_Transform {
 		_xt = (T.m11 * x + T.m12 * y + T.m13 * z);
 		_yt = (T.m21 * x + T.m22 * y + T.m23 * z);
 		_zt = (T.m31 * x + T.m32 * y + T.m33 * z);
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyAsNormal(final WB_Coordinate n,
@@ -831,7 +831,7 @@ public class WB_Transform {
 		_xt = (invT.m11 * n.xd() + invT.m21 * n.yd() + invT.m31 * n.zd());
 		_yt = (invT.m12 * n.xd() + invT.m22 * n.yd() + invT.m32 * n.zd());
 		_zt = (invT.m13 * n.xd() + invT.m23 * n.yd() + invT.m33 * n.zd());
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyAsNormal(final double x, final double y, final double z,
@@ -839,7 +839,7 @@ public class WB_Transform {
 		_xt = (invT.m11 * x + invT.m21 * y + invT.m31 * z);
 		_yt = (invT.m12 * x + invT.m22 * y + invT.m32 * z);
 		_zt = (invT.m13 * x + invT.m23 * y + invT.m33 * z);
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyInvAsPoint(final WB_Coordinate p,
@@ -849,7 +849,7 @@ public class WB_Transform {
 		_zt = (invT.m31 * p.xd() + invT.m32 * p.yd() + invT.m33 * p.zd() + invT.m34);
 		double wp = (invT.m41 * p.xd() + invT.m42 * p.yd() + invT.m43 * p.zd() + invT.m44);
 		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
+		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyInvAsPoint(final double x, final double y, final double z,
@@ -859,7 +859,7 @@ public class WB_Transform {
 		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z + invT.m34);
 		double wp = (invT.m41 * x + invT.m42 * y + invT.m43 * z + invT.m44);
 		wp = 1.0 / wp;
-		result._set(_xt * wp, _yt * wp, _zt * wp);
+		result.set(_xt * wp, _yt * wp, _zt * wp);
 	}
 
 	public void applyInvAsVector(final WB_Coordinate p,
@@ -867,7 +867,7 @@ public class WB_Transform {
 		_xt = (invT.m11 * p.xd() + invT.m12 * p.yd() + invT.m13 * p.zd());
 		_yt = (invT.m21 * p.xd() + invT.m22 * p.yd() + invT.m23 * p.zd());
 		_zt = (invT.m31 * p.xd() + invT.m32 * p.yd() + invT.m33 * p.zd());
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyInvAsVector(final double x, final double y,
@@ -875,7 +875,7 @@ public class WB_Transform {
 		_xt = (invT.m11 * x + invT.m12 * y + invT.m13 * z);
 		_yt = (invT.m21 * x + invT.m22 * y + invT.m23 * z);
 		_zt = (invT.m31 * x + invT.m32 * y + invT.m33 * z);
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyInvAsNormal(final WB_Coordinate n,
@@ -883,7 +883,7 @@ public class WB_Transform {
 		_xt = (T.m11 * n.xd() + T.m21 * n.yd() + T.m31 * n.zd());
 		_yt = (T.m12 * n.xd() + T.m22 * n.yd() + T.m32 * n.zd());
 		_zt = (T.m13 * n.xd() + T.m23 * n.yd() + T.m33 * n.zd());
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public void applyInvAsNormal(final double x, final double y,
@@ -891,7 +891,7 @@ public class WB_Transform {
 		_xt = (T.m11 * x + T.m21 * y + T.m31 * z);
 		_yt = (T.m12 * x + T.m22 * y + T.m32 * z);
 		_zt = (T.m13 * x + T.m23 * y + T.m33 * z);
-		result._set(_xt, _yt, _zt);
+		result.set(_xt, _yt, _zt);
 	}
 
 	public WB_Transform(final WB_Transform Trans) {
@@ -913,7 +913,7 @@ public class WB_Transform {
 		final WB_Vector v2 = geometryfactory
 				.createNormalizedVector(targetDirection);
 		WB_Vector axis = v1.cross(v2);
-		final double l = axis.getLength();
+		final double l = axis.getLength3D();
 		if (WB_Epsilon.isZero(l)) {
 			if (v1.dot(v2) < 0.0) {
 				axis = geometryfactory
@@ -922,7 +922,7 @@ public class WB_Transform {
 			}
 		} else {
 			final double angle = Math.atan2(l, v1.dot(v2));
-			axis._normalizeSelf();
+			axis.normalizeSelf();
 			addRotate(angle, axis);
 		}
 
@@ -940,7 +940,7 @@ public class WB_Transform {
 		final WB_Vector v2 = geometryfactory
 				.createNormalizedVector(targetDirection);
 		WB_Vector axis = v1.cross(v2);
-		final double l = axis.getLength();
+		final double l = axis.getLength3D();
 		if (WB_Epsilon.isZero(l)) {
 			if (v1.dot(v2) < 0.0) {
 				axis = geometryfactory
@@ -949,7 +949,7 @@ public class WB_Transform {
 			}
 		} else {
 			final double angle = Math.atan2(l, v1.dot(v2));
-			axis._normalizeSelf();
+			axis.normalizeSelf();
 			addRotate(angle, axis);
 		}
 

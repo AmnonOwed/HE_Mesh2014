@@ -64,7 +64,7 @@ public class WB_BSpline implements WB_Curve {
 		final int p = knot.p();
 		for (int i = 0; i <= p; i++) {
 			final WB_Point tmp = points[span - p + i];
-			C._addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i] * tmp.zd());
+			C.addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i] * tmp.zd());
 		}
 		return C;
 	}
@@ -357,7 +357,7 @@ public class WB_BSpline implements WB_Curve {
 				ebpts[i] = new WB_Point();
 				mpi = Math.min(p, i);
 				for (j = Math.max(0, i - t); j <= mpi; j++) {
-					ebpts[i]._addMulSelf(bezalfs[i][j], bpts[j]);
+					ebpts[i].addMulSelf(bezalfs[i][j], bpts[j]);
 				}
 			}
 
@@ -437,7 +437,7 @@ public class WB_BSpline implements WB_Curve {
 		for (int k = 1; k <= d; k++) {
 			final int tmp = p - k + 1;
 			for (int i = 0; i <= r - k; i++) {
-				PK[k][i] = PK[k - 1][i + 1].sub(PK[k - 1][i])._mulSelf(
+				PK[k][i] = PK[k - 1][i + 1].sub(PK[k - 1][i]).mulSelf(
 						tmp
 								/ (knot.value(r1 + i + p + 1) - knot.value(r1
 										+ i + k)));
@@ -458,7 +458,7 @@ public class WB_BSpline implements WB_Curve {
 		for (int k = 0; k <= du; k++) {
 			CK[k] = new WB_Point();
 			for (int j = 0; j <= p - k; j++) {
-				CK[k]._addSelf(PK[k][j].mul(N[j][p - k]));
+				CK[k].addSelf(PK[k][j].mul(N[j][p - k]));
 			}
 		}
 		return CK;
@@ -476,9 +476,9 @@ public class WB_BSpline implements WB_Curve {
 		for (int k = 0; k <= du; k++) {
 			CK[k] = new WB_Point();
 			for (int j = 0; j <= p - k; j++) {
-				CK[k]._addSelf(PK[k][j].mul(N[j][p - k]));
+				CK[k].addSelf(PK[k][j].mul(N[j][p - k]));
 			}
-			CK[k]._normalizeSelf();
+			CK[k].normalizeSelf();
 		}
 		return CK;
 	}
@@ -500,9 +500,9 @@ public class WB_BSpline implements WB_Curve {
 		for (int k = 0; k <= 1; k++) {
 			CK[k] = new WB_Vector();
 			for (int j = 0; j <= p - k; j++) {
-				CK[k]._addSelf(PK[k][j].mul(N[j][p - k]));
+				CK[k].addSelf(PK[k][j].mul(N[j][p - k]));
 			}
-			CK[k]._normalizeSelf();
+			CK[k].normalizeSelf();
 		}
 		return CK[1];
 	}

@@ -317,8 +317,8 @@ public class WB_QuickHull3D {
 				zm = (pnt.zd());
 				minVtxs[2] = v;
 			}
-			max._set(xM, yM, zM);
-			min._set(xm, ym, zm);
+			max.set(xM, yM, zM);
+			min.set(xm, ym, zm);
 		}
 
 		// this epsilon formula comes from QuickHull, and I'm
@@ -364,29 +364,29 @@ public class WB_QuickHull3D {
 		final WB_Vector nrml = new WB_Vector();
 		final WB_Vector xprod = new WB_Vector();
 		double maxSqr = 0;
-		u01._subSelf(vtx[0].pos);
-		u01._normalizeSelf();
+		u01.subSelf(vtx[0].pos);
+		u01.normalizeSelf();
 
 		for (int i = 0; i < numPoints; i++) {
 			final Vertex p = pointBuffer[i];
-			diff02._set(p.pos.xd() - vtx[0].pos.xd(),
+			diff02.set(p.pos.xd() - vtx[0].pos.xd(),
 					p.pos.yd() - vtx[0].pos.yd(), p.pos.zd() - vtx[0].pos.zd());
-			xprod._set(u01.yd() * diff02.zd() - u01.zd() * diff02.yd(),
+			xprod.set(u01.yd() * diff02.zd() - u01.zd() * diff02.yd(),
 					u01.zd() * diff02.xd() - u01.xd() * diff02.zd(), u01.xd()
 							* diff02.yd() - u01.yd() * diff02.xd());
-			final double lenSqr = xprod.getSqLength();
+			final double lenSqr = xprod.getSqLength3D();
 			if (lenSqr > maxSqr && p != vtx[0] && // paranoid
 					p != vtx[1]) {
 				maxSqr = lenSqr;
 				vtx[2] = p;
-				nrml._set(xprod);
+				nrml.set(xprod);
 			}
 		}
 		if (Math.sqrt(maxSqr) <= 100 * tolerance) {
 			throw new IllegalArgumentException(
 					"Input points appear to be colinear");
 		}
-		nrml._normalizeSelf();
+		nrml.normalizeSelf();
 
 		double maxDist = 0;
 		final double d0 = nrml.dot(vtx[2].pos);
@@ -864,10 +864,10 @@ public class WB_QuickHull3D {
 			Vertex v;
 			do {
 				v = he.head();
-				centroid._addSelf(v.pos);
+				centroid.addSelf(v.pos);
 				he = he.next;
 			} while (he != he0);
-			return centroid._divSelf(numVerts);
+			return centroid.divSelf(numVerts);
 		}
 
 		protected void computeNormal(final WB_Vector normal,
@@ -894,11 +894,11 @@ public class WB_QuickHull3D {
 				final Vertex p2 = hedgeMax.head();
 				final Vertex p1 = hedgeMax.tail();
 				final double lenMax = Math.sqrt(lenSqrMax);
-				final WB_Vector u = p2.pos.sub(p1.pos)._divSelf(lenMax);
+				final WB_Vector u = p2.pos.sub(p1.pos).divSelf(lenMax);
 				final double dot = normal.dot(u);
 				normal.addMul(-dot, u);
 
-				normal._normalizeSelf();
+				normal.normalizeSelf();
 			}
 		}
 
@@ -913,7 +913,7 @@ public class WB_QuickHull3D {
 			double d2y = p2.pos.yd() - p0.pos.yd();
 			double d2z = p2.pos.zd() - p0.pos.zd();
 
-			normal._set(0, 0, 0);
+			normal.set(0, 0, 0);
 
 			numVerts = 2;
 
@@ -927,15 +927,15 @@ public class WB_QuickHull3D {
 				d2y = p2.pos.yd() - p0.pos.yd();
 				d2z = p2.pos.zd() - p0.pos.zd();
 
-				normal._addSelf(d1y * d2z - d1z * d2y, d1z * d2x - d1x * d2z,
+				normal.addSelf(d1y * d2z - d1z * d2y, d1z * d2x - d1x * d2z,
 						d1x * d2y - d1y * d2x);
 
 				he1 = he2;
 				he2 = he2.next;
 				numVerts++;
 			}
-			area = normal.getLength();
-			normal._normalizeSelf();
+			area = normal.getLength3D();
+			normal.normalizeSelf();
 
 		}
 

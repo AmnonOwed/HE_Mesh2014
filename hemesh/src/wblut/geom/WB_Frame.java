@@ -413,16 +413,16 @@ public class WB_Frame {
 			if (node.getOrder() == 2) {
 				newPos[id] = node.getNeighbor(0).add(node.getNeighbor(1));
 
-				newPos[id]._mulSelf(0.5);
-				newPos[id]._addSelf(node);
-				newPos[id]._mulSelf(0.5);
+				newPos[id].mulSelf(0.5);
+				newPos[id].addSelf(node);
+				newPos[id].mulSelf(0.5);
 			}
 			id++;
 		}
 		id = 0;
 		for (final WB_FrameNode node : nodes) {
 			if (node.getOrder() == 2) {
-				node._set(newPos[id]);
+				node.set(newPos[id]);
 			}
 			id++;
 		}
@@ -489,15 +489,15 @@ public class WB_Frame {
 				u = P.getU().mul(r);
 				v = strut.toNormVector().get();
 				strut.start().addMul(rr, v);
-				v._mulSelf(dsl);
+				v.mulSelf(dsl);
 				for (int i = 0; i <= divs; i++) {
 					for (int j = 0; j < n; j++) {
 						p = strut.start().addMul(i, v);
 						localu = u.get();
 						localu.rotateAboutAxis(j * da, new WB_Point(),
 								P.getNormal());
-						p._addSelf(localu);
-						p._addSelf(rnd.nextVector()._mulSelf(dr));
+						p.addSelf(localu);
+						p.addSelf(rnd.nextVector().mulSelf(dr));
 						points.add(p);
 					}
 				}
@@ -508,7 +508,7 @@ public class WB_Frame {
 					.setB(l).setC(0).setCenter(node));
 
 			for (final WB_Point q : ball.getVerticesAsPoint()) {
-				points.add(q._addSelf(rnd.nextVector()._mulSelf(dr)));
+				points.add(q.addSelf(rnd.nextVector().mulSelf(dr)));
 			}
 
 		}

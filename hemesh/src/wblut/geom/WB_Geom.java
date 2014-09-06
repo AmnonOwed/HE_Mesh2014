@@ -63,7 +63,7 @@ public class WB_Geom {
 	public static double pointAlongLine(final WB_Coordinate p, final WB_Line L) {
 		final WB_Vector ab = L.getDirection();
 		final WB_Vector ac = new WB_Vector(p);
-		ac._subSelf(L.getOrigin());
+		ac.subSelf(L.getOrigin());
 		return ac.dot(ab);
 	}
 

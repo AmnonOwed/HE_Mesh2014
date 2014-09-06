@@ -50,106 +50,252 @@ public class WB_Vector extends WB_AbstractVector {
 		super(p1, p2);
 	}
 
+	/**
+	 * @deprecated Use {@link #addMulSelf(double,double,double,double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _addMulSelf(final double f, final double x,
 			final double y, final double z) {
-		_set(xd() + f * x, yd() + f * y, zd() + f * z);
+		return addMulSelf(f, x, y, z);
+	}
+
+	public WB_Vector addMulSelf(final double f, final double x, final double y,
+			final double z) {
+		set(xd() + f * x, yd() + f * y, zd() + f * z);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #addMulSelf(double,WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public WB_Vector _addMulSelf(final double f, final WB_Coordinate p) {
-		_set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
+		return addMulSelf(f, p);
+	}
+
+	public WB_Vector addMulSelf(final double f, final WB_Coordinate p) {
+		set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #addSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _addSelf(final double x, final double y, final double z) {
-		_set(xd() + x, yd() + y, zd() + z);
+		return addSelf(x, y, z);
+	}
+
+	public WB_Vector addSelf(final double x, final double y, final double z) {
+		set(xd() + x, yd() + y, zd() + z);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #addSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public WB_Vector _addSelf(final WB_Coordinate p) {
-		_set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
+		return addSelf(p);
+	}
+
+	public WB_Vector addSelf(final WB_Coordinate p) {
+		set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsNormalSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	public WB_Vector _applyAsNormalSelf(final WB_Transform T) {
+		return applyAsNormalSelf(T);
+	}
+
+	public WB_Vector applyAsNormalSelf(final WB_Transform T) {
 		T.applyAsNormal(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsPointSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	public WB_Vector _applyAsPointSelf(final WB_Transform T) {
+		return applyAsPointSelf(T);
+	}
+
+	public WB_Vector applyAsPointSelf(final WB_Transform T) {
 		T.applyAsPoint(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsVectorSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	public WB_Vector _applyAsVectorSelf(final WB_Transform T) {
+		return applyAsVectorSelf(T);
+	}
+
+	public WB_Vector applyAsVectorSelf(final WB_Transform T) {
 		T.applyAsVector(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #crossSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public WB_Vector _crossSelf(final WB_Coordinate p) {
-		_set(yd() * p.zd() - this.zd() * p.yd(), this.zd() * p.xd() - this.xd()
+		return crossSelf(p);
+	}
+
+	public WB_Vector crossSelf(final WB_Coordinate p) {
+		set(yd() * p.zd() - this.zd() * p.yd(), this.zd() * p.xd() - this.xd()
 				* p.zd(), this.xd() * p.yd() - yd() * p.xd());
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #divSelf(double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _divSelf(final double f) {
-		return _mulSelf(1.0 / f);
+		return divSelf(f);
 	}
 
+	public WB_Vector divSelf(final double f) {
+		return mulSelf(1.0 / f);
+	}
+
+	/**
+	 * @deprecated Use {@link #invert()} instead
+	 */
+	@Deprecated
 	public void _invert() {
-		_mulSelf(-1);
+		invert();
 	}
 
+	public void invert() {
+		mulSelf(-1);
+	}
+
+	/**
+	 * @deprecated Use {@link #mulAddMulSelf(double,double,WB_Coordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	public WB_Vector _mulAddMulSelf(final double f, final double g,
 			final WB_Coordinate p) {
-		_set(f * xd() + g * p.xd(), f * yd() + g * p.yd(),
-				f * zd() + g * p.zd());
+		return mulAddMulSelf(f, g, p);
+	}
+
+	public WB_Vector mulAddMulSelf(final double f, final double g,
+			final WB_Coordinate p) {
+		set(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f * zd() + g * p.zd());
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #mulSelf(double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _mulSelf(final double f) {
-		_set(f * xd(), f * yd(), f * zd());
+		return mulSelf(f);
+	}
+
+	public WB_Vector mulSelf(final double f) {
+		set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #normalizeSelf()} instead
+	 */
+	@Deprecated
 	public double _normalizeSelf() {
-		final double d = getLength();
+		return normalizeSelf();
+	}
+
+	public double normalizeSelf() {
+		final double d = getLength3D();
 		if (WB_Epsilon.isZero(d)) {
-			_set(0, 0, 0);
+			set(0, 0, 0);
 		}
 		else {
-			_set(xd() / d, yd() / d, zd() / d);
+			set(xd() / d, yd() / d, zd() / d);
 		}
 		return d;
 	}
 
+	/**
+	 * @deprecated Use {@link #scaleSelf(double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _scaleSelf(final double f) {
-		_mulSelf(f);
+		return scaleSelf(f);
+	}
+
+	public WB_Vector scaleSelf(final double f) {
+		mulSelf(f);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #scaleSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _scaleSelf(final double fx, final double fy,
 			final double fz) {
-		_set(xd() * fx, yd() * fy, zd() * fz);
+		return scaleSelf(fx, fy, fz);
+	}
+
+	public WB_Vector scaleSelf(final double fx, final double fy, final double fz) {
+		set(xd() * fx, yd() * fy, zd() * fz);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #subSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	public WB_Vector _subSelf(final double x, final double y, final double z) {
-		_set(xd() - x, yd() - y, zd() - z);
+		return subSelf(x, y, z);
+	}
+
+	public WB_Vector subSelf(final double x, final double y, final double z) {
+		set(xd() - x, yd() - y, zd() - z);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #subSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public WB_Vector _subSelf(final WB_Coordinate v) {
-		_set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
+		return subSelf(v);
+	}
+
+	public WB_Vector subSelf(final WB_Coordinate v) {
+		set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #trimSelf(double)} instead
+	 */
+	@Deprecated
 	public void _trimSelf(final double d) {
-		if (getSqLength() > d * d) {
-			_normalizeSelf();
-			_mulSelf(d);
+		trimSelf(d);
+	}
+
+	public void trimSelf(final double d) {
+		if (getSqLength3D() > d * d) {
+			normalizeSelf();
+			mulSelf(d);
 		}
 	}
 
@@ -167,17 +313,37 @@ public class WB_Vector extends WB_AbstractVector {
 		return new WB_Vector(this.xd() + x, this.yd() + y, this.zd() + z);
 	}
 
+	/**
+	 * @deprecated Use
+	 *             {@link #addInto(double,double,double,WB_MutableCoordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	public void add(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
-		result._set(this.xd() + x, this.yd() + y, this.zd() + z);
+		addInto(x, y, z, result);
+	}
+
+	public void addInto(final double x, final double y, final double z,
+			final WB_MutableCoordinate result) {
+		result.set(this.xd() + x, this.yd() + y, this.zd() + z);
 	}
 
 	public WB_Vector add(final WB_Coordinate p) {
 		return new WB_Vector(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 	}
 
+	/**
+	 * @deprecated Use {@link #addInto(WB_Coordinate,WB_MutableCoordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	public void add(final WB_Coordinate p, final WB_MutableCoordinate result) {
-		result._set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
+		addInto(p, result);
+	}
+
+	public void addInto(final WB_Coordinate p, final WB_MutableCoordinate result) {
+		result.set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 	}
 
 	public WB_Vector addMul(final double f, final double x, final double y,
@@ -186,9 +352,20 @@ public class WB_Vector extends WB_AbstractVector {
 				+ f * z);
 	}
 
+	/**
+	 * @deprecated Use
+	 *             {@link #addMulInto(double,double,double,double,WB_MutableCoordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	public void addMul(final double f, final double x, final double y,
 			final double z, final WB_MutableCoordinate result) {
-		result._set(this.xd() + f * x, this.yd() + f * y, this.zd() + f * z);
+		addMulInto(f, x, y, z, result);
+	}
+
+	public void addMulInto(final double f, final double x, final double y,
+			final double z, final WB_MutableCoordinate result) {
+		result.set(this.xd() + f * x, this.yd() + f * y, this.zd() + f * z);
 	}
 
 	public WB_Vector addMul(final double f, final WB_Coordinate p) {
@@ -196,17 +373,31 @@ public class WB_Vector extends WB_AbstractVector {
 				* p.zd());
 	}
 
+	/**
+	 * @deprecated Use
+	 *             {@link #addMulInto(double,WB_Coordinate,WB_MutableCoordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	public void addMul(final double f, final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
-		result._set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
+		addMulInto(f, p, result);
 	}
 
 	public void addMulInto(final double f, final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
-		result._set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
+		result.set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 	}
 
+	/**
+	 * @deprecated Use {@link #applySelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	public WB_Vector apply(final WB_Transform T) {
+		return applySelf(T);
+	}
+
+	public WB_Vector applySelf(final WB_Transform T) {
 		return applyAsVector(T);
 	}
 
@@ -289,7 +480,7 @@ public class WB_Vector extends WB_AbstractVector {
 
 	public void crossInto(final WB_Coordinate p,
 			final WB_MutableCoordinate result) {
-		result._set(yd() * p.zd() - zd() * p.yd(),
+		result.set(yd() * p.zd() - zd() * p.yd(),
 				zd() * p.xd() - xd() * p.zd(), xd() * p.yd() - yd() * p.xd());
 	}
 
@@ -297,8 +488,16 @@ public class WB_Vector extends WB_AbstractVector {
 		return mul(1.0 / f);
 	}
 
+	/**
+	 * @deprecated Use {@link #divInto(double,WB_MutableCoordinate)} instead
+	 */
+	@Deprecated
 	public void div(final double f, final WB_MutableCoordinate result) {
-		mul(1.0 / f, result);
+		divInto(f, result);
+	}
+
+	public void divInto(final double f, final WB_MutableCoordinate result) {
+		mulInto(1.0 / f, result);
 	}
 
 	public double dot(final WB_Coordinate p) {
@@ -347,25 +546,49 @@ public class WB_Vector extends WB_AbstractVector {
 				p.yd(), p.zd());
 	}
 
+	/**
+	 * @deprecated Use {@link #getDistance3D(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public double getDistance(final WB_Coordinate p) {
-		return WB_CoordinateMath.getDistance(xd(), yd(), zd(), p.xd(), p.yd(),
-				p.zd());
+		return getDistance3D(p);
+	}
+
+	public double getDistance3D(final WB_Coordinate p) {
+		return WB_CoordinateMath.getDistance3D(xd(), yd(), zd(), p.xd(),
+				p.yd(), p.zd());
 	}
 
 	public double getDistance2D(final WB_Coordinate p) {
 		return WB_CoordinateMath.getDistance2D(xd(), yd(), p.xd(), p.yd());
 	}
 
+	/**
+	 * @deprecated Use {@link #getLength3D()} instead
+	 */
+	@Deprecated
 	public double getLength() {
-		return WB_CoordinateMath.getLength(xd(), yd(), zd());
+		return getLength3D();
+	}
+
+	public double getLength3D() {
+		return WB_CoordinateMath.getLength3D(xd(), yd(), zd());
 	}
 
 	public double getLength2D() {
 		return WB_CoordinateMath.getLength2D(xd(), yd());
 	}
 
+	/**
+	 * @deprecated Use {@link #getSqDistance3D(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	public double getSqDistance(final WB_Coordinate p) {
-		return WB_CoordinateMath.getSqDistance(xd(), yd(), zd(), p.xd(),
+		return getSqDistance3D(p);
+	}
+
+	public double getSqDistance3D(final WB_Coordinate p) {
+		return WB_CoordinateMath.getSqDistance3D(xd(), yd(), zd(), p.xd(),
 				p.yd(), p.zd());
 	}
 
@@ -373,8 +596,16 @@ public class WB_Vector extends WB_AbstractVector {
 		return WB_CoordinateMath.getSqDistance2D(xd(), yd(), p.xd(), p.yd());
 	}
 
+	/**
+	 * @deprecated Use {@link #getSqLength3D()} instead
+	 */
+	@Deprecated
 	public double getSqLength() {
-		return WB_CoordinateMath.getSqLength(xd(), yd(), zd());
+		return getSqLength3D();
+	}
+
+	public double getSqLength3D() {
+		return WB_CoordinateMath.getSqLength3D(xd(), yd(), zd());
 	}
 
 	public double getSqLength2D() {
@@ -402,26 +633,26 @@ public class WB_Vector extends WB_AbstractVector {
 		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(this, p))) {
 			return true;
 		}
-		return WB_Epsilon.isZeroSq(sub(p).cross(sub(q)).getSqLength());
+		return WB_Epsilon.isZeroSq(sub(p).cross(sub(q)).getSqLength3D());
 	}
 
 	public boolean isParallel(final WB_Coordinate p) {
 		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
-		return (cross(p).getSqLength() / (pm2 * getSqLength()) < WB_Epsilon.SQEPSILON);
+		return (cross(p).getSqLength3D() / (pm2 * getSqLength3D()) < WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isParallel(final WB_Coordinate p, final double t) {
 		final double pm2 = p.xd() * p.xd() + p.yd() * p.yd() + p.zd() * p.zd();
-		return (cross(p).getSqLength() / (pm2 * getSqLength()) < t
+		return (cross(p).getSqLength3D() / (pm2 * getSqLength3D()) < t
 				+ WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isParallelNorm(final WB_Coordinate p) {
-		return (cross(p).getSqLength() < WB_Epsilon.SQEPSILON);
+		return (cross(p).getSqLength3D() < WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isParallelNorm(final WB_Coordinate p, final double t) {
-		return (cross(p).getSqLength() < t + WB_Epsilon.SQEPSILON);
+		return (cross(p).getSqLength3D() < t + WB_Epsilon.SQEPSILON);
 	}
 
 	public boolean isZero() {
@@ -432,8 +663,16 @@ public class WB_Vector extends WB_AbstractVector {
 		return new WB_Vector(xd() * f, yd() * f, zd() * f);
 	}
 
+	/**
+	 * @deprecated Use {@link #mulInto(double,WB_MutableCoordinate)} instead
+	 */
+	@Deprecated
 	public void mul(final double f, final WB_MutableCoordinate result) {
-		scale(f, result);
+		mulInto(f, result);
+	}
+
+	public void mulInto(final double f, final WB_MutableCoordinate result) {
+		scaleInto(f, result);
 	}
 
 	public WB_Vector mulAddMul(final double f, final double g,
@@ -442,9 +681,21 @@ public class WB_Vector extends WB_AbstractVector {
 				* zd() + g * p.zd());
 	}
 
+	/**
+	 * @deprecated Use
+	 *             {@link #mulAddMulInto(double,double,WB_Coordinate,WB_MutableCoordinate)}
+	 *             instead
+	 */
+	@Deprecated
+	public void mulAddMul(final double f, final double g,
+			final WB_Coordinate p, final WB_MutableCoordinate result) {
+		result.set(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f * zd() + g
+				* p.zd());
+	}
+
 	public void mulAddMulInto(final double f, final double g,
 			final WB_Coordinate p, final WB_MutableCoordinate result) {
-		result._set(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f * zd() + g
+		result.set(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f * zd() + g
 				* p.zd());
 	}
 
@@ -482,8 +733,16 @@ public class WB_Vector extends WB_AbstractVector {
 		return WB_CoordinateMath.scalarTriple(this, p, q);
 	}
 
+	/**
+	 * @deprecated Use {@link #scaleInto(double,WB_MutableCoordinate)} instead
+	 */
+	@Deprecated
 	public void scale(final double f, final WB_MutableCoordinate result) {
-		result._set(xd() * f, yd() * f, zd() * f);
+		scaleInto(f, result);
+	}
+
+	public void scaleInto(final double f, final WB_MutableCoordinate result) {
+		result.set(xd() * f, yd() * f, zd() * f);
 	}
 
 	public boolean smallerThan(final WB_Coordinate otherXYZ) {
@@ -505,7 +764,7 @@ public class WB_Vector extends WB_AbstractVector {
 
 	public void sub(final double x, final double y, final double z,
 			final WB_MutableCoordinate result) {
-		result._set(this.xd() - x, this.yd() - y, this.zd() - z);
+		result.set(this.xd() - x, this.yd() - y, this.zd() - z);
 	}
 
 	public WB_Vector sub(final WB_Coordinate p) {
@@ -514,7 +773,7 @@ public class WB_Vector extends WB_AbstractVector {
 	}
 
 	public void sub(final WB_Coordinate p, final WB_MutableCoordinate result) {
-		result._set(this.xd() - p.xd(), this.yd() - p.yd(), this.zd() - p.zd());
+		result.set(this.xd() - p.xd(), this.yd() - p.yd(), this.zd() - p.zd());
 	}
 
 	public WB_M33 tensor(final WB_Coordinate q) {
@@ -529,14 +788,14 @@ public class WB_Vector extends WB_AbstractVector {
 
 	public WB_Vector getOrthoNormal2D() {
 		final WB_Vector a = new WB_Vector(-yd(), xd(), 0);
-		a._normalizeSelf();
+		a.normalizeSelf();
 		return a;
 	}
 
 	public WB_Vector getOrthoNormal3D() {
 		if (Math.abs(zd()) > WB_Epsilon.EPSILON) {
 			final WB_Vector a = new WB_Vector(1, 0, -xd() / zd());
-			a._normalizeSelf();
+			a.normalizeSelf();
 			return a;
 		}
 		else {

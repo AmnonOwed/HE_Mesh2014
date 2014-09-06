@@ -102,7 +102,7 @@ public class HEM_Crocodile extends HEM_Modifier {
 		vitr = new HE_VertexIterator(selection);
 		while (vitr.hasNext()) {
 			v = vitr.next();
-			v.getPoint()._addMulSelf(distance, v.getVertexNormal());
+			v.getPoint().addMulSelf(distance, v.getVertexNormal());
 
 		}
 		return selection.parent;

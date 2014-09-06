@@ -94,22 +94,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(p.xd(), p.yd(), p.zd() - offset);
+			result.set(p.xd(), p.yd(), p.zd() - offset);
 			break;
 		case YZ:
-			result._set(p.yd(), p.zd(), p.xd() - offset);
+			result.set(p.yd(), p.zd(), p.xd() - offset);
 			break;
 		case ZX:
-			result._set(p.zd(), p.xd(), p.yd() - offset);
+			result.set(p.zd(), p.xd(), p.yd() - offset);
 			break;
 		case YX:
-			result._set(p.yd(), p.xd(), offset - p.zd());
+			result.set(p.yd(), p.xd(), offset - p.zd());
 			break;
 		case ZY:
-			result._set(p.zd(), p.yd(), offset - p.xd());
+			result.set(p.zd(), p.yd(), offset - p.xd());
 			break;
 		case XZ:
-			result._set(p.xd(), p.zd(), offset - p.yd());
+			result.set(p.xd(), p.zd(), offset - p.yd());
 			break;
 
 		default:
@@ -122,22 +122,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, z - offset);
+			result.set(x, y, z - offset);
 			break;
 		case YZ:
-			result._set(y, z, x - offset);
+			result.set(y, z, x - offset);
 			break;
 		case ZX:
-			result._set(z, x, y - offset);
+			result.set(z, x, y - offset);
 			break;
 		case YX:
-			result._set(y, x, offset - z);
+			result.set(y, x, offset - z);
 			break;
 		case ZY:
-			result._set(z, y, offset - x);
+			result.set(z, y, offset - x);
 			break;
 		case XZ:
-			result._set(x, z, offset - y);
+			result.set(x, z, offset - y);
 			break;
 
 		default:
@@ -150,22 +150,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(p.xd(), p.yd(), p.zd() + offset);
+			result.set(p.xd(), p.yd(), p.zd() + offset);
 			break;
 		case YZ:
-			result._set(p.zd() + offset, p.xd(), p.yd());
+			result.set(p.zd() + offset, p.xd(), p.yd());
 			break;
 		case ZX:
-			result._set(p.yd(), p.zd() + offset, p.xd());
+			result.set(p.yd(), p.zd() + offset, p.xd());
 			break;
 		case YX:
-			result._set(p.yd(), p.xd(), offset - p.zd());
+			result.set(p.yd(), p.xd(), offset - p.zd());
 			break;
 		case ZY:
-			result._set(offset - p.zd(), p.yd(), p.xd());
+			result.set(offset - p.zd(), p.yd(), p.xd());
 			break;
 		case XZ:
-			result._set(p.xd(), offset - p.zd(), p.yd());
+			result.set(p.xd(), offset - p.zd(), p.yd());
 			break;
 
 		default:
@@ -178,22 +178,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, z + offset);
+			result.set(x, y, z + offset);
 			break;
 		case YZ:
-			result._set(z + offset, x, y);
+			result.set(z + offset, x, y);
 			break;
 		case ZX:
-			result._set(y, z + offset, x);
+			result.set(y, z + offset, x);
 			break;
 		case YX:
-			result._set(y, x, offset - z);
+			result.set(y, x, offset - z);
 			break;
 		case ZY:
-			result._set(offset - z, y, x);
+			result.set(offset - z, y, x);
 			break;
 		case XZ:
-			result._set(x, offset - z, y);
+			result.set(x, offset - z, y);
 			break;
 
 		default:
@@ -206,22 +206,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, offset);
+			result.set(x, y, offset);
 			break;
 		case YZ:
-			result._set(0, x, y + offset);
+			result.set(0, x, y + offset);
 			break;
 		case ZX:
-			result._set(y, 0, x + offset);
+			result.set(y, 0, x + offset);
 			break;
 		case YX:
-			result._set(y, x, offset);
+			result.set(y, x, offset);
 			break;
 		case ZY:
-			result._set(offset, y, x);
+			result.set(offset, y, x);
 			break;
 		case XZ:
-			result._set(x, offset, y);
+			result.set(x, offset, y);
 			break;
 
 		default:
@@ -234,22 +234,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(v.xd(), v.yd(), v.zd() - offset);
+			result.set(v.xd(), v.yd(), v.zd() - offset);
 			break;
 		case YZ:
-			result._set(v.yd(), v.zd(), v.xd() - offset);
+			result.set(v.yd(), v.zd(), v.xd() - offset);
 			break;
 		case ZX:
-			result._set(v.zd(), v.xd(), v.yd() - offset);
+			result.set(v.zd(), v.xd(), v.yd() - offset);
 			break;
 		case YX:
-			result._set(v.yd(), v.xd(), offset - v.zd());
+			result.set(v.yd(), v.xd(), offset - v.zd());
 			break;
 		case ZY:
-			result._set(v.zd(), v.yd(), offset - v.xd());
+			result.set(v.zd(), v.yd(), offset - v.xd());
 			break;
 		case XZ:
-			result._set(v.xd(), v.zd(), offset - v.yd());
+			result.set(v.xd(), v.zd(), offset - v.yd());
 			break;
 
 		default:
@@ -262,22 +262,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, z - offset);
+			result.set(x, y, z - offset);
 			break;
 		case YZ:
-			result._set(y, z, x - offset);
+			result.set(y, z, x - offset);
 			break;
 		case ZX:
-			result._set(z, x, y - offset);
+			result.set(z, x, y - offset);
 			break;
 		case YX:
-			result._set(y, x, offset - z);
+			result.set(y, x, offset - z);
 			break;
 		case ZY:
-			result._set(z, y, offset - x);
+			result.set(z, y, offset - x);
 			break;
 		case XZ:
-			result._set(x, z, offset - y);
+			result.set(x, z, offset - y);
 			break;
 
 		default:
@@ -290,22 +290,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(v.xd(), v.yd(), v.zd() + offset);
+			result.set(v.xd(), v.yd(), v.zd() + offset);
 			break;
 		case YZ:
-			result._set(v.zd() + offset, v.xd(), v.yd());
+			result.set(v.zd() + offset, v.xd(), v.yd());
 			break;
 		case ZX:
-			result._set(v.yd(), v.zd() + offset, v.xd());
+			result.set(v.yd(), v.zd() + offset, v.xd());
 			break;
 		case YX:
-			result._set(v.yd(), v.xd(), offset - v.zd());
+			result.set(v.yd(), v.xd(), offset - v.zd());
 			break;
 		case ZY:
-			result._set(offset - v.zd(), v.yd(), v.xd());
+			result.set(offset - v.zd(), v.yd(), v.xd());
 			break;
 		case XZ:
-			result._set(v.xd(), offset - v.zd(), v.yd());
+			result.set(v.xd(), offset - v.zd(), v.yd());
 			break;
 
 		default:
@@ -318,22 +318,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, z + offset);
+			result.set(x, y, z + offset);
 			break;
 		case YZ:
-			result._set(z + offset, x, y);
+			result.set(z + offset, x, y);
 			break;
 		case ZX:
-			result._set(y, z + offset, x);
+			result.set(y, z + offset, x);
 			break;
 		case YX:
-			result._set(y, x, offset - z);
+			result.set(y, x, offset - z);
 			break;
 		case ZY:
-			result._set(offset - z, y, x);
+			result.set(offset - z, y, x);
 			break;
 		case XZ:
-			result._set(x, offset - z, y);
+			result.set(x, offset - z, y);
 			break;
 
 		default:
@@ -346,22 +346,22 @@ public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
 			final WB_MutableCoordinate result) {
 		switch (mode) {
 		case XY:
-			result._set(x, y, offset);
+			result.set(x, y, offset);
 			break;
 		case YZ:
-			result._set(0, x, y + offset);
+			result.set(0, x, y + offset);
 			break;
 		case ZX:
-			result._set(y, 0, x + offset);
+			result.set(y, 0, x + offset);
 			break;
 		case YX:
-			result._set(y, x, offset);
+			result.set(y, x, offset);
 			break;
 		case ZY:
-			result._set(offset, y, x);
+			result.set(offset, y, x);
 			break;
 		case XZ:
-			result._set(x, offset, y);
+			result.set(x, offset, y);
 			break;
 
 		default:

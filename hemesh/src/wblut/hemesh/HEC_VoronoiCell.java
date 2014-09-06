@@ -252,14 +252,14 @@ public class HEC_VoronoiCell extends HEC_Creator {
 			for (final int element : pointsToUse) {
 				if (cellIndex != element) {
 					final WB_Vector N = new WB_Vector(points[cellIndex]);
-					N._subSelf(points[element]);
-					N._normalizeSelf();
-					O._set(points[cellIndex]); // plane origin=point halfway
+					N.subSelf(points[element]);
+					N.normalizeSelf();
+					O.set(points[cellIndex]); // plane origin=point halfway
 					// between point i and point j
-					O._addSelf(points[element]);
-					O._mulSelf(0.5);
+					O.addSelf(points[element]);
+					O.mulSelf(0.5);
 					if (offset != 0) {
-						O._addSelf(N.mul(offset));
+						O.addSelf(N.mul(offset));
 					}
 					P = new WB_Plane(O, N);
 					cutPlanes.add(P);
@@ -272,14 +272,14 @@ public class HEC_VoronoiCell extends HEC_Creator {
 			for (int j = 0; j < numberOfPoints; j++) {
 				if (cellIndex != j) {
 					final WB_Vector N = new WB_Vector(points[cellIndex]);
-					N._subSelf(points[j]);
-					N._normalizeSelf();
-					O._set(points[cellIndex]); // plane origin=point halfway
+					N.subSelf(points[j]);
+					N.normalizeSelf();
+					O.set(points[cellIndex]); // plane origin=point halfway
 					// between point i and point j
-					O._addSelf(points[j]);
-					O._mulSelf(0.5);
+					O.addSelf(points[j]);
+					O.mulSelf(0.5);
 					if (offset != 0) {
-						O._addSelf(N.mul(offset));
+						O.addSelf(N.mul(offset));
 					}
 					P = new WB_Plane(O, N);
 					cutPlanes.add(P);

@@ -65,7 +65,7 @@ public class WB_FrameStrut {
 
 	public WB_Vector toNormVector() {
 		final WB_Vector v = end().subToVector(start());
-		v._normalizeSelf();
+		v.normalizeSelf();
 		return v;
 	}
 
@@ -110,7 +110,7 @@ public class WB_FrameStrut {
 	}
 
 	public WB_Point getCenter() {
-		return end().add(start())._mulSelf(0.5);
+		return end().add(start()).mulSelf(0.5);
 	}
 
 	public WB_Segment toSegment() {

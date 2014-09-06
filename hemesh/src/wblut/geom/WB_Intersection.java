@@ -240,7 +240,7 @@ public class WB_Intersection {
 		final WB_Vector N1 = P1.getNormal();
 		final WB_Vector N2 = P2.getNormal();
 		final WB_Vector N1xN2 = new WB_Vector(N1.cross(N2));
-		if (WB_Epsilon.isZeroSq(N1xN2.getSqLength())) {
+		if (WB_Epsilon.isZeroSq(N1xN2.getSqLength3D())) {
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = false;
 			i.t1 = 0;
@@ -255,7 +255,7 @@ public class WB_Intersection {
 			final double det = 1 - N1N2 * N1N2;
 			final double c1 = (d1 - d2 * N1N2) / det;
 			final double c2 = (d2 - d1 * N1N2) / det;
-			final WB_Point O = new WB_Point(N1.mul(c1)._addSelf(N2.mul(c2)));
+			final WB_Point O = new WB_Point(N1.mul(c1).addSelf(N2.mul(c2)));
 
 			new WB_Line(O, N1xN2);
 			final WB_IntersectionResult i = new WB_IntersectionResult();
@@ -297,10 +297,10 @@ public class WB_Intersection {
 			final double d1 = P1.d();
 			final double d2 = P2.d();
 			final double d3 = P3.d();
-			final WB_Point p = new WB_Point(N2xN3)._mulSelf(d1);
-			p._addSelf(N3xN1.mul(d2));
-			p._addSelf(N1xN2.mul(d3));
-			p._divSelf(denom);
+			final WB_Point p = new WB_Point(N2xN3).mulSelf(d1);
+			p.addSelf(N3xN1.mul(d2));
+			p.addSelf(N1xN2.mul(d3));
+			p.divSelf(denom);
 
 			final WB_IntersectionResult i = new WB_IntersectionResult();
 			i.intersection = true;
@@ -331,11 +331,9 @@ public class WB_Intersection {
 		return true;
 	}
 
-	// OBB-OBB
-
 	public static boolean checkIntersection3D(final WB_AABB AABB,
 			final WB_Plane P) {
-		final WB_Point c = AABB.getMax().add(AABB.getMin())._mulSelf(0.5);
+		final WB_Point c = AABB.getMax().add(AABB.getMin()).mulSelf(0.5);
 		final WB_Point e = AABB.getMax().sub(c);
 		final double r = e.xd() * WB_Math.fastAbs(P.getNormal().xd()) + e.yd()
 				* WB_Math.fastAbs(P.getNormal().yd()) + e.zd()
@@ -344,21 +342,17 @@ public class WB_Intersection {
 		return WB_Math.fastAbs(s) <= r;
 	}
 
-	// OBB-PLANE
-
 	public static boolean checkIntersection3D(final WB_AABB AABB,
 			final WB_Sphere S) {
 		final double d2 = WB_Distance.getSqDistance3D(S.getCenter(), AABB);
 		return d2 <= S.getRadius() * S.getRadius();
 	}
 
-	// OBB-SPHERE
-
 	public static boolean checkIntersection3D(final Triangle T,
 			final WB_Sphere S) {
 		final WB_Point p = getClosestPoint3D(S.getCenter(), T);
 
-		return (p.subToVector(S.getCenter())).getSqLength() <= S.getRadius()
+		return (p.subToVector(S.getCenter())).getSqLength3D() <= S.getRadius()
 				* S.getRadius();
 	}
 
@@ -367,7 +361,7 @@ public class WB_Intersection {
 	public static boolean checkIntersection3D(final Triangle T,
 			final WB_AABB AABB) {
 		double p0, p1, p2, r;
-		final WB_Point c = AABB.getMax().add(AABB.getMin())._mulSelf(0.5);
+		final WB_Point c = AABB.getMax().add(AABB.getMin()).mulSelf(0.5);
 		final double e0 = (AABB.getMaxX() - AABB.getMinX()) * 0.5;
 		final double e1 = (AABB.getMaxY() - AABB.getMinY()) * 0.5;
 		final double e2 = (AABB.getMaxZ() - AABB.getMinZ()) * 0.5;
@@ -375,9 +369,9 @@ public class WB_Intersection {
 		final WB_Point v1 = T.p2().get();
 		final WB_Point v2 = T.p3().get();
 
-		v0._subSelf(c);
-		v1._subSelf(c);
-		v2._subSelf(c);
+		v0.subSelf(c);
+		v1.subSelf(c);
+		v2.subSelf(c);
 
 		final WB_Vector f0 = v1.subToVector(v0);
 		final WB_Vector f1 = v2.subToVector(v1);
@@ -386,7 +380,7 @@ public class WB_Intersection {
 		// a00
 		final WB_Vector a = new WB_Vector(0, -f0.zd(), f0.yd());// u0xf0
 		if (a.isZero()) {
-			a._set(0, v0.yd(), v0.zd());
+			a.set(0, v0.yd(), v0.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -400,9 +394,9 @@ public class WB_Intersection {
 		}
 
 		// a01
-		a._set(0, -f1.zd(), f1.yd());// u0xf1
+		a.set(0, -f1.zd(), f1.yd());// u0xf1
 		if (a.isZero()) {
-			a._set(0, v1.yd(), v1.zd());
+			a.set(0, v1.yd(), v1.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -416,9 +410,9 @@ public class WB_Intersection {
 		}
 
 		// a02
-		a._set(0, -f2.zd(), f2.yd());// u0xf2
+		a.set(0, -f2.zd(), f2.yd());// u0xf2
 		if (a.isZero()) {
-			a._set(0, v2.yd(), v2.zd());
+			a.set(0, v2.yd(), v2.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -432,9 +426,9 @@ public class WB_Intersection {
 		}
 
 		// a10
-		a._set(f0.zd(), 0, -f0.xd());// u1xf0
+		a.set(f0.zd(), 0, -f0.xd());// u1xf0
 		if (a.isZero()) {
-			a._set(v0.xd(), 0, v0.zd());
+			a.set(v0.xd(), 0, v0.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -447,9 +441,9 @@ public class WB_Intersection {
 			}
 		}
 		// a11
-		a._set(f1.zd(), 0, -f1.xd());// u1xf1
+		a.set(f1.zd(), 0, -f1.xd());// u1xf1
 		if (a.isZero()) {
-			a._set(v1.xd(), 0, v1.zd());
+			a.set(v1.xd(), 0, v1.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -463,9 +457,9 @@ public class WB_Intersection {
 		}
 
 		// a12
-		a._set(f2.zd(), 0, -f2.xd());// u1xf2
+		a.set(f2.zd(), 0, -f2.xd());// u1xf2
 		if (a.isZero()) {
-			a._set(v2.xd(), 0, v2.zd());
+			a.set(v2.xd(), 0, v2.zd());
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -479,9 +473,9 @@ public class WB_Intersection {
 		}
 
 		// a20
-		a._set(-f0.yd(), f0.xd(), 0);// u2xf0
+		a.set(-f0.yd(), f0.xd(), 0);// u2xf0
 		if (a.isZero()) {
-			a._set(v0.xd(), v0.yd(), 0);
+			a.set(v0.xd(), v0.yd(), 0);
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -494,9 +488,9 @@ public class WB_Intersection {
 			}
 		}
 		// a21
-		a._set(-f1.yd(), f1.xd(), 0);// u2xf1
+		a.set(-f1.yd(), f1.xd(), 0);// u2xf1
 		if (a.isZero()) {
-			a._set(v1.xd(), v1.yd(), 0);
+			a.set(v1.xd(), v1.yd(), 0);
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -510,9 +504,9 @@ public class WB_Intersection {
 		}
 
 		// a22
-		a._set(-f2.yd(), f2.xd(), 0);// u2xf2
+		a.set(-f2.yd(), f2.xd(), 0);// u2xf2
 		if (a.isZero()) {
-			a._set(v2.xd(), v2.yd(), 0);
+			a.set(v2.xd(), v2.yd(), 0);
 		}
 		if (!a.isZero()) {
 			p0 = v0.dot(a);
@@ -641,7 +635,7 @@ public class WB_Intersection {
 	public static boolean checkIntersection3D(final WB_Sphere S1,
 			final WB_Sphere S2) {
 		final WB_Vector d = S1.getCenter().subToVector(S2.getCenter());
-		final double d2 = d.getSqLength();
+		final double d2 = d.getSqLength3D();
 		final double radiusSum = S1.getRadius() + S2.getRadius();
 		return d2 <= radiusSum * radiusSum;
 	}
@@ -935,11 +929,11 @@ public class WB_Intersection {
 	public static WB_IntersectionResult getIntersection3D(final Segment S1,
 			final Segment S2) {
 		final WB_Vector d1 = new WB_Vector(S1.getEndpoint());
-		d1._subSelf(S1.getOrigin());
+		d1.subSelf(S1.getOrigin());
 		final WB_Vector d2 = new WB_Vector(S2.getEndpoint());
-		d2._subSelf(S2.getOrigin());
+		d2.subSelf(S2.getOrigin());
 		final WB_Vector r = new WB_Vector(S1.getOrigin());
-		r._subSelf(S2.getOrigin());
+		r.subSelf(S2.getOrigin());
 		final double a = d1.dot(d1);
 		final double e = d2.dot(d2);
 		final double f = d2.dot(r);
@@ -947,7 +941,7 @@ public class WB_Intersection {
 		if (WB_Epsilon.isZero(a) && WB_Epsilon.isZero(e)) {
 			// Both segments are degenerate
 			final WB_IntersectionResult i = new WB_IntersectionResult();
-			i.sqDist = r.getSqLength();
+			i.sqDist = r.getSqLength3D();
 			i.intersection = WB_Epsilon.isZeroSq(i.sqDist);
 			if (i.intersection) {
 				i.dimension = 0;
@@ -963,7 +957,7 @@ public class WB_Intersection {
 		if (WB_Epsilon.isZero(a)) {
 			// First segment is degenerate
 			final WB_IntersectionResult i = new WB_IntersectionResult();
-			i.sqDist = r.getSqLength();
+			i.sqDist = r.getSqLength3D();
 			i.intersection = WB_Epsilon.isZeroSq(i.sqDist);
 			if (i.intersection) {
 				i.dimension = 0;
@@ -980,7 +974,7 @@ public class WB_Intersection {
 		if (WB_Epsilon.isZero(e)) {
 			// Second segment is degenerate
 			final WB_IntersectionResult i = new WB_IntersectionResult();
-			i.sqDist = r.getSqLength();
+			i.sqDist = r.getSqLength3D();
 			i.intersection = WB_Epsilon.isZeroSq(i.sqDist);
 			if (i.intersection) {
 				i.dimension = 0;
@@ -1053,8 +1047,8 @@ public class WB_Intersection {
 					i.sqDist = WB_Distance.getSqDistance3D(start, end);
 					i.intersection = false;
 					i.dimension = 1;
-					start._addSelf(end);
-					start._scaleSelf(0.5);
+					start.addSelf(end);
+					start.scaleSelf(0.5);
 					end = getClosestPoint3D(start, S2);
 					i.object = new WB_Segment(start, end);
 					return i;
@@ -1220,7 +1214,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxX()) {
 			v = AABB.getMaxX();
 		}
-		result._setX(v);
+		result.setX(v);
 		v = p.yd();
 		if (v < AABB.getMinY()) {
 			v = AABB.getMinY();
@@ -1228,7 +1222,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxY()) {
 			v = AABB.getMaxY();
 		}
-		result._setY(v);
+		result.setY(v);
 		v = p.zd();
 		if (v < AABB.getMinZ()) {
 			v = AABB.getMinZ();
@@ -1236,7 +1230,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxZ()) {
 			v = AABB.getMaxZ();
 		}
-		result._setZ(v);
+		result.setZ(v);
 
 		return result;
 	}
@@ -1250,7 +1244,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxX()) {
 			v = AABB.getMaxX();
 		}
-		result._setX(v);
+		result.setX(v);
 		v = p.yd();
 		if (v < AABB.getMinY()) {
 			v = AABB.getMinY();
@@ -1258,7 +1252,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxY()) {
 			v = AABB.getMaxY();
 		}
-		result._setY(v);
+		result.setY(v);
 		v = p.zd();
 		if (v < AABB.getMinZ()) {
 			v = AABB.getMinZ();
@@ -1266,7 +1260,7 @@ public class WB_Intersection {
 		if (v > AABB.getMaxZ()) {
 			v = AABB.getMaxZ();
 		}
-		result._setZ(v);
+		result.setZ(v);
 	}
 
 	// POINT-TRIANGLE
@@ -1292,7 +1286,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return T.p1().add(ab._mulSelf(v));
+			return T.p1().add(ab.mulSelf(v));
 		}
 
 		final WB_Vector cp = new WB_Vector(T.p3(), p);
@@ -1305,19 +1299,19 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return T.p1().add(ac._mulSelf(w));
+			return T.p1().add(ac.mulSelf(w));
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return T.p2().add((T.p3().subToVector(T.p2()))._mulSelf(w));
+			return T.p2().add((T.p3().subToVector(T.p2())).mulSelf(w));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
 		final double v = vb * denom;
 		final double w = vc * denom;
-		return T.p1().add(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		return T.p1().add(ab.mulSelf(v).addSelf(ac.mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointToTriangle3D(final WB_Coordinate p,
@@ -1341,7 +1335,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return new WB_Point(a)._addSelf(ab._mulSelf(v));
+			return new WB_Point(a).addSelf(ab.mulSelf(v));
 		}
 
 		final WB_Vector cp = new WB_Vector(c, p);
@@ -1354,20 +1348,19 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return new WB_Point(a)._addSelf(ac._mulSelf(w));
+			return new WB_Point(a).addSelf(ac.mulSelf(w));
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return new WB_Point(b)._addSelf(new WB_Vector(b, c)._mulSelf(w));
+			return new WB_Point(b).addSelf(new WB_Vector(b, c).mulSelf(w));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
 		final double v = vb * denom;
 		final double w = vc * denom;
-		return new WB_Point(a)
-		._addSelf(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		return new WB_Point(a).addSelf(ab.mulSelf(v).addSelf(ac.mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
@@ -1391,7 +1384,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return T.p1().add(ab._mulSelf(v));
+			return T.p1().add(ab.mulSelf(v));
 		}
 
 		final WB_Vector cp = new WB_Vector(T.p3(), p);
@@ -1404,13 +1397,13 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return T.p1().add(ac._mulSelf(w));
+			return T.p1().add(ac.mulSelf(w));
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return T.p2().add((T.p3().subToVector(T.p2()))._mulSelf(w));
+			return T.p2().add((T.p3().subToVector(T.p2())).mulSelf(w));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
@@ -1629,7 +1622,7 @@ public class WB_Intersection {
 		double bestSqDist = Double.POSITIVE_INFINITY;
 		if (WB_Plane.pointOtherSideOfPlane(p, T.p4, T.p1, T.p2, T.p3)) {
 			final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p2, T.p3);
-			final double sqDist = (q.subToVector(p)).getSqLength();
+			final double sqDist = (q.subToVector(p)).getSqLength3D();
 			if (sqDist < bestSqDist) {
 				bestSqDist = sqDist;
 				closestPt = q;
@@ -1638,7 +1631,7 @@ public class WB_Intersection {
 
 		if (WB_Plane.pointOtherSideOfPlane(p, T.p2, T.p1, T.p3, T.p4)) {
 			final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p3, T.p4);
-			final double sqDist = (q.subToVector(p)).getSqLength();
+			final double sqDist = (q.subToVector(p)).getSqLength3D();
 			if (sqDist < bestSqDist) {
 				bestSqDist = sqDist;
 				closestPt = q;
@@ -1647,7 +1640,7 @@ public class WB_Intersection {
 
 		if (WB_Plane.pointOtherSideOfPlane(p, T.p3, T.p1, T.p4, T.p2)) {
 			final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p4, T.p2);
-			final double sqDist = (q.subToVector(p)).getSqLength();
+			final double sqDist = (q.subToVector(p)).getSqLength3D();
 			if (sqDist < bestSqDist) {
 				bestSqDist = sqDist;
 				closestPt = q;
@@ -1656,7 +1649,7 @@ public class WB_Intersection {
 
 		if (WB_Plane.pointOtherSideOfPlane(p, T.p1, T.p2, T.p4, T.p3)) {
 			final WB_Point q = getClosestPointToTriangle3D(p, T.p2, T.p4, T.p3);
-			final double sqDist = (q.subToVector(p)).getSqLength();
+			final double sqDist = (q.subToVector(p)).getSqLength3D();
 			if (sqDist < bestSqDist) {
 				bestSqDist = sqDist;
 				closestPt = q;
@@ -1922,13 +1915,13 @@ public class WB_Intersection {
 		double tmp = d0 / (d0 - d1);
 		intersection.s0 = vv0 + (vv1 - vv0) * tmp;
 		WB_Vector diff = new WB_Vector(v0, v1);
-		diff._mulSelf(tmp);
+		diff.mulSelf(tmp);
 		intersection.p0 = v0.add(diff);
 
 		tmp = d0 / (d0 - d2);
 		intersection.s1 = vv0 + (vv2 - vv0) * tmp;
 		diff = new WB_Vector(v0, v2);
-		diff._mulSelf(tmp);
+		diff.mulSelf(tmp);
 		intersection.p1 = v0.add(diff);
 
 		return intersection;
@@ -2296,7 +2289,7 @@ public class WB_Intersection {
 			final WB_Circle C1) {
 		final ArrayList<WB_Point> result = new ArrayList<WB_Point>();
 		final WB_Point u = C1.getCenter().sub(C0.getCenter());
-		final double d2 = u.getSqLength();
+		final double d2 = u.getSqLength3D();
 		final double d = Math.sqrt(d2);
 		if (WB_Epsilon.isEqualAbs(d, C0.getRadius() + C1.getRadius())) {
 			result.add(factory.createInterpolatedPoint(C0.getCenter(),
@@ -2312,7 +2305,7 @@ public class WB_Intersection {
 		final double r12 = C1.getRadius() * C1.getRadius();
 		final double a = (r02 - r12 + d2) / (2 * d);
 		final double h = Math.sqrt(r02 - a * a);
-		final WB_Point c = u.mul(a / d)._addSelf(C0.getCenter());
+		final WB_Point c = u.mul(a / d).addSelf(C0.getCenter());
 		final double p0x = c.xd() + h
 				* (C1.getCenter().yd() - C0.getCenter().yd()) / d;
 		final double p0y = c.yd() - h
@@ -2337,8 +2330,8 @@ public class WB_Intersection {
 		final double b = 2 * (L.getDirection().xd()
 				* (L.getOrigin().xd() - C.getCenter().xd()) + L.getDirection()
 				.yd() * (L.getOrigin().yd() - C.getCenter().yd()));
-		final double c = C.getCenter().getSqLength()
-				+ L.getOrigin().getSqLength()
+		final double c = C.getCenter().getSqLength3D()
+				+ L.getOrigin().getSqLength3D()
 				- 2
 				* (C.getCenter().xd() * L.getOrigin().xd() + C.getCenter().yd()
 						* L.getOrigin().yd()) - C.getRadius() * C.getRadius();
@@ -2489,7 +2482,7 @@ public class WB_Intersection {
 			i.object = new WB_Segment(S1.getOrigin().get(), S2.getOrigin()
 					.get());
 			i.dimension = 1;
-			i.sqDist = r.getSqLength();
+			i.sqDist = r.getSqLength3D();
 			return i;
 		}
 
@@ -2667,7 +2660,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return T.p1.add(ab._mulSelf(v));
+			return T.p1.add(ab.mulSelf(v));
 		}
 
 		final WB_Vector cp = new WB_Vector(T.p3, p);
@@ -2680,19 +2673,19 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return T.p1.add(ac._mulSelf(w));
+			return T.p1.add(ac.mulSelf(w));
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return T.p2.add((T.p3.sub(T.p2))._mulSelf(w));
+			return T.p2.add((T.p3.sub(T.p2)).mulSelf(w));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
 		final double v = vb * denom;
 		final double w = vc * denom;
-		return T.p1.add(ab._mulSelf(v)._addSelf(ac._mulSelf(w)));
+		return T.p1.add(ab.mulSelf(v).addSelf(ac.mulSelf(w)));
 	}
 
 	public static WB_Point getClosestPointToTriangle2D(final WB_Coordinate p,
@@ -2716,7 +2709,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return new WB_Point(a)._addMulSelf(v, ab);
+			return new WB_Point(a).addMulSelf(v, ab);
 		}
 
 		final WB_Vector cp = new WB_Vector(c, p);
@@ -2729,19 +2722,19 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return new WB_Point(a)._addMulSelf(w, ac);
+			return new WB_Point(a).addMulSelf(w, ac);
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return new WB_Point(b)._addMulSelf(w, new WB_Vector(b, c));
+			return new WB_Point(b).addMulSelf(w, new WB_Vector(b, c));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
 		final double v = vb * denom;
 		final double w = vc * denom;
-		return new WB_Point(a)._addMulSelf(w, ac)._addMulSelf(v, ab);
+		return new WB_Point(a).addMulSelf(w, ac).addMulSelf(v, ab);
 
 	}
 
@@ -2766,7 +2759,7 @@ public class WB_Intersection {
 		final double vc = d1 * d4 - d3 * d2;
 		if (vc <= 0 && d1 >= 0 && d3 <= 0) {
 			final double v = d1 / (d1 - d3);
-			return T.p1.add(ab._mulSelf(v));
+			return T.p1.add(ab.mulSelf(v));
 		}
 
 		final WB_Vector cp = new WB_Vector(T.p3, p);
@@ -2779,13 +2772,13 @@ public class WB_Intersection {
 		final double vb = d5 * d2 - d1 * d6;
 		if (vb <= 0 && d2 >= 0 && d6 <= 0) {
 			final double w = d2 / (d2 - d6);
-			return T.p1.add(ac._mulSelf(w));
+			return T.p1.add(ac.mulSelf(w));
 		}
 
 		final double va = d3 * d6 - d5 * d4;
 		if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 			final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-			return T.p2.add((T.p3.sub(T.p2))._mulSelf(w));
+			return T.p2.add((T.p3.sub(T.p2)).mulSelf(w));
 		}
 
 		final double denom = 1.0 / (va + vb + vc);
@@ -2956,7 +2949,7 @@ public class WB_Intersection {
 			i.object = new WB_Segment(S1.getOrigin().get(), S2.getOrigin()
 					.get());
 			i.dimension = 1;
-			i.sqDist = r.getSqLength();
+			i.sqDist = r.getSqLength3D();
 			return i;
 		}
 

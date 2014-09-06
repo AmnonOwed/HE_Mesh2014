@@ -75,7 +75,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v._set(newPositions.get(v.getKey()));
+				v.set(newPositions.get(v.getKey()));
 
 			}
 
@@ -130,7 +130,7 @@ public class HEM_Soapfilm extends HEM_Modifier {
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v._set(newPositions.get(v.getKey()));
+				v.set(newPositions.get(v.getKey()));
 
 			}
 		}
@@ -167,12 +167,12 @@ public class HEM_Soapfilm extends HEM_Modifier {
 						neighbor.zd(), v.xd(), v.yd(), v.zd());
 				cotsum += cotb / Math.sqrt(1 - cotb * cotb);
 			}
-			result._addMulSelf(cotsum, neighbor);
+			result.addMulSelf(cotsum, neighbor);
 			weight += cotsum;
 		}
 
 		if (!WB_Epsilon.isZero(weight)) {
-			result._divSelf(weight);
+			result.divSelf(weight);
 		}
 		return result;
 	}

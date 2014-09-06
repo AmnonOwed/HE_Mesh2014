@@ -82,7 +82,7 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
 		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
-		return Math.abs(a.dot(b._crossSelf(c))) / 6.0;
+		return Math.abs(a.dot(b.crossSelf(c))) / 6.0;
 	}
 
 	/** Calculate the radius of the circumsphere. */
@@ -91,11 +91,11 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
 		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
-		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
-		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
-		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
-		O._mulSelf(1.0 / (2 * a.dot(b._crossSelf(c))));
-		return O.getLength();
+		final WB_Vector O = b.cross(c).mulSelf(a.dot(a));
+		O.addSelf(c.cross(a).mulSelf(b.dot(b)));
+		O.addSelf(a.cross(b).mulSelf(c.dot(c)));
+		O.mulSelf(1.0 / (2 * a.dot(b.crossSelf(c))));
+		return O.getLength3D();
 	}
 
 	/** Find the center of the circumscribing sphere. */
@@ -104,10 +104,10 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
 		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
-		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
-		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
-		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
-		O._mulSelf(1.0 / (2 * a.dot(b._crossSelf(c))));
+		final WB_Vector O = b.cross(c).mulSelf(a.dot(a));
+		O.addSelf(c.cross(a).mulSelf(b.dot(b)));
+		O.addSelf(a.cross(b).mulSelf(c.dot(c)));
+		O.mulSelf(1.0 / (2 * a.dot(b.crossSelf(c))));
 		return p4.add(O);
 	}
 
@@ -117,11 +117,11 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector a = geometryfactory.createVectorFromTo(p1, p4);
 		final WB_Vector b = geometryfactory.createVectorFromTo(p2, p4);
 		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
-		final WB_Vector O = b.cross(c)._mulSelf(a.dot(a));
-		O._addSelf(c.cross(a)._mulSelf(b.dot(b)));
-		O._addSelf(a.cross(b)._mulSelf(c.dot(c)));
-		O._mulSelf(1.0 / (2 * a.dot(b._crossSelf(c))));
-		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
+		final WB_Vector O = b.cross(c).mulSelf(a.dot(a));
+		O.addSelf(c.cross(a).mulSelf(b.dot(b)));
+		O.addSelf(a.cross(b).mulSelf(c.dot(c)));
+		O.mulSelf(1.0 / (2 * a.dot(b.crossSelf(c))));
+		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength3D());
 	}
 
 	/** Calculate the radius of the insphere. */
@@ -132,10 +132,10 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector c = geometryfactory.createVectorFromTo(p3, p4);
 		final WB_Vector bXc = b.cross(c);
 		final double sixV = Math.abs(a.dot(bXc));
-		c._crossSelf(a);
-		a._crossSelf(b);
-		final double denom = bXc.getLength() + c.getLength() + a.getLength()
-				+ (bXc._addMulSelf(2, a).getLength());
+		c.crossSelf(a);
+		a.crossSelf(b);
+		final double denom = bXc.getLength3D() + c.getLength3D() + a.getLength3D()
+				+ (bXc.addMulSelf(2, a).getLength3D());
 		return sixV / denom;
 	}
 
@@ -148,14 +148,14 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector bXc = b.cross(c);
 		final WB_Vector cXa = c.cross(a);
 		final WB_Vector aXb = a.cross(b);
-		final double bXcLength = bXc.getLength();
-		final double cXaLength = cXa.getLength();
-		final double aXbLength = aXb.getLength();
-		final double dLength = bXc._addSelf(cXa)._addSelf(aXb).getLength();
-		final WB_Vector O = a._mulSelf(bXcLength);
-		O._addSelf(b._mulSelf(cXaLength));
-		O._addSelf(c._mulSelf(aXbLength));
-		O._divSelf(bXcLength + cXaLength + aXbLength + dLength);
+		final double bXcLength = bXc.getLength3D();
+		final double cXaLength = cXa.getLength3D();
+		final double aXbLength = aXb.getLength3D();
+		final double dLength = bXc.addSelf(cXa).addSelf(aXb).getLength3D();
+		final WB_Vector O = a.mulSelf(bXcLength);
+		O.addSelf(b.mulSelf(cXaLength));
+		O.addSelf(c.mulSelf(aXbLength));
+		O.divSelf(bXcLength + cXaLength + aXbLength + dLength);
 		return p4.add(O);
 	}
 
@@ -166,15 +166,15 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final WB_Vector bXc = b.cross(c);
 		final WB_Vector cXa = c.cross(a);
 		final WB_Vector aXb = a.cross(b);
-		final double bXcLength = bXc.getLength();
-		final double cXaLength = cXa.getLength();
-		final double aXbLength = aXb.getLength();
-		final double dLength = bXc._addSelf(cXa)._addSelf(aXb).getLength();
-		final WB_Vector O = a._mulSelf(bXcLength);
-		O._addSelf(b._mulSelf(cXaLength));
-		O._addSelf(c._mulSelf(aXbLength));
-		O._divSelf(bXcLength + cXaLength + aXbLength + dLength);
-		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength());
+		final double bXcLength = bXc.getLength3D();
+		final double cXaLength = cXa.getLength3D();
+		final double aXbLength = aXb.getLength3D();
+		final double dLength = bXc.addSelf(cXa).addSelf(aXb).getLength3D();
+		final WB_Vector O = a.mulSelf(bXcLength);
+		O.addSelf(b.mulSelf(cXaLength));
+		O.addSelf(c.mulSelf(aXbLength));
+		O.divSelf(bXcLength + cXaLength + aXbLength + dLength);
+		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength3D());
 
 	}
 

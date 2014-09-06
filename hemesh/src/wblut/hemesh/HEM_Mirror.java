@@ -118,7 +118,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		for (final HE_Vertex v : vertices) {
 			final WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
 			final WB_Vector dv = v.getPoint().subToVector(p);
-			v.getPoint()._addMulSelf(-2, dv);
+			v.getPoint().addMulSelf(-2, dv);
 		}
 		mirrormesh.flipAllFaces();
 

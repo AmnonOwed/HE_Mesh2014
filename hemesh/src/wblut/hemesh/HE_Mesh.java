@@ -328,7 +328,7 @@ WB_HasColor, WB_Mesh {
 			}
 
 		}
-		result._center._set(_center);
+		result._center.set(_center);
 		result._centerUpdated = _centerUpdated;
 		return result;
 	}
@@ -711,12 +711,12 @@ WB_HasColor, WB_Mesh {
 	 */
 	public void setVerticesFromFloat(final float[][] values) {
 		int i = 0;
-		_center._set(0, 0, 0);
+		_center.set(0, 0, 0);
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(values[i][0], values[i][1], values[i][2]);
+			v.set(values[i][0], values[i][1], values[i][2]);
 			i++;
 		}
 
@@ -730,12 +730,12 @@ WB_HasColor, WB_Mesh {
 	 */
 	public void setVerticesFromPoint(final WB_Point[] values) {
 		int i = 0;
-		_center._set(0, 0, 0);
+		_center.set(0, 0, 0);
 		HE_Vertex v;
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(values[i]);
+			v.set(values[i]);
 			i++;
 		}
 		;
@@ -754,7 +754,7 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(values[i][0], values[i][1], values[i][2]);
+			v.set(values[i][0], values[i][1], values[i][2]);
 			i++;
 
 		}
@@ -774,7 +774,7 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(values[i][0], values[i][1], values[i][2]);
+			v.set(values[i][0], values[i][1], values[i][2]);
 			i++;
 
 		}
@@ -923,10 +923,10 @@ WB_HasColor, WB_Mesh {
 	 * @return self
 	 */
 	public HE_Mesh move(final double x, final double y, final double z) {
-		_center._addSelf(x, y, z);
+		_center.addSelf(x, y, z);
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
-			vItr.next().getPoint()._addSelf(x, y, z);
+			vItr.next().getPoint().addSelf(x, y, z);
 		}
 		return this;
 	}
@@ -961,10 +961,10 @@ WB_HasColor, WB_Mesh {
 		while (vItr.hasNext()) {
 			vItr.next()
 					.getPoint()
-					._addSelf(x - _center.xd(), y - _center.yd(),
+					.addSelf(x - _center.xd(), y - _center.yd(),
 							z - _center.zd());
 		}
-		_center._set(x, y, z);
+		_center.set(x, y, z);
 		return this;
 	}
 
@@ -1098,11 +1098,11 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(c.xd() + scaleFactorx * (v.xd() - c.xd()), c.yd()
+			v.set(c.xd() + scaleFactorx * (v.xd() - c.xd()), c.yd()
 					+ scaleFactory * (v.yd() - c.yd()), c.zd() + scaleFactorz
 					* (v.zd() - c.zd()));
 		}
-		_center._set(c.xd() + scaleFactorx * (-c.xd() + _center.xd()), c.yd()
+		_center.set(c.xd() + scaleFactorx * (-c.xd() + _center.xd()), c.yd()
 				+ scaleFactory * (-c.yd() + _center.yd()), c.zd()
 				+ scaleFactorz * (-c.zd() + _center.zd()));
 		;
@@ -1142,7 +1142,7 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(_center.xd() + scaleFactorx * (v.xd() - _center.xd()),
+			v.set(_center.xd() + scaleFactorx * (v.xd() - _center.xd()),
 					_center.yd() + scaleFactory * (v.yd() - _center.yd()),
 					_center.zd() + scaleFactorz * (v.zd() - _center.zd()));
 		}
@@ -1184,12 +1184,12 @@ WB_HasColor, WB_Mesh {
 	 *
 	 */
 	public void resetCenter() {
-		_center._set(0, 0, 0);
+		_center.set(0, 0, 0);
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
-			_center._addSelf(vItr.next());
+			_center.addSelf(vItr.next());
 		}
-		_center._divSelf(getNumberOfVertices());
+		_center.divSelf(getNumberOfVertices());
 		_centerUpdated = true;
 
 	}
@@ -1767,7 +1767,7 @@ WB_HasColor, WB_Mesh {
 			final HE_Face fp = hePair.getFace();
 			final HE_Vertex v = he.getVertex();
 			final HE_Vertex vp = hePair.getVertex();
-			vp.getPoint()._addSelf(v)._mulSelf(0.5);
+			vp.getPoint().addSelf(v).mulSelf(0.5);
 
 			final List<HE_Halfedge> tmp = v.getHalfedgeStar();
 			for (int i = 0; i < tmp.size(); i++) {
@@ -1813,7 +1813,7 @@ WB_HasColor, WB_Mesh {
 					if ((!he.isBoundary()) || strict) {
 						return false;
 					}
-					vp.getPoint()._addSelf(v)._mulSelf(0.5);
+					vp.getPoint().addSelf(v).mulSelf(0.5);
 				}
 				else {
 					vp.set(v);
@@ -1821,7 +1821,7 @@ WB_HasColor, WB_Mesh {
 			}
 			else {
 				if (!vp.isBoundary()) {
-					vp.getPoint()._addSelf(v)._mulSelf(0.5);
+					vp.getPoint().addSelf(v).mulSelf(0.5);
 				}
 
 			}
@@ -2228,7 +2228,7 @@ WB_HasColor, WB_Mesh {
 		final int n = getNumberOfEdges();
 		for (int i = 0; i < n; i++) {
 			final WB_Point p = new WB_Point(edges[i].getEdgeNormal());
-			p._mulSelf(offset)._addSelf(edges[i].getHalfedgeCenter());
+			p.mulSelf(offset).addSelf(edges[i].getHalfedgeCenter());
 			selectionOut.union(splitEdge(edges[i], p));
 		}
 		return selectionOut;
@@ -2271,7 +2271,7 @@ WB_HasColor, WB_Mesh {
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			final WB_Point p = new WB_Point(e.getEdgeNormal());
-			p._mulSelf(offset)._addSelf(e.getHalfedgeCenter());
+			p.mulSelf(offset).addSelf(e.getHalfedgeCenter());
 			selectionOut.union(splitEdge(e, p));
 		}
 		selection.addHalfedges(selectionOut.getEdgesAsArray());
@@ -2601,7 +2601,7 @@ WB_HasColor, WB_Mesh {
 	 */
 	public HE_Selection splitFaceTri(final HE_Face face, final double d) {
 		return splitFaceTri(face,
-				face.getFaceCenter()._addMulSelf(d, face.getFaceNormal()));
+				face.getFaceCenter().addMulSelf(d, face.getFaceNormal()));
 	}
 
 	/**
@@ -3797,7 +3797,7 @@ WB_HasColor, WB_Mesh {
 	public HE_Selection selectFaces(final WB_Vector v) {
 		final HE_Selection _selection = new HE_Selection(this);
 		final WB_Vector w = v.get();
-		w._normalizeSelf();
+		w.normalizeSelf();
 		HE_Face f;
 		final Iterator<HE_Face> fItr = fItr();
 

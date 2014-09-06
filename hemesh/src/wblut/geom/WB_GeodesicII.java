@@ -475,10 +475,10 @@ public class WB_GeodesicII {
 		}
 
 		for (final WB_Point p : points) {
-			p._applyAsPointSelf(T);
+			p.applyAsPointSelf(T);
 		}
 
-		final double threshold = LCDPoints[0][0].getDistance(LCDPoints[0][hv])
+		final double threshold = LCDPoints[0][0].getDistance3D(LCDPoints[0][hv])
 				/ (2 * v);
 		mesh = gf.createUniqueMesh(gf.createMesh(points, faces), threshold);
 

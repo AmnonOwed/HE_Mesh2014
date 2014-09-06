@@ -48,7 +48,7 @@ public class HEM_Twist extends HEM_Modifier {
 	public HEM_Twist setTwistAxisFromPoints(final WB_Coordinate a,
 			final WB_Coordinate b) {
 		final WB_Vector axis = new WB_Vector(a, b);
-		axis._normalizeSelf();
+		axis.normalizeSelf();
 		twistAxis = new WB_Line(a, axis);
 		return this;
 	}

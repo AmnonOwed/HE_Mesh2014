@@ -154,9 +154,9 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		for (int i = 0; i < points.length; i++) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = points[i];
-			jpoints[i] = points[i].get()._addSelf(v);
+			jpoints[i] = points[i].get().addSelf(v);
 		}
 
 		ac = null;
@@ -170,9 +170,9 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		for (int i = 0; i < points.length; i++) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = new WB_Point(points[i]);
-			jpoints[i] = points[i].get().getPoint()._addSelf(v);
+			jpoints[i] = points[i].get().getPoint().addSelf(v);
 		}
 		ac = null;
 		return this;
@@ -187,9 +187,9 @@ public class HEC_AlphaShape extends HEC_Creator {
 		int i = 0;
 		for (final WB_Point p : points) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = p;
-			jpoints[i] = p.get()._addSelf(v);
+			jpoints[i] = p.get().addSelf(v);
 			i++;
 		}
 		ac = null;
@@ -206,9 +206,9 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		while (itr.hasNext()) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = itr.next().getPoint();
-			jpoints[i] = this.points[i].get()._addSelf(v);
+			jpoints[i] = this.points[i].get().addSelf(v);
 			i++;
 		}
 		ac = null;
@@ -222,10 +222,10 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		for (int i = 0; i < n; i++) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = new WB_Point(points[i][0], points[i][1],
 					points[i][2]);
-			jpoints[i] = this.points[i].get()._addSelf(v);
+			jpoints[i] = this.points[i].get().addSelf(v);
 		}
 		ac = null;
 		return this;
@@ -238,10 +238,10 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		for (int i = 0; i < n; i++) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = new WB_Point(points[i][0], points[i][1],
 					points[i][2]);
-			jpoints[i] = this.points[i].get()._addSelf(v);
+			jpoints[i] = this.points[i].get().addSelf(v);
 		}
 		ac = null;
 		return this;
@@ -254,10 +254,10 @@ public class HEC_AlphaShape extends HEC_Creator {
 		WB_Vector v;
 		for (int i = 0; i < n; i++) {
 			v = new WB_Vector(Math.random(), Math.random(), Math.random());
-			v._subSelf(-0.5, -0.5, -0.5)._mulSelf(joggle);
+			v.subSelf(-0.5, -0.5, -0.5).mulSelf(joggle);
 			this.points[i] = new WB_Point(points[i][0], points[i][1],
 					points[i][2]);
-			jpoints[i] = this.points[i].get()._addSelf(v);
+			jpoints[i] = this.points[i].get().addSelf(v);
 		}
 		ac = null;
 		return this;

@@ -308,7 +308,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							do {
 
 								he.getVertex().getPoint()
-										._addMulSelf(heights[i], n);
+										.addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -331,7 +331,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							final HE_Vertex v = he.getVertex();
 							he.getVertex()
 									.getPoint()
-									._addMulSelf(
+									.addMulSelf(
 											d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
@@ -414,7 +414,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 
 							he.getVertex().getPoint()
-									._addMulSelf(heights[i], n);
+									.addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -433,7 +433,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					he = f.getHalfedge();
 					do {
 						final HE_Vertex v = he.getVertex();
-						v.getPoint()._addMulSelf(
+						v.getPoint().addMulSelf(
 								d.value(v.xd(), v.yd(), v.zd()), n);
 						he = he.getNextInFace();
 					} while (he != f.getHalfedge());
@@ -567,7 +567,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					.getVertex());
 
 			if (n != null) {
-				eov.getPoint()._addMulSelf(d, n);
+				eov.getPoint().addMulSelf(d, n);
 			}
 			extOuterVertices.add(eov);
 
@@ -576,7 +576,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		for (int i = 0; i < vertices.size(); i++) {
 			final HE_Vertex v = vertices.get(i);
 			if (!outerVertices.contains(v)) {
-				v.getPoint()._addMulSelf(d, n);
+				v.getPoint().addMulSelf(d, n);
 			}
 
 		}
@@ -715,7 +715,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		walls.add(f);
 		f.setInternalLabel(4);
 		final HE_Face[] newFaces = mesh.splitFaceTri(f,
-				fc._addSelf(n._mulSelf(d))).getFacesAsArray();
+				fc.addSelf(n.mulSelf(d))).getFacesAsArray();
 		for (final HE_Face newFace : newFaces) {
 			newFace.copyProperties(f);
 		}
@@ -779,7 +779,7 @@ public class HEM_Extrude extends HEM_Modifier {
 					if ((f1.getInternalLabel() == 2)
 							&& (f2.getInternalLabel() == 2)) {
 						if ((f1.getFaceNormal().cross((f2.getFaceNormal()))
-								.getSqLength()) < sin2FA) {
+								.getSqLength3D()) < sin2FA) {
 							final HE_Face f = mesh.deleteEdge(e);
 							if (f != null) {
 								f.setInternalLabel(3);
@@ -834,9 +834,9 @@ public class HEM_Extrude extends HEM_Modifier {
 				he = faceHalfedges.get(i);
 				ch = Math.max(_halfedgeEWs.get(he.key()),
 						_halfedgeEWs.get(he.getPrevInFace().key()));
-				diff._mulSelf(ch);
-				diff._addSelf(v);
-				extFaceVertices.get(i)._set(diff);
+				diff.mulSelf(ch);
+				diff.addSelf(v);
+				extFaceVertices.get(i).set(diff);
 			}
 		}
 		else {
@@ -856,13 +856,13 @@ public class HEM_Extrude extends HEM_Modifier {
 					final int inew = poly.closestIndex(faceVertices.get(0));
 
 					for (int i = 0; i < n; i++) {
-						extFaceVertices.get(i)._set(
+						extFaceVertices.get(i).set(
 								poly.getPoint((inew + i) % n));
 					}
 				}
 				else if (poly.n > 2) {
 					for (int i = 0; i < n; i++) {
-						extFaceVertices.get(i)._set(
+						extFaceVertices.get(i).set(
 								poly.closestPoint(faceVertices.get(i)));
 					}
 				}
@@ -887,7 +887,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							.getIntersection3D(S1, S2);
 					final WB_Point p = (ir.dimension == 0) ? (WB_Point) ir.object
 							: ((Segment) ir.object).getCenter();
-					extFaceVertices.get(i)._set(p);
+					extFaceVertices.get(i).set(p);
 					v1 = v2;
 					v2 = v3;
 

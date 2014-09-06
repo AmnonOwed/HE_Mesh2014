@@ -90,17 +90,17 @@ public class HES_DooSabin extends HES_Subdividor {
 			fc = f.getFaceCenter();
 			do {
 				final WB_Point p = fc.mul(faceFactor);
-				p._addSelf(he.getVertex());
-				p._addSelf(he.getHalfedgeCenter().mul(edgeFactor));
-				p._addSelf(he.getPrevInFace().getHalfedgeCenter()
+				p.addSelf(he.getVertex());
+				p.addSelf(he.getHalfedgeCenter().mul(edgeFactor));
+				p.addSelf(he.getPrevInFace().getHalfedgeCenter()
 						.mul(edgeFactor));
-				p._divSelf(div);
+				p.divSelf(div);
 				if (absolute) {
 					final double dcurrent = WB_Distance.getDistance3D(p,
 							he.getVertex());
-					p._subSelf(he.getVertex());
-					p._mulSelf(d / dcurrent);
-					p._addSelf(he.getVertex());
+					p.subSelf(he.getVertex());
+					p.mulSelf(d / dcurrent);
+					p.addSelf(he.getVertex());
 
 				}
 

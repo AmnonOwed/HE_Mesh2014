@@ -83,109 +83,109 @@ public class WB_CoordinateSystem {
 	}
 
 	public WB_CoordinateSystem setOrigin(final WB_Point o) {
-		_origin._set(o);
+		_origin.set(o);
 		return this;
 	}
 
 	public WB_CoordinateSystem setOrigin(final double ox, final double oy,
 			final double oz) {
-		_origin._set(ox, oy, oz);
+		_origin.set(ox, oy, oz);
 		return this;
 	}
 
 	public WB_CoordinateSystem setXY(final WB_Coordinate X,
 			final WB_Coordinate Y) {
-		_X._set(X);
-		_X._normalizeSelf();
-		_Y._set(Y);
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		if (WB_Epsilon.isZeroSq(_Z.getSqLength())) {
+		_X.set(X);
+		_X.normalizeSelf();
+		_Y.set(Y);
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		if (WB_Epsilon.isZeroSq(_Z.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		_Y._normalizeSelf();
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		_Y.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setYX(final WB_Coordinate Y,
 			final WB_Coordinate X) {
-		_X._set(X);
-		_X._normalizeSelf();
-		_Y._set(Y);
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		if (WB_Epsilon.isZeroSq(_Z.getSqLength())) {
+		_X.set(X);
+		_X.normalizeSelf();
+		_Y.set(Y);
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		if (WB_Epsilon.isZeroSq(_Z.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		_X._normalizeSelf();
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		_X.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setXZ(final WB_Coordinate X,
 			final WB_Coordinate Z) {
-		_X._set(X);
-		_X._normalizeSelf();
-		_Z._set(Z);
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		if (WB_Epsilon.isZeroSq(_Y.getSqLength())) {
+		_X.set(X);
+		_X.normalizeSelf();
+		_Z.set(Z);
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		if (WB_Epsilon.isZeroSq(_Y.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		_Z._normalizeSelf();
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		_Z.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setZX(final WB_Coordinate Z,
 			final WB_Coordinate X) {
-		_X._set(X);
-		_X._normalizeSelf();
-		_Z._set(Z);
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		if (WB_Epsilon.isZeroSq(_Y.getSqLength())) {
+		_X.set(X);
+		_X.normalizeSelf();
+		_Z.set(Z);
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		if (WB_Epsilon.isZeroSq(_Y.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Y._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		_X._normalizeSelf();
+		_Y.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		_X.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setYZ(final WB_Coordinate Y,
 			final WB_Coordinate Z) {
-		_Y._set(Y);
-		_Y._normalizeSelf();
-		_Z._set(Z);
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		if (WB_Epsilon.isZeroSq(_X.getSqLength())) {
+		_Y.set(Y);
+		_Y.normalizeSelf();
+		_Z.set(Z);
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		if (WB_Epsilon.isZeroSq(_X.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_X._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		_Z._normalizeSelf();
+		_X.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		_Z.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setZY(final WB_Coordinate Z,
 			final WB_Coordinate Y) {
-		_Y._set(Y);
-		_Y._normalizeSelf();
-		_Z._set(Z);
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		if (WB_Epsilon.isZeroSq(_X.getSqLength())) {
+		_Y.set(Y);
+		_Y.normalizeSelf();
+		_Z.set(Z);
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		if (WB_Epsilon.isZeroSq(_X.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_X._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		_Y._normalizeSelf();
+		_X.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		_Y.normalizeSelf();
 		return this;
 	}
 
@@ -215,105 +215,105 @@ public class WB_CoordinateSystem {
 
 	public WB_CoordinateSystem setXY(final double xx, final double xy,
 			final double xz, final double yx, final double yy, final double yz) {
-		_X._set(xx, xy, xz);
-		_X._normalizeSelf();
-		_Y._set(yx, yy, yz);
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		if (WB_Epsilon.isZeroSq(_Z.getSqLength())) {
+		_X.set(xx, xy, xz);
+		_X.normalizeSelf();
+		_Y.set(yx, yy, yz);
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		if (WB_Epsilon.isZeroSq(_Z.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		_Y._normalizeSelf();
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		_Y.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setYX(final double yx, final double yy,
 			final double yz, final double xx, final double xy, final double xz) {
-		_X._set(xx, xy, xz);
-		_X._normalizeSelf();
-		_Y._set(yx, yy, yz);
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		if (WB_Epsilon.isZeroSq(_Z.getSqLength())) {
+		_X.set(xx, xy, xz);
+		_X.normalizeSelf();
+		_Y.set(yx, yy, yz);
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		if (WB_Epsilon.isZeroSq(_Z.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		_X._normalizeSelf();
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		_X.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setXZ(final double xx, final double xy,
 			final double xz, final double zx, final double zy, final double zz) {
-		_X._set(xx, xy, xz);
-		_X._normalizeSelf();
-		_Z._set(zx, zy, zz);
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		if (WB_Epsilon.isZeroSq(_Y.getSqLength())) {
+		_X.set(xx, xy, xz);
+		_X.normalizeSelf();
+		_Z.set(zx, zy, zz);
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		if (WB_Epsilon.isZeroSq(_Y.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Y._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		_Z._normalizeSelf();
+		_Y.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		_Z.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setZX(final double zx, final double zy,
 			final double zz, final double xx, final double xy, final double xz) {
-		_X._set(xx, xy, xz);
-		_X._normalizeSelf();
-		_Z._set(zx, zy, zz);
-		_Z._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		if (WB_Epsilon.isZeroSq(_Y.getSqLength())) {
+		_X.set(xx, xy, xz);
+		_X.normalizeSelf();
+		_Z.set(zx, zy, zz);
+		_Z.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		if (WB_Epsilon.isZeroSq(_Y.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_Y._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		_X._normalizeSelf();
+		_Y.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		_X.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setYZ(final double yx, final double yy,
 			final double yz, final double zx, final double zy, final double zz) {
-		_Y._set(yx, yy, yz);
-		_Y._normalizeSelf();
-		_Z._set(zx, zy, zz);
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		if (WB_Epsilon.isZeroSq(_X.getSqLength())) {
+		_Y.set(yx, yy, yz);
+		_Y.normalizeSelf();
+		_Z.set(zx, zy, zz);
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		if (WB_Epsilon.isZeroSq(_X.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_X._normalizeSelf();
-		_Z._set(_X.cross(_Y));
-		_Z._normalizeSelf();
+		_X.normalizeSelf();
+		_Z.set(_X.cross(_Y));
+		_Z.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setZY(final double zx, final double zy,
 			final double zz, final double yx, final double yy, final double yz) {
-		_Y._set(yx, yy, yz);
-		_Y._normalizeSelf();
-		_Z._set(zx, zy, zz);
-		_Z._normalizeSelf();
-		_X._set(_Y.cross(_Z));
-		if (WB_Epsilon.isZeroSq(_X.getSqLength())) {
+		_Y.set(yx, yy, yz);
+		_Y.normalizeSelf();
+		_Z.set(zx, zy, zz);
+		_Z.normalizeSelf();
+		_X.set(_Y.cross(_Z));
+		if (WB_Epsilon.isZeroSq(_X.getSqLength3D())) {
 			throw new IllegalArgumentException("Vectors can not be parallel.");
 		}
-		_X._normalizeSelf();
-		_Y._set(_Z.cross(_X));
-		_Y._normalizeSelf();
+		_X.normalizeSelf();
+		_Y.set(_Z.cross(_X));
+		_Y.normalizeSelf();
 		return this;
 	}
 
 	public WB_CoordinateSystem setX(final WB_Coordinate X) {
 		final WB_Vector lX = new WB_Vector(X);
-		lX._normalizeSelf();
+		lX.normalizeSelf();
 		final WB_Vector tmp = lX.cross(_X);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_X.dot(lX), -1, 1)), tmp);
 		}
 		else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
@@ -324,9 +324,9 @@ public class WB_CoordinateSystem {
 
 	public WB_CoordinateSystem setY(final WB_Coordinate Y) {
 		final WB_Vector lY = new WB_Vector(Y);
-		lY._normalizeSelf();
+		lY.normalizeSelf();
 		final WB_Vector tmp = lY.cross(_Y);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_Y.dot(lY), -1, 1)), tmp);
 		}
 		else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
@@ -337,9 +337,9 @@ public class WB_CoordinateSystem {
 
 	public WB_CoordinateSystem setZ(final WB_Coordinate Z) {
 		final WB_Vector lZ = new WB_Vector(Z);
-		lZ._normalizeSelf();
+		lZ.normalizeSelf();
 		final WB_Vector tmp = lZ.cross(_Z);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_Z.dot(lZ), -1, 1)), tmp);
 		}
 		else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
@@ -368,7 +368,7 @@ public class WB_CoordinateSystem {
 
 	public WB_CoordinateSystem rotate(final double a, final WB_Vector v) {
 		final WB_Vector lv = v.get();
-		lv._normalizeSelf();
+		lv.normalizeSelf();
 		_X.rotateAboutAxis(a, _origin, lv);
 		_Y.rotateAboutAxis(a, _origin, lv);
 		_Z.rotateAboutAxis(a, _origin, lv);
@@ -414,9 +414,9 @@ public class WB_CoordinateSystem {
 	public WB_CoordinateSystem setX(final double xx, final double xy,
 			final double xz) {
 		final WB_Vector lX = new WB_Vector(xx, xy, xz);
-		lX._normalizeSelf();
+		lX.normalizeSelf();
 		final WB_Vector tmp = lX.cross(_X);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_X.dot(lX), -1, 1)), tmp);
 		}
 		else if (_X.dot(lX) < -1 + WB_Epsilon.EPSILON) {
@@ -428,9 +428,9 @@ public class WB_CoordinateSystem {
 	public WB_CoordinateSystem setY(final double yx, final double yy,
 			final double yz) {
 		final WB_Vector lY = new WB_Vector(yx, yy, yz);
-		lY._normalizeSelf();
+		lY.normalizeSelf();
 		final WB_Vector tmp = lY.cross(_Y);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_Y.dot(lY), -1, 1)), tmp);
 		}
 		else if (_Y.dot(lY) < -1 + WB_Epsilon.EPSILON) {
@@ -442,9 +442,9 @@ public class WB_CoordinateSystem {
 	public WB_CoordinateSystem setZ(final double zx, final double zy,
 			final double zz) {
 		final WB_Vector lZ = new WB_Vector(zx, zy, zz);
-		lZ._normalizeSelf();
+		lZ.normalizeSelf();
 		final WB_Vector tmp = lZ.cross(_Z);
-		if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+		if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 			rotate(-Math.acos(WB_Math.clamp(_Z.dot(lZ), -1, 1)), tmp);
 		}
 		else if (_Z.dot(lZ) < -1 + WB_Epsilon.EPSILON) {
@@ -454,18 +454,18 @@ public class WB_CoordinateSystem {
 	}
 
 	public void flipX() {
-		_X._mulSelf(-1);
-		_Y._mulSelf(-1);
+		_X.mulSelf(-1);
+		_Y.mulSelf(-1);
 	}
 
 	public void flipY() {
-		_X._mulSelf(-1);
-		_Y._mulSelf(-1);
+		_X.mulSelf(-1);
+		_Y.mulSelf(-1);
 	}
 
 	public void flipZ() {
-		_Z._mulSelf(-1);
-		_Y._mulSelf(-1);
+		_Z.mulSelf(-1);
+		_Y.mulSelf(-1);
 	}
 
 	/*

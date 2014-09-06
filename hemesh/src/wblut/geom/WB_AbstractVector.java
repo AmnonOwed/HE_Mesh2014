@@ -1,7 +1,7 @@
 package wblut.geom;
 
 public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
-		WB_MutableCoordinate {
+WB_MutableCoordinate {
 
 	/** Coordinates. */
 	private double x, y, z;
@@ -46,30 +46,80 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		z = p2.zd() - p1.zd();
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double)} instead
+	 */
+	@Deprecated
+	@Override
 	public void _set(final double x, final double y) {
+		set(x, y);
+	}
+
+	@Override
+	public void set(final double x, final double y) {
 		this.x = x;
 		this.y = y;
 		z = 0;
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double)} instead
+	 */
+	@Deprecated
+	@Override
 	public void _set(final double x, final double y, final double z) {
+		set(x, y, z);
+	}
+
+	@Override
+	public void set(final double x, final double y, final double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double,double)} instead
+	 */
+	@Deprecated
 	@Override
-	public void _set(double x, double y, double z, double w) {
-		_set(x, y, z);
+	public void _set(final double x, final double y, final double z,
+			final double w) {
+		set(x, y, z, w);
+	}
+
+	@Override
+	public void set(final double x, final double y, final double z,
+			final double w) {
+		set(x, y, z);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(WB_Coordinate)} instead
+	 */
+	@Deprecated
+	@Override
 	public void _set(final WB_Coordinate v) {
-		_set(v.xd(), v.yd(), v.zd());
+		set(v);
 	}
 
 	@Override
-	public void _setCoord(int i, double v) {
+	public void set(final WB_Coordinate v) {
+		set(v.xd(), v.yd(), v.zd());
+	}
+
+	/**
+	 * @deprecated Use {@link #setCoord(int,double)} instead
+	 */
+	@Deprecated
+	@Override
+	public void _setCoord(final int i, final double v) {
+		setCoord(i, v);
+	}
+
+	@Override
+	public void setCoord(final int i, final double v) {
 		if (i == 0) {
 			this.x = v;
 		}
@@ -82,25 +132,61 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setW(double)} instead
+	 */
+	@Deprecated
 	@Override
-	public void _setW(double w) {
-
+	public void _setW(final double w) {
+		setW(w);
 	}
 
 	@Override
-	public void _setX(double x) {
+	public void setW(final double w) {
+
+	}
+
+	/**
+	 * @deprecated Use {@link #setX(double)} instead
+	 */
+	@Deprecated
+	@Override
+	public void _setX(final double x) {
+		setX(x);
+	}
+
+	@Override
+	public void setX(final double x) {
 		this.x = x;
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setY(double)} instead
+	 */
+	@Deprecated
 	@Override
-	public void _setY(double y) {
+	public void _setY(final double y) {
+		setY(y);
+	}
+
+	@Override
+	public void setY(final double y) {
 		this.y = y;
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setZ(double)} instead
+	 */
+	@Deprecated
 	@Override
-	public void _setZ(double z) {
+	public void _setZ(final double z) {
+		setZ(z);
+	}
+
+	@Override
+	public void setZ(final double z) {
 		this.z = z;
 
 	}
@@ -121,6 +207,7 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		return x;
 	}
 
+	@Override
 	public float xf() {
 		return (float) x;
 	}
@@ -130,6 +217,7 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		return y;
 	}
 
+	@Override
 	public float yf() {
 		return (float) y;
 	}
@@ -139,10 +227,12 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		return z;
 	}
 
+	@Override
 	public float zf() {
 		return (float) z;
 	}
 
+	@Override
 	public double getd(final int i) {
 		if (i == 0) {
 			return x;
@@ -156,6 +246,7 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		return Double.NaN;
 	}
 
+	@Override
 	public float getf(final int i) {
 		if (i == 0) {
 			return (float) x;
@@ -169,6 +260,7 @@ public abstract class WB_AbstractVector implements Comparable<WB_Coordinate>,
 		return Float.NaN;
 	}
 
+	@Override
 	public int compareTo(final WB_Coordinate p) {
 		int cmp = Double.compare(xd(), p.xd());
 		if (cmp != 0) {

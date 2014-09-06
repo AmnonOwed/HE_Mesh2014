@@ -61,7 +61,7 @@ public abstract class HEC_Creator implements HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setCenter(final double x, final double y, final double z) {
-		center._set(x, y, z);
+		center.set(x, y, z);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public abstract class HEC_Creator implements HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setCenter(final WB_Point c) {
-		center._set(c);
+		center.set(c);
 		return this;
 	}
 
@@ -101,8 +101,8 @@ public abstract class HEC_Creator implements HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final double x, final double y, final double z) {
-		zaxis._set(x, y, z);
-		zaxis._normalizeSelf();
+		zaxis.set(x, y, z);
+		zaxis.normalizeSelf();
 		return this;
 	}
 
@@ -126,8 +126,8 @@ public abstract class HEC_Creator implements HE_Machine {
 	public HEC_Creator setZAxis(final double p0x, final double p0y,
 			final double p0z, final double p1x, final double p1y,
 			final double p1z) {
-		zaxis._set(p1x - p0x, p1y - p0y, p1z - p0z);
-		zaxis._normalizeSelf();
+		zaxis.set(p1x - p0x, p1y - p0y, p1z - p0z);
+		zaxis.normalizeSelf();
 		return this;
 	}
 
@@ -139,8 +139,8 @@ public abstract class HEC_Creator implements HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Point p) {
-		zaxis._set(p);
-		zaxis._normalizeSelf();
+		zaxis.set(p);
+		zaxis.normalizeSelf();
 		return this;
 	}
 
@@ -154,8 +154,8 @@ public abstract class HEC_Creator implements HE_Machine {
 	 * @return self
 	 */
 	public HEC_Creator setZAxis(final WB_Point p0, final WB_Point p1) {
-		zaxis._set(p1.sub(p0));
-		zaxis._normalizeSelf();
+		zaxis.set(p1.sub(p0));
+		zaxis.normalizeSelf();
 		return this;
 	}
 
@@ -205,7 +205,7 @@ public abstract class HEC_Creator implements HE_Machine {
 			}
 
 			final WB_Vector tmp = zaxis.cross(Z);
-			if (!WB_Epsilon.isZeroSq(tmp.getSqLength())) {
+			if (!WB_Epsilon.isZeroSq(tmp.getSqLength3D())) {
 				base.rotateAboutAxis(
 						-Math.acos(WB_Math.clamp(zaxis.dot(Z), -1, 1)),
 						center.xd(), center.yd(), center.zd(), center.xd()
@@ -227,7 +227,7 @@ public abstract class HEC_Creator implements HE_Machine {
 					cx = v.xf();
 					cy = v.yf();
 					cz = v.zf();
-					v._set(home.modelX(cx, cy, cz), home.modelY(cx, cy, cz),
+					v.set(home.modelX(cx, cy, cz), home.modelY(cx, cy, cz),
 							home.modelZ(cx, cy, cz));
 				}
 			}

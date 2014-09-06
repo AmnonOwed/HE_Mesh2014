@@ -25,14 +25,14 @@ public class WB_Ray extends WB_Linear {
 	public WB_Ray(final WB_Coordinate o, final WB_Coordinate d) {
 		origin = new WB_Point(o);
 		direction = new WB_Vector(d);
-		direction._normalizeSelf();
+		direction.normalizeSelf();
 	}
 
 	public WB_Ray(final double ox, final double oy, final double oz,
 			final double dx, final double dy, final double dz) {
 		origin = new WB_Point(ox, oy, oz);
 		direction = new WB_Vector(dx, dy, dz);
-		direction._normalizeSelf();
+		direction.normalizeSelf();
 	}
 
 	@Override
@@ -40,39 +40,43 @@ public class WB_Ray extends WB_Linear {
 		return "Ray: " + origin.toString() + " " + direction.toString();
 	}
 
+	@Override
 	public void set(final WB_Coordinate o, final WB_Coordinate d) {
 		origin = new WB_Point(o);
 		direction = new WB_Vector(d);
-		direction._normalizeSelf();
+		direction.normalizeSelf();
 
 	}
 
 	public void setFromPoints(final WB_Coordinate p1, final WB_Coordinate p2) {
 		origin = new WB_Point(p1);
 		direction = new WB_Vector(p1, p2);
-		direction._normalizeSelf();
+		direction.normalizeSelf();
 
 	}
 
+	@Override
 	public WB_Point getPointOnLine(final double t) {
 		final WB_Point result = new WB_Point(direction);
-		result._scaleSelf(WB_Math.max(0, t));
-		result.moveBy(origin);
+		result.scaleSelf(WB_Math.max(0, t));
+		result.addSelf(origin);
 		return result;
 	}
 
 	public void getPointOnLineInto(final double t, final WB_Point p) {
-		p.moveTo(direction);
+		p.set(direction);
 		if (t > 0) {
-			p._scaleSelf(t);
+			p.scaleSelf(t);
 		}
-		p.moveBy(origin);
+		p.addSelf(origin);
 	}
 
+	@Override
 	public WB_Point getOrigin() {
 		return origin;
 	}
 
+	@Override
 	public WB_Vector getDirection() {
 		return direction;
 	}

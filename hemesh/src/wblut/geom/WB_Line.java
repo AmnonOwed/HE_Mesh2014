@@ -218,7 +218,7 @@ public class WB_Line extends WB_Linear {
 			final WB_Circle C0, final WB_Circle C1) {
 		final ArrayList<WB_Line> result = new ArrayList<WB_Line>(4);
 		final WB_Point w = C1.getCenter().sub(C0.getCenter());
-		final double wlensqr = w.getSqLength();
+		final double wlensqr = w.getSqLength3D();
 		final double rsum = C0.getRadius() + C1.getRadius();
 		if (wlensqr <= rsum * rsum + WB_Epsilon.SQEPSILON) {
 			return result;
@@ -264,7 +264,7 @@ public class WB_Line extends WB_Linear {
 
 		} else {
 			final WB_Point mid = (C0.getCenter().add(C1.getCenter()))
-					._mulSelf(0.5);
+					.mulSelf(0.5);
 			final double a = Math.sqrt(WB_Math.fastAbs(wlensqr - 4
 					* C0.getRadius() * C0.getRadius()));
 			final WB_Point[] dir = getDirections(w, a);
@@ -272,7 +272,7 @@ public class WB_Line extends WB_Linear {
 			result.add(new WB_Line(mid, dir[1]));
 
 			final double invwlen = 1.0 / Math.sqrt(wlensqr);
-			w._mulSelf(invwlen);
+			w.mulSelf(invwlen);
 			result.add(new WB_Line(new WB_Point(mid.xd() + C0.getRadius()
 					* w.yd(), mid.yd() - C0.getRadius() * w.xd()), w));
 			result.add(new WB_Line(new WB_Point(mid.xd() - C0.getRadius()

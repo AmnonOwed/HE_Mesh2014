@@ -103,11 +103,11 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 *            position
 	 */
 	public void set(final HE_Vertex v) {
-		pos._set(v);
+		pos.set(v);
 	}
 
 	public WB_Point getOffset(final double d) {
-		return new WB_Point(pos)._addMulSelf(d, getVertexNormal());
+		return new WB_Point(pos).addMulSelf(d, getVertexNormal());
 
 	}
 
@@ -137,7 +137,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 				f = he.getPair().getFace();
 			}
 			final WB_Point v = he.getNextInFace().getVertex().get().pos;
-			v._subSelf(he.getVertex());
+			v.subSelf(he.getVertex());
 			he = he.getNextInVertex();
 			HE_Face fn = he.getFace();
 			if (fn == null) {
@@ -527,58 +527,131 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setX(double)} instead
+	 */
 	@Override
 	public void _setX(final double x) {
-		pos._setX(x);
+		setX(x);
+	}
+
+	@Override
+	public void setX(final double x) {
+		pos.setX(x);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setY(double)} instead
+	 */
 	@Override
 	public void _setY(final double y) {
-		pos._setY(y);
+		setY(y);
+	}
+
+	@Override
+	public void setY(final double y) {
+		pos.setY(y);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setZ(double)} instead
+	 */
 	@Override
 	public void _setZ(final double z) {
-		pos._setZ(z);
+		setZ(z);
+	}
+
+	@Override
+	public void setZ(final double z) {
+		pos.setZ(z);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setW(double)} instead
+	 */
 	@Override
 	public void _setW(final double w) {
-		pos._setW(w);
+		setW(w);
+	}
+
+	@Override
+	public void setW(final double w) {
+		pos.setW(w);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setCoord(int,double)} instead
+	 */
 	@Override
 	public void _setCoord(final int i, final double v) {
-		pos._setCoord(i, v);
+		setCoord(i, v);
+	}
+
+	@Override
+	public void setCoord(final int i, final double v) {
+		pos.setCoord(i, v);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(WB_Coordinate)} instead
+	 */
 	@Override
 	public void _set(final WB_Coordinate p) {
-		pos._set(p);
+		set(p);
+	}
+
+	@Override
+	public void set(final WB_Coordinate p) {
+		pos.set(p);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double)} instead
+	 */
 	@Override
 	public void _set(final double x, final double y) {
-		pos._set(x, y);
-
+		set(x, y);
 	}
 
 	@Override
-	public void _set(final double x, final double y, final double z) {
-		pos._set(x, y, z);
+	public void set(final double x, final double y) {
+		pos.set(x, y);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double)} instead
+	 */
+	@Override
+	public void _set(final double x, final double y, final double z) {
+		set(x, y, z);
+	}
+
+	@Override
+	public void set(final double x, final double y, final double z) {
+		pos.set(x, y, z);
+
+	}
+
+	/**
+	 * @deprecated Use {@link #set(double,double,double,double)} instead
+	 */
 	@Override
 	public void _set(final double x, final double y, final double z,
 			final double w) {
-		pos._set(x, y, z, w);
+				set(x, y, z, w);
+			}
+
+	@Override
+	public void set(final double x, final double y, final double z,
+			final double w) {
+		pos.set(x, y, z, w);
 
 	}
 
@@ -602,17 +675,17 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		WB_Vector t2 = new WB_Vector();
 
 		if (Math.abs(normal.xd()) < Math.abs(normal.yd())) {
-			t2._setX(1.0);
+			t2.setX(1.0);
 		}
 		else {
-			t2._setY(1.0);
+			t2.setY(1.0);
 		}
 		final WB_Vector t1 = normal.cross(t2);
-		final double n = t1.getLength();
+		final double n = t1.getLength3D();
 		if (n < WB_Epsilon.EPSILON) {
 			return null;
 		}
-		t1._mulSelf(1.0 / n);
+		t1.mulSelf(1.0 / n);
 		t2 = normal.cross(t1);
 		return geometryfactory.createCSFromOXYZ(this, t1, t2, normal);
 	}
@@ -637,9 +710,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 					_halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
 					.getVertex().pos, temp[0], temp[1], temp[2]);
 
-			normal._addMulSelf(area, temp[2]);
+			normal.addMulSelf(area, temp[2]);
 		} while (_halfedge.getEndVertex() != d);
-		final double n = normal.getLength();
+		final double n = normal.getLength3D();
 		if (n < WB_Epsilon.EPSILON) {
 			HE_Halfedge he = _halfedge;
 			normal = geometryfactory.createVector();
@@ -658,7 +731,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 				for (int j = i + 1; j < normals.size(); j++) {
 					final WB_Vector nj = normals.get(j);
 					ni.crossInto(nj, tmp);
-					if (tmp.getSqLength() < WB_Epsilon.SQEPSILON) {
+					if (tmp.getSqLength3D() < WB_Epsilon.SQEPSILON) {
 						degenerate = true;
 						break;
 					}
@@ -670,10 +743,10 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
 			}
 
-			normal._normalizeSelf();
+			normal.normalizeSelf();
 			return normal;
 		}
-		normal._mulSelf(1.0 / n);
+		normal.mulSelf(1.0 / n);
 		return normal;
 	}
 
@@ -690,7 +763,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 */
 	public double getGaussianCurvature(final WB_Vector meanCurvatureVector) {
 
-		meanCurvatureVector._set(0, 0, 0);
+		meanCurvatureVector.set(0, 0, 0);
 		WB_Point vect1 = new WB_Point();
 		WB_Point vect2 = new WB_Point();
 		WB_Point vect3 = new WB_Point();
@@ -705,7 +778,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 				continue;
 			}
 			if (ot.getPair().getFace() == null) {
-				meanCurvatureVector._set(0, 0, 0);
+				meanCurvatureVector.set(0, 0, 0);
 				return 0.0;
 			}
 			final HE_Vertex p1 = ot.getEndVertex();
@@ -718,7 +791,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			final double c31 = vect3.dot(vect1);
 			// Override vect2
 			vect2 = vect1.cross(vect3);
-			final double area = 0.5 * vect2.getLength();
+			final double area = 0.5 * vect2.getLength3D();
 			if (c31 > 0.0) {
 				mixed += 0.5 * area;
 			}
@@ -735,10 +808,10 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			}
 			gauss += Math.abs(Math.atan2(2.0 * area, -c31));
 
-			meanCurvatureVector._addMulSelf(0.5 / area,
+			meanCurvatureVector.addMulSelf(0.5 / area,
 					vect3.mulAddMul(c12, -c23, vect1));
 		} while (ot.getEndVertex() != d);
-		meanCurvatureVector._mulSelf(0.5 / mixed);
+		meanCurvatureVector.mulSelf(0.5 / mixed);
 		// Discrete gaussian curvature
 		return (2.0 * Math.PI - gauss) / mixed;
 	}
@@ -817,16 +890,16 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		tempD2 = p2.subToVector(p0);
 		tempD1.crossInto(tempD2, ret);
 
-		double norm = ret.getLength();
+		double norm = ret.getLength3D();
 		if (norm * norm > WB_Epsilon.SQEPSILON
 				* (tempD1.xd() * tempD1.xd() + tempD1.yd() * tempD1.yd()
 						+ tempD1.zd() * tempD1.zd() + tempD2.xd() * tempD2.xd()
 						+ tempD2.yd() * tempD2.yd() + tempD2.zd() * tempD2.zd())) {
-			ret._mulSelf(1.0 / norm);
+			ret.mulSelf(1.0 / norm);
 
 		}
 		else {
-			ret._set(0, 0, 0);
+			ret.set(0, 0, 0);
 			norm = 0.0;
 		}
 		return 0.5 * norm;
@@ -861,7 +934,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			final double c23 = vect2.dot(vect3);
 			// Override vect2
 			vect2 = vect1.cross(vect3);
-			final double area = 0.5 * vect2.getLength();
+			final double area = 0.5 * vect2.getLength3D();
 			final double len2 = vect1.dot(vect1);
 			if (len2 < WB_Epsilon.SQEPSILON) {
 				continue;
@@ -877,16 +950,16 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 			d2 /= n;
 			final double omega = 0.5
 					* (c12 * vect3.dot(vect3) + c23 * vect1.dot(vect1)) / area;
-			g0._addSelf(omega * d1 * d1 * d1 * d1, omega * 2.0 * d1 * d1 * d1
+			g0.addSelf(omega * d1 * d1 * d1 * d1, omega * 2.0 * d1 * d1 * d1
 					* d2, omega * d1 * d1 * d2 * d2);
-			g1._addSelf(omega * 4.0 * d1 * d1 * d2 * d2, omega * 2.0 * d1 * d2
+			g1.addSelf(omega * 4.0 * d1 * d1 * d2 * d2, omega * 2.0 * d1 * d2
 					* d2 * d2, omega * d2 * d2 * d2 * d2);
-			h._addSelf(omega * kappa * d1 * d1, omega * kappa * 2.0 * d1 * d2,
+			h.addSelf(omega * kappa * d1 * d1, omega * kappa * 2.0 * d1 * d2,
 					omega * kappa * d2 * d2);
 		} while (ot.getEndVertex() != d);
-		g1._setX(g0.yd());
-		g2._setX(g0.zd());
-		g2._setY(g1.zd());
+		g1.setX(g0.yd());
+		g2.setX(g0.zd());
+		g2.setY(g1.zd());
 		WB_M33 G = new WB_M33(g0.xd(), g1.xd(), g2.xd(), g0.yd(), g1.yd(),
 				g2.yd(), g0.zd(), g1.zd(), g2.zd());
 		G = G.inverse();

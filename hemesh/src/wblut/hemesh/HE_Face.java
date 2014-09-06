@@ -59,11 +59,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		final WB_Point _center = new WB_Point();
 		int c = 0;
 		do {
-			_center._addSelf(he.getVertex());
+			_center.addSelf(he.getVertex());
 			c++;
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		_center._divSelf(c);
+		_center.divSelf(c);
 		return _center;
 	}
 
@@ -75,11 +75,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		final WB_Point _center = new WB_Point();
 		int c = 0;
 		do {
-			_center._addSelf(he.getVertex());
+			_center.addSelf(he.getVertex());
 			c++;
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		_center._divSelf(c)._addMulSelf(d, getFaceNormal());
+		_center.divSelf(c).addMulSelf(d, getFaceNormal());
 		return _center;
 	}
 
@@ -96,13 +96,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			p0 = he.getVertex();
 			p1 = he.getNextInFace().getVertex();
 
-			_normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+			_normal.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
 					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
-		_normal._normalizeSelf();
+		_normal.normalizeSelf();
 		return _normal;
 	}
 
@@ -119,7 +119,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			p0 = he.getVertex();
 			p1 = he.getNextInFace().getVertex();
 
-			_normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+			_normal.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
 					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
 
@@ -288,7 +288,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		HE_Halfedge he = _halfedge;
 
 		do {
-			he.getVertex().getPoint()._addSelf(c);
+			he.getVertex().getPoint().addSelf(c);
 
 			he = he.getNextInFace();
 		} while (he != _halfedge);
@@ -305,7 +305,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	public WB_Plane toPlane(final double d) {
 		final WB_Vector fn = getFaceNormal();
-		return new WB_Plane(getFaceCenter()._addMulSelf(d, fn), fn);
+		return new WB_Plane(getFaceCenter().addMulSelf(d, fn), fn);
 	}
 
 	public void sort() {

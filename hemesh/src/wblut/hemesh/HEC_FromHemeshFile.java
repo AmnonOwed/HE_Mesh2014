@@ -97,7 +97,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 			y = Double.parseDouble(subresult[1]);
 			z = Double.parseDouble(subresult[2]);
 			heid = Integer.parseInt(subresult[3]);
-			v._set(x, y, z);
+			v.set(x, y, z);
 			if (heid > -1) {
 				v.setHalfedge(halfedges.get(heid));
 			}

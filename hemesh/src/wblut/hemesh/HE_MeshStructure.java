@@ -808,7 +808,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -821,7 +821,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -829,37 +829,36 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		return _data.get(s);
 	}
 
-	public HE_Path createPathFromIndices(final int[] vertices) {
-		final HE_Path path = new HE_Path();
+	public HE_Path createPathFromIndices(final int[] vertices,
+			final boolean loop) {
+		final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
 		if (vertices.length > 1) {
-			HE_PathHalfedge phe = new HE_PathHalfedge();
-			HE_Halfedge he = searchHalfedgeFromTo(
-					getVertexByIndex(vertices[0]),
-					getVertexByIndex(vertices[1]));
-			if (he == null) {
-				throw new IllegalArgumentException("Two vertices "
-						+ vertices[0] + " and " + vertices[1]
-								+ " in path are not connected.");
-			}
-			phe.setHalfedge(he);
-			path.setPathHalfedge(phe);
-			HE_PathHalfedge prevphe = phe;
-			for (int i = 1; i < vertices.length - 1; i++) {
+			HE_Halfedge he;
+			for (int i = 0; i < vertices.length - 1; i++) {
 				he = searchHalfedgeFromTo(getVertexByIndex(vertices[i]),
 						getVertexByIndex(vertices[i + 1]));
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-									+ " in path are not connected.");
+							+ " in path are not connected.");
 				}
-				phe = new HE_PathHalfedge();
-				phe.setHalfedge(he);
-				prevphe.setNext(phe);
-				phe.setPrev(prevphe);
-				prevphe = phe;
+				halfedges.add(he);
+			}
+			if (loop) {
+				he = searchHalfedgeFromTo(
+						getVertexByIndex(vertices[vertices.length - 1]),
+						getVertexByIndex(vertices[0]));
+				if (he == null) {
+					throw new IllegalArgumentException("Vertices "
+							+ vertices[vertices.length - 1] + " and "
+							+ vertices[0]
+							+ " in path are not connected: path is not a loop.");
+				}
+
 			}
 
 		}
+		final HE_Path path = new HE_Path(halfedges, loop);
 		return path;
 
 	}

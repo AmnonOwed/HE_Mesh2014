@@ -14,57 +14,130 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 		this.seq = seq;
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double)} instead
+	 */
 	@Override
 	public void _set(final double x, final double y) {
+		set(x, y);
+	}
+
+	@Override
+	public void set(final double x, final double y) {
 		seq._setRaw(id, x);
 		seq._setRaw(id + 1, y);
 		seq._setRaw(id + 2, 0);
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double)} instead
+	 */
 	@Override
 	public void _set(final double x, final double y, final double z) {
+		set(x, y, z);
+	}
+
+	@Override
+	public void set(final double x, final double y, final double z) {
 		seq._setRaw(id, x);
 		seq._setRaw(id + 1, y);
 		seq._setRaw(id + 2, z);
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double,double)} instead
+	 */
 	@Override
 	public void _set(final double x, final double y, final double z,
 			final double w) {
-		_set(x, y, z);
+				set(x, y, z, w);
+			}
+
+	@Override
+	public void set(final double x, final double y, final double z,
+			final double w) {
+		set(x, y, z);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(WB_Coordinate)} instead
+	 */
 	@Override
 	public void _set(final WB_Coordinate v) {
-		_set(v.xd(), v.yd(), v.zd());
+		set(v);
 	}
 
+	@Override
+	public void set(final WB_Coordinate v) {
+		set(v.xd(), v.yd(), v.zd());
+	}
+
+	/**
+	 * @deprecated Use {@link #setW(double)} instead
+	 */
 	@Override
 	public void _setW(final double w) {
-
+		setW(w);
 	}
 
 	@Override
+	public void setW(final double w) {
+
+	}
+
+	/**
+	 * @deprecated Use {@link #setX(double)} instead
+	 */
+	@Override
 	public void _setX(final double x) {
+		setX(x);
+	}
+
+	@Override
+	public void setX(final double x) {
 		seq._setRaw(id, x);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setY(double)} instead
+	 */
 	@Override
 	public void _setY(final double y) {
+		setY(y);
+	}
+
+	@Override
+	public void setY(final double y) {
 		seq._setRaw(id + 1, y);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setZ(double)} instead
+	 */
 	@Override
 	public void _setZ(final double z) {
+		setZ(z);
+	}
+
+	@Override
+	public void setZ(final double z) {
 		seq._setRaw(id + 2, z);
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setCoord(int,double)} instead
+	 */
 	@Override
 	public void _setCoord(final int i, final double v) {
+		setCoord(i, v);
+	}
+
+	@Override
+	public void setCoord(final int i, final double v) {
 		if (i == 0) {
 			seq._setRaw(id, v);
 		}

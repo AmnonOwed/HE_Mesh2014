@@ -12,9 +12,9 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 
 	private int i2;
 
-	private double length;
+	private final double length;
 
-	private WB_Point[] points;
+	private final WB_Point[] points;
 
 	public WB_IndexedSegment(final int i1, final int i2, final WB_Point[] points) {
 		super(points[i1], new WB_Vector(points[i1], points[i2]));
@@ -24,24 +24,28 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 		length = WB_Distance.getDistance3D(points[i1], points[i2]);
 	}
 
+	@Override
 	public WB_Point getParametricPointOnSegment(final double t) {
 		final WB_Point result = new WB_Point(direction);
-		result._scaleSelf(WB_Math.clamp(t, 0, 1) * length);
-		result.moveBy(points[i1]);
+		result.scaleSelf(WB_Math.clamp(t, 0, 1) * length);
+		result.addSelf(points[i1]);
 		return result;
 	}
 
+	@Override
 	public void getParametricPointOnSegmentInto(final double t,
 			final WB_MutableCoordinate result) {
-		result._set(direction.mul(WB_Math.clamp(t, 0, 1) * length)._addSelf(
+		result.set(direction.mul(WB_Math.clamp(t, 0, 1) * length).addSelf(
 				points[i1]));
 
 	}
 
+	@Override
 	public WB_Point getCenter() {
 		return gf.createMidpoint(points[i1], points[i2]);
 	}
 
+	@Override
 	public WB_Point getEndpoint() {
 		return points[i2];
 	}
@@ -51,6 +55,7 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 		return points[i1];
 	}
 
+	@Override
 	public double getLength() {
 		return length;
 	}
@@ -83,20 +88,23 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 
 	}
 
+	@Override
 	public void reverse() {
-		direction._mulSelf(-1);
+		direction.mulSelf(-1);
 		origin = points[i2];
-		int tmp = i2;
+		final int tmp = i2;
 		i2 = i1;
 		i1 = tmp;
 	}
 
 	@Override
-	public WB_Point getPoint(int i) {
-		if (i == 0)
+	public WB_Point getPoint(final int i) {
+		if (i == 0) {
 			return getOrigin();
-		if (i == 1)
+		}
+		if (i == 1) {
 			return getEndpoint();
+		}
 		return null;
 	}
 
@@ -117,7 +125,7 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 	}
 
 	@Override
-	public WB_Geometry apply(WB_Transform T) {
+	public WB_Geometry apply(final WB_Transform T) {
 		return geometryfactory.createSegment(getOrigin().applyAsPoint(T),
 				getEndpoint().applyAsPoint(T));
 	}

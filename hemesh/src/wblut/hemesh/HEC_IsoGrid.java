@@ -521,7 +521,7 @@ public class HEC_IsoGrid extends HEC_Creator {
 		final double val0 = value(i, j, k);
 		final double val1 = value(i + 1, j, k);
 		xedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		xedge.getPoint()._addSelf(offset);
+		xedge.getPoint().addSelf(offset);
 		mesh.add(xedge);
 		xedges.put(index(i, j, k), xedge);
 		return xedge;
@@ -550,7 +550,7 @@ public class HEC_IsoGrid extends HEC_Creator {
 		final double val0 = value(i, j, k);
 		final double val1 = value(i, j + 1, k);
 		yedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		yedge.getPoint()._addSelf(offset);
+		yedge.getPoint().addSelf(offset);
 		mesh.add(yedge);
 		yedges.put(index(i, j, k), yedge);
 		return yedge;
@@ -580,7 +580,7 @@ public class HEC_IsoGrid extends HEC_Creator {
 		final double val0 = value(i, j, k);
 		final double val1 = value(i, j, k + 1);
 		zedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
-		zedge.getPoint()._addSelf(offset);
+		zedge.getPoint().addSelf(offset);
 		mesh.add(zedge);
 		zedges.put(index(i, j, k), zedge);
 		return zedge;

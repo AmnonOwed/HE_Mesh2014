@@ -45,9 +45,9 @@ public class WB_Containment {
 
 	public static boolean sameSide(final WB_Coordinate p1,
 			final WB_Coordinate p2, final WB_Coordinate A, final WB_Coordinate B) {
-		final WB_Point t1 = new WB_Point(B)._subSelf(A);
-		WB_Point t2 = new WB_Point(p1)._subSelf(A);
-		WB_Point t3 = new WB_Point(p2)._subSelf(A);
+		final WB_Point t1 = new WB_Point(B).subSelf(A);
+		WB_Point t2 = new WB_Point(p1).subSelf(A);
+		WB_Point t3 = new WB_Point(p2).subSelf(A);
 		t2 = t1.cross(t2);
 		t3 = t1.cross(t3);
 		final double t = t2.dot(t3);

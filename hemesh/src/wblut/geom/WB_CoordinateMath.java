@@ -12,8 +12,8 @@ public class WB_CoordinateMath {
 			final double p2z) {
 		final WB_Vector v0 = new WB_Vector(p1x - cx, p1y - cy, p1z - cz);
 		final WB_Vector v1 = new WB_Vector(p2x - cx, p2y - cy, p2z - cz);
-		v0._normalizeSelf();
-		v1._normalizeSelf();
+		v0.normalizeSelf();
+		v1.normalizeSelf();
 		double d = v0.dot(v1);
 		if (d < -1.0) {
 			d = -1.0;
@@ -31,8 +31,8 @@ public class WB_CoordinateMath {
 			final double p2z) {
 		final WB_Vector v0 = new WB_Vector(p1x - cx, p1y - cy, p1z - cz);
 		final WB_Vector v1 = new WB_Vector(p2x - cx, p2y - cy, p2z - cz);
-		v0._normalizeSelf();
-		v1._normalizeSelf();
+		v0.normalizeSelf();
+		v1.normalizeSelf();
 		double d = v0.dot(v1);
 		if (d < -1.0) {
 			d = -1.0;
@@ -49,8 +49,8 @@ public class WB_CoordinateMath {
 			final double v2z) {
 		final WB_Vector v0 = new WB_Vector(v1x, v1y, v1z);
 		final WB_Vector v1 = new WB_Vector(v2x, v2y, v2z);
-		v0._normalizeSelf();
-		v1._normalizeSelf();
+		v0.normalizeSelf();
+		v1.normalizeSelf();
 		double d = v0.dot(v1);
 		if (d < -1.0) {
 			d = -1.0;
@@ -67,8 +67,8 @@ public class WB_CoordinateMath {
 			final double v2z) {
 		final WB_Vector v0 = new WB_Vector(v1x, v1y, v1z);
 		final WB_Vector v1 = new WB_Vector(v2x, v2y, v2z);
-		v0._normalizeSelf();
-		v1._normalizeSelf();
+		v0.normalizeSelf();
+		v1.normalizeSelf();
 		double d = v0.dot(v1);
 		if (d < -1.0) {
 			d = -1.0;
@@ -228,23 +228,55 @@ public class WB_CoordinateMath {
 				* q.xd(), p.zd() * q.yd(), p.zd() * q.zd());
 	}
 
+	/**
+	 * @deprecated Use {@link #getLength3D(double,double,double)} instead
+	 */
 	public static double getLength(final double x, final double y,
+			final double z) {
+				return getLength3D(x, y, z);
+			}
+
+	public static double getLength3D(final double x, final double y,
 			final double z) {
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
+	/**
+	 * @deprecated Use {@link #getSqLength3D(double,double,double)} instead
+	 */
 	public static double getSqLength(final double x, final double y,
+			final double z) {
+				return getSqLength3D(x, y, z);
+			}
+
+	public static double getSqLength3D(final double x, final double y,
 			final double z) {
 		return x * x + y * y + z * z;
 	}
 
+	/**
+	 * @deprecated Use {@link #getDistance3D(double,double,double,double,double,double)} instead
+	 */
 	public static double getDistance(final double x1, final double y1,
+			final double z1, final double x2, final double y2, final double z2) {
+				return getDistance3D(x1, y1, z1, x2, y2, z2);
+			}
+
+	public static double getDistance3D(final double x1, final double y1,
 			final double z1, final double x2, final double y2, final double z2) {
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)
 				+ (z2 - z1) * (z2 - z1));
 	}
 
+	/**
+	 * @deprecated Use {@link #getSqDistance3D(double,double,double,double,double,double)} instead
+	 */
 	public static double getSqDistance(final double x1, final double y1,
+			final double z1, final double x2, final double y2, final double z2) {
+				return getSqDistance3D(x1, y1, z1, x2, y2, z2);
+			}
+
+	public static double getSqDistance3D(final double x1, final double y1,
 			final double z1, final double x2, final double y2, final double z2) {
 		return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1)
 				* (z2 - z1);
@@ -269,7 +301,7 @@ public class WB_CoordinateMath {
 	}
 
 	public static boolean isZero(final double x, final double y, final double z) {
-		return (getSqLength(x, y, z) < WB_Epsilon.SQEPSILON);
+		return (getSqLength3D(x, y, z) < WB_Epsilon.SQEPSILON);
 	}
 
 }

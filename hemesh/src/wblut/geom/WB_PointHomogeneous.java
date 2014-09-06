@@ -84,7 +84,15 @@ public class WB_PointHomogeneous extends WB_Point4D {
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double,double)} instead
+	 */
 	public void _set(final double x, final double y, final double z,
+			final double w) {
+				set(x, y, z, w);
+			}
+
+	public void set(final double x, final double y, final double z,
 			final double w) {
 		this.x = x * w;
 		this.y = y * w;

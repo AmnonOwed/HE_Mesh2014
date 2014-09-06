@@ -104,7 +104,7 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public boolean isTangent(final WB_Circle C) {
-		final double d = center.getDistance(C.getCenter());
+		final double d = center.getDistance3D(C.getCenter());
 		return WB_Epsilon.isZero(d - WB_Math.fastAbs(C.getRadius() - radius))
 				|| WB_Epsilon.isZero(d
 						- WB_Math.fastAbs(C.getRadius() + radius));
@@ -131,15 +131,15 @@ public class WB_Circle implements WB_Geometry {
 	}
 
 	public void setCenter(final double x, final double y) {
-		center._set(x, y);
+		center.set(x, y);
 	}
 
 	public void setCenter(final double x, final double y, double z) {
-		center._set(x, y, z);
+		center.set(x, y, z);
 	}
 
 	public void setCenter(WB_Coordinate c) {
-		center._set(c);
+		center.set(c);
 	}
 
 	public void setRadius(final double radius) {
@@ -189,10 +189,10 @@ public class WB_Circle implements WB_Geometry {
 		final ArrayList<WB_Circle> result = new ArrayList<WB_Circle>();
 		double cPrime = L.c() + L.a() * p.xd() + L.b() * p.yd();
 		if (WB_Epsilon.isZero(cPrime)) {
-			result.add(new WB_Circle(new WB_Point(p)._addSelf(L.a(), L.b(), r),
+			result.add(new WB_Circle(new WB_Point(p).addSelf(L.a(), L.b(), r),
 					r));
 			result.add(new WB_Circle(
-					new WB_Point(p)._addSelf(L.a(), L.b(), -r), r));
+					new WB_Point(p).addSelf(L.a(), L.b(), -r), r));
 			return result;
 		}
 		double a, b;
@@ -209,7 +209,7 @@ public class WB_Circle implements WB_Geometry {
 		final double tmp1 = cPrime - r;
 		double tmp2 = r * r - tmp1 * tmp1;
 		if (WB_Epsilon.isZero(tmp2)) {
-			result.add(new WB_Circle(new WB_Point(p)._addSelf(a, b, -tmp1), r));
+			result.add(new WB_Circle(new WB_Point(p).addSelf(a, b, -tmp1), r));
 			return result;
 		} else if (tmp2 < 0) {
 			return result;

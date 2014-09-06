@@ -37,6 +37,18 @@ public class HE_PathHalfedge extends HE_Element implements WB_HasData {
 		return _he;
 	}
 
+	public HE_Vertex getVertex() {
+		return _he.getVertex();
+	}
+
+	public HE_Vertex getStartVertex() {
+		return _he.getVertex();
+	}
+
+	public HE_Vertex getEndVertex() {
+		return _he.getEndVertex();
+	}
+
 	public void setHalfedge(final HE_Halfedge he) {
 		_he = he;
 	}

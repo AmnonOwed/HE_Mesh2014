@@ -253,21 +253,21 @@ public class WB_Sphere implements WB_Geometry {
 		final WB_Vector e = new WB_Vector();
 		if ((WB_Math.fastAbs(m.m11) >= WB_Math.fastAbs(m.m22))
 				&& (WB_Math.fastAbs(m.m11) >= WB_Math.fastAbs(m.m33))) {
-			e._set(v.m11, v.m21, v.m31);
+			e.set(v.m11, v.m21, v.m31);
 		}
 		if ((WB_Math.fastAbs(m.m22) >= WB_Math.fastAbs(m.m11))
 				&& (WB_Math.fastAbs(m.m22) >= WB_Math.fastAbs(m.m33))) {
-			e._set(v.m12, v.m22, v.m32);
+			e.set(v.m12, v.m22, v.m32);
 		}
 		if ((WB_Math.fastAbs(m.m33) >= WB_Math.fastAbs(m.m11))
 				&& (WB_Math.fastAbs(m.m33) >= WB_Math.fastAbs(m.m11))) {
-			e._set(v.m13, v.m23, v.m33);
+			e.set(v.m13, v.m23, v.m33);
 		}
 		final int[] iminmax = extremePointsAlongDirection(points, numPoints, e);
 		final WB_Point minpt = points[iminmax[0]];
 		final WB_Point maxpt = points[iminmax[1]];
 		final double dist = WB_Distance.getDistance3D(minpt, maxpt);
-		return new WB_Sphere(minpt._addSelf(maxpt)._mulSelf(0.5), 0.5 * dist);
+		return new WB_Sphere(minpt.addSelf(maxpt).mulSelf(0.5), 0.5 * dist);
 	}
 
 	/**
@@ -297,13 +297,13 @@ public class WB_Sphere implements WB_Geometry {
 	 */
 	public void growSpherebyPoint(final WB_Point p) {
 		final WB_Vector d = p.subToVector(center);
-		final double dist2 = d.getSqLength();
+		final double dist2 = d.getSqLength3D();
 		if (dist2 > radius * radius) {
 			final double dist = Math.sqrt(dist2);
 			final double newRadius = (radius + dist) * 0.5;
 			final double k = (newRadius - radius) / dist;
 			radius = newRadius;
-			center._addSelf(k * d.xd(), k * d.yd(), k * d.zd());
+			center.addSelf(k * d.xd(), k * d.yd(), k * d.zd());
 		}
 	}
 
@@ -349,7 +349,7 @@ public class WB_Sphere implements WB_Geometry {
 	 */
 	public WB_Point projectToSphere(final WB_Coordinate v) {
 		final WB_Point vc = new WB_Point(v).sub(center);
-		final double er = vc._normalizeSelf();
+		final double er = vc.normalizeSelf();
 		if (WB_Epsilon.isZero(er)) {
 			return null;
 		}

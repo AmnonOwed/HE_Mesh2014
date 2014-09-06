@@ -65,29 +65,29 @@ public class WB_GeodesicIII {
 		WB_Vector zshift = new WB_Vector(0, 0, 1);
 		switch (type) {
 		case TETRAHEDRON:
-			scalefactor = Math.sqrt(8.0 / 3.0) / p1.getLength();
+			scalefactor = Math.sqrt(8.0 / 3.0) / p1.getLength3D();
 			zshift = new WB_Vector(0, 0, 1.0 / 3.0);
 			break;
 		case OCTAHEDRON:
-			scalefactor = Math.sqrt(2.0) / p1.getLength();
+			scalefactor = Math.sqrt(2.0) / p1.getLength3D();
 			zshift = new WB_Vector(0, 0, Math.sqrt(3.0) / 3.0);
 			break;
 		case ICOSAHEDRON:
 		default:
-			scalefactor = 1.0 / Math.sin(0.4 * Math.PI) / p1.getLength();
+			scalefactor = 1.0 / Math.sin(0.4 * Math.PI) / p1.getLength3D();
 			zshift = new WB_Vector(0, 0, Math.sqrt(3) / 12.0
 					* (3 + Math.sqrt(5)) / Math.sin(0.4 * Math.PI));
 		}
-		p0._mulSelf(scalefactor);
-		p1._mulSelf(scalefactor);
-		p2._mulSelf(scalefactor);
+		p0.mulSelf(scalefactor);
+		p1.mulSelf(scalefactor);
+		p2.mulSelf(scalefactor);
 		trigrid.setScale(scalefactor);
 		PPT = new FastTable<WB_Point>();
 		for (int i = -v; i <= v; i++) {
 			for (int j = -v; j <= v; j++) {
 				p = trigrid.getPoint(i, j);
 				cp = WB_Intersection.getClosestPointToTriangle3D(p, p0, p1, p2);
-				if (WB_Epsilon.isZeroSq(cp.getSqDistance(p))) {
+				if (WB_Epsilon.isZeroSq(cp.getSqDistance3D(p))) {
 					PPT.add(p);
 				}
 			}
@@ -95,21 +95,21 @@ public class WB_GeodesicIII {
 
 		zeropoints = new FastTable<WB_Point>();
 		double angle = Math.PI / 6.0 - p1.heading();
-		WB_Point center = gf.createMidpoint(p0, p1, p2)._mulSelf(-1);
+		WB_Point center = gf.createMidpoint(p0, p1, p2).mulSelf(-1);
 		WB_Transform T = new WB_Transform().addTranslate(center)
 				.addRotateZ(angle).addTranslate(zshift)
 				.addRotateY(centralanglesabc[type][2]);
 
 		for (int i = 0; i < PPT.size(); i++) {
 			p = T.applyAsPoint(PPT.get(i));
-			p._normalizeSelf();
-			p._mulSelf(radius);
+			p.normalizeSelf();
+			p.mulSelf(radius);
 			zeropoints.add(p);
-			PPT.get(i)._applyAsPointSelf(T);
-			PPT.get(i)._mulSelf(radius);
+			PPT.get(i).applyAsPointSelf(T);
+			PPT.get(i).mulSelf(radius);
 		}
 
-		double threshold = zeropoints.get(0).getDistance(zeropoints.get(1))
+		double threshold = zeropoints.get(0).getDistance3D(zeropoints.get(1))
 				/ (2 * v);
 		/*
 		 * T = new WB_Transform().addRotateY(Math.PI / 180 * 36); for (WB_Point

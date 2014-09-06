@@ -57,9 +57,9 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
 					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
-				final WB_Point O = new WB_Point(N)._mulSelf(-distance);
-				N._mulSelf(-1);
-				O._addSelf(e.getHalfedgeCenter());
+				final WB_Point O = new WB_Point(N).mulSelf(-distance);
+				N.mulSelf(-1);
+				O.addSelf(e.getHalfedgeCenter());
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}
@@ -91,9 +91,9 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
 					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
-				final WB_Point O = new WB_Point(N)._mulSelf(-distance);
-				N._mulSelf(-1);
-				O._addSelf(e.getHalfedgeCenter());
+				final WB_Point O = new WB_Point(N).mulSelf(-distance);
+				N.mulSelf(-1);
+				O.addSelf(e.getHalfedgeCenter());
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}

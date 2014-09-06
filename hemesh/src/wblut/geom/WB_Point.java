@@ -40,139 +40,279 @@ public class WB_Point extends WB_Vector {
 		super(v);
 	}
 
+	/**
+	 * @deprecated Use {@link #addMulSelf(double,double,double,double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _addMulSelf(final double f, final double x, final double y,
 			final double z) {
-		_set(xd() + f * x, yd() + f * y, zd() + f * z);
-		return this;
+		return addMulSelf(f, x, y, z);
 	}
 
 	@Override
+	public WB_Point addMulSelf(final double f, final double x, final double y,
+			final double z) {
+		set(xd() + f * x, yd() + f * y, zd() + f * z);
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link #addMulSelf(double,WB_Coordinate)} instead
+	 */
+	@Deprecated
+	@Override
 	public WB_Point _addMulSelf(final double f, final WB_Coordinate p) {
-		_set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
+		return addMulSelf(f, p);
+	}
+
+	@Override
+	public WB_Point addMulSelf(final double f, final WB_Coordinate p) {
+		set(xd() + f * p.xd(), yd() + f * p.yd(), zd() + f * p.zd());
 
 		return this;
 	}
 
 	public WB_Point _addMulSelf(final double f,
 			final WB_CoordinateSequence seq, final int i) {
-		_set(xd() + f * seq.get(i, 0), yd() + f * seq.get(i, 1),
+		set(xd() + f * seq.get(i, 0), yd() + f * seq.get(i, 1),
 				zd() + f * seq.get(i, 2));
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #addSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _addSelf(final double x, final double y, final double z) {
-		_set(xd() + x, yd() + y, zd() + z);
-		return this;
+		return addSelf(x, y, z);
 	}
 
 	@Override
+	public WB_Point addSelf(final double x, final double y, final double z) {
+		set(xd() + x, yd() + y, zd() + z);
+		return this;
+	}
+
+	/**
+	 * @deprecated Use {@link #addSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
+	@Override
 	public WB_Point _addSelf(final WB_Coordinate p) {
-		_set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
+		return addSelf(p);
+	}
+
+	@Override
+	public WB_Point addSelf(final WB_Coordinate p) {
+		set(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
 		return this;
 	}
 
 	public WB_Point _addSelf(final WB_CoordinateSequence seq, final int i) {
-		_set(xd() + seq.get(i, 0), yd() + seq.get(i, 1), zd() + seq.get(i, 2));
+		set(xd() + seq.get(i, 0), yd() + seq.get(i, 1), zd() + seq.get(i, 2));
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsNormalSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _applyAsNormalSelf(final WB_Transform T) {
+		return applyAsNormalSelf(T);
+	}
+
+	@Override
+	public WB_Point applyAsNormalSelf(final WB_Transform T) {
 		T.applyAsNormal(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsPointSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _applyAsPointSelf(final WB_Transform T) {
+		return applyAsPointSelf(T);
+	}
+
+	@Override
+	public WB_Point applyAsPointSelf(final WB_Transform T) {
 		T.applyAsPoint(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #applyAsVectorSelf(WB_Transform)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _applyAsVectorSelf(final WB_Transform T) {
+		return applyAsVectorSelf(T);
+	}
+
+	@Override
+	public WB_Point applyAsVectorSelf(final WB_Transform T) {
 		T.applyAsVector(this, this);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #crossSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _crossSelf(final WB_Coordinate p) {
-		_set(yd() * p.zd() - zd() * p.yd(), zd() * p.xd() - xd() * p.zd(), xd()
+		return crossSelf(p);
+	}
+
+	@Override
+	public WB_Point crossSelf(final WB_Coordinate p) {
+		set(yd() * p.zd() - zd() * p.yd(), zd() * p.xd() - xd() * p.zd(), xd()
 				* p.yd() - yd() * p.xd());
 		return this;
 	}
 
 	public WB_Point _crossSelf(final WB_CoordinateSequence seq, final int i) {
-		_set(yd() * seq.get(i, 2) - zd() * seq.get(i, 1), zd() * seq.get(i, 0)
+		set(yd() * seq.get(i, 2) - zd() * seq.get(i, 1), zd() * seq.get(i, 0)
 				- xd() * seq.get(i, 2),
 				xd() * seq.get(i, 1) - yd() * seq.get(i, 0));
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #divSelf(double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _divSelf(final double f) {
-		return _mulSelf(1.0 / f);
+		return divSelf(f);
 	}
 
 	@Override
-	public void _invert() {
-		_mulSelf(-1.0);
+	public WB_Point divSelf(final double f) {
+		return mulSelf(1.0 / f);
 	}
 
+	/**
+	 * @deprecated Use {@link #invert()} instead
+	 */
+	@Deprecated
+	@Override
+	public void _invert() {
+		invert();
+	}
+
+	@Override
+	public void invert() {
+		mulSelf(-1.0);
+	}
+
+	/**
+	 * @deprecated Use {@link #mulAddMulSelf(double,double,WB_Coordinate)}
+	 *             instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _mulAddMulSelf(final double f, final double g,
 			final WB_Coordinate p) {
-		_set(f * xd() + g * p.xd(), f * yd() + g * p.yd(),
-				f * zd() + g * p.zd());
+		return mulAddMulSelf(f, g, p);
+	}
+
+	@Override
+	public WB_Point mulAddMulSelf(final double f, final double g,
+			final WB_Coordinate p) {
+		set(f * xd() + g * p.xd(), f * yd() + g * p.yd(), f * zd() + g * p.zd());
 
 		return this;
 	}
 
 	public WB_Point _mulAddMulSelf(final double f, final double g,
 			final WB_CoordinateSequence seq, final int i) {
-		_set(f * xd() + g * seq.get(i, 0), f * yd() + g * seq.get(i, 1), f
+		set(f * xd() + g * seq.get(i, 0), f * yd() + g * seq.get(i, 1), f
 				* zd() + g * seq.get(i, 2));
 
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #mulSelf(double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _mulSelf(final double f) {
-		_set(f * xd(), f * yd(), f * zd());
+		return mulSelf(f);
+	}
+
+	@Override
+	public WB_Point mulSelf(final double f) {
+		set(f * xd(), f * yd(), f * zd());
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #scaleSelf(double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _scaleSelf(final double f) {
-
-		return _mulSelf(f);
+		return scaleSelf(f);
 	}
 
+	@Override
+	public WB_Point scaleSelf(final double f) {
+
+		return mulSelf(f);
+	}
+
+	/**
+	 * @deprecated Use {@link #scaleSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _scaleSelf(final double fx, final double fy, final double fz) {
-		_set(xd() * fx, yd() * fy, zd() * fz);
+		return scaleSelf(fx, fy, fz);
+	}
+
+	@Override
+	public WB_Point scaleSelf(final double fx, final double fy, final double fz) {
+		set(xd() * fx, yd() * fy, zd() * fz);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #subSelf(double,double,double)} instead
+	 */
+	@Deprecated
 	@Override
 	public WB_Point _subSelf(final double x, final double y, final double z) {
-		_set(xd() - x, yd() - y, zd() - z);
-		return this;
+		return subSelf(x, y, z);
 	}
 
 	@Override
-	public WB_Point _subSelf(final WB_Coordinate v) {
-		_set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
+	public WB_Point subSelf(final double x, final double y, final double z) {
+		set(xd() - x, yd() - y, zd() - z);
 		return this;
 	}
 
-	public WB_Point _subSelf(final WB_CoordinateSequence seq, final int i) {
-		_set(xd() - seq.get(i, 0), yd() - seq.get(i, 1), zd() - seq.get(i, 2));
+	/**
+	 * @deprecated Use {@link #subSelf(WB_Coordinate)} instead
+	 */
+	@Deprecated
+	@Override
+	public WB_Point _subSelf(final WB_Coordinate v) {
+		return subSelf(v);
+	}
 
+	@Override
+	public WB_Point subSelf(final WB_Coordinate v) {
+		set(xd() - v.xd(), yd() - v.yd(), zd() - v.zd());
 		return this;
 	}
 
@@ -184,12 +324,6 @@ public class WB_Point extends WB_Vector {
 	@Override
 	public WB_Point add(final WB_Coordinate p) {
 		return new WB_Point(xd() + p.xd(), yd() + p.yd(), zd() + p.zd());
-	}
-
-	public WB_Point add(final WB_CoordinateSequence seq, final int i) {
-
-		return new WB_Point(xd() + seq.get(i, 0), yd() + seq.get(i, 1), zd()
-				+ seq.get(i, 2));
 	}
 
 	@Override
@@ -205,14 +339,16 @@ public class WB_Point extends WB_Vector {
 				* p.zd());
 	}
 
-	public WB_Point addMul(final double f, final WB_CoordinateSequence seq,
-			final int i) {
-		return new WB_Point(xd() + f * seq.get(i, 0), yd() + f * seq.get(i, 1),
-				zd() + f * seq.get(i, 2));
+	/**
+	 * @deprecated Use {@link #applySelf(WB_Transform)} instead
+	 */
+	@Override
+	public WB_Point apply(final WB_Transform T) {
+		return applySelf(T);
 	}
 
 	@Override
-	public WB_Point apply(final WB_Transform T) {
+	public WB_Point applySelf(final WB_Transform T) {
 		return applyAsPoint(T);
 	}
 
@@ -220,12 +356,6 @@ public class WB_Point extends WB_Vector {
 	public WB_Point cross(final WB_Coordinate p) {
 		return new WB_Point(yd() * p.zd() - zd() * p.yd(), zd() * p.xd() - xd()
 				* p.zd(), xd() * p.yd() - yd() * p.xd());
-	}
-
-	public WB_Point cross(final WB_CoordinateSequence seq, final int i) {
-		return new WB_Point(yd() * seq.get(i, 2) - zd() * seq.get(i, 1), zd()
-				* seq.get(i, 0) - xd() * seq.get(i, 2), xd() * seq.get(i, 1)
-				- yd() * seq.get(i, 0));
 	}
 
 	@Override
@@ -260,49 +390,6 @@ public class WB_Point extends WB_Vector {
 	@Override
 	public WB_Point get() {
 		return new WB_Point(this);
-	}
-
-	public WB_Point moveBy(final double x, final double y, final double z) {
-		_addSelf(x, y, z);
-		return this;
-	}
-
-	public WB_Point moveBy(final WB_Point v) {
-		_addSelf(v);
-		return this;
-	}
-
-	public WB_Point moveByAndCopy(final double x, final double y, final double z) {
-		return new WB_Point(this.xd() + x, this.yd() + y, this.zd() + z);
-	}
-
-	public WB_Point moveByAndCopy(final WB_Coordinate v) {
-		return new WB_Point(xd() + v.xd(), yd() + v.yd(), zd() + v.zd());
-	}
-
-	public void moveByInto(final double x, final double y, final double z,
-			final WB_MutableCoordinate result) {
-		result._set(this.xd() + x, this.yd() + y, this.zd() + z);
-	}
-
-	public void moveByInto(final WB_Coordinate v,
-			final WB_MutableCoordinate result) {
-		result._set(xd() + v.xd(), yd() + v.yd(), zd() + v.zd());
-	}
-
-	public WB_Point moveTo(final double x, final double y) {
-		_set(x, y);
-		return this;
-	}
-
-	public WB_Point moveTo(final double x, final double y, final double z) {
-		_set(x, y, z);
-		return this;
-	}
-
-	public WB_Point moveTo(final WB_Coordinate p) {
-		_set(p);
-		return this;
 	}
 
 	@Override

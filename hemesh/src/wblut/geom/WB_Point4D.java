@@ -196,9 +196,9 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	public double normalize() {
 		final double d = mag();
 		if (WB_Epsilon.isZero(d)) {
-			_set(0, 0, 0, 0);
+			set(0, 0, 0, 0);
 		} else {
-			_set(x / d, y / d, z / d, w / d);
+			set(x / d, y / d, z / d, w / d);
 		}
 		return d;
 	}
@@ -375,31 +375,71 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		return w;
 	}
 
+	/**
+	 * @deprecated Use {@link #setX(double)} instead
+	 */
 	@Override
 	public void _setX(double x) {
+		setX(x);
+	}
+
+	@Override
+	public void setX(double x) {
 		this.x = x;
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setY(double)} instead
+	 */
 	@Override
 	public void _setY(double y) {
+		setY(y);
+	}
+
+	@Override
+	public void setY(double y) {
 		this.y = y;
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setZ(double)} instead
+	 */
 	@Override
 	public void _setZ(double z) {
+		setZ(z);
+	}
+
+	@Override
+	public void setZ(double z) {
 		this.z = z;
 
 	}
 
+	/**
+	 * @deprecated Use {@link #setW(double)} instead
+	 */
 	@Override
 	public void _setW(double w) {
-		this.w = w;
+		setW(w);
 	}
 
 	@Override
+	public void setW(double w) {
+		this.w = w;
+	}
+
+	/**
+	 * @deprecated Use {@link #setCoord(int,double)} instead
+	 */
+	@Override
 	public void _setCoord(int i, double v) {
+		setCoord(i, v);
+	}
+
+	@Override
+	public void setCoord(int i, double v) {
 		if (i == 0) {
 			this.x = v;
 		}
@@ -415,24 +455,48 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double,double)} instead
+	 */
 	@Override
 	public void _set(double x, double y, double z, double w) {
+		set(x, y, z, w);
+	}
+
+	@Override
+	public void set(double x, double y, double z, double w) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double,double)} instead
+	 */
 	@Override
 	public void _set(double x, double y, double z) {
+		set(x, y, z);
+	}
+
+	@Override
+	public void set(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = 0;
 	}
 
+	/**
+	 * @deprecated Use {@link #set(double,double)} instead
+	 */
 	@Override
 	public void _set(double x, double y) {
+		set(x, y);
+	}
+
+	@Override
+	public void set(double x, double y) {
 		this.x = x;
 		this.y = y;
 		this.z = 0;
@@ -464,8 +528,16 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 		return Double.compare(wd(), p.wd());
 	}
 
+	/**
+	 * @deprecated Use {@link #set(WB_Coordinate)} instead
+	 */
 	@Override
 	public void _set(WB_Coordinate p) {
+		set(p);
+	}
+
+	@Override
+	public void set(WB_Coordinate p) {
 		this.x = p.xd();
 		this.y = p.yd();
 		this.z = p.zd();
@@ -474,41 +546,41 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	}
 
 	public WB_Point4D rotateXY(double theta) {
-		_set(x * Math.cos(theta) + y * -Math.sin(theta), x * Math.sin(theta)
+		set(x * Math.cos(theta) + y * -Math.sin(theta), x * Math.sin(theta)
 				+ y * Math.cos(theta), z, w);
 		return this;
 	}
 
 	public WB_Point4D rotateYZ(double theta) {
-		_set(x, y * Math.cos(theta) + z * Math.sin(theta), y * -Math.sin(theta)
+		set(x, y * Math.cos(theta) + z * Math.sin(theta), y * -Math.sin(theta)
 				+ z * Math.cos(theta), w);
 		return this;
 	}
 
 	public WB_Point4D rotateXZ(double theta) {
 
-		_set(x * Math.cos(theta) + z * -Math.sin(theta), y, x * Math.sin(theta)
+		set(x * Math.cos(theta) + z * -Math.sin(theta), y, x * Math.sin(theta)
 				+ z * Math.cos(theta), w);
 		return this;
 	}
 
 	public WB_Point4D rotateXW(double theta) {
 
-		_set(x * Math.cos(theta) + w * Math.sin(theta), y, z,
+		set(x * Math.cos(theta) + w * Math.sin(theta), y, z,
 				x * -Math.sin(theta) + w * Math.cos(theta));
 		return this;
 	}
 
 	public WB_Point4D rotateYW(double theta) {
 
-		_set(x, y * Math.cos(theta) + w * -Math.sin(theta), z,
+		set(x, y * Math.cos(theta) + w * -Math.sin(theta), z,
 				y * Math.sin(theta) + w * Math.cos(theta));
 		return this;
 	}
 
 	public WB_Point4D rotateZW(double theta) {
 
-		_set(x, y, z * Math.cos(theta) + w * -Math.sin(theta),
+		set(x, y, z * Math.cos(theta) + w * -Math.sin(theta),
 				z * Math.sin(theta) + w * Math.cos(theta));
 		return this;
 	}

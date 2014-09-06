@@ -172,16 +172,16 @@ public class WB_FaceListMesh implements WB_Mesh {
 		for (int i = 0, j = face.length - 1; i < face.length; j = i, i++) {
 			p0 = vertices.getPoint(face[j]);
 			p1 = vertices.getPoint(face[i]);
-			center._addSelf(p1);
+			center.addSelf(p1);
 			tmp = geometryfactory.createVector((p0.yd() - p1.yd())
 					* (p0.zd() + p1.zd()),
 					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
-			normal._addSelf(tmp);
+			normal.addSelf(tmp);
 
 		}
-		normal._normalizeSelf();
-		center._divSelf(face.length);
+		normal.normalizeSelf();
+		center.divSelf(face.length);
 
 		return geometryfactory.createPlane(center.addMul(d, normal), normal);
 
@@ -256,9 +256,9 @@ public class WB_FaceListMesh implements WB_Mesh {
 		final List<WB_IndexedPoint> rescaled = new FastTable<WB_IndexedPoint>();
 		for (int i = 0; i < vertices.size(); i++) {
 			final WB_IndexedPoint p = vertices.getPoint(i);
-			p._addSelf(-scx, -scy, -scz);
-			p._mulSelf(f);
-			p._addSelf(acx, acy, acz);
+			p.addSelf(-scx, -scy, -scz);
+			p.mulSelf(f);
+			p.addSelf(acx, acy, acz);
 			rescaled.add(p);
 		}
 
@@ -391,10 +391,10 @@ public class WB_FaceListMesh implements WB_Mesh {
 	public WB_Point getFaceCenter(final int id) {
 		final WB_Point c = geometryfactory.createPoint();
 		for (int i = 0; i < faces[id].length; i++) {
-			c._addSelf(getVertex(faces[id][i]));
+			c.addSelf(getVertex(faces[id][i]));
 
 		}
-		c._divSelf(faces[id].length);
+		c.divSelf(faces[id].length);
 		return c;
 	}
 
@@ -512,13 +512,13 @@ public class WB_FaceListMesh implements WB_Mesh {
 				final WB_Vector P20 = geometryfactory
 						.createNormalizedVectorFromTo(p0, p2);
 				final double w = P10.getAngleNorm(P20);
-				vertexNormals[face[j]]._addMulSelf(w, faceNormals[i]);
+				vertexNormals[face[j]].addMulSelf(w, faceNormals[i]);
 			}
 			i++;
 
 		}
 		for (final WB_Vector v : vertexNormals) {
-			v._normalizeSelf();
+			v.normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -544,11 +544,11 @@ public class WB_FaceListMesh implements WB_Mesh {
 						(p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
 						(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 						(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
-				tmp._addSelf(tmp2);
+				tmp.addSelf(tmp2);
 			}
 
 			faceNormals[i] = tmp;
-			faceNormals[i]._normalizeSelf();
+			faceNormals[i].normalizeSelf();
 		}
 
 		fNormalsUpdated = true;
@@ -613,11 +613,11 @@ public class WB_FaceListMesh implements WB_Mesh {
 							(p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
 							(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 							(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
-					tmp._addSelf(tmp2);
+					tmp.addSelf(tmp2);
 				}
 
 				faceNormals[i] = tmp;
-				faceNormals[i]._normalizeSelf();
+				faceNormals[i].normalizeSelf();
 			}
 
 		}

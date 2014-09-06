@@ -402,9 +402,9 @@ public class WB_Voronoi2D {
 		while (pointQueueMarkers[pointQueueMin].nextHalfedgeInPointQueue == null) {
 			pointQueueMin += 1;
 		}
-		result._setX(pointQueueMarkers[pointQueueMin].nextHalfedgeInPointQueue.vertex
+		result.setX(pointQueueMarkers[pointQueueMin].nextHalfedgeInPointQueue.vertex
 				.xd());
-		result._setY(pointQueueMarkers[pointQueueMin].nextHalfedgeInPointQueue.ystar);
+		result.setY(pointQueueMarkers[pointQueueMin].nextHalfedgeInPointQueue.ystar);
 		return (result);
 	}
 
@@ -813,8 +813,8 @@ public class WB_Voronoi2D {
 		// create a new site at the point of intersection - this is a new vector
 		// event waiting to happen
 		v = new WB_Point();
-		v._setX(xint);
-		v._setY(yint);
+		v.setX(xint);
+		v.setY(yint);
 		return (v);
 	}
 }

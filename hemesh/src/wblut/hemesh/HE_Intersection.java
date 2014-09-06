@@ -226,7 +226,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, ray);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(ray.getOrigin());
+				d2 = sect.point.getSqDistance3D(ray.getOrigin());
 				if (d2 < d2min) {
 					p = sect;
 
@@ -256,7 +256,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, ray);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(ray.getOrigin());
+				d2 = sect.point.getSqDistance3D(ray.getOrigin());
 				if (d2 > d2max) {
 					p = sect;
 					d2max = d2;
@@ -287,7 +287,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, line);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(line.getOrigin());
+				d2 = sect.point.getSqDistance3D(line.getOrigin());
 				if (d2 < d2min) {
 					p = sect;
 					d2min = d2;
@@ -317,7 +317,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, line);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(line.getOrigin());
+				d2 = sect.point.getSqDistance3D(line.getOrigin());
 				if (d2 > d2max) {
 					p = sect;
 					d2max = d2;
@@ -348,7 +348,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, segment);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(segment.getOrigin());
+				d2 = sect.point.getSqDistance3D(segment.getOrigin());
 				if (d2 < d2min) {
 					p = sect;
 					d2min = d2;
@@ -378,7 +378,7 @@ public class HE_Intersection {
 		for (final HE_Face face : candidates) {
 			final HE_FaceIntersection sect = getIntersection(face, segment);
 			if (sect != null) {
-				d2 = sect.point.getSqDistance(segment.getOrigin());
+				d2 = sect.point.getSqDistance3D(segment.getOrigin());
 				if (d2 > d2max) {
 					p = sect;
 					d2max = d2;

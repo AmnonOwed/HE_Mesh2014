@@ -228,15 +228,15 @@ public class WB_M33 {
 	 */
 	public void rowInto(final int i, final WB_Vector result) {
 		if (i == 0) {
-			result._set(m11, m12, m13);
+			result.set(m11, m12, m13);
 		}
 		if (i == 1) {
-			result._set(m21, m22, m23);
+			result.set(m21, m22, m23);
 		}
 		if (i == 2) {
-			result._set(m31, m32, m33);
+			result.set(m31, m32, m33);
 		}
-		result._set(0, 0, 0);
+		result.set(0, 0, 0);
 	}
 
 	/**
@@ -269,15 +269,15 @@ public class WB_M33 {
 	 */
 	public void colInto(final int i, final WB_Vector result) {
 		if (i == 0) {
-			result._set(m11, m21, m31);
+			result.set(m11, m21, m31);
 		}
 		if (i == 1) {
-			result._set(m12, m22, m32);
+			result.set(m12, m22, m32);
 		}
 		if (i == 2) {
-			result._set(m13, m23, m33);
+			result.set(m13, m23, m33);
 		}
-		result._set(0, 0, 0);
+		result.set(0, 0, 0);
 	}
 
 	/**
@@ -522,14 +522,14 @@ public class WB_M33 {
 	 */
 	public static void mulInto(final WB_M33 m, final WB_Coordinate v,
 			final WB_MutableCoordinate result) {
-		result._set(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13, v.xd()
+		result.set(v.xd() * m.m11 + v.yd() * m.m12 + v.zd() * m.m13, v.xd()
 				* m.m21 + v.yd() * m.m22 + v.zd() * m.m23,
 				v.xd() * m.m31 + v.yd() * m.m32 + v.zd() * m.m33);
 	}
 
 	public static void mulInto(final WB_Coordinate v, final WB_M33 m,
 			final WB_MutableCoordinate result) {
-		result._set(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31, v.xd()
+		result.set(v.xd() * m.m11 + v.yd() * m.m21 + v.zd() * m.m31, v.xd()
 				* m.m12 + v.yd() * m.m22 + v.zd() * m.m32,
 				v.xd() * m.m13 + v.yd() * m.m23 + v.zd() * m.m33);
 	}
@@ -812,10 +812,10 @@ public class WB_M33 {
 		final WB_Point p = new WB_Point();
 		double e00, e11, e22, e01, e02, e12;
 		for (int i = 0; i < numPoints; i++) {
-			c._addSelf(points[i]);
+			c.addSelf(points[i]);
 
 		}
-		c._mulSelf(oon);
+		c.mulSelf(oon);
 		e00 = e11 = e22 = e01 = e02 = e12 = 0;
 		for (int i = 0; i < numPoints; i++) {
 			points[i].sub(c, p);

@@ -114,12 +114,12 @@ public class WB_BSplineSurface implements WB_Surface {
 			tmp = new WB_Point();
 			final int vind = vspan - q + el;
 			for (int k = 0; k <= p; k++) {
-				tmp._addSelf(Nu[k] * points[uind + k][vind].xd(), Nu[k]
+				tmp.addSelf(Nu[k] * points[uind + k][vind].xd(), Nu[k]
 						* points[uind + k][vind].yd(), Nu[k]
 						* points[uind + k][vind].zd());
 
 			}
-			S._addSelf(tmp._mulSelf(Nv[el]));
+			S.addSelf(tmp.mulSelf(Nv[el]));
 		}
 
 		return S;
@@ -294,7 +294,7 @@ public class WB_BSplineSurface implements WB_Surface {
 			cpoints[j] = new WB_Point();
 			for (int i = 0; i <= p; i++) {
 				final WB_Point tmp = points[span - p + i][j];
-				cpoints[j]._addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i]
+				cpoints[j].addSelf(N[i] * tmp.xd(), N[i] * tmp.yd(), N[i]
 						* tmp.zd());
 			}
 		}
@@ -312,7 +312,7 @@ public class WB_BSplineSurface implements WB_Surface {
 			cpoints[i] = new WB_Point();
 			for (int j = 0; j <= q; j++) {
 				final WB_Point tmp = points[i][span - q + j];
-				cpoints[i]._addSelf(N[j] * tmp.xd(), N[j] * tmp.yd(), N[j]
+				cpoints[i].addSelf(N[j] * tmp.xd(), N[j] * tmp.yd(), N[j]
 						* tmp.zd());
 			}
 		}

@@ -123,7 +123,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 				for (int iu = 0; iu < lusteps; iu++) {
 					final double u = (double) (iu) / (double) (usteps);
 					vertices[index] = evaluator.f(u, v);
-					vertices[index]._scaleSelf(radius);
+					vertices[index].scaleSelf(radius);
 					index++;
 				} // for iu
 			} // for iv

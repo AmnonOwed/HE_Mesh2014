@@ -23,10 +23,6 @@ public class WB_SimplePolygon implements SimplePolygon {
 	/** Status of stored plane. */
 	private boolean updated;
 
-	private static WB_Coordinate c;
-	private static WB_Coordinate p1;
-	private static WB_Coordinate p2;
-
 	/**
 	 * Instantiates a new WB_Polygon.
 	 */
@@ -202,13 +198,13 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 			p0 = points[j];
 			p1 = points[i];
-			normal._addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
+			normal.addSelf((p0.yd() - p1.yd()) * (p0.zd() + p1.zd()),
 					(p0.zd() - p1.zd()) * (p0.xd() + p1.xd()),
 					(p0.xd() - p1.xd()) * (p0.yd() + p1.yd()));
-			center._addSelf(p1);
+			center.addSelf(p1);
 		}
-		normal._normalizeSelf();
-		center._divSelf(n);
+		normal.normalizeSelf();
+		center.divSelf(n);
 		P = new WB_Plane(center, normal);
 		updated = true;
 		return P;
@@ -227,12 +223,12 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 		final WB_Vector vp = points[(i == 0) ? n - 1 : i - 1]
 				.subToVector(points[i]);
-		vp._normalizeSelf();
+		vp.normalizeSelf();
 		final WB_Vector vn = points[(i == n - 1) ? 0 : i + 1]
 				.subToVector(points[i]);
-		vn._normalizeSelf();
+		vn.normalizeSelf();
 
-		final double cross = vp.cross(vn).getSqLength();
+		final double cross = vp.cross(vn).getSqLength3D();
 
 		if (WB_Epsilon.isZeroSq(cross)) {
 			return WB_Convex.FLAT;
@@ -391,7 +387,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			newPoints[2 * i] = points[j].add(points[i]);
-			newPoints[2 * i]._mulSelf(0.5);
+			newPoints[2 * i].mulSelf(0.5);
 			newPoints[2 * i + 1] = points[i].get();
 		}
 		final WB_Point[] sPoints = new WB_Point[2 * n];
@@ -401,7 +397,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 				k = 0;
 			}
 			sPoints[i] = newPoints[j].add(newPoints[k]);
-			sPoints[i]._mulSelf(0.5);
+			sPoints[i].mulSelf(0.5);
 		}
 
 		return new WB_SimplePolygon(sPoints, 2 * n);
@@ -437,13 +433,13 @@ public class WB_SimplePolygon implements SimplePolygon {
 			p2 = cpoly.points[j];// endpoint of edge
 			// vector along edge
 			v = p2.subToVector(p1);
-			v._normalizeSelf();
+			v.normalizeSelf();
 			// edge normal is perpendicular to edge and plane normal
 			normal = v.cross(P.getNormal());
 			// center of edge
-			origin = p1.add(p2)._mulSelf(0.5);
+			origin = p1.add(p2).mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d * normal.xd(), d * normal.yd(), d * normal.zd());
+			origin.addSelf(d * normal.xd(), d * normal.yd(), d * normal.zd());
 
 			splitPolygonInto(poly, new WB_Plane(origin, normal), frontPoly,
 					backPoly);
@@ -490,13 +486,13 @@ public class WB_SimplePolygon implements SimplePolygon {
 			p2 = poly.points[j];// endpoint of edge
 			// vector along edge
 			v = p2.subToVector(p1);
-			v._normalizeSelf();
+			v.normalizeSelf();
 			// edge normal is perpendicular to edge and plane normal
 			normal = v.cross(P.getNormal());
 			// center of edge
-			origin = p1.add(p2)._mulSelf(0.5);
+			origin = p1.add(p2).mulSelf(0.5);
 			// offset cutting plane origin by the desired distance d
-			origin._addSelf(d[j] * normal.xd(), d[j] * normal.yd(), d[j]
+			origin.addSelf(d[j] * normal.xd(), d[j] * normal.yd(), d[j]
 					* normal.zd());
 
 			splitPolygonInto(poly, new WB_Plane(origin, normal), frontPoly,
@@ -770,7 +766,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getSegments()
 	 */
 	@Override
@@ -816,7 +812,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getN()
 	 */
 	@Override
@@ -826,7 +822,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getPoint(int)
 	 */
 	@Override
@@ -836,7 +832,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getIndex(int)
 	 */
 	@Override
@@ -846,7 +842,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Polygon#getPoints()
 	 */
 	@Override

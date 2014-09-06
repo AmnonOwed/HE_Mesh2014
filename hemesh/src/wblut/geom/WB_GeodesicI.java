@@ -84,15 +84,15 @@ public class WB_GeodesicI {
 				refpoints[i - 1 + 2 * (v - 1)] = apices[0].mulAddMul(1.0 - i
 						* iv, i * iv, apices[1]);
 
-				refpoints[i - 1 + 2 * (v - 1)]._normalizeSelf();
+				refpoints[i - 1 + 2 * (v - 1)].normalizeSelf();
 				refpoints[i - 1 + v - 1] = apices[0].mulAddMul(1.0 - i * iv, i
 						* iv, apices[2]);
 
-				refpoints[i - 1 + v - 1]._normalizeSelf();
+				refpoints[i - 1 + v - 1].normalizeSelf();
 				refpoints[i - 1] = apices[1].mulAddMul(1.0 - i * iv, i * iv,
 						apices[2]);
 
-				refpoints[i - 1]._normalizeSelf();
+				refpoints[i - 1].normalizeSelf();
 			}
 		} else if (div == MIDARC) {
 
@@ -123,7 +123,7 @@ public class WB_GeodesicI {
 							p3, p4);
 					PPTpoints[id] = selectPoint(gci, apices, type);
 
-					PPTpoints[id]._normalizeSelf();
+					PPTpoints[id].normalizeSelf();
 					id++;
 
 				}
@@ -174,9 +174,9 @@ public class WB_GeodesicI {
 							p5, p6);
 					i2 = selectPoint(gci, apices, type);
 
-					PPTpoints[id] = (i0.add(i1))._addSelf(i2);
+					PPTpoints[id] = (i0.add(i1)).addSelf(i2);
 
-					PPTpoints[id]._normalizeSelf();
+					PPTpoints[id].normalizeSelf();
 					id++;
 
 				}
@@ -202,11 +202,11 @@ public class WB_GeodesicI {
 		points.add(apices[2]);
 		for (WB_Point p : points) {
 
-			p._normalizeSelf();
+			p.normalizeSelf();
 
-			p._mulSelf(radius);
+			p.mulSelf(radius);
 		}
-		double threshold = apices[0].getDistance(apices[1]) / (10 * v);
+		double threshold = apices[0].getDistance3D(apices[1]) / (10 * v);
 		zeropoints.addAll(points);
 
 		WB_Transform T = new WB_Transform();
@@ -385,17 +385,17 @@ public class WB_GeodesicI {
 		int j01 = (j0 + j1) / 2;
 		points[i01][j01] = points[i0][j0].mulAddMul(0.5, 0.5, points[i1][j1]);
 
-		points[i01][j01]._normalizeSelf();
+		points[i01][j01].normalizeSelf();
 		int i02 = (i0 + i2) / 2;
 		int j02 = (j0 + j2) / 2;
 		points[i02][j02] = points[i0][j0].mulAddMul(0.5, 0.5, points[i2][j2]);
 
-		points[i02][j02]._normalizeSelf();
+		points[i02][j02].normalizeSelf();
 		int i12 = (i1 + i2) / 2;
 		int j12 = (j1 + j2) / 2;
 		points[i12][j12] = points[i1][j1].mulAddMul(0.5, 0.5, points[i2][j2]);
 
-		points[i12][j12]._normalizeSelf();
+		points[i12][j12].normalizeSelf();
 		if (r < n - 1) {
 			recdivtriangle(points, i0, j0, i01, j01, i02, j02, r + 1, n);
 			recdivtriangle(points, i01, j01, i1, j1, i12, j12, r + 1, n);

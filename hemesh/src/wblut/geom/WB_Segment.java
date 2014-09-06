@@ -9,7 +9,7 @@ import wblut.math.WB_Math;
 public class WB_Segment extends WB_Linear implements Segment {
 
 	protected double length;
-	private WB_Point endpoint;
+	private final WB_Point endpoint;
 
 	public WB_Segment() {
 		super();
@@ -23,7 +23,7 @@ public class WB_Segment extends WB_Linear implements Segment {
 		super(o, d);
 		length = l;
 		endpoint = new WB_Point(direction);
-		endpoint._mulSelf(l)._addSelf(origin);
+		endpoint.mulSelf(l).addSelf(origin);
 	}
 
 	public WB_Segment(final WB_Coordinate p1, final WB_Coordinate p2) {
@@ -44,27 +44,30 @@ public class WB_Segment extends WB_Linear implements Segment {
 	@Override
 	public WB_Point getParametricPointOnSegment(final double t) {
 		final WB_Point result = new WB_Point(direction);
-		result._scaleSelf(WB_Math.clamp(t, 0, 1) * length);
-		result.moveBy(origin);
+		result.scaleSelf(WB_Math.clamp(t, 0, 1) * length);
+		result.addSelf(origin);
 		return result;
 	}
 
 	@Override
 	public void getParametricPointOnSegmentInto(final double t,
 			final WB_MutableCoordinate result) {
-		result._set(direction.mul(WB_Math.clamp(t, 0, 1) * length)._addSelf(
+		result.set(direction.mul(WB_Math.clamp(t, 0, 1) * length).addSelf(
 				origin));
 
 	}
 
+	@Override
 	public WB_Point getEndpoint() {
 		return endpoint;
 	}
 
+	@Override
 	public WB_Point getCenter() {
-		return endpoint.add(origin)._mulSelf(0.5);
+		return endpoint.add(origin).mulSelf(0.5);
 	}
 
+	@Override
 	public double getLength() {
 		return length;
 	}
@@ -86,19 +89,22 @@ public class WB_Segment extends WB_Linear implements Segment {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.WB_Segment2D#reverse()
 	 */
+	@Override
 	public void reverse() {
 		set(endpoint, origin);
 	}
 
 	@Override
-	public WB_Point getPoint(int i) {
-		if (i == 0)
+	public WB_Point getPoint(final int i) {
+		if (i == 0) {
 			return origin;
-		if (i == 1)
+		}
+		if (i == 1) {
 			return endpoint;
+		}
 		return null;
 	}
 
@@ -119,7 +125,7 @@ public class WB_Segment extends WB_Linear implements Segment {
 	}
 
 	@Override
-	public WB_Geometry apply(WB_Transform T) {
+	public WB_Geometry apply(final WB_Transform T) {
 		return geometryfactory.createSegment(origin.applyAsPoint(T),
 				endpoint.applyAsPoint(T));
 	}

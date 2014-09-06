@@ -216,12 +216,12 @@ public class WB_Voronoi {
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
 					final WB_Vector N = new WB_Vector(points.get(i));
-					N._subSelf(points.get(j));
-					N._normalizeSelf();
-					O._set(points.get(i)); // plane origin=point halfway
+					N.subSelf(points.get(j));
+					N.normalizeSelf();
+					O.set(points.get(i)); // plane origin=point halfway
 					// between point i and point j
-					O._addSelf(points.get(j));
-					O._mulSelf(0.5);
+					O.addSelf(points.get(j));
+					O.mulSelf(0.5);
 					P = new WB_Plane(O, N);
 					cutPlanes.add(P);
 				}
@@ -268,12 +268,12 @@ public class WB_Voronoi {
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
 					final WB_Vector N = new WB_Vector(points[i]);
-					N._subSelf(points[j]);
-					N._normalizeSelf();
-					O._set(points[i]); // plane origin=point halfway
+					N.subSelf(points[j]);
+					N.normalizeSelf();
+					O.set(points[i]); // plane origin=point halfway
 					// between point i and point j
-					O._addSelf(points[j]);
-					O._mulSelf(0.5);
+					O.addSelf(points[j]);
+					O.mulSelf(0.5);
 					P = new WB_Plane(O, N);
 					cutPlanes.add(P);
 				}

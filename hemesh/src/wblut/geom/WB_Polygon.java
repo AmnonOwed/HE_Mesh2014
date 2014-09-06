@@ -130,9 +130,9 @@ public class WB_Polygon extends WB_Ring {
 			final WB_Vector v = geometryfactory.createVector(points.get(in, 0)
 					- points.get(i, 0), points.get(in, 1) - points.get(i, 1),
 					points.get(in, 2) - points.get(i, 2));
-			incLengths[i] = (i == 0) ? v.getLength() : incLengths[i - 1]
-					+ v.getLength();
-			v._normalizeSelf();
+			incLengths[i] = (i == 0) ? v.getLength3D() : incLengths[i - 1]
+					+ v.getLength3D();
+			v.normalizeSelf();
 			dirs.add(v);
 		}
 		directions = geometryfactory.createVectorSequence(dirs);
@@ -259,7 +259,7 @@ public class WB_Polygon extends WB_Ring {
 		final WB_Vector normal = geometryfactory.createVector();
 		for (int i = 0, j = getNumberOfPoints() - 1; i < getNumberOfPoints(); j = i, i++) {
 
-			normal._addSelf(
+			normal.addSelf(
 					(points.get(j, 1) - points.get(i, 1))
 					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
@@ -268,7 +268,7 @@ public class WB_Polygon extends WB_Ring {
 					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
-		normal._normalizeSelf();
+		normal.normalizeSelf();
 		return geometryfactory.createPlane(
 				points.getPoint(0).addMul(d, normal), normal);
 
@@ -278,7 +278,7 @@ public class WB_Polygon extends WB_Ring {
 		final WB_Vector normal = geometryfactory.createVector();
 		for (int i = 0, j = getNumberOfPoints() - 1; i < getNumberOfPoints(); j = i, i++) {
 
-			normal._addSelf(
+			normal.addSelf(
 					(points.get(j, 1) - points.get(i, 1))
 					* (points.get(j, 2) + points.get(i, 2)),
 					(points.get(j, 2) - points.get(i, 2))
@@ -287,7 +287,7 @@ public class WB_Polygon extends WB_Ring {
 					* (points.get(j, 1) + points.get(i, 1)));
 
 		}
-		normal._normalizeSelf();
+		normal.normalizeSelf();
 
 		return normal;
 

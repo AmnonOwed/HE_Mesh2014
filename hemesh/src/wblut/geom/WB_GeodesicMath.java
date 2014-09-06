@@ -26,16 +26,16 @@ public class WB_GeodesicMath {
 		WB_Vector r2 = vnor(v3, origin, v4);
 		WB_Vector r3 = vnor(r1, origin, r2);
 
-		if (WB_Epsilon.isZeroSq(r3.getSqLength())) {
+		if (WB_Epsilon.isZeroSq(r3.getSqLength3D())) {
 			return null;
 		}
-		r3._normalizeSelf();
+		r3.normalizeSelf();
 		WB_Point p0 = gf.createPoint(r3);
 		WB_Point p1 = p0.mul(-1);
 		double dihedral = Math.acos(Math.abs(r1.dot(r2))
-				/ (r1.getLength() * r2.getLength()));
-		p0._addSelf(origin);
-		p1._addSelf(origin);
+				/ (r1.getLength3D() * r2.getLength3D()));
+		p0.addSelf(origin);
+		p1.addSelf(origin);
 		return new WB_GreatCircleIntersection(p0.coords(), p1.coords(),
 				dihedral);
 	}
@@ -65,7 +65,7 @@ public class WB_GeodesicMath {
 			WB_Coordinate v3) {
 		WB_Vector r0 = new WB_Vector(v2, v1);
 		WB_Vector r1 = new WB_Vector(v2, v3);
-		return r0.dot(r1) / (r0.getLength() * r1.getLength());
+		return r0.dot(r1) / (r0.getLength3D() * r1.getLength3D());
 	}
 
 }

@@ -70,10 +70,10 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 			v = vItr.next();
 			if (v.getVertexType() == WB_Convex.CONVEX) {
 				final WB_Vector N = new WB_Vector(v.getVertexNormal());
-				final WB_Point O = new WB_Point(N)._mulSelf(-distance.value(
+				final WB_Point O = new WB_Point(N).mulSelf(-distance.value(
 						v.xd(), v.yd(), v.zd()));
-				N._mulSelf(-1);
-				O._addSelf(v);
+				N.mulSelf(-1);
+				O.addSelf(v);
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}
@@ -105,10 +105,10 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 			v = vItr.next();
 			if (v.getVertexType() == WB_Convex.CONVEX) {
 				final WB_Vector N = new WB_Vector(v.getVertexNormal());
-				final WB_Point O = new WB_Point(N)._mulSelf(-distance.value(
+				final WB_Point O = new WB_Point(N).mulSelf(-distance.value(
 						v.xd(), v.yd(), v.zd()));
-				N._mulSelf(-1);
-				O._addSelf(v);
+				N.mulSelf(-1);
+				O.addSelf(v);
 				final WB_Plane P = new WB_Plane(O, N);
 				cutPlanes.add(P);
 			}

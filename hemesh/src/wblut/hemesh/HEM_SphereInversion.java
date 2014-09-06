@@ -74,18 +74,18 @@ public class HEM_SphereInversion extends HEM_Modifier {
 			v = vItr.next();
 			if (linear) {
 				d = v.getPoint().subToVector(center);
-				d._normalizeSelf();
-				surf = new WB_Point(center)._addMulSelf(r, d);
-				d = surf.subToVector(v)._mulSelf(2);
-				v.getPoint()._addSelf(d);
+				d.normalizeSelf();
+				surf = new WB_Point(center).addMulSelf(r, d);
+				d = surf.subToVector(v).mulSelf(2);
+				v.getPoint().addSelf(d);
 			}
 			else {
 				d = v.getPoint().subToVector(center);
-				ri = d.getLength();
-				d._normalizeSelf();
+				ri = d.getLength3D();
+				d.normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
-				v._set(center);
-				v.getPoint()._addMulSelf(rf, d);
+				v.set(center);
+				v.getPoint().addMulSelf(rf, d);
 			}
 
 		}
@@ -116,18 +116,18 @@ public class HEM_SphereInversion extends HEM_Modifier {
 			v = vItr.next();
 			if (linear) {
 				d = v.getPoint().subToVector(center);
-				d._normalizeSelf();
-				surf = new WB_Point(center)._addMulSelf(r, d);
+				d.normalizeSelf();
+				surf = new WB_Point(center).addMulSelf(r, d);
 				d = v.getPoint().subToVector(surf);
-				v.getPoint()._addSelf(d);
+				v.getPoint().addSelf(d);
 			}
 			else {
 				d = v.getPoint().subToVector(center);
-				ri = d.getLength();
-				d._normalizeSelf();
+				ri = d.getLength3D();
+				d.normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
-				v.getPoint()._set(center);
-				v.getPoint()._addMulSelf(rf, d);
+				v.getPoint().set(center);
+				v.getPoint().addMulSelf(rf, d);
 			}
 
 		}

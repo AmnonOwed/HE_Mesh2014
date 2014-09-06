@@ -37,7 +37,7 @@ public class WB_Plane {
 		final WB_Vector v21 = new WB_Vector(p1, p2);
 		final WB_Vector v31 = new WB_Vector(p1, p3);
 		n = new WB_Vector(v21.cross(v31));
-		n._normalizeSelf();
+		n.normalizeSelf();
 		d = n.xd() * p1.xd() + n.yd() * p1.yd() + n.zd() * p1.zd();
 		origin = new WB_Point(p1);
 		setAxes();
@@ -47,7 +47,7 @@ public class WB_Plane {
 			final double nx, final double ny, final double nz) {
 		origin = new WB_Point(ox, oy, oz);
 		n = new WB_Vector(nx, ny, nz);
-		n._normalizeSelf();
+		n.normalizeSelf();
 		d = n.dot(origin);
 		setAxes();
 	}
@@ -55,7 +55,7 @@ public class WB_Plane {
 	public WB_Plane(final WB_Coordinate o, final WB_Coordinate n) {
 		origin = new WB_Point(o);
 		this.n = new WB_Vector(n);
-		this.n._normalizeSelf();
+		this.n.normalizeSelf();
 		d = this.n.dot(origin);
 		setAxes();
 	}
@@ -63,14 +63,14 @@ public class WB_Plane {
 	protected void set(final WB_Coordinate o, final WB_Coordinate n) {
 		origin = new WB_Point(o);
 		this.n = new WB_Vector(n);
-		this.n._normalizeSelf();
+		this.n.normalizeSelf();
 		d = this.n.dot(origin);
 		setAxes();
 	}
 
 	public WB_Plane(final WB_Coordinate n, final double d) {
 		this.n = new WB_Vector(n);
-		this.n._normalizeSelf();
+		this.n.normalizeSelf();
 		this.d = d;
 		origin = WB_Intersection.getClosestPoint3D(new WB_Point(), this);
 		setAxes();
@@ -93,7 +93,7 @@ public class WB_Plane {
 	}
 
 	public void flipNormal() {
-		n._mulSelf(-1);
+		n.mulSelf(-1);
 		setAxes();
 	}
 
@@ -144,7 +144,7 @@ public class WB_Plane {
 	public static boolean pointOutsideOfPlane(final WB_Coordinate p,
 			final WB_Coordinate a, final WB_Coordinate b, final WB_Coordinate c) {
 		return new WB_Vector(a, p).dot(new WB_Vector(a, b)
-				._crossSelf(new WB_Vector(a, c))) >= 0;
+				.crossSelf(new WB_Vector(a, c))) >= 0;
 	}
 
 	/**
@@ -167,9 +167,9 @@ public class WB_Plane {
 			final WB_Coordinate q, final WB_Coordinate a,
 			final WB_Coordinate b, final WB_Coordinate c) {
 		final double signp = new WB_Vector(a, p).dot(new WB_Vector(a, b)
-				._crossSelf(new WB_Vector(a, c)));
+				.crossSelf(new WB_Vector(a, c)));
 		final double signq = new WB_Vector(a, q).dot(new WB_Vector(a, b)
-				._crossSelf(new WB_Vector(a, c)));
+				.crossSelf(new WB_Vector(a, c)));
 		return signp * signq <= 0;
 	}
 
@@ -277,7 +277,7 @@ public class WB_Plane {
 		} else {
 			u = new WB_Vector(0, n.zd(), -n.yd());
 		}
-		u._normalizeSelf();
+		u.normalizeSelf();
 		v = n.cross(u);
 
 	}
@@ -393,7 +393,7 @@ public class WB_Plane {
 		if (WB_Epsilon.isZero(WB_Distance.getDistance3D(p, this))) {
 			return new WB_Point(p);
 		}
-		return extractPoint2D(localPoint(p)._scaleSelf(1, 1, -1));
+		return extractPoint2D(localPoint(p).scaleSelf(1, 1, -1));
 
 	}
 

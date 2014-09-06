@@ -135,14 +135,14 @@ public class HEC_SweepTube extends HEC_Creator {
 			if (curve.p() == 1) {
 				deriv = new WB_Vector(0, 0, 0);
 				if (i > 0) {
-					deriv._addSelf(onCurve.subToVector(curve.curvePoint((i - 1)
+					deriv.addSelf(onCurve.subToVector(curve.curvePoint((i - 1)
 							* ds)));
 				}
 				if (i < steps) {
-					deriv._addSelf(curve.curvePoint((i + 1) * ds).subToVector(
+					deriv.addSelf(curve.curvePoint((i + 1) * ds).subToVector(
 							onCurve));
 				}
-				deriv._normalizeSelf();
+				deriv.normalizeSelf();
 			}
 			else {
 				deriv = curve.curveFirstDeriv(i * ds);
@@ -151,11 +151,11 @@ public class HEC_SweepTube extends HEC_Creator {
 			final double angle = Math.acos(WB_Math.clamp(oldderiv.dot(deriv),
 					-1, 1));
 			for (int j = 0; j < facets; j++) {
-				if (!WB_Epsilon.isZeroSq(axis.getSqLength())) {
+				if (!WB_Epsilon.isZeroSq(axis.getSqLength3D())) {
 					basevertices[j].rotateAboutAxis(angle, origin, axis);
 				}
 				vertices[j + i * facets] = new WB_Point(basevertices[j]);
-				vertices[j + i * facets]._addSelf(onCurve);
+				vertices[j + i * facets].addSelf(onCurve);
 			}
 			oldderiv = deriv;
 		}

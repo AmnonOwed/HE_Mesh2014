@@ -56,9 +56,9 @@ public class WB_Triangle implements Triangle {
 	 * Update side lengths and corner angles.
 	 */
 	protected void update() {
-		a = p2.getDistance(p3);
-		b = p1.getDistance(p3);
-		c = p1.getDistance(p2);
+		a = p2.getDistance3D(p3);
+		b = p1.getDistance3D(p3);
+		c = p1.getDistance3D(p2);
 
 		cosA = ((p2.xd() - p1.xd()) * (p3.xd() - p1.xd()) + (p2.yd() - p1.yd())
 				* (p3.yd() - p1.yd()))
@@ -161,7 +161,7 @@ public class WB_Triangle implements Triangle {
 	@Override
 	public WB_Plane getPlane() {
 		final WB_Plane P = new WB_Plane(p1, p2, p3);
-		if (P.getNormal().getSqLength() < WB_Epsilon.SQEPSILON) {
+		if (P.getNormal().getSqLength3D() < WB_Epsilon.SQEPSILON) {
 			return null;
 		}
 		return P;
@@ -220,11 +220,11 @@ public class WB_Triangle implements Triangle {
 		final double abc = a * x + b * y + c * z;
 		final WB_Point ea = p2.sub(p3);
 		final WB_Point eb = p1.sub(p3);
-		ea._mulSelf(b * y);
-		eb._mulSelf(a * x);
-		ea._addSelf(eb);
-		ea._divSelf(abc);
-		ea._addSelf(p3);
+		ea.mulSelf(b * y);
+		eb.mulSelf(a * x);
+		ea.addSelf(eb);
+		ea.divSelf(abc);
+		ea.addSelf(p3);
 		return ea;
 
 	}
@@ -409,7 +409,7 @@ public class WB_Triangle implements Triangle {
 		final WB_Point ta = p1.mul(a);
 		final WB_Point tb = p2.mul(b);
 		final WB_Point tc = p3.mul(c);
-		tc._addSelf(ta)._addSelf(tb)._divSelf(abc);
+		tc.addSelf(ta).addSelf(tb).divSelf(abc);
 		result.setCenter(tc);
 		return result;
 
@@ -439,9 +439,9 @@ public class WB_Triangle implements Triangle {
 	 */
 	public static boolean sameSide2D(final WB_Coordinate p1,
 			final WB_Coordinate p2, final WB_Coordinate A, final WB_Coordinate B) {
-		final WB_Point t1 = new WB_Point(B)._subSelf(A);
-		final WB_Point t2 = new WB_Point(p1)._subSelf(A);
-		final WB_Point t3 = new WB_Point(p2)._subSelf(A);
+		final WB_Point t1 = new WB_Point(B).subSelf(A);
+		final WB_Point t2 = new WB_Point(p1).subSelf(A);
+		final WB_Point t3 = new WB_Point(p2).subSelf(A);
 		final double ct2 = t1.xd() * t2.yd() - t1.yd() * t2.xd();
 		final double ct3 = t1.xd() * t3.yd() - t1.yd() * t3.xd();
 
@@ -532,9 +532,9 @@ public class WB_Triangle implements Triangle {
 			return false;
 		}
 		// Compute vectors
-		final WB_Point v0 = new WB_Point(C)._subSelf(A);
-		final WB_Point v1 = new WB_Point(B)._subSelf(A);
-		final WB_Point v2 = new WB_Point(p)._subSelf(A);
+		final WB_Point v0 = new WB_Point(C).subSelf(A);
+		final WB_Point v1 = new WB_Point(B).subSelf(A);
+		final WB_Point v2 = new WB_Point(p).subSelf(A);
 
 		// Compute dot products
 		final double dot00 = v0.dot2D(v0);
@@ -569,9 +569,9 @@ public class WB_Triangle implements Triangle {
 			return false;
 		}
 		// Compute vectors
-		final WB_Point v0 = new WB_Point(C)._subSelf(A);
-		final WB_Point v1 = new WB_Point(B)._subSelf(A);
-		final WB_Point v2 = new WB_Point(p)._subSelf(A);
+		final WB_Point v0 = new WB_Point(C).subSelf(A);
+		final WB_Point v1 = new WB_Point(B).subSelf(A);
+		final WB_Point v2 = new WB_Point(p).subSelf(A);
 
 		// Compute dot products
 		final double dot00 = v0.dot(v0);

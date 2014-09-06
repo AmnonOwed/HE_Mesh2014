@@ -390,17 +390,17 @@ public class WB_Render3D {
 
 		for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 			int id = lmesh.getFace(i)[0];
-			v._set(lmesh.getVertexNormal(id));
+			v.set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
 			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[1];
-			v._set(lmesh.getVertexNormal(id));
+			v.set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
 			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
 			id = lmesh.getFace(i)[2];
-			v._set(lmesh.getVertexNormal(id));
+			v.set(lmesh.getVertexNormal(id));
 			retained.normal(v.xf(), v.yf(), v.zf());
 			p = seq.getPoint(id);
 			retained.vertex(p.xf(), p.yf(), p.zf());
@@ -1665,9 +1665,9 @@ public class WB_Render3D {
 	public void drawTriangle(final Triangle triangle) {
 		home.beginShape();
 		home.vertex(triangle.p1().xf(), triangle.p1().yf(), triangle.p1().zf());
+		home.vertex(triangle.p2().xf(), triangle.p2().yf(), triangle.p2().zf());
 		home.vertex(triangle.p3().xf(), triangle.p3().yf(), triangle.p3().zf());
-		home.vertex(triangle.p1().xf(), triangle.p1().yf(), triangle.p1().zf());
-		home.endShape();
+		home.endShape(PApplet.CLOSE);
 	}
 
 	public void drawTriangle2D(final Collection<? extends Triangle> triangles) {
@@ -1950,13 +1950,13 @@ public class WB_Render3D {
 					+ m_pMatrix.m32 * in[2] + m_pMatrix.m33 * in[3];
 
 			if (out[3] == 0.0) { // Check for an invalid result.
-				result._set(0, 0, 0);
+				result.set(0, 0, 0);
 				return false;
 			}
 
 			// Scale to world coordinates.
 			out[3] = 1.0 / out[3];
-			result._set(out[0] * out[3], out[1] * out[3], out[2] * out[3]);
+			result.set(out[0] * out[3], out[1] * out[3], out[2] * out[3]);
 			return true;
 
 		}

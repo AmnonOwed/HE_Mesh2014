@@ -58,7 +58,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p2, p1);
 
 			faceNormals[i] = a.cross(b);
-			faceNormals[i]._normalizeSelf();
+			faceNormals[i].normalizeSelf();
 		}
 
 		fNormalsUpdated = true;
@@ -100,17 +100,17 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p1, p2);
 			final WB_Vector c = geometryfactory.createNormalizedVectorFromTo(p2, p0);
 
-			final double l2a = a.getSqLength();
-			final double l2b = b.getSqLength();
-			final double l2c = c.getSqLength();
+			final double l2a = a.getSqLength3D();
+			final double l2b = b.getSqLength3D();
+			final double l2c = c.getSqLength3D();
 			final WB_Vector facenormal = a.cross(b);
-			(vertexNormals[face[0]])._addMulSelf(1.0 / (l2a * l2c), facenormal);
-			(vertexNormals[face[1]])._addMulSelf(1.0 / (l2b * l2a), facenormal);
-			(vertexNormals[face[2]])._addMulSelf(1.0 / (l2c * l2b), facenormal);
+			(vertexNormals[face[0]]).addMulSelf(1.0 / (l2a * l2c), facenormal);
+			(vertexNormals[face[1]]).addMulSelf(1.0 / (l2b * l2a), facenormal);
+			(vertexNormals[face[2]]).addMulSelf(1.0 / (l2c * l2b), facenormal);
 
 		}
 		for (final WB_Vector v : vertexNormals) {
-			(v)._normalizeSelf();
+			(v).normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -139,13 +139,13 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p1, p2);
 
 			final WB_Vector facenormal = a.cross(b);
-			(vertexNormals[face[0]])._addSelf(facenormal);
-			(vertexNormals[face[1]])._addSelf(facenormal);
-			(vertexNormals[face[2]])._addSelf(facenormal);
+			(vertexNormals[face[0]]).addSelf(facenormal);
+			(vertexNormals[face[1]]).addSelf(facenormal);
+			(vertexNormals[face[2]]).addSelf(facenormal);
 
 		}
 		for (final WB_Vector v : vertexNormals) {
-			(v)._normalizeSelf();
+			(v).normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -187,17 +187,17 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector P21 = geometryfactory
 					.createNormalizedVectorFromTo(p1, p2);
 			final double w0 = P10.getAngleNorm(P20);
-			P10._mulSelf(-1);
+			P10.mulSelf(-1);
 			final double w1 = P10.getAngleNorm(P21);
 			final WB_Vector fn = faceNormals[i];
-			(vertexNormals[face[0]])._addMulSelf(w0, fn);
-			(vertexNormals[face[1]])._addMulSelf(w1, fn);
-			(vertexNormals[face[2]])._addMulSelf(Math.PI - w0 - w1, fn);
+			(vertexNormals[face[0]]).addMulSelf(w0, fn);
+			(vertexNormals[face[1]]).addMulSelf(w1, fn);
+			(vertexNormals[face[2]]).addMulSelf(Math.PI - w0 - w1, fn);
 			i++;
 
 		}
 		for (final WB_Vector v : vertexNormals) {
-			v._normalizeSelf();
+			v.normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -221,13 +221,13 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		int i = 0;
 		for (final int[] face : faces) {
 			final WB_Vector fn = faceNormals[i];
-			(vertexNormals[face[0]])._addSelf(fn);
-			(vertexNormals[face[1]])._addSelf(fn);
-			(vertexNormals[face[2]])._addSelf(fn);
+			(vertexNormals[face[0]]).addSelf(fn);
+			(vertexNormals[face[1]]).addSelf(fn);
+			(vertexNormals[face[2]]).addSelf(fn);
 			i++;
 		}
 		for (final WB_Vector v : vertexNormals) {
-			(v)._normalizeSelf();
+			(v).normalizeSelf();
 
 		}
 		vNormalsUpdated = true;
@@ -259,9 +259,9 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			// Compute corner weights
 			final WB_Vector c = e0.cross(e1);
 			double x, y, z;
-			final double area = 0.5 * c.getLength();
-			final double[] l2 = new double[] { e0.getSqLength(),
-					e1.getSqLength(), e2.getSqLength() };
+			final double area = 0.5 * c.getLength3D();
+			final double[] l2 = new double[] { e0.getSqLength3D(),
+					e1.getSqLength3D(), e2.getSqLength3D() };
 			final double[] ew = new double[] { l2[0] * (l2[1] + l2[2] - l2[0]),
 					l2[1] * (l2[2] + l2[0] - l2[1]),
 					l2[2] * (l2[0] + l2[1] - l2[2]) };
@@ -323,10 +323,10 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		}
 
 		for (int i = 0; i < nv; i++) {
-			(pdir1[i])._crossSelf(vertexNormals[i]);
-			pdir1[i]._normalizeSelf();
+			(pdir1[i]).crossSelf(vertexNormals[i]);
+			pdir1[i].normalizeSelf();
 			pdir2[i] = (vertexNormals[i]).cross(pdir1[i]);
-			pdir2[i]._normalizeSelf();
+			pdir2[i].normalizeSelf();
 		}
 		int i = 0;
 		for (final int[] face : faces) {
@@ -343,7 +343,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector n = e0.cross(e1);
 
 			final WB_Vector b = n.cross(t);
-			b._normalizeSelf();
+			b.normalizeSelf();
 
 			final double[] m = new double[] { 0, 0, 0 };
 			final double[][] w = new double[][] { { 0, 0, 0 }, { 0, 0, 0 },
@@ -422,7 +422,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			final WB_Vector n = e0.cross(e1);
 
 			final WB_Vector b = n.cross(t);
-			b._normalizeSelf();
+			b.normalizeSelf();
 
 			final WB_Vector[] fcurv = new WB_Vector[3];
 			for (int j = 0; j < 3; j++) {
@@ -616,7 +616,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	WB_Vector trinorm(final WB_Coordinate v0, final WB_Coordinate v1,
 			final WB_Coordinate v2) {
 		final WB_Vector a = geometryfactory.createVectorFromTo(v0, v1);
-		return a.cross(geometryfactory.createVectorFromTo(v0, v2))._mulSelf(0.5);
+		return a.cross(geometryfactory.createVectorFromTo(v0, v2)).mulSelf(0.5);
 
 	}
 
@@ -703,7 +703,7 @@ public class WB_TriMesh extends WB_FaceListMesh {
 		final double v1 = rNewU.dot(oldV);
 		final double u2 = rNewV.dot(oldU);
 		final double v2 = rNewV.dot(oldV);
-		newKs._set(oldKu * u1 * u1 + oldKuv * (2 * u1 * v1) + oldKv * v1 * v1,
+		newKs.set(oldKu * u1 * u1 + oldKuv * (2 * u1 * v1) + oldKv * v1 * v1,
 				oldKu * u1 * u2 + oldKuv * (u1 * v2 + u2 * v1) + oldKv * v1
 						* v2, oldKu * u2 * u2 + oldKuv * (2 * u2 * v2) + oldKv
 						* v2 * v2);
@@ -740,20 +740,20 @@ public class WB_TriMesh extends WB_FaceListMesh {
 
 	void rotCoordSys(final WB_Vector oldU, final WB_Vector oldV,
 			final WB_Vector newNorm, final WB_Vector newU, final WB_Vector newV) {
-		newU._set(oldU);
-		newV._set(oldV);
+		newU.set(oldU);
+		newV.set(oldV);
 		final WB_Vector oldNorm = oldU.cross(oldV);
 		final double ndot = oldNorm.dot(newNorm);
 		if (ndot <= -1.0) {
-			newU._mulSelf(-1);
-			newV._mulSelf(-1);
+			newU.mulSelf(-1);
+			newV.mulSelf(-1);
 			return;
 		}
 		final WB_Vector perpOld = newNorm.addMul(-ndot, oldNorm);
 		final WB_Vector dperp = newNorm.add(oldNorm);
-		dperp._mulSelf(1.0 / (1 + ndot));
-		newU._addMulSelf(-newU.dot(perpOld), dperp);
-		newV._addMulSelf(-newV.dot(perpOld), dperp);
+		dperp.mulSelf(1.0 / (1 + ndot));
+		newU.addMulSelf(-newU.dot(perpOld), dperp);
+		newV.addMulSelf(-newV.dot(perpOld), dperp);
 
 	}
 
@@ -775,17 +775,17 @@ public class WB_TriMesh extends WB_FaceListMesh {
 			s = tt * c;
 		}
 
-		ks._set(ku - tt * kuv, kv + tt * kuv, 0);
+		ks.set(ku - tt * kuv, kv + tt * kuv, 0);
 
 		if (Math.abs(ks.xd()) >= Math.abs(ks.yd())) {
-			pdir1._set(rOldU.mulAddMul(c, -s, rOldV));
+			pdir1.set(rOldU.mulAddMul(c, -s, rOldV));
 		}
 		else {
-			ks._set(ks.yd(), ks.zd(), ks.xd());
+			ks.set(ks.yd(), ks.zd(), ks.xd());
 
-			pdir1._set(rOldU.mulAddMul(s, c, rOldV));
+			pdir1.set(rOldU.mulAddMul(s, c, rOldV));
 		}
-		pdir2._set(newNorm.cross(pdir1));
+		pdir2.set(newNorm.cross(pdir1));
 	}
 
 	@Override

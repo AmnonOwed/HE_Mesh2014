@@ -24,7 +24,7 @@ public class HEM_Spherify extends HEM_Modifier {
 	}
 
 	public HEM_Spherify setCenter(final double x, final double y, final double z) {
-		sphere.getCenter()._set(x, y, z);
+		sphere.getCenter().set(x, y, z);
 		return this;
 	}
 
@@ -50,7 +50,7 @@ public class HEM_Spherify extends HEM_Modifier {
 		HE_Vertex v;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
+			v.set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
 					factor));
 		}
 		return mesh;
@@ -68,7 +68,7 @@ public class HEM_Spherify extends HEM_Modifier {
 		HE_Vertex v;
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			v._set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
+			v.set(gf.createInterpolatedPoint(v, sphere.projectToSphere(v),
 					factor));
 		}
 		return selection.parent;

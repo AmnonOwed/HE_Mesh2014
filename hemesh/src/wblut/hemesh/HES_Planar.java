@@ -140,17 +140,17 @@ public class HES_Planar extends HES_Subdividor {
 						final WB_Point tmp = new WB_Point(he.getVertex());
 						final double t = 0.5 + (randomGen.nextDouble() - 0.5)
 								* range;
-						tmp._mulSelf(t);
-						fv.getPoint()._addSelf(tmp);
+						tmp.mulSelf(t);
+						fv.getPoint().addSelf(tmp);
 						c += t;
 						he = he.getNextInFace();
 					} while (he != face.getHalfedge());
-					fv.getPoint()._divSelf(c);
+					fv.getPoint().divSelf(c);
 					trial++;
 				} while ((!HE_Mesh.pointIsStrictlyInFace(fv, face))
 						&& (trial < 10));
 				if (trial == 10) {
-					fv._set(face.getFaceCenter());
+					fv.set(face.getFaceCenter());
 				}
 				faceVertices.put(face.key(), fv);
 			}
@@ -296,17 +296,17 @@ public class HES_Planar extends HES_Subdividor {
 						final WB_Point tmp = new WB_Point(he.getVertex());
 						final double t = 0.5 + (randomGen.nextDouble() - 0.5)
 								* range;
-						tmp._mulSelf(t);
-						fv.getPoint()._addSelf(tmp);
+						tmp.mulSelf(t);
+						fv.getPoint().addSelf(tmp);
 						c += t;
 						he = he.getNextInFace();
 					} while (he != face.getHalfedge());
-					fv.getPoint()._divSelf(c);
+					fv.getPoint().divSelf(c);
 					trial++;
 				} while ((!HE_Mesh.pointIsStrictlyInFace(fv, face))
 						&& (trial < 10));
 				if (trial == 10) {
-					fv._set(face.getFaceCenter());
+					fv.set(face.getFaceCenter());
 				}
 				faceVertices.put(face.key(), fv);
 			}

@@ -89,12 +89,12 @@ public class HEM_Inflate extends HEM_Modifier {
 					if (neighbors[i].coord != v) {
 						final WB_Vector tmp = neighbors[i].coord.getPoint()
 								.subToVector(v);
-						tmp._normalizeSelf();
-						dv._addSelf(tmp);
+						tmp.normalizeSelf();
+						dv.addSelf(tmp);
 					}
 				}
-				dv._normalizeSelf();
-				dv._mulSelf(factor);
+				dv.normalizeSelf();
+				dv.mulSelf(factor);
 				newPositions[id] = v.getPoint().add(dv);
 
 				id++;
@@ -103,7 +103,7 @@ public class HEM_Inflate extends HEM_Modifier {
 			vItr = mesh.vItr();
 			id = 0;
 			while (vItr.hasNext()) {
-				vItr.next()._set(newPositions[id]);
+				vItr.next().set(newPositions[id]);
 				id++;
 			}
 
@@ -156,19 +156,19 @@ public class HEM_Inflate extends HEM_Modifier {
 					if (neighbors[i].coord != v) {
 						final WB_Vector tmp = neighbors[i].coord.getPoint()
 								.subToVector(v);
-						tmp._normalizeSelf();
-						dv._addSelf(tmp);
+						tmp.normalizeSelf();
+						dv.addSelf(tmp);
 					}
 				}
-				dv._normalizeSelf();
-				dv._mulSelf(factor);
+				dv.normalizeSelf();
+				dv.mulSelf(factor);
 				newPositions[id] = v.getPoint().add(dv);
 				id++;
 			}
 			vItr = selection.vItr();
 			id = 0;
 			while (vItr.hasNext()) {
-				vItr.next()._set(newPositions[id]);
+				vItr.next().set(newPositions[id]);
 				id++;
 			}
 		}

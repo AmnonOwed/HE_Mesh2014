@@ -318,8 +318,8 @@ public class HEC_FromFrame extends HEC_Creator {
 					.start()) ? 1 : -1;
 			final double so = strutNodeConnections[id].maxoffset;
 			final WB_Vector v = strutNodeConnections[id].strut.toVector();
-			v._normalizeSelf();
-			v._mulSelf(sgn);
+			v.normalizeSelf();
+			v.mulSelf(sgn);
 			strutNodeConnections[id].dir = v.get();
 			final WB_Plane P = strutNodeConnections[id].strut.toPlane();
 			final WB_Vector u = P.getU();
@@ -329,11 +329,11 @@ public class HEC_FromFrame extends HEC_Creator {
 						strutNodeConnections[id].node.xd(),
 						strutNodeConnections[id].node.yd(),
 						strutNodeConnections[id].node.zd());
-				p._addMulSelf(so, v);
+				p.addMulSelf(so, v);
 				final WB_Vector localu = u.mul(sr);
 				localu.rotateAboutAxis((j + af) * da, new WB_Point(),
 						P.getNormal());
-				p._addSelf(localu);
+				p.addSelf(localu);
 				final HE_Vertex vrtx = new HE_Vertex(p);
 				vrtx.setInternalLabel(strutNodeConnections[id].node.getIndex());
 				strutNodeConnections[id].vertices.add(vrtx);
@@ -558,11 +558,11 @@ public class HEC_FromFrame extends HEC_Creator {
 							offset = struts.get(j).getIndex() * 2 + 1;
 						}
 						final WB_Vector v = strutNodeConnections[offset].dir;
-						v._mulSelf(strutNodeConnections[offset].offset
+						v.mulSelf(strutNodeConnections[offset].offset
 								- strutNodeConnections[offset].maxoffset);
 						for (int k = 0; k < strutFacets; k++) {
 							strutNodeConnections[offset].vertices.get(k)
-							.getPoint()._addSelf(v);
+							.getPoint().addSelf(v);
 						}
 					}
 

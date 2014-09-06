@@ -71,7 +71,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 				final WB_Point p;
 				if (vn.isParallel(fn)) {
 					p = new WB_Point(v);
-					p._addMulSelf(d, fn);
+					p.addMulSelf(d, fn);
 
 				}
 				else {

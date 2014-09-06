@@ -90,11 +90,11 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			vmod = vmodItr.next();
-			R = new WB_Ray(v, v.getVertexNormal()._mulSelf(-1));
+			R = new WB_Ray(v, v.getVertexNormal().mulSelf(-1));
 			final WB_Point p = HE_Intersection.getClosestIntersection(tree, R).point;
 			if (p != null) {
 				if (WB_Distance.getDistance3D(v, p) < radius) {
-					vmod._set(p);
+					vmod.set(p);
 				}
 				else {
 					undecided.add(vmod);
@@ -127,8 +127,8 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 				else {
 					dist /= decNeighbors;
 					final WB_Vector dv = v.getPoint().subToVector(wcenter);
-					dv._normalizeSelf();
-					v._set(wcenter.addMul(dist, dv));
+					dv.normalizeSelf();
+					v.set(wcenter.addMul(dist, dv));
 				}
 
 			}

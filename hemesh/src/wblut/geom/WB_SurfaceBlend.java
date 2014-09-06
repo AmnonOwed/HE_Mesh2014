@@ -38,8 +38,8 @@ public class WB_SurfaceBlend implements WB_Surface {
 	 * @see wblut.nurbs.WB_Surface#surfacePoint(double, double)
 	 */
 	public WB_Point surfacePoint(final double u, final double v) {
-		return (surfA.surfacePoint(u, v)._addSelf(surfB.surfacePoint(u, v)))
-				._mulSelf(0.5);
+		return (surfA.surfacePoint(u, v).addSelf(surfB.surfacePoint(u, v)))
+				.mulSelf(0.5);
 
 	}
 
@@ -51,7 +51,7 @@ public class WB_SurfaceBlend implements WB_Surface {
 			return surfB.surfacePoint(u, v);
 		}
 		final WB_Point A = surfA.surfacePoint(u, v);
-		return A._addMulSelf(t, surfB.surfacePoint(u, v)._subSelf(A));
+		return A.addMulSelf(t, surfB.surfacePoint(u, v).subSelf(A));
 	}
 
 	/*

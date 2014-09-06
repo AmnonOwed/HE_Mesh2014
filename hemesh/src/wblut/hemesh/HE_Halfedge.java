@@ -155,14 +155,14 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 			return null;
 		}
 		WB_Vector v = _vertex.getPoint().subToVector(getPrevInFace()._vertex);
-		v._normalizeSelf();
+		v.normalizeSelf();
 		final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector(
 				_vertex);
-		vn._normalizeSelf();
+		vn.normalizeSelf();
 		v = v.cross(vn);
 		final WB_Vector n;
 		if (_face == null) {
-			n = _pair._face.getFaceNormal()._mulSelf(-1);
+			n = _pair._face.getFaceNormal().mulSelf(-1);
 		}
 		else {
 			n = _face.getFaceNormal();
@@ -191,7 +191,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
 			final WB_Vector v = _pair.getVertex().getPoint()
 					.subToVector(_vertex);
-			v._normalizeSelf();
+			v.normalizeSelf();
 			return v;
 		}
 		return null;
@@ -203,7 +203,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 			return null;
 		}
 
-		return isEdge() ? v : v._mulSelf(-1);
+		return isEdge() ? v : v.mulSelf(-1);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 				: new WB_Vector(0, 0, 0);
 		final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
 				n1.zd() + n2.zd());
-		n._normalizeSelf();
+		n.normalizeSelf();
 		return n;
 	}
 
@@ -387,9 +387,9 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		}
 		final HE_Vertex vn = getNextInFace().getVertex();
 		final WB_Vector _normal = new WB_Vector(vn);
-		_normal._subSelf(getVertex());
-		_normal._set(fn.cross(_normal));
-		_normal._normalizeSelf();
+		_normal.subSelf(getVertex());
+		_normal.set(fn.cross(_normal));
+		_normal.normalizeSelf();
 		return _normal;
 
 	}

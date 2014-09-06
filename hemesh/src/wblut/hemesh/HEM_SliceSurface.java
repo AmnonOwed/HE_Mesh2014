@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_Classification;
+import wblut.geom.WB_Classify;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Plane;
 
@@ -28,6 +30,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/** Stores new edges. */
 	public HE_Selection cutEdges;
+
+	private List<HE_Path> paths;
 
 	/**
 	 * Instantiates a new HEM_SliceSurface.
@@ -77,6 +81,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		cut = new HE_Selection(mesh);
 		cutEdges = new HE_Selection(mesh);
+		paths = new FastTable<HE_Path>();
 		// no plane defined
 		if (P == null) {
 			return mesh;
@@ -205,6 +210,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				ne.setInternalLabel(1);
 				cutEdges.add(ne);
 			}
+			buildPaths(cutEdges);
 		}
 
 		return mesh;
@@ -219,6 +225,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	public HE_Mesh apply(final HE_Selection selection) {
 		cut = new HE_Selection(selection.parent);
 		cutEdges = new HE_Selection(selection.parent);
+		paths = new FastTable<HE_Path>();
 		// no plane defined
 		if (P == null) {
 			return selection.parent;
@@ -362,8 +369,57 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				}
 
 			}
+			buildPaths(cutEdges);
 		}
 
 		return lsel.parent;
 	}
+
+	private void buildPaths(final HE_Selection cutEdges) {
+		paths = new FastTable<HE_Path>();
+		if (cutEdges.getNumberOfEdges() == 0) {
+			return;
+		}
+		final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
+
+		for (final HE_Halfedge he : cutEdges.getEdgesAsList()) {
+			final HE_Face f = he.getFace();
+			if (WB_Classify.classifyPointToPlane(P, f.getFaceCenter()) == WB_Classification.BACK) {
+				edges.add(he.getPair());
+			}
+			else {
+				edges.add(he);
+			}
+		}
+		while (edges.size() > 0) {
+			final List<HE_Halfedge> pathedges = new FastTable<HE_Halfedge>();
+			HE_Halfedge current = edges.get(0);
+			pathedges.add(current);
+			boolean loop = false;
+			for (int i = 0; i < edges.size(); i++) {
+				if (edges.get(i).getVertex() == current.getEndVertex()) {
+					if (i > 0) {
+						current = edges.get(i);
+						pathedges.add(current);
+						i = 0;
+					}
+					else {
+						loop = true;
+						break;
+					}
+				}
+			}
+			paths.add(new HE_Path(pathedges, loop));
+			edges.removeAll(pathedges);
+		}
+	}
+
+	/**
+	 *
+	 * @return List of HE_Path created by the cutting plane
+	 */
+	public List<HE_Path> getPaths() {
+		return paths;
+	}
+
 }

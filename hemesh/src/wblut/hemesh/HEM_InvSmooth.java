@@ -78,13 +78,13 @@ public class HEM_InvSmooth extends HEM_Modifier {
 				v = vItr.next();
 				p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
-				p._mulSelf(neighbors.size());
+				p.mulSelf(neighbors.size());
 
 				for (int i = 0; i < neighbors.size(); i++) {
-					p._addSelf(neighbors.get(i));
+					p.addSelf(neighbors.get(i));
 				}
 
-				newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+				newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
 
 				id++;
 
@@ -94,7 +94,7 @@ public class HEM_InvSmooth extends HEM_Modifier {
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v.getPoint()._addSelf(v.getPoint().sub(newPositions[id++]));
+				v.getPoint().addSelf(v.getPoint().sub(newPositions[id++]));
 			}
 
 		}
@@ -143,19 +143,19 @@ public class HEM_InvSmooth extends HEM_Modifier {
 						nItr.remove();
 					}
 				}
-				p._mulSelf(neighbors.size());
+				p.mulSelf(neighbors.size());
 				for (int i = 0; i < neighbors.size(); i++) {
-					p._addSelf(neighbors.get(i));
+					p.addSelf(neighbors.get(i));
 				}
 
-				newPositions[id] = p._scaleSelf(0.5 / neighbors.size());
+				newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
 				id++;
 			}
 			vItr = selection.vItr();
 			id = 0;
 			while (vItr.hasNext()) {
 				v = vItr.next();
-				v.getPoint()._addSelf(v.getPoint().sub(newPositions[id++]));
+				v.getPoint().addSelf(v.getPoint().sub(newPositions[id++]));
 			}
 		}
 		selection.parent.resetCenter();

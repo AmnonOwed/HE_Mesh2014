@@ -178,11 +178,11 @@ public class HET_STLWriter {
 	}
 
 	public void setScale(final float s) {
-		scale._set(s, s, s);
+		scale.set(s, s, s);
 	}
 
 	public void setScale(final WB_Coordinate s) {
-		scale._set(s);
+		scale.set(s);
 	}
 
 	public void useInvertedNormals(final boolean state) {

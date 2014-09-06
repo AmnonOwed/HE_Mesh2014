@@ -281,15 +281,15 @@ public class HES_TriDec extends HES_Simplifier {
 		double A;
 		for (final HE_Face f : faces) {
 			A = f.getFaceArea();
-			nom._addMulSelf(A, f.getFaceNormal());
+			nom.addMulSelf(A, f.getFaceNormal());
 			denom += A;
 		}
 		if (WB_Epsilon.isZero(denom)) {
 			throw new IllegalArgumentException(
 					"HES_TriDec: can't simplify meshes with degenerate faces.");
 		}
-		nom._divSelf(denom);
-		return 1.0 - nom.getLength();
+		nom.divSelf(denom);
+		return 1.0 - nom.getLength3D();
 	}
 
 	private double halfedgeCollapseCost(final HE_Halfedge he) {
@@ -311,10 +311,10 @@ public class HES_TriDec extends HES_Simplifier {
 				boundary = boundary.getNextInVertex();
 			}
 			v1 = he.getEndVertex().getPoint().subToVector(he.getVertex());
-			v1._normalizeSelf();
+			v1.normalizeSelf();
 			v2 = boundary.getEndVertex().getPoint()
 					.subToVector(boundary.getVertex());
-			v2._normalizeSelf();
+			v2.normalizeSelf();
 			cost += he.getEdge().getLength() * (1.0 - v1.dot(v2)) * _lambda;
 		}
 		else {

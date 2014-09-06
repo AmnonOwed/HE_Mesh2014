@@ -70,7 +70,7 @@ public class HEM_Noise extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			n = rs.nextVector();
-			v.getPoint()._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
+			v.getPoint().addSelf(n.mulSelf(d.value(v.xd(), v.yd(), v.zd())));
 		}
 		mesh.resetFaces();
 		return mesh;
@@ -94,7 +94,7 @@ public class HEM_Noise extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			n = rs.nextVector();
-			v.getPoint()._addSelf(n._mulSelf(d.value(v.xd(), v.yd(), v.zd())));
+			v.getPoint().addSelf(n.mulSelf(d.value(v.xd(), v.yd(), v.zd())));
 		}
 		selection.parent.resetFaces();
 		return selection.parent;

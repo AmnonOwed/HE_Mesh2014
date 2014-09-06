@@ -103,15 +103,15 @@ public class HES_Smooth extends HES_Subdividor {
 			v = vItr.next();
 			final WB_Point p = new WB_Point(v);
 			neighbors = v.getNeighborVertices();
-			p._mulSelf(origWeight);
+			p.mulSelf(origWeight);
 			double c = origWeight;
 			for (int i = 0; i < neighbors.size(); i++) {
 				n = neighbors.get(i);
-				p._addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight
+				p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight
 						* n.zd());
 				c += neigWeight;
 			}
-			newPositions[id] = p._scaleSelf(1.0 / c);
+			newPositions[id] = p.scaleSelf(1.0 / c);
 
 			id++;
 		}
@@ -124,19 +124,19 @@ public class HES_Smooth extends HES_Subdividor {
 			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
-				p._mulSelf(origWeight);
+				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
 				for (int i = 0; i < neighbors.size(); i++) {
 					n = neighbors.get(i);
 					if (boundary.contains(n)) {
-						p._addSelf(neigWeight * n.xd(), neigWeight * n.yd(),
+						p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(),
 								neigWeight * n.zd());
 						c += neigWeight;
 						nc++;
 					}
 				}
-				newPositions[id] = (nc > 1) ? p._scaleSelf(1.0 / c) : v
+				newPositions[id] = (nc > 1) ? p.scaleSelf(1.0 / c) : v
 						.getPoint();
 			}
 			id++;
@@ -145,12 +145,12 @@ public class HES_Smooth extends HES_Subdividor {
 		vItr = inner.iterator();
 		id = 0;
 		while (vItr.hasNext()) {
-			vItr.next()._set(newPositions[id]);
+			vItr.next().set(newPositions[id]);
 			id++;
 		}
 		vItr = boundary.iterator();
 		while (vItr.hasNext()) {
-			vItr.next()._set(newPositions[id]);
+			vItr.next().set(newPositions[id]);
 			id++;
 		}
 		return mesh;
@@ -188,15 +188,15 @@ public class HES_Smooth extends HES_Subdividor {
 			v = vItr.next();
 			final WB_Point p = new WB_Point(v);
 			neighbors = v.getNeighborVertices();
-			p._mulSelf(origWeight);
+			p.mulSelf(origWeight);
 			double c = origWeight;
 			for (int i = 0; i < neighbors.size(); i++) {
 				n = neighbors.get(i);
-				p._addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight
+				p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(), neigWeight
 						* n.zd());
 				c += neigWeight;
 			}
-			newPositions.add(p._scaleSelf(1.0 / c));
+			newPositions.add(p.scaleSelf(1.0 / c));
 
 			id++;
 		}
@@ -209,19 +209,19 @@ public class HES_Smooth extends HES_Subdividor {
 			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
-				p._mulSelf(origWeight);
+				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
 				for (int i = 0; i < neighbors.size(); i++) {
 					n = neighbors.get(i);
 					if (boundary.contains(n)) {
-						p._addSelf(neigWeight * n.xd(), neigWeight * n.yd(),
+						p.addSelf(neigWeight * n.xd(), neigWeight * n.yd(),
 								neigWeight * n.zd());
 						c += neigWeight;
 						nc++;
 					}
 				}
-				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v
+				newPositions.add((nc > 1) ? p.scaleSelf(1.0 / c) : v
 						.getPoint());
 			}
 			id++;
@@ -235,7 +235,7 @@ public class HES_Smooth extends HES_Subdividor {
 			else {
 				final WB_Point p = new WB_Point(v);
 				neighbors = v.getNeighborVertices();
-				p._mulSelf(origWeight);
+				p.mulSelf(origWeight);
 				double c = origWeight;
 				int nc = 0;
 				for (int i = 0; i < neighbors.size(); i++) {
@@ -251,14 +251,14 @@ public class HES_Smooth extends HES_Subdividor {
 						}
 
 						if (!singleFaceGap) {
-							p._addSelf(neigWeight * n.xd(),
+							p.addSelf(neigWeight * n.xd(),
 									neigWeight * n.yd(), neigWeight * n.zd());
 							c += neigWeight;
 							nc++;
 						}
 					}
 				}
-				newPositions.add((nc > 1) ? p._scaleSelf(1.0 / c) : v
+				newPositions.add((nc > 1) ? p.scaleSelf(1.0 / c) : v
 						.getPoint());
 			}
 			id++;
@@ -266,17 +266,17 @@ public class HES_Smooth extends HES_Subdividor {
 		vItr = inner.iterator();
 		id = 0;
 		while (vItr.hasNext()) {
-			vItr.next()._set(newPositions.get(id));
+			vItr.next().set(newPositions.get(id));
 			id++;
 		}
 		vItr = boundary.iterator();
 		while (vItr.hasNext()) {
-			vItr.next()._set(newPositions.get(id));
+			vItr.next().set(newPositions.get(id));
 			id++;
 		}
 		vItr = outer.iterator();
 		while (vItr.hasNext()) {
-			vItr.next()._set(newPositions.get(id));
+			vItr.next().set(newPositions.get(id));
 			id++;
 		}
 		return selection.parent;

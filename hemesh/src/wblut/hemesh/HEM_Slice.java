@@ -17,10 +17,15 @@ public class HEM_Slice extends HEM_Modifier {
 	/** Cut plane. */
 	private WB_Plane P;
 
-	/** Reverse planar cut. */
+	/**
+	 * HEM_slice keeps the part of the mesh on the positive side of the plane.
+	 * Reverse planar cut.
+	 */
 	private boolean reverse = false;
 
-	/** Cap holes?. */
+	/**
+	 * Cap holes?. Capping holes does not work properly with nested loops...
+	 */
 	private boolean capHoles = true;
 
 	/** The simple cap. */
@@ -145,7 +150,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -231,7 +236,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */

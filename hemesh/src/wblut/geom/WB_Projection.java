@@ -7,7 +7,7 @@ public class WB_Projection {
 		WB_Vector po = new WB_Vector(P.getOrigin(), p);
 		WB_Vector n = P.getNormal();
 
-		return projection._subSelf(n._mulSelf(n.dot(po)));
+		return projection.subSelf(n.mulSelf(n.dot(po)));
 	}
 
 }

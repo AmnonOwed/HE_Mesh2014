@@ -81,7 +81,7 @@ public class WB_DebugRender3D {
 
 	public void drawFaceNormal(final HE_Face f, final double d) {
 		final WB_Point p1 = f.getFaceCenter();
-		final WB_Point p2 = new WB_Point(f.getFaceNormal().mul(d))._addSelf(p1);
+		final WB_Point p2 = new WB_Point(f.getFaceNormal().mul(d)).addSelf(p1);
 		home.line(p1.xf(), p1.yf(), p1.zf(), p2.xf(), p2.yf(), p2.zf());
 	}
 
@@ -122,7 +122,7 @@ public class WB_DebugRender3D {
 	public void drawHalfedge(final HE_Halfedge he, final double d,
 			final double s) {
 		final WB_Point c = he.getHalfedgeCenter();
-		c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
+		c.addSelf(he.getHalfedgeNormal().mulSelf(d));
 
 		home.stroke(255, 0, 0);
 		home.line(he.getVertex().xf(), he.getVertex().yf(),
@@ -146,7 +146,7 @@ public class WB_DebugRender3D {
 			final double s, final double f) {
 		final WB_Point c = geometryfactory.createInterpolatedPoint(
 				he.getVertex(), he.getEndVertex(), f);
-		c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
+		c.addSelf(he.getHalfedgeNormal().mulSelf(d));
 
 		home.stroke(255, 0, 0);
 		home.line(he.getVertex().xf(), he.getVertex().yf(),
@@ -187,7 +187,7 @@ public class WB_DebugRender3D {
 			if (he.getFace() != null) {
 				c = geometryfactory.createInterpolatedPoint(he.getVertex(),
 						he.getEndVertex(), f);
-				c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
+				c.addSelf(he.getHalfedgeNormal().mulSelf(d));
 
 				home.stroke(255, 0, 0);
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
@@ -213,7 +213,7 @@ public class WB_DebugRender3D {
 			else {
 				c = geometryfactory.createInterpolatedPoint(he.getVertex(),
 						he.getEndVertex(), f);
-				c._addSelf(he.getPair().getHalfedgeNormal()._mulSelf(-d));
+				c.addSelf(he.getPair().getHalfedgeNormal().mulSelf(-d));
 
 				home.stroke(255, 0, 0);
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
@@ -242,7 +242,7 @@ public class WB_DebugRender3D {
 
 			if (he.getFace() != null) {
 				c = he.getHalfedgeCenter();
-				c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
+				c.addSelf(he.getHalfedgeNormal().mulSelf(d));
 
 				home.stroke(255, 0, 0);
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
@@ -266,7 +266,7 @@ public class WB_DebugRender3D {
 			}
 			else {
 				c = he.getHalfedgeCenter();
-				c._addSelf(he.getPair().getHalfedgeNormal()._mulSelf(-d));
+				c.addSelf(he.getPair().getHalfedgeNormal().mulSelf(-d));
 
 				home.stroke(255, 0, 0);
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
@@ -286,7 +286,7 @@ public class WB_DebugRender3D {
 	public void drawHalfedgeSimple(final HE_Halfedge he, final double d,
 			final double s) {
 		final WB_Point c = he.getHalfedgeCenter();
-		c._addSelf(he.getHalfedgeNormal()._mulSelf(d));
+		c.addSelf(he.getHalfedgeNormal().mulSelf(d));
 
 		home.line(he.getVertex().xf(), he.getVertex().yf(),
 				he.getVertex().zf(), c.xf(), c.yf(), c.zf());

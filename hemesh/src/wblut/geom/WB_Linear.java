@@ -16,24 +16,24 @@ public abstract class WB_Linear {
 	public WB_Linear(final WB_Coordinate o, final WB_Coordinate d) {
 		origin = new WB_Point(o);
 		direction = new WB_Vector(d);
-		direction._normalizeSelf();
+		direction.normalizeSelf();
 	}
 
 	protected void set(final WB_Coordinate o, final WB_Coordinate d) {
-		origin._set(o);
-		direction._set(d);
-		direction._normalizeSelf();
+		origin.set(o);
+		direction.set(d);
+		direction.normalizeSelf();
 	}
 
 	public WB_Point getPointOnLine(final double t) {
 		final WB_Point result = new WB_Point(direction);
-		result._scaleSelf(t);
-		result.moveBy(origin);
+		result.scaleSelf(t);
+		result.addSelf(origin);
 		return result;
 	}
 
 	public void getPointOnLineInto(final double t, final WB_MutableCoordinate p) {
-		p._set(direction.mul(t)._addSelf(origin));
+		p.set(direction.mul(t).addSelf(origin));
 	}
 
 	public WB_Point getOrigin() {
@@ -47,7 +47,7 @@ public abstract class WB_Linear {
 	public WB_Vector getNormal() {
 		WB_Vector n = new WB_Vector(0, 0, 1);
 		n = n.cross(direction);
-		final double d = n._normalizeSelf();
+		final double d = n.normalizeSelf();
 		if (WB_Epsilon.isZero(d)) {
 			n = new WB_Vector(1, 0, 0);
 		}

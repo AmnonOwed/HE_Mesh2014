@@ -7,7 +7,7 @@ public class WB_NurbsSurfaceOfRevolution {
 		WB_Vector v = new WB_Vector(axis);
 		if (theta < 0) {
 			theta *= -1;
-			v._mulSelf(-1);
+			v.mulSelf(-1);
 		}
 		while (theta > 360) {
 			theta -= 360;
@@ -65,8 +65,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
 					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
-			final double r = X._normalizeSelf();
-			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
+			final double r = X.normalizeSelf();
+			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);
 			points[0][j] = new WB_Point(P0);
 			weights[0][j] = 1;
@@ -75,12 +75,12 @@ public class WB_NurbsSurfaceOfRevolution {
 			angle = 0.0;
 			for (i = 1; i <= narcs; i++) {
 				final WB_Point P2 = new WB_Point(O);
-				P2._addMulSelf(r * cosines[i], X);
-				P2._addMulSelf(r * sines[i], Y);
+				P2.addMulSelf(r * cosines[i], X);
+				P2.addMulSelf(r * sines[i], Y);
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = 1;
 				final WB_Vector T2 = Y.mul(cosines[i]);
-				T2._addMulSelf(-sines[i], X);
+				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection
@@ -91,8 +91,8 @@ public class WB_NurbsSurfaceOfRevolution {
 				weights[index + 1][j] = wm;
 				index = index + 2;
 				if (i < narcs) {
-					P0._set(P2);
-					T0._set(T2);
+					P0.set(P2);
+					T0.set(T2);
 				}
 
 			}
@@ -109,7 +109,7 @@ public class WB_NurbsSurfaceOfRevolution {
 
 		if (theta < 0) {
 			theta *= -1;
-			v._mulSelf(-1);
+			v.mulSelf(-1);
 		}
 		while (theta > 360) {
 			theta -= 360;
@@ -167,8 +167,8 @@ public class WB_NurbsSurfaceOfRevolution {
 			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
 					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
-			final double r = X._normalizeSelf();
-			final WB_Vector Y = new WB_Vector(v)._crossSelf(X);
+			final double r = X.normalizeSelf();
+			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);
 			points[0][j] = new WB_Point(P0);
 			weights[0][j] = C.wpoints()[j].w;
@@ -177,12 +177,12 @@ public class WB_NurbsSurfaceOfRevolution {
 			angle = 0.0;
 			for (i = 1; i <= narcs; i++) {
 				final WB_Point P2 = new WB_Point(O);
-				P2._addMulSelf(r * cosines[i], X);
-				P2._addMulSelf(r * sines[i], Y);
+				P2.addMulSelf(r * cosines[i], X);
+				P2.addMulSelf(r * sines[i], Y);
 				points[index + 2][j] = new WB_Point(P2);
 				weights[index + 2][j] = C.wpoints()[j].w;
 				final WB_Vector T2 = Y.mul(cosines[i]);
-				T2._addMulSelf(-sines[i], X);
+				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
 				final WB_IntersectionResult is = WB_Intersection
@@ -194,8 +194,8 @@ public class WB_NurbsSurfaceOfRevolution {
 				weights[index + 1][j] = wm * C.wpoints()[j].w;
 				index = index + 2;
 				if (i < narcs) {
-					P0._set(P2);
-					T0._set(T2);
+					P0.set(P2);
+					T0.set(T2);
 				}
 
 			}
