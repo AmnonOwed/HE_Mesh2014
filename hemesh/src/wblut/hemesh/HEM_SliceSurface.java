@@ -74,7 +74,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -218,7 +218,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -409,8 +409,31 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					}
 				}
 			}
-			paths.add(new HE_Path(pathedges, loop));
-			edges.removeAll(pathedges);
+			if (!loop) {
+				final List<HE_Halfedge> reversepathedges = new FastTable<HE_Halfedge>();
+				current = edges.get(0);
+				for (int i = 0; i < edges.size(); i++) {
+					if (edges.get(i).getEndVertex() == current.getVertex()) {
+						if (i > 0) {
+							current = edges.get(i);
+							reversepathedges.add(current);
+							i = 0;
+						}
+					}
+				}
+				final List<HE_Halfedge> finalpathedges = new FastTable<HE_Halfedge>();
+				for (int i = reversepathedges.size() - 1; i > -1; i--) {
+					finalpathedges.add(reversepathedges.get(i));
+				}
+				finalpathedges.addAll(pathedges);
+				paths.add(new HE_Path(finalpathedges, loop));
+				edges.removeAll(finalpathedges);
+			}
+			else {
+
+				paths.add(new HE_Path(pathedges, loop));
+				edges.removeAll(pathedges);
+			}
 		}
 	}
 
