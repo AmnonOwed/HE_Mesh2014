@@ -43,7 +43,6 @@ import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
-import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceIntersection;
@@ -110,8 +109,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -248,20 +247,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+								.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -1452,116 +1451,33 @@ public class WB_Render3D {
 		}
 	}
 
-	public void drawPolygon(final Collection<? extends SimplePolygon> polygons) {
-		final Iterator<? extends SimplePolygon> polyItr = polygons.iterator();
+	public void drawPolygon(final Collection<? extends WB_Polygon> polygons) {
+		final Iterator<? extends WB_Polygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygon(polyItr.next());
 		}
 
 	}
 
-	public void drawPolygon(final SimplePolygon polygon) {
-		WB_Point v1;
-		final int n = polygon.getNumberOfPoints();
-		home.beginShape(PConstants.POLYGON);
-		for (int i = 0; i < n; i++) {
-			v1 = polygon.getPoint(i);
-			home.vertex(v1.xf(), v1.yf(), v1.zf());
-
-		}
-		home.endShape(PConstants.CLOSE);
-	}
-
-	public void drawPolygon2D(final Collection<SimplePolygon> polygons) {
-		final Iterator<SimplePolygon> polyItr = polygons.iterator();
-		while (polyItr.hasNext()) {
-			drawPolygon2D(polyItr.next());
-		}
-
-	}
-
-	public void drawPolygon2D(final SimplePolygon polygon) {
-		WB_Point v1;
-		final int n = polygon.getNumberOfPoints();
-		home.beginShape(PConstants.POLYGON);
-		for (int i = 0; i < n; i++) {
-			v1 = polygon.getPoint(i);
-			home.vertex(v1.xf(), v1.yf());
-
-		}
-		home.endShape(PConstants.CLOSE);
-	}
-
-	public void drawPolygon2DEdges(
-			final Collection<? extends SimplePolygon> polygons) {
-		final Iterator<? extends SimplePolygon> polyItr = polygons.iterator();
-		while (polyItr.hasNext()) {
-			drawPolygon2DEdges(polyItr.next());
-		}
-
-	}
-
-	public void drawPolygon2DEdges(final SimplePolygon polygon) {
-		WB_Point v1, v2;
-		final int n = polygon.getNumberOfPoints();
-		for (int i = 0, j = n - 1; i < n; j = i, i++) {
-			v1 = polygon.getPoint(i);
-			v2 = polygon.getPoint(j);
-			home.line(v1.xf(), v1.yf(), v2.xf(), v2.yf());
-		}
-	}
-
-	public void drawPolygon2DVertices(final Collection<SimplePolygon> polygons,
-			final double d) {
-		final Iterator<SimplePolygon> polyItr = polygons.iterator();
-		while (polyItr.hasNext()) {
-			drawPolygon2DVertices(polyItr.next(), d);
-		}
-
-	}
-
-	public void drawPolygon2DVertices(final SimplePolygon polygon,
-			final double d) {
-		WB_Point v1;
-		final int n = polygon.getNumberOfPoints();
-		for (int i = 0; i < n; i++) {
-			v1 = polygon.getPoint(i);
-
-			home.ellipse(v1.xf(), v1.yf(), (float) d, (float) d);
-
-		}
-	}
-
-	public void drawPolygonEdges(
-			final Collection<? extends SimplePolygon> polygons) {
-		final Iterator<? extends SimplePolygon> polyItr = polygons.iterator();
+	public void drawPolygonEdges(final Collection<? extends WB_Polygon> polygons) {
+		final Iterator<? extends WB_Polygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygonEdges(polyItr.next());
 		}
 
 	}
 
-	public void drawPolygonEdges(final SimplePolygon polygon) {
-		WB_Point v1, v2;
-		final int n = polygon.getNumberOfPoints();
-		for (int i = 0, j = n - 1; i < n; j = i, i++) {
-			v1 = polygon.getPoint(i);
-			v2 = polygon.getPoint(j);
-			home.line(v1.xf(), v1.yf(), v1.zf(), v2.xf(), v2.yf(), v2.zf());
-		}
-	}
-
-	public void drawPolygonVertices(final Collection<SimplePolygon> polygons,
+	public void drawPolygonVertices(final Collection<WB_Polygon> polygons,
 			final double d) {
-		final Iterator<SimplePolygon> polyItr = polygons.iterator();
+		final Iterator<WB_Polygon> polyItr = polygons.iterator();
 		while (polyItr.hasNext()) {
 			drawPolygonVertices(polyItr.next(), d);
 		}
 
 	}
 
-	public void drawPolygonVertices(final SimplePolygon polygon, final double d) {
-		WB_Point v1;
+	public void drawPolygonVertices(final WB_Polygon polygon, final double d) {
+		WB_Coordinate v1;
 		final int n = polygon.getNumberOfPoints();
 		for (int i = 0; i < n; i++) {
 			v1 = polygon.getPoint(i);

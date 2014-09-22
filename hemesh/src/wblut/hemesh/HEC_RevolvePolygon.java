@@ -3,12 +3,12 @@ package wblut.hemesh;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
-import wblut.geom.interfaces.SimplePolygon;
 
 public class HEC_RevolvePolygon extends HEC_Creator {
 
-	private SimplePolygon polygon;
+	private WB_Polygon polygon;
 
 	private WB_Line axis;
 
@@ -20,7 +20,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 		facets = 6;
 	}
 
-	public HEC_RevolvePolygon setPolygon(final SimplePolygon poly) {
+	public HEC_RevolvePolygon setPolygon(final WB_Polygon poly) {
 		polygon = poly;
 		return this;
 	}
@@ -44,7 +44,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -85,7 +85,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 
 		final HEC_FromFacelist fl = new HEC_FromFacelist();
 		fl.setVertices(points).setFaces(faces).setDuplicate(false)
-				.setCheckNormals(false);
+		.setCheckNormals(false);
 		return fl.createBase();
 
 	}
