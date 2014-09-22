@@ -14,42 +14,42 @@ public class WB_PolyLine implements WB_Geometry {
 
 	double[] incLengths;
 
-	int n;
+	int numberOfPoints;
 
-	int hc;
+	int hashcode;
 
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
 	public WB_IndexedPoint getPoint(final int i) {
-		if ((i < 0) || (i > n - 1)) {
+		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
-					+ " must between 0 and " + (n - 1) + ".");
+					+ " must between 0 and " + (numberOfPoints - 1) + ".");
 		}
 		return points.getPoint(i);
 	}
 
 	public double getd(final int i, final int j) {
-		if ((i < 0) || (i > n - 1)) {
+		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
-					+ " must between 0 and " + (n - 1) + ".");
+					+ " must between 0 and " + (numberOfPoints - 1) + ".");
 		}
 		return points.get(i, j);
 	}
 
 	public float getf(final int i, final int j) {
-		if ((i < 0) || (i > n - 1)) {
+		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
-					+ " must between 0 and " + (n - 1) + ".");
+					+ " must between 0 and " + (numberOfPoints - 1) + ".");
 		}
 		return (float) points.get(i, j);
 	}
 
 	public WB_Point getPointOnLine(final double t) {
-		if ((t < 0) || (t > incLengths[n - 1])) {
+		if ((t < 0) || (t > incLengths[numberOfPoints - 1])) {
 			throw new IllegalArgumentException(
 					"Parameter must between 0 and length of polyline"
-							+ incLengths[n - 1] + " .");
+							+ incLengths[numberOfPoints - 1] + " .");
 		}
 		if (t == 0) {
 			return new WB_Point(points.getPoint(0));
@@ -65,9 +65,9 @@ public class WB_PolyLine implements WB_Geometry {
 	}
 
 	public WB_Point getParametricPointOnLine(final double t) {
-		if ((t < 0) || (t > n - 1)) {
+		if ((t < 0) || (t > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 1) + ".");
+					+ (numberOfPoints - 1) + ".");
 		}
 		final double ft = t - (int) t;
 		if (ft == 0.0) {
@@ -79,17 +79,17 @@ public class WB_PolyLine implements WB_Geometry {
 	}
 
 	public WB_IndexedVector getDirection(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return directions.getVector(i);
 	}
 
 	public WB_Vector getNormal(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		WB_Vector normal = geometryfactory.createVector(0, 0, 1);
 		normal = normal.cross(directions.getVector(i));
@@ -102,47 +102,47 @@ public class WB_PolyLine implements WB_Geometry {
 	}
 
 	public double a(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return -directions.get(i, 1);
 	}
 
 	public double b(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return directions.get(i, 0);
 	}
 
 	public double c(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return points.get(i, 0) * directions.get(i, 1) - points.get(i, 1)
 				* directions.get(i, 0);
 	}
 
 	public int getNumberOfPoints() {
-		return n;
+		return numberOfPoints;
 	}
 
 	public WB_Segment getSegment(final int i) {
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return geometryfactory.createSegment(getPoint(i), getPoint(i + 1));
 	}
 
 	public double getLength(final int i) {
 
-		if ((i < 0) || (i > n - 2)) {
+		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
-					+ (n - 2) + ".");
+					+ (numberOfPoints - 2) + ".");
 		}
 		return incLengths[i + 1] - incLengths[i];
 	}
@@ -152,24 +152,24 @@ public class WB_PolyLine implements WB_Geometry {
 	}
 
 	protected WB_PolyLine(final Collection<? extends WB_Coordinate> points) {
-		n = points.size();
+		numberOfPoints = points.size();
 		this.points = geometryfactory.createPointSequence(points);
 		getDirections();
-		hc = -1;
+		hashcode = -1;
 	}
 
 	protected WB_PolyLine(final WB_Coordinate[] points) {
-		n = points.length;
+		numberOfPoints = points.length;
 		this.points = geometryfactory.createPointSequence(points);
 		getDirections();
-		hc = -1;
+		hashcode = -1;
 	}
 
 	protected WB_PolyLine(final WB_CoordinateSequence points) {
-		n = points.size();
+		numberOfPoints = points.size();
 		this.points = geometryfactory.createPointSequence(points);
 		getDirections();
-		hc = -1;
+		hashcode = -1;
 	}
 
 	private void getDirections() {
@@ -203,7 +203,7 @@ public class WB_PolyLine implements WB_Geometry {
 		if (getNumberOfPoints() != L.getNumberOfPoints()) {
 			return false;
 		}
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < numberOfPoints; i++) {
 			if (!getPoint(i).equals(L.getPoint(i))) {
 				return false;
 			}
@@ -214,14 +214,14 @@ public class WB_PolyLine implements WB_Geometry {
 
 	@Override
 	public int hashCode() {
-		if (hc == -1) {
-			hc = points.getPoint(0).hashCode();
+		if (hashcode == -1) {
+			hashcode = points.getPoint(0).hashCode();
 			for (int i = 1; i < points.size(); i++) {
-				hc = 31 * hc + points.getPoint(i).hashCode();
+				hashcode = 31 * hashcode + points.getPoint(i).hashCode();
 
 			}
 		}
-		return hc;
+		return hashcode;
 
 	}
 
@@ -229,20 +229,6 @@ public class WB_PolyLine implements WB_Geometry {
 	public WB_GeometryType getType() {
 
 		return WB_GeometryType.POLYLINE;
-	}
-
-	@Override
-	public int getDimension() {
-		return 1;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 2;
-	}
-
-	public int size() {
-		return points.size();
 	}
 
 	@Override

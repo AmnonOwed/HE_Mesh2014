@@ -70,30 +70,13 @@ public class WB_SimplePolygon implements SimplePolygon {
 	/**
 	 * Set polygon.
 	 *
-	 * @param points
-	 *            array of WB_Point, no copies are made
-	 * @param n
-	 *            number of points
-	 */
-	public void set(final WB_Coordinate[] points, final int n) {
-		this.n = n;
-		this.points = new WB_Point[n];
-		for (int i = 0; i < n; i++) {
-			this.points[i] = new WB_Point(points[i]);
-		}
-		P = getPlane();
-	}
-
-	/**
-	 * Set polygon.
-	 *
 	 * @param poly
 	 *            source polygon, no copies are made
 	 */
 	@Override
 	public void set(final SimplePolygon poly) {
 		points = poly.getPoints();
-		n = poly.getN();
+		n = poly.getNumberOfPoints();
 		P = getPlane();
 	}
 
@@ -261,39 +244,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 					points[2], points[3]);
 		}
 
-		final List<WB_Point> pts = new FastTable<WB_Point>();
-		for (int i = 0; i < n; i++) {
-			pts.add(points[i]);
-		}
-
-		final WB_Triangulation2DWithPoints triangulation = WB_Triangulate
-				.getPolygonTriangulation2D(pts, true,
-						geometryfactory.createEmbeddedPlane(getPlane()));
-
-		final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
-				points.length);
-
-		for (int i = 0; i < points.length; i++) {
-			pointmap.add(points[i], i);
-		}
-
-		final int[][] triangles = triangulation.getTriangles();
-
-		final List<WB_Coordinate> tripoints = triangulation.getPoints();
-		final int[] intmap = new int[tripoints.size()];
-		int index = 0;
-		for (final WB_Coordinate point : tripoints) {
-			final int found = pointmap.getNearestNeighbor(point).value;
-			intmap[index++] = found;
-		}
-
-		for (final int[] T : triangles) {
-			T[0] = intmap[T[0]];
-			T[1] = intmap[T[1]];
-			T[2] = intmap[T[2]];
-		}
-
-		return triangles;
+		return WB_Triangulate.getPolygonTriangulation2D(this).getTriangles();
 
 	}
 
@@ -317,24 +268,6 @@ public class WB_SimplePolygon implements SimplePolygon {
 	}
 
 	/**
-	 * Removes the point self.
-	 *
-	 * @param i
-	 *            the i
-	 */
-	public void removePointSelf(final int i) {
-		final WB_Point[] newPoints = new WB_Point[n - 1];
-		for (int j = 0; j < i; j++) {
-			newPoints[j] = points[j];
-		}
-		for (int j = i; j < n - 1; j++) {
-			newPoints[j] = points[j + 1];
-		}
-		set(newPoints, n - 1);
-
-	}
-
-	/**
 	 * Adds point.
 	 *
 	 * @param i
@@ -353,27 +286,6 @@ public class WB_SimplePolygon implements SimplePolygon {
 			newPoints[j] = points[j - 1];
 		}
 		return new WB_SimplePolygon(newPoints, n + 1);
-
-	}
-
-	/**
-	 * Adds the point self.
-	 *
-	 * @param i
-	 *            the i
-	 * @param p
-	 *            the p
-	 */
-	public void addPointSelf(final int i, final WB_Point p) {
-		final WB_Point[] newPoints = new WB_Point[n + 1];
-		for (int j = 0; j < i; j++) {
-			newPoints[j] = points[j];
-		}
-		newPoints[i] = p;
-		for (int j = i + 1; j < n + 1; j++) {
-			newPoints[j] = points[j - 1];
-		}
-		set(newPoints, n + 1);
 
 	}
 
@@ -766,7 +678,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.WB_Polygon#getSegments()
 	 */
 	@Override
@@ -812,17 +724,17 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.WB_Polygon#getN()
 	 */
 	@Override
-	public int getN() {
+	public int getNumberOfPoints() {
 		return n;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.WB_Polygon#getPoint(int)
 	 */
 	@Override
@@ -832,17 +744,7 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see wblut.geom.WB_Polygon#getIndex(int)
-	 */
-	@Override
-	public int getIndex(final int i) {
-		return i;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.WB_Polygon#getPoints()
 	 */
 	@Override
@@ -858,6 +760,14 @@ public class WB_SimplePolygon implements SimplePolygon {
 
 		}
 		return segments;
+	}
+
+	public WB_SimplePolygon toPolygon2D() {
+		final WB_Point[] lpoints = new WB_Point[n];
+		for (int i = 0; i < n; i++) {
+			lpoints[i] = P.localPoint2D(points[i]);
+		}
+		return new WB_SimplePolygon(lpoints, n);
 	}
 
 }

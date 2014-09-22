@@ -109,19 +109,9 @@ public class WB_IndexedSegment extends WB_Linear implements Segment {
 	}
 
 	@Override
-	public int getDimension() {
-		return 1;
-	}
-
-	@Override
 	public WB_GeometryType getType() {
 
 		return WB_GeometryType.SEGMENT;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 1;
 	}
 
 	@Override

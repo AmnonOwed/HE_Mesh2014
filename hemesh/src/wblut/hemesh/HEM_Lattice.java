@@ -5,12 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_SimplePolygon;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
 public class HEM_Lattice extends HEM_Modifier {
-
+	private static final WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	private double d;
 
 	private double sew;
@@ -136,7 +137,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		List<HE_Halfedge> hei;
 		List<HE_Halfedge> heo;
 		WB_Point[] viPos;
-		WB_SimplePolygon poly;
+		WB_Polygon poly;
 		HE_Halfedge heoc, heic, heon, hein, heio, heoi;
 		HE_Face fNew;
 		WB_Vector ni;
@@ -164,7 +165,7 @@ public class HEM_Lattice extends HEM_Modifier {
 				for (int j = 0; j < nvi; j++) {
 					viPos[j] = new WB_Point(hei.get(j).getVertex());
 				}
-				poly = new WB_SimplePolygon(viPos, nvi);
+				poly = gf.createSimplePolygon(viPos);
 
 				heo = fo.getFaceHalfedges();
 
@@ -285,7 +286,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		List<HE_Halfedge> hei;
 		List<HE_Halfedge> heo;
 		WB_Point[] viPos;
-		WB_SimplePolygon poly;
+		WB_Polygon poly;
 		HE_Halfedge heoc, heic, heon, hein, heio, heoi;
 		HE_Face fNew;
 		WB_Vector ni, no;
@@ -312,7 +313,7 @@ public class HEM_Lattice extends HEM_Modifier {
 				for (int j = 0; j < nvi; j++) {
 					viPos[j] = new WB_Point(hei.get(j).getVertex());
 				}
-				poly = new WB_SimplePolygon(viPos, nvi);
+				poly = gf.createSimplePolygon(viPos);
 
 				heo = fo.getFaceHalfedges();
 

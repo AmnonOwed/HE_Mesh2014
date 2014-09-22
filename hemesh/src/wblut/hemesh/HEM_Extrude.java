@@ -10,11 +10,12 @@ import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Intersection;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
-import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Vector;
 import wblut.geom.interfaces.Segment;
 import wblut.math.WB_ConstantParameter;
@@ -28,6 +29,8 @@ import wblut.math.WB_Parameter;
  *
  */
 public class HEM_Extrude extends HEM_Modifier {
+
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	/** Extrusion distance. */
 	private WB_Parameter<Double> d;
@@ -413,8 +416,7 @@ public class HEM_Extrude extends HEM_Modifier {
 						he = f.getHalfedge();
 						do {
 
-							he.getVertex().getPoint()
-									.addMulSelf(heights[i], n);
+							he.getVertex().getPoint().addMulSelf(heights[i], n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 
@@ -850,9 +852,10 @@ public class HEM_Extrude extends HEM_Modifier {
 					final HE_Vertex v = faceVertices.get(i);
 					vPos[i] = new WB_Point(v);
 				}
-				final WB_SimplePolygon poly = new WB_SimplePolygon(vPos, n);
-				poly.trimConvexPolygon(d);
-				if (poly.n == n) {
+				WB_Polygon poly = gf.createSimplePolygon(vPos);
+
+				poly = poly.trimConvexPolygon(d);
+				if (poly.getNumberOfShellPoints() == n) {
 					final int inew = poly.closestIndex(faceVertices.get(0));
 
 					for (int i = 0; i < n; i++) {
@@ -860,7 +863,7 @@ public class HEM_Extrude extends HEM_Modifier {
 								poly.getPoint((inew + i) % n));
 					}
 				}
-				else if (poly.n > 2) {
+				else if (poly.getNumberOfShellPoints() > 2) {
 					for (int i = 0; i < n; i++) {
 						extFaceVertices.get(i).set(
 								poly.closestPoint(faceVertices.get(i)));

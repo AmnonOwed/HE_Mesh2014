@@ -114,7 +114,7 @@ public class WB_Plane {
 		return WB_Classification.ON;
 	}
 
-	public static WB_Classification classifyPointToPlane(final WB_Point p,
+	public static WB_Classification classifyPointToPlane(final WB_Coordinate p,
 			final WB_Plane P) {
 
 		final double dist = P.getNormal().dot(p) - P.d();
@@ -130,7 +130,7 @@ public class WB_Plane {
 	/**
 	 * Check if points lies on positive side of plane defined by 3 clockwise
 	 * points.
-	 * 
+	 *
 	 * @param p
 	 *            point to check
 	 * @param a
@@ -150,7 +150,7 @@ public class WB_Plane {
 	/**
 	 * Check if points lies on other side of plane compared with reference
 	 * points.
-	 * 
+	 *
 	 * @param p
 	 *            point to check
 	 * @param q
@@ -173,17 +173,10 @@ public class WB_Plane {
 		return signp * signq <= 0;
 	}
 
-	/**
-	 * Classify polygon to plane.
-	 * 
-	 * @param poly
-	 *            the poly
-	 * @return the w b_ classify polygon to plane
-	 */
 	public WB_Classification classifyPolygonToPlane(final SimplePolygon poly) {
 		int numInFront = 0;
 		int numBehind = 0;
-		for (int i = 0; i < poly.getN(); i++) {
+		for (int i = 0; i < poly.getNumberOfPoints(); i++) {
 			switch (classifyPointToPlane(poly.getPoint(i))) {
 			case FRONT:
 				numInFront++;
@@ -206,20 +199,64 @@ public class WB_Plane {
 		return WB_Classification.ON;
 	}
 
-	/**
-	 * Classify polygon to plane.
-	 * 
-	 * @param poly
-	 *            the poly
-	 * @param P
-	 *            the p
-	 * @return the w b_ classify polygon to plane
-	 */
+	public WB_Classification classifyPolygonToPlane(final WB_Polygon poly) {
+		int numInFront = 0;
+		int numBehind = 0;
+		for (int i = 0; i < poly.getNumberOfShellPoints(); i++) {
+			switch (classifyPointToPlane(poly.getPoint(i))) {
+			case FRONT:
+				numInFront++;
+				break;
+			case BACK:
+				numBehind++;
+				break;
+			}
+			if (numBehind > 0 && numInFront > 0) {
+				return WB_Classification.CROSSING;
+			}
+		}
+
+		if (numInFront > 0) {
+			return WB_Classification.FRONT;
+		}
+		if (numBehind > 0) {
+			return WB_Classification.BACK;
+		}
+		return WB_Classification.ON;
+	}
+
 	public static WB_Classification classifyPolygonToPlane(
 			final SimplePolygon poly, final WB_Plane P) {
 		int numInFront = 0;
 		int numBehind = 0;
-		for (int i = 0; i < poly.getN(); i++) {
+		for (int i = 0; i < poly.getNumberOfPoints(); i++) {
+			switch (classifyPointToPlane(poly.getPoint(i), P)) {
+			case FRONT:
+				numInFront++;
+				break;
+			case BACK:
+				numBehind++;
+				break;
+			}
+			if (numBehind != 0 && numInFront != 0) {
+				return WB_Classification.CROSSING;
+			}
+		}
+
+		if (numInFront != 0) {
+			return WB_Classification.FRONT;
+		}
+		if (numBehind != 0) {
+			return WB_Classification.BACK;
+		}
+		return WB_Classification.ON;
+	}
+
+	public static WB_Classification classifyPolygonToPlane(
+			final WB_Polygon poly, final WB_Plane P) {
+		int numInFront = 0;
+		int numBehind = 0;
+		for (int i = 0; i < poly.getNumberOfShellPoints(); i++) {
 			switch (classifyPointToPlane(poly.getPoint(i), P)) {
 			case FRONT:
 				numInFront++;
@@ -244,7 +281,7 @@ public class WB_Plane {
 
 	/**
 	 * Are the planes equal?.
-	 * 
+	 *
 	 * @param P
 	 *            the p
 	 * @param Q
@@ -274,7 +311,8 @@ public class WB_Plane {
 		if (x >= y) {
 			u = new WB_Vector(n.zd(), 0, -n.xd());
 
-		} else {
+		}
+		else {
 			u = new WB_Vector(0, n.zd(), -n.yd());
 		}
 		u.normalizeSelf();
@@ -285,7 +323,7 @@ public class WB_Plane {
 	// Return coordinates relative to plane axes
 	/**
 	 * Local point.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point3d
@@ -304,7 +342,7 @@ public class WB_Plane {
 
 	/**
 	 * Local point2 d.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point2d
@@ -321,7 +359,7 @@ public class WB_Plane {
 	// Return embedded point coordinates relative to world axes
 	/**
 	 * Extract point.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point3d
@@ -335,7 +373,7 @@ public class WB_Plane {
 	// Return embedded point coordinates relative to world axes
 	/**
 	 * Extract point.
-	 * 
+	 *
 	 * @param x
 	 *            the x
 	 * @param y
@@ -351,7 +389,7 @@ public class WB_Plane {
 	// Return coordinates relative to world axes
 	/**
 	 * Extract point.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point3d
@@ -366,7 +404,7 @@ public class WB_Plane {
 	// Return coordinates relative to world axes
 	/**
 	 * Extract point.
-	 * 
+	 *
 	 * @param x
 	 *            the x
 	 * @param y
@@ -384,7 +422,7 @@ public class WB_Plane {
 	// Return new point mirrored across plane
 	/**
 	 * Mirror point.
-	 * 
+	 *
 	 * @param p
 	 *            the p
 	 * @return the w b_ point3d
@@ -400,7 +438,7 @@ public class WB_Plane {
 	// Return copy of u coordinate axis in world coordinates
 	/**
 	 * Gets the u.
-	 * 
+	 *
 	 * @return the u
 	 */
 	public WB_Vector getU() {
@@ -410,7 +448,7 @@ public class WB_Plane {
 	// Return copy of v coordinate axis in world coordinates
 	/**
 	 * Gets the v.
-	 * 
+	 *
 	 * @return the v
 	 */
 	public WB_Vector getV() {
@@ -420,7 +458,7 @@ public class WB_Plane {
 	// Return copy of w coordinate axis in world coordinates
 	/**
 	 * Gets the w.
-	 * 
+	 *
 	 * @return the w
 	 */
 	public WB_Vector getW() {

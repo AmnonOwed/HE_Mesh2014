@@ -1,13 +1,14 @@
 package wblut.hemesh;
 
+import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
-import wblut.geom.interfaces.SimplePolygon;
 import wblut.math.WB_Epsilon;
 
 public class HEC_Polygon extends HEC_Creator {
 
-	private SimplePolygon polygon;
+	private WB_Polygon polygon;
 
 	private double thickness;
 
@@ -16,14 +17,14 @@ public class HEC_Polygon extends HEC_Creator {
 		override = true;
 	}
 
-	public HEC_Polygon(final SimplePolygon poly, final double d) {
+	public HEC_Polygon(final WB_Polygon poly, final double d) {
 		this();
 		override = true;
 		polygon = poly;
 		thickness = d;
 	}
 
-	public HEC_Polygon setPolygon(final SimplePolygon poly) {
+	public HEC_Polygon setPolygon(final WB_Polygon poly) {
 		polygon = poly;
 		return this;
 	}
@@ -44,16 +45,17 @@ public class HEC_Polygon extends HEC_Creator {
 			return null;
 		}
 		final WB_Vector norm = polygon.getPlane().getNormal();
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		final boolean surf = WB_Epsilon.isZero(thickness);
-		final WB_Point[] points = new WB_Point[surf ? n : 2 * n];
+		final WB_Coordinate[] points = new WB_Coordinate[surf ? n : 2 * n];
 		for (int i = 0; i < n; i++) {
 			points[i] = polygon.getPoint(i);
 
 		}
 		if (!surf) {
 			for (int i = 0; i < n; i++) {
-				points[n + i] = points[i].addMul(thickness, norm);
+				points[n + i] = new WB_Point(points[i]).addMulSelf(thickness,
+						norm);
 			}
 		}
 		int[][] faces;
@@ -63,7 +65,8 @@ public class HEC_Polygon extends HEC_Creator {
 				faces[0][i] = i;
 			}
 
-		} else {
+		}
+		else {
 			faces = new int[n + 2][];
 			faces[n] = new int[n];
 			faces[n + 1] = new int[n];

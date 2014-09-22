@@ -39,27 +39,30 @@ public class WB_Line extends WB_Linear {
 
 	/**
 	 * a.x+b.y+c=0
-	 * 
+	 *
 	 * @return a for a 2D line
 	 */
+	@Override
 	public double a() {
 		return -direction.yd();
 	}
 
 	/**
 	 * a.x+b.y+c=0
-	 * 
+	 *
 	 * @return b for a 2D line
 	 */
+	@Override
 	public double b() {
 		return direction.xd();
 	}
 
 	/**
 	 * a.x+b.y+c=0
-	 * 
+	 *
 	 * @return c for a 2D line
 	 */
+	@Override
 	public double c() {
 		return origin.xd() * direction.yd() - origin.yd() * direction.xd();
 	}
@@ -81,7 +84,8 @@ public class WB_Line extends WB_Linear {
 		final double y = WB_Math.fastAbs(direction.yd());
 		if (x >= y) {
 			t = (proj.xd() - origin.xd()) / (direction.xd());
-		} else {
+		}
+		else {
 			t = (proj.yd() - origin.yd()) / (direction.yd());
 		}
 		return t;
@@ -121,16 +125,19 @@ public class WB_Line extends WB_Linear {
 		if (a == WB_Classification.ON) {
 			if (b == WB_Classification.ON) {
 				return WB_Classification.ON;
-			} else if (b == WB_Classification.FRONT) {
+			}
+			else if (b == WB_Classification.FRONT) {
 				return WB_Classification.FRONT;
-			} else {
+			}
+			else {
 				return WB_Classification.BACK;
 			}
 		}
 		if (b == WB_Classification.ON) {
 			if (a == WB_Classification.FRONT) {
 				return WB_Classification.FRONT;
-			} else {
+			}
+			else {
 				return WB_Classification.BACK;
 			}
 		}
@@ -157,7 +164,37 @@ public class WB_Line extends WB_Linear {
 			if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.FRONT) {
 				numFront++;
 
-			} else if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.BACK) {
+			}
+			else if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.BACK) {
+				numBack++;
+			}
+
+			if (numFront > 0 && numBack > 0) {
+				return WB_Classification.CROSSING;
+			}
+
+		}
+		if (numFront > 0) {
+			return WB_Classification.FRONT;
+		}
+		if (numBack > 0) {
+			return WB_Classification.BACK;
+		}
+		return null;
+	}
+
+	public WB_Classification classifyPolygonToLine2D(final WB_Polygon P) {
+
+		int numFront = 0;
+		int numBack = 0;
+
+		for (int i = 0; i < P.numberOfShellPoints; i++) {
+
+			if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.FRONT) {
+				numFront++;
+
+			}
+			else if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.BACK) {
 				numBack++;
 			}
 
@@ -190,9 +227,11 @@ public class WB_Line extends WB_Linear {
 		if (WB_Epsilon.isZero(dcp - C.getRadius())) {
 			final WB_Vector u = new WB_Vector(C.getCenter(), p);
 			result.add(new WB_Line(p, new WB_Point(-u.yd(), u.xd())));
-		} else if (dcp < C.getRadius()) {
+		}
+		else if (dcp < C.getRadius()) {
 			return result;
-		} else {
+		}
+		else {
 			final WB_Vector u = new WB_Vector(C.getCenter(), p);
 			final double ux2 = u.xd() * u.xd();
 			final double ux4 = ux2 * ux2;
@@ -237,7 +276,8 @@ public class WB_Line extends WB_Linear {
 			s = -0.5 * (c1 + discr) * invc2;
 			if (s >= 0.5) {
 				a = Math.sqrt(WB_Math.fastAbs(wlensqr - r0sqr / (s * s)));
-			} else {
+			}
+			else {
 				oms = 1.0 - s;
 				a = Math.sqrt(WB_Math.fastAbs(wlensqr - r1sqr / (oms * oms)));
 			}
@@ -251,7 +291,8 @@ public class WB_Line extends WB_Linear {
 			s = -0.5 * (c1 - discr) * invc2;
 			if (s >= 0.5) {
 				a = Math.sqrt(WB_Math.fastAbs(wlensqr - r0sqr / (s * s)));
-			} else {
+			}
+			else {
 				oms = 1.0 - s;
 				a = Math.sqrt(WB_Math.fastAbs(wlensqr - r1sqr / (oms * oms)));
 			}
@@ -262,7 +303,8 @@ public class WB_Line extends WB_Linear {
 			result.add(new WB_Line(org, dir[0]));
 			result.add(new WB_Line(org, dir[1]));
 
-		} else {
+		}
+		else {
 			final WB_Point mid = (C0.getCenter().add(C1.getCenter()))
 					.mulSelf(0.5);
 			final double a = Math.sqrt(WB_Math.fastAbs(wlensqr - 4
@@ -304,7 +346,8 @@ public class WB_Line extends WB_Linear {
 			final double dir1y = -0.5 * (c1 - discr) * invc2;
 			dir[1] = new WB_Point((a - w.yd() * dir1y) * invwx, dir1y);
 
-		} else {
+		}
+		else {
 			c0 = asqr - wysqr;
 			c1 = -2 * a * w.xd();
 			discr = Math.sqrt(WB_Math.fastAbs(c1 * c1 - 4 * c0 * c2));
@@ -355,12 +398,12 @@ public class WB_Line extends WB_Linear {
 		result[0] = new WB_Line(new WB_Point(C.getCenter().xd() + C.getRadius()
 				* L.getDirection().xd(), C.getCenter().yd() + C.getRadius()
 				* L.getDirection().yd()), new WB_Point(-L.getDirection().yd(),
-				L.getDirection().xd()));
+						L.getDirection().xd()));
 
 		result[1] = new WB_Line(new WB_Point(C.getCenter().xd() - C.getRadius()
 				* L.getDirection().xd(), C.getCenter().yd() - C.getRadius()
 				* L.getDirection().yd()), new WB_Point(-L.getDirection().yd(),
-				L.getDirection().xd()));
+						L.getDirection().xd()));
 		return result;
 	}
 }

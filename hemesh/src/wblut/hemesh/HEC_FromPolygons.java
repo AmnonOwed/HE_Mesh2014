@@ -3,8 +3,8 @@ package wblut.hemesh;
 import java.util.Collection;
 
 import javolution.util.FastTable;
-import wblut.geom.WB_Point;
-import wblut.geom.interfaces.SimplePolygon;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_Polygon;
 
 /**
  * Creates a new mesh from a list of polygons. Duplicate vertices are fused.
@@ -14,8 +14,7 @@ import wblut.geom.interfaces.SimplePolygon;
  */
 public class HEC_FromPolygons extends HEC_Creator {
 
-	/** Quads. */
-	private SimplePolygon[] polygons;
+	private WB_Polygon[] polygons;
 	private boolean checkNormals;
 
 	/**
@@ -33,7 +32,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 	 * @param qs
 	 *            the qs
 	 */
-	public HEC_FromPolygons(final SimplePolygon[] qs) {
+	public HEC_FromPolygons(final WB_Polygon[] qs) {
 		this();
 		polygons = qs;
 	}
@@ -44,7 +43,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 	 * @param qs
 	 *            the qs
 	 */
-	public HEC_FromPolygons(final Collection<? extends SimplePolygon> qs) {
+	public HEC_FromPolygons(final Collection<? extends WB_Polygon> qs) {
 		this();
 		setPolygons(qs);
 	}
@@ -56,7 +55,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 	 *            source polygons
 	 * @return self
 	 */
-	public HEC_FromPolygons setPolygons(final SimplePolygon[] qs) {
+	public HEC_FromPolygons setPolygons(final WB_Polygon[] qs) {
 		polygons = qs;
 		return this;
 	}
@@ -69,11 +68,11 @@ public class HEC_FromPolygons extends HEC_Creator {
 	 * @return self
 	 */
 	public HEC_FromPolygons setPolygons(
-			final Collection<? extends SimplePolygon> qs) {
+			final Collection<? extends WB_Polygon> qs) {
 		final int n = qs.size();
-		polygons = new SimplePolygon[n];
+		polygons = new WB_Polygon[n];
 		int i = 0;
-		for (final SimplePolygon poly : qs) {
+		for (final WB_Polygon poly : qs) {
 			polygons[i] = poly;
 			i++;
 		}
@@ -87,7 +86,7 @@ public class HEC_FromPolygons extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -95,20 +94,20 @@ public class HEC_FromPolygons extends HEC_Creator {
 		if (polygons != null) {
 			if (polygons.length > 0) {
 				final int nq = polygons.length;
-				final FastTable<WB_Point> vertices = new FastTable<WB_Point>();
+				final FastTable<WB_Coordinate> vertices = new FastTable<WB_Coordinate>();
 				final int[][] faces = new int[nq][];
 				int id = 0;
 				for (int i = 0; i < nq; i++) {
-					faces[i] = new int[polygons[i].getN()];
-					for (int j = 0; j < polygons[i].getN(); j++) {
+					faces[i] = new int[polygons[i].getNumberOfPoints()];
+					for (int j = 0; j < polygons[i].getNumberOfPoints(); j++) {
 						vertices.add(polygons[i].getPoint(j));
 						faces[i][j] = id;
 						id++;
 					}
 				}
 				final HEC_FromFacelist ffl = new HEC_FromFacelist()
-						.setVertices(vertices).setFaces(faces)
-						.setDuplicate(true).setCheckNormals(checkNormals);
+				.setVertices(vertices).setFaces(faces)
+				.setDuplicate(true).setCheckNormals(checkNormals);
 				;
 				return ffl.createBase();
 			}

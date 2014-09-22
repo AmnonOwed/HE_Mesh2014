@@ -100,19 +100,16 @@ public class WB_Render2D {
 	}
 
 	public void drawPolygonEdges(final WB_Polygon P) {
-		home.beginShape();
-		int index = 0;
-		for (int i = 0; i < P.getNumberOfPoints(); i++) {
-			vertex(P.getPoint(index++));
-		}
-		home.endShape(PConstants.CLOSE);
-		final int[] nph = P.getNumberOfPointsPerHole();
-		for (int i = 0; i < P.getNumberOfHoles(); i++) {
+		final int[] npc = P.getNumberOfPointsPerContour();
+		for (int i = 0; i < P.getNumberOfContours(); i++) {
 			home.beginShape();
-			for (int j = 0; j < nph[i]; j++) {
+
+			int index = 0;
+			for (int j = 0; j < npc[i]; j++) {
 				vertex(P.getPoint(index++));
 			}
 			home.endShape(PConstants.CLOSE);
+
 		}
 
 	}

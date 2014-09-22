@@ -24,9 +24,7 @@ public interface SimplePolygon {
 
 	public List<WB_IndexedSegment> getSegments();
 
-	public int getN();
-
-	public int getIndex(int i);
+	public int getNumberOfPoints();
 
 	public WB_Point getPoint(int i);
 

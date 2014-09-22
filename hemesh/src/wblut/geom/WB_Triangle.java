@@ -118,16 +118,6 @@ public class WB_Triangle implements Triangle {
 	}
 
 	@Override
-	public int getDimension() {
-		return 2;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 2;
-	}
-
-	@Override
 	public WB_Point getPoint(final int i) {
 		if (i == 0) {
 			return p1;
@@ -334,18 +324,18 @@ public class WB_Triangle implements Triangle {
 		switch (coord) {
 		case 1:
 			area = (p1.yd() * (p2.zd() - p3.zd()))
-					+ (p2.yd() * (p3.zd() - p1.zd()))
-					+ (p3.yd() * (p1.zd() - p2.zd()));
+			+ (p2.yd() * (p3.zd() - p1.zd()))
+			+ (p3.yd() * (p1.zd() - p2.zd()));
 			break;
 		case 2:
 			area = (p1.xd() * (p2.zd() - p3.zd()))
-					+ (p2.xd() * (p3.zd() - p1.zd()))
-					+ (p3.xd() * (p1.zd() - p2.zd()));
+			+ (p2.xd() * (p3.zd() - p1.zd()))
+			+ (p3.xd() * (p1.zd() - p2.zd()));
 			break;
 		case 3:
 			area = (p1.xd() * (p2.yd() - p3.yd()))
-					+ (p2.xd() * (p3.yd() - p1.yd()))
-					+ (p3.xd() * (p1.yd() - p2.yd()));
+			+ (p2.xd() * (p3.yd() - p1.yd()))
+			+ (p3.xd() * (p1.yd() - p2.yd()));
 			break;
 
 		}

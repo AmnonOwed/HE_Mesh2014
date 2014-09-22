@@ -93,16 +93,6 @@ public class WB_Circle implements WB_Geometry {
 		return WB_GeometryType.CIRCLE;
 	}
 
-	@Override
-	public int getDimension() {
-		return 1;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 2;
-	}
-
 	public boolean isTangent(final WB_Circle C) {
 		final double d = center.getDistance3D(C.getCenter());
 		return WB_Epsilon.isZero(d - WB_Math.fastAbs(C.getRadius() - radius))
@@ -134,11 +124,11 @@ public class WB_Circle implements WB_Geometry {
 		center.set(x, y);
 	}
 
-	public void setCenter(final double x, final double y, double z) {
+	public void setCenter(final double x, final double y, final double z) {
 		center.set(x, y, z);
 	}
 
-	public void setCenter(WB_Coordinate c) {
+	public void setCenter(final WB_Coordinate c) {
 		center.set(c);
 	}
 
@@ -191,8 +181,8 @@ public class WB_Circle implements WB_Geometry {
 		if (WB_Epsilon.isZero(cPrime)) {
 			result.add(new WB_Circle(new WB_Point(p).addSelf(L.a(), L.b(), r),
 					r));
-			result.add(new WB_Circle(
-					new WB_Point(p).addSelf(L.a(), L.b(), -r), r));
+			result.add(new WB_Circle(new WB_Point(p).addSelf(L.a(), L.b(), -r),
+					r));
 			return result;
 		}
 		double a, b;
@@ -201,7 +191,8 @@ public class WB_Circle implements WB_Geometry {
 			a = -L.a();
 			b = -L.b();
 			cPrime *= -1;
-		} else {
+		}
+		else {
 
 			a = L.a();
 			b = L.b();
@@ -211,9 +202,11 @@ public class WB_Circle implements WB_Geometry {
 		if (WB_Epsilon.isZero(tmp2)) {
 			result.add(new WB_Circle(new WB_Point(p).addSelf(a, b, -tmp1), r));
 			return result;
-		} else if (tmp2 < 0) {
+		}
+		else if (tmp2 < 0) {
 			return result;
-		} else {
+		}
+		else {
 			tmp2 = Math.sqrt(tmp2);
 			final WB_Point tmpp = new WB_Point(p.xd() - a * tmp1, p.yd() - b
 					* tmp1);
@@ -264,10 +257,12 @@ public class WB_Circle implements WB_Geometry {
 		if (dcp > C.getRadius() + 2 * r) {
 			return result;
 
-		} else if (dcp < C.getRadius() - 2 * r) {
+		}
+		else if (dcp < C.getRadius() - 2 * r) {
 			return result;
 
-		} else {
+		}
+		else {
 			final WB_Circle ctmp1 = new WB_Circle(p, r);
 			WB_Circle ctmp2 = new WB_Circle(C.getCenter(), r + C.getRadius());
 			ArrayList<WB_Point> intersection = WB_Intersection

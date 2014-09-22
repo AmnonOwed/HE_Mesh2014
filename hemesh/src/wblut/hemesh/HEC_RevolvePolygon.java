@@ -53,7 +53,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 			return null;
 		}
 
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 
 		final WB_Point[] points = new WB_Point[n * facets];
 		final double da = 2 * Math.PI / facets;

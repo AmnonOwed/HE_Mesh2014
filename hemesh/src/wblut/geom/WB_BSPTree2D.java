@@ -36,18 +36,22 @@ public class WB_BSPTree2D {
 
 			if (result == WB_Classification.FRONT) {
 				pos_list.add(seg);
-			} else if (result == WB_Classification.BACK) {
+			}
+			else if (result == WB_Classification.BACK) {
 				neg_list.add(seg);
-			} else if (result == WB_Classification.CROSSING) { /* spanning */
+			}
+			else if (result == WB_Classification.CROSSING) { /* spanning */
 				final WB_Segment[] split_seg = WB_Intersection.splitSegment2D(
 						seg, tree.partition);
 				if (split_seg != null) {
 					pos_list.add(split_seg[0]);
 					neg_list.add(split_seg[1]);
-				} else {
+				}
+				else {
 
 				}
-			} else if (result == WB_Classification.ON) {
+			}
+			else if (result == WB_Classification.ON) {
 				_segs.add(seg);
 			}
 		}
@@ -72,7 +76,7 @@ public class WB_BSPTree2D {
 		build(root, segments);
 	}
 
-	public void build(final WB_SimplePolygon poly) {
+	public void build(final WB_Polygon poly) {
 		if (root == null) {
 			root = new WB_BSPNode2D();
 		}
@@ -94,16 +98,20 @@ public class WB_BSPTree2D {
 		if (type == WB_Classification.FRONT) {
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
-			} else {
+			}
+			else {
 				return 1;
 			}
-		} else if (type == WB_Classification.BACK) {
+		}
+		else if (type == WB_Classification.BACK) {
 			if (node.neg != null) {
 				return pointLocation(node.neg, p);
-			} else {
+			}
+			else {
 				return -1;
 			}
-		} else {
+		}
+		else {
 			for (int i = 0; i < node.segments.size(); i++) {
 				if (WB_Epsilon.isZero(WB_Distance.getDistance2D(p,
 						node.segments.get(i)))) {
@@ -112,9 +120,11 @@ public class WB_BSPTree2D {
 			}
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
-			} else if (node.neg != null) {
+			}
+			else if (node.neg != null) {
 				return pointLocation(node.neg, p);
-			} else {
+			}
+			else {
 				return 0;
 
 			}
@@ -143,13 +153,16 @@ public class WB_BSPTree2D {
 				getSegmentPosPartition(node, split[0], pos, neg, coSame, coDiff);
 				getSegmentNegPartition(node, split[1], pos, neg, coSame, coDiff);
 			}
-		} else if (type == WB_Classification.FRONT) {
+		}
+		else if (type == WB_Classification.FRONT) {
 			getSegmentPosPartition(node, S, pos, neg, coSame, coDiff);
 
-		} else if (type == WB_Classification.BACK) {
+		}
+		else if (type == WB_Classification.BACK) {
 			getSegmentNegPartition(node, S, pos, neg, coSame, coDiff);
 
-		} else if (type == WB_Classification.ON) {
+		}
+		else if (type == WB_Classification.ON) {
 			partitionCoincidentSegments(node, S, pos, neg, coSame, coDiff);
 		}
 
@@ -192,11 +205,13 @@ public class WB_BSPTree2D {
 							newpartSegments.add(new WB_Segment(pj, thisS
 									.getEndpoint()));
 						}
-					} else {// this segment doesn't coincide with an edge
+					}
+					else {// this segment doesn't coincide with an edge
 						newpartSegments.add(thisS);
 					}
 
-				} else {
+				}
+				else {
 					intersection = WB_Intersection.getIntervalIntersection2D(
 							u1, u0, WB_Math.min(v0, v1), WB_Math.max(v0, v1));
 
@@ -212,7 +227,8 @@ public class WB_BSPTree2D {
 							newpartSegments.add(new WB_Segment(thisS
 									.getOrigin(), pj));
 						}
-					} else {
+					}
+					else {
 						newpartSegments.add(thisS);
 					}
 				}
@@ -237,7 +253,8 @@ public class WB_BSPTree2D {
 			final List<WB_Segment> coDiff) {
 		if (node.pos != null) {
 			partitionSegment(node.pos, S, pos, neg, coSame, coDiff);
-		} else {
+		}
+		else {
 			pos.add(S);
 		}
 
@@ -249,7 +266,8 @@ public class WB_BSPTree2D {
 			final List<WB_Segment> coDiff) {
 		if (node.neg != null) {
 			partitionSegment(node.neg, S, pos, neg, coSame, coDiff);
-		} else {
+		}
+		else {
 			neg.add(S);
 		}
 	}
@@ -297,34 +315,35 @@ public class WB_BSPTree2D {
 		return negNode;
 	}
 
-	public void partitionPolygon(final WB_SimplePolygon P,
-			final List<WB_SimplePolygon> pos, final List<WB_SimplePolygon> neg) {
+	public void partitionPolygon(final WB_Polygon P,
+			final List<WB_Polygon> pos, final List<WB_Polygon> neg) {
 
 		partitionPolygon(root, P, pos, neg);
 
 	}
 
-	private void partitionPolygon(final WB_BSPNode2D node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg) {
+	private void partitionPolygon(final WB_BSPNode2D node, final WB_Polygon P,
+			final List<WB_Polygon> pos, final List<WB_Polygon> neg) {
 
-		if (P.n > 2) {
+		if (P.numberOfShellPoints > 2) {
 			final WB_Classification type = node.partition
 					.classifyPolygonToLine2D(P);
 
 			if (type == WB_Classification.CROSSING) {
-				final WB_SimplePolygon[] split = WB_Intersection
-						.splitPolygon2D(P, node.partition);
-				if (split[0].n > 2) {
+				final WB_Polygon[] split = WB_Intersection.splitPolygon2D(P,
+						node.partition);
+				if (split[0].numberOfShellPoints > 2) {
 					getPolygonPosPartition(node, split[0], pos, neg);
 				}
-				if (split[1].n > 2) {
+				if (split[1].numberOfShellPoints > 2) {
 					getPolygonNegPartition(node, split[1], pos, neg);
 				}
-			} else if (type == WB_Classification.FRONT) {
+			}
+			else if (type == WB_Classification.FRONT) {
 				getPolygonPosPartition(node, P, pos, neg);
 
-			} else if (type == WB_Classification.BACK) {
+			}
+			else if (type == WB_Classification.BACK) {
 				getPolygonNegPartition(node, P, pos, neg);
 
 			}
@@ -333,22 +352,24 @@ public class WB_BSPTree2D {
 	}
 
 	private void getPolygonPosPartition(final WB_BSPNode2D node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg) {
+			final WB_Polygon P, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg) {
 		if (node.pos != null) {
 			partitionPolygon(node.pos, P, pos, neg);
-		} else {
+		}
+		else {
 			pos.add(P);
 		}
 
 	}
 
 	private void getPolygonNegPartition(final WB_BSPNode2D node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg) {
+			final WB_Polygon P, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg) {
 		if (node.neg != null) {
 			partitionPolygon(node.neg, P, pos, neg);
-		} else {
+		}
+		else {
 			neg.add(P);
 		}
 	}

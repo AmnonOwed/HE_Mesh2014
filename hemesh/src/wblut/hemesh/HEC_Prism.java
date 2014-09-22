@@ -1,23 +1,27 @@
 /**
- * 
+ *
  */
 package wblut.hemesh;
 
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_SimplePolygon;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class HEC_Prism.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
- * 
+ *
  *         Creates a rectangular prism. If a thickness is specified the result
  *         is a solid, otherwise it's a surface, a regular polygon.
  */
 public class HEC_Prism extends HEC_Creator {
+
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	/** The facets. */
 	private int facets;
@@ -37,7 +41,7 @@ public class HEC_Prism extends HEC_Creator {
 
 	/**
 	 * Instantiates a new hE c_ prism.
-	 * 
+	 *
 	 * @param n
 	 *            the n
 	 * @param r
@@ -54,7 +58,7 @@ public class HEC_Prism extends HEC_Creator {
 
 	/**
 	 * Sets the facets.
-	 * 
+	 *
 	 * @param n
 	 *            the n
 	 * @return the hE c_ prism
@@ -66,7 +70,7 @@ public class HEC_Prism extends HEC_Creator {
 
 	/**
 	 * Sets the height.
-	 * 
+	 *
 	 * @param d
 	 *            the d
 	 * @return the hE c_ prism
@@ -78,7 +82,7 @@ public class HEC_Prism extends HEC_Creator {
 
 	/**
 	 * Sets the radius.
-	 * 
+	 *
 	 * @param r
 	 *            the r
 	 * @return the hE c_ prism
@@ -90,7 +94,7 @@ public class HEC_Prism extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -106,18 +110,19 @@ public class HEC_Prism extends HEC_Creator {
 			ppoints[i] = new WB_Point(x, y, 0.0);
 
 		}
-		final WB_SimplePolygon polygon = new WB_SimplePolygon(ppoints, facets);
+		final WB_Polygon polygon = gf.createSimplePolygon(ppoints);
 		final WB_Vector norm = polygon.getPlane().getNormal();
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		final boolean surf = WB_Epsilon.isZero(thickness);
-		final WB_Point[] points = new WB_Point[surf ? n : 2 * n];
+		final WB_Coordinate[] points = new WB_Coordinate[surf ? n : 2 * n];
 		for (int i = 0; i < n; i++) {
 			points[i] = polygon.getPoint(i);
 
 		}
 		if (!surf) {
 			for (int i = 0; i < n; i++) {
-				points[n + i] = points[i].addMul(thickness, norm);
+				points[n + i] = new WB_Point(points[i]).addMulSelf(thickness,
+						norm);
 			}
 		}
 		int[][] faces;
@@ -127,7 +132,8 @@ public class HEC_Prism extends HEC_Creator {
 				faces[0][i] = i;
 			}
 
-		} else {
+		}
+		else {
 			faces = new int[n + 2][];
 			faces[n] = new int[n];
 			faces[n + 1] = new int[n];

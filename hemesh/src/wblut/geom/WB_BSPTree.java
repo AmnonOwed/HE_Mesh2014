@@ -17,21 +17,20 @@ public class WB_BSPTree {
 		root = null;
 	}
 
-	private void build(final WB_BSPNode tree,
-			final List<WB_SimplePolygon> polygons) {
+	private void build(final WB_BSPNode tree, final List<WB_Polygon> polygons) {
 		if (polygons.size() > 0) {
-			WB_SimplePolygon cpol = null;
-			final Iterator<WB_SimplePolygon> PItr = polygons.iterator();
+			WB_Polygon cpol = null;
+			final Iterator<WB_Polygon> PItr = polygons.iterator();
 			if (PItr.hasNext()) {
 				cpol = PItr.next();
 			}
 			tree.partition = cpol.getPlane();
-			final FastTable<WB_SimplePolygon> _pols = new FastTable<WB_SimplePolygon>();
+			final FastTable<WB_Polygon> _pols = new FastTable<WB_Polygon>();
 
 			_pols.add(cpol);
-			final FastTable<WB_SimplePolygon> pos_list = new FastTable<WB_SimplePolygon>();
-			final FastTable<WB_SimplePolygon> neg_list = new FastTable<WB_SimplePolygon>();
-			WB_SimplePolygon pol = null;
+			final FastTable<WB_Polygon> pos_list = new FastTable<WB_Polygon>();
+			final FastTable<WB_Polygon> neg_list = new FastTable<WB_Polygon>();
+			WB_Polygon pol = null;
 			while (PItr.hasNext()) {
 				pol = PItr.next();
 				final WB_Classification result = tree.partition
@@ -39,19 +38,24 @@ public class WB_BSPTree {
 
 				if (result == WB_Classification.FRONT) {
 					pos_list.add(pol);
-				} else if (result == WB_Classification.BACK) {
+				}
+				else if (result == WB_Classification.BACK) {
 					neg_list.add(pol);
-				} else if (result == WB_Classification.CROSSING) { /* spanning */
-					final WB_SimplePolygon frontPoly = new WB_SimplePolygon();
-					final WB_SimplePolygon backPoly = new WB_SimplePolygon();
-					pol.splitPolygonInto(tree.partition, frontPoly, backPoly);
-					if (frontPoly.n > 2) {
+				}
+				else if (result == WB_Classification.CROSSING) { /* spanning */
+
+					final WB_Polygon[] split = pol.splitPolygon(tree.partition);
+					final WB_Polygon frontPoly = split[0];
+					final WB_Polygon backPoly = split[1];
+
+					if (frontPoly.getNumberOfShellPoints() > 2) {
 						pos_list.add(frontPoly);
 					}
-					if (backPoly.n > 2) {
+					if (backPoly.getNumberOfShellPoints() > 2) {
 						neg_list.add(backPoly);
 					}
-				} else if (result == WB_Classification.ON) {
+				}
+				else if (result == WB_Classification.ON) {
 					_pols.add(pol);
 				}
 			}
@@ -70,17 +74,17 @@ public class WB_BSPTree {
 		}
 	}
 
-	private void build(final WB_BSPNode tree, final WB_SimplePolygon[] polygons) {
+	private void build(final WB_BSPNode tree, final WB_Polygon[] polygons) {
 		if (polygons.length > 0) {
-			final WB_SimplePolygon cpol = polygons[0];
+			final WB_Polygon cpol = polygons[0];
 
 			tree.partition = cpol.getPlane();
-			final FastTable<WB_SimplePolygon> _pols = new FastTable<WB_SimplePolygon>();
+			final FastTable<WB_Polygon> _pols = new FastTable<WB_Polygon>();
 
 			_pols.add(cpol);
-			final FastTable<WB_SimplePolygon> pos_list = new FastTable<WB_SimplePolygon>();
-			final FastTable<WB_SimplePolygon> neg_list = new FastTable<WB_SimplePolygon>();
-			WB_SimplePolygon pol = null;
+			final FastTable<WB_Polygon> pos_list = new FastTable<WB_Polygon>();
+			final FastTable<WB_Polygon> neg_list = new FastTable<WB_Polygon>();
+			WB_Polygon pol = null;
 			for (int i = 1; i < polygons.length; i++) {
 				pol = polygons[i];
 				final WB_Classification result = tree.partition
@@ -88,19 +92,22 @@ public class WB_BSPTree {
 
 				if (result == WB_Classification.FRONT) {
 					pos_list.add(pol);
-				} else if (result == WB_Classification.BACK) {
+				}
+				else if (result == WB_Classification.BACK) {
 					neg_list.add(pol);
-				} else if (result == WB_Classification.CROSSING) { /* spanning */
-					final WB_SimplePolygon frontPoly = new WB_SimplePolygon();
-					final WB_SimplePolygon backPoly = new WB_SimplePolygon();
-					pol.splitPolygonInto(tree.partition, frontPoly, backPoly);
-					if (frontPoly.n > 2) {
+				}
+				else if (result == WB_Classification.CROSSING) { /* spanning */
+					final WB_Polygon[] split = pol.splitPolygon(tree.partition);
+					final WB_Polygon frontPoly = split[0];
+					final WB_Polygon backPoly = split[1];
+					if (frontPoly.getNumberOfShellPoints() > 2) {
 						pos_list.add(frontPoly);
 					}
-					if (backPoly.n > 2) {
+					if (backPoly.getNumberOfShellPoints() > 2) {
 						neg_list.add(backPoly);
 					}
-				} else if (result == WB_Classification.ON) {
+				}
+				else if (result == WB_Classification.ON) {
 					_pols.add(pol);
 				}
 			}
@@ -119,14 +126,14 @@ public class WB_BSPTree {
 		}
 	}
 
-	public void build(final List<WB_SimplePolygon> polygons) {
+	public void build(final List<WB_Polygon> polygons) {
 		if (root == null) {
 			root = new WB_BSPNode();
 		}
 		build(root, polygons);
 	}
 
-	public void build(final WB_SimplePolygon[] polygons) {
+	public void build(final WB_Polygon[] polygons) {
 		if (root == null) {
 			root = new WB_BSPNode();
 		}
@@ -156,16 +163,20 @@ public class WB_BSPTree {
 		if (type == WB_Classification.FRONT) {
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
-			} else {
+			}
+			else {
 				return 1;
 			}
-		} else if (type == WB_Classification.BACK) {
+		}
+		else if (type == WB_Classification.BACK) {
 			if (node.neg != null) {
 				return pointLocation(node.neg, p);
-			} else {
+			}
+			else {
 				return -1;
 			}
-		} else {
+		}
+		else {
 			for (int i = 0; i < node.polygons.size(); i++) {
 				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
 						node.polygons.get(i)))) {
@@ -174,62 +185,65 @@ public class WB_BSPTree {
 			}
 			if (node.pos != null) {
 				return pointLocation(node.pos, p);
-			} else if (node.neg != null) {
+			}
+			else if (node.neg != null) {
 				return pointLocation(node.neg, p);
-			} else {
+			}
+			else {
 				return 0;
 
 			}
 		}
 	}
 
-	public void partitionPolygon(final WB_SimplePolygon P,
-			final List<WB_SimplePolygon> pos, final List<WB_SimplePolygon> neg,
-			final List<WB_SimplePolygon> coSame,
-			final List<WB_SimplePolygon> coDiff) {
+	public void partitionPolygon(final WB_Polygon polygon,
+			final List<WB_Polygon> pos, final List<WB_Polygon> neg,
+			final List<WB_Polygon> coSame, final List<WB_Polygon> coDiff) {
 
-		partitionPolygon(root, P, pos, neg, coSame, coDiff);
+		partitionPolygon(root, polygon, pos, neg, coSame, coDiff);
 
 	}
 
 	private void partitionPolygon(final WB_BSPNode node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg,
-			final List<WB_SimplePolygon> coSame,
-			final List<WB_SimplePolygon> coDiff) {
+			final WB_Polygon polygon, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg, final List<WB_Polygon> coSame,
+			final List<WB_Polygon> coDiff) {
 
-		final WB_Classification type = node.partition.classifyPolygonToPlane(P);
+		final WB_Classification type = node.partition
+				.classifyPolygonToPlane(polygon);
 
 		if (type == WB_Classification.CROSSING) {
 
-			final WB_SimplePolygon frontPoly = new WB_SimplePolygon();
-			final WB_SimplePolygon backPoly = new WB_SimplePolygon();
-			P.splitPolygonInto(node.partition, frontPoly, backPoly);
-			if (frontPoly.n > 2) {
+			final WB_Polygon[] split = polygon.splitPolygon(node.partition);
+			final WB_Polygon frontPoly = split[0];
+			final WB_Polygon backPoly = split[1];
+			if (frontPoly.getNumberOfShellPoints() > 2) {
 				getPolygonPosPartition(node, frontPoly, pos, neg, coSame,
 						coDiff);
 			}
-			if (backPoly.n > 2) {
+			if (backPoly.getNumberOfShellPoints() > 2) {
 				getPolygonNegPartition(node, backPoly, pos, neg, coSame, coDiff);
 			}
 
-		} else if (type == WB_Classification.FRONT) {
-			getPolygonPosPartition(node, P, pos, neg, coSame, coDiff);
+		}
+		else if (type == WB_Classification.FRONT) {
+			getPolygonPosPartition(node, polygon, pos, neg, coSame, coDiff);
 
-		} else if (type == WB_Classification.BACK) {
-			getPolygonNegPartition(node, P, pos, neg, coSame, coDiff);
+		}
+		else if (type == WB_Classification.BACK) {
+			getPolygonNegPartition(node, polygon, pos, neg, coSame, coDiff);
 
-		} else if (type == WB_Classification.ON) {
-			partitionCoincidentPolygons(node, P, pos, neg, coSame, coDiff);
+		}
+		else if (type == WB_Classification.ON) {
+			partitionCoincidentPolygons(node, polygon, pos, neg, coSame, coDiff);
 		}
 
 	}
 
 	private void partitionCoincidentPolygons(final WB_BSPNode node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg,
-			final List<WB_SimplePolygon> coSame,
-			final List<WB_SimplePolygon> coDiff) {
+			final WB_Polygon polygon, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg, final List<WB_Polygon> coSame,
+			final List<WB_Polygon> coDiff) {
 
 		/*
 		 * FastTable<WB_Polygon> partSegments = new FastTable<WB_Polygon>();
@@ -266,27 +280,27 @@ public class WB_BSPTree {
 	}
 
 	private void getPolygonPosPartition(final WB_BSPNode node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg,
-			final List<WB_SimplePolygon> coSame,
-			final List<WB_SimplePolygon> coDiff) {
+			final WB_Polygon polygon, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg, final List<WB_Polygon> coSame,
+			final List<WB_Polygon> coDiff) {
 		if (node.pos != null) {
-			partitionPolygon(node.pos, P, pos, neg, coSame, coDiff);
-		} else {
-			pos.add(P);
+			partitionPolygon(node.pos, polygon, pos, neg, coSame, coDiff);
+		}
+		else {
+			pos.add(polygon);
 		}
 
 	}
 
 	private void getPolygonNegPartition(final WB_BSPNode node,
-			final WB_SimplePolygon P, final List<WB_SimplePolygon> pos,
-			final List<WB_SimplePolygon> neg,
-			final List<WB_SimplePolygon> coSame,
-			final List<WB_SimplePolygon> coDiff) {
+			final WB_Polygon polygon, final List<WB_Polygon> pos,
+			final List<WB_Polygon> neg, final List<WB_Polygon> coSame,
+			final List<WB_Polygon> coDiff) {
 		if (node.neg != null) {
-			partitionPolygon(node.neg, P, pos, neg, coSame, coDiff);
-		} else {
-			neg.add(P);
+			partitionPolygon(node.neg, polygon, pos, neg, coSame, coDiff);
+		}
+		else {
+			neg.add(polygon);
 		}
 	}
 
@@ -318,7 +332,8 @@ public class WB_BSPTree {
 			final List<HE_Mesh> pos, final List<HE_Mesh> neg) {
 		if (node.pos != null) {
 			partitionMesh(node.pos, mesh, pos, neg);
-		} else {
+		}
+		else {
 			pos.add(mesh);
 		}
 
@@ -328,20 +343,21 @@ public class WB_BSPTree {
 			final List<HE_Mesh> pos, final List<HE_Mesh> neg) {
 		if (node.neg != null) {
 			partitionMesh(node.neg, mesh, pos, neg);
-		} else {
+		}
+		else {
 			neg.add(mesh);
 		}
 	}
 
-	public ArrayList<WB_SimplePolygon> toPolygons() {
-		final ArrayList<WB_SimplePolygon> polygons = new ArrayList<WB_SimplePolygon>();
+	public ArrayList<WB_Polygon> toPolygons() {
+		final ArrayList<WB_Polygon> polygons = new ArrayList<WB_Polygon>();
 		addPolygons(root, polygons);
 		return polygons;
 
 	}
 
 	private void addPolygons(final WB_BSPNode node,
-			final ArrayList<WB_SimplePolygon> polygons) {
+			final ArrayList<WB_Polygon> polygons) {
 		polygons.addAll(node.polygons);
 		if (node.pos != null) {
 			addPolygons(node.pos, polygons);
@@ -363,7 +379,7 @@ public class WB_BSPTree {
 		negNode.partition = node.partition.get();
 		negNode.partition.flipNormal();
 		for (int i = 0; i < node.polygons.size(); i++) {
-			final WB_SimplePolygon pol = node.polygons.get(i);
+			final WB_Polygon pol = node.polygons.get(i);
 			negNode.polygons.add(pol.negate());
 		}
 		if (node.pos != null) {

@@ -9,12 +9,13 @@ import org.apache.log4j.Logger;
 
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Projection;
-import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Triangulate;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
@@ -37,6 +38,8 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	private int[][] triangles;
 
 	private static Logger logger = Logger.getLogger(HE_Face.class);
+
+	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	/**
 	 * Instantiates a new HE_Face.
@@ -370,7 +373,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	}
 
-	public WB_SimplePolygon toPolygon() {
+	public WB_Polygon toPolygon() {
 		final int n = getFaceOrder();
 		if (n == 0) {
 			return null;
@@ -388,10 +391,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			i++;
 		} while (he != _halfedge);
 
-		return new WB_SimplePolygon(points, n);
+		return gf.createSimplePolygon(points);
 	}
 
-	public WB_SimplePolygon toPlanarPolygon() {
+	public WB_Polygon toPlanarPolygon() {
 		final int n = getFaceOrder();
 
 		if (n == 0) {
@@ -409,7 +412,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 			i++;
 		} while (he != _halfedge);
 
-		return new WB_SimplePolygon(points, n);
+		return gf.createSimplePolygon(points);
 	}
 
 	public List<HE_Face> getNeighborFaces() {

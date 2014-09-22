@@ -167,19 +167,15 @@ public class WB_Render3D {
 	}
 
 	public void drawPolygonEdges(final WB_Polygon P) {
-		home.beginShape();
+		final int[] npc = P.getNumberOfPointsPerContour();
 		int index = 0;
-		for (int i = 0; i < P.getNumberOfPoints(); i++) {
-			vertex(P.getPoint(index++));
-		}
-		home.endShape(PConstants.CLOSE);
-		final int[] nph = P.getNumberOfPointsPerHole();
-		for (int i = 0; i < P.getNumberOfHoles(); i++) {
+		for (int i = 0; i < P.getNumberOfContours(); i++) {
 			home.beginShape();
-			for (int j = 0; j < nph[i]; j++) {
+			for (int j = 0; j < npc[i]; j++) {
 				vertex(P.getPoint(index++));
 			}
 			home.endShape(PConstants.CLOSE);
+
 		}
 
 	}
@@ -1466,7 +1462,7 @@ public class WB_Render3D {
 
 	public void drawPolygon(final SimplePolygon polygon) {
 		WB_Point v1;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		home.beginShape(PConstants.POLYGON);
 		for (int i = 0; i < n; i++) {
 			v1 = polygon.getPoint(i);
@@ -1486,7 +1482,7 @@ public class WB_Render3D {
 
 	public void drawPolygon2D(final SimplePolygon polygon) {
 		WB_Point v1;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		home.beginShape(PConstants.POLYGON);
 		for (int i = 0; i < n; i++) {
 			v1 = polygon.getPoint(i);
@@ -1507,7 +1503,7 @@ public class WB_Render3D {
 
 	public void drawPolygon2DEdges(final SimplePolygon polygon) {
 		WB_Point v1, v2;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			v1 = polygon.getPoint(i);
 			v2 = polygon.getPoint(j);
@@ -1527,7 +1523,7 @@ public class WB_Render3D {
 	public void drawPolygon2DVertices(final SimplePolygon polygon,
 			final double d) {
 		WB_Point v1;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		for (int i = 0; i < n; i++) {
 			v1 = polygon.getPoint(i);
 
@@ -1547,7 +1543,7 @@ public class WB_Render3D {
 
 	public void drawPolygonEdges(final SimplePolygon polygon) {
 		WB_Point v1, v2;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		for (int i = 0, j = n - 1; i < n; j = i, i++) {
 			v1 = polygon.getPoint(i);
 			v2 = polygon.getPoint(j);
@@ -1566,7 +1562,7 @@ public class WB_Render3D {
 
 	public void drawPolygonVertices(final SimplePolygon polygon, final double d) {
 		WB_Point v1;
-		final int n = polygon.getN();
+		final int n = polygon.getNumberOfPoints();
 		for (int i = 0; i < n; i++) {
 			v1 = polygon.getPoint(i);
 			home.pushMatrix();

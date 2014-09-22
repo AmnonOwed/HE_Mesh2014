@@ -46,6 +46,11 @@ public class WB_Distance {
 		return Math.sqrt(getSqDistance3D(p, poly));
 	}
 
+	public static double getDistance3D(final WB_Coordinate p,
+			final WB_Polygon poly) {
+		return Math.sqrt(getSqDistance3D(p, poly));
+	}
+
 	public static double getDistance3D(final WB_Coordinate p, final WB_AABB AABB) {
 		return Math.sqrt(getSqDistance3D(p, AABB));
 	}
@@ -64,7 +69,7 @@ public class WB_Distance {
 	}
 
 	public static double getDistance3D(final double p[], final WB_Plane P) {
-		WB_Vector n = P.getNormal();
+		final WB_Vector n = P.getNormal();
 		return n.xd() * p[0] + n.yd() * p[1] + n.zd() * p[2] - P.d();
 	}
 
@@ -79,7 +84,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to line.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            point on line
@@ -94,7 +99,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to line.
-	 * 
+	 *
 	 * @param p
 	 * @param L
 	 * @return distance
@@ -111,14 +116,14 @@ public class WB_Distance {
 	}
 
 	public static double getDistanceToPlane3D(final double[] p, final WB_Plane P) {
-		WB_Vector v = P.getNormal();
+		final WB_Vector v = P.getNormal();
 		final double d = v.xd() * p[0] + v.yd() * p[1] + v.zd() * p[2] - P.d();
 		return (d < 0) ? -d : d;
 	}
 
 	/**
 	 * 2D Distance between 2 points.
-	 * 
+	 *
 	 * @param p
 	 * @param q
 	 * @return distance
@@ -130,7 +135,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance between 2 points.
-	 * 
+	 *
 	 * @param p
 	 * @param q
 	 * @return distance
@@ -147,7 +152,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to ray.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            origin of ray
@@ -162,7 +167,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to ray.
-	 * 
+	 *
 	 * @param p
 	 * @param R
 	 * @return distance
@@ -179,7 +184,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to segment.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            start of segment
@@ -194,7 +199,7 @@ public class WB_Distance {
 
 	/**
 	 * 3D Distance from point to segment.
-	 * 
+	 *
 	 * @param p
 	 * @param S
 	 * @return distance
@@ -293,6 +298,31 @@ public class WB_Distance {
 	}
 
 	public static double getSqDistance3D(final WB_Coordinate p,
+			final WB_Polygon poly) {
+		final int[][] tris = poly.getTriangles();
+		final int n = tris.length;
+		double dmax2 = Double.POSITIVE_INFINITY;
+		WB_Coordinate tmp;
+		int[] T;
+		for (int i = 0; i < n; i++) {
+			T = tris[i];
+			tmp = WB_Intersection.getClosestPointToTriangle3D(p,
+					poly.getPoint(T[0]), poly.getPoint(T[1]),
+					poly.getPoint(T[2]));
+			final double d2 = WB_Distance.getDistance3D(tmp, p);
+			if (d2 < dmax2) {
+				dmax2 = d2;
+				if (WB_Epsilon.isZeroSq(dmax2)) {
+					break;
+				}
+			}
+
+		}
+
+		return dmax2;
+	}
+
+	public static double getSqDistance3D(final WB_Coordinate p,
 			final WB_AABB AABB) {
 		double sqDist = 0;
 		double v = p.xd();
@@ -366,7 +396,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 2D Distance from point to line.
-	 * 
+	 *
 	 * @param p
 	 * @param L
 	 * @return squared distance
@@ -384,7 +414,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to line.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            point on line
@@ -404,7 +434,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to line.
-	 * 
+	 *
 	 * @param p
 	 * @param L
 	 * @return squared distance
@@ -412,7 +442,8 @@ public class WB_Distance {
 	public static double getSqDistanceToLine3D(final WB_Coordinate p,
 			final WB_Line L) {
 		final WB_Vector ab = L.getDirection();
-		final WB_Vector ac = geometryfactory.createVectorFromTo(L.getOrigin(), p);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(L.getOrigin(),
+				p);
 		final double e = ac.dot(ab);
 		final double f = ab.dot(ab);
 		return ac.dot(ac) - e * e / f;
@@ -426,7 +457,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 2D Distance between 2 points.
-	 * 
+	 *
 	 * @param p
 	 * @param q
 	 * @return squared distance
@@ -442,7 +473,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance between 2 points.
-	 * 
+	 *
 	 * @param p
 	 * @param q
 	 * @return squared distance
@@ -468,7 +499,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to ray.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            origin of ray
@@ -492,7 +523,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to ray.
-	 * 
+	 *
 	 * @param p
 	 * @param R
 	 * @return squared distance
@@ -500,7 +531,8 @@ public class WB_Distance {
 	public static double getSqDistanceToRay3D(final WB_Coordinate p,
 			final WB_Ray R) {
 		final WB_Vector ab = R.getDirection();
-		final WB_Vector ac = geometryfactory.createVectorFromTo(R.getOrigin(), p);
+		final WB_Vector ac = geometryfactory.createVectorFromTo(R.getOrigin(),
+				p);
 		final double e = ac.dot(ab);
 		if (e <= 0) {
 			return ac.dot(ac);
@@ -527,7 +559,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to segment.
-	 * 
+	 *
 	 * @param p
 	 * @param a
 	 *            start of segment
@@ -553,7 +585,7 @@ public class WB_Distance {
 
 	/**
 	 * Squared 3D Distance from point to segment.
-	 * 
+	 *
 	 * @param p
 	 * @param S
 	 * @return squared distance

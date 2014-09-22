@@ -33,26 +33,6 @@ public class WB_GeometryCollection implements WB_Geometry {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	@Override
-	public int getDimension() {
-		int dim = 0;
-		for (final WB_Geometry geom : geometries) {
-			dim = Math.max(dim, geom.getDimension());
-
-		}
-
-		return dim;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		int embdim = 0;
-		for (final WB_Geometry geom : geometries) {
-			embdim = Math.max(embdim, geom.getEmbeddingDimension());
-		}
-		return embdim;
-	}
-
 	public WB_Geometry getGeometry(final int i) {
 		if (geometries == null) {
 			return null;

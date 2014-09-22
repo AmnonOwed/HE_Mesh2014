@@ -47,24 +47,17 @@ public class WB_Tetrahedron implements WB_Simplex {
 	}
 
 	@Override
-	public int getDimension() {
-		return 3;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 3;
-	}
-
-	@Override
 	public WB_Point getPoint(final int i) {
 		if (i == 0) {
 			return p1;
-		} else if (i == 1) {
+		}
+		else if (i == 1) {
 			return p2;
-		} else if (i == 2) {
+		}
+		else if (i == 2) {
 			return p3;
-		} else if (i == 3) {
+		}
+		else if (i == 3) {
 			return p4;
 		}
 		return null;
@@ -121,7 +114,8 @@ public class WB_Tetrahedron implements WB_Simplex {
 		O.addSelf(c.cross(a).mulSelf(b.dot(b)));
 		O.addSelf(a.cross(b).mulSelf(c.dot(c)));
 		O.mulSelf(1.0 / (2 * a.dot(b.crossSelf(c))));
-		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength3D());
+		return geometryfactory.createSphereWithRadius(p4.add(O),
+				O.getLength3D());
 	}
 
 	/** Calculate the radius of the insphere. */
@@ -134,8 +128,8 @@ public class WB_Tetrahedron implements WB_Simplex {
 		final double sixV = Math.abs(a.dot(bXc));
 		c.crossSelf(a);
 		a.crossSelf(b);
-		final double denom = bXc.getLength3D() + c.getLength3D() + a.getLength3D()
-				+ (bXc.addMulSelf(2, a).getLength3D());
+		final double denom = bXc.getLength3D() + c.getLength3D()
+				+ a.getLength3D() + (bXc.addMulSelf(2, a).getLength3D());
 		return sixV / denom;
 	}
 
@@ -174,7 +168,8 @@ public class WB_Tetrahedron implements WB_Simplex {
 		O.addSelf(b.mulSelf(cXaLength));
 		O.addSelf(c.mulSelf(aXbLength));
 		O.divSelf(bXcLength + cXaLength + aXbLength + dLength);
-		return geometryfactory.createSphereWithRadius(p4.add(O), O.getLength3D());
+		return geometryfactory.createSphereWithRadius(p4.add(O),
+				O.getLength3D());
 
 	}
 

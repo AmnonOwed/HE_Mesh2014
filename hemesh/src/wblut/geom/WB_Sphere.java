@@ -59,24 +59,14 @@ public class WB_Sphere implements WB_Geometry {
 	}
 
 	@Override
-	public int getDimension() {
-		return 2;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-		return 3;
-	}
-
-	@Override
 	public WB_Sphere apply(final WB_Transform T) {
-		return geometryfactory.createSphereWithRadius(
-				center.applyAsPoint(T), radius);
+		return geometryfactory.createSphereWithRadius(center.applyAsPoint(T),
+				radius);
 	}
 
 	/**
 	 * Get copy.
-	 * 
+	 *
 	 * @return copy
 	 */
 	public WB_Sphere get() {
@@ -85,7 +75,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Gets the center.
-	 * 
+	 *
 	 * @return the center
 	 */
 	public WB_Point getCenter() {
@@ -94,7 +84,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Sets the center.
-	 * 
+	 *
 	 * @param c
 	 *            the new center
 	 */
@@ -104,7 +94,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Gets the radius.
-	 * 
+	 *
 	 * @return the radius
 	 */
 	public double getRadius() {
@@ -113,7 +103,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Sets the radius.
-	 * 
+	 *
 	 * @param r
 	 *            the new radius
 	 */
@@ -123,7 +113,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Approximate sphere enclosing points, calculated from distant points.
-	 * 
+	 *
 	 * @param points
 	 *            WB_Point[]
 	 * @param numPoints
@@ -183,7 +173,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Get Ritter sphere enclosing points.
-	 * 
+	 *
 	 * @param points
 	 *            WB_Point[]
 	 * @param numPoints
@@ -202,7 +192,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Get iterative Ritter sphere enclosing points.
-	 * 
+	 *
 	 * @param points
 	 *            WB_Point[]
 	 * @param numPoints
@@ -237,7 +227,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Get Eigensphere enclosing points.
-	 * 
+	 *
 	 * @param points
 	 *            WB_Point[]
 	 * @param numPoints
@@ -272,7 +262,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Get Ritter Eigensphere enclosing points.
-	 * 
+	 *
 	 * @param points
 	 *            WB_Point[]
 	 * @param numPoints
@@ -291,7 +281,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Grow sphere to include point.
-	 * 
+	 *
 	 * @param p
 	 *            point to include
 	 */
@@ -309,7 +299,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Extreme points along direction.
-	 * 
+	 *
 	 * @param points
 	 *            the points
 	 * @param numPoints
@@ -342,7 +332,7 @@ public class WB_Sphere implements WB_Geometry {
 
 	/**
 	 * Project point to sphere.
-	 * 
+	 *
 	 * @param v
 	 *            the v
 	 * @return point projected to sphere

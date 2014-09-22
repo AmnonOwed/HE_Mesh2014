@@ -40,9 +40,9 @@ import wblut.geom.WB_Mesh;
 import wblut.geom.WB_MeshCreator;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Segment;
-import wblut.geom.WB_SimplePolygon;
 import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
@@ -55,7 +55,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-WB_HasColor, WB_Mesh {
+		WB_HasColor, WB_Mesh {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	/** Stored mesh center. */
 	private WB_Point _center;
@@ -788,8 +788,8 @@ WB_HasColor, WB_Mesh {
 	 *
 	 */
 
-	public WB_SimplePolygon[] getPolygons() {
-		final WB_SimplePolygon[] result = new WB_SimplePolygon[getNumberOfFaces()];
+	public WB_Polygon[] getPolygons() {
+		final WB_Polygon[] result = new WB_Polygon[getNumberOfFaces()];
 		final Iterator<HE_Face> fItr = fItr();
 		HE_Face f;
 		int i = 0;
@@ -806,8 +806,8 @@ WB_HasColor, WB_Mesh {
 	 *
 	 * @return the polygon list
 	 */
-	public List<WB_SimplePolygon> getPolygonList() {
-		final List<WB_SimplePolygon> result = new FastTable<WB_SimplePolygon>();
+	public List<WB_Polygon> getPolygonList() {
+		final List<WB_Polygon> result = new FastTable<WB_Polygon>();
 		final Iterator<HE_Face> fItr = fItr();
 		HE_Face f;
 		while (fItr.hasNext()) {
@@ -960,9 +960,9 @@ WB_HasColor, WB_Mesh {
 		final Iterator<HE_Vertex> vItr = vItr();
 		while (vItr.hasNext()) {
 			vItr.next()
-					.getPoint()
-					.addSelf(x - _center.xd(), y - _center.yd(),
-							z - _center.zd());
+			.getPoint()
+			.addSelf(x - _center.xd(), y - _center.yd(),
+					z - _center.zd());
 		}
 		_center.set(x, y, z);
 		return this;
@@ -1349,9 +1349,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -1424,9 +1424,9 @@ WB_HasColor, WB_Mesh {
 						he2 = vInfo.in.get(j);
 						if ((he2.getPair() == null)
 								&& (he.getVertex() == he2.getNextInFace()
-										.getVertex())
+								.getVertex())
 								&& (he2.getVertex() == he.getNextInFace()
-										.getVertex())) {
+								.getVertex())) {
 							he.setPair(he2);
 							he2.setPair(he);
 
@@ -3664,16 +3664,13 @@ WB_HasColor, WB_Mesh {
 	 */
 	public static boolean pointIsStrictlyInFace(final WB_Coordinate p,
 			final HE_Face f) {
-		final WB_SimplePolygon poly = f.toPolygon();
+		final WB_Polygon poly = f.toPolygon();
 		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
-				WB_Intersection.getClosestPoint3D(p, f.toPolygon())))) {
+				WB_Intersection.getClosestPoint3D(p, poly)))) {
 			return false;
 		}
-		if (!WB_Epsilon
-				.isZeroSq(WB_Distance.getSqDistance3D(
-						p,
-						WB_Intersection.getClosestPointOnPeriphery3D(p,
-								f.toPolygon())))) {
+		if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+				WB_Intersection.getClosestPointOnPeriphery3D(p, poly)))) {
 			return false;
 		}
 		return true;
@@ -4173,9 +4170,9 @@ WB_HasColor, WB_Mesh {
 						he.getNextInVertex().getHalfedgeTangent())) {
 					he.getPrevInFace().setNext(he.getNextInFace());
 					he.getPair().getPrevInFace()
-							.setNext(he.getPair().getNextInFace());
+					.setNext(he.getPair().getNextInFace());
 					he.getPair().getNextInFace()
-							.setVertex(he.getNextInFace().getVertex());
+					.setVertex(he.getNextInFace().getVertex());
 					if (he.getFace() != null) {
 						if (he.getFace().getHalfedge() == he) {
 							he.getFace().setHalfedge(he.getNextInFace());
@@ -4185,7 +4182,7 @@ WB_HasColor, WB_Mesh {
 						if (he.getPair().getFace().getHalfedge() == he
 								.getPair()) {
 							he.getPair().getFace()
-									.setHalfedge(he.getPair().getNextInFace());
+							.setHalfedge(he.getPair().getNextInFace());
 						}
 					}
 					vItr.remove();
@@ -4414,7 +4411,7 @@ WB_HasColor, WB_Mesh {
 		double dmin = Double.POSITIVE_INFINITY;
 		WB_Point result = new WB_Point();
 		for (int i = 0; i < faces.size(); i++) {
-			final WB_SimplePolygon poly = faces.get(i).toPolygon();
+			final WB_Polygon poly = faces.get(i).toPolygon();
 			final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
 			d = WB_Distance.getSqDistance3D(tmp, p);
 			if (d < dmin) {
@@ -4443,7 +4440,7 @@ WB_HasColor, WB_Mesh {
 		double dmin = Double.POSITIVE_INFINITY;
 		HE_Face face = new HE_Face();
 		for (int i = 0; i < faces.size(); i++) {
-			final WB_SimplePolygon poly = faces.get(i).toPolygon();
+			final WB_Polygon poly = faces.get(i).toPolygon();
 			final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
 			d = WB_Distance.getSqDistance3D(tmp, p);
 			if (d < dmin) {
@@ -4469,8 +4466,8 @@ WB_HasColor, WB_Mesh {
 		return result;
 	}
 
-	public List<WB_SimplePolygon> getBoundaryAsPolygons() {
-		final List<WB_SimplePolygon> polygons = new FastTable<WB_SimplePolygon>();
+	public List<WB_Polygon> getBoundaryAsPolygons() {
+		final List<WB_Polygon> polygons = new FastTable<WB_Polygon>();
 		final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
 		final List<HE_Halfedge> loop = new FastTable<HE_Halfedge>();
 		final List<WB_Coordinate> points = new FastTable<WB_Coordinate>();
@@ -4487,7 +4484,7 @@ WB_HasColor, WB_Mesh {
 					break;
 				}
 			} while (he != halfedges.get(0));
-			polygons.add(new WB_SimplePolygon(points));
+			polygons.add(gf.createSimplePolygon(points));
 			halfedges.removeAll(loop);
 		}
 		return polygons;
@@ -4763,7 +4760,7 @@ WB_HasColor, WB_Mesh {
 	 * Clean.
 	 */
 	public void clean() {
-		final WB_SimplePolygon[] polygons = getPolygons();
+		final WB_Polygon[] polygons = getPolygons();
 		final HEC_FromPolygons creator = new HEC_FromPolygons();
 		creator.setPolygons(polygons);
 		set(creator.create());
@@ -4771,7 +4768,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -4784,7 +4781,7 @@ WB_HasColor, WB_Mesh {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -4828,17 +4825,6 @@ WB_HasColor, WB_Mesh {
 	@Override
 	public WB_GeometryType getType() {
 		return WB_GeometryType.MESH;
-	}
-
-	@Override
-	public int getDimension() {
-		return 3;
-	}
-
-	@Override
-	public int getEmbeddingDimension() {
-
-		return 3;
 	}
 
 	@Override

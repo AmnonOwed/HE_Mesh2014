@@ -23,7 +23,7 @@ import wblut.math.WB_Epsilon;
 public class HEC_FromFacelist extends HEC_Creator {
 
 	/** Vertices. */
-	private WB_Point[] vertices;
+	private WB_Coordinate[] vertices;
 
 	/** Face indices. */
 	private int[][] faces;
@@ -52,7 +52,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 	 *            vertices
 	 * @return self
 	 */
-	public HEC_FromFacelist setVertices(final WB_Point[] vs) {
+	public HEC_FromFacelist setVertices(final WB_Coordinate[] vs) {
 		vertices = vs;
 		return this;
 	}
@@ -64,11 +64,12 @@ public class HEC_FromFacelist extends HEC_Creator {
 	 *            vertices
 	 * @return self
 	 */
-	public HEC_FromFacelist setVertices(final Collection<WB_Point> vs) {
+	public HEC_FromFacelist setVertices(
+			final Collection<? extends WB_Coordinate> vs) {
 
 		final int n = vs.size();
-		final Iterator<WB_Point> itr = vs.iterator();
-		vertices = new WB_Point[n];
+		final Iterator<? extends WB_Coordinate> itr = vs.iterator();
+		vertices = new WB_Coordinate[n];
 		int i = 0;
 		while (itr.hasNext()) {
 			vertices[i] = itr.next();
@@ -86,11 +87,12 @@ public class HEC_FromFacelist extends HEC_Creator {
 	 *            copy points?
 	 * @return self
 	 */
-	public HEC_FromFacelist setVertices(final WB_Point[] vs, final boolean copy) {
+	public HEC_FromFacelist setVertices(final WB_Coordinate[] vs,
+			final boolean copy) {
 		if (copy) {
 			final int n = vs.length;
 
-			vertices = new WB_Point[n];
+			vertices = new WB_Coordinate[n];
 			for (int i = 0; i < n; i++) {
 				vertices[i] = new WB_Point(vs[i]);
 
@@ -227,7 +229,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -328,7 +330,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 											for (int k = 0; k < fln / 2; k++) {
 												temp = faces[neighbor][k];
 												faces[neighbor][k] = faces[neighbor][fln
-														- k - 1];
+												                                     - k - 1];
 												faces[neighbor][fln - k - 1] = temp;
 											}
 										}
