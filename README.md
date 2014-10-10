@@ -18,6 +18,6 @@ You need to add some other external *.jar files to the properties of your Eclips
   (http://logging.apache.org/log4j/1.2/)
 
 
-## Build-of-the-day HE_Mesh 2014 (28/07/2014)
+## Build-of-the-day HE_Mesh 2014 (11/10/2014)
 
 Download a recent built here: http://hemesh.wblut.com/hemesh.zip.
