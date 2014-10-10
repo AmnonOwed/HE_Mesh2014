@@ -677,15 +677,14 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 */
 	public final List<HE_Halfedge> getEdgesAsList() {
 		final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
-		final Iterator<HE_Halfedge> eItr = heItr();
-		int i = 0;
+		final Iterator<HE_Halfedge> eItr = eItr();
+
 		HE_Halfedge he;
 		while (eItr.hasNext()) {
 			he = eItr.next();
-			if (he.isEdge()) {
-				edges.add(he);
-				i++;
-			}
+
+			edges.add(he);
+
 		}
 		return (edges);
 	}
@@ -808,7 +807,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -821,7 +820,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -840,7 +839,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-							+ " in path are not connected.");
+									+ " in path are not connected.");
 				}
 				halfedges.add(he);
 			}
@@ -852,7 +851,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 					throw new IllegalArgumentException("Vertices "
 							+ vertices[vertices.length - 1] + " and "
 							+ vertices[0]
-							+ " in path are not connected: path is not a loop.");
+									+ " in path are not connected: path is not a loop.");
 				}
 
 			}

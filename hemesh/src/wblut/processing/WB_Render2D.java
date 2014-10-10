@@ -101,17 +101,15 @@ public class WB_Render2D {
 
 	public void drawPolygonEdges(final WB_Polygon P) {
 		final int[] npc = P.getNumberOfPointsPerContour();
+		int index = 0;
 		for (int i = 0; i < P.getNumberOfContours(); i++) {
 			home.beginShape();
-
-			int index = 0;
 			for (int j = 0; j < npc[i]; j++) {
 				vertex(P.getPoint(index++));
 			}
 			home.endShape(PConstants.CLOSE);
 
 		}
-
 	}
 
 	public void drawCircle(final WB_Circle C) {

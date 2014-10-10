@@ -6,7 +6,6 @@ import java.util.List;
 
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.interfaces.Segment;
-import wblut.geom.interfaces.SimplePolygon;
 import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
@@ -869,67 +868,10 @@ public class WB_Intersection {
 		return result;
 	}
 
-	public static ArrayList<WB_Segment> getIntersection3D(
-			final SimplePolygon poly, final WB_Plane P) {
-
-		P.classifyPolygonToPlane(poly);
-		final ArrayList<WB_Segment> result = new ArrayList<WB_Segment>();
-		/*
-		 * if (cptp == WB_ClassifyPolygonToPlane.POLYGON_ON_PLANE) { return
-		 * poly.toSegments(); } if ((cptp ==
-		 * WB_ClassifyPolygonToPlane.POLYGON_BEHIND_PLANE) || (cptp ==
-		 * WB_ClassifyPolygonToPlane.POLYGON_BEHIND_PLANE)) { return result; }
-		 */
-		final ArrayList<WB_Point> splitVerts = new ArrayList<WB_Point>();
-		final int numVerts = poly.getNumberOfPoints();
-		if (numVerts > 0) {
-			WB_Point a = poly.getPoint(numVerts - 1);
-			WB_Classification aSide = P.classifyPointToPlane(a);
-			WB_Point b;
-			WB_Classification bSide;
-			for (int n = 0; n < numVerts; n++) {
-				WB_IntersectionResult i;
-				b = poly.getPoint(n);
-				bSide = P.classifyPointToPlane(b);
-				if (bSide == WB_Classification.FRONT) {
-					if (aSide == WB_Classification.BACK) {
-						i = WB_Intersection.getIntersection3D(b, a, P);
-						splitVerts.add((WB_Point) i.object);
-					}
-				}
-				else if (bSide == WB_Classification.BACK) {
-					if (aSide == WB_Classification.FRONT) {
-						i = WB_Intersection.getIntersection3D(a, b, P);
-						splitVerts.add((WB_Point) i.object);
-					}
-				}
-				if (aSide == WB_Classification.ON) {
-					splitVerts.add(a);
-
-				}
-				a = b;
-				aSide = bSide;
-
-			}
-		}
-
-		for (int i = 0; i < splitVerts.size(); i += 2) {
-			if (splitVerts.get(i + 1) != null) {
-				result.add(new WB_Segment(splitVerts.get(i), splitVerts
-						.get(i + 1)));
-			}
-
-		}
-
-		return result;
-
-	}
-
 	// TODO: implement for polygons with holes
 	public static ArrayList<WB_Segment> getIntersection3D(
 			final WB_Polygon poly, final WB_Plane P) {
 
-		P.classifyPolygonToPlane(poly);
 		final ArrayList<WB_Segment> result = new ArrayList<WB_Segment>();
 		/*
 		 * if (cptp == WB_ClassifyPolygonToPlane.POLYGON_ON_PLANE) { return
@@ -971,7 +913,7 @@ public class WB_Intersection {
 		}
 
 		for (int i = 0; i < splitVerts.size(); i += 2) {
-			if (splitVerts.get(i + 1) != null) {
+			if (i + 1 < splitVerts.size() && splitVerts.get(i + 1) != null) {
 				result.add(new WB_Segment(splitVerts.get(i), splitVerts
 						.get(i + 1)));
 			}
@@ -1497,30 +1439,6 @@ public class WB_Intersection {
 	// POINT-POLYGON
 
 	public static WB_Point getClosestPoint3D(final WB_Coordinate p,
-			final SimplePolygon poly) {
-		final int[][] tris = poly.getTriangles();
-
-		final int n = tris.length;
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		int[] T;
-		for (int i = 0; i < n; i++) {
-			T = tris[i];
-			tmp = getClosestPointToTriangle3D(p, poly.getPoint(T[0]),
-					poly.getPoint(T[1]), poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getSqDistance3D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-
-		return closest;
-	}
-
-	public static WB_Point getClosestPoint3D(final WB_Coordinate p,
 			final List<? extends Triangle> tris) {
 		final int n = tris.size();
 		double dmax2 = Double.POSITIVE_INFINITY;
@@ -1538,81 +1456,6 @@ public class WB_Intersection {
 
 		}
 
-		return closest;
-	}
-
-	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
-			final SimplePolygon poly) {
-		final int[][] tris = poly.getTriangles();
-		final int n = tris.length;
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		int[] T;
-		for (int i = 0; i < n; i++) {
-			T = tris[i];
-			tmp = getClosestPointToTriangle3D(p, poly.getPoint(T[0]),
-					poly.getPoint(T[1]), poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getSqDistance3D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-		if (WB_Epsilon.isZeroSq(dmax2)) {
-			dmax2 = Double.POSITIVE_INFINITY;
-			WB_Segment S;
-			for (int i = 0, j = poly.getNumberOfPoints() - 1; i < poly
-					.getNumberOfPoints(); j = i, i++) {
-				S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
-				tmp = getClosestPoint3D(p, S);
-				final double d2 = WB_Distance.getSqDistance3D(tmp, p);
-				if (d2 < dmax2) {
-					closest = tmp;
-					dmax2 = d2;
-				}
-
-			}
-
-		}
-
-		return closest;
-	}
-
-	public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
-			final SimplePolygon poly, final List<? extends Triangle> tris) {
-		final int n = tris.size();
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		Triangle T;
-		for (int i = 0; i < n; i++) {
-			T = tris.get(i);
-			tmp = getClosestPoint3D(p, T);
-			final double d2 = WB_Distance.getSqDistance3D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-		if (WB_Epsilon.isZeroSq(dmax2)) {
-			dmax2 = Double.POSITIVE_INFINITY;
-			WB_Segment S;
-			for (int i = 0, j = poly.getNumberOfPoints() - 1; i < poly
-					.getNumberOfPoints(); j = i, i++) {
-				S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
-				tmp = getClosestPoint3D(p, S);
-				final double d2 = WB_Distance.getSqDistance3D(tmp, p);
-				if (d2 < dmax2) {
-					closest = tmp;
-					dmax2 = d2;
-				}
-
-			}
-
-		}
 		return closest;
 	}
 
@@ -2262,86 +2105,6 @@ public class WB_Intersection {
 
 	}
 
-	public static WB_SimplePolygon[] splitPolygon2D(
-			final WB_SimplePolygon poly, final WB_Line L) {
-
-		final ArrayList<WB_Point> frontVerts = new ArrayList<WB_Point>(20);
-		final ArrayList<WB_Point> backVerts = new ArrayList<WB_Point>(20);
-
-		final int numVerts = poly.n;
-		if (numVerts > 0) {
-			WB_Point a = poly.getPoint(numVerts - 1);
-			WB_Classification aSide = L.classifyPointToLine2D(a);
-			WB_Point b;
-			WB_Classification bSide;
-
-			for (int n = 0; n < numVerts; n++) {
-				WB_IntersectionResult i = new WB_IntersectionResult();
-				b = poly.getPoint(n);
-				bSide = L.classifyPointToLine2D(b);
-				if (bSide == WB_Classification.FRONT) {
-					if (aSide == WB_Classification.BACK) {
-						i = getClosestPoint2D(L, new WB_Segment(a, b));
-						WB_Point p1 = null;
-						if (i.dimension == 0) {
-							p1 = (WB_Point) i.object;
-						}
-						else if (i.dimension == 1) {
-							p1 = ((Segment) i.object).getOrigin();
-						}
-						frontVerts.add(p1);
-
-						backVerts.add(p1);
-
-					}
-					frontVerts.add(b);
-
-				}
-				else if (bSide == WB_Classification.BACK) {
-					if (aSide == WB_Classification.FRONT) {
-						i = getClosestPoint2D(L, new WB_Segment(a, b));
-
-						/*
-						 * if (classifyPointToPlane(i.p1, P) !=
-						 * ClassifyPointToPlane.POINT_ON_PLANE) { System.out
-						 * .println("Inconsistency: intersection not on plane");
-						 * }
-						 */
-						final WB_Point p1 = (WB_Point) i.object;
-
-						frontVerts.add(p1);
-
-						backVerts.add(p1);
-
-					}
-					else if (aSide == WB_Classification.ON) {
-						backVerts.add(a);
-
-					}
-					backVerts.add(b);
-
-				}
-				else {
-					frontVerts.add(b);
-
-					if (aSide == WB_Classification.BACK) {
-						backVerts.add(b);
-
-					}
-				}
-				a = b;
-				aSide = bSide;
-
-			}
-
-		}
-		final WB_SimplePolygon[] result = new WB_SimplePolygon[2];
-		result[0] = new WB_SimplePolygon(frontVerts);
-		result[1] = new WB_SimplePolygon(backVerts);
-		return result;
-
-	}
-
 	public static WB_Polygon[] splitPolygon2D(final WB_Polygon poly,
 			final WB_Line L) {
 
@@ -2955,29 +2718,6 @@ public class WB_Intersection {
 	// POINT-POLYGON
 
 	public static WB_Point getClosestPoint2D(final WB_Coordinate p,
-			final WB_SimplePolygon poly) {
-		final int[][] tris = poly.getTriangles();
-		final int n = tris.length;
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		int[] T;
-		for (int i = 0; i < n; i++) {
-			T = tris[i];
-			tmp = getClosestPointToTriangle2D(p, poly.getPoint(T[0]),
-					poly.getPoint(T[1]), poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getDistance2D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-
-		return closest;
-	}
-
-	public static WB_Point getClosestPoint2D(final WB_Coordinate p,
 			final WB_Polygon poly) {
 		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
@@ -3022,44 +2762,6 @@ public class WB_Intersection {
 	}
 
 	public static WB_Point getClosestPointOnPeriphery2D(final WB_Coordinate p,
-			final WB_SimplePolygon poly) {
-		final int[][] tris = poly.getTriangles();
-		final int n = tris.length;
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		int[] T;
-		for (int i = 0; i < n; i++) {
-			T = tris[i];
-			tmp = getClosestPointToTriangle2D(p, poly.getPoint(T[0]),
-					poly.getPoint(T[1]), poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getSqDistance2D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-		if (WB_Epsilon.isZeroSq(dmax2)) {
-			dmax2 = Double.POSITIVE_INFINITY;
-			WB_IndexedSegment S;
-			for (int i = 0, j = poly.n - 1; i < poly.n; j = i, i++) {
-				S = new WB_IndexedSegment(j, i, poly.getPoints());
-				tmp = getClosestPoint2D(p, S);
-				final double d2 = WB_Distance.getSqDistance2D(tmp, p);
-				if (d2 < dmax2) {
-					closest = tmp;
-					dmax2 = d2;
-				}
-
-			}
-
-		}
-
-		return closest;
-	}
-
-	public static WB_Point getClosestPointOnPeriphery2D(final WB_Coordinate p,
 			final WB_Polygon poly) {
 		final int[][] tris = poly.getTriangles();
 		final int n = tris.length;
@@ -3095,41 +2797,6 @@ public class WB_Intersection {
 
 		}
 
-		return closest;
-	}
-
-	public static WB_Point getClosestPointOnPeriphery2D(final WB_Coordinate p,
-			final WB_SimplePolygon poly, final ArrayList<WB_Triangle> tris) {
-		final int n = tris.size();
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Point closest = new WB_Point();
-		WB_Point tmp;
-		WB_Triangle T;
-		for (int i = 0; i < n; i++) {
-			T = tris.get(i);
-			tmp = getClosestPoint2D(p, T);
-			final double d2 = WB_Distance.getSqDistance2D(tmp, p);
-			if (d2 < dmax2) {
-				closest = tmp;
-				dmax2 = d2;
-			}
-
-		}
-		if (WB_Epsilon.isZeroSq(dmax2)) {
-			dmax2 = Double.POSITIVE_INFINITY;
-			Segment S;
-			for (int i = 0, j = poly.n - 1; i < poly.n; j = i, i++) {
-				S = new WB_IndexedSegment(j, i, poly.getPoints());
-				tmp = getClosestPoint2D(p, S);
-				final double d2 = WB_Distance.getSqDistance2D(tmp, p);
-				if (d2 < dmax2) {
-					closest = tmp;
-					dmax2 = d2;
-				}
-
-			}
-
-		}
 		return closest;
 	}
 
@@ -3240,62 +2907,6 @@ public class WB_Intersection {
 			i.object = new WB_Segment(p1, p2);
 		}
 		return i;
-
-	}
-
-	public static WB_IntersectionResult getIntersection3D(final WB_Ray ray,
-			final WB_SimplePolygon poly) {
-		final WB_IntersectionResult ir = getIntersection3D(ray, poly.getPlane());
-		if (ir.intersection == false) {
-			return ir;
-		}
-		final WB_Point p = (WB_Point) ir.object;
-		final WB_Point q = getClosestPoint3D(p, poly);
-		final double d2 = WB_Distance.getSqDistance3D(q, p);
-
-		if (WB_Epsilon.isZeroSq(d2)) {
-			return ir;
-		}
-		ir.intersection = false;
-		return ir;
-
-	}
-
-	public static WB_IntersectionResult getIntersection3D(final WB_Line line,
-			final WB_SimplePolygon poly) {
-		final WB_IntersectionResult ir = getIntersection3D(line,
-				poly.getPlane());
-		if (ir.intersection == false) {
-			return ir;
-		}
-		final WB_Point p = (WB_Point) ir.object;
-		final WB_Point q = getClosestPoint3D(p, poly);
-		final double d2 = WB_Distance.getSqDistance3D(q, p);
-
-		if (WB_Epsilon.isZeroSq(d2)) {
-			return ir;
-		}
-		ir.intersection = false;
-		return ir;
-
-	}
-
-	public static WB_IntersectionResult getIntersection3D(
-			final WB_Segment segment, final WB_SimplePolygon poly) {
-		final WB_IntersectionResult ir = getIntersection3D(segment,
-				poly.getPlane());
-		if (ir.intersection == false) {
-			return ir;
-		}
-		final WB_Point p = (WB_Point) ir.object;
-		final WB_Point q = getClosestPoint3D(p, poly);
-		final double d2 = WB_Distance.getSqDistance3D(q, p);
-
-		if (WB_Epsilon.isZeroSq(d2)) {
-			return ir;
-		}
-		ir.intersection = false;
-		return ir;
 
 	}
 

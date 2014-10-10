@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
+import wblut.geom.WB_Classify;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
@@ -218,8 +219,23 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @param selection
 	 *            the selection
 	 * @return the h e_ mesh
+	 * @deprecated Use {@link #simplifySelected(HES_Simplifier,HE_Selection)} instead
 	 */
 	public HE_Mesh simplify(final HES_Simplifier simplifier,
+			final HE_Selection selection) {
+				return simplifySelected(simplifier, selection);
+			}
+
+	/**
+	 * Simplify.
+	 *
+	 * @param simplifier
+	 *            the simplifier
+	 * @param selection
+	 *            the selection
+	 * @return the h e_ mesh
+	 */
+	public HE_Mesh simplifySelected(final HES_Simplifier simplifier,
 			final HE_Selection selection) {
 		return simplifier.apply(selection);
 
@@ -2488,123 +2504,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	}
 
 	/**
-	 * Tri split face.
-	 *
-	 * @param face
-	 *            face
-	 * @param v
-	 *            new vertex
-	 * @return selection of new faces and new vertex
-	 */
-	public HE_Selection splitFaceTri(final HE_Face face, final WB_Point v) {
-		HE_Halfedge he = face.getHalfedge();
-		final HE_Vertex vi = new HE_Vertex(v);
-		vi.setInternalLabel(2);
-		final HE_Selection out = new HE_Selection(this);
-		int c = 0;
-		boolean onEdge = false;
-		do {
-			c++;
-			final WB_Plane P = new WB_Plane(he.getHalfedgeCenter(),
-					he.getHalfedgeNormal());
-			final double d = WB_Distance.getDistance3D(v, P);
-			if (WB_Epsilon.isZero(d)) {
-				onEdge = true;
-				break;
-			}
-			he = he.getNextInFace();
-		} while (he != face.getHalfedge());
-		if (!onEdge) {
-			add(vi);
-
-			final HE_Halfedge[] he0 = new HE_Halfedge[c];
-			final HE_Halfedge[] he1 = new HE_Halfedge[c];
-			final HE_Halfedge[] he2 = new HE_Halfedge[c];
-			c = 0;
-			do {
-				HE_Face f;
-				if (c == 0) {
-					f = face;
-				}
-				else {
-					f = new HE_Face();
-					f.copyProperties(face);
-					add(f);
-					out.add(f);
-				}
-				he0[c] = he;
-				he.setFace(f);
-				f.setHalfedge(he);
-				he1[c] = new HE_Halfedge();
-				he2[c] = new HE_Halfedge();
-				add(he1[c]);
-				add(he2[c]);
-				he1[c].setVertex(he.getNextInFace().getVertex());
-				he2[c].setVertex(vi);
-				he1[c].setNext(he2[c]);
-				he2[c].setNext(he);
-				he1[c].setFace(f);
-				he2[c].setFace(f);
-				c++;
-				he = he.getNextInFace();
-			} while (he != face.getHalfedge());
-			vi.setHalfedge(he2[0]);
-			for (int i = 0; i < c; i++) {
-				he0[i].setNext(he1[i]);
-				he1[i].setPair(he2[i == c - 1 ? 0 : i + 1]);
-				he2[i == c - 1 ? 0 : i + 1].setPair(he1[i]);
-			}
-			out.add(vi);
-			return out;
-		}
-		return null;
-
-	}
-
-	/**
-	 * Tri split face.
-	 *
-	 * @param face
-	 *            face
-	 * @param x
-	 *            x-coordinate of new vertex
-	 * @param y
-	 *            y-coordinate of new vertex
-	 * @param z
-	 *            z-coordinate of new vertex
-	 * @return selection of new faces and new vertex
-	 */
-	public HE_Selection splitFaceTri(final HE_Face face, final double x,
-			final double y, final double z) {
-		return splitFaceTri(face, new WB_Point(x, y, z));
-	}
-
-	/**
-	 * Tri split face.
-	 *
-	 * @param face
-	 *            face
-	 * @return selection of new faces and new vertex
-	 */
-	public HE_Selection splitFaceTri(final HE_Face face) {
-		return splitFaceTri(face, face.getFaceCenter());
-	}
-
-	/**
-	 * Tri split face with offset along face normal.
-	 *
-	 * @param face
-	 *            face
-	 * @param d
-	 *            offset along face normal
-	 * @return selection of new faces and new vertex
-	 */
-	public HE_Selection splitFaceTri(final HE_Face face, final double d) {
-		return splitFaceTri(face,
-				face.getFaceCenter().addMulSelf(d, face.getFaceNormal()));
-	}
-
-	/**
 	 * Tri split faces with offset along face normal.
 	 *
 	 * @param d
@@ -2612,14 +2511,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @return selection of new faces and new vertex
 	 */
 	public HE_Selection splitFacesTri(final double d) {
-		final HE_Selection selectionOut = new HE_Selection(this);
-		final HE_Face[] faces = getFacesAsArray();
-		final int n = getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-			selectionOut.union(splitFaceTri(faces[i], d));
-
-		}
-		return selectionOut;
+		final HEM_TriSplit ts = new HEM_TriSplit().setOffset(d);
+		modify(ts);
+		return ts.getSplitFaces();
 	}
 
 	/**
@@ -2628,14 +2522,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @return selection of new faces and new vertex
 	 */
 	public HE_Selection splitFacesTri() {
-		final HE_Selection selectionOut = new HE_Selection(this);
-		final HE_Face[] faces = getFacesAsArray();
-		final int n = getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-			selectionOut.union(splitFaceTri(faces[i]));
-
-		}
-		return selectionOut;
+		final HEM_TriSplit ts = new HEM_TriSplit();
+		modify(ts);
+		return ts.getSplitFaces();
 	}
 
 	/**
@@ -2646,16 +2535,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @return selection of new faces and new vertex
 	 */
 	public HE_Selection splitFacesTri(final HE_Selection selection) {
-		final HE_Selection selectionOut = new HE_Selection(this);
-		final HE_Face[] faces = selection.getFacesAsArray();
-		final int n = selection.getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-
-			selectionOut.union(splitFaceTri(faces[i]));
-
-		}
-		selection.union(selectionOut);
-		return selectionOut;
+		final HEM_TriSplit ts = new HEM_TriSplit();
+		modifySelected(ts, selection);
+		return ts.getSplitFaces();
 	}
 
 	/**
@@ -2669,48 +2551,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 */
 	public HE_Selection splitFacesTri(final HE_Selection selection,
 			final double d) {
-		final HE_Selection selectionOut = new HE_Selection(this);
-		final HE_Face[] faces = selection.getFacesAsArray();
-		final int n = selection.getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-
-			selectionOut.union(splitFaceTri(faces[i], d));
-
-		}
-		selection.union(selectionOut);
-		return selectionOut;
-	}
-
-	/**
-	 * Split face by connecting all face vertices with new vertex.
-	 *
-	 * @param key
-	 *            key of face
-	 * @param v
-	 *            position of new vertex
-	 * @return selection of new faces and new vertex
-	 */
-
-	public HE_Selection splitFaceTri(final long key, final WB_Point v) {
-		return splitFaceTri(getFaceByKey(key), v);
-	}
-
-	/**
-	 * Split face by connecting all face vertices with new vertex.
-	 *
-	 * @param key
-	 *            key of face
-	 * @param x
-	 *            x-coordinate of new vertex
-	 * @param y
-	 *            y-coordinate of new vertex
-	 * @param z
-	 *            z-coordinate of new vertex
-	 * @return selection of new faces and new vertex
-	 */
-	public HE_Selection splitFaceTri(final long key, final double x,
-			final double y, final double z) {
-		return splitFaceTri(getFaceByKey(key), new WB_Point(x, y, z));
+		final HEM_TriSplit ts = new HEM_TriSplit().setOffset(d);
+		modifySelected(ts, selection);
+		return ts.getSplitFaces();
 	}
 
 	/**
@@ -3784,13 +3627,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		return _selection;
 	}
 
-	/**
-	 * Select faces.
-	 *
-	 * @param v
-	 *            the v
-	 * @return the h e_ selection
-	 */
 	public HE_Selection selectFaces(final WB_Vector v) {
 		final HE_Selection _selection = new HE_Selection(this);
 		final WB_Vector w = v.get();
@@ -3807,17 +3643,16 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		return _selection;
 	}
 
-	/**
-	 * Select faces.
-	 *
-	 * @param P
-	 *            the p
-	 * @return the h e_ selection
-	 */
 	public HE_Selection selectFaces(final WB_Plane P) {
 		final HE_Selection _selection = new HE_Selection(this);
-		_selection.addFaces(HE_Intersection.getPotentialIntersectedFaces(this,
-				P));
+		final HE_FaceIterator fitr = fItr();
+		HE_Face f;
+		while (fitr.hasNext()) {
+			f = fitr.next();
+			if (WB_Classify.classifyPolygonToPlane(f.toPolygon(), P) == WB_Classification.FRONT) {
+				_selection.add(f);
+			}
+		}
 
 		return _selection;
 	}
@@ -4449,7 +4284,8 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 				;
 			}
 		}
-		final HE_Vertex nv = splitFaceTri(face, p).vItr().next();
+		final HE_Vertex nv = HEM_TriSplit.splitFaceTri(this, face, p).vItr()
+				.next();
 		vertexTree.add(nv, nv.key());
 	}
 
@@ -4682,63 +4518,12 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		}
 	}
 
-	private void triangulateNoPairing(final HE_Face face) {
-		if (face.getFaceOrder() > 3) {
-			final int[][] tris = face.getTriangles();
-			final List<HE_Vertex> vertices = face.getFaceVertices();
-			HE_Halfedge he = face.getHalfedge();
-			remove(face);
-			do {
-
-				if (he.getPair() != null) {
-
-					he.getPair().clearPair();
-				}
-
-				he.clearPair();
-				remove(he);
-				he = he.getNextInFace();
-			} while (he != face.getHalfedge());
-
-			for (int i = 0; i < tris.length; i++) {
-				final int[] tri = tris[i];
-				final HE_Face f = new HE_Face();
-				add(f);
-				f.copyProperties(face);
-				final HE_Halfedge he1 = new HE_Halfedge();
-				final HE_Halfedge he2 = new HE_Halfedge();
-				final HE_Halfedge he3 = new HE_Halfedge();
-				he1.setVertex(vertices.get(tri[0]));
-				he2.setVertex(vertices.get(tri[1]));
-				he3.setVertex(vertices.get(tri[2]));
-				he1.getVertex().setHalfedge(he1);
-				he2.getVertex().setHalfedge(he2);
-				he3.getVertex().setHalfedge(he3);
-				he1.setFace(f);
-				he2.setFace(f);
-				he3.setFace(f);
-				he1.setNext(he2);
-				he2.setNext(he3);
-				he3.setNext(he1);
-				f.setHalfedge(he1);
-				add(he1);
-				add(he2);
-				add(he3);
-			}
-		}
-	}
-
 	/**
 	 * Triangulate all faces.
 	 *
 	 */
 	public void triangulate() {
-		final HE_Face[] f = getFacesAsArray();
-		final int n = getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-			triangulateNoPairing(f[i]);
-		}
-		pairHalfedges();
+		modify(new HEM_Triangulate());
 	}
 
 	/**
@@ -4748,12 +4533,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 *            the sel
 	 */
 	public void triangulate(final HE_Selection sel) {
-		final HE_Face[] f = sel.getFacesAsArray();
-		final int n = sel.getNumberOfFaces();
-		for (int i = 0; i < n; i++) {
-			triangulateNoPairing(f[i]);
-		}
-		pairHalfedges();
+		modifySelected(new HEM_Triangulate(), sel);
 	}
 
 	/**

@@ -6,11 +6,11 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 	/** Coordinates. */
 	private int i;
 	private final WB_CoordinateSequence seq;
-	private int id;
+	private int offset;
 
 	public WB_AbstractSeqVector(final int i, final WB_CoordinateSequence seq) {
 		this.i = i;
-		this.id = 4 * i;
+		this.offset = 4 * i;
 		this.seq = seq;
 	}
 
@@ -24,9 +24,9 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public void set(final double x, final double y) {
-		seq._setRaw(id, x);
-		seq._setRaw(id + 1, y);
-		seq._setRaw(id + 2, 0);
+		seq._setRaw(offset, x);
+		seq._setRaw(offset + 1, y);
+		seq._setRaw(offset + 2, 0);
 	}
 
 	/**
@@ -39,9 +39,9 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public void set(final double x, final double y, final double z) {
-		seq._setRaw(id, x);
-		seq._setRaw(id + 1, y);
-		seq._setRaw(id + 2, z);
+		seq._setRaw(offset, x);
+		seq._setRaw(offset + 1, y);
+		seq._setRaw(offset + 2, z);
 	}
 
 	/**
@@ -96,7 +96,7 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public void setX(final double x) {
-		seq._setRaw(id, x);
+		seq._setRaw(offset, x);
 
 	}
 
@@ -110,7 +110,7 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public void setY(final double y) {
-		seq._setRaw(id + 1, y);
+		seq._setRaw(offset + 1, y);
 
 	}
 
@@ -124,7 +124,7 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public void setZ(final double z) {
-		seq._setRaw(id + 2, z);
+		seq._setRaw(offset + 2, z);
 
 	}
 
@@ -139,13 +139,13 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 	@Override
 	public void setCoord(final int i, final double v) {
 		if (i == 0) {
-			seq._setRaw(id, v);
+			seq._setRaw(offset, v);
 		}
 		if (i == 1) {
-			seq._setRaw(id + 1, v);
+			seq._setRaw(offset + 1, v);
 		}
 		if (i == 2) {
-			seq._setRaw(id + 2, v);
+			seq._setRaw(offset + 2, v);
 		}
 
 	}
@@ -163,44 +163,44 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	@Override
 	public double xd() {
-		return seq.getRaw(id);
+		return seq.getRaw(offset);
 	}
 
 	@Override
 	public float xf() {
-		return (float) seq.getRaw(id);
+		return (float) seq.getRaw(offset);
 	}
 
 	@Override
 	public double yd() {
-		return seq.getRaw(id + 1);
+		return seq.getRaw(offset + 1);
 	}
 
 	@Override
 	public float yf() {
-		return (float) seq.getRaw(id + 1);
+		return (float) seq.getRaw(offset + 1);
 	}
 
 	@Override
 	public double zd() {
-		return seq.getRaw(id + 2);
+		return seq.getRaw(offset + 2);
 	}
 
 	@Override
 	public float zf() {
-		return (float) seq.getRaw(id + 2);
+		return (float) seq.getRaw(offset + 2);
 	}
 
 	@Override
 	public double getd(final int i) {
 		if (i == 0) {
-			return seq.getRaw(id);
+			return seq.getRaw(offset);
 		}
 		if (i == 1) {
-			return seq.getRaw(id + 1);
+			return seq.getRaw(offset + 1);
 		}
 		if (i == 2) {
-			return seq.getRaw(id + 2);
+			return seq.getRaw(offset + 2);
 		}
 		return Double.NaN;
 	}
@@ -208,13 +208,13 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 	@Override
 	public float getf(final int i) {
 		if (i == 0) {
-			return (float) seq.getRaw(id);
+			return (float) seq.getRaw(offset);
 		}
 		if (i == 1) {
-			return (float) seq.getRaw(id + 1);
+			return (float) seq.getRaw(offset + 1);
 		}
 		if (i == 2) {
-			return (float) seq.getRaw(id + 2);
+			return (float) seq.getRaw(offset + 2);
 		}
 		return Float.NaN;
 	}
@@ -242,7 +242,7 @@ Comparable<WB_Coordinate>, WB_MutableCoordinate {
 
 	public void setIndex(final int i) {
 		this.i = i;
-		this.id = 4 * i;
+		this.offset = 4 * i;
 
 	}
 

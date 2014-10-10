@@ -222,7 +222,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		}
 		HE_PathHalfedge he = _phalfedge;
 		do {
-			if (!fhe.contains(he.getHalfedge())) {
+			if (!fhe.contains(he.getVertex())) {
 				fhe.add(he.getVertex());
 			}
 			if (he.getNextInPath() == null) {
@@ -331,7 +331,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -351,7 +351,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -364,7 +364,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

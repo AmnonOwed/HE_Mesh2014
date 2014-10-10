@@ -74,7 +74,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -200,25 +200,34 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				}
 			}
 			if ((firstVertex != -1) && (secondVertex != -1)) {
-				cut.add(f);
-				final HE_Selection out = mesh.splitFace(f,
-						faceVertices.get(firstVertex),
-						faceVertices.get(secondVertex));
-				final HE_Face nf = out.fItr().next();
-				cut.add(nf);
-				final HE_Halfedge ne = out.eItr().next();
-				ne.setInternalLabel(1);
-				cutEdges.add(ne);
+				final int fo = f.getFaceOrder();
+				int diff = Math.abs(firstVertex - secondVertex);
+				if (diff == fo - 1) {
+					diff = 1;
+				}
+
+				if (diff > 1) {
+					cut.add(f);
+					final HE_Selection out = mesh.splitFace(f,
+							faceVertices.get(firstVertex),
+							faceVertices.get(secondVertex));
+					final HE_Face nf = out.fItr().next();
+					cut.add(nf);
+					final HE_Halfedge ne = out.eItr().next();
+					ne.setInternalLabel(1);
+					cutEdges.add(ne);
+				}
 			}
-			buildPaths(cutEdges);
+
 		}
+		buildPaths(cutEdges);
 
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -356,16 +365,23 @@ public class HEM_SliceSurface extends HEM_Modifier {
 					}
 				}
 				if ((firstVertex != -1) && (secondVertex != -1)) {
-					cut.add(f);
-					final HE_Selection out = lsel.parent.splitFace(f,
-							faceVertices.get(firstVertex),
-							faceVertices.get(secondVertex));
+					final int fo = f.getFaceOrder();
+					int diff = Math.abs(firstVertex - secondVertex);
+					if (diff == fo - 1) {
+						diff = 1;
+					}
+					if (diff > 1) {
+						cut.add(f);
+						final HE_Selection out = lsel.parent.splitFace(f,
+								faceVertices.get(firstVertex),
+								faceVertices.get(secondVertex));
 
-					final HE_Face nf = out.fItr().next();
-					cut.add(nf);
-					final HE_Halfedge ne = out.eItr().next();
-					ne.setInternalLabel(1);
-					cutEdges.add(ne);
+						final HE_Face nf = out.fItr().next();
+						cut.add(nf);
+						final HE_Halfedge ne = out.eItr().next();
+						ne.setInternalLabel(1);
+						cutEdges.add(ne);
+					}
 				}
 
 			}
@@ -384,11 +400,15 @@ public class HEM_SliceSurface extends HEM_Modifier {
 
 		for (final HE_Halfedge he : cutEdges.getEdgesAsList()) {
 			final HE_Face f = he.getFace();
-			if (WB_Classify.classifyPointToPlane(P, f.getFaceCenter()) == WB_Classification.BACK) {
+			if (WB_Classify.classifyPointToPlane(P, f.getFaceCenter()) == WB_Classification.FRONT) {
+
 				edges.add(he.getPair());
+
 			}
 			else {
+
 				edges.add(he);
+
 			}
 		}
 		while (edges.size() > 0) {
@@ -397,18 +417,23 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			pathedges.add(current);
 			boolean loop = false;
 			for (int i = 0; i < edges.size(); i++) {
+
 				if (edges.get(i).getVertex() == current.getEndVertex()) {
+
 					if (i > 0) {
 						current = edges.get(i);
+
 						pathedges.add(current);
-						i = 0;
+						i = -1;
 					}
 					else {
+
 						loop = true;
 						break;
 					}
 				}
 			}
+
 			if (!loop) {
 				final List<HE_Halfedge> reversepathedges = new FastTable<HE_Halfedge>();
 				current = edges.get(0);
@@ -430,7 +455,6 @@ public class HEM_SliceSurface extends HEM_Modifier {
 				edges.removeAll(finalpathedges);
 			}
 			else {
-
 				paths.add(new HE_Path(pathedges, loop));
 				edges.removeAll(pathedges);
 			}

@@ -1,7 +1,6 @@
 package wblut.geom;
 
 import wblut.geom.interfaces.Segment;
-import wblut.geom.interfaces.SimplePolygon;
 import wblut.math.WB_Epsilon;
 
 public class WB_Distance {
@@ -39,11 +38,6 @@ public class WB_Distance {
 
 	public static double getDistance3D(final WB_Coordinate p, final Segment S) {
 		return Math.sqrt(getSqDistance3D(p, S));
-	}
-
-	public static double getDistance3D(final WB_Coordinate p,
-			final SimplePolygon poly) {
-		return Math.sqrt(getSqDistance3D(p, poly));
 	}
 
 	public static double getDistance3D(final WB_Coordinate p,
@@ -270,31 +264,6 @@ public class WB_Distance {
 			return bc.dot(bc);
 		}
 		return ac.dot(ac) - e * e / f;
-	}
-
-	public static double getSqDistance3D(final WB_Coordinate p,
-			final SimplePolygon poly) {
-		final int[][] tris = poly.getTriangles();
-		final int n = tris.length;
-		double dmax2 = Double.POSITIVE_INFINITY;
-		WB_Coordinate tmp;
-		int[] T;
-		for (int i = 0; i < n; i++) {
-			T = tris[i];
-			tmp = WB_Intersection.getClosestPointToTriangle3D(p,
-					poly.getPoint(T[0]), poly.getPoint(T[1]),
-					poly.getPoint(T[2]));
-			final double d2 = WB_Distance.getDistance3D(tmp, p);
-			if (d2 < dmax2) {
-				dmax2 = d2;
-				if (WB_Epsilon.isZeroSq(dmax2)) {
-					break;
-				}
-			}
-
-		}
-
-		return dmax2;
 	}
 
 	public static double getSqDistance3D(final WB_Coordinate p,

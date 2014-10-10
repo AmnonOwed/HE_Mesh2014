@@ -359,55 +359,56 @@ public class WB_Polygon extends WB_Ring {
 		final List<WB_Coordinate> backVerts = new FastTable<WB_Coordinate>();
 
 		final int numVerts = poly.numberOfShellPoints;
+		if (numVerts > 0) {
+			WB_Coordinate a = poly.points.getPoint(numVerts - 1);
+			WB_Classification aSide = P.classifyPointToPlane(a);
+			WB_Coordinate b;
+			WB_Classification bSide;
 
-		WB_Coordinate a = poly.points.getPoint(numVerts - 1);
-		WB_Classification aSide = P.classifyPointToPlane(a);
-		WB_Coordinate b;
-		WB_Classification bSide;
+			for (int n = 0; n < numVerts; n++) {
+				final WB_IntersectionResult i;
+				b = poly.points.getPoint(n);
+				bSide = P.classifyPointToPlane(b);
+				if (bSide == WB_Classification.FRONT) {
+					if (aSide == WB_Classification.BACK) {
+						i = WB_Intersection.getIntersection3D(b, a, P);
 
-		for (int n = 0; n < numVerts; n++) {
-			final WB_IntersectionResult i;
-			b = poly.points.getPoint(n);
-			bSide = P.classifyPointToPlane(b);
-			if (bSide == WB_Classification.FRONT) {
-				if (aSide == WB_Classification.BACK) {
-					i = WB_Intersection.getIntersection3D(b, a, P);
-
-					frontVerts.add((WB_Point) i.object);
+						frontVerts.add((WB_Point) i.object);
+						numFront++;
+						backVerts.add((WB_Point) i.object);
+						numBack++;
+					}
+					frontVerts.add(b);
 					numFront++;
-					backVerts.add((WB_Point) i.object);
-					numBack++;
 				}
-				frontVerts.add(b);
-				numFront++;
-			}
-			else if (bSide == WB_Classification.BACK) {
-				if (aSide == WB_Classification.FRONT) {
-					i = WB_Intersection.getIntersection3D(a, b, P);
+				else if (bSide == WB_Classification.BACK) {
+					if (aSide == WB_Classification.FRONT) {
+						i = WB_Intersection.getIntersection3D(a, b, P);
 
-					frontVerts.add((WB_Point) i.object);
-					numFront++;
-					backVerts.add((WB_Point) i.object);
-					numBack++;
-				}
-				else if (aSide == WB_Classification.ON) {
-					backVerts.add(a);
-					numBack++;
-				}
-				backVerts.add(b);
-				numBack++;
-			}
-			else {
-				frontVerts.add(b);
-				numFront++;
-				if (aSide == WB_Classification.BACK) {
+						frontVerts.add((WB_Point) i.object);
+						numFront++;
+						backVerts.add((WB_Point) i.object);
+						numBack++;
+					}
+					else if (aSide == WB_Classification.ON) {
+						backVerts.add(a);
+						numBack++;
+					}
 					backVerts.add(b);
 					numBack++;
 				}
-			}
-			a = b;
-			aSide = bSide;
+				else {
+					frontVerts.add(b);
+					numFront++;
+					if (aSide == WB_Classification.BACK) {
+						backVerts.add(b);
+						numBack++;
+					}
+				}
+				a = b;
+				aSide = bSide;
 
+			}
 		}
 		final WB_Polygon[] result = new WB_Polygon[2];
 		result[0] = new WB_Polygon(frontVerts);

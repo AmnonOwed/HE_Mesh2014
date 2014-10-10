@@ -51,6 +51,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 	 */
 	public HEMC_VoronoiCells() {
 		super();
+		simpleCap = true;
 	}
 
 	/**
@@ -222,7 +223,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_MultiCreator#create()
 	 */
 	@Override
@@ -249,7 +250,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
 		final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
 		cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-				.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
+		.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap);
 		if (limit > 0) {
 			final WB_KDTree<WB_Point, Integer> tree = new WB_KDTree<WB_Point, Integer>();
 			for (int i = 0; i < numberOfPoints; i++) {
@@ -306,7 +307,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 			}
 
 			result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
-					.setActive(on).setCells(result));
+			.setActive(on).setCells(result));
 		}
 		return result;
 

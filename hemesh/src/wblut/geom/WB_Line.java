@@ -6,7 +6,7 @@ import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
-public class WB_Line extends WB_Linear {
+public class WB_Line extends WB_Linear implements WB_Curve {
 	private static final WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
 	public static final WB_Line X() {
@@ -152,35 +152,6 @@ public class WB_Line extends WB_Linear {
 			return WB_Classification.FRONT;
 		}
 		return WB_Classification.BACK;
-	}
-
-	public WB_Classification classifyPolygonToLine2D(final WB_SimplePolygon P) {
-
-		int numFront = 0;
-		int numBack = 0;
-
-		for (int i = 0; i < P.n; i++) {
-
-			if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.FRONT) {
-				numFront++;
-
-			}
-			else if (classifyPointToLine2D(P.getPoint(i)) == WB_Classification.BACK) {
-				numBack++;
-			}
-
-			if (numFront > 0 && numBack > 0) {
-				return WB_Classification.CROSSING;
-			}
-
-		}
-		if (numFront > 0) {
-			return WB_Classification.FRONT;
-		}
-		if (numBack > 0) {
-			return WB_Classification.BACK;
-		}
-		return null;
 	}
 
 	public WB_Classification classifyPolygonToLine2D(final WB_Polygon P) {
@@ -398,12 +369,30 @@ public class WB_Line extends WB_Linear {
 		result[0] = new WB_Line(new WB_Point(C.getCenter().xd() + C.getRadius()
 				* L.getDirection().xd(), C.getCenter().yd() + C.getRadius()
 				* L.getDirection().yd()), new WB_Point(-L.getDirection().yd(),
-						L.getDirection().xd()));
+				L.getDirection().xd()));
 
 		result[1] = new WB_Line(new WB_Point(C.getCenter().xd() - C.getRadius()
 				* L.getDirection().xd(), C.getCenter().yd() - C.getRadius()
 				* L.getDirection().yd()), new WB_Point(-L.getDirection().yd(),
-						L.getDirection().xd()));
+				L.getDirection().xd()));
 		return result;
+	}
+
+	@Override
+	public WB_Point curvePoint(final double u) {
+
+		return this.getPointOnLine(u);
+	}
+
+	@Override
+	public double loweru() {
+
+		return Double.NEGATIVE_INFINITY;
+	}
+
+	@Override
+	public double upperu() {
+
+		return Double.POSITIVE_INFINITY;
 	}
 }

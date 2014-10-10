@@ -1,6 +1,5 @@
 package wblut.hemesh;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import wblut.geom.WB_Classification;
@@ -131,7 +130,7 @@ public class HEM_Slice extends HEM_Modifier {
 	 * @return the hE m_ slice
 	 */
 	public HEM_Slice setSimpleCap(final Boolean b) {
-		simpleCap = true;// b;
+		simpleCap = b;
 		return this;
 	}
 
@@ -150,7 +149,7 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -179,7 +178,7 @@ public class HEM_Slice extends HEM_Modifier {
 		cut = ss.cut;
 		final HE_Selection newFaces = new HE_Selection(mesh);
 		HE_Face face;
-		Iterator<HE_Face> fItr = mesh.fItr();
+		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			face = fItr.next();
 			final WB_Classification cptp = WB_Plane.classifyPolygonToPlane(
@@ -199,16 +198,6 @@ public class HEM_Slice extends HEM_Modifier {
 		mesh.replaceFaces(newFaces.getFacesAsArray());
 		cut.cleanSelection();
 		mesh.cleanUnusedElementsByFace();
-		final ArrayList<HE_Face> facesToRemove = new ArrayList<HE_Face>();
-		fItr = mesh.fItr();
-		while (fItr.hasNext()) {
-			face = fItr.next();
-			if (face.getFaceOrder() < 3) {
-				facesToRemove.add(face);
-			}
-		}
-		mesh.removeFaces(facesToRemove);
-		mesh.cleanUnusedElementsByFace();
 		if (capHoles) {
 			if (simpleCap) {
 				cap.addFaces(mesh.capHoles());
@@ -216,8 +205,43 @@ public class HEM_Slice extends HEM_Modifier {
 				mesh.capHalfedges();
 			}
 			else {
-				// TODO
+				final long[][] triKeys = HET_PlanarPathTriangulator
+						.getTriangleKeys(ss.getPaths(), lP);
+				HE_Face tri;
+				HE_Vertex v0, v1, v2;
+				HE_Halfedge he0, he1, he2;
+				for (int i = 0; i < triKeys.length; i++) {
+					tri = new HE_Face();
+					v0 = mesh.getVertexByKey(triKeys[i][0]);
+					v1 = mesh.getVertexByKey(triKeys[i][1]);
+					v2 = mesh.getVertexByKey(triKeys[i][2]);
+					he0 = new HE_Halfedge();
+					he1 = new HE_Halfedge();
+					he2 = new HE_Halfedge();
+					tri.setHalfedge(he0);
+					he0.setVertex(v0);
+					he1.setVertex(v1);
+					he2.setVertex(v2);
+					he0.setNext(he1);
+					he1.setNext(he2);
+					he2.setNext(he0);
+					he0.setPrev(he2);
+					he1.setPrev(he0);
+					he2.setPrev(he1);
+					he0.setFace(tri);
+					he1.setFace(tri);
+					he2.setFace(tri);
+					cap.add(tri);
+					mesh.add(tri);
+					mesh.add(he0);
+					mesh.add(he1);
+					mesh.add(he2);
+				}
+				mesh.pairHalfedges();
 
+				cap.addFaces(mesh.capHoles());
+				mesh.pairHalfedges();
+				mesh.capHalfedges();
 			}
 
 		}
@@ -230,13 +254,14 @@ public class HEM_Slice extends HEM_Modifier {
 		if (!keepCenter) {
 			mesh.resetCenter();
 		}
+
 		return mesh;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */

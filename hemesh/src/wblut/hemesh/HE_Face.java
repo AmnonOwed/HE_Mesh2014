@@ -338,11 +338,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 				return new int[][] { { 0, 0, 0 } };
 			}
 			else if (fo == 3) {
-				logger.debug("Trivial triangulation of triangle face.");
+				logger.trace("Trivial triangulation of triangle face.");
 				return new int[][] { { 0, 1, 2 } };
 			}
 			else if (fo == 4) {
-				logger.debug("Triangulation of quad face.");
+				logger.trace("Triangulation of quad face.");
 				final WB_Point[] points = new WB_Point[4];
 
 				int i = 0;
@@ -359,7 +359,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 						points[2], points[3]);
 			}
 			else {
-				logger.debug("Starting triangulation of face with " + fo
+				logger.trace("Starting triangulation of face with " + fo
 						+ " faces.");
 				triangles = toPolygon().getTriangles();
 			}
@@ -384,11 +384,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		int i = 0;
 		HE_Halfedge he = _halfedge;
 		do {
-			points[i] = new WB_Point(he.getVertex().xd(), he.getVertex().yd(),
-					he.getVertex().zd());
+			points[i++] = new WB_Point(he.getVertex().xd(),
+					he.getVertex().yd(), he.getVertex().zd());
 
 			he = he.getNextInFace();
-			i++;
+
 		} while (he != _halfedge);
 
 		return gf.createSimplePolygon(points);

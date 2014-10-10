@@ -615,16 +615,16 @@ public class WB_GeometryFactory {
 	 *
 	 * @param a
 	 *            focus
-	 * @param mu
+	 * @param sigma
 	 *            elliptic coordinate >=0
-	 * @param nu
-	 *            elliptic coordinate between -PI and PI
+	 * @param theta
+	 *            elliptic coordinate between -1 and 1
 	 * @return 2D point
 	 */
-	public WB_Point createPointFromElliptic(final double a, final double mu,
-			final double nu) {
-		return createPoint(a * Math.cosh(mu) * Math.cos(nu), a * Math.sinh(mu)
-				* Math.cos(nu));
+	public WB_Point createPointFromElliptic(final double a, final double sigma,
+			final double tau) {
+		return createPoint(a * sigma * tau,
+				Math.sqrt(a * a * (sigma * sigma - 1) * (1 - tau * tau)));
 	}
 
 	/**
@@ -2539,7 +2539,7 @@ public class WB_GeometryFactory {
 		return new WB_Polygon(points, innerpoints);
 	}
 
-	protected WB_Polygon createPolygonFromJTSPolygon(final Polygon JTSpoly) {
+	public WB_Polygon createPolygonFromJTSPolygon(final Polygon JTSpoly) {
 
 		final LineString shell = JTSpoly.getExteriorRing();
 		Coordinate[] coords = shell.getCoordinates();

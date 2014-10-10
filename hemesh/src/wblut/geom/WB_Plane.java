@@ -1,6 +1,5 @@
 package wblut.geom;
 
-import wblut.geom.interfaces.SimplePolygon;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
@@ -94,6 +93,7 @@ public class WB_Plane {
 
 	public void flipNormal() {
 		n.mulSelf(-1);
+		d *= -1;
 		setAxes();
 	}
 
@@ -173,32 +173,6 @@ public class WB_Plane {
 		return signp * signq <= 0;
 	}
 
-	public WB_Classification classifyPolygonToPlane(final SimplePolygon poly) {
-		int numInFront = 0;
-		int numBehind = 0;
-		for (int i = 0; i < poly.getNumberOfPoints(); i++) {
-			switch (classifyPointToPlane(poly.getPoint(i))) {
-			case FRONT:
-				numInFront++;
-				break;
-			case BACK:
-				numBehind++;
-				break;
-			}
-			if (numBehind > 0 && numInFront > 0) {
-				return WB_Classification.CROSSING;
-			}
-		}
-
-		if (numInFront > 0) {
-			return WB_Classification.FRONT;
-		}
-		if (numBehind > 0) {
-			return WB_Classification.BACK;
-		}
-		return WB_Classification.ON;
-	}
-
 	public WB_Classification classifyPolygonToPlane(final WB_Polygon poly) {
 		int numInFront = 0;
 		int numBehind = 0;
@@ -220,33 +194,6 @@ public class WB_Plane {
 			return WB_Classification.FRONT;
 		}
 		if (numBehind > 0) {
-			return WB_Classification.BACK;
-		}
-		return WB_Classification.ON;
-	}
-
-	public static WB_Classification classifyPolygonToPlane(
-			final SimplePolygon poly, final WB_Plane P) {
-		int numInFront = 0;
-		int numBehind = 0;
-		for (int i = 0; i < poly.getNumberOfPoints(); i++) {
-			switch (classifyPointToPlane(poly.getPoint(i), P)) {
-			case FRONT:
-				numInFront++;
-				break;
-			case BACK:
-				numBehind++;
-				break;
-			}
-			if (numBehind != 0 && numInFront != 0) {
-				return WB_Classification.CROSSING;
-			}
-		}
-
-		if (numInFront != 0) {
-			return WB_Classification.FRONT;
-		}
-		if (numBehind != 0) {
 			return WB_Classification.BACK;
 		}
 		return WB_Classification.ON;

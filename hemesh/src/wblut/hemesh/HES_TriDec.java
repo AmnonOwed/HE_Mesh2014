@@ -21,6 +21,7 @@ public class HES_TriDec extends HES_Simplifier {
 	TLongDoubleMap vertexCost;
 
 	private int goal;
+	private double fraction;
 	int counter;
 
 	public HES_TriDec() {
@@ -35,6 +36,13 @@ public class HES_TriDec extends HES_Simplifier {
 
 	public HES_TriDec setGoal(final int r) {
 		goal = r;
+		return this;
+
+	}
+
+	public HES_TriDec setGoal(final double f) {
+		fraction = f;
+		goal = -1;
 		return this;
 
 	}
@@ -71,12 +79,17 @@ public class HES_TriDec extends HES_Simplifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		if (goal == -1) {
+			goal = (int) (mesh.getNumberOfVertices() * fraction);
+
+		}
+
 		if (mesh.getNumberOfVertices() <= goal) {
 			return mesh;
 		}
@@ -118,24 +131,38 @@ public class HES_TriDec extends HES_Simplifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.simplifiers.HES_Simplifier#apply(wblut.hemesh.core.HE_Selection
 	 * )
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+
+		selection.collectVertices();
+		_mesh = selection.parent;
+
+		if (goal == -1) {
+			goal = (int) ((selection.parent.getNumberOfVertices() - selection
+					.getNumberOfVertices()) + selection.getNumberOfVertices()
+					* fraction);
+
+		}
+		else {
+			goal = selection.parent.getNumberOfVertices()
+					- selection.getNumberOfVertices() + goal;
+
+		}
 		if (selection.parent.getNumberOfVertices() <= goal) {
 			return selection.parent;
 		}
 
-		_mesh = selection.parent;
 		_mesh.triangulate();
 		_mesh.resetVertexInternalLabels();
 		if (_mesh.getNumberOfVertices() <= 4) {
 			return _mesh;
 		}
-		buildHeap(selection);
+		buildHeap(_mesh);
 		HE_Vertex v;
 		Entry entry;
 		List<HE_Vertex> vertices;
@@ -145,21 +172,24 @@ public class HES_TriDec extends HES_Simplifier {
 			do {
 				entry = heap.pop();
 				v = entry.v;
-				valid = selection.contains(v)
+				valid = selection.contains(v) && _mesh.contains(v)
 						&& (entry.version == v.getInternalLabel());
 
 			} while (heap.size() > 0 && !valid);
+
 			if (valid) {
 				vertices = v.getNeighborVertices();
 				// vertices.addAll(v.getNextNeighborVertices());
 				if (_mesh.collapseHalfedge(v.getHalfedge())) {
 					vertexCost.remove(v.key());
+
 					selection.remove(v);
 					counter++;
-					updateHeap(vertices, selection);
+					updateHeap(vertices, _mesh);
 				}
 			}
 		}
+		selection.clear();
 		return _mesh;
 
 	}
@@ -296,6 +326,24 @@ public class HES_TriDec extends HES_Simplifier {
 
 		final HE_Face f = he.getFace();
 		final HE_Face fp = he.getPair().getFace();
+		final List<HE_Vertex> vineighbors = he.getVertex()
+				.getNeighborVertices();
+		final List<HE_Vertex> vfneighbors = he.getEndVertex()
+				.getNeighborVertices();
+		int shared = 0;
+		final int max = (f == null || fp == null) ? 1 : 2;
+		for (final HE_Vertex vi : vineighbors) {
+			for (final HE_Vertex vf : vfneighbors) {
+				if (vi == vf) {
+					shared++;
+					break;
+				}
+				if (shared > max) {
+					return Double.POSITIVE_INFINITY;
+				}
+			}
+
+		}
 
 		double cost = 0.0;
 		HE_Halfedge boundary;

@@ -54,7 +54,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Instantiates a new cylinder.
-	 * 
+	 *
 	 * @param Ri
 	 *            bottom radius
 	 * @param Ro
@@ -72,7 +72,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Set fixed radius.
-	 * 
+	 *
 	 * @param R
 	 *            radius
 	 * @return self
@@ -85,7 +85,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Set lower and upper radius.
-	 * 
+	 *
 	 * @param Ri
 	 *            lower radius
 	 * @param Ro
@@ -100,7 +100,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * set height.
-	 * 
+	 *
 	 * @param H
 	 *            height
 	 * @return self
@@ -112,7 +112,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Set vertical divisions.
-	 * 
+	 *
 	 * @param data
 	 *            the data
 	 * @return self
@@ -130,7 +130,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the data from double.
-	 * 
+	 *
 	 * @param data
 	 *            the data
 	 * @return the hE c_ data cylinder
@@ -148,7 +148,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the data from float.
-	 * 
+	 *
 	 * @param data
 	 *            the data
 	 * @return the hE c_ data cylinder
@@ -170,7 +170,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the data from float.
-	 * 
+	 *
 	 * @param data
 	 *            the data
 	 * @return the hE c_ data cylinder
@@ -192,7 +192,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Set capping options.
-	 * 
+	 *
 	 * @param topcap
 	 *            create top cap?
 	 * @param bottomcap
@@ -207,7 +207,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the taper.
-	 * 
+	 *
 	 * @param t
 	 *            the t
 	 * @return the hE c_ data cylinder
@@ -220,7 +220,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the spiky.
-	 * 
+	 *
 	 * @param b
 	 *            the b
 	 * @return the hE c_ data cylinder
@@ -233,7 +233,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the chamfer.
-	 * 
+	 *
 	 * @param d
 	 *            the d
 	 * @return the hE c_ data cylinder
@@ -246,7 +246,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/**
 	 * Sets the proto.
-	 * 
+	 *
 	 * @param reduceSteps
 	 *            the reduce steps
 	 * @param reduceFacets
@@ -262,7 +262,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -339,13 +339,14 @@ public class HEC_DataCylinder extends HEC_Creator {
 					final double datapoint = data[currentfacet][currentstep];
 					final WB_Point p = currentFace.getFaceCenter();
 					p.addMulSelf(datapoint, currentFace.getFaceNormal());
-					mesh.splitFaceTri(currentFace, p);
+					HEM_TriSplit.splitFaceTri(mesh, currentFace, p);
 				}
 			}
-		} else {
-			double[] heights = new double[steps * facets];
+		}
+		else {
+			final double[] heights = new double[steps * facets];
 			int id = 0;
-			HE_Selection sel = new HE_Selection(mesh);
+			final HE_Selection sel = new HE_Selection(mesh);
 			for (int i = 0; i < steps; i++) {
 				for (int j = 0; j < facets; j++) {
 					final HE_Face currentFace = fItr.next();
@@ -355,7 +356,7 @@ public class HEC_DataCylinder extends HEC_Creator {
 					sel.add(currentFace);
 				}
 			}
-			HEM_Extrude ef = new HEM_Extrude().setChamfer(chamfer)
+			final HEM_Extrude ef = new HEM_Extrude().setChamfer(chamfer)
 					.setDistances(heights);
 			mesh.modifySelected(ef, sel);
 

@@ -2,7 +2,7 @@ package wblut.geom;
 
 import wblut.math.WB_Math;
 
-public class WB_Ray extends WB_Linear {
+public class WB_Ray extends WB_Linear implements WB_Curve {
 
 	public static WB_Ray X() {
 		return new WB_Ray(0, 0, 0, 1, 0, 0);
@@ -79,6 +79,24 @@ public class WB_Ray extends WB_Linear {
 	@Override
 	public WB_Vector getDirection() {
 		return direction;
+	}
+
+	@Override
+	public WB_Point curvePoint(final double u) {
+
+		return this.getPointOnLine(u);
+	}
+
+	@Override
+	public double loweru() {
+
+		return 0;
+	}
+
+	@Override
+	public double upperu() {
+
+		return Double.POSITIVE_INFINITY;
 	}
 
 }

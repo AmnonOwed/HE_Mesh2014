@@ -34,115 +34,90 @@
  *     www.vividsolutions.com
  */
 
-package wblut.geom;
+package wblut.hemesh;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javolution.util.FastTable;
+import wblut.geom.WB_Context2D;
+import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_KDTree;
+import wblut.geom.WB_Plane;
+import wblut.geom.WB_Point;
+import wblut.geom.WB_Polygon;
+
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 
-/**
- * Converts a Java2D shape or the more general PathIterator into a List of
- * WB_polygon.
- * <p>
- * The coordinate system for Java2D is typically screen coordinates, which has
- * the Y axis inverted relative to the usual coordinate system.
- * <p>
- * PathIterators to be converted are expected to be linear or flat. That is,
- * they should contain only <tt>SEG_MOVETO</tt>, <tt>SEG_LINETO</tt>, and
- * <tt>SEG_CLOSE</tt> segment types. Any other segment types will cause an
- * exception.
- *
- * @author Martin Davis
- * @author Frederik Vanhoutte (W:Blut)
- *
- */
-class WB_ShapeReader {
-	private static AffineTransform INVERT_Y = AffineTransform.getScaleInstance(
-			1, -1);
+class HET_PlanarPathTriangulator {
+
 	private static GeometryFactory JTSgf = new GeometryFactory();
 
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	public WB_ShapeReader() {
+	public HET_PlanarPathTriangulator() {
 
 	}
 
-	public List<WB_Polygon> read(final Shape shp, final double flatness) {
-		final PathIterator pathIt = shp.getPathIterator(INVERT_Y, flatness);
-		return read(pathIt);
-	}
+	public static long[][] getTriangleKeys(final List<? extends HE_Path> paths,
+			final WB_Plane P) {
+		final WB_Context2D emb = geometryfactory.createEmbeddedPlane(P);
+		final RingTree ringtree = new RingTree();
+		List<HE_Vertex> vertices;
+		Coordinate[] pts;
 
-	public List<WB_Polygon> read(final PathIterator pathIt) {
-		final List<Coordinate[]> pathPtSeq = toCoordinates(pathIt);
-		final RingTree tree = new RingTree();
+		final WB_KDTree<WB_Point, Long> vertextree = new WB_KDTree<WB_Point, Long>();
+		for (int i = 0; i < paths.size(); i++) {
+			final HE_Path path = paths.get(i);
+			if (path.isLoop()) {
 
-		for (int i = 0; i < pathPtSeq.size(); i++) {
-			final Coordinate[] pts = pathPtSeq.get(i);
-			final LinearRing ring = JTSgf.createLinearRing(pts);
-			tree.add(ring);
-		}
-		return tree.extractPolygons();
-	}
+				vertices = path.getPathVertices();
 
-	private static List<Coordinate[]> toCoordinates(final PathIterator pathIt) {
-		final List<Coordinate[]> coordArrays = new ArrayList<Coordinate[]>();
-		while (!pathIt.isDone()) {
-			final Coordinate[] pts = nextCoordinateArray(pathIt);
-			if (pts == null) {
-				break;
-			}
-			coordArrays.add(pts);
-		}
-		return coordArrays;
-	}
+				pts = new Coordinate[vertices.size() + 1];
+				for (int j = 0; j < vertices.size(); j++) {
+					final WB_Point proj = geometryfactory.createPoint();
+					emb.pointTo2D(vertices.get(j), proj);
+					vertextree.add(proj, vertices.get(j).getKey());
+					pts[vertices.size() - j] = new Coordinate(proj.xd(),
+							proj.yd(), 0);
 
-	private static Coordinate[] nextCoordinateArray(final PathIterator pathIt) {
-		final double[] pathPt = new double[6];
-		CoordinateList coordList = null;
-		boolean isDone = false;
-		while (!pathIt.isDone()) {
-			final int segType = pathIt.currentSegment(pathPt);
-			switch (segType) {
-			case PathIterator.SEG_MOVETO:
-				if (coordList != null) {
-					// don't advance pathIt, to retain start of next path if any
-					isDone = true;
 				}
-				else {
-					coordList = new CoordinateList();
-					coordList.add(new Coordinate(pathPt[0], pathPt[1]));
-					pathIt.next();
-				}
-				break;
-			case PathIterator.SEG_LINETO:
-				coordList.add(new Coordinate(pathPt[0], pathPt[1]));
-				pathIt.next();
-				break;
-			case PathIterator.SEG_CLOSE:
-				coordList.closeRing();
-				pathIt.next();
-				isDone = true;
-				break;
-			default:
-				throw new IllegalArgumentException(
-						"unhandled (non-linear) segment type encountered");
+				final WB_Point proj = geometryfactory.createPoint();
+				emb.pointTo2D(vertices.get(0), proj);
+
+				pts[0] = new Coordinate(proj.xd(), proj.yd(), 0);
+				ringtree.add(JTSgf.createLinearRing(pts));
+
 			}
-			if (isDone) {
-				break;
+
+		}
+		final List<WB_Polygon> polygons = ringtree.extractPolygons();
+		final List<WB_Coordinate[]> triangles = new FastTable<WB_Coordinate[]>();
+		for (final WB_Polygon poly : polygons) {
+			final int[][] tris = poly.getTriangles();
+			for (int i = 0; i < tris.length; i++) {
+				triangles.add(new WB_Coordinate[] { poly.getPoint(tris[i][0]),
+						poly.getPoint(tris[i][1]), poly.getPoint(tris[i][2]) });
 			}
 		}
-		return coordList.toCoordinateArray();
+
+		final long[][] trianglekeys = new long[triangles.size()][3];
+		for (int i = 0; i < triangles.size(); i++) {
+			final WB_Coordinate[] tri = triangles.get(i);
+			final long key0 = vertextree.getNearestNeighbor(tri[0]).value;
+			final long key1 = vertextree.getNearestNeighbor(tri[1]).value;
+			final long key2 = vertextree.getNearestNeighbor(tri[2]).value;
+			trianglekeys[i] = new long[] { key0, key1, key2 };
+		}
+
+		return trianglekeys;
 	}
 
 	// The JTS implementation of ShapeReader does not handle overlapping
@@ -220,10 +195,12 @@ class WB_ShapeReader {
 			final List<WB_Polygon> polygons = new ArrayList<WB_Polygon>();
 			final List<RingNode> shellNodes = new ArrayList<RingNode>();
 			addExteriorNodes(root, shellNodes);
+
 			for (final RingNode node : shellNodes) {
 
 				int count = 0;
 				for (int i = 0; i < node.children.size(); i++) {
+
 					if (node.children.get(i).hole) {
 						count++;
 					}
@@ -258,6 +235,7 @@ class WB_ShapeReader {
 		void addExteriorNodes(final RingNode parent,
 				final List<RingNode> shellNodes) {
 			for (final RingNode node : parent.children) {
+
 				if (node.hole == false) {
 					shellNodes.add(node);
 				}

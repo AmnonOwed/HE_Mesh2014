@@ -240,7 +240,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -270,9 +270,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -311,7 +311,7 @@ public class HEM_Extrude extends HEM_Modifier {
 							do {
 
 								he.getVertex().getPoint()
-										.addMulSelf(heights[i], n);
+								.addMulSelf(heights[i], n);
 								he = he.getNextInFace();
 							} while (he != f.getHalfedge());
 						}
@@ -333,9 +333,9 @@ public class HEM_Extrude extends HEM_Modifier {
 						do {
 							final HE_Vertex v = he.getVertex();
 							he.getVertex()
-									.getPoint()
-									.addMulSelf(
-											d.value(v.xd(), v.yd(), v.zd()), n);
+							.getPoint()
+							.addMulSelf(
+									d.value(v.xd(), v.yd(), v.zd()), n);
 							he = he.getNextInFace();
 						} while (he != f.getHalfedge());
 					}
@@ -348,7 +348,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -379,9 +379,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 				_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 				_halfedgeEWs
-						.put(he.key(),
-								(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-										: chamfer);
+				.put(he.key(),
+						(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+								: chamfer);
 				he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 
@@ -716,7 +716,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 		walls.add(f);
 		f.setInternalLabel(4);
-		final HE_Face[] newFaces = mesh.splitFaceTri(f,
+		final HE_Face[] newFaces = HEM_TriSplit.splitFaceTri(mesh, f,
 				fc.addSelf(n.mulSelf(d))).getFacesAsArray();
 		for (final HE_Face newFace : newFaces) {
 			newFace.copyProperties(f);

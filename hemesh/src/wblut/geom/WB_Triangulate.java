@@ -936,6 +936,7 @@ public class WB_Triangulate {
 	private static List<Coordinate> shellCoords;
 	private static boolean[] shellCoordAvailable;
 
+	@SuppressWarnings("unchecked")
 	public static WB_Triangulation2D getPolygonTriangulation2D(
 			final WB_Polygon polygon) {
 		final List<WB_IndexedPoint> pts = new FastTable<WB_IndexedPoint>();
@@ -943,7 +944,6 @@ public class WB_Triangulate {
 			pts.add(polygon.getPoint(i));
 		}
 		int index = polygon.numberOfShellPoints;
-		@SuppressWarnings("unchecked")
 		final List<WB_IndexedPoint>[] hpts = new FastTable[polygon.numberOfContours - 1];
 		for (int i = 0; i < polygon.numberOfContours - 1; i++) {
 			hpts[i] = new FastTable<WB_IndexedPoint>();
@@ -956,11 +956,11 @@ public class WB_Triangulate {
 				.getPolygonTriangulation2D(pts, hpts, true, geometryfactory
 						.createEmbeddedPlane(polygon.getPlane(0)));
 
-		final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>(
-				polygon.points.size());
+		final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>();
 
-		for (int i = 0; i < polygon.points.size(); i++) {
-			pointmap.add(polygon.points.getPoint(i), i);
+		for (int i = 0; i < polygon.numberOfPoints; i++) {
+			pointmap.add(polygon.getPoint(i), i);
+
 		}
 
 		final int[][] triangles = triangulation.getTriangles();
@@ -969,13 +969,17 @@ public class WB_Triangulate {
 		final int[] intmap = new int[tripoints.size()];
 		index = 0;
 		for (final WB_Coordinate point : tripoints) {
+
 			final int found = pointmap.getNearestNeighbor(point).value;
 			intmap[index++] = found;
 		}
+
 		for (final int[] T : triangles) {
+
 			T[0] = intmap[T[0]];
 			T[1] = intmap[T[1]];
 			T[2] = intmap[T[2]];
+
 		}
 
 		for (final int[] E : edges) {
@@ -985,47 +989,7 @@ public class WB_Triangulate {
 		return new WB_Triangulation2D(triangles, edges);
 	}
 
-	public static WB_Triangulation2D getPolygonTriangulation2D(
-			final WB_SimplePolygon polygon) {
-		final List<WB_Point> pts = new FastTable<WB_Point>();
-		for (int i = 0; i < polygon.n; i++) {
-			pts.add(polygon.getPoint(i));
-		}
-
-		final WB_Triangulation2DWithPoints triangulation = WB_Triangulate
-				.getPolygonTriangulation2D(pts, null, true,
-						geometryfactory.createEmbeddedPlane(polygon.getPlane()));
-
-		final WB_KDTree<WB_Point, Integer> pointmap = new WB_KDTree<WB_Point, Integer>(
-				polygon.n);
-
-		for (int i = 0; i < polygon.n; i++) {
-			pointmap.add(polygon.getPoint(i), i);
-		}
-
-		final int[][] triangles = triangulation.getTriangles();
-		final int[][] edges = triangulation.getEdges();
-		final List<WB_Coordinate> tripoints = triangulation.getPoints();
-		final int[] intmap = new int[tripoints.size()];
-		int index = 0;
-		for (final WB_Coordinate point : tripoints) {
-			final int found = pointmap.getNearestNeighbor(point).value;
-			intmap[index++] = found;
-		}
-		for (final int[] T : triangles) {
-			T[0] = intmap[T[0]];
-			T[1] = intmap[T[1]];
-			T[2] = intmap[T[2]];
-		}
-
-		for (final int[] E : edges) {
-			E[0] = intmap[E[0]];
-			E[1] = intmap[E[1]];
-		}
-		return new WB_Triangulation2D(triangles, edges);
-	}
-
-	private static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
+	public static WB_Triangulation2DWithPoints getPolygonTriangulation2D(
 			final List<? extends WB_Coordinate> outerPolygon,
 					final List<? extends WB_Coordinate>[] innerPolygons,
 							final boolean optimize, final WB_Context2D context) {
@@ -1034,7 +998,9 @@ public class WB_Triangulate {
 		WB_Point point = geometryfactory.createPoint();
 
 		for (int i = 0; i < outerPolygon.size(); i++) {
+
 			context.pointTo2D(outerPolygon.get(i), point);
+
 			coords[i] = new Coordinate(point.xd(), point.yd(), 0);
 		}
 		context.pointTo2D(outerPolygon.get(0), point);
@@ -1070,6 +1036,7 @@ public class WB_Triangulate {
 
 			point = geometryfactory.createPoint();
 			context.pointTo3D(shellCoords.get(i).x, shellCoords.get(i).y, point);
+
 			Points.add(point);
 		}
 		return new WB_Triangulation2DWithPoints(ears, E, Points);
@@ -1179,7 +1146,7 @@ public class WB_Triangulate {
 				}
 			}
 		} while (!finished);
-		if (improve) {
+		if (improve && inputPolygon.getNumInteriorRing() == 0) {
 			doImprove(earList);
 		}
 		final int[][] tris = new int[earList.size()][3];

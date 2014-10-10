@@ -18,6 +18,7 @@ import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_CoordinateMath;
 import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_Curve;
 import wblut.geom.WB_FaceListMesh;
@@ -50,6 +51,7 @@ import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_Intersection;
 import wblut.hemesh.HE_Mesh;
 import wblut.hemesh.HE_MeshStructure;
+import wblut.hemesh.HE_Path;
 import wblut.hemesh.HE_Selection;
 import wblut.hemesh.HE_Vertex;
 
@@ -109,8 +111,8 @@ public class WB_Render3D {
 		home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 				(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 						* R.getDirection().xd()),
-						(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-						(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+				(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+				(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
 	}
 
 	public void drawSegment(final WB_Segment S) {
@@ -247,20 +249,20 @@ public class WB_Render3D {
 		home.beginShape(PConstants.QUAD);
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() - d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() - d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() + d * P.getV().zd()));
+				* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 		home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 				* P.getV().xd()), (float) (P.getOrigin().yd() + d
-						* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-								.zd() + d * P.getU().zd() - d * P.getV().zd()));
+				* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 		home.endShape();
 	}
 
@@ -1543,6 +1545,22 @@ public class WB_Render3D {
 
 	}
 
+	public void drawPath(final HE_Path path) {
+		home.beginShape();
+		for (final HE_Vertex v : path.getPathVertices()) {
+			home.vertex(v.xf(), v.yf(), v.zf());
+
+		}
+		if (path.isLoop()) {
+			home.endShape(PConstants.CLOSE);
+		}
+		else {
+			home.endShape(PConstants.OPEN);
+
+		}
+
+	}
+
 	public void drawSegment2D(final Collection<? extends Segment> segments) {
 		final Iterator<? extends Segment> segItr = segments.iterator();
 		while (segItr.hasNext()) {
@@ -1709,7 +1727,30 @@ public class WB_Render3D {
 	public WB_Ray getPickingRay(final int x, final int y) {
 		unproject.captureViewMatrix(home);
 		unproject.calculatePickPoints(x, y, home.height);
-		return new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
+
+		WB_Ray ray = new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
+		final WB_Point o = ray.getOrigin();
+
+		WB_Point e = ray.getPointOnLine(1000);
+
+		double error = WB_CoordinateMath.getSqDistance2D(x, y,
+				home.screenX(e.xf(), e.yf(), e.zf()),
+				home.screenY(e.xf(), e.yf(), e.zf()));
+		while (error > 1) {
+			final WB_Point ne = e.add(Math.random() - 0.5, Math.random() - 0.5,
+					Math.random() - 0.5);
+			final double nerror = WB_CoordinateMath.getSqDistance2D(x, y,
+					home.screenX(ne.xf(), ne.yf(), ne.zf()),
+					home.screenY(ne.xf(), ne.yf(), ne.zf()));
+			if (nerror < error) {
+				error = nerror;
+				e = ne;
+			}
+
+		}
+		ray = new WB_Ray(o, e.sub(o));
+
+		return ray;
 	}
 
 	public HE_Face pickClosestFace(final HE_Mesh mesh, final int x, final int y) {

@@ -16,7 +16,7 @@ public class WB_Logger {
 		BasicConfigurator.configure();
 		// Basically disable Javolution logging.
 		final LogContext ctx = LogContext.enter();
-		ctx.setLevel(LogContext.Level.FATAL);
+		setOff();
 	}
 
 	public static WB_Logger instance() {

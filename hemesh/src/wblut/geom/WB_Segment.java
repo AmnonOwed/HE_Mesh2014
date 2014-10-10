@@ -6,7 +6,7 @@ import javolution.util.FastTable;
 import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
-public class WB_Segment extends WB_Linear implements Segment {
+public class WB_Segment extends WB_Linear implements Segment, WB_Curve {
 
 	protected double length;
 	private final WB_Point endpoint;
@@ -89,7 +89,7 @@ public class WB_Segment extends WB_Linear implements Segment {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.geom.WB_Segment2D#reverse()
 	 */
 	@Override
@@ -118,6 +118,24 @@ public class WB_Segment extends WB_Linear implements Segment {
 	public WB_Geometry apply(final WB_Transform T) {
 		return geometryfactory.createSegment(origin.applyAsPoint(T),
 				endpoint.applyAsPoint(T));
+	}
+
+	@Override
+	public WB_Point curvePoint(final double u) {
+
+		return this.getParametricPointOnSegment(u);
+	}
+
+	@Override
+	public double loweru() {
+
+		return 0;
+	}
+
+	@Override
+	public double upperu() {
+
+		return 1;
 	}
 
 }

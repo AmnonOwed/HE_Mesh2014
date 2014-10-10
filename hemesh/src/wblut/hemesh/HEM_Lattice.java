@@ -82,7 +82,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -236,14 +236,16 @@ public class HEM_Lattice extends HEM_Modifier {
 		}
 
 		mesh.pairHalfedges();
-
+		if (d < 0) {
+			mesh.flipAllFaces();
+		}
 		return mesh;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -357,7 +359,9 @@ public class HEM_Lattice extends HEM_Modifier {
 			}
 		}
 		selection.parent.pairHalfedges();
-
+		if (d < 0) {
+			selection.parent.flipAllFaces();
+		}
 		return selection.parent;
 	}
 
