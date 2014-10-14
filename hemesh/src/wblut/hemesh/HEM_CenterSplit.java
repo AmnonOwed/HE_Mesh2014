@@ -1,20 +1,28 @@
 package wblut.hemesh;
 
-import wblut.hemesh.HEM_Modifier;
-import wblut.hemesh.HE_Mesh;
-import wblut.hemesh.HE_Selection;
-
-
 public class HEM_CenterSplit extends HEM_Modifier {
+	private double d;
+	private double c;
 
-	
+	private HE_Selection selectionOut;
+
 	public HEM_CenterSplit() {
 
 		super();
-	
+		d = 0;
+		c = 0.5;
 	}
 
-	
+	public HEM_CenterSplit setOffset(final double d) {
+		this.d = d;
+		return this;
+	}
+
+	public HEM_CenterSplit setChamfer(final double c) {
+		this.c = c;
+		return this;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -22,8 +30,9 @@ public class HEM_CenterSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		
-		mesh.splitFacesCenter();
+		final HEM_Extrude ext = new HEM_Extrude().setChamfer(c).setDistance(d);
+		mesh.modify(ext);
+		selectionOut = ext.extruded;
 		return mesh;
 	}
 
@@ -34,8 +43,13 @@ public class HEM_CenterSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		
-		selection.parent.splitFacesCenter(selection);
+		final HEM_Extrude ext = new HEM_Extrude().setChamfer(c).setDistance(d);
+		selection.parent.modifySelected(ext, selection);
+		selectionOut = ext.extruded;
 		return selection.parent;
+	}
+
+	public HE_Selection getCenterFaces() {
+		return this.selectionOut;
 	}
 }

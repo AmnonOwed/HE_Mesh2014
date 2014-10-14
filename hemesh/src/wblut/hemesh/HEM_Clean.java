@@ -1,20 +1,15 @@
 package wblut.hemesh;
 
-import wblut.hemesh.HEM_Modifier;
-import wblut.hemesh.HE_Mesh;
-import wblut.hemesh.HE_Selection;
-
+import wblut.geom.WB_Polygon;
 
 public class HEM_Clean extends HEM_Modifier {
 
-	
 	public HEM_Clean() {
 
 		super();
-	
+
 	}
 
-	
 	/*
 	 * (non-Javadoc)
 	 *
@@ -22,8 +17,10 @@ public class HEM_Clean extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		
-		mesh.clean();
+		final WB_Polygon[] polygons = mesh.getPolygons();
+		final HEC_FromPolygons creator = new HEC_FromPolygons();
+		creator.setPolygons(polygons);
+		mesh.set(creator.create());
 		return mesh;
 	}
 
@@ -34,8 +31,6 @@ public class HEM_Clean extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		
-		selection.parent.clean();
-		return selection.parent;
+		return apply(selection.parent);
 	}
 }

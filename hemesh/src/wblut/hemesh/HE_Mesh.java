@@ -219,12 +219,14 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * @param selection
 	 *            the selection
 	 * @return the h e_ mesh
-	 * @deprecated Use {@link #simplifySelected(HES_Simplifier,HE_Selection)} instead
+	 * @deprecated Use {@link #simplifySelected(HES_Simplifier,HE_Selection)}
+	 *             instead
 	 */
+	@Deprecated
 	public HE_Mesh simplify(final HES_Simplifier simplifier,
 			final HE_Selection selection) {
-				return simplifySelected(simplifier, selection);
-			}
+		return simplifySelected(simplifier, selection);
+	}
 
 	/**
 	 * Simplify.
@@ -346,6 +348,16 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 		}
 		result._center.set(_center);
 		result._centerUpdated = _centerUpdated;
+		return result;
+	}
+
+	public HE_Mesh getSubmeshFromFaceInternalLabel(final int label) {
+		final HE_Mesh result = get();
+		final HE_Selection sel = result
+				.selectFacesWithOtherInternalLabel(label);
+		result.removeFaces(sel.getFaces());
+		result.cleanUnusedElementsByFace();
+		result.capHalfedges();
 		return result;
 	}
 
@@ -3007,29 +3019,86 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	}
 
 	public HE_Selection splitFacesCenter() {
-		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
-		modify(ext);
-		return ext.extruded;
+		final HEM_CenterSplit cs = new HEM_CenterSplit();
+		modify(cs);
+		return cs.getCenterFaces();
 	}
 
 	public HE_Selection splitFacesCenterHole() {
-		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
-		modify(ext);
-		delete(ext.extruded);
-		return ext.walls;
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole();
+		modify(csh);
+		return csh.getWallFaces();
 	}
 
 	public HE_Selection splitFacesCenter(final HE_Selection faces) {
-		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
-		modifySelected(ext, faces);
-		return ext.extruded;
+		final HEM_CenterSplit cs = new HEM_CenterSplit();
+		modifySelected(cs, faces);
+		return cs.getCenterFaces();
 	}
 
 	public HE_Selection splitFacesCenterHole(final HE_Selection faces) {
-		final HEM_Extrude ext = new HEM_Extrude().setChamfer(0.5);
-		modifySelected(ext, faces);
-		delete(ext.extruded);
-		return ext.walls;
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole();
+		modifySelected(csh, faces);
+		return csh.getWallFaces();
+	}
+
+	public HE_Selection splitFacesCenter(final double d) {
+		final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d);
+		modify(cs);
+		return cs.getCenterFaces();
+	}
+
+	public HE_Selection splitFacesCenterHole(final double d) {
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d);
+		modify(csh);
+		return csh.getWallFaces();
+	}
+
+	public HE_Selection splitFacesCenter(final HE_Selection faces,
+			final double d) {
+		final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d);
+		modifySelected(cs, faces);
+		return cs.getCenterFaces();
+	}
+
+	public HE_Selection splitFacesCenterHole(final HE_Selection faces,
+			final double d) {
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d);
+		modifySelected(csh, faces);
+		return csh.getWallFaces();
+	}
+
+	public HE_Selection splitFacesCenter(final double d, final double c) {
+		final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d)
+				.setChamfer(c);
+		modify(cs);
+		return cs.getCenterFaces();
+	}
+
+	public HE_Selection splitFacesCenterHole(final double d, final double c) {
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d)
+				.setChamfer(c);
+		;
+		modify(csh);
+		return csh.getWallFaces();
+	}
+
+	public HE_Selection splitFacesCenter(final HE_Selection faces,
+			final double d, final double c) {
+		final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d)
+				.setChamfer(c);
+		;
+		modifySelected(cs, faces);
+		return cs.getCenterFaces();
+	}
+
+	public HE_Selection splitFacesCenterHole(final HE_Selection faces,
+			final double d, final double c) {
+		final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d)
+				.setChamfer(c);
+		;
+		modifySelected(csh, faces);
+		return csh.getWallFaces();
 	}
 
 	/**
@@ -4472,50 +4541,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	}
 
 	public void triangulate(final HE_Face face) {
-		if (face.getFaceOrder() > 3) {
-			final int[][] tris = face.getTriangles();
-			final List<HE_Vertex> vertices = face.getFaceVertices();
-			HE_Halfedge he = face.getHalfedge();
-			remove(face);
-			do {
-
-				he.getPair().clearPair();
-
-				he.clearPair();
-
-				remove(he);
-				he = he.getNextInFace();
-			} while (he != face.getHalfedge());
-
-			for (int i = 0; i < tris.length; i++) {
-				final int[] tri = tris[i];
-				final HE_Face f = new HE_Face();
-				add(f);
-				f.copyProperties(face);
-				final HE_Halfedge he1 = new HE_Halfedge();
-				final HE_Halfedge he2 = new HE_Halfedge();
-				final HE_Halfedge he3 = new HE_Halfedge();
-				he1.setVertex(vertices.get(tri[0]));
-				he2.setVertex(vertices.get(tri[1]));
-				he3.setVertex(vertices.get(tri[2]));
-				he1.getVertex().setHalfedge(he1);
-				he2.getVertex().setHalfedge(he2);
-				he3.getVertex().setHalfedge(he3);
-				he1.setFace(f);
-				he2.setFace(f);
-				he3.setFace(f);
-				he1.setNext(he2);
-				he2.setNext(he3);
-				he3.setNext(he1);
-
-				f.setHalfedge(he1);
-				add(he1);
-				add(he2);
-				add(he3);
-			}
-
-			pairHalfedges();
-		}
+		final HE_Selection sel = new HE_Selection(this);
+		sel.add(face);
+		triangulate(sel);
 	}
 
 	/**
@@ -4540,10 +4568,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	 * Clean.
 	 */
 	public void clean() {
-		final WB_Polygon[] polygons = getPolygons();
-		final HEC_FromPolygons creator = new HEC_FromPolygons();
-		creator.setPolygons(polygons);
-		set(creator.create());
+		modify(new HEM_Clean());
 	}
 
 	/*
