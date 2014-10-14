@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/core.jar"/>
-	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/javolution-6.1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/jts.jar"/>
-	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/trove-3.1a1.jar"/>
-	<classpathentry kind="lib" path="/Users/frederikvanhoutte/Projects/external/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="external/javolution-6.1.0.jar"/>
+	<classpathentry kind="lib" path="external/jts.jar"/>
+	<classpathentry kind="lib" path="external/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="external/trove-3.1a1.jar"/>
+	<classpathentry kind="lib" path="external/core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
