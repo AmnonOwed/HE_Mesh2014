@@ -22,9 +22,27 @@ public class HET_HemeshWriter {
 		}
 	}
 
+	static private void createDirectories(final File file) {
+		try {
+			final String parentName = file.getParent();
+			if (parentName != null) {
+				final File parent = new File(parentName);
+				if (!parent.exists()) {
+					parent.mkdirs();
+				}
+			}
+		}
+		catch (final SecurityException se) {
+			System.err.println("No permissions to create "
+					+ file.getAbsolutePath());
+		}
+	}
+
 	public void beginSave(final String fn, final String name) {
 		try {
-			hemeshStream = new FileOutputStream(new File(fn, name + ".hemesh"));
+			final File file = new File(fn, name + ".hemesh");
+			createDirectories(file);
+			hemeshStream = new FileOutputStream(file);
 			handleBeginSave();
 		}
 		catch (final Exception e) {

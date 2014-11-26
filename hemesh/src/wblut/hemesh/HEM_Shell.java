@@ -26,7 +26,7 @@ public class HEM_Shell extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -83,13 +83,16 @@ public class HEM_Shell extends HEM_Modifier {
 		}
 
 		mesh.pairHalfedges();
+		if (d < 0) {
+			mesh.flipAllFaces();
+		}
 		return mesh;
 
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

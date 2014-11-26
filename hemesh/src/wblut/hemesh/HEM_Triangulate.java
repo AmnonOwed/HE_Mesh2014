@@ -11,34 +11,41 @@ public class HEM_Triangulate extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-
+		tracker.setStatus("Starting HEM_Triangulate.");
 		final HE_Face[] f = mesh.getFacesAsArray();
 		final int n = mesh.getNumberOfFaces();
+		tracker.setStatus("Triangulating faces.", n);
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i], mesh);
+			tracker.incrementCounter();
 		}
 		mesh.pairHalfedges();
+		tracker.setStatus("Exiting HEM_Triangulate.");
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+		tracker.setStatus("Starting HEM_Triangulate.");
 		final HE_Face[] f = selection.getFacesAsArray();
 		final int n = selection.getNumberOfFaces();
+		tracker.setStatus("Triangulating faces.", n);
 		for (int i = 0; i < n; i++) {
 			triangulateNoPairing(f[i], selection.parent);
+			tracker.incrementCounter();
 		}
 		selection.parent.pairHalfedges();
+		tracker.setStatus("Exiting HEM_Triangulate.");
 		return selection.parent;
 	}
 

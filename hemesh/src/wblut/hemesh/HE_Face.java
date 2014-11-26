@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javolution.util.FastTable;
-
-import org.apache.log4j.Logger;
-
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_GeometryFactory;
@@ -37,7 +34,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	private int[][] triangles;
 
-	private static Logger logger = Logger.getLogger(HE_Face.class);
+	public static final HET_ProgressTracker tracker = HET_ProgressTracker
+			.instance();
+
+	public static String getStatus() {
+
+		return tracker.getStatus();
+	}
 
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
@@ -328,21 +331,24 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
 
 	public int[][] getTriangles() {
-		logger.debug("Starting getTriangles() in face " + getKey() + ".");
+		// tracker.setStatus("Starting getTriangles() in face " + getKey() +
+		// ".");
 		if (triangles == null) {
-			logger.debug("Triangles not calculated, starting face triangulation.");
+			// tracker.setStatus("Triangles not calculated, starting face triangulation.");
 			final int fo = getFaceOrder();
 			if (fo < 3) {
-				logger.warn("HE_Face " + getKey() + " has only " + fo
-						+ " vertices.");
 				return new int[][] { { 0, 0, 0 } };
 			}
 			else if (fo == 3) {
-				logger.trace("Trivial triangulation of triangle face.");
+				// tracker.setStatus("Triangulating face with " + fo
+				// + " vertices.");
+				// logger.trace("Trivial triangulation of triangle face.");
 				return new int[][] { { 0, 1, 2 } };
 			}
 			else if (fo == 4) {
-				logger.trace("Triangulation of quad face.");
+				// tracker.setStatus("Triangulating face with " + fo
+				// + " vertices.");
+				// logger.trace("Triangulation of quad face.");
 				final WB_Point[] points = new WB_Point[4];
 
 				int i = 0;
@@ -359,12 +365,15 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 						points[2], points[3]);
 			}
 			else {
-				logger.trace("Starting triangulation of face with " + fo
-						+ " faces.");
+				// logger.trace("Starting triangulation of face with " + fo +
+				// " faces.");
+				// tracker.setStatus("Triangulating face with " + fo
+				// + " vertices.");
 				triangles = toPolygon().getTriangles();
 			}
 		}
-		logger.debug("Returning triangles.");
+		// // logger.debug("Returning triangles.");
+		// tracker.setStatus("Triangulation done.");
 		return triangles;
 	}
 
@@ -440,7 +449,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.geom.Point3D#toString()
 	 */
 	@Override
@@ -459,7 +468,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -472,7 +481,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override

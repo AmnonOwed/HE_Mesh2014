@@ -3,8 +3,6 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.List;
 
-import javolution.util.FastTable;
-
 /**
  *
  *
@@ -46,35 +44,50 @@ public class HEMC_Explode extends HEMC_MultiCreator {
 		final ArrayList<HE_Mesh> result = new ArrayList<HE_Mesh>();
 		if (mesh == null) {
 			_numberOfMeshes = 0;
-			final HE_Mesh[] resarray = new HE_Mesh[result.size()];
-			return result.toArray(resarray);
+			return new HE_Mesh[0];
 		}
-		final List<HE_Face> faces = mesh.getFaces();
-		mesh.setInternalLabel(0); // face not visited
-		int index = 1;
+		mesh.resetFaceInternalLabels();
+		HE_Face start = mesh.getFaceByIndex(0);
+		final int index = 0;
+		int lastfound = 0;
+		HE_Selection submesh;
 		do {
-			final HE_Face start = faces.get(0);
-			start.setInternalLabel(index);// visited
-			final List<HE_Face> submesh = new FastTable<HE_Face>();
-			submesh.add(start);
-			final List<HE_Face> facesToProcess = new FastTable<HE_Face>();
-			facesToProcess.add(start);
-			do {
-				final List<HE_Face> neighbors = facesToProcess.get(0)
-						.getNeighborFaces();
-				facesToProcess.remove(0);
-				for (final HE_Face neighbor : neighbors) {
-					if (neighbor.getInternalLabel() == 0) {
-						neighbor.setInternalLabel(index);// visited
-						submesh.add(neighbor);
-						facesToProcess.add(neighbor);
-					}
+			for (int i = lastfound; i < mesh.getNumberOfFaces(); i++) {
+				start = mesh.getFaceByIndex(i);
+				lastfound = i;
+				if (start.getInternalLabel() == -1) {
+					break;
 				}
-			} while (facesToProcess.size() > 0);
-			faces.removeAll(submesh);
-			result.add(mesh.getSubmeshFromFaceInternalLabel(index++));
+			}
+			if (start.getInternalLabel() != -1) {
+				break;
+			}
+			start.setInternalLabel(index);// visited
+			submesh = new HE_Selection(mesh);
+			submesh.add(start);
+			HE_RAS<HE_Face> facesToProcess = new HE_RASTrove<HE_Face>();
+			HE_RAS<HE_Face> newFacesToProcess;
+			facesToProcess.add(start);
+			List<HE_Face> neighbors;
+			do {
+				newFacesToProcess = new HE_RASTrove<HE_Face>();
+				for (final HE_Face f : facesToProcess) {
+					neighbors = f.getNeighborFaces();
+					for (final HE_Face neighbor : neighbors) {
+						if (neighbor.getInternalLabel() == -1) {
+							neighbor.setInternalLabel(index);// visited
+							submesh.add(neighbor);
+							newFacesToProcess.add(neighbor);
+						}
+					}
 
-		} while (faces.size() > 0);
+				}
+				facesToProcess = newFacesToProcess;
+			} while (facesToProcess.size() > 0);
+
+			result.add(submesh.getAsMesh());
+
+		} while (true);
 
 		final HE_Mesh[] resarray = new HE_Mesh[result.size()];
 		return result.toArray(resarray);

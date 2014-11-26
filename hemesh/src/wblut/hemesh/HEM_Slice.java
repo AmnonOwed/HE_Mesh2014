@@ -1,6 +1,7 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
+import java.util.List;
 
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Plane;
@@ -23,7 +24,8 @@ public class HEM_Slice extends HEM_Modifier {
 	private boolean reverse = false;
 
 	/**
-	 * Cap holes?. Capping holes does not work properly with nested loops...
+	 * Cap holes?. Capping holes does not work properly with
+	 * self-intersection...
 	 */
 	private boolean capHoles = true;
 
@@ -41,6 +43,9 @@ public class HEM_Slice extends HEM_Modifier {
 
 	/** The offset. */
 	private double offset;
+
+	HEM_SliceSurface ss;
+	boolean inslicesurface;
 
 	/**
 	 * Set offset.
@@ -154,15 +159,20 @@ public class HEM_Slice extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+
+		tracker.setStatus("Starting HEM_Slice.");
+		inslicesurface = false;
 		cut = new HE_Selection(mesh);
 		cap = new HE_Selection(mesh);
 		// no plane defined
 		if (P == null) {
+			tracker.setStatus("No cutplane defined. Exiting HEM_Slice.");
 			return mesh;
 		}
 
 		// empty mesh
 		if (mesh.getNumberOfVertices() == 0) {
+			tracker.setStatus("Empty mesh. Exiting HEM_Slice.");
 			return mesh;
 		}
 
@@ -171,13 +181,16 @@ public class HEM_Slice extends HEM_Modifier {
 			lP.flipNormal();
 		}
 		lP = new WB_Plane(lP.getNormal(), lP.d() + offset);
-		HEM_SliceSurface ss;
-		ss = new HEM_SliceSurface().setPlane(lP);
-		mesh.modify(ss);
 
+		ss = new HEM_SliceSurface().setPlane(lP);
+		inslicesurface = true;
+
+		mesh.modify(ss);
+		inslicesurface = false;
 		cut = ss.cut;
 		final HE_Selection newFaces = new HE_Selection(mesh);
 		HE_Face face;
+		tracker.setStatus("Classifying faces.", mesh.getNumberOfFaces());
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			face = fItr.next();
@@ -192,21 +205,25 @@ public class HEM_Slice extends HEM_Modifier {
 					cut.remove(face);
 				}
 			}
+			tracker.incrementCounter();
 
 		}
-
+		tracker.setStatus("Removing unwanted faces.");
 		mesh.replaceFaces(newFaces.getFacesAsArray());
 		cut.cleanSelection();
 		mesh.cleanUnusedElementsByFace();
+
 		if (capHoles) {
+			tracker.setStatus("Capping holes.");
 			if (simpleCap) {
 				cap.addFaces(mesh.capHoles());
-				mesh.pairHalfedges();
-				mesh.capHalfedges();
+
 			}
 			else {
+				final List<HE_Path> cutpaths = ss.getPaths();
+				tracker.setStatus("Triangulating cut paths.");
 				final long[][] triKeys = HET_PlanarPathTriangulator
-						.getTriangleKeys(ss.getPaths(), lP);
+						.getTriangleKeys(cutpaths, lP);
 				HE_Face tri;
 				HE_Vertex v0, v1, v2;
 				HE_Halfedge he0, he1, he2;
@@ -237,24 +254,23 @@ public class HEM_Slice extends HEM_Modifier {
 					mesh.add(he1);
 					mesh.add(he2);
 				}
+
 				mesh.pairHalfedges();
 
-				cap.addFaces(mesh.capHoles());
-				mesh.pairHalfedges();
-				mesh.capHalfedges();
+				// cap.addFaces(mesh.capHoles());
+
 			}
+		}
 
-		}
-		else {
-			mesh.pairHalfedges();
-			mesh.capHalfedges();
-		}
+		mesh.pairHalfedges();
+
+		mesh.capHalfedges();
 
 		// mesh.triangulateConcaveFaces();
 		if (!keepCenter) {
 			mesh.resetCenter();
 		}
-
+		tracker.setStatus("Ending HEM_Slice.");
 		return mesh;
 
 	}

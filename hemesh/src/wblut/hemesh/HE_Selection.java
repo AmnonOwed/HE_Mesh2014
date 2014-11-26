@@ -236,12 +236,29 @@ public class HE_Selection extends HE_MeshStructure {
 		return copy;
 	}
 
+	public HE_Mesh getAsMesh() {
+		return new HE_Mesh(new HEC_Copy(this));
+	}
+
 	/**
 	 * Add selection.
 	 *
 	 * @param sel
 	 *            selection to add
 	 */
+	public void add(final HE_Selection sel) {
+
+		for (final HE_Face f : sel.faces) {
+			add(f);
+		}
+		for (final HE_Halfedge he : sel.halfedges) {
+			add(he);
+		}
+		for (final HE_Vertex v : sel.vertices) {
+			add(v);
+		}
+	}
+
 	public void union(final HE_Selection sel) {
 
 		for (final HE_Face f : sel.faces) {

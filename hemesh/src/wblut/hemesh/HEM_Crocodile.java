@@ -10,7 +10,7 @@ import wblut.geom.WB_Point;
 public class HEM_Crocodile extends HEM_Modifier {
 	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 	private double distance;
-
+	public HE_Selection spikes;
 	private double chamfer;
 
 	/*
@@ -56,11 +56,31 @@ public class HEM_Crocodile extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
+		spikes = new HE_Selection(selection.parent);
+		selection.collectVertices();
+
+		tracker.setStatus("Starting HEM_Crocodile.");
 		final Map<Long, WB_Point> umbrellapoints = new FastMap<Long, WB_Point>();
 		HE_VertexIterator vitr = new HE_VertexIterator(selection);
 		HE_Vertex v;
-		if (chamfer == 0.5) {
+		if (chamfer == 0) {
+			tracker.setStatus("Chamfer is 0, nothing to do. Exiting HEM_Crocodile.");
+			return selection.parent;
+		}
+		if (chamfer < 0) {
+			chamfer *= -1;
+		}
+		if (chamfer > 0.5 && chamfer < 1.0) {
+			chamfer = 1.0 - chamfer;
+		}
+		else if (chamfer < 0 || chamfer > 1) {
+			tracker.setStatus("Chamfer is outside range (0-0.5), nothing to do. Exiting HEM_Crocodile.");
+			return selection.parent;
+		}
 
+		if (chamfer == 0.5) {
+			tracker.setStatus("Enumerating vertex umbrellas.",
+					selection.getNumberOfVertices());
 			List<HE_Halfedge> star;
 
 			while (vitr.hasNext()) {
@@ -69,17 +89,20 @@ public class HEM_Crocodile extends HEM_Modifier {
 				for (final HE_Halfedge e : star) {
 					umbrellapoints.put(e._key, e.getEdgeCenter());
 				}
-
+				tracker.incrementCounter();
 			}
 
+			tracker.setStatus("Splitting edges.", umbrellapoints.size());
 			for (final long e : umbrellapoints.keySet()) {
 				selection.parent.splitEdge(e, umbrellapoints.get(e));
+				tracker.incrementCounter();
 			}
 
 		}
 		else {
 			List<HE_Halfedge> star;
-
+			tracker.setStatus("Enumerating vertex umbrellas.",
+					selection.getNumberOfVertices());
 			while (vitr.hasNext()) {
 				v = vitr.next();
 				star = v.getHalfedgeStar();
@@ -89,22 +112,40 @@ public class HEM_Crocodile extends HEM_Modifier {
 							gf.createInterpolatedPoint(he.getVertex(),
 									he.getEndVertex(), chamfer));
 				}
+				tracker.incrementCounter();
 
 			}
-
+			tracker.setStatus("Splitting edges.", umbrellapoints.size());
 			for (final long he : umbrellapoints.keySet()) {
 				selection.parent.splitEdge(
 						selection.parent.getHalfedgeByKey(he),
 						umbrellapoints.get(he));
+				tracker.incrementCounter();
 			}
 
 		}
+		tracker.setStatus("Splitting faces.", selection.getNumberOfVertices());
 		vitr = new HE_VertexIterator(selection);
 		while (vitr.hasNext()) {
 			v = vitr.next();
+			final HE_VertexHalfedgeOutCirculator vhoc = new HE_VertexHalfedgeOutCirculator(
+					v);
+			HE_Halfedge he;
+			while (vhoc.hasNext()) {
+				he = vhoc.next();
+				if (he.getFace() != null) {
+					spikes.union(selection.parent.splitFace(he.getFace(), he
+							.getEndVertex(), he.getPrevInVertex()
+							.getEndVertex()));
+
+				}
+
+			}
+			tracker.incrementCounter();
 			v.getPoint().addMulSelf(distance, v.getVertexNormal());
 
 		}
+		tracker.setStatus("Exiting HEM_Crocodile.");
 		return selection.parent;
 	}
 }

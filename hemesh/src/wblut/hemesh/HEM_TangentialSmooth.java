@@ -4,9 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Projection;
 
-public class HEM_Smooth extends HEM_Modifier {
+public class HEM_TangentialSmooth extends HEM_Modifier {
 
 	private boolean autoRescale;
 	private boolean keepBoundary;
@@ -14,23 +16,23 @@ public class HEM_Smooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 
-	public HEM_Smooth setAutoRescale(final boolean b) {
+	public HEM_TangentialSmooth setAutoRescale(final boolean b) {
 		autoRescale = b;
 		return this;
 
 	}
 
-	public HEM_Smooth setIterations(final int r) {
+	public HEM_TangentialSmooth setIterations(final int r) {
 		iter = r;
 		return this;
 
 	}
 
-	public HEM_Smooth setKeepBoundary(final boolean b) {
+	public HEM_TangentialSmooth setKeepBoundary(final boolean b) {
 		keepBoundary = b;
 		return this;
 
@@ -38,7 +40,7 @@ public class HEM_Smooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -61,22 +63,25 @@ public class HEM_Smooth extends HEM_Modifier {
 			List<HE_Vertex> neighbors;
 			int id = 0;
 			WB_Point p;
+			WB_Plane tangent;
 			while (vItr.hasNext()) {
 				v = vItr.next();
+				tangent = new WB_Plane(v, v.getVertexNormal());
 				if (v.isBoundary() && keepBoundary) {
 					newPositions[id] = v.getPoint();
 
 				}
 				else {
 					p = new WB_Point(v);
+
 					neighbors = v.getNeighborVertices();
 					p.mulSelf(neighbors.size());
-
 					for (int i = 0; i < neighbors.size(); i++) {
 						p.addSelf(neighbors.get(i));
 					}
 
-					newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
+					newPositions[id] = WB_Projection.projectOnPlane(
+							p.scaleSelf(0.5 / neighbors.size()), tangent);
 				}
 				id++;
 
@@ -100,7 +105,7 @@ public class HEM_Smooth extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -114,12 +119,13 @@ public class HEM_Smooth extends HEM_Modifier {
 			box = selection.parent.getAABB();
 		}
 		final WB_Point[] newPositions = new WB_Point[selection
-		                                             .getNumberOfVertices()];
+				.getNumberOfVertices()];
 		if (iter < 1) {
 			iter = 1;
 		}
 		tracker.setStatus("Smoothing vertices.",
 				iter * selection.getNumberOfVertices());
+		WB_Plane tangent;
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = selection.vItr();
 			HE_Vertex v;
@@ -129,6 +135,7 @@ public class HEM_Smooth extends HEM_Modifier {
 
 			while (vItr.hasNext()) {
 				v = vItr.next();
+				tangent = new WB_Plane(v, v.getVertexNormal());
 				final WB_Point p = new WB_Point(v);
 				if (v.isBoundary() && keepBoundary) {
 					newPositions[id] = v.getPoint();
@@ -148,7 +155,8 @@ public class HEM_Smooth extends HEM_Modifier {
 						p.addSelf(neighbors.get(i));
 					}
 
-					newPositions[id] = p.scaleSelf(0.5 / neighbors.size());
+					newPositions[id] = WB_Projection.projectOnPlane(
+							p.scaleSelf(0.5 / neighbors.size()), tangent);
 				}
 				id++;
 			}

@@ -20,6 +20,13 @@ import wblut.geom.WB_Vector;
  */
 
 public class HE_MeshStructure extends HE_Element implements WB_HasData {
+	public static final HET_ProgressTracker tracker = HET_ProgressTracker
+			.instance();
+
+	public static String getStatus() {
+
+		return tracker.getStatus();
+	}
 
 	public HE_RAS<HE_Vertex> vertices;
 	public HE_RAS<HE_Halfedge> halfedges;
@@ -140,6 +147,14 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		}
 	}
 
+	public final void addFaces(final HE_Mesh source) {
+		tracker.setStatus("Adding faces", source.getNumberOfFaces());
+		for (final HE_Face f : source.faces) {
+			add(f);
+			tracker.incrementCounter();
+		}
+	}
+
 	/**
 	 * Adds halfedges.
 	 *
@@ -164,6 +179,14 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		}
 	}
 
+	public final void addHalfedges(final HE_Mesh source) {
+		tracker.setStatus("Adding halfedges", source.getNumberOfHalfedges());
+		for (final HE_Halfedge he : source.halfedges) {
+			add(he);
+			tracker.incrementCounter();
+		}
+	}
+
 	/**
 	 * Adds vertices.
 	 *
@@ -173,6 +196,14 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	public final void addVertices(final HE_Vertex[] vertices) {
 		for (final HE_Vertex vertex : vertices) {
 			add(vertex);
+		}
+	}
+
+	public final void addVertices(final HE_Mesh source) {
+		tracker.setStatus("Adding vertices", source.getNumberOfVertices());
+		for (final HE_Vertex vertex : source.vertices) {
+			add(vertex);
+			tracker.incrementCounter();
 		}
 	}
 
@@ -421,9 +452,9 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @param faces
 	 *            faces to remove as List<HE_Face>
 	 */
-	public final void removeFaces(final List<HE_Face> faces) {
-		for (int i = 0; i < faces.size(); i++) {
-			remove(faces.get(i));
+	public final void removeFaces(final Collection<HE_Face> faces) {
+		for (final HE_Face f : faces) {
+			remove(f);
 		}
 	}
 
@@ -453,9 +484,9 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @param halfedges
 	 *            halfedges to remove as FastTable<HE_Halfedge>
 	 */
-	public final void removeHalfedges(final List<HE_Halfedge> halfedges) {
-		for (int i = 0; i < halfedges.size(); i++) {
-			remove(halfedges.get(i));
+	public final void removeHalfedges(final Collection<HE_Halfedge> halfedges) {
+		for (final HE_Halfedge he : halfedges) {
+			remove(he);
 		}
 	}
 
@@ -485,9 +516,9 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	 * @param vertices
 	 *            vertices to remove as FastTable<HE_Vertex>
 	 */
-	public final void removeVertices(final List<HE_Vertex> vertices) {
-		for (int i = 0; i < vertices.size(); i++) {
-			remove(vertices.get(i));
+	public final void removeVertices(final Collection<HE_Vertex> vertices) {
+		for (final HE_Vertex v : vertices) {
+			remove(v);
 		}
 	}
 
@@ -552,6 +583,18 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		for (final HE_Face face : faces) {
 			add(face);
 		}
+	}
+
+	public final void replaceFaces(final HE_Mesh mesh) {
+		faces = mesh.faces;
+	}
+
+	public final void replaceVertices(final HE_Mesh mesh) {
+		vertices = mesh.vertices;
+	}
+
+	public final void replaceHalfedges(final HE_Mesh mesh) {
+		halfedges = mesh.halfedges;
 	}
 
 	/**
@@ -807,7 +850,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
 	 */
 	@Override
@@ -820,7 +863,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.core.WB_HasData#getData(java.lang.String)
 	 */
 	@Override
@@ -839,7 +882,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 				if (he == null) {
 					throw new IllegalArgumentException("Two vertices "
 							+ vertices[i] + " and " + vertices[i + 1]
-									+ " in path are not connected.");
+							+ " in path are not connected.");
 				}
 				halfedges.add(he);
 			}
@@ -851,7 +894,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 					throw new IllegalArgumentException("Vertices "
 							+ vertices[vertices.length - 1] + " and "
 							+ vertices[0]
-									+ " in path are not connected: path is not a loop.");
+							+ " in path are not connected: path is not a loop.");
 				}
 
 			}

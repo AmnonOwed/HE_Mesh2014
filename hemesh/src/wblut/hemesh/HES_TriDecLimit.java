@@ -12,37 +12,29 @@ import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
-public class HES_TriDec extends HES_Simplifier {
+public class HES_TriDecLimit extends HES_Simplifier {
 
 	private double _lambda;
 	private HE_Mesh _mesh;
 	private Heap heap;
-
+	private int counter;
 	TLongDoubleMap vertexCost;
 
-	private int goal;
-	private double fraction;
-	int counter;
+	private double limit;
 
-	public HES_TriDec() {
+	public HES_TriDecLimit() {
 		_lambda = 20;
+		limit = 100;
 
 	}
 
-	public HES_TriDec setLambda(final double f) {
+	public HES_TriDecLimit setLambda(final double f) {
 		_lambda = f;
 		return this;
 	}
 
-	public HES_TriDec setGoal(final int r) {
-		goal = r;
-		return this;
-
-	}
-
-	public HES_TriDec setGoal(final double f) {
-		fraction = f;
-		goal = -1;
+	public HES_TriDecLimit setLimit(final double r) {
+		limit = r;
 		return this;
 
 	}
@@ -86,15 +78,6 @@ public class HES_TriDec extends HES_Simplifier {
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
 		tracker.setStatus("Starting HES_TriDec.");
-		if (goal == -1) {
-			goal = (int) (mesh.getNumberOfVertices() * fraction);
-
-		}
-
-		if (mesh.getNumberOfVertices() <= goal) {
-			tracker.setStatus("Mesh has less vertices than goal. Exiting HES_TriDec.");
-			return mesh;
-		}
 
 		_mesh = mesh;
 
@@ -110,9 +93,9 @@ public class HES_TriDec extends HES_Simplifier {
 		HE_Vertex v;
 		Entry entry;
 		List<HE_Vertex> vertices;
-		final int count = _mesh.getNumberOfVertices() - goal;
-		tracker.setStatus("Removing vertices.", count);
-		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+		tracker.setStatus("Removing vertices.", mesh.getNumberOfVertices());
+		double lastcost = 0;
+		while (lastcost <= limit && heap.size() > 0
 				&& _mesh.getNumberOfVertices() > 4) {
 			boolean valid = false;
 
@@ -127,10 +110,12 @@ public class HES_TriDec extends HES_Simplifier {
 				vertices = v.getNeighborVertices();
 				// vertices.addAll(v.getNextNeighborVertices());
 				if (_mesh.collapseHalfedge(v.getHalfedge())) {
-					// System.out.println(vertexCost.get(v.key()));
-					vertexCost.remove(v.key());
-					counter++;
-					updateHeap(vertices, null);
+					lastcost = vertexCost.get(v.key());
+					if (lastcost <= limit) {
+						vertexCost.remove(v.key());
+						counter++;
+						updateHeap(vertices, null);
+					}
 				}
 			}
 			tracker.incrementCounter();
@@ -151,22 +136,7 @@ public class HES_TriDec extends HES_Simplifier {
 		tracker.setStatus("Starting HES_TriDec.");
 		selection.collectVertices();
 		_mesh = selection.parent;
-
-		if (goal == -1) {
-			goal = (int) ((selection.parent.getNumberOfVertices() - selection
-					.getNumberOfVertices()) + selection.getNumberOfVertices()
-					* fraction);
-
-		}
-		else {
-			goal = selection.parent.getNumberOfVertices()
-					- selection.getNumberOfVertices() + goal;
-
-		}
-		if (selection.parent.getNumberOfVertices() <= goal) {
-			tracker.setStatus("Mesh has less vertices than goal. Exiting HES_TriDec.");
-			return selection.parent;
-		}
+		counter = 0;
 
 		if (_mesh.getNumberOfVertices() <= 4) {
 			tracker.setStatus("Mesh has  4 or less vertices. Exiting HES_TriDec.");
@@ -180,9 +150,10 @@ public class HES_TriDec extends HES_Simplifier {
 		HE_Vertex v;
 		Entry entry;
 		List<HE_Vertex> vertices;
-		final int count = _mesh.getNumberOfVertices() - goal;
-		tracker.setStatus("Removing vertices.", count);
-		while (_mesh.getNumberOfVertices() > goal && heap.size() > 0
+
+		tracker.setStatus("Removing vertices.", selection.getNumberOfVertices());
+		double lastcost = 0;
+		while (lastcost <= limit && heap.size() > 0
 				&& _mesh.getNumberOfVertices() > 4) {
 			boolean valid = false;
 			do {
@@ -197,11 +168,16 @@ public class HES_TriDec extends HES_Simplifier {
 				vertices = v.getNeighborVertices();
 				// vertices.addAll(v.getNextNeighborVertices());
 				if (_mesh.collapseHalfedge(v.getHalfedge())) {
-					vertexCost.remove(v.key());
+					lastcost = vertexCost.get(v.key());
+					if (lastcost <= limit) {
+						vertexCost.remove(v.key());
 
-					selection.remove(v);
-					counter++;
-					updateHeap(vertices, _mesh);
+						vertexCost.remove(v.key());
+
+						selection.remove(v);
+						counter++;
+						updateHeap(vertices, _mesh);
+					}
 				}
 			}
 			tracker.incrementCounter();

@@ -167,17 +167,11 @@ public class HET_Diagnosis {
 		}
 
 		if (verbose == true) {
-			System.out.println("Checking edge (" + mesh.getNumberOfEdges()
-					+ ") properties");
-		}
-
-		if (verbose == true) {
 			System.out.println("Checking half edge ("
 					+ mesh.getNumberOfHalfedges() + ") properties");
 		}
 
 		for (final HE_Halfedge he : mesh.halfedges) {
-
 			if (he.getNextInFace() == null) {
 				if (verbose == true) {
 					System.out.println("Null reference (next) in half edge  "
@@ -194,8 +188,8 @@ public class HET_Diagnosis {
 				if (!mesh.contains(he.getNextInFace())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (next) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (next) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -209,8 +203,8 @@ public class HET_Diagnosis {
 					if (he.getFace() != he.getNextInFace().getFace()) {
 						if (verbose == true) {
 							System.out
-									.println("Inconsistent reference (face) in half edge  "
-											+ he.key() + ".");
+							.println("Inconsistent reference (face) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -237,8 +231,8 @@ public class HET_Diagnosis {
 				if (!mesh.contains(he.getPrevInFace())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (prev) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (prev) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -252,8 +246,8 @@ public class HET_Diagnosis {
 					if (he.getFace() != he.getPrevInFace().getFace()) {
 						if (verbose == true) {
 							System.out
-									.println("Inconsistent reference (face) in half edge  "
-											+ he.key() + ".");
+							.println("Inconsistent reference (face) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -266,8 +260,8 @@ public class HET_Diagnosis {
 				if (he.getPrevInFace().getNextInFace() != he) {
 					if (verbose == true) {
 						System.out
-								.println("Unmatched (next)/(prev) in half edge  "
-										+ he.key() + ".");
+						.println("Unmatched (next)/(prev) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -294,8 +288,8 @@ public class HET_Diagnosis {
 				if (!mesh.contains(he.getPair())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (pair) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (pair) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -307,16 +301,16 @@ public class HET_Diagnosis {
 				if (he.getPair().getPair() == null) {
 					if (verbose == true) {
 						System.out
-								.println("No pair reference back to half edge  "
-										+ he.key() + ".");
+						.println("No pair reference back to half edge  "
+								+ he.key() + ".");
 					}
 				}
 				else {
 					if (he.getPair().getPair() != he) {
 						if (verbose == true) {
 							System.out
-									.println("Wrong pair reference back to half edge  "
-											+ he.key() + ".");
+							.println("Wrong pair reference back to half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -335,8 +329,8 @@ public class HET_Diagnosis {
 							.getVertex()) {
 						if (verbose == true) {
 							System.out
-									.println("Inconsistent reference (pair)/(next) in half edge  "
-											+ he.key() + ".");
+							.println("Inconsistent reference (pair)/(next) in half edge  "
+									+ he.key() + ".");
 						}
 						if (force == true) {
 							result = false;
@@ -351,8 +345,8 @@ public class HET_Diagnosis {
 				if (!allowSurface) {
 					if (verbose == true) {
 						System.out
-								.println("Null reference (face) in half edge  "
-										+ he.key() + ".");
+						.println("Null reference (face) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -367,8 +361,8 @@ public class HET_Diagnosis {
 				if (!mesh.contains(he.getFace())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (face) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (face) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;
@@ -394,8 +388,8 @@ public class HET_Diagnosis {
 				if (!mesh.contains(he.getVertex())) {
 					if (verbose == true) {
 						System.out
-								.println("External reference (vert) in half edge  "
-										+ he.key() + ".");
+						.println("External reference (vert) in half edge  "
+								+ he.key() + ".");
 					}
 					if (force == true) {
 						result = false;

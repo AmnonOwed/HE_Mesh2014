@@ -68,7 +68,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -80,8 +80,7 @@ public class HEM_Twist extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, twistAxis);
 				v.getPoint().rotateAboutAxis(d * angleFactor,
-						twistAxis.getOrigin(),
-						twistAxis.getOrigin().add(twistAxis.getDirection()));
+						twistAxis.getOrigin(), twistAxis.getDirection());
 			}
 		}
 		mesh.resetFaces();
@@ -90,7 +89,7 @@ public class HEM_Twist extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
 	 */
@@ -104,8 +103,7 @@ public class HEM_Twist extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, twistAxis);
 				v.getPoint().rotateAboutAxis(d * angleFactor,
-						twistAxis.getOrigin(),
-						twistAxis.getOrigin().add(twistAxis.getDirection()));
+						twistAxis.getOrigin(), twistAxis.getDirection());
 			}
 		}
 		selection.parent.resetFaces();

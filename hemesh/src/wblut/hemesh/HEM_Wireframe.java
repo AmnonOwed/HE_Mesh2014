@@ -88,7 +88,7 @@ public class HEM_Wireframe extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.creators.HEC_Creator#createBase()
 	 */
 	@Override
@@ -107,13 +107,13 @@ public class HEM_Wireframe extends HEM_Modifier {
 		ff.setTaper(taper);
 		ff.setStrutRadius(strutR);
 		ff.setMaximumStrutOffset(maxStrutOffset);
-		mesh.set(ff.create());
+		mesh.setNoCopy(ff.create());
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @seewblut.hemesh.modifiers.HEM_Modifier#applySelected(wblut.hemesh.core.
 	 * HE_Selection)
 	 */

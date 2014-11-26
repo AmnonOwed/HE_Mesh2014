@@ -332,7 +332,7 @@ public class HES_Planar extends HES_Subdividor {
 		}
 		else {
 
-			newVertices.union(selection.parent.splitEdges(selection));
+			newVertices.add(selection.parent.splitEdges(selection));
 		}
 
 		final ArrayList<HE_Face> newFaces = new ArrayList<HE_Face>();

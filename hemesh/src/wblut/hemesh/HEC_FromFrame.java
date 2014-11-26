@@ -547,7 +547,7 @@ public class HEC_FromFrame extends HEC_Creator {
 					}
 
 					tmp.cleanUnusedElementsByFace();
-					tmp.uncapBoundaryHalfedgesAndRemoveBoundaryEdges();
+					tmp.uncapBoundaryHalfedges();
 
 					for (int j = 0; j < struts.size(); j++) {
 						int offset;

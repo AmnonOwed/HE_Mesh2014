@@ -24,24 +24,28 @@ public class HEM_TriSplit extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		tracker.setStatus("Starting HEM_TriSplit.");
+
 		splitFacesTri(mesh.selectAllFaces(), d);
+		tracker.setStatus("Exiting HEM_TriSplit.");
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-
+		tracker.setStatus("Starting HEM_TriSplit.");
 		splitFacesTri(selection, d);
+		tracker.setStatus("Exiting HEM_TriSplit.");
 		return selection.parent;
 	}
 
@@ -58,10 +62,12 @@ public class HEM_TriSplit extends HEM_Modifier {
 		selectionOut = new HE_Selection(selection.parent);
 		final HE_Face[] faces = selection.getFacesAsArray();
 		final int n = selection.getNumberOfFaces();
+		tracker.setStatus("Splitting faces.", n);
 		for (int i = 0; i < n; i++) {
-			selectionOut.union(splitFaceTri(faces[i], d, selection.parent));
+			selectionOut.add(splitFaceTri(faces[i], d, selection.parent));
+			tracker.incrementCounter();
 		}
-		selection.union(selectionOut);
+		selection.add(selectionOut);
 	}
 
 	/**
@@ -75,17 +81,19 @@ public class HEM_TriSplit extends HEM_Modifier {
 	 */
 	private HE_Selection splitFaceTri(final HE_Face face, final double d,
 			final HE_Mesh mesh) {
-		return splitFaceTri(mesh,
-				face, face.getFaceCenter().addMulSelf(d, face.getFaceNormal()));
+		return splitFaceTri(mesh, face,
+				face.getFaceCenter().addMulSelf(d, face.getFaceNormal()));
 	}
 
 	/**
-	 * @deprecated Use {@link #splitFaceTri(HE_Mesh,HE_Face,WB_Coordinate)} instead
+	 * @deprecated Use {@link #splitFaceTri(HE_Mesh,HE_Face,WB_Coordinate)}
+	 *             instead
 	 */
+	@Deprecated
 	public static HE_Selection splitFaceTri(final HE_Face face,
 			final WB_Coordinate v, final HE_Mesh mesh) {
-				return splitFaceTri(mesh, face, v);
-			}
+		return splitFaceTri(mesh, face, v);
+	}
 
 	public static HE_Selection splitFaceTri(final HE_Mesh mesh,
 			final HE_Face face, final WB_Coordinate v) {

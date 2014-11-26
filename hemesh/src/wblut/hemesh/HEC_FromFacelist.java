@@ -229,7 +229,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Creator#create()
 	 */
 	@Override
@@ -330,7 +330,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 											for (int k = 0; k < fln / 2; k++) {
 												temp = faces[neighbor][k];
 												faces[neighbor][k] = faces[neighbor][fln
-												                                     - k - 1];
+														- k - 1];
 												faces[neighbor][fln - k - 1] = temp;
 											}
 										}
@@ -389,7 +389,6 @@ public class HEC_FromFacelist extends HEC_Creator {
 			}
 			mesh.pairHalfedges();
 			mesh.capHalfedges();
-			// mesh.resolvePinchPoints();
 
 		}
 		return mesh;

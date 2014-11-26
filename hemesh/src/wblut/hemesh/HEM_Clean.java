@@ -12,7 +12,7 @@ public class HEM_Clean extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -20,13 +20,13 @@ public class HEM_Clean extends HEM_Modifier {
 		final WB_Polygon[] polygons = mesh.getPolygons();
 		final HEC_FromPolygons creator = new HEC_FromPolygons();
 		creator.setPolygons(polygons);
-		mesh.set(creator.create());
+		mesh.setNoCopy(creator.create());
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override

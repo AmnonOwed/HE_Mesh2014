@@ -39,6 +39,22 @@ public class HET_SimpleMeshWriter {
 		}
 	}
 
+	static private void createDirectories(final File file) {
+		try {
+			final String parentName = file.getParent();
+			if (parentName != null) {
+				final File parent = new File(parentName);
+				if (!parent.exists()) {
+					parent.mkdirs();
+				}
+			}
+		}
+		catch (final SecurityException se) {
+			System.err.println("No permissions to create "
+					+ file.getAbsolutePath());
+		}
+	}
+
 	/**
 	 * Begin save.
 	 *
@@ -47,7 +63,9 @@ public class HET_SimpleMeshWriter {
 	 */
 	public void beginSave(final String fn, final String name) {
 		try {
-			simpleMeshStream = new FileOutputStream(new File(fn, name + ".txt"));
+			final File file = new File(fn, name + ".txt");
+			createDirectories(file);
+			simpleMeshStream = new FileOutputStream(file);
 			handleBeginSave();
 		}
 		catch (final Exception e) {

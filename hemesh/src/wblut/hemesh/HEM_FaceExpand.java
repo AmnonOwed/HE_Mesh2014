@@ -17,7 +17,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
 	 */
@@ -36,7 +36,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see wblut.hemesh.HEM_Modifier#apply(wblut.hemesh.HE_Mesh)
 	 */
 	@Override
@@ -99,9 +99,9 @@ public class HEM_FaceExpand extends HEM_Modifier {
 			} while (he != f.getHalfedge());
 		}
 		final int[][] faces = new int[mesh.getNumberOfFaces()
-				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
+		                              + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
 		final int[] labels = new int[mesh.getNumberOfFaces()
-				+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
+		                             + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
 		final int[] noe = { mesh.getNumberOfFaces(), mesh.getNumberOfEdges(),
 				mesh.getNumberOfVertices() };
 		int currentFace = 0;
@@ -155,14 +155,14 @@ public class HEM_FaceExpand extends HEM_Modifier {
 		}
 		final HEC_FromFacelist fl = new HEC_FromFacelist().setFaces(faces)
 				.setVertices(newVertices).setDuplicate(true);
-		mesh.set(fl.create());
+		mesh.setNoCopy(fl.create());
 
 		return mesh;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * wblut.hemesh.subdividors.HES_Subdividor#subdivideSelected(wblut.hemesh
 	 * .HE_Mesh, wblut.hemesh.HE_Selection)

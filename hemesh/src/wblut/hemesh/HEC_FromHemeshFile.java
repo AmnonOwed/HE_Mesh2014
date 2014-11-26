@@ -68,6 +68,7 @@ public class HEC_FromHemeshFile extends HEC_Creator {
 				.split(System.getProperty("line.separator"));
 		int id = 0;
 		String[] subresult = result[id].split("\\s");
+
 		id++;
 		final int numVertices = Integer.parseInt(subresult[0]);
 		final int numHalfedges = Integer.parseInt(subresult[1]);

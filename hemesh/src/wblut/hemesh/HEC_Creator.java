@@ -16,7 +16,7 @@ import wblut.math.WB_Math;
  * @author Frederik Vanhoutte (W:Blut)
  *
  */
-public abstract class HEC_Creator implements HE_Machine {
+public abstract class HEC_Creator extends HE_Machine {
 
 	/** Calling applet. */
 	public PApplet home;
@@ -209,8 +209,8 @@ public abstract class HEC_Creator implements HE_Machine {
 				base.rotateAboutAxis(
 						-Math.acos(WB_Math.clamp(zaxis.dot(Z), -1, 1)),
 						center.xd(), center.yd(), center.zd(), center.xd()
-								+ tmp.xd(), center.yd() + tmp.yd(), center.zd()
-								+ tmp.zd());
+						+ tmp.xd(), center.yd() + tmp.yd(), center.zd()
+						+ tmp.zd());
 			}
 			else if (zaxis.dot(Z) < -1 + WB_Epsilon.EPSILON) {
 				base.scale(1, 1, -1);
@@ -237,7 +237,7 @@ public abstract class HEC_Creator implements HE_Machine {
 
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		mesh.set(create());
+		mesh.setNoCopy(create());
 		return mesh;
 	}
 

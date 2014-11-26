@@ -9,6 +9,7 @@ import wblut.geom.WB_Intersection;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 
 public class HEM_Mirror extends HEM_Modifier {
 
@@ -59,14 +60,18 @@ public class HEM_Mirror extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
+		tracker.setStatus("Starting HEM_Mirror.");
 		cut = new HE_Selection(mesh);
 		// no plane defined
 		if (P == null) {
+			tracker.setStatus("No mirror plane defined. Exiting HEM_Mirror.");
 			return mesh;
 		}
 
 		// empty mesh
 		if (mesh.getNumberOfVertices() == 0) {
+			tracker.setStatus("No vertices in mesh. Exiting HEM_Mirror.");
+
 			return mesh;
 		}
 
@@ -75,6 +80,7 @@ public class HEM_Mirror extends HEM_Modifier {
 			lP.flipNormal();
 		}
 		lP = new WB_Plane(lP.getNormal(), lP.d() + offset);
+
 		HEM_SliceSurface ss;
 		ss = new HEM_SliceSurface().setPlane(lP);
 		mesh.modify(ss);
@@ -82,6 +88,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		cut = ss.cut;
 		final HE_Selection newFaces = new HE_Selection(mesh);
 		HE_Face face;
+		tracker.setStatus("Classifying mesh faces.", mesh.getNumberOfFaces());
 		Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			face = fItr.next();
@@ -97,6 +104,7 @@ public class HEM_Mirror extends HEM_Modifier {
 					cut.remove(face);
 				}
 			}
+			tracker.incrementCounter();
 		}
 
 		mesh.replaceFaces(newFaces.getFacesAsArray());
@@ -114,17 +122,36 @@ public class HEM_Mirror extends HEM_Modifier {
 		mesh.cleanUnusedElementsByFace();
 		mesh.capHalfedges();
 		final HE_Mesh mirrormesh = mesh.get();
+		tracker.setStatus("Mirroring vertices.", mesh.getNumberOfVertices());
 		final List<HE_Vertex> vertices = mirrormesh.getVerticesAsList();
-		for (final HE_Vertex v : vertices) {
+
+		HE_Vertex v, origv;
+		for (int i = 0; i < vertices.size(); i++) {
+			v = vertices.get(i);
+
 			final WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
 			final WB_Vector dv = v.getPoint().subToVector(p);
-			v.getPoint().addMulSelf(-2, dv);
+			if (dv.getLength3D() <= WB_Epsilon.EPSILON) {
+				final List<HE_Halfedge> star = v.getHalfedgeStar();
+				origv = mesh.getVertexByIndex(i);
+				for (final HE_Halfedge he : star) {
+					he.setVertex(origv);
+				}
+				mirrormesh.remove(v);
+
+			}
+			else {
+				v.getPoint().addMulSelf(-2, dv);
+			}
+			tracker.incrementCounter();
 		}
 		mirrormesh.flipAllFaces();
-
+		mesh.uncapBoundaryHalfedges();
+		mirrormesh.uncapBoundaryHalfedges();
 		mesh.add(mirrormesh);
 
 		mesh.pairHalfedges();
+
 		if (!keepCenter) {
 			mesh.resetCenter();
 		}
