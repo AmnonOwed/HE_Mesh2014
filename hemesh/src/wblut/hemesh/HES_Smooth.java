@@ -72,7 +72,7 @@ public class HES_Smooth extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -82,7 +82,6 @@ public class HES_Smooth extends HES_Subdividor {
 	final HE_Selection all = mesh.selectAllFaces();
 	final List<HE_Vertex> boundary = all.getOuterVertices();
 	final List<HE_Vertex> inner = all.getInnerVertices();
-	System.out.println(boundary.size() + " " + inner.size());
 	HE_Vertex v;
 	HE_Vertex n;
 	List<HE_Vertex> neighbors;
@@ -144,7 +143,7 @@ public class HES_Smooth extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
      * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -156,8 +155,6 @@ public class HES_Smooth extends HES_Subdividor {
 	final List<HE_Vertex> boundary = selection.getBoundaryVertices();
 	final List<HE_Vertex> inner = selection.getInnerVertices();
 	final List<HE_Vertex> outer = selection.getOuterVertices();
-	System.out.println(boundary.size() + " " + inner.size() + " "
-		+ outer.size());
 	List<HE_Face> sharedFaces;
 	HE_Vertex v;
 	Iterator<HE_Vertex> vItr = outer.iterator();
@@ -207,7 +204,7 @@ public class HES_Smooth extends HES_Subdividor {
 		    }
 		}
 		newPositions
-			.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
+		.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
 	    }
 	    id++;
 	}
@@ -242,7 +239,7 @@ public class HES_Smooth extends HES_Subdividor {
 		    }
 		}
 		newPositions
-			.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
+		.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
 	    }
 	    id++;
 	}
