@@ -36,7 +36,6 @@ import wblut.geom.WB_MeshCreator;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Projection;
 import wblut.geom.WB_Ray;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Transform;
@@ -51,7 +50,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-	WB_HasColor, WB_Mesh {
+WB_HasColor, WB_Mesh {
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
     private WB_Point center;
     private boolean isCenterUpdated;
@@ -114,7 +113,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
      */
     public HE_Mesh modifySelected(final HEM_Modifier modifier,
 	    final HE_Selection selection) {
-	return modifier.apply(selection.get());
+	return modifier.apply(selection);
     }
 
     /**
@@ -839,7 +838,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	final Iterator<HE_Vertex> vItr = vItr();
 	while (vItr.hasNext()) {
 	    vItr.next().getPoint()
-		    .addSelf(x - center.xd(), y - center.yd(), z - center.zd());
+	    .addSelf(x - center.xd(), y - center.yd(), z - center.zd());
 	}
 	center.set(x, y, z);
 	return this;
@@ -1205,7 +1204,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	HE_Halfedge he2;
 	tracker.setStatus("Pairing unpaired halfedges per vertex.",
 		vertexLists.size());
-	// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
 	final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
 	VertexInfo vInfo;
 	while (vitr.hasNext()) {
@@ -1218,9 +1216,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he2 = vInfo.in.get(j);
 			if ((he2.getPair() == null)
 				&& (he.getVertex() == he2.getNextInFace()
-					.getVertex())
+				.getVertex())
 				&& (he2.getVertex() == he.getNextInFace()
-					.getVertex())) {
+				.getVertex())) {
 			    he.setPair(he2);
 			    he2.setPair(he);
 			    break;
@@ -1289,9 +1287,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he2 = vInfo.in.get(j);
 			if ((he2.getPair() == null)
 				&& (he.getVertex() == he2.getNextInFace()
-					.getVertex())
+				.getVertex())
 				&& (he2.getVertex() == he.getNextInFace()
-					.getVertex())) {
+				.getVertex())) {
 			    he.setPair(he2);
 			    he2.setPair(he);
 			    break;
@@ -1479,7 +1477,6 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /**
      * Reverse all faces. Flips normals.
-     *
      */
     public HE_Mesh flipAllFaces() {
 	tracker.setStatus("Flipping faces.");
@@ -1544,13 +1541,19 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	if (he.getPair().getFace().getFaceOrder() != 3) {
 	    return false;
 	}
-	// flip would reslt in overlapping triangles
-	final WB_Plane P = new WB_Plane(he.getEndVertex(), he.getNextInFace()
-		.getEndVertex(), he.getPair().getNextInFace().getEndVertex());
-	final WB_Point p = WB_Projection.projectOnPlane(he.getVertex(), P);
-	if (WB_Triangle.pointInTriangleBary3D(p, he.getEndVertex(), he
-		.getNextInFace().getEndVertex(), he.getPair().getNextInFace()
-		.getEndVertex())) {
+	// flip would result in overlapping triangles, this detected by
+	// comparing the areas of the two triangles before and after.
+	final WB_Coordinate a = he.getVertex();
+	final WB_Coordinate b = he.getNextInFace().getVertex();
+	final WB_Coordinate c = he.getNextInFace().getNextInFace().getVertex();
+	final WB_Coordinate d = he.getPair().getNextInFace().getNextInFace()
+		.getVertex();
+	double Ai = new WB_Triangle(a, b, c).getArea();
+	Ai += new WB_Triangle(a, d, b).getArea();
+	double Af = new WB_Triangle(a, d, c).getArea();
+	Af += new WB_Triangle(c, d, b).getArea();
+	final double ratio = Ai / Af;
+	if (ratio > 1.000001 || ratio < 0.99999) {
 	    return false;
 	}
 	// get the 3 edges of triangle t1 and t2, he1t1 and he1t2 is the edge to
@@ -3791,9 +3794,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he.getNextInVertex().getHalfedgeTangent())) {
 		    he.getPrevInFace().setNext(he.getNextInFace());
 		    he.getPair().getPrevInFace()
-			    .setNext(he.getPair().getNextInFace());
+		    .setNext(he.getPair().getNextInFace());
 		    he.getPair().getNextInFace()
-			    .setVertex(he.getNextInFace().getVertex());
+		    .setVertex(he.getNextInFace().getVertex());
 		    if (he.getFace() != null) {
 			if (he.getFace().getHalfedge() == he) {
 			    he.getFace().setHalfedge(he.getNextInFace());
@@ -3803,7 +3806,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			if (he.getPair().getFace().getHalfedge() == he
 				.getPair()) {
 			    he.getPair().getFace()
-				    .setHalfedge(he.getPair().getNextInFace());
+			    .setHalfedge(he.getPair().getNextInFace());
 			}
 		    }
 		    vItr.remove();
@@ -4282,7 +4285,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -4295,7 +4298,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
