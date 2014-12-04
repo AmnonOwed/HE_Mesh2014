@@ -4213,11 +4213,11 @@ WB_HasColor, WB_Mesh {
      * @param key
      *            key of face
      */
-    public void triangulate(final long key) {
-	triangulate(getFaceByKey(key));
+    public HE_Selection triangulate(final long key) {
+	return triangulate(getFaceByKey(key));
     }
 
-    public void triangulateFaceStar(final HE_Vertex v) {
+    public HE_Selection triangulateFaceStar(final HE_Vertex v) {
 	final HE_Selection vf = new HE_Selection(this);
 	final HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(v);
 	HE_Face f;
@@ -4231,10 +4231,10 @@ WB_HasColor, WB_Mesh {
 		}
 	    }
 	}
-	triangulate(vf);
+	return triangulate(vf);
     }
 
-    public void triangulateFaceStar(final long vertexkey) {
+    public HE_Selection triangulateFaceStar(final long vertexkey) {
 	final HE_Selection vf = new HE_Selection(this);
 	final HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(
 		getVertexByKey(vertexkey));
@@ -4249,21 +4249,23 @@ WB_HasColor, WB_Mesh {
 		}
 	    }
 	}
-	triangulate(vf);
+	return triangulate(vf);
     }
 
-    public void triangulate(final HE_Face face) {
+    public HE_Selection triangulate(final HE_Face face) {
 	final HE_Selection sel = new HE_Selection(this);
 	sel.add(face);
-	triangulate(sel);
+	return triangulate(sel);
     }
 
     /**
      * Triangulate all faces.
      *
      */
-    public void triangulate() {
+    public HE_Selection triangulate() {
+	final HEM_Triangulate tri = new HEM_Triangulate();
 	modify(new HEM_Triangulate());
+	return tri.triangles;
     }
 
     /**
@@ -4272,8 +4274,10 @@ WB_HasColor, WB_Mesh {
      * @param sel
      *            the sel
      */
-    public void triangulate(final HE_Selection sel) {
-	modifySelected(new HEM_Triangulate(), sel);
+    public HE_Selection triangulate(final HE_Selection sel) {
+	final HEM_Triangulate tri = new HEM_Triangulate();
+	modifySelected(tri, sel);
+	return tri.triangles;
     }
 
     /**
