@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
-import org.apache.log4j.Logger;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Classification;
 import wblut.geom.WB_Classify;
@@ -56,7 +55,6 @@ WB_HasColor, WB_Mesh {
     private boolean isCenterUpdated;
     protected int label;
     private HashMap<String, Object> data;
-    private static Logger logger = Logger.getLogger(HE_Mesh.class);
     private int meshcolor;
 
     /**
@@ -1129,7 +1127,7 @@ WB_HasColor, WB_Mesh {
      * @return the unpaired halfedges
      */
     public List<HE_Halfedge> getUnpairedHalfedges() {
-	tracker.setStatus("Collecting unpaired halfedges.",
+	tracker.setDefaultStatus("Collecting unpaired halfedges.",
 		getNumberOfHalfedges());
 	final List<HE_Halfedge> unpairedHalfedges = new FastTable<HE_Halfedge>();
 	HE_Halfedge he;
@@ -1166,7 +1164,7 @@ WB_HasColor, WB_Mesh {
      * Try to pair all unpaired halfedges.
      */
     public void pairHalfedges() {
-	tracker.setStatus("Pairing halfedges.");
+	tracker.setDefaultStatus("Pairing halfedges.");
 	class VertexInfo {
 	    FastTable<HE_Halfedge> out;
 	    FastTable<HE_Halfedge> in;
@@ -1181,7 +1179,7 @@ WB_HasColor, WB_Mesh {
 	final List<HE_Halfedge> unpairedHalfedges = getUnpairedHalfedges();
 	HE_Vertex v;
 	VertexInfo vi;
-	tracker.setStatus("Classifying unpaired halfedges.",
+	tracker.setDefaultStatus("Classifying unpaired halfedges.",
 		unpairedHalfedges.size());
 	for (final HE_Halfedge he : unpairedHalfedges) {
 	    v = he.getVertex();
@@ -1202,7 +1200,7 @@ WB_HasColor, WB_Mesh {
 	}
 	HE_Halfedge he;
 	HE_Halfedge he2;
-	tracker.setStatus("Pairing unpaired halfedges per vertex.",
+	tracker.setDefaultStatus("Pairing unpaired halfedges per vertex.",
 		vertexLists.size());
 	final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
 	VertexInfo vInfo;
@@ -1228,7 +1226,7 @@ WB_HasColor, WB_Mesh {
 	    }
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Processed unpaired halfedges.");
+	tracker.setDefaultStatus("Processed unpaired halfedges.");
     }
 
     /**
@@ -1238,7 +1236,7 @@ WB_HasColor, WB_Mesh {
      *            the unpaired halfedges
      */
     public void pairHalfedges(final List<HE_Halfedge> unpairedHalfedges) {
-	tracker.setStatus("Pairing halfedges.");
+	tracker.setDefaultStatus("Pairing halfedges.");
 	class VertexInfo {
 	    FastTable<HE_Halfedge> out;
 	    FastTable<HE_Halfedge> in;
@@ -1252,7 +1250,7 @@ WB_HasColor, WB_Mesh {
 		1024, 0.5f, -1L);
 	HE_Vertex v;
 	VertexInfo vi;
-	tracker.setStatus("Classifying unpaired halfedges.",
+	tracker.setDefaultStatus("Classifying unpaired halfedges.",
 		unpairedHalfedges.size());
 	for (final HE_Halfedge he : unpairedHalfedges) {
 	    v = he.getVertex();
@@ -1273,7 +1271,7 @@ WB_HasColor, WB_Mesh {
 	}
 	HE_Halfedge he;
 	HE_Halfedge he2;
-	tracker.setStatus("Pairing unpaired halfedges per vertex.",
+	tracker.setDefaultStatus("Pairing unpaired halfedges per vertex.",
 		vertexLists.size());
 	final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
 	VertexInfo vInfo;
@@ -1299,7 +1297,7 @@ WB_HasColor, WB_Mesh {
 	    }
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Processed unpaired halfedges.");
+	tracker.setDefaultStatus("Processed unpaired halfedges.");
     }
 
     /**
@@ -1310,7 +1308,7 @@ WB_HasColor, WB_Mesh {
 	final int nuh = unpairedHalfedges.size();
 	final HE_Halfedge[] newHalfedges = new HE_Halfedge[nuh];
 	HE_Halfedge he1, he2;
-	tracker.setStatus("Capping unpaired halfedges.", nuh);
+	tracker.setDefaultStatus("Capping unpaired halfedges.", nuh);
 	for (int i = 0; i < nuh; i++) {
 	    he1 = unpairedHalfedges.get(i);
 	    he2 = new HE_Halfedge();
@@ -1321,7 +1319,7 @@ WB_HasColor, WB_Mesh {
 	    add(he2);
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Cycling new halfedges.", nuh);
+	tracker.setDefaultStatus("Cycling new halfedges.", nuh);
 	for (int i = 0; i < nuh; i++) {
 	    he1 = newHalfedges[i];
 	    if (he1.getNextInFace() == null) {
@@ -1336,14 +1334,14 @@ WB_HasColor, WB_Mesh {
 	    }
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Processed unpaired halfedges.");
+	tracker.setDefaultStatus("Processed unpaired halfedges.");
     }
 
     /**
      * Uncap halfedges.
      */
     public void uncapBoundaryHalfedges() {
-	tracker.setStatus("Detecting and uncapping  boundary edges.",
+	tracker.setDefaultStatus("Detecting and uncapping  boundary edges.",
 		getNumberOfHalfedges());
 	final Iterator<HE_Halfedge> heItr = heItr();
 	HE_Halfedge he;
@@ -1359,7 +1357,7 @@ WB_HasColor, WB_Mesh {
 	    }
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Removing outer boundary halfedges.");
+	tracker.setDefaultStatus("Removing outer boundary halfedges.");
 	halfedges = keep;
     }
 
@@ -1369,7 +1367,7 @@ WB_HasColor, WB_Mesh {
      * @return all new faces as FastTable<HE_Face>
      */
     public List<HE_Face> capHoles() {
-	tracker.setStatus("Capping simple planar holes.");
+	tracker.setDefaultStatus("Capping simple planar holes.");
 	final List<HE_Face> caps = new FastTable<HE_Face>();
 	final List<HE_Halfedge> unpairedEdges = getUnpairedHalfedges();
 	HE_RAS<HE_Halfedge> loopedHalfedges;
@@ -1380,7 +1378,7 @@ WB_HasColor, WB_Mesh {
 	HE_RAS<HE_Halfedge> newHalfedges;
 	HE_Halfedge phe;
 	HE_Halfedge nhe;
-	tracker.setStatus("Finding loops and closing holes.",
+	tracker.setDefaultStatus("Finding loops and closing holes.",
 		unpairedEdges.size());
 	while (unpairedEdges.size() > 0) {
 	    loopedHalfedges = new HE_RASTrove<HE_Halfedge>();
@@ -1424,7 +1422,8 @@ WB_HasColor, WB_Mesh {
 	    cycleHalfedgesReverse(newHalfedges.getObjects());
 	    tracker.incrementCounter(newHalfedges.size());
 	}
-	tracker.setStatus("Capped simple, planar holes.");
+	triangulateConcaveFaces(caps);
+	tracker.setDefaultStatus("Capped simple, planar holes.");
 	return caps;
     }
 
@@ -1436,9 +1435,9 @@ WB_HasColor, WB_Mesh {
     public HE_Mesh cleanUnusedElementsByFace() {
 	final HE_RAS<HE_Vertex> cleanedVertices = new HE_RASTrove<HE_Vertex>();
 	final HE_RAS<HE_Halfedge> cleanedHalfedges = new HE_RASTrove<HE_Halfedge>();
-	tracker.setStatus("Cleaning unused elements.");
+	tracker.setDefaultStatus("Cleaning unused elements.");
 	HE_Halfedge he;
-	tracker.setStatus("Processing faces.", getNumberOfFaces());
+	tracker.setDefaultStatus("Processing faces.", getNumberOfFaces());
 	HE_Face f;
 	final Iterator<HE_Face> fItr = fItr();
 	while (fItr.hasNext()) {
@@ -1456,7 +1455,8 @@ WB_HasColor, WB_Mesh {
 	    } while (he != f.getHalfedge());
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Processing halfedges.", cleanedHalfedges.size());
+	tracker.setDefaultStatus("Processing halfedges.",
+		cleanedHalfedges.size());
 	final int n = cleanedHalfedges.size();
 	for (int i = 0; i < n; i++) {
 	    he = cleanedHalfedges.get(i);
@@ -1471,7 +1471,7 @@ WB_HasColor, WB_Mesh {
 	}
 	replaceVertices(cleanedVertices.getObjects());
 	replaceHalfedges(cleanedHalfedges.getObjects());
-	tracker.setStatus("Done cleaning unused elements.");
+	tracker.setDefaultStatus("Done cleaning unused elements.");
 	return this;
     }
 
@@ -1479,8 +1479,8 @@ WB_HasColor, WB_Mesh {
      * Reverse all faces. Flips normals.
      */
     public HE_Mesh flipAllFaces() {
-	tracker.setStatus("Flipping faces.");
-	tracker.setStatus("Reversing edges.", getNumberOfEdges());
+	tracker.setDefaultStatus("Flipping faces.");
+	tracker.setDefaultStatus("Reversing edges.", getNumberOfEdges());
 	HE_Halfedge he1;
 	HE_Halfedge he2;
 	HE_Vertex tmp;
@@ -1500,7 +1500,8 @@ WB_HasColor, WB_Mesh {
 	prevHe = new HE_Halfedge[getNumberOfHalfedges()];
 	int i = 0;
 	Iterator<HE_Halfedge> heItr = heItr();
-	tracker.setStatus("Reordering halfedges.", 2 * getNumberOfHalfedges());
+	tracker.setDefaultStatus("Reordering halfedges.",
+		2 * getNumberOfHalfedges());
 	while (heItr.hasNext()) {
 	    he = heItr.next();
 	    prevHe[i] = he.getPrevInFace();
@@ -1516,7 +1517,7 @@ WB_HasColor, WB_Mesh {
 	    i++;
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Faces flipped.");
+	tracker.setDefaultStatus("Faces flipped.");
 	return this;
     }
 
@@ -2332,43 +2333,72 @@ WB_HasColor, WB_Mesh {
 	final HE_Selection out = new HE_Selection(this);
 	final HE_Halfedge hei = findHalfedge(face, vi);
 	final HE_Halfedge hej = findHalfedge(face, vj);
-	HE_Halfedge heiPrev;
-	HE_Halfedge hejPrev;
-	HE_Halfedge he0new;
-	HE_Halfedge he1new;
-	HE_Face faceNew;
-	HE_Halfedge he;
+	final double d = vi.getPoint().getDistance3D(vj);
+	boolean degenerate = false;
+	if (WB_Epsilon.isZero(d)) {// happens when a collinear (part of a) face
+	    // is cut. Do not add a new edge connecting
+	    // these two points,rather collapse them into
+	    // each other and remove two-edge faces
+	    degenerate = true;
+	}
 	if ((hei.getNextInFace() != hej) || (hei.getPrevInFace() != hej)) {
-	    heiPrev = hei.getPrevInFace();
-	    hejPrev = hej.getPrevInFace();
-	    he0new = new HE_Halfedge();
-	    he1new = new HE_Halfedge();
-	    he0new.setVertex(vj);
-	    he1new.setVertex(vi);
-	    he0new.setNext(hei);
-	    he1new.setNext(hej);
-	    heiPrev.setNext(he1new);
-	    hejPrev.setNext(he0new);
-	    he0new.setPair(he1new);
-	    he1new.setPair(he0new);
-	    he0new.setInternalLabel(1);
-	    he1new.setInternalLabel(1);
-	    he0new.setFace(face);
-	    faceNew = new HE_Face();
-	    face.setHalfedge(hei);
-	    faceNew.setHalfedge(hej);
-	    faceNew.copyProperties(face);
-	    assignFaceToLoop(faceNew, hej);
-	    add(he0new);
-	    add(he1new);
-	    add(faceNew);
-	    out.add(he0new.isEdge() ? he0new : he1new);
-	    out.add(faceNew);
-	    he = face.getHalfedge();
-	    do {
-		he = he.getNextInFace();
-	    } while (he != face.getHalfedge());
-	    return out;
+	    HE_Halfedge heiPrev;
+	    HE_Halfedge hejPrev;
+	    HE_Face faceNew;
+	    if (!degenerate) {
+		HE_Halfedge he0new;
+		HE_Halfedge he1new;
+		heiPrev = hei.getPrevInFace();
+		hejPrev = hej.getPrevInFace();
+		he0new = new HE_Halfedge();
+		he1new = new HE_Halfedge();
+		he0new.setVertex(vj);
+		he1new.setVertex(vi);
+		he0new.setNext(hei);
+		he1new.setNext(hej);
+		heiPrev.setNext(he1new);
+		hejPrev.setNext(he0new);
+		he0new.setPair(he1new);
+		he1new.setPair(he0new);
+		he0new.setInternalLabel(1);
+		he1new.setInternalLabel(1);
+		he0new.setFace(face);
+		faceNew = new HE_Face();
+		face.setHalfedge(hei);
+		faceNew.setHalfedge(hej);
+		faceNew.copyProperties(face);
+		assignFaceToLoop(faceNew, hej);
+		add(he0new);
+		add(he1new);
+		add(faceNew);
+		out.add(he0new.isEdge() ? he0new : he1new);
+		out.add(faceNew);
+		return out;
+	    } else {
+		heiPrev = hei.getPrevInFace();
+		hejPrev = hej.getPrevInFace();
+		for (final HE_Halfedge hejs : vj.getHalfedgeStar()) {
+		    hejs.setVertex(vi);
+		}
+		heiPrev.setNext(hej);
+		hejPrev.setNext(hei);
+		faceNew = new HE_Face();
+		face.setHalfedge(hei);
+		faceNew.setHalfedge(hej);
+		faceNew.copyProperties(face);
+		assignFaceToLoop(faceNew, hej);
+		add(faceNew);
+		remove(vj);
+		out.add(faceNew);
+		if (face.getFaceOrder() == 2) {
+		    deleteTwoEdgeFace(face);
+		}
+		if (faceNew.getFaceOrder() == 2) {
+		    deleteTwoEdgeFace(faceNew);
+		    out.remove(faceNew);
+		}
+		return out;
+	    }
 	}
 	return null;
     }
@@ -2499,7 +2529,6 @@ WB_HasColor, WB_Mesh {
      * @return selection of new faces and new vertices
      */
     public HE_Selection splitFacesHybrid() {
-	logger.debug("Entering splitFacesHybrid().");
 	final HE_Selection selectionOut = new HE_Selection(this);
 	final int n = getNumberOfFaces();
 	final WB_Point[] faceCenters = new WB_Point[n];
@@ -2517,17 +2546,14 @@ WB_HasColor, WB_Mesh {
 	orig.addFaces(getFacesAsArray());
 	orig.collectVertices();
 	orig.collectEdgesByFace();
-	logger.debug("Starting split of " + orig.getNumberOfEdges() + " edges.");
 	selectionOut.addVertices(splitEdges().getVerticesAsArray());
 	final HE_Face[] faces = getFacesAsArray();
 	HE_Vertex vi = new HE_Vertex();
 	int fo;
-	logger.debug("Starting split of " + n + " faces.");
 	for (i = 0; i < n; i++) {
 	    f = faces[i];
 	    fo = f.getFaceOrder() / 2;
 	    if (fo == 3) {
-		logger.trace("Splitting 3-face in 4 triangles.");
 		HE_Halfedge startHE = f.getHalfedge();
 		while (orig.contains(startHE.getVertex())) {
 		    startHE = startHE.getNextInFace();
@@ -2571,10 +2597,6 @@ WB_HasColor, WB_Mesh {
 		    hec[(j + 1) % c].setPrev(hec[j]);
 		}
 	    } else if (fo > 3) {
-		if (logger.isDebugEnabled()) {
-		    logger.trace("Splitting " + Integer.toString(fo)
-			    + "-face in " + Integer.toString(fo) + " quads.");
-		}
 		vi = new HE_Vertex(faceCenters[i]);
 		vi.setInternalLabel(2);
 		add(vi);
@@ -2626,9 +2648,7 @@ WB_HasColor, WB_Mesh {
 		}
 	    }
 	}
-	logger.debug("Pairing all new unpaired halfedges.");
 	pairHalfedges();
-	logger.debug("Exiting splitFacesHybrid().");
 	return selectionOut;
     }
 
@@ -3134,6 +3154,15 @@ WB_HasColor, WB_Mesh {
 	for (int i = 0; i < n; i++) {
 	    if (f[i].getFaceType() == WB_Convex.CONCAVE) {
 		triangulate(f[i].key());
+	    }
+	}
+    }
+
+    public void triangulateConcaveFaces(final List<HE_Face> sel) {
+	final int n = sel.size();
+	for (int i = 0; i < n; i++) {
+	    if (sel.get(i).getFaceType() == WB_Convex.CONCAVE) {
+		triangulate(sel.get(i).key());
 	    }
 	}
     }
@@ -4150,7 +4179,7 @@ WB_HasColor, WB_Mesh {
 		1024, 0.5f, -1L);
 	HE_Vertex v;
 	VertexInfo vi;
-	tracker.setStatus("Classifying halfedges per vertex.",
+	tracker.setDefaultStatus("Classifying halfedges per vertex.",
 		getNumberOfHalfedges());
 	for (final HE_Halfedge he : halfedges) {
 	    v = he.getVertex();
@@ -4163,7 +4192,8 @@ WB_HasColor, WB_Mesh {
 	    tracker.incrementCounter();
 	}
 	final List<HE_Vertex> toUnweld = new FastTable<HE_Vertex>();
-	tracker.setStatus("Checking vertex umbrellas.", getNumberOfVertices());
+	tracker.setDefaultStatus("Checking vertex umbrellas.",
+		getNumberOfVertices());
 	Iterator<HE_Vertex> vItr = vItr();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
@@ -4174,7 +4204,8 @@ WB_HasColor, WB_Mesh {
 	    }
 	}
 	vItr = toUnweld.iterator();
-	tracker.setStatus("Splitting vertex umbrellas. ", toUnweld.size());
+	tracker.setDefaultStatus("Splitting vertex umbrellas. ",
+		toUnweld.size());
 	HE_Halfedge he;
 	while (vItr.hasNext()) {
 	    v = vItr.next();

@@ -112,14 +112,14 @@ public class HES_CatmullClark extends HES_Subdividor {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HES_CatmullClark");
+		tracker.setDefaultStatus("Starting HES_CatmullClark");
 		mesh.resetVertexInternalLabels();
 		final HashMap<Long, WB_Point> avgFC = new HashMap<Long, WB_Point>();
 		HE_Vertex v;
 		Iterator<HE_Vertex> vItr = mesh.vItr();
 		HE_Halfedge he;
 		WB_Point p;
-		tracker.setStatus("Creating averaged face center points.",mesh.getNumberOfVertices());
+		tracker.setDefaultStatus("Creating averaged face center points.",mesh.getNumberOfVertices());
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			he = v.getHalfedge();
@@ -143,7 +143,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 		final HE_Selection all = mesh.selectAllFaces();
 		final List<HE_Vertex> boundary = all.getOuterVertices();
 		final List<HE_Vertex> inner = all.getInnerVertices();
-		tracker.setStatus("Creating new positions for inner vertices.",inner.size());
+		tracker.setDefaultStatus("Creating new positions for inner vertices.",inner.size());
 		HE_Vertex n;
 		List<HE_Vertex> neighbors;
 		vItr = inner.iterator();
@@ -193,7 +193,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 			tracker.incrementCounter();
 
 		}
-		tracker.setStatus("Creating new positions for boundary vertices.",boundary.size());
+		tracker.setDefaultStatus("Creating new positions for boundary vertices.",boundary.size());
 		vItr = boundary.iterator();
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -221,7 +221,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Setting new positions.");
+		tracker.setDefaultStatus("Setting new positions.");
 		vItr = inner.iterator();
 		while (vItr.hasNext()) {
 			v = vItr.next();
@@ -232,7 +232,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 			v = vItr.next();
 			v.set(newPositions.get(v.key()));
 		}
-		tracker.setStatus("Exiting HEM_CatmullClark.");
+		tracker.setDefaultStatus("Exiting HEM_CatmullClark.");
 		return mesh;
 	}
 

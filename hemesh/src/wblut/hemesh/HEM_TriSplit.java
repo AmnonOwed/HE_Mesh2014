@@ -29,10 +29,10 @@ public class HEM_TriSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_TriSplit.");
+		tracker.setDefaultStatus("Starting HEM_TriSplit.");
 
 		splitFacesTri(mesh.selectAllFaces(), d);
-		tracker.setStatus("Exiting HEM_TriSplit.");
+		tracker.setDefaultStatus("Exiting HEM_TriSplit.");
 		return mesh;
 	}
 
@@ -43,9 +43,9 @@ public class HEM_TriSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HEM_TriSplit.");
+		tracker.setDefaultStatus("Starting HEM_TriSplit.");
 		splitFacesTri(selection, d);
-		tracker.setStatus("Exiting HEM_TriSplit.");
+		tracker.setDefaultStatus("Exiting HEM_TriSplit.");
 		return selection.parent;
 	}
 
@@ -62,7 +62,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 		selectionOut = new HE_Selection(selection.parent);
 		final HE_Face[] faces = selection.getFacesAsArray();
 		final int n = selection.getNumberOfFaces();
-		tracker.setStatus("Splitting faces.", n);
+		tracker.setDefaultStatus("Splitting faces.", n);
 		for (int i = 0; i < n; i++) {
 			selectionOut.add(splitFaceTri(faces[i], d, selection.parent));
 			tracker.incrementCounter();

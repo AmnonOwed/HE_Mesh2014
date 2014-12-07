@@ -38,12 +38,12 @@ public class HEC_Copy extends HEC_Creator {
 	 */
 	@Override
 	protected HE_Mesh createBase() {
-		tracker.setStatus("Starting HEC_Copy.");
+		tracker.setDefaultStatus("Starting HEC_Copy.");
 
 		final HE_Mesh result = new HE_Mesh();
 		result.copyProperties(source);
 		if (source == null) {
-			tracker.setStatus("No source mesh. Exiting HEC_Copy.");
+			tracker.setDefaultStatus("No source mesh. Exiting HEC_Copy.");
 			return result;
 		}
 		if (source instanceof HE_Selection) {
@@ -62,7 +62,7 @@ public class HEC_Copy extends HEC_Creator {
 				-1L, -1L);
 		HE_Vertex rv;
 		HE_Vertex v;
-		tracker.setStatus("Creating vertices.", mesh.getNumberOfVertices());
+		tracker.setDefaultStatus("Creating vertices.", mesh.getNumberOfVertices());
 
 		final Iterator<HE_Vertex> vItr = mesh.vItr();
 		while (vItr.hasNext()) {
@@ -75,7 +75,7 @@ public class HEC_Copy extends HEC_Creator {
 		}
 		HE_Face rf;
 		HE_Face f;
-		tracker.setStatus("Creating faces.", mesh.getNumberOfFaces());
+		tracker.setDefaultStatus("Creating faces.", mesh.getNumberOfFaces());
 		if (source instanceof HE_Selection) {
 
 			final Iterator<HE_Face> fItr = mesh.fItr();
@@ -110,7 +110,7 @@ public class HEC_Copy extends HEC_Creator {
 		}
 		HE_Halfedge rhe;
 		HE_Halfedge he;
-		tracker.setStatus("Creating halfedges.", mesh.getNumberOfHalfedges());
+		tracker.setDefaultStatus("Creating halfedges.", mesh.getNumberOfHalfedges());
 		final Iterator<HE_Halfedge> heItr = mesh.heItr();
 		while (heItr.hasNext()) {
 			he = heItr.next();
@@ -120,7 +120,7 @@ public class HEC_Copy extends HEC_Creator {
 			halfedgeCorrelation.put(he.key(), rhe.key());
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Setting vertex properties.",
+		tracker.setDefaultStatus("Setting vertex properties.",
 				mesh.getNumberOfVertices());
 
 		HE_Vertex sv;
@@ -140,7 +140,7 @@ public class HEC_Copy extends HEC_Creator {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Setting face properties.", mesh.getNumberOfFaces());
+		tracker.setDefaultStatus("Setting face properties.", mesh.getNumberOfFaces());
 		HE_Face sf;
 		HE_Face tf;
 
@@ -157,7 +157,7 @@ public class HEC_Copy extends HEC_Creator {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Setting halfedge properties.",
+		tracker.setDefaultStatus("Setting halfedge properties.",
 				mesh.getNumberOfHalfedges());
 
 		HE_Halfedge she;
@@ -205,7 +205,7 @@ public class HEC_Copy extends HEC_Creator {
 			result.capHalfedges();
 		}
 
-		tracker.setStatus("Exiting HEC_Copy.");
+		tracker.setDefaultStatus("Exiting HEC_Copy.");
 		return result;
 	}
 

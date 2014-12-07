@@ -24,8 +24,8 @@ public class HEM_CapHoles extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_CapHoles.");
-		tracker.setStatus("Uncapping boundary edges.");
+		tracker.setDefaultStatus("Starting HEM_CapHoles.");
+		tracker.setDefaultStatus("Uncapping boundary edges.");
 		final Iterator<HE_Halfedge> heItr = mesh.heItr();
 		HE_Halfedge he;
 		final List<HE_Halfedge> remove = new FastTable<HE_Halfedge>();
@@ -41,7 +41,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 		}
 		mesh.removeHalfedges(remove);
 
-		tracker.setStatus("Capping simple planar holes.");
+		tracker.setDefaultStatus("Capping simple planar holes.");
 		final List<HE_Face> caps = new FastTable<HE_Face>();
 		final List<HE_Halfedge> unpairedEdges = mesh.getUnpairedHalfedges();
 		HE_RAS<HE_Halfedge> loopedHalfedges;
@@ -51,7 +51,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 		HE_RAS<HE_Halfedge> newHalfedges;
 		HE_Halfedge phe;
 		HE_Halfedge nhe;
-		tracker.setStatus("Finding loops and closing holes.",
+		tracker.setDefaultStatus("Finding loops and closing holes.",
 				unpairedEdges.size());
 		while (unpairedEdges.size() > 0) {
 			loopedHalfedges = new HE_RASTrove<HE_Halfedge>();
@@ -98,9 +98,9 @@ public class HEM_CapHoles extends HEM_Modifier {
 			mesh.cycleHalfedgesReverse(newHalfedges.getObjects());
 			tracker.incrementCounter(newHalfedges.size());
 		}
-		tracker.setStatus("Capped simple, planar holes.");
+		tracker.setDefaultStatus("Capped simple, planar holes.");
 
-		tracker.setStatus("Pairing halfedges.");
+		tracker.setDefaultStatus("Pairing halfedges.");
 		class VertexInfo {
 			FastTable<HE_Halfedge> out;
 			FastTable<HE_Halfedge> in;
@@ -118,7 +118,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 		final List<HE_Halfedge> unpairedHalfedges = mesh.getUnpairedHalfedges();
 		HE_Vertex v;
 		VertexInfo vi;
-		tracker.setStatus("Classifying unpaired halfedges.",
+		tracker.setDefaultStatus("Classifying unpaired halfedges.",
 				unpairedHalfedges.size());
 		for (final HE_Halfedge hed : unpairedHalfedges) {
 			v = hed.getVertex();
@@ -141,7 +141,7 @@ public class HEM_CapHoles extends HEM_Modifier {
 		}
 
 		HE_Halfedge he2;
-		tracker.setStatus("Pairing unpaired halfedges per vertex.",
+		tracker.setDefaultStatus("Pairing unpaired halfedges per vertex.",
 				vertexLists.size());
 		// System.out.println("HE_Mesh : pairing unpaired halfedges per vertex.");
 		final TLongObjectIterator<VertexInfo> vitr = vertexLists.iterator();
@@ -171,8 +171,8 @@ public class HEM_CapHoles extends HEM_Modifier {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Processed unpaired halfedges.");
-		tracker.setStatus("Exiting HEM_CapHoles.");
+		tracker.setDefaultStatus("Processed unpaired halfedges.");
+		tracker.setDefaultStatus("Exiting HEM_CapHoles.");
 		return mesh;
 	}
 

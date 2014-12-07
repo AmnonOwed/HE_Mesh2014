@@ -5,7 +5,6 @@ import wblut.math.WB_Epsilon;
 
 public class HEM_Triangulate extends HEM_Modifier {
     public HE_Selection triangles;
-    public HE_Selection trianglesToCheck;
 
     public HEM_Triangulate() {
 	super();
@@ -19,11 +18,10 @@ public class HEM_Triangulate extends HEM_Modifier {
     @Override
     public HE_Mesh apply(final HE_Mesh mesh) {
 	triangles = new HE_Selection(mesh);
-	trianglesToCheck = new HE_Selection(mesh);
-	tracker.setStatus("Starting HEM_Triangulate.");
+	tracker.setDefaultStatus("Starting HEM_Triangulate.");
 	final HE_Face[] f = mesh.getFacesAsArray();
 	final int n = mesh.getNumberOfFaces();
-	tracker.setStatus("Triangulating faces.", n);
+	tracker.setDefaultStatus("Triangulating faces.", n);
 	for (int i = 0; i < n; i++) {
 	    if (!WB_Epsilon.isZero(f[i].getFaceNormal().getLength3D())) {
 		triangulateNoPairing(f[i], mesh);
@@ -41,8 +39,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 	}
 	mesh.pairHalfedges();
 	mesh.capHalfedges();
-	solveBadTriangles(mesh);
-	tracker.setStatus("Exiting HEM_Triangulate.");
+	tracker.setDefaultStatus("Exiting HEM_Triangulate.");
 	return mesh;
     }
 
@@ -54,11 +51,10 @@ public class HEM_Triangulate extends HEM_Modifier {
     @Override
     public HE_Mesh apply(final HE_Selection selection) {
 	triangles = new HE_Selection(selection.parent);
-	trianglesToCheck = new HE_Selection(selection.parent);
-	tracker.setStatus("Starting HEM_Triangulate.");
+	tracker.setDefaultStatus("Starting HEM_Triangulate.");
 	final HE_Face[] f = selection.getFacesAsArray();
 	final int n = selection.getNumberOfFaces();
-	tracker.setStatus("Triangulating faces.", n);
+	tracker.setDefaultStatus("Triangulating faces.", n);
 	for (int i = 0; i < n; i++) {
 	    if (!WB_Epsilon.isZero(f[i].getFaceNormal().getLength3D())) {
 		triangulateNoPairing(f[i], selection.parent);
@@ -76,8 +72,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 	}
 	selection.parent.pairHalfedges();
 	selection.parent.capHalfedges();
-	solveBadTriangles(selection.parent);
-	tracker.setStatus("Exiting HEM_Triangulate.");
+	tracker.setDefaultStatus("Exiting HEM_Triangulate.");
 	return selection.parent;
     }
 
@@ -85,7 +80,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 	if (face.getFaceOrder() == 3) {
 	    triangles.add(face);
 	} else if (face.getFaceOrder() > 3) {
-	    final int[][] tris = face.getTriangles();
+	    final int[][] tris = face.getTriangles(false);
 	    final List<HE_Vertex> vertices = face.getFaceVertices();
 	    HE_Halfedge he = face.getHalfedge();
 	    mesh.remove(face);
@@ -122,32 +117,6 @@ public class HEM_Triangulate extends HEM_Modifier {
 		mesh.add(he1);
 		mesh.add(he2);
 		mesh.add(he3);
-		if (!WB_Epsilon.isZero(f.getFaceNormal().getLength3D())) {
-		    trianglesToCheck.add(f);
-		}
-	    }
-	}
-    }
-
-    void solveBadTriangles(final HE_Mesh mesh) {
-	HE_Face f;
-	for (int i = 0; i < trianglesToCheck.getNumberOfFaces(); i++) {
-	    f = trianglesToCheck.getFaceByIndex(i);
-	    if (mesh.contains(f)) {
-		HE_Halfedge he = f.getHalfedge();
-		boolean flat = false;
-		do {
-		    if (he.getHalfedgeTangent().getAngleNorm(
-			    he.getNextInFace().getHalfedgeTangent()) < 0.001) {
-			flat = true;
-			break;
-		    }
-		    he = he.getNextInFace();
-		} while (he != f.getHalfedge());
-		if (flat) {
-		    he = he.getNextInFace();
-		    mesh.flipEdge(he);
-		}
 	    }
 	}
     }

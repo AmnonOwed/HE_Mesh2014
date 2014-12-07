@@ -3,6 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 import javolution.util.FastTable;
+import wblut.geom.WB_Context2D;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_GeometryFactory;
@@ -14,7 +15,12 @@ import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Projection;
 import wblut.geom.WB_Triangulate;
 import wblut.geom.WB_Vector;
+import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.operation.valid.IsValidOp;
 
 /**
  * Face element of half-edge data structure.
@@ -268,7 +274,16 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
     }
 
     public WB_Plane toPlane() {
-	return new WB_Plane(getFaceCenter(), getFaceNormal());
+	WB_Vector fn = getFaceNormal();
+	if (fn.getSqLength3D() < 0.5) {
+	    if (WB_Epsilon.isEqualAbs(_halfedge.getVertex().xd(), _halfedge
+		    .getEndVertex().xd())) {
+		fn = new WB_Vector(1, 0, 0);
+	    } else {
+		fn = new WB_Vector(0, 0, 1);
+	    }
+	}
+	return new WB_Plane(getFaceCenter(), fn);
     }
 
     public WB_Plane toPlane(final double d) {
@@ -291,6 +306,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
     }
 
     public int[][] getTriangles() {
+	return getTriangles(true);
+    }
+
+    public int[][] getTriangles(final boolean optimize) {
 	// tracker.setStatus("Starting getTriangles() in face " + getKey() +
 	// ".");
 	if (triangles == null) {
@@ -303,6 +322,12 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		// + " vertices.");
 		// logger.trace("Trivial triangulation of triangle face.");
 		return new int[][] { { 0, 1, 2 } };
+	    } else if (getFaceNormal().getSqLength3D() < 0.5) {
+		// degenerate face
+		triangles = new int[fo - 2][3];
+		for (int i = 0; i < fo - 2; i++) {
+		    triangles[i] = new int[] { 0, i + 1, i + 2 };
+		}
 	    } else if (fo == 4) {
 		// tracker.setStatus("Triangulating face with " + fo
 		// + " vertices.");
@@ -323,7 +348,8 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		// " faces.");
 		// tracker.setStatus("Triangulating face with " + fo
 		// + " vertices.");
-		triangles = toPolygon().getTriangles();
+		triangles = WB_Triangulate.getPolygonTriangulation2D(
+			this.toPolygon(), true).getTriangles();
 	    }
 	}
 	// // logger.debug("Returning triangles.");
@@ -390,7 +416,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -408,7 +434,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -421,7 +447,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -465,5 +491,38 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	_data = null;
 	_halfedge = null;
 	triangles = null;
+    }
+
+    public void checkValidity() {
+	final Coordinate[] coords = new Coordinate[getFaceOrder() + 1];
+	final WB_Point point = geometryfactory.createPoint();
+	final WB_Context2D context = geometryfactory
+		.createEmbeddedPlane(toPlane());
+	HE_Halfedge he = _halfedge;
+	int i = 0;
+	do {
+	    context.pointTo2D(he.getVertex(), point);
+	    coords[i] = new Coordinate(point.xd(), point.yd(), i);
+	    he = he.getNextInFace();
+	    i++;
+	} while (he != _halfedge);
+	context.pointTo2D(he.getVertex(), point);
+	coords[i] = new Coordinate(point.xd(), point.yd(), i);
+	he = he.getNextInFace();
+	final Polygon inputPolygon = new GeometryFactory()
+		.createPolygon(coords);
+	final IsValidOp isValidOp = new IsValidOp(inputPolygon);
+	if (!IsValidOp.isValid(inputPolygon)) {
+	    System.out.println(this);
+	    System.out.println(this.getFaceArea() + " " + this.getFaceNormal());
+	    he = _halfedge;
+	    i = 0;
+	    do {
+		System.out.println("  " + i + ": " + he.getVertex());
+		he = he.getNextInFace();
+		i++;
+	    } while (he != _halfedge);
+	    System.out.println(isValidOp.getValidationError());
+	}
     }
 }

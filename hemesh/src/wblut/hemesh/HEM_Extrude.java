@@ -245,7 +245,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_Extrude.");
+		tracker.setDefaultStatus("Starting HEM_Extrude.");
 		mesh.resetFaceInternalLabels();
 		walls = new HE_Selection(mesh);
 		extruded = new HE_Selection(mesh);
@@ -254,7 +254,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		_halfedgeEWs = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
 
 		if ((chamfer == 0) && (d == null) && (heights == null)) {
-			tracker.setStatus("Exiting HEM_Extrude.");
+			tracker.setDefaultStatus("Exiting HEM_Extrude.");
 			return mesh;
 		}
 
@@ -265,7 +265,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		_faceCenters = mesh.getKeyedFaceCenters();
 		final int nf = faces.size();
 
-		tracker.setStatus("Collecting halfedge information per face.", nf);
+		tracker.setDefaultStatus("Collecting halfedge information per face.", nf);
 		for (int i = 0; i < nf; i++) {
 			f = faces.get(i);
 			he = f.getHalfedge();
@@ -345,7 +345,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				}
 			}
 		}
-		tracker.setStatus("Exiting HEM_Extrude.");
+		tracker.setDefaultStatus("Exiting HEM_Extrude.");
 		return mesh;
 
 	}
@@ -357,12 +357,12 @@ public class HEM_Extrude extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HEM_Extrude.");
+		tracker.setDefaultStatus("Starting HEM_Extrude.");
 		selection.parent.resetFaceInternalLabels();
 		walls = new HE_Selection(selection.parent);
 		extruded = new HE_Selection(selection.parent);
 		if (selection.getNumberOfFaces() == 0) {
-			tracker.setStatus("Exiting HEM_Extrude.");
+			tracker.setDefaultStatus("Exiting HEM_Extrude.");
 			return selection.parent;
 		}
 
@@ -378,7 +378,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		_faceNormals = selection.parent.getKeyedFaceNormals();
 		_faceCenters = selection.parent.getKeyedFaceCenters();
 		final int nf = selFaces.size();
-		tracker.setStatus("Collecting halfedge information per face.", nf);
+		tracker.setDefaultStatus("Collecting halfedge information per face.", nf);
 		for (int i = 0; i < nf; i++) {
 			f = selFaces.get(i);
 			he = f.getHalfedge();
@@ -449,7 +449,7 @@ public class HEM_Extrude extends HEM_Modifier {
 				}
 			}
 		}
-		tracker.setStatus("Exiting HEM_Extrude.");
+		tracker.setDefaultStatus("Exiting HEM_Extrude.");
 		return selection.parent;
 
 	}
@@ -467,7 +467,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		final int nf = faces.size();
 		final boolean[] visited = new boolean[nf];
 		WB_Point fc;
-		tracker.setStatus("Creating straight extrusions.", nf);
+		tracker.setDefaultStatus("Creating straight extrusions.", nf);
 		if (heights != null) {
 			if (heights.length == faces.size()) {
 				for (int i = 0; i < nf; i++) {
@@ -681,7 +681,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		final int nf = faces.size();
 		HE_Face f;
 		WB_Point fc;
-		tracker.setStatus("Creating peaked extrusions.", nf);
+		tracker.setDefaultStatus("Creating peaked extrusions.", nf);
 		for (int i = 0; i < nf; i++) {
 			f = faces.get(i);
 			_faceCenters.put(f.key(), f.getFaceCenter());
@@ -758,7 +758,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
 		final List<HE_Halfedge> originalEdges = sel.getEdgesAsList();
 		final int nf = faces.size();
-		tracker.setStatus("Creating flat extrusions.", nf);
+		tracker.setDefaultStatus("Creating flat extrusions.", nf);
 		WB_Point fc;
 		if (heights != null) {
 			if (heights.length == faces.size()) {
@@ -789,7 +789,7 @@ public class HEM_Extrude extends HEM_Modifier {
 		}
 
 		if (fuse) {
-			tracker.setStatus("Fusing original edges.", originalEdges.size());
+			tracker.setDefaultStatus("Fusing original edges.", originalEdges.size());
 			for (int i = 0; i < originalEdges.size(); i++) {
 				final HE_Halfedge e = originalEdges.get(i);
 

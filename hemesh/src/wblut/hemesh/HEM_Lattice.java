@@ -87,13 +87,13 @@ public class HEM_Lattice extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_Lattice.");
+		tracker.setDefaultStatus("Starting HEM_Lattice.");
 		if (d == 0) {
-			tracker.setStatus("Can't create with zero thickness. Exiting HEM_Lattice.");
+			tracker.setDefaultStatus("Can't create with zero thickness. Exiting HEM_Lattice.");
 			return mesh;
 		}
 		if (sew == 0) {
-			tracker.setStatus("Can't create with zero width. Exiting HEM_Lattice.");
+			tracker.setDefaultStatus("Can't create with zero width. Exiting HEM_Lattice.");
 			return mesh;
 		}
 		final HEM_Extrude extm = new HEM_Extrude().setDistance(0)
@@ -102,13 +102,13 @@ public class HEM_Lattice extends HEM_Modifier {
 				.setThresholdAngle(thresholdAngle);
 		mesh.modify(extm);
 
-		tracker.setStatus("Creating inner mesh.");
+		tracker.setDefaultStatus("Creating inner mesh.");
 		final HE_Mesh innerMesh = mesh.get();
-		tracker.setStatus("Shrinking inner mesh.");
+		tracker.setDefaultStatus("Shrinking inner mesh.");
 		final HEM_VertexExpand expm = new HEM_VertexExpand().setDistance(-d);
 		innerMesh.modify(expm);
 
-		tracker.setStatus("Creating face correlations.",
+		tracker.setDefaultStatus("Creating face correlations.",
 				mesh.getNumberOfFaces());
 		final HashMap<Long, Long> faceCorrelation = new HashMap<Long, Long>();
 
@@ -123,7 +123,7 @@ public class HEM_Lattice extends HEM_Modifier {
 			tracker.incrementCounter();
 		}
 
-		tracker.setStatus("Creating boundary halfedge correlations.",
+		tracker.setDefaultStatus("Creating boundary halfedge correlations.",
 				mesh.getNumberOfHalfedges());
 		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
 		final Iterator<HE_Halfedge> heItr1 = mesh.heItr();
@@ -155,7 +155,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		HE_Face fNew;
 		WB_Vector ni;
 		WB_Vector no;
-		tracker.setStatus("Connecting outer and inner faces.", nf);
+		tracker.setDefaultStatus("Connecting outer and inner faces.", nf);
 		for (int i = 0; i < nf; i++) {
 			fo = origFaces[i];
 
@@ -223,7 +223,7 @@ public class HEM_Lattice extends HEM_Modifier {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Connecting outer and inner boundaries.",
+		tracker.setDefaultStatus("Connecting outer and inner boundaries.",
 				heCorrelation.size());
 		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet()
 				.iterator();
@@ -255,7 +255,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		if (d < 0) {
 			mesh.flipAllFaces();
 		}
-		tracker.setStatus("Exiting HEM_Lattice.");
+		tracker.setDefaultStatus("Exiting HEM_Lattice.");
 		return mesh;
 
 	}
@@ -267,14 +267,14 @@ public class HEM_Lattice extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HEM_Lattice.");
+		tracker.setDefaultStatus("Starting HEM_Lattice.");
 		if (d == 0) {
-			tracker.setStatus("Can't create with zero thickness. Exiting HEM_Lattice.");
+			tracker.setDefaultStatus("Can't create with zero thickness. Exiting HEM_Lattice.");
 
 			return selection.parent;
 		}
 		if (sew == 0) {
-			tracker.setStatus("Can't create with zero width. Exiting HEM_Lattice.");
+			tracker.setDefaultStatus("Can't create with zero width. Exiting HEM_Lattice.");
 			return selection.parent;
 		}
 		final HEM_Extrude extm = new HEM_Extrude().setDistance(0)
@@ -282,13 +282,13 @@ public class HEM_Lattice extends HEM_Modifier {
 				.setHardEdgeChamfer(hew).setFuseAngle(fuseAngle)
 				.setThresholdAngle(thresholdAngle);
 		selection.parent.modifySelected(extm, selection);
-		tracker.setStatus("Creating inner mesh.");
+		tracker.setDefaultStatus("Creating inner mesh.");
 		final HE_Mesh innerMesh = selection.parent.get();
-		tracker.setStatus("Shrinking inner mesh.");
+		tracker.setDefaultStatus("Shrinking inner mesh.");
 		final HEM_VertexExpand expm = new HEM_VertexExpand().setDistance(-d);
 		innerMesh.modify(expm);
 
-		tracker.setStatus("Creating face correlations.",
+		tracker.setDefaultStatus("Creating face correlations.",
 				selection.parent.getNumberOfFaces());
 		final HashMap<Long, Long> faceCorrelation = new HashMap<Long, Long>();
 		final Iterator<HE_Face> fItr1 = selection.parent.fItr();
@@ -302,7 +302,7 @@ public class HEM_Lattice extends HEM_Modifier {
 			tracker.incrementCounter();
 		}
 
-		tracker.setStatus("Creating boundary halfedge correlations.",
+		tracker.setDefaultStatus("Creating boundary halfedge correlations.",
 				selection.parent.getNumberOfHalfedges());
 		final HashMap<Long, Long> heCorrelation = new HashMap<Long, Long>();
 		final Iterator<HE_Halfedge> heItr1 = selection.parent.heItr();
@@ -333,7 +333,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		HE_Halfedge heoc, heic, heon, hein, heio, heoi;
 		HE_Face fNew;
 		WB_Vector ni, no;
-		tracker.setStatus("Connecting outer and inner faces.", nf);
+		tracker.setDefaultStatus("Connecting outer and inner faces.", nf);
 		for (int i = 0; i < nf; i++) {
 			fo = origFaces[i];
 
@@ -402,7 +402,7 @@ public class HEM_Lattice extends HEM_Modifier {
 			tracker.incrementCounter();
 		}
 
-		tracker.setStatus("Connecting outer and inner boundaries.",
+		tracker.setDefaultStatus("Connecting outer and inner boundaries.",
 				heCorrelation.size());
 		final Iterator<Map.Entry<Long, Long>> it = heCorrelation.entrySet()
 				.iterator();
@@ -434,7 +434,7 @@ public class HEM_Lattice extends HEM_Modifier {
 		if (d < 0) {
 			selection.parent.flipAllFaces();
 		}
-		tracker.setStatus("Exiting HEM_Lattice.");
+		tracker.setDefaultStatus("Exiting HEM_Lattice.");
 		return selection.parent;
 	}
 

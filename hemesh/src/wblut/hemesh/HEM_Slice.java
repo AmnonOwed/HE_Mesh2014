@@ -145,17 +145,17 @@ public class HEM_Slice extends HEM_Modifier {
      */
     @Override
     public HE_Mesh apply(final HE_Mesh mesh) {
-	tracker.setStatus("Starting HEM_Slice.");
+	tracker.setDefaultStatus("Starting HEM_Slice.");
 	cut = new HE_Selection(mesh);
 	cap = new HE_Selection(mesh);
 	// no plane defined
 	if (P == null) {
-	    tracker.setStatus("No cutplane defined. Exiting HEM_Slice.");
+	    tracker.setDefaultStatus("No cutplane defined. Exiting HEM_Slice.");
 	    return mesh;
 	}
 	// empty mesh
 	if (mesh.getNumberOfVertices() == 0) {
-	    tracker.setStatus("Empty mesh. Exiting HEM_Slice.");
+	    tracker.setDefaultStatus("Empty mesh. Exiting HEM_Slice.");
 	    return mesh;
 	}
 	WB_Plane lP = P.get();
@@ -168,7 +168,7 @@ public class HEM_Slice extends HEM_Modifier {
 	cut = ss.cut;
 	final HE_Selection newFaces = new HE_Selection(mesh);
 	HE_Face face;
-	tracker.setStatus("Classifying faces.", mesh.getNumberOfFaces());
+	tracker.setDefaultStatus("Classifying faces.", mesh.getNumberOfFaces());
 	final Iterator<HE_Face> fItr = mesh.fItr();
 	while (fItr.hasNext()) {
 	    face = fItr.next();
@@ -184,17 +184,17 @@ public class HEM_Slice extends HEM_Modifier {
 	    }
 	    tracker.incrementCounter();
 	}
-	tracker.setStatus("Removing unwanted faces.");
+	tracker.setDefaultStatus("Removing unwanted faces.");
 	mesh.replaceFaces(newFaces.getFacesAsArray());
 	cut.cleanSelection();
 	mesh.cleanUnusedElementsByFace();
 	if (capHoles) {
-	    tracker.setStatus("Capping holes.");
+	    tracker.setDefaultStatus("Capping holes.");
 	    if (simpleCap) {
 		cap.addFaces(mesh.capHoles());
 	    } else {
 		final List<HE_Path> cutpaths = ss.getPaths();
-		tracker.setStatus("Triangulating cut paths.");
+		tracker.setDefaultStatus("Triangulating cut paths.");
 		final long[][] triKeys = HET_PlanarPathTriangulator
 			.getTriangleKeys(cutpaths, lP);
 		HE_Face tri;
@@ -232,12 +232,11 @@ public class HEM_Slice extends HEM_Modifier {
 	    }
 	}
 	mesh.pairHalfedges();
-	mesh.capHalfedges();
 	if (!keepCenter) {
 	    mesh.resetCenter();
 	}
-	mesh.triangulateConcaveFaces();
-	tracker.setStatus("Ending HEM_Slice.");
+	// mesh.triangulateConcaveFaces();
+	tracker.setDefaultStatus("Ending HEM_Slice.");
 	return mesh;
     }
 

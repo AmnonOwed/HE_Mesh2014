@@ -60,17 +60,17 @@ public class HEM_Mirror extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_Mirror.");
+		tracker.setDefaultStatus("Starting HEM_Mirror.");
 		cut = new HE_Selection(mesh);
 		// no plane defined
 		if (P == null) {
-			tracker.setStatus("No mirror plane defined. Exiting HEM_Mirror.");
+			tracker.setDefaultStatus("No mirror plane defined. Exiting HEM_Mirror.");
 			return mesh;
 		}
 
 		// empty mesh
 		if (mesh.getNumberOfVertices() == 0) {
-			tracker.setStatus("No vertices in mesh. Exiting HEM_Mirror.");
+			tracker.setDefaultStatus("No vertices in mesh. Exiting HEM_Mirror.");
 
 			return mesh;
 		}
@@ -88,7 +88,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		cut = ss.cut;
 		final HE_Selection newFaces = new HE_Selection(mesh);
 		HE_Face face;
-		tracker.setStatus("Classifying mesh faces.", mesh.getNumberOfFaces());
+		tracker.setDefaultStatus("Classifying mesh faces.", mesh.getNumberOfFaces());
 		Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			face = fItr.next();
@@ -122,7 +122,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		mesh.cleanUnusedElementsByFace();
 		mesh.capHalfedges();
 		final HE_Mesh mirrormesh = mesh.get();
-		tracker.setStatus("Mirroring vertices.", mesh.getNumberOfVertices());
+		tracker.setDefaultStatus("Mirroring vertices.", mesh.getNumberOfVertices());
 		final List<HE_Vertex> vertices = mirrormesh.getVerticesAsList();
 
 		HE_Vertex v, origv;

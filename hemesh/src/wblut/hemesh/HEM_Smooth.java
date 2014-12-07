@@ -43,7 +43,7 @@ public class HEM_Smooth extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_Smooth.");
+		tracker.setDefaultStatus("Starting HEM_Smooth.");
 		WB_AABB box = new WB_AABB();
 		if (autoRescale) {
 			box = mesh.getAABB();
@@ -53,7 +53,7 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (iter < 1) {
 			iter = 1;
 		}
-		tracker.setStatus("Smoothing vertices.",
+		tracker.setDefaultStatus("Smoothing vertices.",
 				iter * mesh.getNumberOfVertices());
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = mesh.vItr();
@@ -94,7 +94,7 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (autoRescale) {
 			mesh.fitInAABB(box);
 		}
-		tracker.setStatus("Exiting HEM_Smooth.");
+		tracker.setDefaultStatus("Exiting HEM_Smooth.");
 		return mesh;
 	}
 
@@ -106,7 +106,7 @@ public class HEM_Smooth extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HEM_Smooth.");
+		tracker.setDefaultStatus("Starting HEM_Smooth.");
 		selection.collectVertices();
 
 		WB_AABB box = new WB_AABB();
@@ -118,7 +118,7 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (iter < 1) {
 			iter = 1;
 		}
-		tracker.setStatus("Smoothing vertices.",
+		tracker.setDefaultStatus("Smoothing vertices.",
 				iter * selection.getNumberOfVertices());
 		for (int r = 0; r < iter; r++) {
 			Iterator<HE_Vertex> vItr = selection.vItr();
@@ -164,7 +164,7 @@ public class HEM_Smooth extends HEM_Modifier {
 		if (autoRescale) {
 			selection.parent.fitInAABB(box);
 		}
-		tracker.setStatus("Exiting HEM_Smooth.");
+		tracker.setDefaultStatus("Exiting HEM_Smooth.");
 		return selection.parent;
 	}
 

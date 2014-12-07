@@ -30,11 +30,11 @@ public class HEM_CenterSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEC_CenterSplit.");
+		tracker.setDefaultStatus("Starting HEC_CenterSplit.");
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(c).setDistance(d);
 		mesh.modify(ext);
 		selectionOut = ext.extruded;
-		tracker.setStatus("Exiting HEC_CenterSplit.");
+		tracker.setDefaultStatus("Exiting HEC_CenterSplit.");
 		return mesh;
 	}
 
@@ -45,11 +45,11 @@ public class HEM_CenterSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HEC_CenterSplit.");
+		tracker.setDefaultStatus("Starting HEC_CenterSplit.");
 		final HEM_Extrude ext = new HEM_Extrude().setChamfer(c).setDistance(d);
 		selection.parent.modifySelected(ext, selection);
 		selectionOut = ext.extruded;
-		tracker.setStatus("Exiting HEC_CenterSplit.");
+		tracker.setDefaultStatus("Exiting HEC_CenterSplit.");
 		return selection.parent;
 	}
 

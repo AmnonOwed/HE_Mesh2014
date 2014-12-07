@@ -77,12 +77,12 @@ public class HES_TriDecLimit extends HES_Simplifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HES_TriDec.");
+		tracker.setDefaultStatus("Starting HES_TriDec.");
 
 		_mesh = mesh;
 
 		if (_mesh.getNumberOfVertices() <= 4) {
-			tracker.setStatus("Mesh has  4 or less vertices. Exiting HES_TriDec.");
+			tracker.setDefaultStatus("Mesh has  4 or less vertices. Exiting HES_TriDec.");
 			return _mesh;
 		}
 
@@ -93,7 +93,7 @@ public class HES_TriDecLimit extends HES_Simplifier {
 		HE_Vertex v;
 		Entry entry;
 		List<HE_Vertex> vertices;
-		tracker.setStatus("Removing vertices.", mesh.getNumberOfVertices());
+		tracker.setDefaultStatus("Removing vertices.", mesh.getNumberOfVertices());
 		double lastcost = 0;
 		while (lastcost <= limit && heap.size() > 0
 				&& _mesh.getNumberOfVertices() > 4) {
@@ -120,7 +120,7 @@ public class HES_TriDecLimit extends HES_Simplifier {
 			}
 			tracker.incrementCounter();
 		}
-		tracker.setStatus("Exiting HES_TriDec.");
+		tracker.setDefaultStatus("Exiting HES_TriDec.");
 		return _mesh;
 	}
 
@@ -133,13 +133,13 @@ public class HES_TriDecLimit extends HES_Simplifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection selection) {
-		tracker.setStatus("Starting HES_TriDec.");
+		tracker.setDefaultStatus("Starting HES_TriDec.");
 		selection.collectVertices();
 		_mesh = selection.parent;
 		counter = 0;
 
 		if (_mesh.getNumberOfVertices() <= 4) {
-			tracker.setStatus("Mesh has  4 or less vertices. Exiting HES_TriDec.");
+			tracker.setDefaultStatus("Mesh has  4 or less vertices. Exiting HES_TriDec.");
 			return _mesh;
 		}
 
@@ -151,7 +151,7 @@ public class HES_TriDecLimit extends HES_Simplifier {
 		Entry entry;
 		List<HE_Vertex> vertices;
 
-		tracker.setStatus("Removing vertices.", selection.getNumberOfVertices());
+		tracker.setDefaultStatus("Removing vertices.", selection.getNumberOfVertices());
 		double lastcost = 0;
 		while (lastcost <= limit && heap.size() > 0
 				&& _mesh.getNumberOfVertices() > 4) {
@@ -183,13 +183,13 @@ public class HES_TriDecLimit extends HES_Simplifier {
 			tracker.incrementCounter();
 		}
 		selection.clear();
-		tracker.setStatus("Exiting HES_TriDec.");
+		tracker.setDefaultStatus("Exiting HES_TriDec.");
 		return _mesh;
 
 	}
 
 	private void buildHeap(final HE_MeshStructure sel) {
-		tracker.setStatus("Building vertex removal heap.",
+		tracker.setDefaultStatus("Building vertex removal heap.",
 				sel.getNumberOfVertices());
 		counter = 0;
 		heap = new Heap();

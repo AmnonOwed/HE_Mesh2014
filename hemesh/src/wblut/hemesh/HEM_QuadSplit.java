@@ -26,14 +26,14 @@ public class HEM_QuadSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Mesh mesh) {
-		tracker.setStatus("Starting HEM_QuadSplit.");
+		tracker.setDefaultStatus("Starting HEM_QuadSplit.");
 		selectionOut = new HE_Selection(mesh);
 		final int n = mesh.getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
 		final int[] faceOrders = new int[n];
 		HE_Face f;
 		int i = 0;
-		tracker.setStatus("Getting face centers.", n);
+		tracker.setDefaultStatus("Getting face centers.", n);
 		final Iterator<HE_Face> fItr = mesh.fItr();
 		while (fItr.hasNext()) {
 			f = fItr.next();
@@ -50,7 +50,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		final HE_Face[] faces = mesh.getFacesAsArray();
 		HE_Vertex vi = new HE_Vertex();
 
-		tracker.setStatus("Splitting faces into quads.", n);
+		tracker.setDefaultStatus("Splitting faces into quads.", n);
 		for (i = 0; i < n; i++) {
 			f = faces[i];
 			vi = new HE_Vertex(faceCenters[i]);
@@ -103,7 +103,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 			tracker.incrementCounter();
 		}
 		mesh.pairHalfedges();
-		tracker.setStatus("Exiting HEM_QuadSplit.");
+		tracker.setDefaultStatus("Exiting HEM_QuadSplit.");
 		return mesh;
 	}
 
@@ -114,7 +114,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 	 */
 	@Override
 	public HE_Mesh apply(final HE_Selection sel) {
-		tracker.setStatus("Starting HEM_QuadSplit.");
+		tracker.setDefaultStatus("Starting HEM_QuadSplit.");
 		selectionOut = new HE_Selection(sel.parent);
 		final int n = sel.getNumberOfFaces();
 		final WB_Point[] faceCenters = new WB_Point[n];
@@ -122,7 +122,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		HE_Face face;
 		final Iterator<HE_Face> fItr = sel.fItr();
 		int i = 0;
-		tracker.setStatus("Getting face centers.", n);
+		tracker.setDefaultStatus("Getting face centers.", n);
 		while (fItr.hasNext()) {
 			face = fItr.next();
 			faceCenters[i] = face.getFaceCenter().addMul(d,
@@ -139,7 +139,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		selectionOut.addVertices(sel.parent.splitEdges(orig)
 				.getVerticesAsArray());
 		final HE_Face[] faces = sel.getFacesAsArray();
-		tracker.setStatus("Splitting faces into quads.", n);
+		tracker.setDefaultStatus("Splitting faces into quads.", n);
 		for (i = 0; i < n; i++) {
 			face = faces[i];
 			final HE_Vertex vi = new HE_Vertex(faceCenters[i]);
@@ -194,7 +194,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 			tracker.incrementCounter();
 		}
 		sel.parent.pairHalfedges();
-		tracker.setStatus("Exiting HEM_QuadSplit.");
+		tracker.setDefaultStatus("Exiting HEM_QuadSplit.");
 		return sel.parent;
 	}
 
