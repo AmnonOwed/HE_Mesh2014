@@ -23,11 +23,11 @@ public class HET_ProgressTracker {
 	return tracker;
     }
 
-    protected void incrementCounter() {
+    public void incrementCounter() {
 	counter++;
     }
 
-    protected void incrementCounter(final int inc) {
+    public void incrementCounter(final int inc) {
 	counter += inc;
     }
 

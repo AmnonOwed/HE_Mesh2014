@@ -1,48 +1,43 @@
 package wblut.core;
 
 public class WB_Version {
+    public static final WB_Version CURRENT_VERSION = new WB_Version();
+    public static final int MAJOR = 2;
+    public static final int MINOR = 0;
+    public static final int PATCH = 6;
+    private static final String releaseInfo = "Phaedra";
 
-	public static final WB_Version CURRENT_VERSION = new WB_Version();
+    public static void main(final String[] args) {
+	System.out.println(CURRENT_VERSION);
+    }
 
-	public static final int MAJOR = 2;
+    private WB_Version() {
+    }
 
-	public static final int MINOR = 0;
+    public static int getMajor() {
+	return MAJOR;
+    }
 
-	public static final int PATCH = 0;
+    public static int getMinor() {
+	return MINOR;
+    }
 
-	private static final String releaseInfo = "Cardinal";
+    public static int getPatch() {
+	return PATCH;
+    }
 
-	public static void main(final String[] args) {
-		System.out.println(CURRENT_VERSION);
+    @Override
+    public String toString() {
+	final String ver = "W:Blut HE_Mesh " + MAJOR + "." + MINOR + "."
+		+ PATCH;
+	if (releaseInfo != null && releaseInfo.length() > 0) {
+	    return ver + " " + releaseInfo
+		    + System.getProperty("line.separator");
 	}
+	return ver;
+    }
 
-	private WB_Version() {
-	}
-
-	public static int getMajor() {
-		return MAJOR;
-	}
-
-	public static int getMinor() {
-		return MINOR;
-	}
-
-	public static int getPatch() {
-		return PATCH;
-	}
-
-	@Override
-	public String toString() {
-		final String ver = "W:Blut HE_Mesh " + MAJOR + "." + MINOR + "."
-				+ PATCH;
-		if (releaseInfo != null && releaseInfo.length() > 0) {
-			return ver + " " + releaseInfo
-					+ System.getProperty("line.separator");
-		}
-		return ver;
-	}
-
-	public static String version() {
-		return CURRENT_VERSION.toString();
-	}
+    public static String version() {
+	return CURRENT_VERSION.toString();
+    }
 }
