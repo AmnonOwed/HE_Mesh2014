@@ -13,6 +13,7 @@ You need to add some other external *.jar files to the properties of your Eclips
 * `jts.jar`: The JTS Topology Suite is an API of spatial predicates and functions for processing planar geometry. You need version 1.13. Download here: http://hemesh.wblut.com/jts.zip (http://tsusiatsoftware.net/jts/main.html)
 * `trove-3.1a1.jar`: A collection of high speed primitive based collections. Download here: http://hemesh.wblut.com/trove-3.1a1.zip
   (http://trove.starlight-systems.com/)
+*`hemesh-external.jar`: HE_MESH 2014 contains source code from other authors that was converted to use my geometry classes for convenience. To protect the rights of the original authors whose work is not in the public domain, the source code is only available on request. The required JAR can be downloaded here: http://hemesh.wblut.com/hemesh-external.zip
 
 ## Build-of-the-day HE_Mesh 2014 (10/12/2014)
 
