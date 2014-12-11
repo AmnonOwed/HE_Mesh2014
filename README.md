@@ -26,13 +26,13 @@ To the extent possible under law, I, Frederik Vanhoutte, have waived all copyrig
 
 The following classes are subject to the license agreement of their original authors, included in the source file:
 
-wblut.geom.WB_Delaunay
-wblut.geom.WB_ShapeReader
-wblut.math.WB_MTRandom
+* wblut.geom.WB_Delaunay
+* wblut.geom.WB_ShapeReader
+* wblut.math.WB_MTRandom
 
 The following packages are part of hemesh-external.jar and are subject to the license agreement of their original authors:
 
-wblut.external.ProGAL http://www.diku.dk/~rfonseca/ProGAL/
-wblut.external.straightskeleton https://code.google.com/p/campskeleton/
+* wblut.external.ProGAL http://www.diku.dk/~rfonseca/ProGAL/
+* wblut.external.straightskeleton https://code.google.com/p/campskeleton/
 
 The modified code is available on request.
