@@ -3,10 +3,9 @@ package wblut.hemesh;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-
 import javolution.util.FastMap;
+import wblut.external.QuickHull3D.WB_QuickHull3D;
 import wblut.geom.WB_Point;
-import wblut.geom.WB_QuickHull3D;
 
 /**
  * Creates the convex hull of a collection of points.

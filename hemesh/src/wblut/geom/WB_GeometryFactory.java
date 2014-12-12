@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import javolution.util.FastTable;
+import wblut.external.QuickHull3D.WB_QuickHull3D;
 import wblut.external.straightskeleton.Corner;
 import wblut.external.straightskeleton.Edge;
 import wblut.external.straightskeleton.Loop;
