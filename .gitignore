@@ -3,3 +3,4 @@
 # Ignore Eclipse class path
 .classpath
 .project
+.DS_Store
