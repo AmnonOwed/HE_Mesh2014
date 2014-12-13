@@ -35,5 +35,6 @@ The following packages are part of hemesh-external.jar and are subject to the li
 
 * wblut.external.ProGAL http://www.diku.dk/~rfonseca/ProGAL/
 * wblut.external.straightskeleton https://code.google.com/p/campskeleton/
+* wblut.external.QuickHull3D https://www.cs.ubc.ca/~lloyd/java/quickhull3d.html
 
 The modified code is available on request.
