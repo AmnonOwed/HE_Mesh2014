@@ -130,9 +130,12 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     public double getFaceArea() {
 	if (_halfedge == null) {
-	    return Double.NaN;
+	    return 0;
 	}
 	final WB_Vector n = getFaceNormal();
+	if (n.getLength3D() < 0.5) {
+	    return 0;
+	}
 	final double x = WB_Math.fastAbs(n.xd());
 	final double y = WB_Math.fastAbs(n.yd());
 	final double z = WB_Math.fastAbs(n.zd());

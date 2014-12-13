@@ -106,8 +106,8 @@ public class WB_Render3D {
 	home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 		(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 			* R.getDirection().xd()),
-		(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-		(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+			(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+			(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
     }
 
     public void drawSegment(final WB_Segment S) {
@@ -235,20 +235,20 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 	home.endShape();
     }
 
@@ -1603,7 +1603,7 @@ public class WB_Render3D {
 
     private final Unproject unproject = new Unproject();
 
-    public WB_Ray getPickingRay(final int x, final int y) {
+    public WB_Ray getPickingRay(final double x, final double y) {
 	unproject.captureViewMatrix(home);
 	unproject.calculatePickPoints(x, y, home.height);
 	WB_Ray ray = new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
@@ -1627,37 +1627,40 @@ public class WB_Render3D {
 	return ray;
     }
 
-    public HE_Face pickClosestFace(final HE_Mesh mesh, final int x, final int y) {
+    public HE_Face pickClosestFace(final HE_Mesh mesh, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
 		mesh, mouseRay3d);
 	return (p == null) ? null : p.face;
     }
 
-    public HE_Face pickFurthestFace(final HE_Mesh mesh, final int x, final int y) {
+    public HE_Face pickFurthestFace(final HE_Mesh mesh, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final HE_FaceIntersection p = HE_Intersection.getFurthestIntersection(
 		mesh, mouseRay3d);
 	return (p == null) ? null : p.face;
     }
 
-    public HE_Face pickClosestFace(final WB_AABBTree meshtree, final int x,
-	    final int y) {
+    public HE_Face pickClosestFace(final WB_AABBTree meshtree, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
 		meshtree, mouseRay3d);
 	return (p == null) ? null : p.face;
     }
 
-    public HE_Face pickFurthestFace(final WB_AABBTree meshtree, final int x,
-	    final int y) {
+    public HE_Face pickFurthestFace(final WB_AABBTree meshtree, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final HE_FaceIntersection p = HE_Intersection.getFurthestIntersection(
 		meshtree, mouseRay3d);
 	return (p == null) ? null : p.face;
     }
 
-    public List<HE_Face> pickFaces(final HE_Mesh mesh, final int x, final int y) {
+    public List<HE_Face> pickFaces(final HE_Mesh mesh, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final List<HE_FaceIntersection> p = HE_Intersection.getIntersection(
 		mesh, mouseRay3d);
@@ -1668,8 +1671,8 @@ public class WB_Render3D {
 	return result;
     }
 
-    public List<HE_Face> pickFaces(final WB_AABBTree meshtree, final int x,
-	    final int y) {
+    public List<HE_Face> pickFaces(final WB_AABBTree meshtree, final double x,
+	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
 	final List<HE_FaceIntersection> p = HE_Intersection.getIntersection(
 		meshtree, mouseRay3d);
@@ -1690,7 +1693,7 @@ public class WB_Render3D {
 	public WB_Point ptStartPos = new WB_Point();
 	public WB_Point ptEndPos = new WB_Point();
 
-	public boolean calculatePickPoints(final int x, final int y,
+	public boolean calculatePickPoints(final double x, final double y,
 		final int height) {
 	    // Calculate positions on the near and far 3D
 	    // frustum planes.
