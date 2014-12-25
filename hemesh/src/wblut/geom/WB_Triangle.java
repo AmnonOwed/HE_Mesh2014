@@ -1,6 +1,5 @@
 package wblut.geom;
 
-import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 

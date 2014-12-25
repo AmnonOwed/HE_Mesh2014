@@ -1,10 +1,10 @@
 package wblut.hemesh;
 
+import wblut.geom.WB_JohnsonPolyhedraData01;
+import wblut.geom.WB_JohnsonPolyhedraData02;
+import wblut.geom.WB_JohnsonPolyhedraData03;
+import wblut.geom.WB_JohnsonPolyhedraData04;
 import wblut.geom.WB_Point;
-import wblut.geom.data.WB_JohnsonPolyhedraData01;
-import wblut.geom.data.WB_JohnsonPolyhedraData02;
-import wblut.geom.data.WB_JohnsonPolyhedraData03;
-import wblut.geom.data.WB_JohnsonPolyhedraData04;
 
 /**
  * Johnson polyhedra.

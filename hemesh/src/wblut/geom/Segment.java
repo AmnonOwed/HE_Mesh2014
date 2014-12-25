@@ -1,9 +1,5 @@
-package wblut.geom.interfaces;
+package wblut.geom;
 
-import wblut.geom.WB_MutableCoordinate;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Simplex;
-import wblut.geom.WB_Vector;
 
 public interface Segment extends WB_Simplex {
 

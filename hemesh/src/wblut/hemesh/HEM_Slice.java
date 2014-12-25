@@ -227,11 +227,10 @@ public class HEM_Slice extends HEM_Modifier {
 		    mesh.add(he1);
 		    mesh.add(he2);
 		}
-		mesh.pairHalfedges();
-		// cap.addFaces(mesh.capHoles());
 	    }
 	}
 	mesh.pairHalfedges();
+	mesh.capHalfedges();
 	if (!keepCenter) {
 	    mesh.resetCenter();
 	}

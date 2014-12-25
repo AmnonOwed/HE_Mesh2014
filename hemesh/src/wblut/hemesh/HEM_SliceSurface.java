@@ -423,7 +423,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
 	for (final HE_Halfedge he : cutEdges.getEdgesAsList()) {
 	    final HE_Face f = he.getFace();
-	    if (WB_Classify.classifyPointToPlane(P, f.getFaceCenter()) == WB_Classification.FRONT) {
+	    if (WB_Classify.classifyPointToPlane3D(P, f.getFaceCenter()) == WB_Classification.FRONT) {
 		edges.add(he.getPair());
 	    } else {
 		edges.add(he);

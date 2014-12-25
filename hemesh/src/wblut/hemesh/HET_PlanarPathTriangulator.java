@@ -10,6 +10,8 @@ import wblut.geom.WB_KDTree;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
+import wblut.geom.WB_Triangulate;
+import wblut.geom.WB_Triangulation2DWithPoints;
 import com.vividsolutions.jts.algorithm.CGAlgorithms;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -38,7 +40,7 @@ class HET_PlanarPathTriangulator {
 	tracker.setDefaultStatus("Building contours tree.");
 	for (int i = 0; i < paths.size(); i++) {
 	    final HE_Path path = paths.get(i);
-	    if (path.isLoop()) {
+	    if (path.isLoop() && path.getPathOrder() > 2) {
 		vertices = path.getPathVertices();
 		pts = new Coordinate[vertices.size() + 1];
 		for (int j = 0; j < vertices.size(); j++) {
@@ -76,6 +78,59 @@ class HET_PlanarPathTriangulator {
 	}
 	tracker.setDefaultStatus("All paths triangulated.");
 	return trianglekeys;
+    }
+
+    public static HE_Mesh getConstrainedCaps(
+	    final List<? extends HE_Path> paths, final WB_Plane P) {
+	tracker.setDefaultStatus("Starting planar path triangulation.");
+	final WB_Context2D emb = geometryfactory.createEmbeddedPlane(P);
+	final RingTree ringtree = new RingTree();
+	List<HE_Vertex> vertices;
+	Coordinate[] pts;
+	final WB_KDTree<WB_Point, Long> vertextree = new WB_KDTree<WB_Point, Long>();
+	tracker.setDefaultStatus("Building contours tree.");
+	for (int i = 0; i < paths.size(); i++) {
+	    final HE_Path path = paths.get(i);
+	    if (path.isLoop() && path.getPathOrder() > 2) {
+		vertices = path.getPathVertices();
+		pts = new Coordinate[vertices.size() + 1];
+		for (int j = 0; j < vertices.size(); j++) {
+		    final WB_Point proj = geometryfactory.createPoint();
+		    emb.pointTo2D(vertices.get(j), proj);
+		    vertextree.add(proj, vertices.get(j).getKey());
+		    pts[vertices.size() - j] = new Coordinate(proj.xd(),
+			    proj.yd(), 0);
+		}
+		final WB_Point proj = geometryfactory.createPoint();
+		emb.pointTo2D(vertices.get(0), proj);
+		pts[0] = new Coordinate(proj.xd(), proj.yd(), 0);
+		ringtree.add(JTSgf.createLinearRing(pts));
+	    }
+	}
+	tracker.setDefaultStatus("Extracting polygons from contours tree.");
+	final List<WB_Polygon> polygons = ringtree.extractPolygons();
+	tracker.setDefaultStatus("Triangulating polygons.", polygons.size());
+	final HE_Mesh cap = new HE_Mesh();
+	for (final WB_Polygon poly : polygons) {
+	    final WB_Triangulation2DWithPoints tri = WB_Triangulate
+		    .getConformingTriangulation2D(poly);
+	    cap.add(toMesh(tri));
+	    tracker.incrementCounter();
+	}
+	final HE_VertexIterator vitr = cap.vItr();
+	HE_Vertex v;
+	while (vitr.hasNext()) {
+	    v = vitr.next();
+	    emb.pointTo3D(v.xd(), v.yd(), v);
+	}
+	tracker.setDefaultStatus("All paths triangulated.");
+	return cap;
+    }
+
+    static HE_Mesh toMesh(final WB_Triangulation2DWithPoints tri) {
+	final HEC_FromFacelist ffl = new HEC_FromFacelist().setFaces(
+		tri.getTriangles()).setVertices(tri.getPoints());
+	return new HE_Mesh(ffl);
     }
 
     // The JTS implementation of ShapeReader does not handle overlapping

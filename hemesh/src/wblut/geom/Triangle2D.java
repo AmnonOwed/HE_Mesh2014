@@ -1,8 +1,5 @@
-package wblut.geom.interfaces;
+package wblut.geom;
 
-import wblut.geom.WB_Circle;
-import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_Point;
 
 public interface Triangle2D {
 

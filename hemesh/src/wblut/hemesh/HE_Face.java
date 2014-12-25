@@ -3,6 +3,7 @@ package wblut.hemesh;
 import java.util.HashMap;
 import java.util.List;
 import javolution.util.FastTable;
+import wblut.geom.WB_AABB;
 import wblut.geom.WB_Context2D;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
@@ -13,6 +14,7 @@ import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Projection;
+import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulate;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
@@ -325,7 +327,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		// + " vertices.");
 		// logger.trace("Trivial triangulation of triangle face.");
 		return new int[][] { { 0, 1, 2 } };
-	    } else if (getFaceNormal().getSqLength3D() < 0.5) {
+	    } else if (isDegenerate()) {
 		// degenerate face
 		triangles = new int[fo - 2][3];
 		for (int i = 0; i < fo - 2; i++) {
@@ -362,6 +364,24 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     public void reset() {
 	triangles = null;
+    }
+
+    public WB_AABB toAABB() {
+	final WB_AABB aabb = new WB_AABB();
+	HE_Halfedge he = getHalfedge();
+	do {
+	    aabb.expandToInclude(he.getVertex());
+	    he = he.getNextInFace();
+	} while (he != getHalfedge());
+	return aabb;
+    }
+
+    public WB_Triangle toTriangle() {
+	if (getFaceOrder() != 3) {
+	    return null;
+	}
+	return new WB_Triangle(_halfedge.getVertex(), _halfedge.getEndVertex(),
+		_halfedge.getNextInFace().getEndVertex());
     }
 
     public WB_Polygon toPolygon() {
@@ -482,6 +502,10 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	    he = he.getNextInFace();
 	} while (he != _halfedge);
 	return false;
+    }
+
+    public boolean isDegenerate() {
+	return getFaceNormal().getLength3D() < 0.5;
     }
 
     public void copyProperties(final HE_Face el) {

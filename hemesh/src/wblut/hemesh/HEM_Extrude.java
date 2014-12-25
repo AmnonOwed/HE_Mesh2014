@@ -2,12 +2,11 @@ package wblut.hemesh;
 
 import gnu.trove.map.TLongDoubleMap;
 import gnu.trove.map.hash.TLongDoubleHashMap;
-
 import java.util.List;
 import java.util.Map;
-
 import javolution.util.FastMap;
 import javolution.util.FastTable;
+import wblut.geom.Segment;
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
@@ -17,7 +16,6 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Vector;
-import wblut.geom.interfaces.Segment;
 import wblut.math.WB_ConstantParameter;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Parameter;

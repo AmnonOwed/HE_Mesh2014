@@ -296,12 +296,12 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double absDot(final WB_Coordinate p) {
-	return WB_Math.fastAbs(WB_CoordinateMath.dot(xd(), yd(), zd(), p.xd(),
+	return WB_Math.fastAbs(WB_CoordinateUtil.dot(xd(), yd(), zd(), p.xd(),
 		p.yd(), p.zd()));
     }
 
     public double absDot2D(final WB_Coordinate p) {
-	return WB_Math.fastAbs(WB_CoordinateMath.dot2D(xd(), yd(), p.xd(),
+	return WB_Math.fastAbs(WB_CoordinateUtil.dot2D(xd(), yd(), p.xd(),
 		p.yd()));
     }
 
@@ -495,11 +495,11 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double dot(final WB_Coordinate p) {
-	return WB_CoordinateMath.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd());
+	return WB_CoordinateUtil.dot(xd(), yd(), zd(), p.xd(), p.yd(), p.zd());
     }
 
     public double dot2D(final WB_Coordinate p) {
-	return WB_CoordinateMath.dot2D(xd(), yd(), p.xd(), p.yd());
+	return WB_CoordinateUtil.dot2D(xd(), yd(), p.xd(), p.yd());
     }
 
     @Override
@@ -531,12 +531,12 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double getAngle(final WB_Coordinate p) {
-	return WB_CoordinateMath.angleBetween(xd(), yd(), zd(), p.xd(), p.yd(),
+	return WB_CoordinateUtil.angleBetween(xd(), yd(), zd(), p.xd(), p.yd(),
 		p.zd());
     }
 
     public double getAngleNorm(final WB_Coordinate p) {
-	return WB_CoordinateMath.angleBetweenNorm(xd(), yd(), zd(), p.xd(),
+	return WB_CoordinateUtil.angleBetweenNorm(xd(), yd(), zd(), p.xd(),
 		p.yd(), p.zd());
     }
 
@@ -549,12 +549,12 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double getDistance3D(final WB_Coordinate p) {
-	return WB_CoordinateMath.getDistance3D(xd(), yd(), zd(), p.xd(),
+	return WB_CoordinateUtil.getDistance3D(xd(), yd(), zd(), p.xd(),
 		p.yd(), p.zd());
     }
 
     public double getDistance2D(final WB_Coordinate p) {
-	return WB_CoordinateMath.getDistance2D(xd(), yd(), p.xd(), p.yd());
+	return WB_CoordinateUtil.getDistance2D(xd(), yd(), p.xd(), p.yd());
     }
 
     /**
@@ -566,11 +566,11 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double getLength3D() {
-	return WB_CoordinateMath.getLength3D(xd(), yd(), zd());
+	return WB_CoordinateUtil.getLength3D(xd(), yd(), zd());
     }
 
     public double getLength2D() {
-	return WB_CoordinateMath.getLength2D(xd(), yd());
+	return WB_CoordinateUtil.getLength2D(xd(), yd());
     }
 
     /**
@@ -582,12 +582,12 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double getSqDistance3D(final WB_Coordinate p) {
-	return WB_CoordinateMath.getSqDistance3D(xd(), yd(), zd(), p.xd(),
+	return WB_CoordinateUtil.getSqDistance3D(xd(), yd(), zd(), p.xd(),
 		p.yd(), p.zd());
     }
 
     public double getSqDistance2D(final WB_Coordinate p) {
-	return WB_CoordinateMath.getSqDistance2D(xd(), yd(), p.xd(), p.yd());
+	return WB_CoordinateUtil.getSqDistance2D(xd(), yd(), p.xd(), p.yd());
     }
 
     /**
@@ -599,16 +599,16 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public double getSqLength3D() {
-	return WB_CoordinateMath.getSqLength3D(xd(), yd(), zd());
+	return WB_CoordinateUtil.getSqLength3D(xd(), yd(), zd());
     }
 
     public double getSqLength2D() {
-	return WB_CoordinateMath.getSqLength2D(xd(), yd());
+	return WB_CoordinateUtil.getSqLength2D(xd(), yd());
     }
 
     @Override
     public int hashCode() {
-	return WB_CoordinateMath.calculateHashCode(xd(), yd(), zd());
+	return WB_CoordinateUtil.calculateHashCode(xd(), yd(), zd());
     }
 
     public double heading() {
@@ -648,7 +648,7 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public boolean isZero() {
-	return WB_CoordinateMath.isZero(xd(), yd(), zd());
+	return WB_CoordinateUtil.isZero(xd(), yd(), zd());
     }
 
     public WB_Vector mul(final double f) {
@@ -714,8 +714,9 @@ public class WB_Vector extends WB_AbstractVector {
 	raa.applySelfAsVector(this);
     }
 
-    public double scalarTriple(final WB_Coordinate p, final WB_Coordinate q) {
-	return WB_CoordinateMath.scalarTriple(this, p, q);
+    public double scalarTriple(final WB_Coordinate v, final WB_Coordinate w) {
+	return WB_CoordinateUtil.scalarTriple(xd(), yd(), zd(), v.xd(), v.yd(),
+		v.zd(), w.xd(), w.yd(), w.zd());
     }
 
     /**
@@ -761,8 +762,9 @@ public class WB_Vector extends WB_AbstractVector {
 	result.set(this.xd() - p.xd(), this.yd() - p.yd(), this.zd() - p.zd());
     }
 
-    public WB_M33 tensor(final WB_Coordinate q) {
-	return WB_CoordinateMath.tensor(this, q);
+    public WB_M33 tensor(final WB_Coordinate v) {
+	return new WB_M33(WB_CoordinateUtil.tensor3D(xd(), yd(), zd(), v.xd(),
+		v.yd(), v.zd()));
     }
 
     @Override

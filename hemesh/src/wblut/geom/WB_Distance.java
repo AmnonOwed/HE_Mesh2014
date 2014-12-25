@@ -1,6 +1,5 @@
 package wblut.geom;
 
-import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Epsilon;
 
 public class WB_Distance {

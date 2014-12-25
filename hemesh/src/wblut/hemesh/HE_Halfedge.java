@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_CoordinateMath;
+import wblut.geom.WB_CoordinateUtil;
 import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasColor;
@@ -572,7 +572,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		if (c == null) {
 			return Double.NaN;
 		}
-		return WB_CoordinateMath.angleBetween(c.xd(), c.yd(), c.zd(), p1.xd(),
+		return WB_CoordinateUtil.angleBetween(c.xd(), c.yd(), c.zd(), p1.xd(),
 				p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd());
 
 	}

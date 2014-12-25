@@ -25,12 +25,6 @@ import wblut.external.straightskeleton.Output.Face;
 import wblut.external.straightskeleton.Point3d;
 import wblut.external.straightskeleton.Skeleton;
 import wblut.geom.WB_KDTree.WB_KDEntry;
-import wblut.geom.data.WB_JohnsonPolyhedraData01;
-import wblut.geom.data.WB_JohnsonPolyhedraData02;
-import wblut.geom.data.WB_JohnsonPolyhedraData03;
-import wblut.geom.data.WB_JohnsonPolyhedraData04;
-import wblut.geom.data.WB_PolyhedraData;
-import wblut.geom.interfaces.Triangle;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 import com.vividsolutions.jts.densify.Densifier;
@@ -7743,13 +7737,13 @@ public class WB_GeometryFactory {
 	final WB_Polygon[] polys = new WB_Polygon[2];
 	if (numVerts > 0) {
 	    WB_Point a = new WB_Point(poly.getPoint(numVerts - 1));
-	    WB_Classification aSide = WB_Classify.classifyPointToPlane(P, a);
+	    WB_Classification aSide = WB_Classify.classifyPointToPlane3D(P, a);
 	    WB_Point b;
 	    WB_Classification bSide;
 	    for (int n = 0; n < numVerts; n++) {
 		WB_Point intersection;
 		b = new WB_Point(poly.getPoint(n));
-		bSide = WB_Classify.classifyPointToPlane(P, b);
+		bSide = WB_Classify.classifyPointToPlane3D(P, b);
 		if (bSide == WB_Classification.FRONT) {
 		    if (aSide == WB_Classification.BACK) {
 			intersection = getIntersection(b, a, P);

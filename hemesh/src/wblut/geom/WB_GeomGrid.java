@@ -1,9 +1,7 @@
 package wblut.geom;
 
 import java.util.ArrayList;
-
 import javolution.util.FastMap;
-import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 

@@ -1,9 +1,7 @@
 package wblut.geom;
 
 import java.util.List;
-
 import javolution.util.FastTable;
-import wblut.geom.interfaces.Segment;
 import wblut.math.WB_Math;
 
 public class WB_Segment extends WB_Linear implements Segment, WB_Curve {

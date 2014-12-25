@@ -13,9 +13,11 @@ import processing.opengl.PGraphics3D;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
+import wblut.geom.Segment;
+import wblut.geom.Triangle;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_CoordinateMath;
+import wblut.geom.WB_CoordinateUtil;
 import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_Curve;
 import wblut.geom.WB_FaceListMesh;
@@ -40,8 +42,6 @@ import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
-import wblut.geom.interfaces.Segment;
-import wblut.geom.interfaces.Triangle;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceIntersection;
 import wblut.hemesh.HE_Halfedge;
@@ -1609,13 +1609,13 @@ public class WB_Render3D {
 	WB_Ray ray = new WB_Ray(unproject.ptStartPos, unproject.ptEndPos);
 	final WB_Point o = ray.getOrigin();
 	WB_Point e = ray.getPointOnLine(1000);
-	double error = WB_CoordinateMath.getSqDistance2D(x, y,
+	double error = WB_CoordinateUtil.getSqDistance2D(x, y,
 		home.screenX(e.xf(), e.yf(), e.zf()),
 		home.screenY(e.xf(), e.yf(), e.zf()));
 	while (error > 1) {
 	    final WB_Point ne = e.add(Math.random() - 0.5, Math.random() - 0.5,
 		    Math.random() - 0.5);
-	    final double nerror = WB_CoordinateMath.getSqDistance2D(x, y,
+	    final double nerror = WB_CoordinateUtil.getSqDistance2D(x, y,
 		    home.screenX(ne.xf(), ne.yf(), ne.zf()),
 		    home.screenY(ne.xf(), ne.yf(), ne.zf()));
 	    if (nerror < error) {

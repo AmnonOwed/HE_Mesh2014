@@ -1,9 +1,5 @@
-package wblut.geom.interfaces;
+package wblut.geom;
 
-import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_Plane;
-import wblut.geom.WB_Point;
-import wblut.geom.WB_Simplex;
 
 public interface Triangle extends WB_Simplex {
 

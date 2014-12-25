@@ -5,7 +5,7 @@ public class WB_Disclaimer {
 
     @Override
     public String toString() {
-	final String dis = "";
+	final String dis = "License: https://github.com/wblut/HE_Mesh2014#license";
 	return dis;
     }
 

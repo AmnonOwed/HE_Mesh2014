@@ -168,7 +168,7 @@ public class WB_VoronoiCell3D {
 		                                                         .getNumberOfVertices()];
 
 		for (int i = 0; i < cell.getNumberOfVertices(); i++) {
-			result[i] = WB_Classify.classifyPointToPlane(WB_Point,
+			result[i] = WB_Classify.classifyPointToPlane3D(WB_Point,
 					cell.getVertex(i));
 		}
 		return result;

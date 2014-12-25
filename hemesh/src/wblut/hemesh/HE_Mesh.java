@@ -1,5 +1,7 @@
 package wblut.hemesh;
 
+import static wblut.math.WB_Epsilon.isZero;
+import static wblut.math.WB_Epsilon.isZeroSq;
 import gnu.trove.iterator.TLongObjectIterator;
 import gnu.trove.map.TLongIntMap;
 import gnu.trove.map.TLongObjectMap;
@@ -1870,7 +1872,7 @@ WB_HasColor, WB_Mesh {
 	HE_Halfedge e;
 	while (eItr.hasNext()) {
 	    e = eItr.next();
-	    if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(e.getVertex(),
+	    if (isZeroSq(WB_Distance.getSqDistance3D(e.getVertex(),
 		    e.getEndVertex()))) {
 		edgesToRemove.add(e);
 	    }
@@ -2335,7 +2337,7 @@ WB_HasColor, WB_Mesh {
 	final HE_Halfedge hej = findHalfedge(face, vj);
 	final double d = vi.getPoint().getDistance3D(vj);
 	boolean degenerate = false;
-	if (WB_Epsilon.isZero(d)) {// happens when a collinear (part of a) face
+	if (isZero(d)) {// happens when a collinear (part of a) face
 	    // is cut. Do not add a new edge connecting
 	    // these two points,rather collapse them into
 	    // each other and remove two-edge faces
@@ -3308,7 +3310,7 @@ WB_HasColor, WB_Mesh {
      * @return true/false
      */
     public static boolean pointIsInFace(final WB_Point p, final HE_Face f) {
-	return WB_Epsilon.isZero(WB_Distance.getDistance3D(p,
+	return isZero(WB_Distance.getDistance3D(p,
 		WB_Intersection.getClosestPoint3D(p, f.toPolygon())));
     }
 
@@ -3324,11 +3326,11 @@ WB_HasColor, WB_Mesh {
     public static boolean pointIsStrictlyInFace(final WB_Coordinate p,
 	    final HE_Face f) {
 	final WB_Polygon poly = f.toPolygon();
-	if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
 		WB_Intersection.getClosestPoint3D(p, poly)))) {
 	    return false;
 	}
-	if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(p,
+	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
 		WB_Intersection.getClosestPointOnPeriphery3D(p, poly)))) {
 	    return false;
 	}
@@ -3460,7 +3462,7 @@ WB_HasColor, WB_Mesh {
 	HE_Face f;
 	while (fitr.hasNext()) {
 	    f = fitr.next();
-	    if (WB_Classify.classifyPolygonToPlane(f.toPolygon(), P) == WB_Classification.FRONT) {
+	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_Classification.FRONT) {
 		_selection.add(f);
 	    }
 	}
@@ -3473,7 +3475,7 @@ WB_HasColor, WB_Mesh {
 	HE_Face f;
 	while (fitr.hasNext()) {
 	    f = fitr.next();
-	    if (WB_Classify.classifyPolygonToPlane(f.toPolygon(), P) == WB_Classification.CROSSING) {
+	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_Classification.CROSSING) {
 		_selection.add(f);
 	    }
 	}
@@ -3810,8 +3812,19 @@ WB_HasColor, WB_Mesh {
     /**
      * Remove all redundant vertices in straight edges.
      *
+     * @deprecated Use {@link #removeCollinearVertices()} instead
+     *
      */
+    @Deprecated
     public void removeColinearVertices() {
+	deleteCollinearVertices();
+    }
+
+    /**
+     * Remove all redundant vertices in straight edges.
+     *
+     */
+    public void deleteCollinearVertices() {
 	final Iterator<HE_Vertex> vItr = vItr();
 	HE_Vertex v;
 	HE_Halfedge he;
@@ -3841,6 +3854,51 @@ WB_HasColor, WB_Mesh {
 		    vItr.remove();
 		    remove(he);
 		    remove(he.getPair());
+		}
+	    }
+	}
+    }
+
+    public void deleteDegenerateTriangles() {
+	final List<HE_Face> faces = this.getFacesAsList();
+	HE_Halfedge he;
+	for (final HE_Face face : faces) {
+	    if (!contains(face)) {
+		continue; // face already removed by a previous change
+	    }
+	    if (face.isDegenerate()) {
+		final int fo = face.getFaceOrder();
+		if (fo == 3) {
+		    HE_Halfedge degeneratehe = null;
+		    he = face.getHalfedge();
+		    do {
+			if (isZero(he.getLength())) {
+			    degeneratehe = he;
+			    break;
+			}
+			he = he.getNextInFace();
+		    } while (he != face.getHalfedge());
+		    if (degeneratehe != null) {
+			System.out.println("Zero length change!");
+			collapseHalfedge(he);
+			continue;
+		    }
+		    he = face.getHalfedge();
+		    double d;
+		    double dmax = 0;
+		    do {
+			d = he.getLength();
+			if (d > dmax) {
+			    degeneratehe = he;
+			    dmax = d;
+			}
+			he = he.getNextInFace();
+		    } while (he != face.getHalfedge());
+		    System.out.println("Deleting longest edge: " + he);
+		    final HE_Face f = deleteEdge(degeneratehe);
+		    /*
+		     * if (f != null) { triangulate(f,false); }
+		     */
 		}
 	    }
 	}

@@ -2,8 +2,6 @@ package wblut.geom;
 
 import java.util.ArrayList;
 
-import wblut.geom.interfaces.Segment;
-
 public class WB_GeomGridCell {
 
 	protected int index;
