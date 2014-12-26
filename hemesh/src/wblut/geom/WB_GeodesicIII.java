@@ -86,7 +86,7 @@ public class WB_GeodesicIII {
 		for (int i = -v; i <= v; i++) {
 			for (int j = -v; j <= v; j++) {
 				p = trigrid.getPoint(i, j);
-				cp = WB_Intersection.getClosestPointToTriangle3D(p, p0, p1, p2);
+				cp = WB_GeometryOp.getClosestPointToTriangle3D(p, p0, p1, p2);
 				if (WB_Epsilon.isZeroSq(cp.getSqDistance3D(p))) {
 					PPT.add(p);
 				}

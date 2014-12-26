@@ -8,9 +8,9 @@ import java.util.Map;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABBTree;
-import wblut.geom.WB_Classification;
+import wblut.geom.WB_ClassificationGeometry;
 import wblut.geom.WB_Classify;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
@@ -96,7 +96,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	}
 	// check if plane intersects mesh
 	final WB_Plane lP = new WB_Plane(P.getNormal(), P.d() + offset);
-	if (!WB_Intersection.checkIntersection3D(mesh.getAABB(), lP)) {
+	if (!WB_GeometryOp.checkIntersection3D(mesh.getAABB(), lP)) {
 	    tracker.setDefaultStatus("Plane doesn't intersect bounding box. Exiting HEM_SliceSurface.");
 	    return mesh;
 	}
@@ -107,8 +107,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	faces.addFaces(HE_Intersection.getPotentialIntersectedFaces(tree, lP));
 	faces.collectVertices();
 	faces.collectEdgesByFace();
-	WB_Classification tmp;
-	final HashMap<Long, WB_Classification> vertexClass = new HashMap<Long, WB_Classification>();
+	WB_ClassificationGeometry tmp;
+	final HashMap<Long, WB_ClassificationGeometry> vertexClass = new HashMap<Long, WB_ClassificationGeometry>();
 	tracker.setDefaultStatus("Classifying vertices.",
 		faces.getNumberOfVertices());
 	HE_Vertex v;
@@ -127,24 +127,24 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	HE_Halfedge e;
 	while (eItr.hasNext()) {
 	    e = eItr.next();
-	    if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
-		if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+	    if (vertexClass.get(e.getStartVertex().key()) == WB_ClassificationGeometry.ON) {
+		if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 		    cutEdges.add(e);
 		    e.setInternalLabel(1);
 		    e.getPair().setInternalLabel(1);
 		} else {
 		    edgeInt.put(e.key(), 0.0);
 		}
-	    } else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
-		if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+	    } else if (vertexClass.get(e.getStartVertex().key()) == WB_ClassificationGeometry.BACK) {
+		if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 		    edgeInt.put(e.key(), 1.0);
-		} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
+		} else if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.FRONT) {
 		    edgeInt.put(e.key(), HE_Intersection.getIntersection(e, lP));
 		}
 	    } else {
-		if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+		if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 		    edgeInt.put(e.key(), 1.0);
-		} else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
+		} else if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.BACK) {
 		    edgeInt.put(e.key(), HE_Intersection.getIntersection(e, lP));
 		}
 	    }
@@ -203,20 +203,20 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		    final HE_Selection out = mesh.splitFace(f,
 			    faceVertices.get(firstVertex),
 			    faceVertices.get(secondVertex));
-		    WB_Classification cptp = WB_Plane.classifyPointToPlane(
+		    WB_ClassificationGeometry cptp = WB_Plane.classifyPointToPlane(
 			    f.getFaceCenter(), lP);
-		    if (cptp == WB_Classification.FRONT) {
+		    if (cptp == WB_ClassificationGeometry.FRONT) {
 			front.add(f);
-		    } else if (cptp == WB_Classification.BACK) {
+		    } else if (cptp == WB_ClassificationGeometry.BACK) {
 			back.add(f);
 		    }
 		    if (out.getNumberOfFaces() > 0) {
 			final HE_Face nf = out.fItr().next();
 			cptp = WB_Plane.classifyPointToPlane(
 				nf.getFaceCenter(), lP);
-			if (cptp == WB_Classification.FRONT) {
+			if (cptp == WB_ClassificationGeometry.FRONT) {
 			    front.add(nf);
-			} else if (cptp == WB_Classification.BACK) {
+			} else if (cptp == WB_ClassificationGeometry.BACK) {
 			    back.add(nf);
 			}
 			cut.add(nf);
@@ -277,8 +277,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	// check if plane intersects mesh
 	boolean positiveVertexExists = false;
 	boolean negativeVertexExists = false;
-	WB_Classification tmp;
-	final FastMap<Long, WB_Classification> vertexClass = new FastMap<Long, WB_Classification>();
+	WB_ClassificationGeometry tmp;
+	final FastMap<Long, WB_ClassificationGeometry> vertexClass = new FastMap<Long, WB_ClassificationGeometry>();
 	HE_Vertex v;
 	tracker.setDefaultStatus("Classifying vertices.",
 		lsel.getNumberOfVertices());
@@ -287,10 +287,10 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	    v = vItr.next();
 	    tmp = lP.classifyPointToPlane(v);
 	    vertexClass.put(v.key(), tmp);
-	    if (tmp == WB_Classification.FRONT) {
+	    if (tmp == WB_ClassificationGeometry.FRONT) {
 		positiveVertexExists = true;
 	    }
-	    if (tmp == WB_Classification.BACK) {
+	    if (tmp == WB_ClassificationGeometry.BACK) {
 		negativeVertexExists = true;
 	    }
 	    tracker.incrementCounter();
@@ -305,24 +305,24 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		    lsel.getNumberOfEdges());
 	    while (eItr.hasNext()) {
 		e = eItr.next();
-		if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.ON) {
-		    if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+		if (vertexClass.get(e.getStartVertex().key()) == WB_ClassificationGeometry.ON) {
+		    if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 			cutEdges.add(e);
 			e.setInternalLabel(1);
 		    } else {
 			edgeInt.put(e.key(), 0.0);
 		    }
-		} else if (vertexClass.get(e.getStartVertex().key()) == WB_Classification.BACK) {
-		    if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+		} else if (vertexClass.get(e.getStartVertex().key()) == WB_ClassificationGeometry.BACK) {
+		    if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 			edgeInt.put(e.key(), 1.0);
-		    } else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.FRONT) {
+		    } else if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.FRONT) {
 			edgeInt.put(e.key(),
 				HE_Intersection.getIntersection(e, lP));
 		    }
 		} else {
-		    if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.ON) {
+		    if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.ON) {
 			edgeInt.put(e.key(), 1.0);
-		    } else if (vertexClass.get(e.getEndVertex().key()) == WB_Classification.BACK) {
+		    } else if (vertexClass.get(e.getEndVertex().key()) == WB_ClassificationGeometry.BACK) {
 			edgeInt.put(e.key(),
 				HE_Intersection.getIntersection(e, lP));
 		    }
@@ -385,20 +385,20 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			final HE_Selection out = lsel.parent.splitFace(f,
 				faceVertices.get(firstVertex),
 				faceVertices.get(secondVertex));
-			WB_Classification cptp = WB_Plane.classifyPointToPlane(
+			WB_ClassificationGeometry cptp = WB_Plane.classifyPointToPlane(
 				f.getFaceCenter(), lP);
-			if (cptp == WB_Classification.FRONT) {
+			if (cptp == WB_ClassificationGeometry.FRONT) {
 			    front.add(f);
-			} else if (cptp == WB_Classification.BACK) {
+			} else if (cptp == WB_ClassificationGeometry.BACK) {
 			    back.add(f);
 			}
 			final HE_Face nf = out.fItr().next();
 			cut.add(nf);
 			cptp = WB_Plane.classifyPointToPlane(
 				nf.getFaceCenter(), lP);
-			if (cptp == WB_Classification.FRONT) {
+			if (cptp == WB_ClassificationGeometry.FRONT) {
 			    front.add(nf);
-			} else if (cptp == WB_Classification.BACK) {
+			} else if (cptp == WB_ClassificationGeometry.BACK) {
 			    back.add(nf);
 			}
 			final HE_Halfedge ne = out.eItr().next();
@@ -423,7 +423,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
 	for (final HE_Halfedge he : cutEdges.getEdgesAsList()) {
 	    final HE_Face f = he.getFace();
-	    if (WB_Classify.classifyPointToPlane3D(P, f.getFaceCenter()) == WB_Classification.FRONT) {
+	    if (WB_Classify.classifyPointToPlane3D(P, f.getFaceCenter()) == WB_ClassificationGeometry.FRONT) {
 		edges.add(he.getPair());
 	    } else {
 		edges.add(he);

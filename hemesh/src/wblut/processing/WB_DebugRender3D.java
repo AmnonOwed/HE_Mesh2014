@@ -6,7 +6,7 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_Point;
@@ -106,10 +106,10 @@ public class WB_DebugRender3D {
 		HE_Face f;
 		while (fItr.hasNext()) {
 			f = fItr.next();
-			if (f.getFaceType() == WB_Convex.CONVEX) {
+			if (f.getFaceType() == WB_ClassificationConvex.CONVEX) {
 				home.fill(0, 255, 0);
 			}
-			else if (f.getFaceType() == WB_Convex.CONCAVE) {
+			else if (f.getFaceType() == WB_ClassificationConvex.CONCAVE) {
 				home.fill(255, 0, 0);
 			}
 			else {
@@ -127,10 +127,10 @@ public class WB_DebugRender3D {
 		home.stroke(255, 0, 0);
 		home.line(he.getVertex().xf(), he.getVertex().yf(),
 				he.getVertex().zf(), c.xf(), c.yf(), c.zf());
-		if (he.getHalfedgeType() == WB_Convex.CONVEX) {
+		if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
 			home.stroke(0, 255, 0);
 		}
-		else if (he.getHalfedgeType() == WB_Convex.CONCAVE) {
+		else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
 			home.stroke(255, 0, 0);
 		}
 		else {
@@ -151,10 +151,10 @@ public class WB_DebugRender3D {
 		home.stroke(255, 0, 0);
 		home.line(he.getVertex().xf(), he.getVertex().yf(),
 				he.getVertex().zf(), c.xf(), c.yf(), c.zf());
-		if (he.getHalfedgeType() == WB_Convex.CONVEX) {
+		if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
 			home.stroke(0, 255, 0);
 		}
-		else if (he.getHalfedgeType() == WB_Convex.CONCAVE) {
+		else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
 			home.stroke(255, 0, 0);
 		}
 		else {
@@ -193,11 +193,11 @@ public class WB_DebugRender3D {
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
 						.getVertex().zf(), c.xf(), c.yf(), c.zf());
 
-				if (he.getHalfedgeType() == WB_Convex.CONVEX) {
+				if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
 					home.stroke(0, 255, 0);
 					home.fill(0, 255, 0);
 				}
-				else if (he.getHalfedgeType() == WB_Convex.CONCAVE) {
+				else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
 					home.stroke(255, 0, 0);
 					home.fill(255, 0, 0);
 				}
@@ -247,11 +247,11 @@ public class WB_DebugRender3D {
 				home.stroke(255, 0, 0);
 				home.line(he.getVertex().xf(), he.getVertex().yf(), he
 						.getVertex().zf(), c.xf(), c.yf(), c.zf());
-				if (he.getHalfedgeType() == WB_Convex.CONVEX) {
+				if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
 					home.stroke(0, 255, 0);
 					home.fill(0, 255, 0);
 				}
-				else if (he.getHalfedgeType() == WB_Convex.CONCAVE) {
+				else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
 					home.stroke(255, 0, 0);
 					home.fill(255, 0, 0);
 				}

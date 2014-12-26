@@ -748,7 +748,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	}
 
 	private void updateCurvatures() {
-		final WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		final WB_TriangleMesh tri = (WB_TriangleMesh) geometryfactory.createTriMesh(this);
 		tri.updateCurvatures();
 		k1min = tri.k1min;
 		k2min = tri.k2min;
@@ -764,7 +764,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	}
 
 	private void updateDCurvatures() {
-		final WB_TriMesh tri = (WB_TriMesh) geometryfactory.createTriMesh(this);
+		final WB_TriangleMesh tri = (WB_TriangleMesh) geometryfactory.createTriMesh(this);
 		tri.updateDCurvatures();
 		k1min = tri.k1min;
 		k2min = tri.k2min;

@@ -15,9 +15,9 @@ import java.util.Map;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
-import wblut.geom.WB_Classification;
+import wblut.geom.WB_ClassificationGeometry;
 import wblut.geom.WB_Classify;
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_Distance;
@@ -28,7 +28,7 @@ import wblut.geom.WB_GeometryType;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
@@ -3154,7 +3154,7 @@ WB_HasColor, WB_Mesh {
 	final HE_Face[] f = getFacesAsArray();
 	final int n = getNumberOfFaces();
 	for (int i = 0; i < n; i++) {
-	    if (f[i].getFaceType() == WB_Convex.CONCAVE) {
+	    if (f[i].getFaceType() == WB_ClassificationConvex.CONCAVE) {
 		triangulate(f[i].key());
 	    }
 	}
@@ -3163,7 +3163,7 @@ WB_HasColor, WB_Mesh {
     public void triangulateConcaveFaces(final List<HE_Face> sel) {
 	final int n = sel.size();
 	for (int i = 0; i < n; i++) {
-	    if (sel.get(i).getFaceType() == WB_Convex.CONCAVE) {
+	    if (sel.get(i).getFaceType() == WB_ClassificationConvex.CONCAVE) {
 		triangulate(sel.get(i).key());
 	    }
 	}
@@ -3186,7 +3186,7 @@ WB_HasColor, WB_Mesh {
      *            key of face
      */
     public void triangulateConcaveFace(final HE_Face face) {
-	if (face.getFaceType() == WB_Convex.CONCAVE) {
+	if (face.getFaceType() == WB_ClassificationConvex.CONCAVE) {
 	    triangulate(face);
 	}
     }
@@ -3281,11 +3281,11 @@ WB_HasColor, WB_Mesh {
 	    face = fItr.next();
 	    P = face.toPlane();
 	    if (isConvex) {
-		if (P.classifyPointToPlane(p) == WB_Classification.BACK) {
+		if (P.classifyPointToPlane(p) == WB_ClassificationGeometry.BACK) {
 		    return false;
 		}
 	    } else {
-		lpi = WB_Intersection.getIntersection3D(R, P);
+		lpi = WB_GeometryOp.getIntersection3D(R, P);
 		if (lpi.intersection) {
 		    if (pointIsInFace((WB_Point) lpi.object, face)) {
 			/*
@@ -3311,7 +3311,7 @@ WB_HasColor, WB_Mesh {
      */
     public static boolean pointIsInFace(final WB_Point p, final HE_Face f) {
 	return isZero(WB_Distance.getDistance3D(p,
-		WB_Intersection.getClosestPoint3D(p, f.toPolygon())));
+		WB_GeometryOp.getClosestPoint3D(p, f.toPolygon())));
     }
 
     /**
@@ -3327,11 +3327,11 @@ WB_HasColor, WB_Mesh {
 	    final HE_Face f) {
 	final WB_Polygon poly = f.toPolygon();
 	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
-		WB_Intersection.getClosestPoint3D(p, poly)))) {
+		WB_GeometryOp.getClosestPoint3D(p, poly)))) {
 	    return false;
 	}
 	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
-		WB_Intersection.getClosestPointOnPeriphery3D(p, poly)))) {
+		WB_GeometryOp.getClosestPointOnPeriphery3D(p, poly)))) {
 	    return false;
 	}
 	return true;
@@ -3462,7 +3462,7 @@ WB_HasColor, WB_Mesh {
 	HE_Face f;
 	while (fitr.hasNext()) {
 	    f = fitr.next();
-	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_Classification.FRONT) {
+	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_ClassificationGeometry.FRONT) {
 		_selection.add(f);
 	    }
 	}
@@ -3475,7 +3475,7 @@ WB_HasColor, WB_Mesh {
 	HE_Face f;
 	while (fitr.hasNext()) {
 	    f = fitr.next();
-	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_Classification.CROSSING) {
+	    if (WB_Classify.classifyPolygonToPlane3D(f.toPolygon(), P) == WB_ClassificationGeometry.CROSSING) {
 		_selection.add(f);
 	    }
 	}
@@ -4111,7 +4111,7 @@ WB_HasColor, WB_Mesh {
 	WB_Point result = new WB_Point();
 	for (int i = 0; i < faces.size(); i++) {
 	    final WB_Polygon poly = faces.get(i).toPolygon();
-	    final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
+	    final WB_Point tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
 	    d = WB_Distance.getSqDistance3D(tmp, p);
 	    if (d < dmin) {
 		dmin = d;
@@ -4140,7 +4140,7 @@ WB_HasColor, WB_Mesh {
 	HE_Face face = new HE_Face();
 	for (int i = 0; i < faces.size(); i++) {
 	    final WB_Polygon poly = faces.get(i).toPolygon();
-	    final WB_Point tmp = WB_Intersection.getClosestPoint3D(p, poly);
+	    final WB_Point tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
 	    d = WB_Distance.getSqDistance3D(tmp, p);
 	    if (d < dmin) {
 		dmin = d;

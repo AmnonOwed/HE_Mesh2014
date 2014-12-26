@@ -528,9 +528,40 @@ public class WB_CoordinateUtil {
      * @param uy
      * @param uz
      * @return
+     * @deprecated Use {@link #isZero3D(double,double,double)} instead
      */
+    @Deprecated
     public static boolean isZero(final double ux, final double uy,
 	    final double uz) {
+	return isZero3D(ux, uy, uz);
+    }
+
+    /**
+     *
+     * Check if the square length of 3D vector is smaller than the SQEPSILON
+     * tolerance defined in {@link wblut.math.WB_Epsilon#SQEPSILON}
+     *
+     * @param ux
+     * @param uy
+     * @param uz
+     * @return
+     */
+    public static boolean isZero3D(final double ux, final double uy,
+	    final double uz) {
 	return (getSqLength3D(ux, uy, uz) < WB_Epsilon.SQEPSILON);
+    }
+
+    /**
+     *
+     * Check if the square length of 2D vector is smaller than the SQEPSILON
+     * tolerance defined in {@link wblut.math.WB_Epsilon#SQEPSILON}
+     *
+     * @param ux
+     * @param uy
+     * @return
+     */
+    public static boolean isZero2D(final double ux, final double uy,
+	    final double uz) {
+	return (getSqLength2D(ux, uy) < WB_Epsilon.SQEPSILON);
     }
 }

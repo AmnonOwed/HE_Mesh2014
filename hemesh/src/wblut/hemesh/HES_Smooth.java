@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Point;
 
 /**
@@ -211,7 +211,7 @@ public class HES_Smooth extends HES_Subdividor {
 	vItr = outer.iterator();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
-	    if ((keepEdges) || (v.getVertexType() != WB_Convex.FLAT)) {
+	    if ((keepEdges) || (v.getVertexType() != WB_ClassificationConvex.FLAT)) {
 		newPositions.add(v.getPoint());
 	    } else {
 		final WB_Point p = new WB_Point(v);

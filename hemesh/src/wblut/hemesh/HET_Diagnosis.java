@@ -5,7 +5,7 @@ import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Segment;
 import wblut.geom.WB_Triangle;
@@ -472,7 +472,7 @@ public class HET_Diagnosis {
 	final HE_RASTrove<HE_Face> candidates = new HE_RASTrove<HE_Face>();
 	final WB_Triangle T = tri.toTriangle();
 	final WB_AABB aabb = tri.toAABB();
-	final List<WB_AABBNode> nodes = WB_Intersection.getIntersection3D(aabb,
+	final List<WB_AABBNode> nodes = WB_GeometryOp.getIntersection3D(aabb,
 		tree);
 	for (final WB_AABBNode n : nodes) {
 	    candidates.addAll(n.getFaces());
@@ -483,7 +483,7 @@ public class HET_Diagnosis {
 	for (final HE_Face candidate : candidates) {
 	    if (candidate.getKey() > tri.getKey()) {// Check each face pair only
 		// once
-		final WB_IntersectionResult ir = WB_Intersection
+		final WB_IntersectionResult ir = WB_GeometryOp
 			.getIntersection3D(T, candidate.toTriangle());
 		if (ir.intersection
 			&& ir.object != null

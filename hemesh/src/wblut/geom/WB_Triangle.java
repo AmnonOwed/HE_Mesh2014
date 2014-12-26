@@ -3,7 +3,7 @@ package wblut.geom;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
-public class WB_Triangle implements Triangle {
+public class WB_Triangle implements WB_Simplex {
     /** First point. */
     WB_Point p1;
     /** Second point. */
@@ -55,17 +55,14 @@ public class WB_Triangle implements Triangle {
 		/ (a * b);
     }
 
-    @Override
     public WB_Point p1() {
 	return p1;
     }
 
-    @Override
     public WB_Point p2() {
 	return p2;
     }
 
-    @Override
     public WB_Point p3() {
 	return p3;
     }
@@ -127,7 +124,6 @@ public class WB_Triangle implements Triangle {
      *
      * @return WB_Plane
      */
-    @Override
     public WB_Plane getPlane() {
 	final WB_Plane P = new WB_Plane(p1, p2, p3);
 	if (P.getNormal().getSqLength3D() < WB_Epsilon.SQEPSILON) {
@@ -141,7 +137,6 @@ public class WB_Triangle implements Triangle {
      *
      * @return centroid
      */
-    @Override
     public WB_Point getCentroid() {
 	return getPointFromTrilinear(b * c, c * a, a * b);
     }
@@ -151,7 +146,6 @@ public class WB_Triangle implements Triangle {
      *
      * @return circumcenter
      */
-    @Override
     public WB_Point getCircumcenter() {
 	return getPointFromTrilinear(cosA, cosB, cosC);
     }
@@ -161,7 +155,6 @@ public class WB_Triangle implements Triangle {
      *
      * @return orthocenter
      */
-    @Override
     public WB_Point getOrthocenter() {
 	final double a2 = a * a;
 	final double b2 = b * b;
@@ -182,7 +175,6 @@ public class WB_Triangle implements Triangle {
      *            the z
      * @return point
      */
-    @Override
     public WB_Point getPointFromTrilinear(final double x, final double y,
 	    final double z) {
 	final double abc = a * x + b * y + c * z;
@@ -207,7 +199,6 @@ public class WB_Triangle implements Triangle {
      *            the z
      * @return point
      */
-    @Override
     public WB_Point getPointFromBarycentric(final double x, final double y,
 	    final double z) {
 	return getPointFromTrilinear(x / a, y / b, z / c);
@@ -234,7 +225,6 @@ public class WB_Triangle implements Triangle {
      *            the p
      * @return the w b_ point
      */
-    @Override
     public WB_Point getBarycentric(final WB_Coordinate p) {
 	final WB_Vector m = p3.subToVector(p1).cross(p2.subToVector(p1));
 	double nu, nv, ood;

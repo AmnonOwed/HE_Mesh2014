@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.Iterator;
 
 import wblut.geom.WB_Distance;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
@@ -138,11 +138,11 @@ public class HEM_Stretch extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > WB_Epsilon.EPSILON)) {
-					p = WB_Intersection.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPoint().subSelf(p);
 					v.getPoint().mulSelf(stretchFactor);
 					v.getPoint().addSelf(p);
-					p = WB_Intersection.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPoint().subSelf(p);
 					v.getPoint().mulSelf(1 / compressionFactor);
 					v.getPoint().addSelf(p);
@@ -175,11 +175,11 @@ public class HEM_Stretch extends HEM_Modifier {
 				v = vItr.next();
 				final double d = WB_Distance.getDistance3D(v, groundPlane);
 				if (!posOnly || (d > WB_Epsilon.EPSILON)) {
-					p = WB_Intersection.getClosestPoint3D(v, groundPlane);
+					p = WB_GeometryOp.getClosestPoint3D(v, groundPlane);
 					v.getPoint().subSelf(p);
 					v.getPoint().mulSelf(stretchFactor);
 					v.getPoint().addSelf(p);
-					p = WB_Intersection.getClosestPoint3D(v, L);
+					p = WB_GeometryOp.getClosestPoint3D(v, L);
 					v.getPoint().subSelf(p);
 					v.getPoint().mulSelf(1 / compressionFactor);
 					v.getPoint().addSelf(p);

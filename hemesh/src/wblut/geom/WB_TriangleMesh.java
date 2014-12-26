@@ -2,7 +2,7 @@ package wblut.geom;
 
 import java.util.Collection;
 
-public class WB_TriMesh extends WB_FaceListMesh {
+public class WB_TriangleMesh extends WB_FaceListMesh {
 	private final static int[] PREV = new int[] { 2, 0, 1 };
 	private final static int[] NEXT = new int[] { 1, 2, 0 };
 
@@ -18,24 +18,24 @@ public class WB_TriMesh extends WB_FaceListMesh {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	protected WB_TriMesh(final Collection<? extends WB_Coordinate> points,
+	protected WB_TriangleMesh(final Collection<? extends WB_Coordinate> points,
 			final int[][] faces) {
 		super(points, faces);
 		triangulate();
 	}
 
-	protected WB_TriMesh(final WB_Coordinate[] points, final int[][] faces) {
+	protected WB_TriangleMesh(final WB_Coordinate[] points, final int[][] faces) {
 
 		super(points, faces);
 		triangulate();
 	}
 
-	protected WB_TriMesh(final WB_CoordinateSequence points, final int[][] faces) {
+	protected WB_TriangleMesh(final WB_CoordinateSequence points, final int[][] faces) {
 		super(points, faces);
 		triangulate();
 	}
 
-	protected WB_TriMesh(final WB_FaceListMesh mesh) {
+	protected WB_TriangleMesh(final WB_FaceListMesh mesh) {
 		vertices = mesh.getPoints();
 		faces = mesh.getFacesAsInt();
 		aabb = new WB_AABB(vertices);

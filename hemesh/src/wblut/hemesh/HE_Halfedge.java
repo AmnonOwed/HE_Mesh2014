@@ -1,6 +1,6 @@
 package wblut.hemesh;
 
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateUtil;
 import wblut.geom.WB_Distance;
@@ -149,7 +149,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	 *
 	 * @return HE.FLAT, HE.CONVEX, HE.CONCAVE
 	 */
-	public WB_Convex getHalfedgeType() {
+	public WB_ClassificationConvex getHalfedgeType() {
 
 		if (_vertex == null) {
 			return null;
@@ -170,13 +170,13 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 		final double dot = n.dot(v);
 
 		if (v.isParallel(vn)) {
-			return WB_Convex.FLAT;
+			return WB_ClassificationConvex.FLAT;
 		}
 		else if (dot > 0) {
-			return WB_Convex.CONVEX;
+			return WB_ClassificationConvex.CONVEX;
 		}
 		else {
-			return WB_Convex.CONCAVE;
+			return WB_ClassificationConvex.CONCAVE;
 		}
 
 	}

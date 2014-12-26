@@ -2391,22 +2391,22 @@ public class WB_Predicates {
 	 *            the q
 	 * @return the w b_ classify
 	 */
-	public WB_Classification insphereTetra(double[] p0, double[] p1,
+	public WB_ClassificationGeometry insphereTetra(double[] p0, double[] p1,
 			double[] p2, double[] p3, double[] q) {
 		double orient = orientTetra(p0, p1, p2, p3);
 		if (orient == 0) {
-			return WB_Classification.COPLANAR;
+			return WB_ClassificationGeometry.COPLANAR;
 		}
 
 		double result = _insphereTetra(p0, p1, p2, p3, q);
 
 		if (result == 0)
-			return WB_Classification.ON;
+			return WB_ClassificationGeometry.ON;
 		if (Math.signum(result) * Math.signum(orient) < 0)// Signum for faster
 															// multiplication
-			return WB_Classification.OUTSIDE;
+			return WB_ClassificationGeometry.OUTSIDE;
 		else
-			return WB_Classification.INSIDE;
+			return WB_ClassificationGeometry.INSIDE;
 	}
 
 	/**
@@ -3857,17 +3857,17 @@ public class WB_Predicates {
 	 *            the q
 	 * @return the w b_ classify
 	 */
-	public WB_Classification insphereTri(double[] p0, double[] p1, double[] p2,
+	public WB_ClassificationGeometry insphereTri(double[] p0, double[] p1, double[] p2,
 			double[] q) {
 		double result = _insphereTri(p0[0], p0[1], p0[2], p1[0], p1[1], p1[2],
 				p2[0], p2[1], p2[2], q[0], q[1], q[2]);
 
 		if (result > 0) {
-			return WB_Classification.INSIDE;
+			return WB_ClassificationGeometry.INSIDE;
 		} else if (result < 0) {
-			return WB_Classification.OUTSIDE;
+			return WB_ClassificationGeometry.OUTSIDE;
 		} else {
-			return WB_Classification.ON;
+			return WB_ClassificationGeometry.ON;
 		}
 	}
 
@@ -5380,25 +5380,25 @@ public class WB_Predicates {
 	 *            the q1
 	 * @return the w b_ classify
 	 */
-	public WB_Classification diffsides(double[] p0, double[] p1, double[] p2,
+	public WB_ClassificationGeometry diffsides(double[] p0, double[] p1, double[] p2,
 			double[] q0, double[] q1) {
 		double a, b;
 		a = orientTetra(p0, p1, p2, q0);
 		b = orientTetra(p0, p1, p2, q1);
 		if (a == 0 && b == 0) {
-			return WB_Classification.COPLANAR;
+			return WB_ClassificationGeometry.COPLANAR;
 		}
 		if ((a > 0 && b < 0) || (a < 0 && b > 0)) {
 			if (a == 0 || b == 0) {
-				return WB_Classification.DIFF;
+				return WB_ClassificationGeometry.DIFF;
 			}
-			return WB_Classification.DIFFEXCL;
+			return WB_ClassificationGeometry.DIFFEXCL;
 		}
 		if ((a > 0 && b > 0) || (a < 0 && b < 0)) {
 			if (a == 0 || b == 0) {
-				return WB_Classification.SAME;
+				return WB_ClassificationGeometry.SAME;
 			}
-			return WB_Classification.SAMEEXCL;
+			return WB_ClassificationGeometry.SAMEEXCL;
 		}
 
 		return null;
@@ -7291,24 +7291,24 @@ public class WB_Predicates {
 		return (D[Dlength - 1]);
 	}
 
-	public WB_Classification insphereTetra(final WB_Coordinate p0,
+	public WB_ClassificationGeometry insphereTetra(final WB_Coordinate p0,
 			final WB_Coordinate p1, final WB_Coordinate p2,
 			final WB_Coordinate p3, final WB_Coordinate q) {
 		final double orient = orientTetra(p0, p1, p2, p3);
 		if (orient == 0) {
-			return WB_Classification.COPLANAR;
+			return WB_ClassificationGeometry.COPLANAR;
 		}
 
 		final double result = _insphereTetra(p0, p1, p2, p3, q);
 
 		if (result == 0) {
-			return WB_Classification.ON;
+			return WB_ClassificationGeometry.ON;
 		}
 		if (Math.signum(result) * Math.signum(orient) < 0) {
 			// multiplication
-			return WB_Classification.OUTSIDE;
+			return WB_ClassificationGeometry.OUTSIDE;
 		} else {
-			return WB_Classification.INSIDE;
+			return WB_ClassificationGeometry.INSIDE;
 		}
 	}
 
@@ -8704,7 +8704,7 @@ public class WB_Predicates {
 		return deter[deterlen - 1];
 	}
 
-	public WB_Classification insphereTri(final WB_Coordinate p0,
+	public WB_ClassificationGeometry insphereTri(final WB_Coordinate p0,
 			final WB_Coordinate p1, final WB_Coordinate p2,
 			final WB_Coordinate q) {
 		final double result = _insphereTri(p0.xd(), p0.yd(), p0.zd(), p1.xd(),
@@ -8712,11 +8712,11 @@ public class WB_Predicates {
 				q.zd());
 
 		if (result > 0) {
-			return WB_Classification.INSIDE;
+			return WB_ClassificationGeometry.INSIDE;
 		} else if (result < 0) {
-			return WB_Classification.OUTSIDE;
+			return WB_ClassificationGeometry.OUTSIDE;
 		} else {
-			return WB_Classification.ON;
+			return WB_ClassificationGeometry.ON;
 		}
 	}
 
@@ -10119,26 +10119,26 @@ public class WB_Predicates {
 		return finnow[finlength - 1];
 	}
 
-	public WB_Classification diffsides(final WB_Coordinate p0,
+	public WB_ClassificationGeometry diffsides(final WB_Coordinate p0,
 			final WB_Coordinate p1, final WB_Coordinate p2,
 			final WB_Coordinate q0, final WB_Coordinate q1) {
 		double a, b;
 		a = orientTetra(p0, p1, p2, q0);
 		b = orientTetra(p0, p1, p2, q1);
 		if (a == 0 && b == 0) {
-			return WB_Classification.COPLANAR;
+			return WB_ClassificationGeometry.COPLANAR;
 		}
 		if ((a > 0 && b < 0) || (a < 0 && b > 0)) {
 			if (a == 0 || b == 0) {
-				return WB_Classification.DIFF;
+				return WB_ClassificationGeometry.DIFF;
 			}
-			return WB_Classification.DIFFEXCL;
+			return WB_ClassificationGeometry.DIFFEXCL;
 		}
 		if ((a > 0 && b > 0) || (a < 0 && b < 0)) {
 			if (a == 0 || b == 0) {
-				return WB_Classification.SAME;
+				return WB_ClassificationGeometry.SAME;
 			}
-			return WB_Classification.SAMEEXCL;
+			return WB_ClassificationGeometry.SAMEEXCL;
 		}
 
 		return null;

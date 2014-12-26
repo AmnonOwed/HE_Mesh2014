@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
@@ -54,8 +54,8 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
-					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
+			if ((e.getVertex().getVertexType() == WB_ClassificationConvex.CONVEX)
+					|| (e.getEndVertex().getVertexType() == WB_ClassificationConvex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
 				final WB_Point O = new WB_Point(N).mulSelf(-distance);
 				N.mulSelf(-1);
@@ -88,8 +88,8 @@ public class HEM_ChamferEdges extends HEM_Modifier {
 		HE_Halfedge e;
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if ((e.getVertex().getVertexType() == WB_Convex.CONVEX)
-					|| (e.getEndVertex().getVertexType() == WB_Convex.CONVEX)) {
+			if ((e.getVertex().getVertexType() == WB_ClassificationConvex.CONVEX)
+					|| (e.getEndVertex().getVertexType() == WB_ClassificationConvex.CONVEX)) {
 				final WB_Vector N = new WB_Vector(e.getEdgeNormal());
 				final WB_Point O = new WB_Point(N).mulSelf(-distance);
 				N.mulSelf(-1);

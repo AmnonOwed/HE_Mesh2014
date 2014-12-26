@@ -7,7 +7,7 @@ import java.util.List;
 import javolution.util.FastMap;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.math.WB_ConstantParameter;
@@ -383,7 +383,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 		if (nc > 1) {
 		    p.scaleSelf(1.0 / c);
 		    if (planes.size() == 1) {
-			p = WB_Intersection.getClosestPoint3D(p, planes.get(0));
+			p = WB_GeometryOp.getClosestPoint3D(p, planes.get(0));
 		    }/*
 		      * else if (planes.size() == 2) { final WB_Line L =
 		      * WB_Intersect.intersect(planes.get(0), planes.get(1)).L;

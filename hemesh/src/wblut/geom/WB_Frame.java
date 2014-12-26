@@ -369,7 +369,7 @@ public class WB_Frame {
 			final double d = WB_Distance.getDistance3D(p, S);
 			if (d < mind) {
 				mind = d;
-				q = WB_Intersection.getClosestPoint3D(S, p);
+				q = WB_GeometryOp.getClosestPoint3D(S, p);
 			}
 
 		}
@@ -399,7 +399,7 @@ public class WB_Frame {
 					.getDistance3D(new WB_Point(x, y, z), S);
 			if (d < mind) {
 				mind = d;
-				q = WB_Intersection.getClosestPoint3D(S, new WB_Point(x, y, z));
+				q = WB_GeometryOp.getClosestPoint3D(S, new WB_Point(x, y, z));
 			}
 
 		}

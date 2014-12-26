@@ -2,7 +2,7 @@ package wblut.hemesh;
 
 import java.util.Iterator;
 import java.util.List;
-import wblut.geom.WB_Classification;
+import wblut.geom.WB_ClassificationGeometry;
 import wblut.geom.WB_Plane;
 
 /**
@@ -172,10 +172,10 @@ public class HEM_Slice extends HEM_Modifier {
 	final Iterator<HE_Face> fItr = mesh.fItr();
 	while (fItr.hasNext()) {
 	    face = fItr.next();
-	    final WB_Classification cptp = WB_Plane.classifyPointToPlane(
+	    final WB_ClassificationGeometry cptp = WB_Plane.classifyPointToPlane(
 		    face.getFaceCenter(), lP);
-	    if ((cptp == WB_Classification.FRONT)
-		    || (cptp == WB_Classification.ON)) {
+	    if ((cptp == WB_ClassificationGeometry.FRONT)
+		    || (cptp == WB_ClassificationGeometry.ON)) {
 		newFaces.add(face);
 	    } else {
 		if (cut.contains(face)) {

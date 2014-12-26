@@ -603,7 +603,7 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
     }
 
     public boolean isZero() {
-	return WB_CoordinateUtil.isZero(xd(), yd(), zd());
+	return WB_CoordinateUtil.isZero3D(xd(), yd(), zd());
     }
 
     public WB_Vector mul(final double f) {

@@ -3,7 +3,7 @@ package wblut.hemesh;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
@@ -68,7 +68,7 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = mesh.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			if (v.getVertexType() == WB_Convex.CONVEX) {
+			if (v.getVertexType() == WB_ClassificationConvex.CONVEX) {
 				final WB_Vector N = new WB_Vector(v.getVertexNormal());
 				final WB_Point O = new WB_Point(N).mulSelf(-distance.value(
 						v.xd(), v.yd(), v.zd()));
@@ -103,7 +103,7 @@ public class HEM_ChamferCorners extends HEM_Modifier {
 		final Iterator<HE_Vertex> vItr = selection.vItr();
 		while (vItr.hasNext()) {
 			v = vItr.next();
-			if (v.getVertexType() == WB_Convex.CONVEX) {
+			if (v.getVertexType() == WB_ClassificationConvex.CONVEX) {
 				final WB_Vector N = new WB_Vector(v.getVertexNormal());
 				final WB_Point O = new WB_Point(N).mulSelf(-distance.value(
 						v.xd(), v.yd(), v.zd()));

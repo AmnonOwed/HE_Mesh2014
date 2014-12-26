@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import wblut.geom.WB_Classification;
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_ClassificationGeometry;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
@@ -93,10 +93,10 @@ public class HEM_Mirror extends HEM_Modifier {
 		while (fItr.hasNext()) {
 			face = fItr.next();
 
-			final WB_Classification cptp = WB_Plane.classifyPolygonToPlane(
+			final WB_ClassificationGeometry cptp = WB_Plane.classifyPolygonToPlane(
 					face.toPolygon(), lP);
-			if ((cptp == WB_Classification.FRONT)
-					|| (cptp == WB_Classification.ON)) {
+			if ((cptp == WB_ClassificationGeometry.FRONT)
+					|| (cptp == WB_ClassificationGeometry.ON)) {
 				newFaces.add(face);
 			}
 			else {
@@ -129,7 +129,7 @@ public class HEM_Mirror extends HEM_Modifier {
 		for (int i = 0; i < vertices.size(); i++) {
 			v = vertices.get(i);
 
-			final WB_Point p = WB_Intersection.getClosestPoint3D(v, lP);
+			final WB_Point p = WB_GeometryOp.getClosestPoint3D(v, lP);
 			final WB_Vector dv = v.getPoint().subToVector(p);
 			if (dv.getLength3D() <= WB_Epsilon.EPSILON) {
 				final List<HE_Halfedge> star = v.getHalfedgeStar();

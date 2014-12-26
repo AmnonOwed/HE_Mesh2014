@@ -67,7 +67,7 @@ public class WB_Plane {
 	this.n = new WB_Vector(n);
 	this.n.normalizeSelf();
 	this.d = d;
-	origin = WB_Intersection.getClosestPoint3D(new WB_Point(), this);
+	origin = WB_GeometryOp.getClosestPoint3D(new WB_Point(), this);
 	setAxes();
     }
 
@@ -98,27 +98,27 @@ public class WB_Plane {
 	return "Plane o: [" + origin + "] n: [" + n + "] d: [" + d + "]";
     }
 
-    public WB_Classification classifyPointToPlane(final WB_Coordinate p) {
+    public WB_ClassificationGeometry classifyPointToPlane(final WB_Coordinate p) {
 	final double dist = getNormal().dot(p) - d();
 	if (dist > WB_Epsilon.EPSILON) {
-	    return WB_Classification.FRONT;
+	    return WB_ClassificationGeometry.FRONT;
 	}
 	if (dist < -WB_Epsilon.EPSILON) {
-	    return WB_Classification.BACK;
+	    return WB_ClassificationGeometry.BACK;
 	}
-	return WB_Classification.ON;
+	return WB_ClassificationGeometry.ON;
     }
 
-    public static WB_Classification classifyPointToPlane(final WB_Coordinate p,
+    public static WB_ClassificationGeometry classifyPointToPlane(final WB_Coordinate p,
 	    final WB_Plane P) {
 	final double dist = P.getNormal().dot(p) - P.d();
 	if (dist > WB_Epsilon.EPSILON) {
-	    return WB_Classification.FRONT;
+	    return WB_ClassificationGeometry.FRONT;
 	}
 	if (dist < -WB_Epsilon.EPSILON) {
-	    return WB_Classification.BACK;
+	    return WB_ClassificationGeometry.BACK;
 	}
-	return WB_Classification.ON;
+	return WB_ClassificationGeometry.ON;
     }
 
     /**
@@ -167,7 +167,7 @@ public class WB_Plane {
 	return signp * signq <= 0;
     }
 
-    public WB_Classification classifyPolygonToPlane(final WB_Polygon poly) {
+    public WB_ClassificationGeometry classifyPolygonToPlane(final WB_Polygon poly) {
 	int numInFront = 0;
 	int numBehind = 0;
 	for (int i = 0; i < poly.getNumberOfShellPoints(); i++) {
@@ -180,19 +180,19 @@ public class WB_Plane {
 		break;
 	    }
 	    if (numBehind > 0 && numInFront > 0) {
-		return WB_Classification.CROSSING;
+		return WB_ClassificationGeometry.CROSSING;
 	    }
 	}
 	if (numInFront > 0) {
-	    return WB_Classification.FRONT;
+	    return WB_ClassificationGeometry.FRONT;
 	}
 	if (numBehind > 0) {
-	    return WB_Classification.BACK;
+	    return WB_ClassificationGeometry.BACK;
 	}
-	return WB_Classification.ON;
+	return WB_ClassificationGeometry.ON;
     }
 
-    public static WB_Classification classifyPolygonToPlane(
+    public static WB_ClassificationGeometry classifyPolygonToPlane(
 	    final WB_Polygon poly, final WB_Plane P) {
 	int numInFront = 0;
 	int numBehind = 0;
@@ -206,16 +206,16 @@ public class WB_Plane {
 		break;
 	    }
 	    if (numBehind != 0 && numInFront != 0) {
-		return WB_Classification.CROSSING;
+		return WB_ClassificationGeometry.CROSSING;
 	    }
 	}
 	if (numInFront != 0) {
-	    return WB_Classification.FRONT;
+	    return WB_ClassificationGeometry.FRONT;
 	}
 	if (numBehind != 0) {
-	    return WB_Classification.BACK;
+	    return WB_ClassificationGeometry.BACK;
 	}
-	return WB_Classification.ON;
+	return WB_ClassificationGeometry.ON;
     }
 
     /**

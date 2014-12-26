@@ -2,19 +2,19 @@ package wblut.hemesh;
 
 import java.util.Collection;
 import javolution.util.FastTable;
-import wblut.geom.Triangle;
 import wblut.geom.WB_Point;
+import wblut.geom.WB_Triangle;
 
 /**
  * Creates a new mesh from a list of triangles. Duplicate vertices are fused.
  *
  * the generic type
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
  */
 public class HEC_FromTriangles extends HEC_Creator {
     /** Source triangles. */
-    FastTable<Triangle> triangles;
+    FastTable<WB_Triangle> triangles;
 
     /**
      * Instantiates a new HEC_FromTriangles.
@@ -32,9 +32,9 @@ public class HEC_FromTriangles extends HEC_Creator {
      *            source triangles
      * @return self
      */
-    public HEC_FromTriangles setTriangles(final Triangle[] ts) {
-	triangles = new FastTable<Triangle>();
-	for (final Triangle tri : ts) {
+    public HEC_FromTriangles setTriangles(final WB_Triangle[] ts) {
+	triangles = new FastTable<WB_Triangle>();
+	for (final WB_Triangle tri : ts) {
 	    triangles.add(tri);
 	}
 	return this;
@@ -48,15 +48,15 @@ public class HEC_FromTriangles extends HEC_Creator {
      * @return self
      */
     public HEC_FromTriangles setTriangles(
-	    final Collection<? extends Triangle> ts) {
-	triangles = new FastTable<Triangle>();
+	    final Collection<? extends WB_Triangle> ts) {
+	triangles = new FastTable<WB_Triangle>();
 	triangles.addAll(ts);
 	return this;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
@@ -76,7 +76,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 	    // triangles.size()
 	    // + " triangles as faces.");
 	    final HEC_FromFacelist ffl = new HEC_FromFacelist()
-		    .setVertices(vertices).setFaces(faces).setDuplicate(true);
+	    .setVertices(vertices).setFaces(faces).setDuplicate(true);
 	    return ffl.createBase();
 	}
 	return null;

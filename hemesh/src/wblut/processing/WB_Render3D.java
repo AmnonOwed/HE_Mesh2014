@@ -13,12 +13,10 @@ import processing.opengl.PGraphics3D;
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
-import wblut.geom.Segment;
-import wblut.geom.Triangle;
 import wblut.geom.WB_Circle;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_CoordinateUtil;
 import wblut.geom.WB_CoordinateSequence;
+import wblut.geom.WB_CoordinateUtil;
 import wblut.geom.WB_Curve;
 import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
@@ -106,8 +104,8 @@ public class WB_Render3D {
 	home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 		(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 			* R.getDirection().xd()),
-			(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-			(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+		(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+		(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
     }
 
     public void drawSegment(final WB_Segment S) {
@@ -235,20 +233,20 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() - d * P.getU().zd() - d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() - d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() + d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() + d * P.getU().zd() - d * P.getV().zd()));
 	home.endShape();
     }
 
@@ -1435,17 +1433,11 @@ public class WB_Render3D {
 	}
     }
 
-    public void drawSegment(final Collection<? extends Segment> segments) {
-	final Iterator<? extends Segment> segItr = segments.iterator();
+    public void drawSegment(final Collection<? extends WB_Segment> segments) {
+	final Iterator<? extends WB_Segment> segItr = segments.iterator();
 	while (segItr.hasNext()) {
 	    drawSegment(segItr.next());
 	}
-    }
-
-    public void drawSegment(final Segment segment) {
-	home.line(segment.getOrigin().xf(), segment.getOrigin().yf(), segment
-		.getOrigin().zf(), segment.getEndpoint().xf(), segment
-		.getEndpoint().yf(), segment.getEndpoint().zf());
     }
 
     public void drawPath(final HE_Path path) {
@@ -1460,32 +1452,32 @@ public class WB_Render3D {
 	}
     }
 
-    public void drawSegment2D(final Collection<? extends Segment> segments) {
-	final Iterator<? extends Segment> segItr = segments.iterator();
+    public void drawSegment2D(final Collection<? extends WB_Segment> segments) {
+	final Iterator<? extends WB_Segment> segItr = segments.iterator();
 	while (segItr.hasNext()) {
 	    drawSegment2D(segItr.next());
 	}
     }
 
-    public void drawSegment2D(final Segment segment) {
+    public void drawSegment2D(final WB_Segment segment) {
 	home.line(segment.getOrigin().xf(), segment.getOrigin().yf(), segment
 		.getEndpoint().xf(), segment.getEndpoint().yf());
     }
 
-    public void drawSegment2D(final Segment[] segments) {
-	for (final Segment segment : segments) {
+    public void drawSegment2D(final WB_Segment[] segments) {
+	for (final WB_Segment segment : segments) {
 	    drawSegment2D(segment);
 	}
     }
 
-    public void drawTriangle(final Collection<? extends Triangle> triangles) {
-	final Iterator<? extends Triangle> triItr = triangles.iterator();
+    public void drawTriangle(final Collection<? extends WB_Triangle> triangles) {
+	final Iterator<? extends WB_Triangle> triItr = triangles.iterator();
 	while (triItr.hasNext()) {
 	    drawTriangle(triItr.next());
 	}
     }
 
-    public void drawTriangle(final Triangle triangle) {
+    public void drawTriangle(final WB_Triangle triangle) {
 	home.beginShape();
 	home.vertex(triangle.p1().xf(), triangle.p1().yf(), triangle.p1().zf());
 	home.vertex(triangle.p2().xf(), triangle.p2().yf(), triangle.p2().zf());
@@ -1493,14 +1485,14 @@ public class WB_Render3D {
 	home.endShape(PApplet.CLOSE);
     }
 
-    public void drawTriangle2D(final Collection<? extends Triangle> triangles) {
-	final Iterator<? extends Triangle> triItr = triangles.iterator();
+    public void drawTriangle2D(final Collection<? extends WB_Triangle> triangles) {
+	final Iterator<? extends WB_Triangle> triItr = triangles.iterator();
 	while (triItr.hasNext()) {
 	    drawTriangle2D(triItr.next());
 	}
     }
 
-    public void drawTriangle2D(final Triangle triangle) {
+    public void drawTriangle2D(final WB_Triangle triangle) {
 	home.beginShape();
 	home.vertex(triangle.p1().xf(), triangle.p1().yf());
 	home.vertex(triangle.p2().xf(), triangle.p2().yf());
@@ -1508,21 +1500,21 @@ public class WB_Render3D {
 	home.endShape();
     }
 
-    public void drawTriangle2D(final Triangle[] triangles) {
-	for (final Triangle triangle : triangles) {
+    public void drawTriangle2D(final WB_Triangle[] triangles) {
+	for (final WB_Triangle triangle : triangles) {
 	    drawTriangle2D(triangle);
 	}
     }
 
     public void drawTriangle2DEdges(
-	    final Collection<? extends Triangle> triangles) {
-	final Iterator<? extends Triangle> triItr = triangles.iterator();
+	    final Collection<? extends WB_Triangle> triangles) {
+	final Iterator<? extends WB_Triangle> triItr = triangles.iterator();
 	while (triItr.hasNext()) {
 	    drawTriangle2DEdges(triItr.next());
 	}
     }
 
-    public void drawTriangle2DEdges(final Triangle triangle) {
+    public void drawTriangle2DEdges(final WB_Triangle triangle) {
 	home.line(triangle.p1().xf(), triangle.p1().yf(), triangle.p2().xf(),
 		triangle.p2().yf());
 	home.line(triangle.p3().xf(), triangle.p3().yf(), triangle.p2().xf(),
@@ -1531,20 +1523,21 @@ public class WB_Render3D {
 		triangle.p3().yf());
     }
 
-    public void drawTriangle2DEdges(final Triangle[] triangles) {
-	for (final Triangle triangle : triangles) {
+    public void drawTriangle2DEdges(final WB_Triangle[] triangles) {
+	for (final WB_Triangle triangle : triangles) {
 	    drawTriangle2DEdges(triangle);
 	}
     }
 
-    public void drawTriangleEdges(final Collection<? extends Triangle> triangles) {
-	final Iterator<? extends Triangle> triItr = triangles.iterator();
+    public void drawTriangleEdges(
+	    final Collection<? extends WB_Triangle> triangles) {
+	final Iterator<? extends WB_Triangle> triItr = triangles.iterator();
 	while (triItr.hasNext()) {
 	    drawTriangleEdges(triItr.next());
 	}
     }
 
-    public void drawTriangleEdges(final Triangle triangle) {
+    public void drawTriangleEdges(final WB_Triangle triangle) {
 	home.line(triangle.p1().xf(), triangle.p1().yf(), triangle.p1().zf(),
 		triangle.p2().xf(), triangle.p2().yf(), triangle.p2().zf());
 	home.line(triangle.p3().xf(), triangle.p3().yf(), triangle.p3().zf(),

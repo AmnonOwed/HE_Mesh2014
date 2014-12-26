@@ -6,7 +6,7 @@ import gnu.trove.map.hash.TLongIntHashMap;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import wblut.geom.WB_Intersection;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
@@ -76,7 +76,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 				}
 				else {
 					final WB_Plane planef2 = he.getPair().getFace().toPlane(d);
-					final WB_IntersectionResult ir = WB_Intersection
+					final WB_IntersectionResult ir = WB_GeometryOp
 							.getIntersection3D(planef, planef2);
 					final WB_Line lineff;
 					if (ir.dimension == 1) {
@@ -87,7 +87,7 @@ public class HEM_FaceExpand extends HEM_Modifier {
 						lineff = new WB_Line(v.getPoint().addMul(d, en),
 								he.getHalfedgeTangent());
 					}
-					p = WB_Intersection.getClosestPoint3D(v, lineff);
+					p = WB_GeometryOp.getClosestPoint3D(v, lineff);
 
 				}
 

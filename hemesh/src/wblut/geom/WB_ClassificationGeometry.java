@@ -1,6 +1,6 @@
 package wblut.geom;
 
-public enum WB_Classification {
+public enum WB_ClassificationGeometry {
 
 	FRONT,
 

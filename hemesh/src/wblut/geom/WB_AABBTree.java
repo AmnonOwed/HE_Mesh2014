@@ -59,12 +59,12 @@ public class WB_AABBTree {
 			node.separator = new WB_Plane(new WB_Point(node.aabb.getCenter()),
 					dir);
 			for (final HE_Face face : faces.getFacesAsList()) {
-				final WB_Classification cptp = node.separator
+				final WB_ClassificationGeometry cptp = node.separator
 						.classifyPolygonToPlane(face.toPolygon());
-				if (cptp == WB_Classification.CROSSING) {
+				if (cptp == WB_ClassificationGeometry.CROSSING) {
 					mid.add(face);
 				}
-				else if (cptp == WB_Classification.BACK) {
+				else if (cptp == WB_ClassificationGeometry.BACK) {
 					neg.add(face);
 				}
 				else {

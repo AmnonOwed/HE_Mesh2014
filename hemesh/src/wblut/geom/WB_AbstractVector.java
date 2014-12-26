@@ -28,10 +28,10 @@ WB_MutableCoordinate {
 		this.z = x[2];
 	}
 
-	public WB_AbstractVector(final double[] p1, final double[] p2) {
-		this.x = p2[0] - p1[0];
-		this.y = p2[1] - p1[1];
-		this.z = p2[2] - p1[2];
+	public WB_AbstractVector(final double[] fromPoint, final double[] toPoint) {
+		this.x = toPoint[0] - fromPoint[0];
+		this.y = toPoint[1] - fromPoint[1];
+		this.z = toPoint[2] - fromPoint[2];
 	}
 
 	public WB_AbstractVector(final WB_Coordinate v) {
@@ -40,10 +40,10 @@ WB_MutableCoordinate {
 		z = v.zd();
 	}
 
-	public WB_AbstractVector(final WB_Coordinate p1, final WB_Coordinate p2) {
-		x = p2.xd() - p1.xd();
-		y = p2.yd() - p1.yd();
-		z = p2.zd() - p1.zd();
+	public WB_AbstractVector(final WB_Coordinate fromPoint, final WB_Coordinate toPoint) {
+		x = toPoint.xd() - fromPoint.xd();
+		y = toPoint.yd() - fromPoint.yd();
+		z = toPoint.zd() - fromPoint.zd();
 	}
 
 	/**

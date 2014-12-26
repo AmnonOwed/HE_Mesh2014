@@ -1,11 +1,12 @@
 package wblut.hemesh;
 
+import static wblut.geom.WB_GeometryOp.projectOnPlane;
 import java.util.HashMap;
 import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Context2D;
-import wblut.geom.WB_Convex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_HasColor;
@@ -13,7 +14,6 @@ import wblut.geom.WB_HasData;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
-import wblut.geom.WB_Projection;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulate;
 import wblut.geom.WB_Vector;
@@ -179,18 +179,18 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return WB_Math.fastAbs(area);
     }
 
-    public WB_Convex getFaceType() {
+    public WB_ClassificationConvex getFaceType() {
 	if (_halfedge == null) {
 	    return null;
 	}
 	HE_Halfedge he = _halfedge;
 	do {
-	    if (he.getHalfedgeType() != WB_Convex.CONVEX) {
-		return WB_Convex.CONCAVE;
+	    if (he.getHalfedgeType() != WB_ClassificationConvex.CONVEX) {
+		return WB_ClassificationConvex.CONCAVE;
 	    }
 	    he = he.getNextInFace();
 	} while (he != _halfedge);
-	return WB_Convex.CONVEX;
+	return WB_ClassificationConvex.CONVEX;
     }
 
     public List<HE_Vertex> getFaceVertices() {
@@ -410,7 +410,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	int i = 0;
 	HE_Halfedge he = _halfedge;
 	do {
-	    points[i] = WB_Projection.projectOnPlane(he.getVertex(), P);
+	    points[i] = projectOnPlane(he.getVertex(), P);
 	    he = he.getNextInFace();
 	    i++;
 	} while (he != _halfedge);
@@ -439,7 +439,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -457,7 +457,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -470,7 +470,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -537,7 +537,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	coords[i] = new Coordinate(point.xd(), point.yd(), i);
 	he = he.getNextInFace();
 	final Polygon inputPolygon = new GeometryFactory()
-		.createPolygon(coords);
+	.createPolygon(coords);
 	final IsValidOp isValidOp = new IsValidOp(inputPolygon);
 	if (!IsValidOp.isValid(inputPolygon)) {
 	    System.out.println(this);

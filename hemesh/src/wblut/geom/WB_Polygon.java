@@ -336,16 +336,16 @@ public class WB_Polygon extends WB_Ring {
 	final int numVerts = poly.numberOfShellPoints;
 	if (numVerts > 0) {
 	    WB_Coordinate a = poly.points.getPoint(numVerts - 1);
-	    WB_Classification aSide = P.classifyPointToPlane(a);
+	    WB_ClassificationGeometry aSide = P.classifyPointToPlane(a);
 	    WB_Coordinate b;
-	    WB_Classification bSide;
+	    WB_ClassificationGeometry bSide;
 	    for (int n = 0; n < numVerts; n++) {
 		final WB_IntersectionResult i;
 		b = poly.points.getPoint(n);
 		bSide = P.classifyPointToPlane(b);
-		if (bSide == WB_Classification.FRONT) {
-		    if (aSide == WB_Classification.BACK) {
-			i = WB_Intersection.getIntersection3D(b, a, P);
+		if (bSide == WB_ClassificationGeometry.FRONT) {
+		    if (aSide == WB_ClassificationGeometry.BACK) {
+			i = WB_GeometryOp.getIntersection3D(b, a, P);
 			frontVerts.add((WB_Point) i.object);
 			numFront++;
 			backVerts.add((WB_Point) i.object);
@@ -353,14 +353,14 @@ public class WB_Polygon extends WB_Ring {
 		    }
 		    frontVerts.add(b);
 		    numFront++;
-		} else if (bSide == WB_Classification.BACK) {
-		    if (aSide == WB_Classification.FRONT) {
-			i = WB_Intersection.getIntersection3D(a, b, P);
+		} else if (bSide == WB_ClassificationGeometry.BACK) {
+		    if (aSide == WB_ClassificationGeometry.FRONT) {
+			i = WB_GeometryOp.getIntersection3D(a, b, P);
 			frontVerts.add((WB_Point) i.object);
 			numFront++;
 			backVerts.add((WB_Point) i.object);
 			numBack++;
-		    } else if (aSide == WB_Classification.ON) {
+		    } else if (aSide == WB_ClassificationGeometry.ON) {
 			backVerts.add(a);
 			numBack++;
 		    }
@@ -369,7 +369,7 @@ public class WB_Polygon extends WB_Ring {
 		} else {
 		    frontVerts.add(b);
 		    numFront++;
-		    if (aSide == WB_Classification.BACK) {
+		    if (aSide == WB_ClassificationGeometry.BACK) {
 			backVerts.add(b);
 			numBack++;
 		    }

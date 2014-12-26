@@ -139,21 +139,21 @@ public class WB_VoronoiCell3D {
 	}
 
 	private void slice(final WB_Plane P) {
-		final WB_Classification[] classifyPoints = ptsPlane(P);
+		final WB_ClassificationGeometry[] classifyPoints = ptsPlane(P);
 		final List<WB_Coordinate> newPoints = new ArrayList<WB_Coordinate>();
 
 		for (int i = 0; i < classifyPoints.length; i++) {
-			if (classifyPoints[i] != WB_Classification.BACK) {
+			if (classifyPoints[i] != WB_ClassificationGeometry.BACK) {
 				newPoints.add(cell.getVertex(i));
 			}
 		}
 		final int[][] edges = cell.getEdgesAsInt();
 		for (final int[] edge : edges) {
-			if (((classifyPoints[edge[0]] == WB_Classification.BACK) && (classifyPoints[edge[1]] == WB_Classification.FRONT))
-					|| ((classifyPoints[edge[1]] == WB_Classification.BACK) && (classifyPoints[edge[0]] == WB_Classification.FRONT))) {
+			if (((classifyPoints[edge[0]] == WB_ClassificationGeometry.BACK) && (classifyPoints[edge[1]] == WB_ClassificationGeometry.FRONT))
+					|| ((classifyPoints[edge[1]] == WB_ClassificationGeometry.BACK) && (classifyPoints[edge[0]] == WB_ClassificationGeometry.FRONT))) {
 				final WB_IndexedPoint a = cell.getVertex(edge[0]);
 				final WB_IndexedPoint b = cell.getVertex(edge[1]);
-				newPoints.add((WB_Point) WB_Intersection.getIntersection3D(a,
+				newPoints.add((WB_Point) WB_GeometryOp.getIntersection3D(a,
 						b, P).object);
 				sliced = true;
 			}
@@ -163,8 +163,8 @@ public class WB_VoronoiCell3D {
 
 	}
 
-	private WB_Classification[] ptsPlane(final WB_Plane WB_Point) {
-		final WB_Classification[] result = new WB_Classification[cell
+	private WB_ClassificationGeometry[] ptsPlane(final WB_Plane WB_Point) {
+		final WB_ClassificationGeometry[] result = new WB_ClassificationGeometry[cell
 		                                                         .getNumberOfVertices()];
 
 		for (int i = 0; i < cell.getNumberOfVertices(); i++) {

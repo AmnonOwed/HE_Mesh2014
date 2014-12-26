@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastTable;
-import wblut.geom.WB_Convex;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSystem;
 import wblut.geom.WB_HasColor;
@@ -122,7 +122,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	 *         faces, HE.VertexType.SADDLE: vertex is convex and concave in at
 	 *         least one face each
 	 */
-	public WB_Convex getVertexType() {
+	public WB_ClassificationConvex getVertexType() {
 
 		if (_halfedge == null) {
 			return null;
@@ -159,27 +159,27 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		} while (he != _halfedge);
 		if (nconcave > 0) {
 			if (nconvex > 0) {
-				return WB_Convex.SADDLE;
+				return WB_ClassificationConvex.SADDLE;
 			}
 			else {
 				if (nflat > 0) {
-					return WB_Convex.FLATCONCAVE;
+					return WB_ClassificationConvex.FLATCONCAVE;
 				}
 				else {
-					return WB_Convex.CONCAVE;
+					return WB_ClassificationConvex.CONCAVE;
 				}
 			}
 		}
 		else if (nconvex > 0) {
 			if (nflat > 0) {
-				return WB_Convex.FLATCONVEX;
+				return WB_ClassificationConvex.FLATCONVEX;
 			}
 			else {
-				return WB_Convex.CONVEX;
+				return WB_ClassificationConvex.CONVEX;
 			}
 		}
 
-		return WB_Convex.FLAT;
+		return WB_ClassificationConvex.FLAT;
 
 	}
 

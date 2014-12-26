@@ -62,7 +62,7 @@ public class WB_NurbsSurfaceOfRevolution {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j],
 					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X.normalizeSelf();
@@ -83,7 +83,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_Intersection
+				final WB_IntersectionResult is = WB_GeometryOp
 						.getClosestPoint3D(L1, L2);
 				final WB_Point p1 = (is.dimension == 0) ? (WB_Point) is.object
 						: ((WB_Segment) is.object).getOrigin();
@@ -164,7 +164,7 @@ public class WB_NurbsSurfaceOfRevolution {
 			sines[i] = Math.sin(angle);
 		}
 		for (j = 0; j <= C.n(); j++) {
-			final WB_Point O = WB_Intersection.getClosestPoint3D(C.points()[j],
+			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j],
 					L);
 			final WB_Vector X = C.points()[j].subToVector(O);
 			final double r = X.normalizeSelf();
@@ -185,7 +185,7 @@ public class WB_NurbsSurfaceOfRevolution {
 				T2.addMulSelf(-sines[i], X);
 				final WB_Line L1 = new WB_Line(P0, T0);
 				final WB_Line L2 = new WB_Line(P2, T2);
-				final WB_IntersectionResult is = WB_Intersection
+				final WB_IntersectionResult is = WB_GeometryOp
 						.getClosestPoint3D(L1, L2);
 
 				final WB_Point p1 = (is.dimension == 0) ? (WB_Point) is.object

@@ -37,16 +37,16 @@ public class WB_Vector extends WB_AbstractVector {
 	super(x);
     }
 
-    public WB_Vector(final double[] p1, final double[] p2) {
-	super(p1, p2);
+    public WB_Vector(final double[] fromPoint, final double[] toPoint) {
+	super(fromPoint, toPoint);
     }
 
     public WB_Vector(final WB_Coordinate v) {
 	super(v);
     }
 
-    public WB_Vector(final WB_Coordinate p1, final WB_Coordinate p2) {
-	super(p1, p2);
+    public WB_Vector(final WB_Coordinate fromPoint, final WB_Coordinate toPoint) {
+	super(fromPoint, toPoint);
     }
 
     /**
@@ -648,7 +648,7 @@ public class WB_Vector extends WB_AbstractVector {
     }
 
     public boolean isZero() {
-	return WB_CoordinateUtil.isZero(xd(), yd(), zd());
+	return WB_CoordinateUtil.isZero3D(xd(), yd(), zd());
     }
 
     public WB_Vector mul(final double f) {
