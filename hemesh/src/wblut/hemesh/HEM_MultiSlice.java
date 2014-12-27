@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import wblut.geom.WB_Distance;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
@@ -158,7 +158,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -178,12 +178,12 @@ public class HEM_MultiSlice extends HEM_Modifier {
 	mesh.resetFaceInternalLabels();
 	final HEM_Slice slice = new HEM_Slice();
 	slice.setReverse(reverse).setCap(capHoles).setOffset(offset)
-	.setSimpleCap(simpleCap);
+		.setSimpleCap(simpleCap);
 	if (center != null) {
 	    final double[] r = new double[planes.size()];
 	    for (int i = 0; i < planes.size(); i++) {
 		final WB_Plane P = planes.get(i);
-		r[i] = WB_Distance.getSqDistance3D(P.getOrigin(), center);
+		r[i] = WB_GeometryOp.getSqDistance3D(P.getOrigin(), center);
 	    }
 	    for (int i = planes.size(); --i >= 0;) {
 		for (int m = 0; m < i; m++) {
@@ -241,7 +241,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */

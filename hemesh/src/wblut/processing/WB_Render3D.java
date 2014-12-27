@@ -25,7 +25,6 @@ import wblut.geom.WB_FrameStrut;
 import wblut.geom.WB_Geometry;
 import wblut.geom.WB_GeometryCollection;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_Grid3D;
 import wblut.geom.WB_IndexedPoint;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Mesh;
@@ -104,8 +103,8 @@ public class WB_Render3D {
 	home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 		(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 			* R.getDirection().xd()),
-		(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-		(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+			(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+			(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
     }
 
     public void drawSegment(final WB_Segment S) {
@@ -233,20 +232,20 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 	home.endShape();
     }
 
@@ -589,39 +588,6 @@ public class WB_Render3D {
 	    for (int i = 0; i < indices.length; i += 4) {
 		drawTetrahedron(points[indices[i]], points[indices[i + 1]],
 			points[indices[i + 2]], points[indices[i + 3]]);
-	    }
-	}
-    }
-
-    public void drawGrid(final WB_Grid3D<Object> grid) {
-	float x, y, z;
-	float xl, yl, zl;
-	float xu, yu, zu;
-	xl = (float) grid.getLowX(0);
-	yl = (float) grid.getLowY(0);
-	zl = (float) grid.getLowZ(0);
-	xu = (float) grid.getLowX(grid.Ni());
-	yu = (float) grid.getLowY(grid.Nj());
-	zu = (float) grid.getLowZ(grid.Nk());
-	for (int i = 0; i < grid.Ni() + 1; i++) {
-	    x = (float) grid.getLowX(i);
-	    for (int j = 0; j < grid.Nj() + 1; j++) {
-		y = (float) grid.getLowY(j);
-		home.line(x, y, zl, x, y, zu);
-	    }
-	}
-	for (int i = 0; i < grid.Ni() + 1; i++) {
-	    x = (float) grid.getLowX(i);
-	    for (int k = 0; k < grid.Nk() + 1; k++) {
-		z = (float) grid.getLowZ(k);
-		home.line(x, yl, z, x, yu, z);
-	    }
-	}
-	for (int j = 0; j < grid.Nj() + 1; j++) {
-	    y = (float) grid.getLowY(j);
-	    for (int k = 0; k < grid.Nk() + 1; k++) {
-		z = (float) grid.getLowZ(k);
-		home.line(xl, y, z, xu, y, z);
 	    }
 	}
     }

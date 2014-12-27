@@ -4,15 +4,39 @@ import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
 public class WB_Plane {
+    /**
+     * @deprecated Use {@link #Z()} instead
+     */
+    @Deprecated
     public static final WB_Plane XY() {
+	return Z();
+    }
+
+    public static final WB_Plane Z() {
 	return new WB_Plane(0, 0, 0, 0, 0, 1);
     }
 
+    /**
+     * @deprecated Use {@link #Y()} instead
+     */
+    @Deprecated
     public static final WB_Plane XZ() {
+	return Y();
+    }
+
+    public static final WB_Plane Y() {
 	return new WB_Plane(0, 0, 0, 0, 1, 0);
     }
 
+    /**
+     * @deprecated Use {@link #X()} instead
+     */
+    @Deprecated
     public static final WB_Plane YZ() {
+	return X();
+    }
+
+    public static final WB_Plane X() {
 	return new WB_Plane(0, 0, 0, 1, 0, 0);
     }
 
@@ -20,11 +44,6 @@ public class WB_Plane {
     private WB_Vector n;
     /** Origin. */
     private WB_Point origin;
-    /**
-     * d-parameter: p.n = d with p point on plane, n the normal and . the dot
-     * product.
-     */
-    private double d;
     private WB_Vector u, v;
 
     public WB_Plane(final WB_Coordinate p1, final WB_Coordinate p2,
@@ -33,7 +52,6 @@ public class WB_Plane {
 	final WB_Vector v31 = new WB_Vector(p1, p3);
 	n = new WB_Vector(v21.cross(v31));
 	n.normalizeSelf();
-	d = n.xd() * p1.xd() + n.yd() * p1.yd() + n.zd() * p1.zd();
 	origin = new WB_Point(p1);
 	setAxes();
     }
@@ -43,7 +61,6 @@ public class WB_Plane {
 	origin = new WB_Point(ox, oy, oz);
 	n = new WB_Vector(nx, ny, nz);
 	n.normalizeSelf();
-	d = n.dot(origin);
 	setAxes();
     }
 
@@ -51,7 +68,6 @@ public class WB_Plane {
 	origin = new WB_Point(o);
 	this.n = new WB_Vector(n);
 	this.n.normalizeSelf();
-	d = this.n.dot(origin);
 	setAxes();
     }
 
@@ -59,15 +75,25 @@ public class WB_Plane {
 	origin = new WB_Point(o);
 	this.n = new WB_Vector(n);
 	this.n.normalizeSelf();
-	d = this.n.dot(origin);
 	setAxes();
     }
 
     public WB_Plane(final WB_Coordinate n, final double d) {
 	this.n = new WB_Vector(n);
 	this.n.normalizeSelf();
-	this.d = d;
-	origin = WB_GeometryOp.getClosestPoint3D(new WB_Point(), this);
+	if (WB_Math.fastAbs(n.xd()) > WB_Math.fastAbs(n.yd())) {
+	    if (WB_Math.fastAbs(n.xd()) > WB_Math.fastAbs(n.zd())) {
+		origin = new WB_Point(d / n.xd(), 0, 0);
+	    } else {
+		origin = new WB_Point(0, 0, d / n.zd());
+	    }
+	} else {
+	    if (WB_Math.fastAbs(n.yd()) > WB_Math.fastAbs(n.zd())) {
+		origin = new WB_Point(0, d / n.yd(), 0);
+	    } else {
+		origin = new WB_Point(0, 0, d / n.zd());
+	    }
+	}
 	setAxes();
     }
 
@@ -80,7 +106,7 @@ public class WB_Plane {
     }
 
     public double d() {
-	return d;
+	return n.dot(origin);
     }
 
     public WB_Point getOrigin() {
@@ -89,133 +115,12 @@ public class WB_Plane {
 
     public void flipNormal() {
 	n.mulSelf(-1);
-	d *= -1;
 	setAxes();
     }
 
     @Override
     public String toString() {
-	return "Plane o: [" + origin + "] n: [" + n + "] d: [" + d + "]";
-    }
-
-    public WB_ClassificationGeometry classifyPointToPlane(final WB_Coordinate p) {
-	final double dist = getNormal().dot(p) - d();
-	if (dist > WB_Epsilon.EPSILON) {
-	    return WB_ClassificationGeometry.FRONT;
-	}
-	if (dist < -WB_Epsilon.EPSILON) {
-	    return WB_ClassificationGeometry.BACK;
-	}
-	return WB_ClassificationGeometry.ON;
-    }
-
-    public static WB_ClassificationGeometry classifyPointToPlane(final WB_Coordinate p,
-	    final WB_Plane P) {
-	final double dist = P.getNormal().dot(p) - P.d();
-	if (dist > WB_Epsilon.EPSILON) {
-	    return WB_ClassificationGeometry.FRONT;
-	}
-	if (dist < -WB_Epsilon.EPSILON) {
-	    return WB_ClassificationGeometry.BACK;
-	}
-	return WB_ClassificationGeometry.ON;
-    }
-
-    /**
-     * Check if points lies on positive side of plane defined by 3 clockwise
-     * points.
-     *
-     * @param p
-     *            point to check
-     * @param a
-     *            the a
-     * @param b
-     *            the b
-     * @param c
-     *            the c
-     * @return true, if successful
-     */
-    public static boolean pointOutsideOfPlane(final WB_Coordinate p,
-	    final WB_Coordinate a, final WB_Coordinate b, final WB_Coordinate c) {
-	return new WB_Vector(a, p).dot(new WB_Vector(a, b)
-		.crossSelf(new WB_Vector(a, c))) >= 0;
-    }
-
-    /**
-     * Check if points lies on other side of plane compared with reference
-     * points.
-     *
-     * @param p
-     *            point to check
-     * @param q
-     *            reference point
-     * @param a
-     *            the a
-     * @param b
-     *            the b
-     * @param c
-     *            the c
-     * @return true, if successful
-     */
-    public static boolean pointOtherSideOfPlane(final WB_Coordinate p,
-	    final WB_Coordinate q, final WB_Coordinate a,
-	    final WB_Coordinate b, final WB_Coordinate c) {
-	final double signp = new WB_Vector(a, p).dot(new WB_Vector(a, b)
-		.crossSelf(new WB_Vector(a, c)));
-	final double signq = new WB_Vector(a, q).dot(new WB_Vector(a, b)
-		.crossSelf(new WB_Vector(a, c)));
-	return signp * signq <= 0;
-    }
-
-    public WB_ClassificationGeometry classifyPolygonToPlane(final WB_Polygon poly) {
-	int numInFront = 0;
-	int numBehind = 0;
-	for (int i = 0; i < poly.getNumberOfShellPoints(); i++) {
-	    switch (classifyPointToPlane(poly.getPoint(i))) {
-	    case FRONT:
-		numInFront++;
-		break;
-	    case BACK:
-		numBehind++;
-		break;
-	    }
-	    if (numBehind > 0 && numInFront > 0) {
-		return WB_ClassificationGeometry.CROSSING;
-	    }
-	}
-	if (numInFront > 0) {
-	    return WB_ClassificationGeometry.FRONT;
-	}
-	if (numBehind > 0) {
-	    return WB_ClassificationGeometry.BACK;
-	}
-	return WB_ClassificationGeometry.ON;
-    }
-
-    public static WB_ClassificationGeometry classifyPolygonToPlane(
-	    final WB_Polygon poly, final WB_Plane P) {
-	int numInFront = 0;
-	int numBehind = 0;
-	for (int i = 0; i < poly.getNumberOfShellPoints(); i++) {
-	    switch (classifyPointToPlane(poly.getPoint(i), P)) {
-	    case FRONT:
-		numInFront++;
-		break;
-	    case BACK:
-		numBehind++;
-		break;
-	    }
-	    if (numBehind != 0 && numInFront != 0) {
-		return WB_ClassificationGeometry.CROSSING;
-	    }
-	}
-	if (numInFront != 0) {
-	    return WB_ClassificationGeometry.FRONT;
-	}
-	if (numBehind != 0) {
-	    return WB_ClassificationGeometry.BACK;
-	}
-	return WB_ClassificationGeometry.ON;
+	return "Plane o: [" + origin + "] n: [" + n + "] d: [" + d() + "]";
     }
 
     /**
@@ -228,10 +133,10 @@ public class WB_Plane {
      * @return true/false
      */
     public static boolean isEqual(final WB_Plane P, final WB_Plane Q) {
-	if (!WB_Epsilon.isZero(WB_Distance.getDistance3D(P.getOrigin(), Q))) {
+	if (!WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(P.getOrigin(), Q))) {
 	    return false;
 	}
-	if (!WB_Epsilon.isZero(WB_Distance.getDistance3D(Q.getOrigin(), P))) {
+	if (!WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(Q.getOrigin(), P))) {
 	    return false;
 	}
 	if (!P.getNormal().isParallelNorm(Q.getNormal())) {
@@ -361,7 +266,7 @@ public class WB_Plane {
      * @return the w b_ point3d
      */
     public WB_Point mirrorPoint(final WB_Coordinate p) {
-	if (WB_Epsilon.isZero(WB_Distance.getDistance3D(p, this))) {
+	if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(p, this))) {
 	    return new WB_Point(p);
 	}
 	return extractPoint2D(localPoint(p).scaleSelf(1, 1, -1));

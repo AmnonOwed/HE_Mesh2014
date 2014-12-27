@@ -14,7 +14,7 @@ public class WB_IndexedSegment extends WB_Segment {
 	this.i1 = i1;
 	this.i2 = i2;
 	this.points = points;
-	length = WB_Distance.getDistance3D(points[i1], points[i2]);
+	length = WB_GeometryOp.getDistance3D(points[i1], points[i2]);
     }
 
     @Override

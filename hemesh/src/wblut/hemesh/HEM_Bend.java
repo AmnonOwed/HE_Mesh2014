@@ -1,7 +1,7 @@
 package wblut.hemesh;
 
 import java.util.Iterator;
-import wblut.geom.WB_Distance;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Plane;
 
@@ -102,7 +102,7 @@ public class HEM_Bend extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -112,7 +112,7 @@ public class HEM_Bend extends HEM_Modifier {
 	    final Iterator<HE_Vertex> vItr = mesh.vItr();
 	    while (vItr.hasNext()) {
 		v = vItr.next();
-		final double d = WB_Distance.getDistance3D(v, groundPlane);
+		final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 		if (!posOnly || (d > 0)) {
 		    v.getPoint().rotateAboutAxis(d * angleFactor,
 			    bendAxis.getOrigin(), bendAxis.getDirection());
@@ -124,7 +124,7 @@ public class HEM_Bend extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */
@@ -135,7 +135,7 @@ public class HEM_Bend extends HEM_Modifier {
 	    final Iterator<HE_Vertex> vItr = selection.vItr();
 	    while (vItr.hasNext()) {
 		v = vItr.next();
-		final double d = WB_Distance.getDistance3D(v, groundPlane);
+		final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 		if (!posOnly || (d > 0)) {
 		    v.getPoint().rotateAboutAxis(d * angleFactor,
 			    bendAxis.getOrigin(), bendAxis.getDirection());

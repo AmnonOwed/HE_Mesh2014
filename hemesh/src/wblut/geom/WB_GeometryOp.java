@@ -182,7 +182,7 @@ public class WB_GeometryOp {
 	i.t2 = 0;
 	i.object = R.getPointOnLine(tmin);
 	i.dimension = 0;
-	i.sqDist = WB_Distance.getSqDistance3D(p, (WB_Point) i.object);
+	i.sqDist = getSqDistance3D(p, (WB_Point) i.object);
 	return i;
     }
 
@@ -308,7 +308,7 @@ public class WB_GeometryOp {
 
     public static boolean checkIntersection3D(final WB_AABB AABB,
 	    final WB_Sphere S) {
-	final double d2 = WB_Distance.getSqDistance3D(S.getCenter(), AABB);
+	final double d2 = getSqDistance3D(S.getCenter(), AABB);
 	return d2 <= S.getRadius() * S.getRadius();
     }
 
@@ -863,13 +863,14 @@ public class WB_GeometryOp {
 	final int numVerts = poly.getNumberOfShellPoints();
 	if (numVerts > 0) {
 	    WB_Coordinate a = poly.getPoint(numVerts - 1);
-	    WB_ClassificationGeometry aSide = P.classifyPointToPlane(a);
+	    WB_ClassificationGeometry aSide = WB_Classify
+		    .classifyPointToPlane3D(a, P);
 	    WB_Coordinate b;
 	    WB_ClassificationGeometry bSide;
 	    for (int n = 0; n < numVerts; n++) {
 		WB_IntersectionResult i;
 		b = poly.getPoint(n);
-		bSide = P.classifyPointToPlane(b);
+		bSide = WB_Classify.classifyPointToPlane3D(b, P);
 		if (bSide == WB_ClassificationGeometry.FRONT) {
 		    if (aSide == WB_ClassificationGeometry.BACK) {
 			i = WB_GeometryOp.getIntersection3D(b, a, P);
@@ -986,11 +987,10 @@ public class WB_GeometryOp {
 		// Projections are overlapping
 		final WB_Point start = L1.getPointOnLine(s2);
 		WB_Point end = L1.getPointOnLine(Math.min(e1, e2));
-		if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
-			S2.getOrigin(), L1))) {
+		if (WB_Epsilon.isZeroSq(getSqDistance3D(S2.getOrigin(), L1))) {
 		    // Segments are overlapping
 		    final WB_IntersectionResult i = new WB_IntersectionResult();
-		    i.sqDist = WB_Distance.getSqDistance3D(start, end);
+		    i.sqDist = getSqDistance3D(start, end);
 		    i.intersection = true;
 		    if (WB_Epsilon.isZeroSq(i.sqDist)) {
 			i.dimension = 0;
@@ -1002,7 +1002,7 @@ public class WB_GeometryOp {
 		    return i;
 		} else {
 		    final WB_IntersectionResult i = new WB_IntersectionResult();
-		    i.sqDist = WB_Distance.getSqDistance3D(start, end);
+		    i.sqDist = getSqDistance3D(start, end);
 		    i.intersection = false;
 		    i.dimension = 1;
 		    start.addSelf(end);
@@ -1026,7 +1026,7 @@ public class WB_GeometryOp {
 	final WB_IntersectionResult i = new WB_IntersectionResult();
 	final WB_Point p1 = S1.getParametricPointOnSegment(t1);
 	final WB_Point p2 = S2.getParametricPointOnSegment(t2);
-	i.sqDist = WB_Distance.getSqDistance3D(p1, p2);
+	i.sqDist = getSqDistance3D(p1, p2);
 	i.intersection = WB_Epsilon.isZeroSq(i.sqDist);
 	if (i.intersection) {
 	    i.dimension = 0;
@@ -1347,11 +1347,11 @@ public class WB_GeometryOp {
 	    return T.p3().get();
 	}
 	final WB_Point A = getClosestPointToSegment3D(p, T.p2(), T.p3());
-	final double dA2 = WB_Distance.getSqDistance3D(p, A);
+	final double dA2 = getSqDistance3D(p, A);
 	final WB_Point B = getClosestPointToSegment3D(p, T.p1(), T.p3());
-	final double dB2 = WB_Distance.getSqDistance3D(p, B);
+	final double dB2 = getSqDistance3D(p, B);
 	final WB_Point C = getClosestPointToSegment3D(p, T.p1(), T.p2());
-	final double dC2 = WB_Distance.getSqDistance3D(p, C);
+	final double dC2 = getSqDistance3D(p, C);
 	if ((dA2 < dB2) && (dA2 < dC2)) {
 	    return A;
 	} else if ((dB2 < dA2) && (dB2 < dC2)) {
@@ -1372,7 +1372,7 @@ public class WB_GeometryOp {
 	for (int i = 0; i < n; i++) {
 	    T = tris.get(i);
 	    tmp = getClosestPoint3D(p, T);
-	    final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+	    final double d2 = getSqDistance3D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -1394,8 +1394,7 @@ public class WB_GeometryOp {
 	if (WB_Epsilon.isZero(denom)) {
 	    final double t2 = r.dot(L1.getDirection());
 	    final WB_Point p2 = new WB_Point(L2.getPointOnLine(t2));
-	    final double d2 = WB_Distance.getSqDistance3D(L1.getOrigin().get(),
-		    p2);
+	    final double d2 = getSqDistance3D(L1.getOrigin().get(), p2);
 	    final WB_IntersectionResult i = new WB_IntersectionResult();
 	    i.intersection = false;
 	    i.t1 = 0;
@@ -1410,7 +1409,7 @@ public class WB_GeometryOp {
 	final double t2 = (a * f - b * c) * denom;
 	final WB_Point p1 = new WB_Point(L1.getPointOnLine(t1));
 	final WB_Point p2 = new WB_Point(L2.getPointOnLine(t2));
-	final double d2 = WB_Distance.getSqDistance3D(p1, p2);
+	final double d2 = getSqDistance3D(p1, p2);
 	if (WB_Epsilon.isZeroSq(d2)) {
 	    final WB_IntersectionResult i = new WB_IntersectionResult();
 	    i.intersection = true;
@@ -1437,7 +1436,7 @@ public class WB_GeometryOp {
 	    final WB_Tetrahedron T) {
 	WB_Point closestPt = new WB_Point(p);
 	double bestSqDist = Double.POSITIVE_INFINITY;
-	if (WB_Plane.pointOtherSideOfPlane(p, T.p4, T.p1, T.p2, T.p3)) {
+	if (pointOtherSideOfPlane(p, T.p4, T.p1, T.p2, T.p3)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p2, T.p3);
 	    final double sqDist = (q.subToVector(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
@@ -1445,7 +1444,7 @@ public class WB_GeometryOp {
 		closestPt = q;
 	    }
 	}
-	if (WB_Plane.pointOtherSideOfPlane(p, T.p2, T.p1, T.p3, T.p4)) {
+	if (pointOtherSideOfPlane(p, T.p2, T.p1, T.p3, T.p4)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p3, T.p4);
 	    final double sqDist = (q.subToVector(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
@@ -1453,7 +1452,7 @@ public class WB_GeometryOp {
 		closestPt = q;
 	    }
 	}
-	if (WB_Plane.pointOtherSideOfPlane(p, T.p3, T.p1, T.p4, T.p2)) {
+	if (pointOtherSideOfPlane(p, T.p3, T.p1, T.p4, T.p2)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p4, T.p2);
 	    final double sqDist = (q.subToVector(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
@@ -1461,7 +1460,7 @@ public class WB_GeometryOp {
 		closestPt = q;
 	    }
 	}
-	if (WB_Plane.pointOtherSideOfPlane(p, T.p1, T.p2, T.p4, T.p3)) {
+	if (pointOtherSideOfPlane(p, T.p1, T.p2, T.p4, T.p3)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p2, T.p4, T.p3);
 	    final double sqDist = (q.subToVector(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
@@ -1470,6 +1469,32 @@ public class WB_GeometryOp {
 	    }
 	}
 	return new WB_Point(closestPt);
+    }
+
+    /**
+     * Check if points lies on other side of plane compared with reference
+     * points.
+     *
+     * @param p
+     *            point to check
+     * @param q
+     *            reference point
+     * @param a
+     *            the a
+     * @param b
+     *            the b
+     * @param c
+     *            the c
+     * @return true, if successful
+     */
+    public static boolean pointOtherSideOfPlane(final WB_Coordinate p,
+	    final WB_Coordinate q, final WB_Coordinate a,
+	    final WB_Coordinate b, final WB_Coordinate c) {
+	final double signp = new WB_Vector(a, p).dot(new WB_Vector(a, b)
+		.crossSelf(new WB_Vector(a, c)));
+	final double signq = new WB_Vector(a, q).dot(new WB_Vector(a, b)
+		.crossSelf(new WB_Vector(a, c)));
+	return signp * signq <= 0;
     }
 
     protected static class TriangleIntersection {
@@ -2028,7 +2053,7 @@ public class WB_GeometryOp {
 	final WB_Point p0 = new WB_Point(p0x, p0y);
 	result.add(p0);
 	final WB_Point p1 = new WB_Point(p1x, p1y);
-	if (!WB_Epsilon.isZeroSq(WB_Distance.getSqDistance2D(p0, p1))) {
+	if (!WB_Epsilon.isZeroSq(getSqDistance2D(p0, p1))) {
 	    result.add(new WB_Point(p1x, p1y));
 	}
 	return result;
@@ -2069,7 +2094,7 @@ public class WB_GeometryOp {
 	} else if (WB_Predicates.orient2D(a, b, c)
 		* WB_Predicates.orient2D(a, b, d) > 0
 		|| WB_Predicates.orient2D(c, d, a)
-		* WB_Predicates.orient2D(c, d, b) > 0) {
+			* WB_Predicates.orient2D(c, d, b) > 0) {
 	    return false;
 	} else {
 	    return true;
@@ -2214,7 +2239,7 @@ public class WB_GeometryOp {
 	i.t2 = t2;
 	final WB_Point p1 = S1.getParametricPointOnSegment(t1);
 	final WB_Point p2 = S2.getParametricPointOnSegment(t2);
-	i.sqDist = WB_Distance.getSqDistance2D(p1, p2);
+	i.sqDist = getSqDistance2D(p1, p2);
 	if (WB_Epsilon.isZeroSq(i.sqDist)) {
 	    i.dimension = 0;
 	    i.object = p1;
@@ -2237,8 +2262,7 @@ public class WB_GeometryOp {
 	if (WB_Epsilon.isZero(denom)) {
 	    final double t2 = r.dot(L1.getDirection());
 	    final WB_Point p2 = new WB_Point(L2.getPointOnLine(t2));
-	    final double d2 = WB_Distance.getSqDistance2D(L1.getOrigin().get(),
-		    p2);
+	    final double d2 = getSqDistance2D(L1.getOrigin().get(), p2);
 	    final WB_IntersectionResult i = new WB_IntersectionResult();
 	    i.intersection = false;
 	    i.t1 = 0;
@@ -2253,7 +2277,7 @@ public class WB_GeometryOp {
 	final double t2 = (a * f - b * c) * denom;
 	final WB_Point p1 = new WB_Point(L1.getPointOnLine(t1));
 	final WB_Point p2 = new WB_Point(L2.getPointOnLine(t2));
-	final double d2 = WB_Distance.getSqDistance2D(p1, p2);
+	final double d2 = getSqDistance2D(p1, p2);
 	final WB_IntersectionResult i = new WB_IntersectionResult();
 	i.intersection = true;
 	i.t1 = t1;
@@ -2460,11 +2484,11 @@ public class WB_GeometryOp {
 	    return T.p3.get();
 	}
 	final WB_Point A = getClosestPointToSegment2D(p, T.p2, T.p3);
-	final double dA2 = WB_Distance.getSqDistance2D(p, A);
+	final double dA2 = getSqDistance2D(p, A);
 	final WB_Point B = getClosestPointToSegment2D(p, T.p1, T.p3);
-	final double dB2 = WB_Distance.getSqDistance2D(p, B);
+	final double dB2 = getSqDistance2D(p, B);
 	final WB_Point C = getClosestPointToSegment2D(p, T.p1, T.p2);
-	final double dC2 = WB_Distance.getSqDistance2D(p, C);
+	final double dC2 = getSqDistance2D(p, C);
 	if ((dA2 < dB2) && (dA2 < dC2)) {
 	    return A;
 	} else if ((dB2 < dA2) && (dB2 < dC2)) {
@@ -2487,7 +2511,7 @@ public class WB_GeometryOp {
 	    T = tris[i];
 	    tmp = getClosestPointToTriangle2D(p, poly.getPoint(T[0]),
 		    poly.getPoint(T[1]), poly.getPoint(T[2]));
-	    final double d2 = WB_Distance.getDistance2D(tmp, p);
+	    final double d2 = getDistance2D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2506,7 +2530,7 @@ public class WB_GeometryOp {
 	for (int i = 0; i < n; i++) {
 	    T = tris.get(i);
 	    tmp = getClosestPoint2D(p, T);
-	    final double d2 = WB_Distance.getDistance2D(tmp, p);
+	    final double d2 = getDistance2D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2527,7 +2551,7 @@ public class WB_GeometryOp {
 	    T = tris[i];
 	    tmp = getClosestPointToTriangle2D(p, poly.getPoint(T[0]),
 		    poly.getPoint(T[1]), poly.getPoint(T[2]));
-	    final double d2 = WB_Distance.getSqDistance2D(tmp, p);
+	    final double d2 = getSqDistance2D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2540,7 +2564,7 @@ public class WB_GeometryOp {
 		    .getNumberOfShellPoints(); j = i, i++) {
 		S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
 		tmp = getClosestPoint2D(p, S);
-		final double d2 = WB_Distance.getSqDistance2D(tmp, p);
+		final double d2 = getSqDistance2D(tmp, p);
 		if (d2 < dmax2) {
 		    closest = tmp;
 		    dmax2 = d2;
@@ -2560,7 +2584,7 @@ public class WB_GeometryOp {
 	for (int i = 0; i < n; i++) {
 	    T = tris.get(i);
 	    tmp = getClosestPoint2D(p, T);
-	    final double d2 = WB_Distance.getSqDistance2D(tmp, p);
+	    final double d2 = getSqDistance2D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2573,7 +2597,7 @@ public class WB_GeometryOp {
 		    .getNumberOfShellPoints(); j = i, i++) {
 		S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
 		tmp = getClosestPoint2D(p, S);
-		final double d2 = WB_Distance.getSqDistance2D(tmp, p);
+		final double d2 = getSqDistance2D(tmp, p);
 		if (d2 < dmax2) {
 		    closest = tmp;
 		    dmax2 = d2;
@@ -2635,7 +2659,7 @@ public class WB_GeometryOp {
 	i.t2 = t2;
 	final WB_Point p1 = S1.getParametricPointOnSegment(t1);
 	final WB_Point p2 = S2.getParametricPointOnSegment(t2);
-	i.sqDist = WB_Distance.getSqDistance2D(p1, p2);
+	i.sqDist = getSqDistance2D(p1, p2);
 	if (WB_Epsilon.isZeroSq(i.sqDist)) {
 	    i.dimension = 0;
 	    i.object = p1;
@@ -2659,7 +2683,7 @@ public class WB_GeometryOp {
 	    T = tris[i];
 	    tmp = getClosestPointToTriangle3D(p, poly.getPoint(T[0]),
 		    poly.getPoint(T[1]), poly.getPoint(T[2]));
-	    final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+	    final double d2 = getSqDistance3D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2680,7 +2704,7 @@ public class WB_GeometryOp {
 	    T = tris[i];
 	    tmp = getClosestPointToTriangle3D(p, poly.getPoint(T[0]),
 		    poly.getPoint(T[1]), poly.getPoint(T[2]));
-	    final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+	    final double d2 = getSqDistance3D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2693,7 +2717,7 @@ public class WB_GeometryOp {
 		    .getNumberOfPoints(); j = i, i++) {
 		S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
 		tmp = getClosestPoint3D(p, S);
-		final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+		final double d2 = getSqDistance3D(tmp, p);
 		if (d2 < dmax2) {
 		    closest = tmp;
 		    dmax2 = d2;
@@ -2714,7 +2738,7 @@ public class WB_GeometryOp {
 	for (int i = 0; i < n; i++) {
 	    T = tris.get(i);
 	    tmp = getClosestPoint3D(p, T);
-	    final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+	    final double d2 = getSqDistance3D(tmp, p);
 	    if (d2 < dmax2) {
 		closest = tmp;
 		dmax2 = d2;
@@ -2727,7 +2751,7 @@ public class WB_GeometryOp {
 		    .getNumberOfPoints(); j = i, i++) {
 		S = new WB_Segment(poly.getPoint(j), poly.getPoint(i));
 		tmp = getClosestPoint3D(p, S);
-		final double d2 = WB_Distance.getSqDistance3D(tmp, p);
+		final double d2 = getSqDistance3D(tmp, p);
 		if (d2 < dmax2) {
 		    closest = tmp;
 		    dmax2 = d2;
@@ -2745,7 +2769,7 @@ public class WB_GeometryOp {
 	}
 	final WB_Point p = (WB_Point) ir.object;
 	final WB_Point q = getClosestPoint3D(p, poly);
-	final double d2 = WB_Distance.getSqDistance3D(q, p);
+	final double d2 = getSqDistance3D(q, p);
 	if (WB_Epsilon.isZeroSq(d2)) {
 	    return ir;
 	}
@@ -2762,7 +2786,7 @@ public class WB_GeometryOp {
 	}
 	final WB_Point p = (WB_Point) ir.object;
 	final WB_Point q = getClosestPoint3D(p, poly);
-	final double d2 = WB_Distance.getSqDistance3D(q, p);
+	final double d2 = getSqDistance3D(q, p);
 	if (WB_Epsilon.isZeroSq(d2)) {
 	    return ir;
 	}
@@ -2779,7 +2803,7 @@ public class WB_GeometryOp {
 	}
 	final WB_Point p = (WB_Point) ir.object;
 	final WB_Point q = getClosestPoint3D(p, poly);
-	final double d2 = WB_Distance.getSqDistance3D(q, p);
+	final double d2 = getSqDistance3D(q, p);
 	if (WB_Epsilon.isZeroSq(d2)) {
 	    return ir;
 	}
@@ -2794,7 +2818,7 @@ public class WB_GeometryOp {
 	} else if (coincident2D(b, c)) {
 	    return true;
 	} else {
-	    if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
+	    if (getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 		final double d = projectedDistanceNorm(c, a, b);
 		if (0 < d && d < 1) {
 		    return true;
@@ -2811,7 +2835,7 @@ public class WB_GeometryOp {
 	} else if (coincident2D(b, c)) {
 	    return true;
 	} else {
-	    if (WB_Distance.getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
+	    if (getSqDistanceToLine2D(c, a, b) < WB_Epsilon.SQEPSILON) {
 		final double d = projectedDistanceNorm(c, a, b);
 		if (0 < d && d < 1) {
 		    return true;
@@ -2823,7 +2847,7 @@ public class WB_GeometryOp {
 
     public static boolean coincident2D(final WB_Coordinate a,
 	    final WB_Coordinate b) {
-	if (WB_Distance.getSqDistance2D(a, b) < WB_Epsilon.SQEPSILON) {
+	if (getSqDistance2D(a, b) < WB_Epsilon.SQEPSILON) {
 	    return true;
 	}
 	return false;
@@ -2893,7 +2917,7 @@ public class WB_GeometryOp {
 
     public static boolean contains(final WB_Coordinate p,
 	    final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine3D(A, B, C))) {
+	if (WB_Epsilon.isZeroSq(getSqDistanceToLine3D(A, B, C))) {
 	    return false;
 	}
 	if (sameSide(p, A, B, C) && sameSide(p, B, A, C)
@@ -2913,5 +2937,569 @@ public class WB_GeometryOp {
 	final WB_Vector po = new WB_Vector(P.getOrigin(), p);
 	final WB_Vector n = P.getNormal();
 	return projection.subSelf(n.mulSelf(n.dot(po)));
+    }
+
+    public static double distanceToLine2D(final WB_Coordinate p, final WB_Line L) {
+	return Math.sqrt(getSqDistanceToLine2D(p, L));
+    }
+
+    public static double getDistance2D(final double[] p, final double[] q) {
+	return Math.sqrt(getSqDistance2D(p, q));
+    }
+
+    public static double getDistance2D(final WB_Coordinate p, final WB_Segment S) {
+	return Math.sqrt(getSqDistance2D(p, S));
+    }
+
+    public static double getDistance2D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return Math.sqrt(getSqDistance2D(p, q));
+    }
+
+    public static double getDistance2D(final WB_Coordinate p, final WB_Line L) {
+	return Math.sqrt(getSqDistance2D(p, L));
+    }
+
+    public static double getDistance2D(final WB_Coordinate p, final WB_Ray R) {
+	return Math.sqrt(getSqDistance2D(p, R));
+    }
+
+    public static double getDistance3D(final WB_Segment S, final WB_Segment T) {
+	return Math.sqrt(WB_GeometryOp.getIntersection3D(S, T).sqDist);
+    }
+
+    public static double getDistance3D(final WB_Coordinate p, final WB_Segment S) {
+	return Math.sqrt(getSqDistance3D(p, S));
+    }
+
+    public static double getDistance3D(final WB_Coordinate p,
+	    final WB_Polygon poly) {
+	return Math.sqrt(getSqDistance3D(p, poly));
+    }
+
+    public static double getDistance3D(final WB_Coordinate p, final WB_AABB AABB) {
+	return Math.sqrt(getSqDistance3D(p, AABB));
+    }
+
+    public static double getDistance3D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return Math.sqrt(getSqDistance3D(p, q));
+    }
+
+    public static double getDistance3D(final WB_Coordinate p, final WB_Line L) {
+	return Math.sqrt(getSqDistance3D(p, L));
+    }
+
+    public static double getDistance3D(final WB_Coordinate p, final WB_Plane P) {
+	return P.getNormal().dot(p) - P.d();
+    }
+
+    public static double getDistance3D(final double p[], final WB_Plane P) {
+	final WB_Vector n = P.getNormal();
+	return n.xd() * p[0] + n.yd() * p[1] + n.zd() * p[2] - P.d();
+    }
+
+    public static double getDistance3D(final WB_Coordinate p, final WB_Ray R) {
+	return Math.sqrt(getSqDistance3D(p, R));
+    }
+
+    public static double getDistanceToLine2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToLine2D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to line.
+     *
+     * @param p
+     * @param a
+     *            point on line
+     * @param b
+     *            second point on line
+     * @return distance
+     */
+    public static double getDistanceToLine3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToLine3D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to line.
+     *
+     * @param p
+     * @param L
+     * @return distance
+     */
+    public static double getDistanceToLine3D(final WB_Coordinate p,
+	    final WB_Line L) {
+	return Math.sqrt(getSqDistanceToLine3D(p, L));
+    }
+
+    public static double getDistanceToPlane3D(final WB_Coordinate p,
+	    final WB_Plane P) {
+	final double d = P.getNormal().dot(p) - P.d();
+	return (d < 0) ? -d : d;
+    }
+
+    public static double getDistanceToPlane3D(final double[] p, final WB_Plane P) {
+	final WB_Vector v = P.getNormal();
+	final double d = v.xd() * p[0] + v.yd() * p[1] + v.zd() * p[2] - P.d();
+	return (d < 0) ? -d : d;
+    }
+
+    /**
+     * 2D Distance between 2 points.
+     *
+     * @param p
+     * @param q
+     * @return distance
+     */
+    public static double getDistanceToPoint2D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return Math.sqrt(getSqDistanceToPoint2D(p, q));
+    }
+
+    /**
+     * Squared 3D Distance between 2 points.
+     *
+     * @param p
+     * @param q
+     * @return distance
+     */
+    public static double getDistanceToPoint3D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return Math.sqrt(getSqDistanceToPoint3D(p, q));
+    }
+
+    public static double getDistanceToRay2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToRay2D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to ray.
+     *
+     * @param p
+     * @param a
+     *            origin of ray
+     * @param b
+     *            point on ray
+     * @return distance
+     */
+    public static double getDistanceToRay3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToRay3D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to ray.
+     *
+     * @param p
+     * @param R
+     * @return distance
+     */
+    public static double getDistanceToRay3D(final WB_Coordinate p,
+	    final WB_Ray R) {
+	return Math.sqrt(getSqDistanceToRay3D(p, R));
+    }
+
+    public static double getDistanceToSegment2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToSegment2D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to segment.
+     *
+     * @param p
+     * @param a
+     *            start of segment
+     * @param b
+     *            endpoint of segment
+     * @return distance
+     */
+    public static double getDistanceToSegment3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	return Math.sqrt(getSqDistanceToSegment3D(p, a, b));
+    }
+
+    /**
+     * 3D Distance from point to segment.
+     *
+     * @param p
+     * @param S
+     * @return distance
+     */
+    public static double getDistanceToSegment3D(final WB_Coordinate p,
+	    final WB_Segment S) {
+	return Math.sqrt(getSqDistanceToSegment3D(p, S));
+    }
+
+    public static double getSqDistance2D(final double[] p, final double[] q) {
+	return ((q[0] - p[0]) * (q[0] - p[0]) + (q[1] - p[1]) * (q[1] - p[1]));
+    }
+
+    public static double getSqDistance2D(final WB_Coordinate p,
+	    final WB_Segment S) {
+	final WB_Vector ab = new WB_Vector(S.getOrigin(), S.getEndpoint());
+	final WB_Vector ac = new WB_Vector(p).sub(S.getOrigin());
+	final WB_Vector bc = new WB_Vector(p).sub(S.getEndpoint());
+	final double e = ac.dot2D(ab);
+	if (e <= 0) {
+	    return ac.dot2D(ac);
+	}
+	final double f = ab.dot2D(ab);
+	if (e >= f) {
+	    return bc.dot2D(bc);
+	}
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    public static double getSqDistance2D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return ((q.xd() - p.xd()) * (q.xd() - p.xd()) + (q.yd() - p.yd())
+		* (q.yd() - p.yd()));
+    }
+
+    public static double getSqDistance2D(final WB_Coordinate p, final WB_Line L) {
+	final WB_Vector ab = L.getDirection();
+	final WB_Vector ac = new WB_Vector(L.getOrigin(), p);
+	final double e = ac.dot2D(ab);
+	final double f = ab.dot2D(ab);
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    public static double getSqDistance2D(final WB_Coordinate p, final WB_Ray R) {
+	final WB_Vector ab = R.getDirection();
+	final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
+	final double e = ac.dot2D(ab);
+	if (e <= 0) {
+	    return ac.dot2D(ac);
+	}
+	final double f = ab.dot2D(ab);
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    public static double getSqDistance3D(final WB_Segment S, final WB_Segment T) {
+	return WB_GeometryOp.getIntersection3D(S, T).sqDist;
+    }
+
+    public static double getSqDistance3D(final WB_Coordinate p,
+	    final WB_Segment S) {
+	final WB_Vector ab = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector ac = new WB_Vector(S.getOrigin(), p);
+	final WB_Vector bc = new WB_Vector(S.getEndpoint(), p);
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	if (e >= f) {
+	    return bc.dot(bc);
+	}
+	return ac.dot(ac) - e * e / f;
+    }
+
+    public static double getSqDistance3D(final WB_Coordinate p,
+	    final WB_Polygon poly) {
+	final int[][] tris = poly.getTriangles();
+	final int n = tris.length;
+	double dmax2 = Double.POSITIVE_INFINITY;
+	WB_Coordinate tmp;
+	int[] T;
+	for (int i = 0; i < n; i++) {
+	    T = tris[i];
+	    tmp = WB_GeometryOp.getClosestPointToTriangle3D(p,
+		    poly.getPoint(T[0]), poly.getPoint(T[1]),
+		    poly.getPoint(T[2]));
+	    final double d2 = getDistance3D(tmp, p);
+	    if (d2 < dmax2) {
+		dmax2 = d2;
+		if (WB_Epsilon.isZeroSq(dmax2)) {
+		    break;
+		}
+	    }
+	}
+	return dmax2;
+    }
+
+    public static double getSqDistance3D(final WB_Coordinate p,
+	    final WB_AABB AABB) {
+	double sqDist = 0;
+	double v = p.xd();
+	if (v < AABB.getMinX()) {
+	    sqDist += (AABB.getMinX() - v) * (AABB.getMinX() - v);
+	}
+	if (v > AABB.getMaxX()) {
+	    sqDist += (v - AABB.getMaxX()) * (v - AABB.getMaxX());
+	}
+	v = p.yd();
+	if (v < AABB.getMinY()) {
+	    sqDist += (AABB.getMinY() - v) * (AABB.getMinY() - v);
+	}
+	if (v > AABB.getMaxY()) {
+	    sqDist += (v - AABB.getMaxY()) * (v - AABB.getMaxY());
+	}
+	v = p.zd();
+	if (v < AABB.getMinZ()) {
+	    sqDist += (AABB.getMinZ() - v) * (AABB.getMinZ() - v);
+	}
+	if (v > AABB.getMaxZ()) {
+	    sqDist += (v - AABB.getMaxZ()) * (v - AABB.getMaxZ());
+	}
+	return sqDist;
+    }
+
+    // POINT-POINT
+    public static double getSqDistance3D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return ((q.xd() - p.xd()) * (q.xd() - p.xd()) + (q.yd() - p.yd())
+		* (q.yd() - p.yd()) + (q.zd() - p.zd()) * (q.zd() - p.zd()));
+    }
+
+    public static double getSqDistance3D(final WB_Coordinate p, final WB_Line L) {
+	final WB_Vector ab = L.getDirection();
+	final WB_Vector ac = new WB_Vector(L.getOrigin(), p);
+	final double e = ac.dot(ab);
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    // POINT-PLANE
+    public static double getSqDistance3D(final WB_Coordinate p, final WB_Plane P) {
+	final double d = P.getNormal().dot(p) - P.d();
+	return d * d;
+    }
+
+    public static double getSqDistance3D(final WB_Coordinate p, final WB_Ray R) {
+	final WB_Vector ab = R.getDirection();
+	final WB_Vector ac = new WB_Vector(R.getOrigin(), p);
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    // POINT-SEGMENT
+    public static double getSqDistanceToLine2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = new WB_Vector(a, b);
+	final WB_Vector ac = new WB_Vector(a, p);
+	final double e = ac.dot2D(ab);
+	final double f = ab.dot2D(ab);
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 2D Distance from point to line.
+     *
+     * @param p
+     * @param L
+     * @return squared distance
+     */
+    public static double getSqDistanceToLine2D(final WB_Coordinate p,
+	    final WB_Line L) {
+	final WB_Point ab = gf.createPoint(L.getDirection().xd(), L
+		.getDirection().yd());
+	final WB_Point ac = gf.createPoint(p.xd() - L.getOrigin().xd(), p.yd()
+		- L.getOrigin().yd());
+	final double e = ac.dot2D(ab);
+	final double f = ab.dot2D(ab);
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 3D Distance from point to line.
+     *
+     * @param p
+     * @param a
+     *            point on line
+     * @param b
+     *            second point on line
+     * @return squared distance
+     */
+    public static double getSqDistanceToLine3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = new WB_Vector(a, b);
+	final WB_Vector ac = new WB_Vector(a, p);
+	final double e = ac.dot(ab);
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 3D Distance from point to line.
+     *
+     * @param p
+     * @param L
+     * @return squared distance
+     */
+    public static double getSqDistanceToLine3D(final WB_Coordinate p,
+	    final WB_Line L) {
+	final WB_Vector ab = L.getDirection();
+	final WB_Vector ac = gf.createVectorFromTo(L.getOrigin(), p);
+	final double e = ac.dot(ab);
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    public static double getSqDistanceToPlane3D(final WB_Coordinate p,
+	    final WB_Plane P) {
+	final double d = P.getNormal().dot(p) - P.d();
+	return d * d;
+    }
+
+    /**
+     * Squared 2D Distance between 2 points.
+     *
+     * @param p
+     * @param q
+     * @return squared distance
+     */
+    public static double getSqDistanceToPoint2D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return ((q.xd() - p.xd()) * (q.xd() - p.xd()) + (q.yd() - p.yd())
+		* (q.yd() - p.yd()));
+    }
+
+    // POINT-RAY
+    /**
+     * Squared 3D Distance between 2 points.
+     *
+     * @param p
+     * @param q
+     * @return squared distance
+     */
+    public static double getSqDistanceToPoint3D(final WB_Coordinate p,
+	    final WB_Coordinate q) {
+	return ((q.xd() - p.xd()) * (q.xd() - p.xd()) + (q.yd() - p.yd())
+		* (q.yd() - p.yd()) + (q.zd() - p.zd()) * (q.zd() - p.zd()));
+    }
+
+    public static double getSqDistanceToRay2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = new WB_Vector(a, b);
+	final WB_Vector ac = new WB_Vector(a, p);
+	final double e = ac.dot2D(ab);
+	if (e <= 0) {
+	    return ac.dot2D(ac);
+	}
+	final double f = ab.dot2D(ab);
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 3D Distance from point to ray.
+     *
+     * @param p
+     * @param a
+     *            origin of ray
+     * @param b
+     *            point on ray
+     * @return squared distance
+     */
+    public static double getSqDistanceToRay3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = gf.createVectorFromTo(a, b);
+	final WB_Vector ac = gf.createVectorFromTo(a, p);
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    // POINT-AABB
+    /**
+     * Squared 3D Distance from point to ray.
+     *
+     * @param p
+     * @param R
+     * @return squared distance
+     */
+    public static double getSqDistanceToRay3D(final WB_Coordinate p,
+	    final WB_Ray R) {
+	final WB_Vector ab = R.getDirection();
+	final WB_Vector ac = gf.createVectorFromTo(R.getOrigin(), p);
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	return ac.dot(ac) - e * e / f;
+    }
+
+    public static double getSqDistanceToSegment2D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = new WB_Vector(a, b);
+	final WB_Vector ac = new WB_Vector(a, p);
+	final WB_Vector bc = new WB_Vector(b, p);
+	final double e = ac.dot2D(ab);
+	if (e <= 0) {
+	    return ac.dot2D(ac);
+	}
+	final double f = ab.dot2D(ab);
+	if (e >= f) {
+	    return bc.dot2D(bc);
+	}
+	return ac.dot2D(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 3D Distance from point to segment.
+     *
+     * @param p
+     * @param a
+     *            start of segment
+     * @param b
+     *            endpoint of segment
+     * @return squared distance
+     */
+    public static double getSqDistanceToSegment3D(final WB_Coordinate p,
+	    final WB_Coordinate a, final WB_Coordinate b) {
+	final WB_Vector ab = gf.createVectorFromTo(a, b);
+	final WB_Vector ac = gf.createVectorFromTo(a, p);
+	final WB_Vector bc = gf.createVectorFromTo(b, p);
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	if (e >= f) {
+	    return bc.dot(bc);
+	}
+	return ac.dot(ac) - e * e / f;
+    }
+
+    /**
+     * Squared 3D Distance from point to segment.
+     *
+     * @param p
+     * @param S
+     * @return squared distance
+     */
+    public static double getSqDistanceToSegment3D(final WB_Coordinate p,
+	    final WB_Segment S) {
+	final WB_Point ab = gf.createPoint(S.getEndpoint()).sub(S.getOrigin());
+	final WB_Point ac = gf.createPoint(p).sub(S.getOrigin());
+	final WB_Point bc = gf.createPoint(p).sub(S.getEndpoint());
+	final double e = ac.dot(ab);
+	if (e <= 0) {
+	    return ac.dot(ac);
+	}
+	final double f = ab.dot(ab);
+	if (e >= f) {
+	    return bc.dot(bc);
+	}
+	return ac.dot(ac) - e * e / f;
+    }
+
+    public static double signedDistanceToPlane3D(final WB_Coordinate p,
+	    final WB_Plane P) {
+	final double d = P.getNormal().dot(p) - P.d();
+	return d;
     }
 }

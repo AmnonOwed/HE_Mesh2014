@@ -255,13 +255,13 @@ public class WB_GeomGrid {
 		    if (neighbor > -1) {
 			cell = cells.get(neighbor);
 			if (cell != null) {
-			    if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
+			    if (WB_GeometryOp.getSqDistance3D(p, cell.getAABB()) <= r2) {
 				result.add(cell);
 			    }
 			} else if (all) {
 			    cell = getNewCellForIndex(id.i + di, id.j + dj,
 				    id.k + dk);
-			    if (WB_Distance.getSqDistance3D(p, cell.getAABB()) <= r2) {
+			    if (WB_GeometryOp.getSqDistance3D(p, cell.getAABB()) <= r2) {
 				result.add(cell);
 			    }
 			}
@@ -303,13 +303,13 @@ public class WB_GeomGrid {
 		    if (neighbor > -1) {
 			cell = cells.get(neighbor);
 			if (cell != null) {
-			    if (WB_Distance.getSqDistance3D(cell.getAABB()
+			    if (WB_GeometryOp.getSqDistance3D(cell.getAABB()
 				    .getCenter(), S) <= r2) {
 				result.add(cell);
 			    }
 			} else if (all) {
 			    cell = getNewCellForIndex(di, dj, dk);
-			    if (WB_Distance.getSqDistance3D(cell.getAABB()
+			    if (WB_GeometryOp.getSqDistance3D(cell.getAABB()
 				    .getCenter(), S) <= r2) {
 				result.add(cell);
 			    }

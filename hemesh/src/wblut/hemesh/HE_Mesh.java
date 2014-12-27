@@ -15,20 +15,19 @@ import java.util.Map;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABB;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_ClassificationGeometry;
 import wblut.geom.WB_Classify;
-import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
-import wblut.geom.WB_Distance;
 import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Frame;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_GeometryType;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_IndexedSegment;
-import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_KDTree;
 import wblut.geom.WB_KDTree.WB_KDEntry;
@@ -1872,7 +1871,7 @@ WB_HasColor, WB_Mesh {
 	HE_Halfedge e;
 	while (eItr.hasNext()) {
 	    e = eItr.next();
-	    if (isZeroSq(WB_Distance.getSqDistance3D(e.getVertex(),
+	    if (isZeroSq(WB_GeometryOp.getSqDistance3D(e.getVertex(),
 		    e.getEndVertex()))) {
 		edgesToRemove.add(e);
 	    }
@@ -1889,7 +1888,7 @@ WB_HasColor, WB_Mesh {
 	final double d2 = d * d;
 	while (eItr.hasNext()) {
 	    e = eItr.next();
-	    if (WB_Distance.getSqDistance3D(e.getVertex(), e.getEndVertex()) < d2) {
+	    if (WB_GeometryOp.getSqDistance3D(e.getVertex(), e.getEndVertex()) < d2) {
 		edgesToRemove.add(e);
 	    }
 	}
@@ -3281,7 +3280,7 @@ WB_HasColor, WB_Mesh {
 	    face = fItr.next();
 	    P = face.toPlane();
 	    if (isConvex) {
-		if (P.classifyPointToPlane(p) == WB_ClassificationGeometry.BACK) {
+		if (WB_Classify.classifyPointToPlane3D(p, P) == WB_ClassificationGeometry.BACK) {
 		    return false;
 		}
 	    } else {
@@ -3310,7 +3309,7 @@ WB_HasColor, WB_Mesh {
      * @return true/false
      */
     public static boolean pointIsInFace(final WB_Point p, final HE_Face f) {
-	return isZero(WB_Distance.getDistance3D(p,
+	return isZero(WB_GeometryOp.getDistance3D(p,
 		WB_GeometryOp.getClosestPoint3D(p, f.toPolygon())));
     }
 
@@ -3326,11 +3325,11 @@ WB_HasColor, WB_Mesh {
     public static boolean pointIsStrictlyInFace(final WB_Coordinate p,
 	    final HE_Face f) {
 	final WB_Polygon poly = f.toPolygon();
-	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
+	if (!isZeroSq(WB_GeometryOp.getSqDistance3D(p,
 		WB_GeometryOp.getClosestPoint3D(p, poly)))) {
 	    return false;
 	}
-	if (!isZeroSq(WB_Distance.getSqDistance3D(p,
+	if (!isZeroSq(WB_GeometryOp.getSqDistance3D(p,
 		WB_GeometryOp.getClosestPointOnPeriphery3D(p, poly)))) {
 	    return false;
 	}
@@ -4112,7 +4111,7 @@ WB_HasColor, WB_Mesh {
 	for (int i = 0; i < faces.size(); i++) {
 	    final WB_Polygon poly = faces.get(i).toPolygon();
 	    final WB_Point tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
-	    d = WB_Distance.getSqDistance3D(tmp, p);
+	    d = WB_GeometryOp.getSqDistance3D(tmp, p);
 	    if (d < dmin) {
 		dmin = d;
 		result = tmp;
@@ -4141,7 +4140,7 @@ WB_HasColor, WB_Mesh {
 	for (int i = 0; i < faces.size(); i++) {
 	    final WB_Polygon poly = faces.get(i).toPolygon();
 	    final WB_Point tmp = WB_GeometryOp.getClosestPoint3D(p, poly);
-	    d = WB_Distance.getSqDistance3D(tmp, p);
+	    d = WB_GeometryOp.getSqDistance3D(tmp, p);
 	    if (d < dmin) {
 		dmin = d;
 		face = faces.get(i);

@@ -359,8 +359,8 @@ public class WB_GeodesicI {
 			WB_GeodesicMath.WB_GreatCircleIntersection gci, WB_Point[] apices,
 			int type) {
 		if (type == TETRAHEDRON) {
-			return (Math.abs(WB_Distance.getDistance3D(gci.p0, P)) < Math
-					.abs(WB_Distance.getDistance3D(gci.p1, P))) ? gf
+			return (Math.abs(WB_GeometryOp.getDistance3D(gci.p0, P)) < Math
+					.abs(WB_GeometryOp.getDistance3D(gci.p1, P))) ? gf
 					.createPoint(gci.p0) : gf.createPoint(gci.p1);
 		}
 		return (gci.p0[2] > 0) ? gf.createPoint(gci.p0) : gf

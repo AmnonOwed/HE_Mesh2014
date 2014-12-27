@@ -3,8 +3,8 @@ package wblut.hemesh;
 import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateUtil;
-import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_HasColor;
 import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
@@ -18,562 +18,520 @@ import wblut.math.WB_Math;
  *
  */
 public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
+    /** Start vertex of halfedge. */
+    private HE_Vertex _vertex;
+    /** Halfedge pair. */
+    private HE_Halfedge _pair;
+    /** Next halfedge in face. */
+    private HE_Halfedge _next;
+    /** Previous halfedge in face. */
+    // private HE_Halfedge _prev;
+    /** Associated face. */
+    private HE_Face _face;
+    /** The _data. */
+    // private HashMap<String, Object> _data;
+    private int hecolor;
+    private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
-	/** Start vertex of halfedge. */
-	private HE_Vertex _vertex;
+    /**
+     * Instantiates a new HE_Halfedge.
+     */
+    public HE_Halfedge() {
+	super();
+	hecolor = -1;
+    }
 
-	/** Halfedge pair. */
-	private HE_Halfedge _pair;
+    /**
+     * Get key.
+     *
+     * @return key
+     */
+    public long key() {
+	return super.getKey();
+    }
 
-	/** Next halfedge in face. */
-	private HE_Halfedge _next;
+    /**
+     * Get previous halfedge in face.
+     *
+     * @return previous halfedge
+     */
+    public HE_Halfedge getPrevInFace() {
+	HE_Halfedge he = this;
+	do {
+	    he = he.getNextInFace();
+	} while (he.getNextInFace() != this);
+	return he;
+    }
 
-	/** Previous halfedge in face. */
-	// private HE_Halfedge _prev;
+    /**
+     * Get next halfedge in face.
+     *
+     * @return next halfedge
+     */
+    public HE_Halfedge getNextInFace() {
+	return _next;
+    }
 
-	/** Associated face. */
-	private HE_Face _face;
-
-	/** The _data. */
-	// private HashMap<String, Object> _data;
-
-	private int hecolor;
-	private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
-
-	/**
-	 * Instantiates a new HE_Halfedge.
-	 */
-	public HE_Halfedge() {
-		super();
-		hecolor = -1;
+    /**
+     * Get next halfedge in vertex.
+     *
+     * @return next halfedge
+     */
+    public HE_Halfedge getNextInVertex() {
+	if (_pair == null) {
+	    return null;
 	}
+	return _pair.getNextInFace();
+    }
 
-	/**
-	 * Get key.
-	 *
-	 * @return key
-	 */
-	public long key() {
-		return super.getKey();
+    /**
+     * Get previous halfedge in vertex.
+     *
+     * @return previous halfedge
+     */
+    public HE_Halfedge getPrevInVertex() {
+	return getPrevInFace().getPair();
+    }
+
+    /**
+     * Get paired halfedge.
+     *
+     * @return paired halfedge
+     */
+    public HE_Halfedge getPair() {
+	return _pair;
+    }
+
+    /**
+     * Set next halfedge in face.
+     *
+     * @param he
+     *            next halfedge
+     */
+    public void setNext(final HE_Halfedge he) {
+	_next = he;
+	he.setPrev(this);
+    }
+
+    /**
+     * Sets previous halfedge in face, only to be called by setNext.
+     *
+     * @param he
+     *            next halfedge
+     */
+    public void setPrev(final HE_Halfedge he) {
+	// _prev = he;
+    }
+
+    /**
+     * Mutually pair halfedges.
+     *
+     * @param he
+     *            halfedge to pair
+     */
+    public void setPair(final HE_Halfedge he) {
+	_pair = he;
+    }
+
+    /**
+     * Get type of face vertex associated with halfedge.
+     *
+     * @return HE.FLAT, HE.CONVEX, HE.CONCAVE
+     */
+    public WB_ClassificationConvex getHalfedgeType() {
+	if (_vertex == null) {
+	    return null;
 	}
-
-	/**
-	 * Get previous halfedge in face.
-	 *
-	 * @return previous halfedge
-	 */
-	public HE_Halfedge getPrevInFace() {
-		HE_Halfedge he = this;
-		do {
-			he = he.getNextInFace();
-		} while (he.getNextInFace() != this);
-		return he;
+	WB_Vector v = _vertex.getPoint().subToVector(getPrevInFace()._vertex);
+	v.normalizeSelf();
+	final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector(
+		_vertex);
+	vn.normalizeSelf();
+	v = v.cross(vn);
+	final WB_Vector n;
+	if (_face == null) {
+	    n = _pair._face.getFaceNormal().mulSelf(-1);
+	} else {
+	    n = _face.getFaceNormal();
 	}
-
-	/**
-	 * Get next halfedge in face.
-	 *
-	 * @return next halfedge
-	 */
-	public HE_Halfedge getNextInFace() {
-		return _next;
+	final double dot = n.dot(v);
+	if (v.isParallel(vn)) {
+	    return WB_ClassificationConvex.FLAT;
+	} else if (dot > 0) {
+	    return WB_ClassificationConvex.CONVEX;
+	} else {
+	    return WB_ClassificationConvex.CONCAVE;
 	}
+    }
 
-	/**
-	 * Get next halfedge in vertex.
-	 *
-	 * @return next halfedge
-	 */
-	public HE_Halfedge getNextInVertex() {
-		if (_pair == null) {
-			return null;
-		}
-		return _pair.getNextInFace();
+    /**
+     * Get tangent WB_Vector of halfedge.
+     *
+     * @return tangent
+     */
+    public WB_Vector getHalfedgeTangent() {
+	if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
+	    final WB_Vector v = _pair.getVertex().getPoint()
+		    .subToVector(_vertex);
+	    v.normalizeSelf();
+	    return v;
 	}
+	return null;
+    }
 
-	/**
-	 * Get previous halfedge in vertex.
-	 *
-	 * @return previous halfedge
-	 */
-	public HE_Halfedge getPrevInVertex() {
-
-		return getPrevInFace().getPair();
+    public WB_Vector getEdgeTangent() {
+	final WB_Vector v = getHalfedgeTangent();
+	if (v == null) {
+	    return null;
 	}
+	return isEdge() ? v : v.mulSelf(-1);
+    }
 
-	/**
-	 * Get paired halfedge.
-	 *
-	 * @return paired halfedge
-	 */
-	public HE_Halfedge getPair() {
-
-		return _pair;
+    /**
+     * Get center of halfedge.
+     *
+     * @return center
+     */
+    public WB_Point getHalfedgeCenter() {
+	if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
+	    return gf.createMidpoint(_next.getVertex(), _vertex);
 	}
+	return null;
+    }
 
-	/**
-	 * Set next halfedge in face.
-	 *
-	 * @param he
-	 *            next halfedge
-	 */
-	public void setNext(final HE_Halfedge he) {
-		_next = he;
-		he.setPrev(this);
-
+    public WB_Point getEdgeCenter() {
+	if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
+	    return gf.createMidpoint(_next.getVertex(), _vertex);
 	}
+	return null;
+    }
 
-	/**
-	 * Sets previous halfedge in face, only to be called by setNext.
-	 *
-	 * @param he
-	 *            next halfedge
-	 */
-	public void setPrev(final HE_Halfedge he) {
-		// _prev = he;
-
+    /**
+     * Get edge of halfedge.
+     *
+     * @return edge
+     */
+    public HE_Halfedge getEdge() {
+	if (isEdge()) {
+	    return this;
 	}
+	return _pair;
+    }
 
-	/**
-	 * Mutually pair halfedges.
-	 *
-	 * @param he
-	 *            halfedge to pair
-	 */
-	public void setPair(final HE_Halfedge he) {
-		_pair = he;
+    /**
+     * Get face of halfedge.
+     *
+     * @return face
+     */
+    public HE_Face getFace() {
+	return _face;
+    }
+
+    /**
+     * Sets the face.
+     *
+     * @param face
+     *            the new face
+     */
+    public void setFace(final HE_Face face) {
+	if (_face != null) {
+	    _face.reset();
 	}
+	_face = face;
+	_face.reset();
+    }
 
-	/**
-	 * Get type of face vertex associated with halfedge.
-	 *
-	 * @return HE.FLAT, HE.CONVEX, HE.CONCAVE
-	 */
-	public WB_ClassificationConvex getHalfedgeType() {
+    /**
+     * Get vertex of halfedge.
+     *
+     * @return vertex
+     */
+    public HE_Vertex getVertex() {
+	return _vertex;
+    }
 
-		if (_vertex == null) {
-			return null;
-		}
-		WB_Vector v = _vertex.getPoint().subToVector(getPrevInFace()._vertex);
-		v.normalizeSelf();
-		final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector(
-				_vertex);
-		vn.normalizeSelf();
-		v = v.cross(vn);
-		final WB_Vector n;
-		if (_face == null) {
-			n = _pair._face.getFaceNormal().mulSelf(-1);
-		}
-		else {
-			n = _face.getFaceNormal();
-		}
-		final double dot = n.dot(v);
+    public HE_Vertex getStartVertex() {
+	return _vertex;
+    }
 
-		if (v.isParallel(vn)) {
-			return WB_ClassificationConvex.FLAT;
-		}
-		else if (dot > 0) {
-			return WB_ClassificationConvex.CONVEX;
-		}
-		else {
-			return WB_ClassificationConvex.CONCAVE;
-		}
+    /**
+     * Sets the vertex.
+     *
+     * @param vertex
+     *            the new vertex
+     */
+    public void setVertex(final HE_Vertex vertex) {
+	_vertex = vertex;
+    }
 
+    /**
+     * Get end vertex of halfedge.
+     *
+     * @return vertex
+     */
+    public HE_Vertex getEndVertex() {
+	if (_pair != null) {
+	    return _pair._vertex;
 	}
+	return _next._vertex;
+    }
 
-	/**
-	 * Get tangent WB_Vector of halfedge.
-	 *
-	 * @return tangent
-	 */
-	public WB_Vector getHalfedgeTangent() {
+    /**
+     * Clear next.
+     */
+    public void clearNext() {
+	_next = null;
+    }
 
-		if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
-			final WB_Vector v = _pair.getVertex().getPoint()
-					.subToVector(_vertex);
-			v.normalizeSelf();
-			return v;
-		}
+    /**
+     * Clear prev
+     */
+    public void clearPrev() {
+	// _prev = null;
+    }
+
+    /**
+     * Clear pair
+     */
+    public void clearPair() {
+	_pair = null;
+    }
+
+    /**
+     * Clear face.
+     */
+    public void clearFace() {
+	if (_face != null) {
+	    _face.reset();
+	}
+	_face = null;
+    }
+
+    /**
+     * Clear vertex.
+     */
+    public void clearVertex() {
+	_vertex = null;
+    }
+
+    public WB_Vector getEdgeNormal() {
+	if (_pair == null) {
+	    return null;
+	}
+	HE_Halfedge he1, he2;
+	if (isEdge()) {
+	    he1 = this;
+	    he2 = _pair;
+	} else {
+	    he1 = _pair;
+	    he2 = this;
+	}
+	if ((he1._face == null) && (he2._face == null)) {
+	    return null;
+	}
+	final WB_Vector n1 = (he1._face != null) ? he1._face.getFaceNormal()
+		: new WB_Vector(0, 0, 0);
+	final WB_Vector n2 = (he2._face != null) ? he2._face.getFaceNormal()
+		: new WB_Vector(0, 0, 0);
+	final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
+		n1.zd() + n2.zd());
+	n.normalizeSelf();
+	return n;
+    }
+
+    /**
+     * Get halfedge normal.
+     *
+     * @return in-face normal of face, points inwards
+     */
+    public WB_Vector getHalfedgeNormal() {
+	WB_Vector fn;
+	if ((getFace() == null) && (getPair() == null)) {
+	    return null;
+	}
+	if (getFace() == null) {
+	    if (getPair().getFace() == null) {
 		return null;
+	    }
+	    fn = getPair().getFace().getFaceNormal();
+	} else {
+	    fn = getFace().getFaceNormal();
 	}
+	final HE_Vertex vn = getNextInFace().getVertex();
+	final WB_Vector _normal = new WB_Vector(vn);
+	_normal.subSelf(getVertex());
+	_normal.set(fn.cross(_normal));
+	_normal.normalizeSelf();
+	return _normal;
+    }
 
-	public WB_Vector getEdgeTangent() {
-		final WB_Vector v = getHalfedgeTangent();
-		if (v == null) {
-			return null;
-		}
+    /**
+     * Get area of faces bounding halfedge.
+     *
+     * @return area
+     */
+    public double getHalfedgeArea() {
+	return 0.5 * getEdgeArea();
+    }
 
-		return isEdge() ? v : v.mulSelf(-1);
+    /**
+     * Get angle between adjacent faces.
+     *
+     * @return angle
+     */
+    public double getHalfedgeDihedralAngle() {
+	return getEdgeDihedralAngle();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.Point3D#toString()
+     */
+    @Override
+    public String toString() {
+	return "HE_Halfedge key: " + key() + ", paired with halfedge "
+		+ getPair().key() + ". Vertex: " + getVertex().key()
+		+ ". Is this an edge: " + isEdge() + ".";
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void setData(final String s, final Object o) {
+	// if (_data == null) {
+	// _data = new HashMap<String, Object>();
+	// }
+	// _data.put(s, o);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.core.WB_HasData#getData(java.lang.String)
+     */
+    @Override
+    public Object getData(final String s) {
+	return null;// _data.get(s);
+    }
+
+    @Override
+    public int getColor() {
+	return hecolor;
+    }
+
+    @Override
+    public void setColor(final int color) {
+	hecolor = color;
+    }
+
+    public double getLength() {
+	return WB_GeometryOp.getDistance3D(getVertex(), getEndVertex());
+    }
+
+    public boolean isEdge() {
+	if (_face == null || _pair == null) {
+	    return false;
 	}
-
-	/**
-	 * Get center of halfedge.
-	 *
-	 * @return center
-	 */
-	public WB_Point getHalfedgeCenter() {
-
-		if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
-			return gf.createMidpoint(_next.getVertex(), _vertex);
-		}
-		return null;
+	if (_pair._face == null) {
+	    return true;
 	}
+	return (_key < _pair._key);
+    }
 
-	public WB_Point getEdgeCenter() {
-
-		if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
-			return gf.createMidpoint(_next.getVertex(), _vertex);
-		}
-		return null;
+    public boolean isBoundary() {
+	if (_face == null || _pair == null) {
+	    return false;
 	}
-
-	/**
-	 * Get edge of halfedge.
-	 *
-	 * @return edge
-	 */
-	public HE_Halfedge getEdge() {
-		if (isEdge()) {
-			return this;
-		}
-
-		return _pair;
+	if (_pair._face == null) {
+	    return true;
 	}
+	return false;
+    }
 
-	/**
-	 * Get face of halfedge.
-	 *
-	 * @return face
-	 */
-	public HE_Face getFace() {
-		return _face;
+    /**
+     * Get area of faces bounding edge.
+     *
+     * @return area
+     */
+    public double getEdgeArea() {
+	if (_pair == null) {
+	    return Double.NaN;
 	}
-
-	/**
-	 * Sets the face.
-	 *
-	 * @param face
-	 *            the new face
-	 */
-	public void setFace(final HE_Face face) {
-		if (_face != null) {
-			_face.reset();
-		}
-		_face = face;
-		_face.reset();
+	HE_Halfedge he1, he2;
+	if (isEdge()) {
+	    he1 = this;
+	    he2 = _pair;
+	} else {
+	    he1 = _pair;
+	    he2 = this;
 	}
-
-	/**
-	 * Get vertex of halfedge.
-	 *
-	 * @return vertex
-	 */
-	public HE_Vertex getVertex() {
-		return _vertex;
+	if ((he1._face == null) && (he2._face == null)) {
+	    return Double.NaN;
 	}
-
-	public HE_Vertex getStartVertex() {
-		return _vertex;
+	double result = 0;
+	int n = 0;
+	if (he1._face != null) {
+	    result += he1._face.getFaceArea();
+	    n++;
 	}
-
-	/**
-	 * Sets the vertex.
-	 *
-	 * @param vertex
-	 *            the new vertex
-	 */
-	public void setVertex(final HE_Vertex vertex) {
-		_vertex = vertex;
+	if (he2._face != null) {
+	    result += he2._face.getFaceArea();
+	    n++;
 	}
+	return result / n;
+    }
 
-	/**
-	 * Get end vertex of halfedge.
-	 *
-	 * @return vertex
-	 */
-	public HE_Vertex getEndVertex() {
-		if (_pair != null) {
-			return _pair._vertex;
-		}
-		return _next._vertex;
+    /**
+     * Return angle between adjacent faces.
+     *
+     * @return angle
+     */
+    public double getEdgeDihedralAngle() {
+	if (_pair == null) {
+	    return Double.NaN;
 	}
-
-	/**
-	 * Clear next.
-	 */
-	public void clearNext() {
-		_next = null;
+	HE_Halfedge he1, he2;
+	if (isEdge()) {
+	    he1 = this;
+	    he2 = _pair;
+	} else {
+	    he1 = _pair;
+	    he2 = this;
 	}
-
-	/**
-	 * Clear prev
-	 */
-	public void clearPrev() {
-		// _prev = null;
+	if ((he1._face == null) || (he2._face == null)) {
+	    return Double.NaN;
+	} else {
+	    final WB_Vector n1 = he1._face.getFaceNormal();
+	    final WB_Vector n2 = he2._face.getFaceNormal();
+	    return Math.PI - Math.acos(WB_Math.clamp(n1.dot(n2), -1, 1));
 	}
+    }
 
-	/**
-	 * Clear pair
-	 */
-	public void clearPair() {
-		_pair = null;
+    public void copyProperties(final HE_Vertex el) {
+	super.copyProperties(el);
+	hecolor = el.getColor();
+    }
 
+    @Override
+    public void clear() {
+	_face = null;
+	_next = null;
+	_pair = null;
+	_vertex = null;
+    }
+
+    public double getAngle() {
+	final WB_Coordinate c = getVertex();
+	final WB_Coordinate p1 = getEndVertex();
+	final WB_Coordinate p2 = this.getPrevInFace().getVertex();
+	if (c == null) {
+	    return Double.NaN;
 	}
-
-	/**
-	 * Clear face.
-	 */
-	public void clearFace() {
-		if (_face != null) {
-			_face.reset();
-		}
-		_face = null;
-
-	}
-
-	/**
-	 * Clear vertex.
-	 */
-	public void clearVertex() {
-		_vertex = null;
-	}
-
-	public WB_Vector getEdgeNormal() {
-		if (_pair == null) {
-			return null;
-		}
-		HE_Halfedge he1, he2;
-		if (isEdge()) {
-			he1 = this;
-			he2 = _pair;
-		}
-		else {
-			he1 = _pair;
-			he2 = this;
-		}
-
-		if ((he1._face == null) && (he2._face == null)) {
-			return null;
-		}
-		final WB_Vector n1 = (he1._face != null) ? he1._face.getFaceNormal()
-				: new WB_Vector(0, 0, 0);
-		final WB_Vector n2 = (he2._face != null) ? he2._face.getFaceNormal()
-				: new WB_Vector(0, 0, 0);
-		final WB_Vector n = new WB_Vector(n1.xd() + n2.xd(), n1.yd() + n2.yd(),
-				n1.zd() + n2.zd());
-		n.normalizeSelf();
-		return n;
-	}
-
-	/**
-	 * Get halfedge normal.
-	 *
-	 * @return in-face normal of face, points inwards
-	 */
-	public WB_Vector getHalfedgeNormal() {
-		WB_Vector fn;
-		if ((getFace() == null) && (getPair() == null)) {
-			return null;
-		}
-
-		if (getFace() == null) {
-			if (getPair().getFace() == null) {
-				return null;
-			}
-			fn = getPair().getFace().getFaceNormal();
-		}
-		else {
-			fn = getFace().getFaceNormal();
-		}
-		final HE_Vertex vn = getNextInFace().getVertex();
-		final WB_Vector _normal = new WB_Vector(vn);
-		_normal.subSelf(getVertex());
-		_normal.set(fn.cross(_normal));
-		_normal.normalizeSelf();
-		return _normal;
-
-	}
-
-	/**
-	 * Get area of faces bounding halfedge.
-	 *
-	 * @return area
-	 */
-	public double getHalfedgeArea() {
-
-		return 0.5 * getEdgeArea();
-	}
-
-	/**
-	 * Get angle between adjacent faces.
-	 *
-	 * @return angle
-	 */
-	public double getHalfedgeDihedralAngle() {
-
-		return getEdgeDihedralAngle();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.geom.Point3D#toString()
-	 */
-	@Override
-	public String toString() {
-		return "HE_Halfedge key: " + key() + ", paired with halfedge "
-				+ getPair().key() + ". Vertex: " + getVertex().key()
-				+ ". Is this an edge: " + isEdge() + ".";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public void setData(final String s, final Object o) {
-		// if (_data == null) {
-		// _data = new HashMap<String, Object>();
-		// }
-		// _data.put(s, o);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.core.WB_HasData#getData(java.lang.String)
-	 */
-	@Override
-	public Object getData(final String s) {
-		return null;// _data.get(s);
-	}
-
-	@Override
-	public int getColor() {
-
-		return hecolor;
-	}
-
-	@Override
-	public void setColor(final int color) {
-		hecolor = color;
-
-	}
-
-	public double getLength() {
-		return WB_Distance.getDistance3D(getVertex(), getEndVertex());
-	}
-
-	public boolean isEdge() {
-		if (_face == null || _pair == null) {
-			return false;
-		}
-		if (_pair._face == null) {
-			return true;
-		}
-		return (_key < _pair._key);
-	}
-
-	public boolean isBoundary() {
-		if (_face == null || _pair == null) {
-			return false;
-		}
-		if (_pair._face == null) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Get area of faces bounding edge.
-	 *
-	 * @return area
-	 */
-	public double getEdgeArea() {
-		if (_pair == null) {
-			return Double.NaN;
-		}
-		HE_Halfedge he1, he2;
-		if (isEdge()) {
-			he1 = this;
-			he2 = _pair;
-		}
-		else {
-			he1 = _pair;
-			he2 = this;
-		}
-
-		if ((he1._face == null) && (he2._face == null)) {
-			return Double.NaN;
-		}
-
-		double result = 0;
-		int n = 0;
-		if (he1._face != null) {
-			result += he1._face.getFaceArea();
-			n++;
-		}
-		if (he2._face != null) {
-			result += he2._face.getFaceArea();
-			n++;
-		}
-
-		return result / n;
-
-	}
-
-	/**
-	 * Return angle between adjacent faces.
-	 *
-	 * @return angle
-	 */
-	public double getEdgeDihedralAngle() {
-		if (_pair == null) {
-			return Double.NaN;
-		}
-		HE_Halfedge he1, he2;
-		if (isEdge()) {
-			he1 = this;
-			he2 = _pair;
-		}
-		else {
-			he1 = _pair;
-			he2 = this;
-		}
-
-		if ((he1._face == null) || (he2._face == null)) {
-			return Double.NaN;
-		}
-		else {
-			final WB_Vector n1 = he1._face.getFaceNormal();
-			final WB_Vector n2 = he2._face.getFaceNormal();
-			return Math.PI - Math.acos(WB_Math.clamp(n1.dot(n2), -1, 1));
-		}
-	}
-
-	public void copyProperties(final HE_Vertex el) {
-		super.copyProperties(el);
-		hecolor = el.getColor();
-	}
-
-	@Override
-	public void clear() {
-		_face = null;
-		_next = null;
-		_pair = null;
-		_vertex = null;
-	}
-
-	public double getAngle() {
-		final WB_Coordinate c = getVertex();
-		final WB_Coordinate p1 = getEndVertex();
-		final WB_Coordinate p2 = this.getPrevInFace().getVertex();
-		if (c == null) {
-			return Double.NaN;
-		}
-		return WB_CoordinateUtil.angleBetween(c.xd(), c.yd(), c.zd(), p1.xd(),
-				p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd());
-
-	}
+	return WB_CoordinateUtil.angleBetween(c.xd(), c.yd(), c.zd(), p1.xd(),
+		p1.yd(), p1.zd(), p2.xd(), p2.yd(), p2.zd());
+    }
 }

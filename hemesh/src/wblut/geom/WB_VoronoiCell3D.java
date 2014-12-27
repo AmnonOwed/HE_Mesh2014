@@ -112,7 +112,7 @@ public class WB_VoronoiCell3D {
 			pointloop: for (int i = 0; i < cell.getNumberOfVertices(); i++) {
 				p = cell.getVertex(i);
 				for (final WB_Plane WB_Point : planes) {
-					d = WB_Distance.getDistanceToPlane3D(p, WB_Point);
+					d = WB_GeometryOp.getDistanceToPlane3D(p, WB_Point);
 					if (WB_Epsilon.isZero(d)) {
 						onBoundary[i] = true;
 						continue pointloop;
@@ -168,8 +168,8 @@ public class WB_VoronoiCell3D {
 		                                                         .getNumberOfVertices()];
 
 		for (int i = 0; i < cell.getNumberOfVertices(); i++) {
-			result[i] = WB_Classify.classifyPointToPlane3D(WB_Point,
-					cell.getVertex(i));
+			result[i] = WB_Classify.classifyPointToPlane3D(cell.getVertex(i),
+					WB_Point);
 		}
 		return result;
 

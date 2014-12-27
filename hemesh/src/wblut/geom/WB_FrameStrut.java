@@ -70,11 +70,11 @@ public class WB_FrameStrut {
 	}
 
 	public double getSqLength() {
-		return WB_Distance.getSqDistance3D(end(), start());
+		return WB_GeometryOp.getSqDistance3D(end(), start());
 	}
 
 	public double getLength() {
-		return WB_Distance.getDistance3D(end(), start());
+		return WB_GeometryOp.getDistance3D(end(), start());
 	}
 
 	public double getRadiusStart() {

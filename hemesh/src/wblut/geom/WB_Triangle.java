@@ -403,7 +403,7 @@ public class WB_Triangle implements WB_Simplex {
      */
     public static boolean pointInTriangle2D(final WB_Coordinate p,
 	    final WB_Coordinate A, final WB_Coordinate B, final WB_Coordinate C) {
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(A, B, C))) {
 	    return false;
 	}
 	if (sameSide2D(p, A, B, C) && sameSide2D(p, B, A, C)
@@ -463,7 +463,7 @@ public class WB_Triangle implements WB_Simplex {
 	if (p == C) {
 	    return false;
 	}
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(A, B, C))) {
 	    return false;
 	}
 	// Compute vectors
@@ -496,7 +496,7 @@ public class WB_Triangle implements WB_Simplex {
 	if (p == C) {
 	    return false;
 	}
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToLine2D(A, B, C))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToLine2D(A, B, C))) {
 	    return false;
 	}
 	// Compute vectors

@@ -231,7 +231,7 @@ public class WB_Voronoi2D {
 				if ((p = intersect(lbnd, bisector)) != null) {
 					removeHalfedgeFromPointqueue(lbnd);
 					insertHalfedgeInPointqueue(lbnd, p,
-							WB_Distance.getDistance2D(p, newsite));
+							WB_GeometryOp.getDistance2D(p, newsite));
 				}
 				lbnd = bisector;
 				// create a new HalfEdge, setting its ELpm field to 1
@@ -244,7 +244,7 @@ public class WB_Voronoi2D {
 				if ((p = intersect(bisector, rbnd)) != null) {
 					// push the HE into the ordered linked list of vertices
 					insertHalfedgeInPointqueue(bisector, p,
-							WB_Distance.getDistance2D(p, newsite));
+							WB_GeometryOp.getDistance2D(p, newsite));
 				}
 
 				newsite = getNextSite();
@@ -315,12 +315,12 @@ public class WB_Voronoi2D {
 				if ((p = intersect(llbnd, bisector)) != null) {
 					removeHalfedgeFromPointqueue(llbnd);
 					insertHalfedgeInPointqueue(llbnd, p,
-							WB_Distance.getDistance2D(p, bot));
+							WB_GeometryOp.getDistance2D(p, bot));
 				}
 
 				if ((p = intersect(bisector, rrbnd)) != null) {
 					insertHalfedgeInPointqueue(bisector, p,
-							WB_Distance.getDistance2D(p, bot));
+							WB_GeometryOp.getDistance2D(p, bot));
 				}
 			} else {
 				break;

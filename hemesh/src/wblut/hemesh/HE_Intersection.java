@@ -4,7 +4,6 @@ import java.util.List;
 import javolution.util.FastTable;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
-import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
 import wblut.geom.WB_Line;
@@ -26,7 +25,7 @@ public class HE_Intersection {
 	    p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
 	    final WB_Point cp = WB_GeometryOp.getClosestPoint3D(p.point,
 		    face.toPlanarPolygon());
-	    if (WB_Epsilon.isZero(WB_Distance.getDistance3D(cp, p.point))) {
+	    if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(cp, p.point))) {
 		return p;
 	    }
 	}
@@ -43,7 +42,7 @@ public class HE_Intersection {
 	    p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
 	    final WB_Point cp = WB_GeometryOp.getClosestPoint3D(p.point,
 		    face.toPlanarPolygon());
-	    if (WB_Epsilon.isZero(WB_Distance.getDistance3D(cp, p.point))) {
+	    if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(cp, p.point))) {
 		return new HE_FaceIntersection(face, p.point);
 	    }
 	}
@@ -60,7 +59,7 @@ public class HE_Intersection {
 	    p = new HE_FaceIntersection(face, (WB_Point) lpi.object);
 	    final WB_Point cp = WB_GeometryOp.getClosestPoint3D(p.point,
 		    face.toPlanarPolygon());
-	    if (WB_Epsilon.isZero(WB_Distance.getDistance3D(cp, p.point))) {
+	    if (WB_Epsilon.isZero(WB_GeometryOp.getDistance3D(cp, p.point))) {
 		return p;
 	    }
 	}

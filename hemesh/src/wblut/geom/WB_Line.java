@@ -175,7 +175,7 @@ public class WB_Line extends WB_Linear implements WB_Curve {
     public static ArrayList<WB_Line> getLinesTangentToCircleThroughPoint(
 	    final WB_Circle C, final WB_Coordinate p) {
 	final ArrayList<WB_Line> result = new ArrayList<WB_Line>(2);
-	final double dcp = WB_Distance.getDistance2D(C.getCenter(), p);
+	final double dcp = WB_GeometryOp.getDistance2D(C.getCenter(), p);
 	if (WB_Epsilon.isZero(dcp - C.getRadius())) {
 	    final WB_Vector u = new WB_Vector(C.getCenter(), p);
 	    result.add(new WB_Line(p, new WB_Point(-u.yd(), u.xd())));

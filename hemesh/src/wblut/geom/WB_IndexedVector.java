@@ -571,13 +571,13 @@ public class WB_IndexedVector extends WB_AbstractSeqVector {
     }
 
     public boolean isCollinear(final WB_Coordinate p, final WB_Coordinate q) {
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(p, q))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(p, q))) {
 	    return true;
 	}
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(this, q))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(this, q))) {
 	    return true;
 	}
-	if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistanceToPoint2D(this, p))) {
+	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistanceToPoint2D(this, p))) {
 	    return true;
 	}
 	return WB_Epsilon.isZeroSq(sub(p).cross(sub(q)).getSqLength3D());

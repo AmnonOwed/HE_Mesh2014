@@ -236,7 +236,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 
 		private V lookup(final WB_Coordinate point) {
 			for (int i = 0; i < _binSize; i++) {
-				if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(point,
+				if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistance3D(point,
 						_bin[i].coord))) {
 					return _bin[i].value;
 				}
@@ -251,7 +251,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			}
 			if (_isLeaf) {
 				for (int i = 0; i < _binSize; i++) {
-					final double dist = WB_Distance.getSqDistance3D(
+					final double dist = WB_GeometryOp.getSqDistance3D(
 							_bin[i].coord, data);
 					heap.tryToAdd(dist, _bin[i]);
 				}
@@ -346,7 +346,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_Distance.getSqDistance3D(center,
+				final double d2 = WB_GeometryOp.getSqDistance3D(center,
 						_bin[i].coord);
 				if (d2 <= r2) {
 					_bin[i].d2 = d2;
@@ -388,7 +388,7 @@ public class WB_KDTree<T extends WB_Coordinate, V> {
 			final WB_KDEntry<T, V>[] tmp = new WB_KDEntry[_binSize];
 			int n = 0;
 			for (int i = 0; i < _binSize; i++) {
-				final double d2 = WB_Distance.getSqDistance3D(center,
+				final double d2 = WB_GeometryOp.getSqDistance3D(center,
 						_bin[i].coord);
 				if ((d2 <= upper2) && (d2 >= lower2)) {
 					_bin[i].d2 = d2;

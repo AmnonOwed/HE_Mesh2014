@@ -7,7 +7,6 @@ import java.util.Map;
 import javolution.util.FastMap;
 import javolution.util.FastTable;
 import wblut.geom.WB_ClassificationConvex;
-import wblut.geom.WB_Distance;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_IntersectionResult;
@@ -218,7 +217,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -247,9 +246,9 @@ public class HEM_Extrude extends HEM_Modifier {
 	    do {
 		_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 		_halfedgeEWs
-			.put(he.key(),
-				(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-					: chamfer);
+		.put(he.key(),
+			(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+				: chamfer);
 		he = he.getNextInFace();
 	    } while (he != f.getHalfedge());
 	    tracker.incrementCounter();
@@ -284,7 +283,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			    he = f.getHalfedge();
 			    do {
 				he.getVertex().getPoint()
-					.addMulSelf(heights[i], n);
+				.addMulSelf(heights[i], n);
 				he = he.getNextInFace();
 			    } while (he != f.getHalfedge());
 			}
@@ -302,9 +301,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 			    final HE_Vertex v = he.getVertex();
 			    he.getVertex()
-				    .getPoint()
-				    .addMulSelf(
-					    d.value(v.xd(), v.yd(), v.zd()), n);
+			    .getPoint()
+			    .addMulSelf(
+				    d.value(v.xd(), v.yd(), v.zd()), n);
 			    he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 		    }
@@ -317,7 +316,7 @@ public class HEM_Extrude extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -349,9 +348,9 @@ public class HEM_Extrude extends HEM_Modifier {
 	    do {
 		_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 		_halfedgeEWs
-			.put(he.key(),
-				(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-					: chamfer);
+		.put(he.key(),
+			(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+				: chamfer);
 		he = he.getNextInFace();
 	    } while (he != f.getHalfedge());
 	    tracker.incrementCounter();
@@ -887,7 +886,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	    for (int i = 0; i < newhes.size(); i++) {
 		final HE_Halfedge e = newhes.get(i);
 		if (e.isEdge()) {
-		    if (WB_Epsilon.isZeroSq(WB_Distance.getSqDistance3D(
+		    if (WB_Epsilon.isZeroSq(WB_GeometryOp.getSqDistance3D(
 			    e.getStartVertex(), e.getEndVertex()))) {
 			edgesToRemove.add(e);
 		    }

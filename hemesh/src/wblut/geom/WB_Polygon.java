@@ -228,11 +228,11 @@ public class WB_Polygon extends WB_Ring {
 	for (int i = 0, j = getNumberOfShellPoints() - 1; i < getNumberOfShellPoints(); j = i, i++) {
 	    normal.addSelf(
 		    (points.get(j, 1) - points.get(i, 1))
-		    * (points.get(j, 2) + points.get(i, 2)),
+			    * (points.get(j, 2) + points.get(i, 2)),
 		    (points.get(j, 2) - points.get(i, 2))
-		    * (points.get(j, 0) + points.get(i, 0)),
+			    * (points.get(j, 0) + points.get(i, 0)),
 		    (points.get(j, 0) - points.get(i, 0))
-		    * (points.get(j, 1) + points.get(i, 1)));
+			    * (points.get(j, 1) + points.get(i, 1)));
 	}
 	normal.normalizeSelf();
 	if (normal.getSqLength3D() < 0.5) {
@@ -250,11 +250,11 @@ public class WB_Polygon extends WB_Ring {
 	for (int i = 0, j = getNumberOfShellPoints() - 1; i < getNumberOfShellPoints(); j = i, i++) {
 	    normal.addSelf(
 		    (points.get(j, 1) - points.get(i, 1))
-		    * (points.get(j, 2) + points.get(i, 2)),
+			    * (points.get(j, 2) + points.get(i, 2)),
 		    (points.get(j, 2) - points.get(i, 2))
-		    * (points.get(j, 0) + points.get(i, 0)),
+			    * (points.get(j, 0) + points.get(i, 0)),
 		    (points.get(j, 0) - points.get(i, 0))
-		    * (points.get(j, 1) + points.get(i, 1)));
+			    * (points.get(j, 1) + points.get(i, 1)));
 	}
 	normal.normalizeSelf();
 	return normal;
@@ -336,13 +336,14 @@ public class WB_Polygon extends WB_Ring {
 	final int numVerts = poly.numberOfShellPoints;
 	if (numVerts > 0) {
 	    WB_Coordinate a = poly.points.getPoint(numVerts - 1);
-	    WB_ClassificationGeometry aSide = P.classifyPointToPlane(a);
+	    WB_ClassificationGeometry aSide = WB_Classify
+		    .classifyPointToPlane3D(a, P);
 	    WB_Coordinate b;
 	    WB_ClassificationGeometry bSide;
 	    for (int n = 0; n < numVerts; n++) {
 		final WB_IntersectionResult i;
 		b = poly.points.getPoint(n);
-		bSide = P.classifyPointToPlane(b);
+		bSide = WB_Classify.classifyPointToPlane3D(b, P);
 		if (bSide == WB_ClassificationGeometry.FRONT) {
 		    if (aSide == WB_ClassificationGeometry.BACK) {
 			i = WB_GeometryOp.getIntersection3D(b, a, P);
@@ -450,7 +451,7 @@ public class WB_Polygon extends WB_Ring {
 	double d = Double.POSITIVE_INFINITY;
 	int id = -1;
 	for (int i = 0; i < this.numberOfShellPoints; i++) {
-	    final double cd = WB_Distance.getSqDistance3D(p, getPoint(i));
+	    final double cd = WB_GeometryOp.getSqDistance3D(p, getPoint(i));
 	    if (cd < d) {
 		id = i;
 		d = cd;
@@ -463,7 +464,7 @@ public class WB_Polygon extends WB_Ring {
 	double d = Double.POSITIVE_INFINITY;
 	int id = -1;
 	for (int i = 0; i < this.numberOfShellPoints; i++) {
-	    final double cd = WB_Distance.getSqDistance3D(p, getPoint(i));
+	    final double cd = WB_GeometryOp.getSqDistance3D(p, getPoint(i));
 	    if (cd < d) {
 		id = i;
 		d = cd;
