@@ -228,11 +228,11 @@ public class WB_Polygon extends WB_Ring {
 	for (int i = 0, j = getNumberOfShellPoints() - 1; i < getNumberOfShellPoints(); j = i, i++) {
 	    normal.addSelf(
 		    (points.get(j, 1) - points.get(i, 1))
-			    * (points.get(j, 2) + points.get(i, 2)),
+		    * (points.get(j, 2) + points.get(i, 2)),
 		    (points.get(j, 2) - points.get(i, 2))
-			    * (points.get(j, 0) + points.get(i, 0)),
+		    * (points.get(j, 0) + points.get(i, 0)),
 		    (points.get(j, 0) - points.get(i, 0))
-			    * (points.get(j, 1) + points.get(i, 1)));
+		    * (points.get(j, 1) + points.get(i, 1)));
 	}
 	normal.normalizeSelf();
 	if (normal.getSqLength3D() < 0.5) {
@@ -250,11 +250,11 @@ public class WB_Polygon extends WB_Ring {
 	for (int i = 0, j = getNumberOfShellPoints() - 1; i < getNumberOfShellPoints(); j = i, i++) {
 	    normal.addSelf(
 		    (points.get(j, 1) - points.get(i, 1))
-			    * (points.get(j, 2) + points.get(i, 2)),
+		    * (points.get(j, 2) + points.get(i, 2)),
 		    (points.get(j, 2) - points.get(i, 2))
-			    * (points.get(j, 0) + points.get(i, 0)),
+		    * (points.get(j, 0) + points.get(i, 0)),
 		    (points.get(j, 0) - points.get(i, 0))
-			    * (points.get(j, 1) + points.get(i, 1)));
+		    * (points.get(j, 1) + points.get(i, 1)));
 	}
 	normal.normalizeSelf();
 	return normal;

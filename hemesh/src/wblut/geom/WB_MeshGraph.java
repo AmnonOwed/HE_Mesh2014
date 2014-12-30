@@ -89,13 +89,39 @@ public class WB_MeshGraph {
 	final WB_Frame frame = new WB_Frame();
 	computePaths(i);
 	for (final WB_GVertex v : vertices) {
-	    frame.addNode(v.pos, v.minDistance);
+	    frame.addNode(v.pos, 0);
 	}
 	for (final WB_GVertex v : vertices) {
 	    final int[] path = getShortestPath(i, v.index);
 	    for (int j = 0; j < path.length - 1; j++) {
+		frame.nodes.get(path[j]).value = Math.max(
+			frame.nodes.get(path[j]).value, 1.0 - j * 1.0
+				/ path.length);
 		frame.addStrut(path[j], path[j + 1]);
 	    }
+	    frame.nodes.get(path[path.length - 1]).value = Math.max(
+		    frame.nodes.get(path[path.length - 1]).value,
+		    1.0 / path.length);
+	}
+	return frame;
+    }
+
+    public WB_Frame getFrame(final int i, final int maxnodes) {
+	final WB_Frame frame = new WB_Frame();
+	computePaths(i);
+	for (final WB_GVertex v : vertices) {
+	    frame.addNode(v.pos, 0);
+	}
+	for (final WB_GVertex v : vertices) {
+	    final int[] path = getShortestPath(i, v.index);
+	    final int nodes = Math.min(maxnodes, path.length);
+	    for (int j = 0; j < nodes - 1; j++) {
+		frame.nodes.get(path[j]).value = Math.max(
+			frame.nodes.get(path[j]).value, 1.0 - j * 1.0 / nodes);
+		frame.addStrut(path[j], path[j + 1]);
+	    }
+	    frame.nodes.get(path[nodes - 1]).value = Math.max(
+		    frame.nodes.get(path[nodes - 1]).value, 1.0 / nodes);
 	}
 	return frame;
     }

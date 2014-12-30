@@ -215,11 +215,11 @@ public class WB_Frame {
 	return n;
     }
 
-    public int addStrut(final int i, final int j) {
+    public boolean addStrut(final int i, final int j) {
 	if (i == j) {
 	    throw new IllegalArgumentException(
 		    "Strut can't connect a node to itself: " + i + " " + j
-			    + ".");
+		    + ".");
 	}
 	final int nn = nodes.size();
 	if ((i < 0) || (j < 0) || (i >= nn) || (j >= nn)) {
@@ -234,15 +234,13 @@ public class WB_Frame {
 	    strut = new WB_FrameStrut(nodes.get(j), nodes.get(i), n);
 	}
 	if (!nodes.get(i).addStrut(strut)) {
-	    // System.out.println("WB_Frame : Strut " + i + "-" + j
-	    // + " already added.");
+	    return false;
 	} else if (!nodes.get(j).addStrut(strut)) {
-	    // System.out.println("WB_Frame : Strut " + i + "-" + j
-	    // + " already added.");
+	    return false;
 	} else {
 	    struts.add(strut);
 	}
-	return n;
+	return true;
     }
 
     public void removeStrut(final WB_FrameStrut strut) {
@@ -403,6 +401,28 @@ public class WB_Frame {
 	    if (node.getOrder() == 2) {
 		node.set(newPos[id]);
 	    }
+	    id++;
+	}
+	return this;
+    }
+
+    public WB_Frame smoothNodes() {
+	final WB_Point[] newPos = new WB_Point[nodes.size()];
+	int id = 0;
+	for (final WB_FrameNode node : nodes) {
+	    newPos[id] = new WB_Point();
+	    final List<WB_FrameNode> ns = node.getNeighbors();
+	    for (final WB_FrameNode n : ns) {
+		newPos[id].addSelf(n);
+	    }
+	    newPos[id].mulSelf(1.0 / ns.size());
+	    newPos[id].addSelf(node);
+	    newPos[id].mulSelf(0.5);
+	    id++;
+	}
+	id = 0;
+	for (final WB_FrameNode node : nodes) {
+	    node.set(newPos[id]);
 	    id++;
 	}
 	return this;

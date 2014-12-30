@@ -12,8 +12,8 @@ public class WB_Classify {
      * @param p
      *            2D point
      * @param L
-     * @return WB_Classification.FRONT, WB_Classification.BACK,
-     *         WB_Classification.ON
+     * @return WB_ClassificationGeometry.FRONT, WB_ClassificationGeometry.BACK,
+     *         WB_ClassificationGeometry.ON
      */
     public static WB_ClassificationGeometry classifyPointToLine2D(
 	    final WB_Coordinate p, final WB_Line L) {
@@ -35,8 +35,8 @@ public class WB_Classify {
      *
      * @param p
      * @param C
-     * @return WB_Classification.INSIDE, WB_Classification.OUTSIDE,
-     *         WB_Classification.ON
+     * @return WB_ClassificationGeometry.INSIDE,
+     *         WB_ClassificationGeometry.OUTSIDE, WB_ClassificationGeometry.ON
      */
     public static WB_ClassificationGeometry classifyPointToCircle2D(
 	    final WB_Coordinate p, final WB_Circle C) {
@@ -56,11 +56,11 @@ public class WB_Classify {
      *
      * @param C1
      * @param C2
-     * @return WB_Classification.INSIDE: C1 inside C2
-     *         WB_Classification.CONTAINING: C2 inside C1
-     *         WB_Classification.OUTSIDE: C1 outside C2
-     *         WB_Classification.CROSSING:C1 intersecting C2
-     *         WB_Classification.ON: C1=C2
+     * @return WB_ClassificationGeometry.INSIDE: C1 inside C2
+     *         WB_ClassificationGeometry.CONTAINING: C2 inside C1
+     *         WB_ClassificationGeometry.OUTSIDE: C1 outside C2
+     *         WB_ClassificationGeometry.CROSSING:C1 intersecting C2
+     *         WB_ClassificationGeometry.ON: C1=C2
      */
     public static WB_ClassificationGeometry classifyCircleToCircle2D(
 	    final WB_Circle C1, final WB_Circle C2) {
@@ -88,9 +88,9 @@ public class WB_Classify {
      *
      * @param C
      * @param L
-     * @return WB_Classification.CROSSING: C crosses L
-     *         WB_Classification.OUTSIDE: C outside of L
-     *         WB_Classification.TANGENT:C is tangent to L
+     * @return WB_ClassificationGeometry.CROSSING: C crosses L
+     *         WB_ClassificationGeometry.OUTSIDE: C outside of L
+     *         WB_ClassificationGeometry.TANGENT:C is tangent to L
      */
     public static WB_ClassificationGeometry classifyCircleToLine2D(
 	    final WB_Circle C, final WB_Line L) {
@@ -111,7 +111,7 @@ public class WB_Classify {
      *            2D point
      * @param q
      *            2D point
-     * @return WB_Classification.SAME, WB_Classification.DIFF
+     * @return WB_ClassificationGeometry.SAME, WB_ClassificationGeometry.DIFF
      */
     public static WB_ClassificationGeometry sameSideOfLine2D(
 	    final WB_Coordinate p, final WB_Coordinate q, final WB_Line L) {
@@ -125,13 +125,18 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.DIFF;
     }
 
+    private static double[] toDouble(final WB_Coordinate p) {
+	return new double[] { p.xd(), p.yd(), 0 };
+    }
+
     /**
      * Classify a 2D segment to 2D line.
      *
      * @param seg
      *            2D segment
-     * @return WB_Classification.ON, WB_Classification.FRONT,
-     *         WB_Classification.BACK or WB_Classification.CROSSING
+     * @return WB_ClassificationGeometry.ON, WB_ClassificationGeometry.FRONT,
+     *         WB_ClassificationGeometry.BACK or
+     *         WB_ClassificationGeometry.CROSSING
      */
     public static WB_ClassificationGeometry classifySegmentToLine2D(
 	    final WB_Segment seg, final WB_Line L) {
@@ -174,8 +179,8 @@ public class WB_Classify {
      *
      * @param P
      *            2D polygon
-     * @return WB_Classification.FRONT, WB_Classification.BACK or
-     *         WB_Classification.CROSSING
+     * @return WB_ClassificationGeometry.FRONT, WB_ClassificationGeometry.BACK
+     *         or WB_ClassificationGeometry.CROSSING
      */
     public static WB_ClassificationGeometry classifyPolygonToLine2D(
 	    final WB_Polygon P, final WB_Line L) {
@@ -200,16 +205,18 @@ public class WB_Classify {
 	return null;
     }
 
-    /**
-     * @deprecated Use {@link #classifyPointToPlaneFast3D(WB_Coordinate,WB_Plane)} instead
-     */
-    public static WB_ClassificationGeometry classifyPointToPlaneFast3D(
-            final WB_Plane P, final WB_Coordinate p) {
-        	return classifyPointToPlaneFast3D(p, P);
-            }
-
     public static WB_ClassificationGeometry classifyPointToPlaneFast3D(
 	    final WB_Coordinate p, final WB_Plane P) {
+	return classifyPointToPlaneFast3D(P, p);
+    }
+
+    public static WB_ClassificationGeometry classifyPointToPlane3D(
+	    final WB_Coordinate p, final WB_Plane P) {
+	return classifyPointToPlane3D(P, p);
+    }
+
+    public static WB_ClassificationGeometry classifyPointToPlaneFast3D(
+	    final WB_Plane P, final WB_Coordinate p) {
 	final double signp = WB_GeometryOp.signedDistanceToPlane3D(p, P);
 	if (WB_Epsilon.isZero(signp)) {
 	    return WB_ClassificationGeometry.ON;
@@ -220,16 +227,8 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.BACK;
     }
 
-    /**
-     * @deprecated Use {@link #classifyPointToPlane3D(WB_Coordinate,WB_Plane)} instead
-     */
     public static WB_ClassificationGeometry classifyPointToPlane3D(
-            final WB_Plane P, final WB_Coordinate p) {
-        	return classifyPointToPlane3D(p, P);
-            }
-
-    public static WB_ClassificationGeometry classifyPointToPlane3D(
-	    final WB_Coordinate p, final WB_Plane P) {
+	    final WB_Plane P, final WB_Coordinate p) {
 	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getDistanceToPlane3D(p, P))) {
 	    return WB_ClassificationGeometry.ON;
 	}
@@ -240,22 +239,14 @@ public class WB_Classify {
 	if (signp == 0) {
 	    return WB_ClassificationGeometry.ON;
 	}
-	if (signp > 0) {
+	if (signp < 0) {
 	    return WB_ClassificationGeometry.FRONT;
 	}
 	return WB_ClassificationGeometry.BACK;
     }
 
-    /**
-     * @deprecated Use {@link #classifyPointToTetrahedron3D(WB_Coordinate,WB_Tetrahedron)} instead
-     */
     public static WB_ClassificationGeometry classifyPointToTetrahedron3D(
-            final WB_Tetrahedron T, final WB_Coordinate p) {
-        	return classifyPointToTetrahedron3D(p, T);
-            }
-
-    public static WB_ClassificationGeometry classifyPointToTetrahedron3D(
-	    final WB_Coordinate p, final WB_Tetrahedron T) {
+	    final WB_Tetrahedron T, final WB_Coordinate p) {
 	final WB_Plane pl012 = geometryfactory.createPlane(T.p1(), T.p2(),
 		T.p3());
 	final WB_Plane pl013 = geometryfactory.createPlane(T.p1(), T.p2(),
@@ -267,7 +258,7 @@ public class WB_Classify {
 	int on = 0;
 	int front = 0;
 	int back = 0;
-	final WB_ClassificationGeometry c012 = classifyPointToPlane3D(p, pl012);
+	final WB_ClassificationGeometry c012 = classifyPointToPlane3D(pl012, p);
 	if (c012 == WB_ClassificationGeometry.ON) {
 	    on++;
 	} else if (c012 == WB_ClassificationGeometry.FRONT) {
@@ -275,7 +266,7 @@ public class WB_Classify {
 	} else {
 	    back++;
 	}
-	final WB_ClassificationGeometry c013 = classifyPointToPlane3D(p, pl013);
+	final WB_ClassificationGeometry c013 = classifyPointToPlane3D(pl013, p);
 	if (c013 == WB_ClassificationGeometry.ON) {
 	    on++;
 	} else if (c013 == WB_ClassificationGeometry.FRONT) {
@@ -283,7 +274,7 @@ public class WB_Classify {
 	} else {
 	    back++;
 	}
-	final WB_ClassificationGeometry c023 = classifyPointToPlane3D(p, pl023);
+	final WB_ClassificationGeometry c023 = classifyPointToPlane3D(pl023, p);
 	if (c023 == WB_ClassificationGeometry.ON) {
 	    on++;
 	} else if (c023 == WB_ClassificationGeometry.FRONT) {
@@ -291,7 +282,7 @@ public class WB_Classify {
 	} else {
 	    back++;
 	}
-	final WB_ClassificationGeometry c123 = classifyPointToPlane3D(p, pl123);
+	final WB_ClassificationGeometry c123 = classifyPointToPlane3D(pl123, p);
 	if (c123 == WB_ClassificationGeometry.ON) {
 	    on++;
 	} else if (c123 == WB_ClassificationGeometry.FRONT) {
@@ -313,7 +304,7 @@ public class WB_Classify {
 	int numInFront = 0;
 	int numBehind = 0;
 	for (int i = 0; i < poly.getNumberOfPoints(); i++) {
-	    switch (classifyPointToPlane3D(poly.getPoint(i), P)) {
+	    switch (classifyPointToPlane3D(P, poly.getPoint(i))) {
 	    case FRONT:
 		numInFront++;
 		break;
@@ -338,14 +329,13 @@ public class WB_Classify {
 	    final WB_Polygon poly, final WB_Plane P) {
 	int numInFront = 0;
 	int numBehind = 0;
+	double d;
 	for (int i = 0; i < poly.getNumberOfPoints(); i++) {
-	    switch (classifyPointToPlaneFast3D(poly.getPoint(i), P)) {
-	    case FRONT:
+	    d = WB_GeometryOp.signedDistanceToPlane3D(poly.getPoint(i), P);
+	    if (d > WB_Epsilon.EPSILON) {
 		numInFront++;
-		break;
-	    case BACK:
+	    } else if (d < -WB_Epsilon.EPSILON) {
 		numBehind++;
-		break;
 	    }
 	    if (numBehind != 0 && numInFront != 0) {
 		return WB_ClassificationGeometry.CROSSING;

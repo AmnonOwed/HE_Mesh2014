@@ -239,9 +239,9 @@ public class HEC_FromFrame extends HEC_Creator {
 				mo,
 				mso,
 				mso
-					/ fidget
-					* Math.min(1.0,
-						Math.tan(0.5 * minLocSpan)));
+				/ fidget
+				* Math.min(1.0,
+					Math.tan(0.5 * minLocSpan)));
 		    } else {
 			createNodeStrutConnection(node, j, mo, o, r);
 		    }
@@ -325,9 +325,9 @@ public class HEC_FromFrame extends HEC_Creator {
 		    extraVertices[j][k] = new HE_Vertex(
 			    gf.createInterpolatedPoint(
 				    strutNodeConnections[offsets].vertices
-					    .get(j),
+				    .get(j),
 				    strutNodeConnections[offsete].vertices
-					    .get(j), (k + 1) / (double) ns));
+				    .get(j), (k + 1) / (double) ns));
 		    mesh.add(extraVertices[j][k]);
 		}
 	    }
@@ -385,8 +385,10 @@ public class HEC_FromFrame extends HEC_Creator {
     private void createNodes() {
 	int i = 0;
 	for (WB_FrameNode node : frame.getNodes()) {
-	    System.out.println("HEC_FromFrame: Creating node " + (i + 1)
-		    + " of " + frame.getNumberOfNodes() + ".");
+	    /*
+	     * System.out.println("HEC_FromFrame: Creating node " + (i + 1) +
+	     * " of " + frame.getNumberOfNodes() + ".");
+	     */
 	    node = frame.getNode(i);
 	    final ArrayList<WB_FrameStrut> struts = node.getStruts();
 	    final ArrayList<HE_Vertex> hullPoints = new ArrayList<HE_Vertex>();
@@ -435,8 +437,8 @@ public class HEC_FromFrame extends HEC_Creator {
 			}
 			for (int k = 0; k < strutFacets; k++) {
 			    hullPoints
-				    .add(strutNodeConnections[offset].vertices
-					    .get(k));
+			    .add(strutNodeConnections[offset].vertices
+				    .get(k));
 			    br = Math.min(br,
 				    strutNodeConnections[offset].radius);
 			}
@@ -447,12 +449,12 @@ public class HEC_FromFrame extends HEC_Creator {
 			    && (nodeTypes[i] != NodeType.BEND)
 			    && (!suppressBalljoint)) {
 			final HE_Mesh ball = new HE_Mesh(new HEC_Sphere()
-				.setRadius(br).setUFacets(strutFacets)
-				.setVFacets(strutFacets).setCenter(node));
+			.setRadius(br).setUFacets(strutFacets)
+			.setVFacets(strutFacets).setCenter(node));
 			hullPoints.addAll(ball.getVerticesAsList());
 		    }
 		    final HEC_ConvexHull ch = new HEC_ConvexHull()
-			    .setPointsFromVertices(hullPoints);
+		    .setPointsFromVertices(hullPoints);
 		    try {
 			final HE_Mesh tmp = new HE_Mesh(ch);
 			final Map<Long, Integer> vertexToPointIndex = ch.vertexToPointIndex;
@@ -499,7 +501,7 @@ public class HEC_FromFrame extends HEC_Creator {
 				    - strutNodeConnections[offset].maxoffset);
 			    for (int k = 0; k < strutFacets; k++) {
 				strutNodeConnections[offset].vertices.get(k)
-					.getPoint().addSelf(v);
+				.getPoint().addSelf(v);
 			    }
 			}
 			final Iterator<HE_Halfedge> tmpheItr = tmp.heItr();

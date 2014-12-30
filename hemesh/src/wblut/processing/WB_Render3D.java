@@ -39,6 +39,7 @@ import wblut.geom.WB_Transform;
 import wblut.geom.WB_Triangle;
 import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
+import wblut.hemesh.HE_EdgeIterator;
 import wblut.hemesh.HE_Face;
 import wblut.hemesh.HE_FaceIntersection;
 import wblut.hemesh.HE_Halfedge;
@@ -103,8 +104,8 @@ public class WB_Render3D {
 	home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 		(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 			* R.getDirection().xd()),
-			(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-			(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+		(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+		(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
     }
 
     public void drawSegment(final WB_Segment S) {
@@ -232,20 +233,20 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() - d * P.getV().zd()));
+		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() - d * P.getU().zd() - d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() - d * P.getU().zd() + d * P.getV().zd()));
+		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() - d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() + d * P.getV().zd()));
+		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() + d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-				.zd() + d * P.getU().zd() - d * P.getV().zd()));
+		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+		.zd() + d * P.getU().zd() - d * P.getV().zd()));
 	home.endShape();
     }
 
@@ -535,6 +536,30 @@ public class WB_Render3D {
 	    } while (he != f.getHalfedge());
 	}
 	retained.endShape();
+	return retained;
+    }
+
+    public PShape toWireframePShape(final HE_MeshStructure mesh) {
+	// tracker.setDefaultStatus("Creating PShape.");
+	final PShape retained = home.createShape();
+	if (mesh instanceof HE_Selection) {
+	    ((HE_Selection) mesh).collectEdgesByFace();
+	}
+	// tracker.setDefaultStatus("Writing Edges.", mesh.getNumberOfEdges());
+	final HE_EdgeIterator eItr = mesh.eItr();
+	HE_Halfedge e;
+	HE_Vertex v;
+	retained.beginShape(PApplet.LINES);
+	while (eItr.hasNext()) {
+	    e = eItr.next();
+	    v = e.getVertex();
+	    retained.vertex(v.xf(), v.yf(), v.zf());
+	    v = e.getEndVertex();
+	    retained.vertex(v.xf(), v.yf(), v.zf());
+	    // tracker.incrementCounter();
+	}
+	retained.endShape();
+	// tracker.setDefaultStatus("Pshape created.");
 	return retained;
     }
 
