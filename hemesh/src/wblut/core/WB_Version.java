@@ -4,8 +4,8 @@ public class WB_Version {
     public static final WB_Version CURRENT_VERSION = new WB_Version();
     public static final int MAJOR = 2;
     public static final int MINOR = 0;
-    public static final int PATCH = 6;
-    private static final String releaseInfo = "Phaedra";
+    public static final int PATCH = 9;
+    private static final String releaseInfo = "Paris";
 
     public static void main(final String[] args) {
 	System.out.println(CURRENT_VERSION);
