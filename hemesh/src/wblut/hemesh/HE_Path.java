@@ -2,7 +2,6 @@ package wblut.hemesh;
 
 import java.util.HashMap;
 import java.util.List;
-
 import javolution.util.FastTable;
 import wblut.geom.WB_HasData;
 
@@ -19,399 +18,387 @@ import wblut.geom.WB_HasData;
  *
  */
 public class HE_Path extends HE_Element implements WB_HasData {
+    /**
+     * The HE_PathHalfedge that is the start of this path. If getPrevInPath() is
+     * null, the path is assumed to be open. If getPrevInPath() is not null, the
+     * path should be a single loop
+     */
+    protected HE_PathHalfedge _phalfedge;
+    private HashMap<String, Object> _data;
 
-	/**
-	 * The HE_PathHalfedge that is the start of this path. If getPrevInPath() is
-	 * null, the path is assumed to be open. If getPrevInPath() is not null, the
-	 * path should be a single loop
-	 */
-	protected HE_PathHalfedge _phalfedge;
+    /**
+     * Create a looping path using the halfedge 'loop' as starting point. The
+     * path is created by calling getNextInFace() until 'loop' is reached.
+     *
+     * @param loop
+     *            starting halfegde;
+     */
+    public HE_Path(final HE_Halfedge loop) {
+	super();
+	_phalfedge = new HE_PathHalfedge(loop);
+	HE_Halfedge he = loop;
+	final HE_PathHalfedge first = _phalfedge;
+	HE_PathHalfedge current = first;
+	HE_PathHalfedge next;
+	while (he.getNextInFace() != loop) {
+	    next = new HE_PathHalfedge(he = he.getNextInFace());
+	    current.setNext(next);
+	    next.setPrev(current);
+	    current = next;
+	}
+	current.setNext(first);
+	first.setPrev(current);
+    }
 
-	private HashMap<String, Object> _data;
+    /**
+     * Create a looping path from a single face .
+     *
+     * @param face
+     *            single face
+     */
+    public HE_Path(final HE_Face face) {
+	this(face.getHalfedge());
+    }
 
-	/**
-	 * Create a looping path using the halfedge 'loop' as starting point. The
-	 * path is created by calling getNextInFace() until 'loop' is reached.
-	 *
-	 * @param loop
-	 *            starting halfegde;
-	 */
-	public HE_Path(final HE_Halfedge loop) {
-		super();
-		_phalfedge = new HE_PathHalfedge(loop);
-		HE_Halfedge he = loop;
-		final HE_PathHalfedge first = _phalfedge;
-		HE_PathHalfedge current = first;
-		HE_PathHalfedge next;
-		while (he.getNextInFace() != loop) {
-			next = new HE_PathHalfedge(he = he.getNextInFace());
-			current.setNext(next);
-			next.setPrev(current);
-			current = next;
+    /**
+     * Create a looping path around a single vertex.
+     *
+     * @param face
+     *            single face
+     */
+    public HE_Path(final HE_Vertex v) {
+	final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
+	HE_Halfedge hev = v.getHalfedge();
+	HE_Halfedge circuit;
+	do {
+	    circuit = hev.getNextInFace();
+	    while (circuit.getPair() != hev.getNextInVertex()) {
+		halfedges.add(circuit);
+		circuit = circuit.getNextInFace();
+	    }
+	    hev = hev.getNextInVertex();
+	} while (hev != v.getHalfedge());
+	createFromList(halfedges, true);
+    }
+
+    /**
+     * Create a looping path from a list of halfedges. The list is assumed to be
+     * a proper sequence or loop. No checking is performed.
+     *
+     * @param halfedges
+     *            List of HE_Halfedge
+     * @param loop
+     *            true/false, is the list supposed to be a loop?
+     */
+    public HE_Path(final List<HE_Halfedge> halfedges, final boolean loop) {
+	super();
+	createFromList(halfedges, loop);
+    }
+
+    /**
+     * Internally creates a looping path from a list of halfedges. The list is
+     * assumed to be a proper sequence or loop. No checking is performed.
+     *
+     * @param halfedges
+     *            List of HE_Halfedge
+     * @param loop
+     *            true/false, is the list supposed to be a loop?
+     */
+    private void createFromList(final List<HE_Halfedge> halfedges,
+	    final boolean loop) {
+	_phalfedge = new HE_PathHalfedge(halfedges.get(0));
+	HE_PathHalfedge current = _phalfedge;
+	HE_PathHalfedge next;
+	for (int i = 1; i < halfedges.size(); i++) {
+	    next = new HE_PathHalfedge(halfedges.get(i));
+	    current.setNext(next);
+	    next.setPrev(current);
+	    current = next;
+	}
+	if (loop) {
+	    current.setNext(_phalfedge);
+	    _phalfedge.setPrev(current);
+	}
+    }
+
+    /**
+     *
+     * @return unique key of HE_Path element
+     */
+    public long key() {
+	return super.getKey();
+    }
+
+    /**
+     *
+     * @return number of halfedges in path. If the path is not a loop, care
+     *         should be taken to include the end vertex of the last halfedge in
+     *         the path.
+     */
+    public int getPathOrder() {
+	int result = 0;
+	if (_phalfedge == null) {
+	    return 0;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	do {
+	    result++;
+	    he = he.getNextInPath();
+	} while ((he != _phalfedge) && (he != null));
+	return result;
+    }
+
+    /**
+     *
+     * @return total length of path
+     */
+    public double getPathLength() {
+	double result = 0;
+	if (_phalfedge == null) {
+	    return result;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	do {
+	    result += he.getHalfedge().getLength();
+	    he = he.getNextInPath();
+	} while ((he != _phalfedge) && (he != null));
+	return result;
+    }
+
+    /**
+     *
+     * @return array containing incremental lengths, first element is always 0
+     */
+    public double[] getPathIncLengths() {
+	final double[] result = new double[getPathOrder() + 1];
+	if (_phalfedge == null) {
+	    return result;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	result[0] = 0;
+	int i = 1;
+	do {
+	    result[i] = result[i - 1] + he.getHalfedge().getLength();
+	    he = he.getNextInPath();
+	    i++;
+	} while ((he != _phalfedge) && (he != null));
+	return result;
+    }
+
+    /**
+     *
+     * @return halfedges of path as List
+     */
+    public List<HE_Halfedge> getHalfedges() {
+	final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
+	if (_phalfedge == null) {
+	    return fhe;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	do {
+	    if (!fhe.contains(he.getHalfedge())) {
+		fhe.add(he.getHalfedge());
+	    }
+	    he = he.getNextInPath();
+	} while ((he != _phalfedge) && (he != null));
+	return fhe;
+    }
+
+    /**
+     *
+     * @return vertices of path as List. Includes end vertex of an open path.
+     */
+    public List<HE_Vertex> getPathVertices() {
+	final List<HE_Vertex> fhe = new FastTable<HE_Vertex>();
+	if (_phalfedge == null) {
+	    return fhe;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	do {
+	    if (!fhe.contains(he.getVertex())) {
+		fhe.add(he.getVertex());
+	    }
+	    if (he.getNextInPath() == null) {
+		fhe.add(he.getEndVertex());
+	    }
+	    he = he.getNextInPath();
+	} while ((he != _phalfedge) && (he != null));
+	return fhe;
+    }
+
+    /**
+     *
+     * @return the edges of the path
+     */
+    public List<HE_Halfedge> getPathEdges() {
+	final List<HE_Halfedge> fe = new FastTable<HE_Halfedge>();
+	if (_phalfedge == null) {
+	    return fe;
+	}
+	HE_PathHalfedge he = _phalfedge;
+	do {
+	    if (he.getHalfedge().isEdge()) {
+		fe.add(he.getHalfedge());
+	    } else {
+		fe.add(he.getHalfedge().getPair());
+	    }
+	    he = he.getNextInPath();
+	} while ((he != _phalfedge) && (he != null));
+	return fe;
+    }
+
+    /**
+     *
+     * @return get the starting HE_PathHalfedge
+     */
+    public HE_PathHalfedge getPathHalfedge() {
+	return _phalfedge;
+    }
+
+    /**
+     * Set the starting HE_PathHalfedge
+     *
+     * @param phalfedge
+     */
+    public void setPathHalfedge(final HE_PathHalfedge phalfedge) {
+	_phalfedge = phalfedge;
+    }
+
+    /**
+     * Clear the HE_PathHalfedge
+     */
+    public void clearPathHalfedge() {
+	_phalfedge = null;
+    }
+
+    /**
+     *
+     * @return get all faces belonging to the path halfedges
+     */
+    public List<HE_Face> getPathInnerFaces() {
+	final List<HE_Face> ff = new FastTable<HE_Face>();
+	if (getPathHalfedge() == null) {
+	    return ff;
+	}
+	HE_PathHalfedge lhe = _phalfedge;
+	HE_Halfedge he;
+	do {
+	    he = lhe.getHalfedge();
+	    if (he.getFace() != null) {
+		if (!ff.contains(he.getFace())) {
+		    ff.add(he.getFace());
 		}
-		current.setNext(first);
-		first.setPrev(current);
+	    }
+	    lhe = lhe.getNextInPath();
+	} while ((lhe != _phalfedge) && (lhe != null));
+	return ff;
+    }
+
+    /**
+     *
+     * @return get all faces belonging to the pairs of the path halfedges
+     */
+    public List<HE_Face> getPathOuterFaces() {
+	final List<HE_Face> ff = new FastTable<HE_Face>();
+	if (getPathHalfedge() == null) {
+	    return ff;
 	}
-
-	/**
-	 * Create a looping path from a single face .
-	 *
-	 * @param face
-	 *            single face
-	 */
-	public HE_Path(final HE_Face face) {
-		this(face.getHalfedge());
-	}
-
-	/**
-	 * Create a looping path around a single vertex.
-	 *
-	 * @param face
-	 *            single face
-	 */
-	public HE_Path(final HE_Vertex v) {
-		final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
-		HE_Halfedge hev = v.getHalfedge();
-		HE_Halfedge circuit;
-		do {
-			circuit = hev.getNextInFace();
-			while (circuit.getPair() != hev.getNextInVertex()) {
-				halfedges.add(circuit);
-				circuit = circuit.getNextInFace();
-			}
-			hev = hev.getNextInVertex();
-
-		} while (hev != v.getHalfedge());
-		createFromList(halfedges, true);
-
-	}
-
-	/**
-	 * Create a looping path from a list of halfedges. The list is assumed to be
-	 * a proper sequence or loop. No checking is performed.
-	 *
-	 * @param halfedges
-	 *            List of HE_Halfedge
-	 * @param loop
-	 *            true/false, is the list supposed to be a loop?
-	 */
-	public HE_Path(final List<HE_Halfedge> halfedges, final boolean loop) {
-		super();
-		createFromList(halfedges, loop);
-	}
-
-	/**
-	 * Internally creates a looping path from a list of halfedges. The list is
-	 * assumed to be a proper sequence or loop. No checking is performed.
-	 *
-	 * @param halfedges
-	 *            List of HE_Halfedge
-	 * @param loop
-	 *            true/false, is the list supposed to be a loop?
-	 */
-	private void createFromList(final List<HE_Halfedge> halfedges,
-			final boolean loop) {
-		_phalfedge = new HE_PathHalfedge(halfedges.get(0));
-		HE_PathHalfedge current = _phalfedge;
-		HE_PathHalfedge next;
-		for (int i = 1; i < halfedges.size(); i++) {
-			next = new HE_PathHalfedge(halfedges.get(i));
-			current.setNext(next);
-			next.setPrev(current);
-			current = next;
+	HE_PathHalfedge lhe = _phalfedge;
+	HE_Halfedge hep;
+	do {
+	    hep = lhe.getHalfedge().getPair();
+	    if (hep.getFace() != null) {
+		if (!ff.contains(hep.getFace())) {
+		    ff.add(hep.getFace());
 		}
-		if (loop) {
-			current.setNext(_phalfedge);
-			_phalfedge.setPrev(current);
+	    }
+	    lhe = lhe.getNextInPath();
+	} while ((lhe != _phalfedge) && (lhe != null));
+	return ff;
+    }
 
-		}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.Point3D#toString()
+     */
+    @Override
+    public String toString() {
+	String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
+		+ " vertices: ";
+	HE_PathHalfedge he = _phalfedge;
+	if (he != null) {
+	    for (int i = 0; i < getPathOrder() - 1; i++) {
+		s += he.getHalfedge().getVertex()._key + "-";
+		he = he.getNextInPath();
+	    }
+	    s += he.getHalfedge().getEndVertex()._key + ".";
 	}
+	return s;
+    }
 
-	/**
-	 *
-	 * @return unique key of HE_Path element
-	 */
-	public long key() {
-		return super.getKey();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
+     */
+    @Override
+    public void setData(final String s, final Object o) {
+	if (_data == null) {
+	    _data = new HashMap<String, Object>();
 	}
+	_data.put(s, o);
+    }
 
-	/**
-	 *
-	 * @return number of halfedges in path. If the path is not a loop, care
-	 *         should be taken to include the end vertex of the last halfedge in
-	 *         the path.
-	 */
-	public int getPathOrder() {
-		int result = 0;
-		if (_phalfedge == null) {
-			return 0;
-		}
-		HE_PathHalfedge he = _phalfedge;
-		do {
-			result++;
-			he = he.getNextInPath();
-		} while ((he != _phalfedge) && (he != null));
-		return result;
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.core.WB_HasData#getData(java.lang.String)
+     */
+    @Override
+    public Object getData(final String s) {
+	return _data.get(s);
+    }
+
+    @Override
+    public void clear() {
+	_data = null;
+	_phalfedge = null;
+    }
+
+    /**
+     * Is this path a loop? Only checks if first path halfedge has a valid
+     * getPrevInPath(). Assumes that the path is constructed correctly.
+     *
+     * @return true/false
+     */
+    public boolean isLoop() {
+	return _phalfedge.getPrevInPath() != null;
+    }
+
+    /**
+     * Does this path cut a mesh in two halves? Automatically true for a loop.
+     * An open path must have its start and end vertex on a boundary. Assumes
+     * that the path is constructed correctly. One of the "halves" can be
+     * degenerate, for example when looping around a single edge. NOTE: not sure
+     * if this is always correct for meshes with holes...
+     *
+     * @return true/false
+     */
+    public boolean isCut() {
+	if (isLoop()) {
+	    return true;
 	}
-
-	/**
-	 *
-	 * @return total length of path
-	 */
-	public double getPathLength() {
-		double result = 0;
-		if (_phalfedge == null) {
-			return result;
-		}
-		HE_PathHalfedge he = _phalfedge;
-		do {
-			result += he.getHalfedge().getLength();
-			he = he.getNextInPath();
-		} while ((he != _phalfedge) && (he != null));
-		return result;
+	if (!_phalfedge.getVertex().isBoundary()) {
+	    return false;
 	}
-
-	/**
-	 *
-	 * @return array containing incremental lengths, first element is always 0
-	 */
-	public double[] getPathIncLengths() {
-		final double[] result = new double[getPathOrder() + 1];
-		if (_phalfedge == null) {
-			return result;
-		}
-
-		HE_PathHalfedge he = _phalfedge;
-		result[0] = 0;
-		int i = 1;
-		do {
-			result[i] = result[i - 1] + he.getHalfedge().getLength();
-			he = he.getNextInPath();
-			i++;
-		} while ((he != _phalfedge) && (he != null));
-		return result;
+	HE_PathHalfedge last = _phalfedge;
+	while (last.getNextInPath() != null) {
+	    last = last.getNextInPath();
 	}
-
-	/**
-	 *
-	 * @return halfedges of path as List
-	 */
-	public List<HE_Halfedge> getHalfedges() {
-		final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
-		if (_phalfedge == null) {
-			return fhe;
-		}
-		HE_PathHalfedge he = _phalfedge;
-		do {
-			if (!fhe.contains(he.getHalfedge())) {
-				fhe.add(he.getHalfedge());
-			}
-			he = he.getNextInPath();
-		} while ((he != _phalfedge) && (he != null));
-		return fhe;
+	if (!last.getEndVertex().isBoundary()) {
+	    return false;
 	}
-
-	/**
-	 *
-	 * @return vertices of path as List. Includes end vertex of an open path.
-	 */
-	public List<HE_Vertex> getPathVertices() {
-		final List<HE_Vertex> fhe = new FastTable<HE_Vertex>();
-		if (_phalfedge == null) {
-			return fhe;
-		}
-		HE_PathHalfedge he = _phalfedge;
-		do {
-			if (!fhe.contains(he.getVertex())) {
-				fhe.add(he.getVertex());
-			}
-			if (he.getNextInPath() == null) {
-				fhe.add(he.getEndVertex());
-			}
-			he = he.getNextInPath();
-		} while ((he != _phalfedge) && (he != null));
-
-		return fhe;
-	}
-
-	/**
-	 *
-	 * @return the edges of the path
-	 */
-	public List<HE_Halfedge> getPathEdges() {
-		final List<HE_Halfedge> fe = new FastTable<HE_Halfedge>();
-		if (_phalfedge == null) {
-			return fe;
-		}
-		HE_PathHalfedge he = _phalfedge;
-		do {
-			if (he.getHalfedge().isEdge()) {
-				fe.add(he.getHalfedge());
-			}
-			else {
-				fe.add(he.getHalfedge().getPair());
-			}
-			he = he.getNextInPath();
-		} while ((he != _phalfedge) && (he != null));
-		return fe;
-	}
-
-	/**
-	 *
-	 * @return get the starting HE_PathHalfedge
-	 */
-	public HE_PathHalfedge getPathHalfedge() {
-		return _phalfedge;
-	}
-
-	/**
-	 * Set the starting HE_PathHalfedge
-	 *
-	 * @param phalfedge
-	 */
-	public void setPathHalfedge(final HE_PathHalfedge phalfedge) {
-		_phalfedge = phalfedge;
-	}
-
-	/**
-	 * Clear the HE_PathHalfedge
-	 */
-	public void clearPathHalfedge() {
-		_phalfedge = null;
-
-	}
-
-	/**
-	 *
-	 * @return get all faces belonging to the path halfedges
-	 */
-
-	public List<HE_Face> getPathInnerFaces() {
-		final List<HE_Face> ff = new FastTable<HE_Face>();
-		if (getPathHalfedge() == null) {
-			return ff;
-		}
-		HE_PathHalfedge lhe = _phalfedge;
-		HE_Halfedge he;
-		do {
-			he = lhe.getHalfedge();
-			if (he.getFace() != null) {
-				if (!ff.contains(he.getFace())) {
-					ff.add(he.getFace());
-				}
-			}
-			lhe = lhe.getNextInPath();
-		} while ((lhe != _phalfedge) && (lhe != null));
-		return ff;
-
-	}
-
-	/**
-	 *
-	 * @return get all faces belonging to the pairs of the path halfedges
-	 */
-	public List<HE_Face> getPathOuterFaces() {
-		final List<HE_Face> ff = new FastTable<HE_Face>();
-		if (getPathHalfedge() == null) {
-			return ff;
-		}
-		HE_PathHalfedge lhe = _phalfedge;
-		HE_Halfedge hep;
-		do {
-			hep = lhe.getHalfedge().getPair();
-			if (hep.getFace() != null) {
-				if (!ff.contains(hep.getFace())) {
-					ff.add(hep.getFace());
-				}
-			}
-			lhe = lhe.getNextInPath();
-		} while ((lhe != _phalfedge) && (lhe != null));
-		return ff;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.geom.Point3D#toString()
-	 */
-	@Override
-	public String toString() {
-		String s = "HE_Path key: " + key() + ". Connects " + getPathOrder()
-				+ " vertices: ";
-		HE_PathHalfedge he = _phalfedge;
-		if (he != null) {
-			for (int i = 0; i < getPathOrder() - 1; i++) {
-				s += he.getHalfedge().getVertex()._key + "-";
-				he = he.getNextInPath();
-			}
-			s += he.getHalfedge().getEndVertex()._key + ".";
-		}
-		return s;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
-	 */
-	@Override
-	public void setData(final String s, final Object o) {
-		if (_data == null) {
-			_data = new HashMap<String, Object>();
-		}
-		_data.put(s, o);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.core.WB_HasData#getData(java.lang.String)
-	 */
-	@Override
-	public Object getData(final String s) {
-		return _data.get(s);
-	}
-
-	@Override
-	public void clear() {
-		_data = null;
-		_phalfedge = null;
-	}
-
-	/**
-	 * Is this path a loop? Only checks if first path halfedge has a valid
-	 * getPrevInPath(). Assumes that the path is constructed correctly.
-	 *
-	 * @return true/false
-	 */
-	public boolean isLoop() {
-		return _phalfedge.getPrevInPath() != null;
-	}
-
-	/**
-	 * Does this path cut a mesh in two halves? Automatically true for a loop.
-	 * An open path must have its start and end vertex on a boundary. Assumes
-	 * that the path is constructed correctly. One of the "halves" can be
-	 * degenerate, for example when looping around a single edge. NOTE: not sure
-	 * if this is always correct for meshes with holes...
-	 *
-	 * @return true/false
-	 */
-
-	public boolean isCut() {
-		if (isLoop()) {
-			return true;
-		}
-		if (!_phalfedge.getVertex().isBoundary()) {
-			return false;
-		}
-		HE_PathHalfedge last = _phalfedge;
-		while (last.getNextInPath() != null) {
-			last = last.getNextInPath();
-		}
-		if (!last.getEndVertex().isBoundary()) {
-			return false;
-		}
-		return true;
-	}
+	return true;
+    }
 }

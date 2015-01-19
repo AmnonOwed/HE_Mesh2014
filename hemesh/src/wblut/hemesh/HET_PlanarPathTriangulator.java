@@ -74,7 +74,8 @@ class HET_PlanarPathTriangulator {
 	    final long key0 = vertextree.getNearestNeighbor(tri[0]).value;
 	    final long key1 = vertextree.getNearestNeighbor(tri[1]).value;
 	    final long key2 = vertextree.getNearestNeighbor(tri[2]).value;
-	    trianglekeys[i] = new long[] { key0, key1, key2 };
+	    // reverse triangles
+	    trianglekeys[i] = new long[] { key0, key2, key1 };
 	}
 	tracker.setDefaultStatus("All paths triangulated.");
 	return trianglekeys;
@@ -136,7 +137,7 @@ class HET_PlanarPathTriangulator {
     // The JTS implementation of ShapeReader does not handle overlapping
     // polygons well. All code below this point is my solution for this. A
     // hierarchical tree that orders rings from the outside in. All input has to
-    // be well-ordered: CW for shell, CCW for hole.
+    // be well-ordered: CCW for shell, CW for hole.
     private static class RingNode {
 	@SuppressWarnings("unused")
 	RingNode parent;
@@ -157,7 +158,7 @@ class HET_PlanarPathTriangulator {
 	    this.ring = ring;
 	    final Coordinate[] coords = ring.getCoordinates();
 	    poly = JTSgf.createPolygon(coords);
-	    hole = CGAlgorithms.isCCW(coords);
+	    hole = !CGAlgorithms.isCCW(coords);
 	    children = new ArrayList<RingNode>();
 	}
     }

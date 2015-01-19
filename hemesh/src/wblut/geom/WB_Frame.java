@@ -219,7 +219,7 @@ public class WB_Frame {
 	if (i == j) {
 	    throw new IllegalArgumentException(
 		    "Strut can't connect a node to itself: " + i + " " + j
-		    + ".");
+			    + ".");
 	}
 	final int nn = nodes.size();
 	if ((i < 0) || (j < 0) || (i >= nn) || (j >= nn)) {
@@ -410,20 +410,24 @@ public class WB_Frame {
 	final WB_Point[] newPos = new WB_Point[nodes.size()];
 	int id = 0;
 	for (final WB_FrameNode node : nodes) {
-	    newPos[id] = new WB_Point();
-	    final List<WB_FrameNode> ns = node.getNeighbors();
-	    for (final WB_FrameNode n : ns) {
-		newPos[id].addSelf(n);
+	    if (node.getOrder() > 1) {
+		newPos[id] = new WB_Point();
+		final List<WB_FrameNode> ns = node.getNeighbors();
+		for (final WB_FrameNode n : ns) {
+		    newPos[id].addSelf(n);
+		}
+		newPos[id].mulSelf(1.0 / ns.size());
+		newPos[id].addSelf(node);
+		newPos[id].mulSelf(0.5);
+		id++;
 	    }
-	    newPos[id].mulSelf(1.0 / ns.size());
-	    newPos[id].addSelf(node);
-	    newPos[id].mulSelf(0.5);
-	    id++;
 	}
 	id = 0;
 	for (final WB_FrameNode node : nodes) {
-	    node.set(newPos[id]);
-	    id++;
+	    if (node.getOrder() > 1) {
+		node.set(newPos[id]);
+		id++;
+	    }
 	}
 	return this;
     }

@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="external/core.jar"/>
 	<classpathentry kind="lib" path="external/javolution-6.1.0.jar"/>
 	<classpathentry kind="lib" path="external/hemesh-external.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

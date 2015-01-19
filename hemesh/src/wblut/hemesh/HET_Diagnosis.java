@@ -466,9 +466,9 @@ public class HET_Diagnosis {
 	System.out.println();
     }
 
-    static List<WB_Segment> checkSelfIntersection(final HE_Face tri,
+    static List<HET_SelfIntersection> checkSelfIntersection(final HE_Face tri,
 	    final WB_AABBTree tree) {
-	final List<WB_Segment> segments = new FastTable<WB_Segment>();
+	final List<HET_SelfIntersection> selfints = new FastTable<HET_SelfIntersection>();
 	final HE_RASTrove<HE_Face> candidates = new HE_RASTrove<HE_Face>();
 	final WB_Triangle T = tri.toTriangle();
 	final WB_AABB aabb = tri.toAABB();
@@ -490,29 +490,56 @@ public class HET_Diagnosis {
 			&& !WB_Epsilon.isZero(((WB_Segment) ir.object)
 				.getLength())) {
 		    candidate.setInternalLabel(1);
-		    segments.add((WB_Segment) ir.object);
+		    selfints.add(new HET_SelfIntersection(tri, candidate,
+			    (WB_Segment) ir.object));
 		}
 	    }
 	}
-	return segments;
+	return selfints;
     }
 
-    public static List<WB_Segment> checkSelfIntersection(final HE_Mesh mesh) {
+    public static List<HET_SelfIntersection> checkSelfIntersection(
+	    final HE_Mesh mesh) {
 	mesh.triangulate();
 	mesh.resetFaceInternalLabels();
 	final WB_AABBTree tree = new WB_AABBTree(mesh, 1);
 	final HE_FaceIterator fitr = mesh.fItr();
-	final List<WB_Segment> segments = new FastTable<WB_Segment>();
-	List<WB_Segment> segs;
+	final List<HET_SelfIntersection> result = new FastTable<HET_SelfIntersection>();
+	List<HET_SelfIntersection> selfints;
 	HE_Face f;
 	while (fitr.hasNext()) {
 	    f = fitr.next();
-	    segs = checkSelfIntersection(f, tree);
-	    if (segs.size() > 0) {
+	    selfints = checkSelfIntersection(f, tree);
+	    if (selfints.size() > 0) {
 		f.setInternalLabel(1);
 	    }
-	    segments.addAll(segs);
+	    result.addAll(selfints);
 	}
-	return segments;
+	return result;
+    }
+
+    public static class HET_SelfIntersection {
+	HE_Face f1;
+	HE_Face f2;
+	WB_Segment segment;
+
+	public HET_SelfIntersection(final HE_Face f1, final HE_Face f2,
+		final WB_Segment seg) {
+	    this.f1 = f1;
+	    this.f2 = f2;
+	    segment = seg;
+	}
+
+	public HE_Face getFace1() {
+	    return f1;
+	}
+
+	public HE_Face getFace2() {
+	    return f2;
+	}
+
+	public WB_Segment getSegment() {
+	    return segment;
+	}
     }
 }

@@ -14,6 +14,7 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_AABBTree;
 import wblut.geom.WB_AABBTree.WB_AABBNode;
 import wblut.geom.WB_Circle;
+import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateSequence;
 import wblut.geom.WB_CoordinateUtil;
@@ -104,8 +105,8 @@ public class WB_Render3D {
 	home.line((float) (R.getOrigin().xd()), (float) (R.getOrigin().yd()),
 		(float) (R.getOrigin().zd()), (float) (R.getOrigin().xd() + d
 			* R.getDirection().xd()),
-		(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
-		(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
+			(float) (R.getOrigin().yd() + d * R.getDirection().yd()),
+			(float) (R.getOrigin().zd() + d * R.getDirection().zd()));
     }
 
     public void drawSegment(final WB_Segment S) {
@@ -233,20 +234,20 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() - d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() - d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() - d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() - d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() - d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() + d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() + d * P.getV().zd()));
+			* P.getU().yd() + d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() + d * P.getV().zd()));
 	home.vertex((float) (P.getOrigin().xd() + d * P.getU().xd() - d
 		* P.getV().xd()), (float) (P.getOrigin().yd() + d
-		* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
-		.zd() + d * P.getU().zd() - d * P.getV().zd()));
+			* P.getU().yd() - d * P.getV().yd()), (float) (P.getOrigin()
+				.zd() + d * P.getU().zd() - d * P.getV().zd()));
 	home.endShape();
     }
 
@@ -1587,6 +1588,98 @@ public class WB_Render3D {
 
     private final Unproject unproject = new Unproject();
 
+    // -----------------------------------------------------------------------
+    // Unproject
+    private class Unproject {
+        private boolean m_bValid = false;
+        private final PMatrix3D m_pMatrix = new PMatrix3D();
+        private final int[] m_aiViewport = new int[4];
+        // Store the near and far ray positions.
+        public WB_Point ptStartPos = new WB_Point();
+        public WB_Point ptEndPos = new WB_Point();
+    
+        public boolean calculatePickPoints(final double x, final double y,
+        	final int height) {
+            // Calculate positions on the near and far 3D
+            // frustum planes.
+            m_bValid = true; // Have to do both in order to reset PVector on
+            // error.
+            if (!gluUnProject(x, height - y, 0.0, ptStartPos)) {
+        	m_bValid = false;
+            }
+            if (!gluUnProject(x, height - y, 1.0, ptEndPos)) {
+        	m_bValid = false;
+            }
+            return m_bValid;
+        }
+    
+        public void captureViewMatrix(final PGraphics3D g3d) {
+            // Call this to capture the selection matrix after
+            // you have called perspective() or ortho() and applied
+            // your pan, zoom and camera angles - but before
+            // you start drawing or playing with the
+            // matrices any further.
+            if (g3d != null) { // Check for a valid 3D canvas.
+        	// Capture current projection matrix.
+        	m_pMatrix.set(g3d.projection);
+        	// Multiply by current modelview matrix.
+        	m_pMatrix.apply(g3d.modelview);
+        	// Invert the resultant matrix.
+        	m_pMatrix.invert();
+        	// Store the viewport.
+        	m_aiViewport[0] = 0;
+        	m_aiViewport[1] = 0;
+        	m_aiViewport[2] = g3d.width;
+        	m_aiViewport[3] = g3d.height;
+            }
+        }
+    
+        // Maintain own projection matrix.
+        public PMatrix3D getMatrix() {
+            return m_pMatrix;
+        }
+    
+        // -------------------------
+        // Maintain own viewport data.
+        public int[] getViewport() {
+            return m_aiViewport;
+        }
+    
+        // -------------------------
+        public boolean gluUnProject(final double winx, final double winy,
+        	final double winz, final WB_Point result) {
+            final double[] in = new double[4];
+            final double[] out = new double[4];
+            // Transform to normalized screen coordinates (-1 to 1).
+            in[0] = ((winx - m_aiViewport[0]) / m_aiViewport[2]) * 2.0 - 1.0;
+            in[1] = ((winy - m_aiViewport[1]) / m_aiViewport[3]) * 2.0 - 1.0;
+            in[2] = ((winz > 1) ? 1.0 : ((winz < 0) ? 0.0 : winz)) * 2.0 - 1.0;
+            in[3] = 1.0;
+            // Calculate homogeneous coordinates.
+            out[0] = m_pMatrix.m00 * in[0] + m_pMatrix.m01 * in[1]
+        	    + m_pMatrix.m02 * in[2] + m_pMatrix.m03 * in[3];
+            out[1] = m_pMatrix.m10 * in[0] + m_pMatrix.m11 * in[1]
+        	    + m_pMatrix.m12 * in[2] + m_pMatrix.m13 * in[3];
+            out[2] = m_pMatrix.m20 * in[0] + m_pMatrix.m21 * in[1]
+        	    + m_pMatrix.m22 * in[2] + m_pMatrix.m23 * in[3];
+            out[3] = m_pMatrix.m30 * in[0] + m_pMatrix.m31 * in[1]
+        	    + m_pMatrix.m32 * in[2] + m_pMatrix.m33 * in[3];
+            if (out[3] == 0.0) { // Check for an invalid result.
+        	result.set(0, 0, 0);
+        	return false;
+            }
+            // Scale to world coordinates.
+            out[3] = 1.0 / out[3];
+            result.set(out[0] * out[3], out[1] * out[3], out[2] * out[3]);
+            return true;
+        }
+    
+        // True if near and far points calculated.
+        public boolean isValid() {
+            return m_bValid;
+        }
+    }
+
     public WB_Ray getPickingRay(final double x, final double y) {
 	unproject.captureViewMatrix(home);
 	unproject.calculatePickPoints(x, y, home.height);
@@ -1667,95 +1760,245 @@ public class WB_Render3D {
 	return result;
     }
 
-    // -----------------------------------------------------------------------
-    // Unproject
-    private class Unproject {
-	private boolean m_bValid = false;
-	private final PMatrix3D m_pMatrix = new PMatrix3D();
-	private final int[] m_aiViewport = new int[4];
-	// Store the near and far ray positions.
-	public WB_Point ptStartPos = new WB_Point();
-	public WB_Point ptEndPos = new WB_Point();
-
-	public boolean calculatePickPoints(final double x, final double y,
-		final int height) {
-	    // Calculate positions on the near and far 3D
-	    // frustum planes.
-	    m_bValid = true; // Have to do both in order to reset PVector on
-	    // error.
-	    if (!gluUnProject(x, height - y, 0.0, ptStartPos)) {
-		m_bValid = false;
-	    }
-	    if (!gluUnProject(x, height - y, 1.0, ptEndPos)) {
-		m_bValid = false;
-	    }
-	    return m_bValid;
-	}
-
-	public void captureViewMatrix(final PGraphics3D g3d) {
-	    // Call this to capture the selection matrix after
-	    // you have called perspective() or ortho() and applied
-	    // your pan, zoom and camera angles - but before
-	    // you start drawing or playing with the
-	    // matrices any further.
-	    if (g3d != null) { // Check for a valid 3D canvas.
-		// Capture current projection matrix.
-		m_pMatrix.set(g3d.projection);
-		// Multiply by current modelview matrix.
-		m_pMatrix.apply(g3d.modelview);
-		// Invert the resultant matrix.
-		m_pMatrix.invert();
-		// Store the viewport.
-		m_aiViewport[0] = 0;
-		m_aiViewport[1] = 0;
-		m_aiViewport[2] = g3d.width;
-		m_aiViewport[3] = g3d.height;
+    public void drawBadVertices(final double d, final HE_MeshStructure mesh) {
+	HE_Vertex v;
+	final Iterator<HE_Vertex> vItr = mesh.vItr();
+	while (vItr.hasNext()) {
+	    v = vItr.next();
+	    if (!mesh.contains(v.getHalfedge())) {
+		home.pushMatrix();
+		home.translate(v.xf(), v.yf(), v.zf());
+		home.box((float) d);
+		home.popMatrix();
 	    }
 	}
+    }
 
-	// Maintain own projection matrix.
-	public PMatrix3D getMatrix() {
-	    return m_pMatrix;
-	}
-
-	// -------------------------
-	// Maintain own viewport data.
-	public int[] getViewport() {
-	    return m_aiViewport;
-	}
-
-	// -------------------------
-	public boolean gluUnProject(final double winx, final double winy,
-		final double winz, final WB_Point result) {
-	    final double[] in = new double[4];
-	    final double[] out = new double[4];
-	    // Transform to normalized screen coordinates (-1 to 1).
-	    in[0] = ((winx - m_aiViewport[0]) / m_aiViewport[2]) * 2.0 - 1.0;
-	    in[1] = ((winy - m_aiViewport[1]) / m_aiViewport[3]) * 2.0 - 1.0;
-	    in[2] = ((winz > 1) ? 1.0 : ((winz < 0) ? 0.0 : winz)) * 2.0 - 1.0;
-	    in[3] = 1.0;
-	    // Calculate homogeneous coordinates.
-	    out[0] = m_pMatrix.m00 * in[0] + m_pMatrix.m01 * in[1]
-		    + m_pMatrix.m02 * in[2] + m_pMatrix.m03 * in[3];
-	    out[1] = m_pMatrix.m10 * in[0] + m_pMatrix.m11 * in[1]
-		    + m_pMatrix.m12 * in[2] + m_pMatrix.m13 * in[3];
-	    out[2] = m_pMatrix.m20 * in[0] + m_pMatrix.m21 * in[1]
-		    + m_pMatrix.m22 * in[2] + m_pMatrix.m23 * in[3];
-	    out[3] = m_pMatrix.m30 * in[0] + m_pMatrix.m31 * in[1]
-		    + m_pMatrix.m32 * in[2] + m_pMatrix.m33 * in[3];
-	    if (out[3] == 0.0) { // Check for an invalid result.
-		result.set(0, 0, 0);
-		return false;
+    public void drawBoundaryEdges(final HE_MeshStructure mesh) {
+	HE_Halfedge he;
+	final Iterator<HE_Halfedge> heItr = mesh.heItr();
+	while (heItr.hasNext()) {
+	    he = heItr.next();
+	    if (he.getFace() == null) {
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
+			he.getNextInFace().getVertex().yf(), he.getNextInFace()
+				.getVertex().zf());
 	    }
-	    // Scale to world coordinates.
-	    out[3] = 1.0 / out[3];
-	    result.set(out[0] * out[3], out[1] * out[3], out[2] * out[3]);
-	    return true;
 	}
+    }
 
-	// True if near and far points calculated.
-	public boolean isValid() {
-	    return m_bValid;
+    public void drawBoundaryHalfedges(final HE_MeshStructure mesh) {
+	HE_Halfedge he;
+	final Iterator<HE_Halfedge> heItr = mesh.heItr();
+	home.pushStyle();
+	while (heItr.hasNext()) {
+	    he = heItr.next();
+	    if (he.getPair().getFace() == null) {
+		home.stroke(255, 0, 0);
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
+			he.getNextInFace().getVertex().yf(), he.getNextInFace()
+				.getVertex().zf());
+	    }
+	}
+	home.popStyle();
+    }
+
+    public void drawFaceNormal(final HE_Face f, final double d) {
+	final WB_Point p1 = f.getFaceCenter();
+	final WB_Point p2 = new WB_Point(f.getFaceNormal().mul(d)).addSelf(p1);
+	home.line(p1.xf(), p1.yf(), p1.zf(), p2.xf(), p2.yf(), p2.zf());
+    }
+
+    public void drawFaceNormals(final double d, final HE_MeshStructure mesh) {
+	final Iterator<HE_Face> fItr = mesh.fItr();
+	WB_Point fc;
+	WB_Vector fn;
+	HE_Face f;
+	while (fItr.hasNext()) {
+	    f = fItr.next();
+	    fc = f.getFaceCenter();
+	    fn = f.getFaceNormal();
+	    home.line(fc.xf(), fc.yf(), fc.zf(),
+		    (fc.xf() + (float) d * fn.xf()),
+		    (fc.yf() + (float) d * fn.yf()),
+		    (fc.zf() + (float) d * fn.zf()));
+	}
+    }
+
+    public void drawFaceTypes(final HE_MeshStructure mesh) {
+	final Iterator<HE_Face> fItr = mesh.fItr();
+	HE_Face f;
+	while (fItr.hasNext()) {
+	    f = fItr.next();
+	    if (f.getFaceType() == WB_ClassificationConvex.CONVEX) {
+		home.fill(0, 255, 0);
+	    } else if (f.getFaceType() == WB_ClassificationConvex.CONCAVE) {
+		home.fill(255, 0, 0);
+	    } else {
+		home.fill(0, 0, 255);
+	    }
+	    drawFace(f);
+	}
+    }
+
+    public void drawHalfedge(final HE_Halfedge he, final double d,
+	    final double s) {
+	final WB_Point c = he.getHalfedgeCenter();
+	c.addSelf(he.getHalfedgeNormal().mulSelf(d));
+	home.stroke(255, 0, 0);
+	home.line(he.getVertex().xf(), he.getVertex().yf(),
+		he.getVertex().zf(), c.xf(), c.yf(), c.zf());
+	if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
+	    home.stroke(0, 255, 0);
+	} else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
+	    home.stroke(255, 0, 0);
+	} else {
+	    home.stroke(0, 0, 255);
+	}
+	home.pushMatrix();
+	home.translate(c.xf(), c.yf(), c.zf());
+	home.box((float) s);
+	home.popMatrix();
+    }
+
+    public void drawHalfedge(final HE_Halfedge he, final double d,
+	    final double s, final double f) {
+	final WB_Point c = geometryfactory.createInterpolatedPoint(
+		he.getVertex(), he.getEndVertex(), f);
+	c.addSelf(he.getHalfedgeNormal().mulSelf(d));
+	home.stroke(255, 0, 0);
+	home.line(he.getVertex().xf(), he.getVertex().yf(),
+		he.getVertex().zf(), c.xf(), c.yf(), c.zf());
+	if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
+	    home.stroke(0, 255, 0);
+	} else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
+	    home.stroke(255, 0, 0);
+	} else {
+	    home.stroke(0, 0, 255);
+	}
+	home.pushMatrix();
+	home.translate(c.xf(), c.yf(), c.zf());
+	home.box((float) s);
+	home.popMatrix();
+    }
+
+    public void drawHalfedge(final Long key, final double d, final double s,
+	    final HE_MeshStructure mesh) {
+	final HE_Halfedge he = mesh.getHalfedgeByKey(key);
+	drawHalfedge(he, d, s);
+    }
+
+    public void drawHalfedges(final double d, final double f,
+	    final HE_MeshStructure mesh) {
+	WB_Point c;
+	HE_Halfedge he;
+	final Iterator<HE_Halfedge> heItr = mesh.heItr();
+	home.pushStyle();
+	while (heItr.hasNext()) {
+	    he = heItr.next();
+	    if (he.getFace() != null) {
+		c = geometryfactory.createInterpolatedPoint(he.getVertex(),
+			he.getEndVertex(), f);
+		c.addSelf(he.getHalfedgeNormal().mulSelf(d));
+		home.stroke(255, 0, 0);
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), c.xf(), c.yf(), c.zf());
+		if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
+		    home.stroke(0, 255, 0);
+		    home.fill(0, 255, 0);
+		} else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
+		    home.stroke(255, 0, 0);
+		    home.fill(255, 0, 0);
+		} else {
+		    home.stroke(0, 0, 255);
+		    home.fill(0, 0, 255);
+		}
+		home.pushMatrix();
+		home.translate(c.xf(), c.yf(), c.zf());
+		home.box((float) d);
+		home.popMatrix();
+	    } else {
+		c = geometryfactory.createInterpolatedPoint(he.getVertex(),
+			he.getEndVertex(), f);
+		c.addSelf(he.getPair().getHalfedgeNormal().mulSelf(-d));
+		home.stroke(255, 0, 0);
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), c.xf(), c.yf(), c.zf());
+		home.stroke(0, 255, 255);
+		home.pushMatrix();
+		home.translate(c.xf(), c.yf(), c.zf());
+		home.box((float) d);
+		home.popMatrix();
+	    }
+	}
+	home.popStyle();
+    }
+
+    public void drawHalfedges(final double d, final HE_MeshStructure mesh) {
+	WB_Point c;
+	HE_Halfedge he;
+	final Iterator<HE_Halfedge> heItr = mesh.heItr();
+	home.pushStyle();
+	while (heItr.hasNext()) {
+	    he = heItr.next();
+	    if (he.getFace() != null) {
+		c = he.getHalfedgeCenter();
+		c.addSelf(he.getHalfedgeNormal().mulSelf(d));
+		home.stroke(255, 0, 0);
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), c.xf(), c.yf(), c.zf());
+		if (he.getHalfedgeType() == WB_ClassificationConvex.CONVEX) {
+		    home.stroke(0, 255, 0);
+		    home.fill(0, 255, 0);
+		} else if (he.getHalfedgeType() == WB_ClassificationConvex.CONCAVE) {
+		    home.stroke(255, 0, 0);
+		    home.fill(255, 0, 0);
+		} else {
+		    home.stroke(0, 0, 255);
+		    home.fill(0, 0, 255);
+		}
+		home.pushMatrix();
+		home.translate(c.xf(), c.yf(), c.zf());
+		home.box((float) d);
+		home.popMatrix();
+	    } else {
+		c = he.getHalfedgeCenter();
+		c.addSelf(he.getPair().getHalfedgeNormal().mulSelf(-d));
+		home.stroke(255, 0, 0);
+		home.line(he.getVertex().xf(), he.getVertex().yf(), he
+			.getVertex().zf(), c.xf(), c.yf(), c.zf());
+		home.stroke(0, 255, 255);
+		home.pushMatrix();
+		home.translate(c.xf(), c.yf(), c.zf());
+		home.box((float) d);
+		home.popMatrix();
+	    }
+	}
+	home.popStyle();
+    }
+
+    public void drawHalfedgeSimple(final HE_Halfedge he, final double d,
+	    final double s) {
+	final WB_Point c = he.getHalfedgeCenter();
+	c.addSelf(he.getHalfedgeNormal().mulSelf(d));
+	home.line(he.getVertex().xf(), he.getVertex().yf(),
+		he.getVertex().zf(), c.xf(), c.yf(), c.zf());
+	home.pushMatrix();
+	home.translate(c.xf(), c.yf(), c.zf());
+	home.box((float) s);
+	home.popMatrix();
+    }
+
+    public void drawVertexNormals(final double d, final HE_MeshStructure mesh) {
+	final Iterator<HE_Vertex> vItr = mesh.vItr();
+	WB_Vector vn;
+	HE_Vertex v;
+	while (vItr.hasNext()) {
+	    v = vItr.next();
+	    vn = v.getVertexNormal();
+	    draw(v, vn, d);
 	}
     }
 }
