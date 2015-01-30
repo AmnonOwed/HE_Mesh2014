@@ -2943,10 +2943,6 @@ public class WB_GeometryOp {
 	return Math.sqrt(getSqDistanceToLine2D(p, L));
     }
 
-    public static double getDistance2D(final double[] p, final double[] q) {
-	return Math.sqrt(getSqDistance2D(p, q));
-    }
-
     public static double getDistance2D(final WB_Coordinate p, final WB_Segment S) {
 	return Math.sqrt(getSqDistance2D(p, S));
     }
@@ -3135,8 +3131,20 @@ public class WB_GeometryOp {
 	return Math.sqrt(getSqDistanceToSegment3D(p, S));
     }
 
-    public static double getSqDistance2D(final double[] p, final double[] q) {
-	return ((q[0] - p[0]) * (q[0] - p[0]) + (q[1] - p[1]) * (q[1] - p[1]));
+    public static double getSqLength2D(final WB_Coordinate p) {
+	return (p.xd() * p.xd() + p.yf() * p.yf());
+    }
+
+    public static double getSqLength3D(final WB_Coordinate p) {
+	return (p.xd() * p.xd() + p.yf() * p.yf() + p.zf() * p.zf());
+    }
+
+    public static double getLength2D(final WB_Coordinate p) {
+	return Math.sqrt(p.xd() * p.xd() + p.yf() * p.yf());
+    }
+
+    public static double getLength3D(final WB_Coordinate p) {
+	return Math.sqrt(p.xd() * p.xd() + p.yf() * p.yf() + p.zf() * p.zf());
     }
 
     public static double getSqDistance2D(final WB_Coordinate p,

@@ -349,29 +349,29 @@ public class WB_CoordinateSystem {
 	}
 
 	public WB_CoordinateSystem rotateX(final double a) {
-		_Y.rotateAboutAxis(a, _origin, _X);
-		_Z.rotateAboutAxis(a, _origin, _X);
+		_Y.rotateAboutAxisSelf(a, _origin, _X);
+		_Z.rotateAboutAxisSelf(a, _origin, _X);
 		return this;
 	}
 
 	public WB_CoordinateSystem rotateY(final double a) {
-		_X.rotateAboutAxis(a, _origin, _Y);
-		_Z.rotateAboutAxis(a, _origin, _Y);
+		_X.rotateAboutAxisSelf(a, _origin, _Y);
+		_Z.rotateAboutAxisSelf(a, _origin, _Y);
 		return this;
 	}
 
 	public WB_CoordinateSystem rotateZ(final double a) {
-		_X.rotateAboutAxis(a, _origin, _Z);
-		_Y.rotateAboutAxis(a, _origin, _Z);
+		_X.rotateAboutAxisSelf(a, _origin, _Z);
+		_Y.rotateAboutAxisSelf(a, _origin, _Z);
 		return this;
 	}
 
 	public WB_CoordinateSystem rotate(final double a, final WB_Vector v) {
 		final WB_Vector lv = v.get();
 		lv.normalizeSelf();
-		_X.rotateAboutAxis(a, _origin, lv);
-		_Y.rotateAboutAxis(a, _origin, lv);
-		_Z.rotateAboutAxis(a, _origin, lv);
+		_X.rotateAboutAxisSelf(a, _origin, lv);
+		_Y.rotateAboutAxisSelf(a, _origin, lv);
+		_Z.rotateAboutAxisSelf(a, _origin, lv);
 		return this;
 	}
 

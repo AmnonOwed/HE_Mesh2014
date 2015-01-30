@@ -288,7 +288,7 @@ public class HEC_FromFrame extends HEC_Creator {
 			strutNodeConnections[id].node.zd());
 		p.addMulSelf(so, v);
 		final WB_Vector localu = u.mul(sr);
-		localu.rotateAboutAxis((j + af) * da, new WB_Point(),
+		localu.rotateAboutAxisSelf((j + af) * da, new WB_Point(),
 			P.getNormal());
 		p.addSelf(localu);
 		final HE_Vertex vrtx = new HE_Vertex(p);

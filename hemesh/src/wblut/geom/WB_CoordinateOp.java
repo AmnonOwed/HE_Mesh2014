@@ -10,7 +10,7 @@ import wblut.math.WB_Math;
  *
  *
  */
-public class WB_CoordinateUtil {
+public class WB_CoordinateOp {
     /**
      * Get angle in radians. Angle is defined by corner point c, and two end
      * points p and q. The angle is always in the range [-PI,PI].

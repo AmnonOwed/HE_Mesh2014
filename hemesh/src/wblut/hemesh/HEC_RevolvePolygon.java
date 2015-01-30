@@ -61,7 +61,7 @@ public class HEC_RevolvePolygon extends HEC_Creator {
 		for (int a = 0; a < facets; a++) {
 			for (int i = 0; i < n; i++) {
 				points[id] = polygon.getPoint(i).get();
-				points[id].rotateAboutAxis(a * da, axis.getOrigin(),
+				points[id].rotateAboutAxisSelf(a * da, axis.getOrigin(),
 						axis.getDirection());
 				id++;
 			}

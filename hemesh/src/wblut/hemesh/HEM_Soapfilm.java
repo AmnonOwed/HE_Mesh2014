@@ -8,7 +8,7 @@ import java.util.List;
 
 import wblut.geom.WB_AABB;
 import wblut.geom.WB_Coordinate;
-import wblut.geom.WB_CoordinateUtil;
+import wblut.geom.WB_CoordinateOp;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
@@ -157,12 +157,12 @@ public class HEM_Soapfilm extends HEM_Modifier {
 			neighbor = he.getEndVertex();
 			{
 				corner = he.getPrevInFace().getVertex();
-				cota = WB_CoordinateUtil.cosAngleBetween(corner.xd(),
+				cota = WB_CoordinateOp.cosAngleBetween(corner.xd(),
 						corner.yd(), corner.zd(), neighbor.xd(), neighbor.yd(),
 						neighbor.zd(), v.xd(), v.yd(), v.zd());
 				cotsum += cota / Math.sqrt(1 - cota * cota);
 				corner = he.getPair().getPrevInFace().getVertex();
-				cotb = WB_CoordinateUtil.cosAngleBetween(corner.xd(),
+				cotb = WB_CoordinateOp.cosAngleBetween(corner.xd(),
 						corner.yd(), corner.zd(), neighbor.xd(), neighbor.yd(),
 						neighbor.zd(), v.xd(), v.yd(), v.zd());
 				cotsum += cotb / Math.sqrt(1 - cotb * cotb);

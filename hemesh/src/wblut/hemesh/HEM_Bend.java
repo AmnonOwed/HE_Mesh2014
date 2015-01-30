@@ -114,7 +114,7 @@ public class HEM_Bend extends HEM_Modifier {
 		v = vItr.next();
 		final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 		if (!posOnly || (d > 0)) {
-		    v.getPoint().rotateAboutAxis(d * angleFactor,
+		    v.getPoint().rotateAboutAxisSelf(d * angleFactor,
 			    bendAxis.getOrigin(), bendAxis.getDirection());
 		}
 	    }
@@ -137,7 +137,7 @@ public class HEM_Bend extends HEM_Modifier {
 		v = vItr.next();
 		final double d = WB_GeometryOp.getDistance3D(v, groundPlane);
 		if (!posOnly || (d > 0)) {
-		    v.getPoint().rotateAboutAxis(d * angleFactor,
+		    v.getPoint().rotateAboutAxisSelf(d * angleFactor,
 			    bendAxis.getOrigin(), bendAxis.getDirection());
 		}
 	    }

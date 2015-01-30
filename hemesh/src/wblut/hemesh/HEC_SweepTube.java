@@ -152,7 +152,7 @@ public class HEC_SweepTube extends HEC_Creator {
 					-1, 1));
 			for (int j = 0; j < facets; j++) {
 				if (!WB_Epsilon.isZeroSq(axis.getSqLength3D())) {
-					basevertices[j].rotateAboutAxis(angle, origin, axis);
+					basevertices[j].rotateAboutAxisSelf(angle, origin, axis);
 				}
 				vertices[j + i * facets] = new WB_Point(basevertices[j]);
 				vertices[j + i * facets].addSelf(onCurve);

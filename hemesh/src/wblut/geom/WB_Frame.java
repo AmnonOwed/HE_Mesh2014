@@ -489,7 +489,7 @@ public class WB_Frame {
 		    for (int j = 0; j < n; j++) {
 			p = strut.start().addMul(i, v);
 			localu = u.get();
-			localu.rotateAboutAxis(j * da, new WB_Point(),
+			localu.rotateAboutAxisSelf(j * da, new WB_Point(),
 				P.getNormal());
 			p.addSelf(localu);
 			p.addSelf(rnd.nextVector().mulSelf(dr));
