@@ -286,7 +286,7 @@ public class WB_Sphere implements WB_Geometry {
 	 *            point to include
 	 */
 	public void growSpherebyPoint(final WB_Point p) {
-		final WB_Vector d = p.subToVector(center);
+		final WB_Vector d = p.subToVector3D(center);
 		final double dist2 = d.getSqLength3D();
 		if (dist2 > radius * radius) {
 			final double dist = Math.sqrt(dist2);

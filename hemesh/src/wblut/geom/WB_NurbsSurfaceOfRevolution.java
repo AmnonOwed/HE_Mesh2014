@@ -64,7 +64,7 @@ public class WB_NurbsSurfaceOfRevolution {
 		for (j = 0; j <= C.n(); j++) {
 			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j],
 					L);
-			final WB_Vector X = C.points()[j].subToVector(O);
+			final WB_Vector X = C.points()[j].subToVector3D(O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);
@@ -166,7 +166,7 @@ public class WB_NurbsSurfaceOfRevolution {
 		for (j = 0; j <= C.n(); j++) {
 			final WB_Point O = WB_GeometryOp.getClosestPoint3D(C.points()[j],
 					L);
-			final WB_Vector X = C.points()[j].subToVector(O);
+			final WB_Vector X = C.points()[j].subToVector3D(O);
 			final double r = X.normalizeSelf();
 			final WB_Vector Y = new WB_Vector(v).crossSelf(X);
 			final WB_Point P0 = new WB_Point(C.points()[j]);

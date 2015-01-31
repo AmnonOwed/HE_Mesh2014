@@ -26,7 +26,7 @@ import wblut.geom.WB_FrameStrut;
 import wblut.geom.WB_Geometry;
 import wblut.geom.WB_GeometryCollection;
 import wblut.geom.WB_GeometryFactory;
-import wblut.geom.WB_IndexedPoint;
+import wblut.geom.WB_SequencePoint;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Plane;
@@ -351,7 +351,7 @@ public class WB_Render3D {
 	final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 	final WB_Vector v = geometryfactory.createVector();
 	final WB_CoordinateSequence seq = lmesh.getPoints();
-	WB_IndexedPoint p = seq.getPoint(0);
+	WB_SequencePoint p = seq.getPoint(0);
 	for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 	    int id = lmesh.getFace(i)[0];
 	    v.set(lmesh.getVertexNormal(id));
@@ -378,7 +378,7 @@ public class WB_Render3D {
 	retained.beginShape(PConstants.TRIANGLES);
 	final WB_FaceListMesh lmesh = geometryfactory.createTriMesh(mesh);
 	final WB_CoordinateSequence seq = lmesh.getPoints();
-	WB_IndexedPoint p = seq.getPoint(0);
+	WB_SequencePoint p = seq.getPoint(0);
 	for (int i = 0; i < lmesh.getNumberOfFaces(); i++) {
 	    int id = lmesh.getFace(i)[0];
 	    p = seq.getPoint(id);
@@ -1415,7 +1415,7 @@ public class WB_Render3D {
     }
 
     public void drawPolylineVertices(final WB_PolyLine P, final double d) {
-	WB_IndexedPoint v1;
+	WB_SequencePoint v1;
 	for (int i = 0; i < P.getNumberOfPoints(); i++) {
 	    v1 = P.getPoint(i);
 	    home.pushMatrix();

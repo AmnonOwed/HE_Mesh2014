@@ -88,7 +88,7 @@ public class HEM_Inflate extends HEM_Modifier {
 				for (int i = 0; i < neighbors.length; i++) {
 					if (neighbors[i].coord != v) {
 						final WB_Vector tmp = neighbors[i].coord.getPoint()
-								.subToVector(v);
+								.subToVector3D(v);
 						tmp.normalizeSelf();
 						dv.addSelf(tmp);
 					}
@@ -155,7 +155,7 @@ public class HEM_Inflate extends HEM_Modifier {
 				for (int i = 0; i < neighbors.length; i++) {
 					if (neighbors[i].coord != v) {
 						final WB_Vector tmp = neighbors[i].coord.getPoint()
-								.subToVector(v);
+								.subToVector3D(v);
 						tmp.normalizeSelf();
 						dv.addSelf(tmp);
 					}

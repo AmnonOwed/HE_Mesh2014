@@ -135,11 +135,11 @@ public class HEC_SweepTube extends HEC_Creator {
 			if (curve.p() == 1) {
 				deriv = new WB_Vector(0, 0, 0);
 				if (i > 0) {
-					deriv.addSelf(onCurve.subToVector(curve.curvePoint((i - 1)
+					deriv.addSelf(onCurve.subToVector3D(curve.curvePoint((i - 1)
 							* ds)));
 				}
 				if (i < steps) {
-					deriv.addSelf(curve.curvePoint((i + 1) * ds).subToVector(
+					deriv.addSelf(curve.curvePoint((i + 1) * ds).subToVector3D(
 							onCurve));
 				}
 				deriv.normalizeSelf();

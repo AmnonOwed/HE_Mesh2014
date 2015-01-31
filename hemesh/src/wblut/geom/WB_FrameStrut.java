@@ -60,11 +60,11 @@ public class WB_FrameStrut {
 	}
 
 	public WB_Vector toVector() {
-		return end().subToVector(start());
+		return end().subToVector3D(start());
 	}
 
 	public WB_Vector toNormVector() {
-		final WB_Vector v = end().subToVector(start());
+		final WB_Vector v = end().subToVector3D(start());
 		v.normalizeSelf();
 		return v;
 	}

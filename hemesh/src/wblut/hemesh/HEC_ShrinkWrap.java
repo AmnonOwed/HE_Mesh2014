@@ -112,7 +112,7 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 		    newundecided.add(v);
 		} else {
 		    dist /= decNeighbors;
-		    final WB_Vector dv = v.getPoint().subToVector(wcenter);
+		    final WB_Vector dv = v.getPoint().subToVector3D(wcenter);
 		    dv.normalizeSelf();
 		    v.set(wcenter.addMul(dist, dv));
 		}

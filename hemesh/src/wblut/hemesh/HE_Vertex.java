@@ -886,8 +886,8 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	private static double computeNormal3D(final WB_Point p0, final WB_Point p1,
 			final WB_Point p2, WB_Vector tempD1, WB_Vector tempD2,
 			final WB_Vector ret) {
-		tempD1 = p1.subToVector(p2);
-		tempD2 = p2.subToVector(p0);
+		tempD1 = p1.subToVector3D(p2);
+		tempD2 = p2.subToVector3D(p0);
 		tempD1.crossInto(tempD2, ret);
 
 		double norm = ret.getLength3D();

@@ -51,9 +51,9 @@ public class WB_TriangleMesh extends WB_FaceListMesh {
 		faceNormals = new WB_Vector[nf];
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
-			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
-			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
-			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
+			final WB_SequencePoint p0 = vertices.getPoint(face[0]);
+			final WB_SequencePoint p1 = vertices.getPoint(face[1]);
+			final WB_SequencePoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVectorFromTo(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p2, p1);
 
@@ -93,9 +93,9 @@ public class WB_TriangleMesh extends WB_FaceListMesh {
 		}
 
 		for (final int[] face : faces) {
-			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
-			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
-			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
+			final WB_SequencePoint p0 = vertices.getPoint(face[0]);
+			final WB_SequencePoint p1 = vertices.getPoint(face[1]);
+			final WB_SequencePoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVectorFromTo(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p1, p2);
 			final WB_Vector c = geometryfactory.createNormalizedVectorFromTo(p2, p0);
@@ -132,9 +132,9 @@ public class WB_TriangleMesh extends WB_FaceListMesh {
 		}
 
 		for (final int[] face : faces) {
-			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
-			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
-			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
+			final WB_SequencePoint p0 = vertices.getPoint(face[0]);
+			final WB_SequencePoint p1 = vertices.getPoint(face[1]);
+			final WB_SequencePoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector a = geometryfactory.createNormalizedVectorFromTo(p0, p1);
 			final WB_Vector b = geometryfactory.createNormalizedVectorFromTo(p1, p2);
 
@@ -177,9 +177,9 @@ public class WB_TriangleMesh extends WB_FaceListMesh {
 
 		int i = 0;
 		for (final int[] face : faces) {
-			final WB_IndexedPoint p0 = vertices.getPoint(face[0]);
-			final WB_IndexedPoint p1 = vertices.getPoint(face[1]);
-			final WB_IndexedPoint p2 = vertices.getPoint(face[2]);
+			final WB_SequencePoint p0 = vertices.getPoint(face[0]);
+			final WB_SequencePoint p1 = vertices.getPoint(face[1]);
+			final WB_SequencePoint p2 = vertices.getPoint(face[2]);
 			final WB_Vector P10 = geometryfactory
 					.createNormalizedVectorFromTo(p0, p1);
 			final WB_Vector P20 = geometryfactory

@@ -167,8 +167,8 @@ public class WB_FaceListMesh implements WB_Mesh {
 		final WB_Vector normal = geometryfactory.createVector();
 		final WB_Point center = geometryfactory.createPoint();
 		WB_Vector tmp;
-		WB_IndexedPoint p0;
-		WB_IndexedPoint p1;
+		WB_SequencePoint p0;
+		WB_SequencePoint p1;
 		for (int i = 0, j = face.length - 1; i < face.length; j = i, i++) {
 			p0 = vertices.getPoint(face[j]);
 			p1 = vertices.getPoint(face[i]);
@@ -253,9 +253,9 @@ public class WB_FaceListMesh implements WB_Mesh {
 				/ self.getHeight());
 		f = Math.min(f, AABB.getDepth() / self.getDepth());
 
-		final List<WB_IndexedPoint> rescaled = new FastTable<WB_IndexedPoint>();
+		final List<WB_SequencePoint> rescaled = new FastTable<WB_SequencePoint>();
 		for (int i = 0; i < vertices.size(); i++) {
-			final WB_IndexedPoint p = vertices.getPoint(i);
+			final WB_SequencePoint p = vertices.getPoint(i);
 			p.addSelf(-scx, -scy, -scz);
 			p.mulSelf(f);
 			p.addSelf(acx, acy, acz);
@@ -417,7 +417,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 	}
 
 	@Override
-	public WB_IndexedPoint getVertex(final int i) {
+	public WB_SequencePoint getVertex(final int i) {
 		return vertices.getPoint(i);
 	}
 
@@ -500,7 +500,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 		}
 
 		int i = 0;
-		WB_IndexedPoint p0, p1, p2;
+		WB_SequencePoint p0, p1, p2;
 		for (final int[] face : faces) {
 			for (int j = 0; j < face.length; j++) {
 				p0 = vertices.getPoint(face[j]);
@@ -532,7 +532,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 		}
 
 		faceNormals = new WB_Vector[nf];
-		WB_IndexedPoint p0, p1;
+		WB_SequencePoint p0, p1;
 		for (int i = 0; i < nf; i++) {
 			final int[] face = faces[i];
 			final WB_Vector tmp = geometryfactory.createVector();
@@ -601,7 +601,7 @@ public class WB_FaceListMesh implements WB_Mesh {
 
 		@Override
 		public void run() {
-			WB_IndexedPoint p0, p1;
+			WB_SequencePoint p0, p1;
 			for (int i = start; i < end; i++) {
 				final int[] face = faces[i];
 				final WB_Vector tmp = geometryfactory.createVector();

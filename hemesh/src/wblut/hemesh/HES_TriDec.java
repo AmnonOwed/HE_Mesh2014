@@ -389,10 +389,10 @@ public class HES_TriDec extends HES_Simplifier {
 					&& (boundary.getPair().getFace() != null)) {
 				boundary = boundary.getNextInVertex();
 			}
-			v1 = he.getEndVertex().getPoint().subToVector(he.getVertex());
+			v1 = he.getEndVertex().getPoint().subToVector3D(he.getVertex());
 			v1.normalizeSelf();
 			v2 = boundary.getEndVertex().getPoint()
-					.subToVector(boundary.getVertex());
+					.subToVector3D(boundary.getVertex());
 			v2.normalizeSelf();
 			cost += he.getEdge().getLength() * (1.0 - v1.dot(v2)) * _lambda;
 		}

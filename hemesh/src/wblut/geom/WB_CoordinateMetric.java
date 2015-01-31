@@ -25,7 +25,7 @@ public interface WB_CoordinateMetric {
 
     public double getSqLength3D();
 
-    public double heading();
+    public double heading2D();
 
     public boolean isZero();
 }

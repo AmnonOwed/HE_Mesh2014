@@ -873,14 +873,14 @@ public class WB_Triangulate {
     @SuppressWarnings("unchecked")
     public static WB_Triangulation2D getPolygonTriangulation2D(
 	    final WB_Polygon polygon, final boolean optimize) {
-	final List<WB_IndexedPoint> pts = new FastTable<WB_IndexedPoint>();
+	final List<WB_SequencePoint> pts = new FastTable<WB_SequencePoint>();
 	for (int i = 0; i < polygon.numberOfShellPoints; i++) {
 	    pts.add(polygon.getPoint(i));
 	}
 	int index = polygon.numberOfShellPoints;
-	final List<WB_IndexedPoint>[] hpts = new FastTable[polygon.numberOfContours - 1];
+	final List<WB_SequencePoint>[] hpts = new FastTable[polygon.numberOfContours - 1];
 	for (int i = 0; i < polygon.numberOfContours - 1; i++) {
-	    hpts[i] = new FastTable<WB_IndexedPoint>();
+	    hpts[i] = new FastTable<WB_SequencePoint>();
 	    for (int j = 0; j < polygon.numberOfPointsPerContour[i + 1]; j++) {
 		hpts[i].add(polygon.points.getPoint(index++));
 	    }
@@ -893,7 +893,7 @@ public class WB_Triangulate {
 	final WB_Triangulation2DWithPoints triangulation = WB_Triangulate
 		.getPolygonTriangulation2D(pts, hpts, optimize,
 			geometryfactory.createEmbeddedPlane(P));
-	final WB_KDTree<WB_IndexedPoint, Integer> pointmap = new WB_KDTree<WB_IndexedPoint, Integer>();
+	final WB_KDTree<WB_SequencePoint, Integer> pointmap = new WB_KDTree<WB_SequencePoint, Integer>();
 	for (int i = 0; i < polygon.numberOfPoints; i++) {
 	    pointmap.add(polygon.getPoint(i), i);
 	}

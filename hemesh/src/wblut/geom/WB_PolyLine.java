@@ -21,7 +21,7 @@ public class WB_PolyLine implements WB_Geometry {
 	public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 			.instance();
 
-	public WB_IndexedPoint getPoint(final int i) {
+	public WB_SequencePoint getPoint(final int i) {
 		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
 					+ " must between 0 and " + (numberOfPoints - 1) + ".");
@@ -78,7 +78,7 @@ public class WB_PolyLine implements WB_Geometry {
 				points.getPoint(1 + (int) t));
 	}
 
-	public WB_IndexedVector getDirection(final int i) {
+	public WB_SequenceVector getDirection(final int i) {
 		if ((i < 0) || (i > numberOfPoints - 2)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
 					+ (numberOfPoints - 2) + ".");

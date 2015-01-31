@@ -226,7 +226,7 @@ public class WB_Triangle implements WB_Simplex {
      * @return the w b_ point
      */
     public WB_Point getBarycentric(final WB_Coordinate p) {
-	final WB_Vector m = p3.subToVector(p1).cross(p2.subToVector(p1));
+	final WB_Vector m = p3.subToVector3D(p1).cross(p2.subToVector3D(p1));
 	double nu, nv, ood;
 	final double x = WB_Math.fastAbs(m.xd());
 	final double y = WB_Math.fastAbs(m.yd());

@@ -82,18 +82,18 @@ public class WB_CoordinateSequence {
 	return ordinates.get(i);
     }
 
-    public WB_IndexedPoint getPoint(final int i) {
+    public WB_SequencePoint getPoint(final int i) {
 	if (i >= n) {
 	    throw (new IndexOutOfBoundsException());
 	}
-	return new WB_IndexedPoint(i, this);
+	return new WB_SequencePoint(i, this);
     }
 
-    public WB_IndexedVector getVector(final int i) {
+    public WB_SequenceVector getVector(final int i) {
 	if (i >= n) {
 	    throw (new IndexOutOfBoundsException());
 	}
-	return new WB_IndexedVector(i, this);
+	return new WB_SequenceVector(i, this);
     }
 
     public int size() {

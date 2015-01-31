@@ -82,8 +82,8 @@ public class WB_FrameNode extends WB_Point {
 	if (n == 1) {
 	    return 2 * Math.PI;
 	} else if (n == 2) {
-	    final WB_Vector u = nnodes.get(0).subToVector(this);
-	    final WB_Vector w = nnodes.get(1).subToVector(this);
+	    final WB_Vector u = nnodes.get(0).subToVector3D(this);
+	    final WB_Vector w = nnodes.get(1).subToVector3D(this);
 	    u.normalizeSelf();
 	    w.normalizeSelf();
 	    final double udw = WB_Math.clamp(u.dot(w), -1, 1);
@@ -94,11 +94,11 @@ public class WB_FrameNode extends WB_Point {
 	    }
 	} else {
 	    double minAngle = Double.MAX_VALUE;
-	    final WB_Vector u = nnodes.get(i).subToVector(this);
+	    final WB_Vector u = nnodes.get(i).subToVector3D(this);
 	    u.normalizeSelf();
 	    for (int j = 0; j < n; j++) {
 		if (i != j) {
-		    final WB_Vector w = nnodes.get(j).subToVector(this);
+		    final WB_Vector w = nnodes.get(j).subToVector3D(this);
 		    w.normalizeSelf();
 		    final double a = Math.acos(u.dot(w));
 		    minAngle = WB_Math.min(minAngle, a);

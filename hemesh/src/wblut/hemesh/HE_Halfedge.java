@@ -142,9 +142,9 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	if (_vertex == null) {
 	    return null;
 	}
-	WB_Vector v = _vertex.getPoint().subToVector(getPrevInFace()._vertex);
+	WB_Vector v = _vertex.getPoint().subToVector3D(getPrevInFace()._vertex);
 	v.normalizeSelf();
-	final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector(
+	final WB_Vector vn = getNextInFace()._vertex.getPoint().subToVector3D(
 		_vertex);
 	vn.normalizeSelf();
 	v = v.cross(vn);
@@ -172,7 +172,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     public WB_Vector getHalfedgeTangent() {
 	if ((_pair != null) && (_vertex != null) && (_pair.getVertex() != null)) {
 	    final WB_Vector v = _pair.getVertex().getPoint()
-		    .subToVector(_vertex);
+		    .subToVector3D(_vertex);
 	    v.normalizeSelf();
 	    return v;
 	}

@@ -50,12 +50,12 @@ public interface WB_CoordinateMath {
 
     public WB_Coordinate sub(final double x, final double y, final double z);
 
-    public void sub(final double x, final double y, final double z,
+    public void subInto(final double x, final double y, final double z,
 	    final WB_MutableCoordinate result);
 
     public WB_Coordinate sub(final WB_Coordinate p);
 
-    public void sub(final WB_Coordinate p, final WB_MutableCoordinate result);
+    public void subInto(final WB_Coordinate p, final WB_MutableCoordinate result);
 
     public WB_M33 tensor(final WB_Coordinate v);
 

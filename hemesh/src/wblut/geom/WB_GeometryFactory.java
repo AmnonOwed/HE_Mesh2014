@@ -4418,11 +4418,11 @@ public class WB_GeometryFactory {
     }
 
     public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh) {
-	final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
+	final List<WB_SequencePoint> uniqueVertices = new FastTable<WB_SequencePoint>();
 	final TIntIntMap oldnew = new TIntIntHashMap(10, 0.5f, -1, -1);
-	final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
-	WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
-	WB_IndexedPoint v = mesh.getVertex(0);
+	final WB_KDTree<WB_SequencePoint, Integer> kdtree = new WB_KDTree<WB_SequencePoint, Integer>();
+	WB_KDEntry<WB_SequencePoint, Integer> neighbor;
+	WB_SequencePoint v = mesh.getVertex(0);
 	kdtree.add(v, 0);
 	uniqueVertices.add(v);
 	oldnew.put(0, 0);
@@ -4451,12 +4451,12 @@ public class WB_GeometryFactory {
 
     public WB_FaceListMesh createUniqueMesh(final WB_FaceListMesh mesh,
 	    final double threshold) {
-	final List<WB_IndexedPoint> uniqueVertices = new FastTable<WB_IndexedPoint>();
+	final List<WB_SequencePoint> uniqueVertices = new FastTable<WB_SequencePoint>();
 	final TIntIntMap oldnew = new TIntIntHashMap(10, 0.5f, -1, -1);
-	final WB_KDTree<WB_IndexedPoint, Integer> kdtree = new WB_KDTree<WB_IndexedPoint, Integer>();
+	final WB_KDTree<WB_SequencePoint, Integer> kdtree = new WB_KDTree<WB_SequencePoint, Integer>();
 	final double t2 = threshold * threshold;
-	WB_KDEntry<WB_IndexedPoint, Integer> neighbor;
-	WB_IndexedPoint v = mesh.getVertex(0);
+	WB_KDEntry<WB_SequencePoint, Integer> neighbor;
+	WB_SequencePoint v = mesh.getVertex(0);
 	kdtree.add(v, 0);
 	uniqueVertices.add(v);
 	oldnew.put(0, 0);

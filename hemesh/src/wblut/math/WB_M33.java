@@ -818,7 +818,7 @@ public class WB_M33 {
 		c.mulSelf(oon);
 		e00 = e11 = e22 = e01 = e02 = e12 = 0;
 		for (int i = 0; i < numPoints; i++) {
-			points[i].sub(c, p);
+			points[i].subInto(c, p);
 			e00 += p.xd() * p.xd();
 			e11 += p.yd() * p.yd();
 			e22 += p.zd() * p.zd();

@@ -911,7 +911,7 @@ WB_HasColor, WB_Mesh {
 	HE_Vertex v;
 	final Iterator<HE_Vertex> vItr = vItr();
 	final WB_Transform raa = new WB_Transform();
-	raa.addRotateAboutAxis(angle, p1, p2.subToVector(p1));
+	raa.addRotateAboutAxis(angle, p1, p2.subToVector3D(p1));
 	while (vItr.hasNext()) {
 	    v = vItr.next();
 	    raa.applySelfAsPoint(v);

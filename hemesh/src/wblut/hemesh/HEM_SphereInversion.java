@@ -73,14 +73,14 @@ public class HEM_SphereInversion extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (linear) {
-				d = v.getPoint().subToVector(center);
+				d = v.getPoint().subToVector3D(center);
 				d.normalizeSelf();
 				surf = new WB_Point(center).addMulSelf(r, d);
-				d = surf.subToVector(v).mulSelf(2);
+				d = surf.subToVector3D(v).mulSelf(2);
 				v.getPoint().addSelf(d);
 			}
 			else {
-				d = v.getPoint().subToVector(center);
+				d = v.getPoint().subToVector3D(center);
 				ri = d.getLength3D();
 				d.normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);
@@ -115,14 +115,14 @@ public class HEM_SphereInversion extends HEM_Modifier {
 		while (vItr.hasNext()) {
 			v = vItr.next();
 			if (linear) {
-				d = v.getPoint().subToVector(center);
+				d = v.getPoint().subToVector3D(center);
 				d.normalizeSelf();
 				surf = new WB_Point(center).addMulSelf(r, d);
-				d = v.getPoint().subToVector(surf);
+				d = v.getPoint().subToVector3D(surf);
 				v.getPoint().addSelf(d);
 			}
 			else {
-				d = v.getPoint().subToVector(center);
+				d = v.getPoint().subToVector3D(center);
 				ri = d.getLength3D();
 				d.normalizeSelf();
 				rf = r2 * Math.max(icutoff, 1.0 / ri);

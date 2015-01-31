@@ -29,7 +29,7 @@ package wblut.geom;
  *
  * @author Mark Howison
  */
-public class Tri_Point extends WB_SimpleCoordinate {
+public class Tri_Point extends WB_SimpleVector {
     public final static int INTERIOR = 0;
     public final static int BOUNDARY = 1;
     public final static int DELETED = 2;

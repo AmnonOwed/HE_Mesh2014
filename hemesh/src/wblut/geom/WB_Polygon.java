@@ -261,7 +261,7 @@ public class WB_Polygon extends WB_Ring {
     }
 
     @Override
-    public WB_IndexedPoint getPoint(final int i) {
+    public WB_SequencePoint getPoint(final int i) {
 	return points.getPoint(i);
     }
 

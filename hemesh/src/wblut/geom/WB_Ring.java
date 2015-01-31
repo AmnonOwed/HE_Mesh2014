@@ -16,7 +16,7 @@ public class WB_Ring extends WB_PolyLine {
 	 * @return direction
 	 */
 	@Override
-	public WB_IndexedVector getDirection(final int i) {
+	public WB_SequenceVector getDirection(final int i) {
 		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter must between 0 and "
 					+ (numberOfPoints - 1) + ".");
@@ -179,10 +179,10 @@ public class WB_Ring extends WB_PolyLine {
 		}
 
 		// find highest point
-		WB_IndexedPoint hiPt = getPoint(0);
+		WB_SequencePoint hiPt = getPoint(0);
 		int hiIndex = 0;
 		for (int i = 1; i <= nPts; i++) {
-			final WB_IndexedPoint p = getPoint(i);
+			final WB_SequencePoint p = getPoint(i);
 			if (p.yd() > hiPt.yd()) {
 				hiPt = p;
 				hiIndex = i;
@@ -204,8 +204,8 @@ public class WB_Ring extends WB_PolyLine {
 			iNext = (iNext + 1) % nPts;
 		} while (getPoint(iNext).equals(hiPt) && iNext != hiIndex);
 
-		final WB_IndexedPoint prev = getPoint(iPrev);
-		final WB_IndexedPoint next = getPoint(iNext);
+		final WB_SequencePoint prev = getPoint(iPrev);
+		final WB_SequencePoint next = getPoint(iNext);
 
 		/**
 		 * This check catches cases where the ring contains an A-B-A
@@ -248,7 +248,7 @@ public class WB_Ring extends WB_PolyLine {
 	}
 
 	@Override
-	public WB_IndexedPoint getPoint(final int i) {
+	public WB_SequencePoint getPoint(final int i) {
 		if ((i < 0) || (i > numberOfPoints - 1)) {
 			throw new IllegalArgumentException("Parameter " + i
 					+ " must between 0 and " + (numberOfPoints - 1) + ".");

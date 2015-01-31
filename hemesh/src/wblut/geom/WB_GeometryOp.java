@@ -12,7 +12,7 @@ public class WB_GeometryOp {
 
     public static WB_IntersectionResult getIntersection3D(final WB_Segment S,
 	    final WB_Plane P) {
-	final WB_Vector ab = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector ab = S.getEndpoint().subToVector3D(S.getOrigin());
 	double t = (P.d() - P.getNormal().dot(S.getOrigin()))
 		/ P.getNormal().dot(ab);
 	if (t >= -WB_Epsilon.EPSILON && t <= 1.0 + WB_Epsilon.EPSILON) {
@@ -315,7 +315,7 @@ public class WB_GeometryOp {
     public static boolean checkIntersection3D(final WB_Triangle T,
 	    final WB_Sphere S) {
 	final WB_Point p = getClosestPoint3D(S.getCenter(), T);
-	return (p.subToVector(S.getCenter())).getSqLength3D() <= S.getRadius()
+	return (p.subToVector3D(S.getCenter())).getSqLength3D() <= S.getRadius()
 		* S.getRadius();
     }
 
@@ -333,9 +333,9 @@ public class WB_GeometryOp {
 	v0.subSelf(c);
 	v1.subSelf(c);
 	v2.subSelf(c);
-	final WB_Vector f0 = v1.subToVector(v0);
-	final WB_Vector f1 = v2.subToVector(v1);
-	final WB_Vector f2 = v0.subToVector(v2);
+	final WB_Vector f0 = v1.subToVector3D(v0);
+	final WB_Vector f1 = v2.subToVector3D(v1);
+	final WB_Vector f2 = v0.subToVector3D(v2);
 	// a00
 	final WB_Vector a = new WB_Vector(0, -f0.zd(), f0.yd());// u0xf0
 	if (a.isZero()) {
@@ -493,7 +493,7 @@ public class WB_GeometryOp {
 	    if (!n.isZero()) {
 		P = new WB_Plane(n, n.dot(v0));
 	    } else {
-		final WB_Vector t = T.p3().subToVector(T.p1());
+		final WB_Vector t = T.p3().subToVector3D(T.p1());
 		final double a1 = T.p1().dot(t);
 		final double a2 = T.p2().dot(t);
 		final double a3 = T.p3().dot(t);
@@ -530,8 +530,8 @@ public class WB_GeometryOp {
     // SEGMENT-AABB
     public static boolean checkIntersection3D(final WB_Segment S,
 	    final WB_AABB AABB) {
-	final WB_Vector e = AABB.getMax().subToVector(AABB.getMin());
-	final WB_Vector d = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector e = AABB.getMax().subToVector3D(AABB.getMin());
+	final WB_Vector d = S.getEndpoint().subToVector3D(S.getOrigin());
 	final WB_Point m = new WB_Point(S.getEndpoint().xd()
 		+ S.getOrigin().xd() - AABB.getMinX() - AABB.getMaxX(), S
 		.getEndpoint().yd()
@@ -572,7 +572,7 @@ public class WB_GeometryOp {
     // SPHERE-SPHERE
     public static boolean checkIntersection3D(final WB_Sphere S1,
 	    final WB_Sphere S2) {
-	final WB_Vector d = S1.getCenter().subToVector(S2.getCenter());
+	final WB_Vector d = S1.getCenter().subToVector3D(S2.getCenter());
 	final double d2 = d.getSqLength3D();
 	final double radiusSum = S1.getRadius() + S2.getRadius();
 	return d2 <= radiusSum * radiusSum;
@@ -580,7 +580,7 @@ public class WB_GeometryOp {
 
     // RAY-SPHERE
     public static boolean checkIntersection3D(final WB_Ray R, final WB_Sphere S) {
-	final WB_Vector m = R.getOrigin().subToVector(S.getCenter());
+	final WB_Vector m = R.getOrigin().subToVector3D(S.getCenter());
 	final double c = m.dot(m) - S.getRadius() * S.getRadius();
 	if (c <= 0) {
 	    return true;
@@ -1053,7 +1053,7 @@ public class WB_GeometryOp {
 
     public static WB_Point getClosestPoint3D(final WB_Coordinate p,
 	    final WB_Segment S) {
-	final WB_Vector ab = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector ab = S.getEndpoint().subToVector3D(S.getOrigin());
 	final WB_Vector ac = new WB_Vector(S.getOrigin(), p);
 	double t = ac.dot(ab);
 	if (t <= 0) {
@@ -1078,7 +1078,7 @@ public class WB_GeometryOp {
 
     public static double getClosestPointT3D(final WB_Coordinate p,
 	    final WB_Segment S) {
-	final WB_Vector ab = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector ab = S.getEndpoint().subToVector3D(S.getOrigin());
 	final WB_Vector ac = new WB_Vector(S.getOrigin(), p);
 	double t = ac.dot(ab);
 	if (t <= WB_Epsilon.EPSILON) {
@@ -1211,8 +1211,8 @@ public class WB_GeometryOp {
     // POINT-TRIANGLE
     public static WB_Point getClosestPoint3D(final WB_Coordinate p,
 	    final WB_Triangle T) {
-	final WB_Vector ab = T.p2().subToVector(T.p1());
-	final WB_Vector ac = T.p3().subToVector(T.p1());
+	final WB_Vector ab = T.p2().subToVector3D(T.p1());
+	final WB_Vector ac = T.p3().subToVector3D(T.p1());
 	final WB_Vector ap = new WB_Vector(T.p1(), p);
 	final double d1 = ab.dot(ap);
 	final double d2 = ac.dot(ap);
@@ -1244,7 +1244,7 @@ public class WB_GeometryOp {
 	final double va = d3 * d6 - d5 * d4;
 	if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 	    final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-	    return T.p2().add((T.p3().subToVector(T.p2())).mulSelf(w));
+	    return T.p2().add((T.p3().subToVector3D(T.p2())).mulSelf(w));
 	}
 	final double denom = 1.0 / (va + vb + vc);
 	final double v = vb * denom;
@@ -1297,8 +1297,8 @@ public class WB_GeometryOp {
 
     public static WB_Point getClosestPointOnPeriphery3D(final WB_Coordinate p,
 	    final WB_Triangle T) {
-	final WB_Vector ab = T.p2().subToVector(T.p1());
-	final WB_Vector ac = T.p3().subToVector(T.p1());
+	final WB_Vector ab = T.p2().subToVector3D(T.p1());
+	final WB_Vector ac = T.p3().subToVector3D(T.p1());
 	final WB_Vector ap = new WB_Vector(T.p1(), p);
 	final double d1 = ab.dot(ap);
 	final double d2 = ac.dot(ap);
@@ -1330,13 +1330,13 @@ public class WB_GeometryOp {
 	final double va = d3 * d6 - d5 * d4;
 	if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
 	    final double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
-	    return T.p2().add((T.p3().subToVector(T.p2())).mulSelf(w));
+	    return T.p2().add((T.p3().subToVector3D(T.p2())).mulSelf(w));
 	}
 	final double denom = 1.0 / (va + vb + vc);
 	final double v = vb * denom;
 	final double w = vc * denom;
 	final double u = 1 - v - w;
-	T.p3().subToVector(T.p2());
+	T.p3().subToVector3D(T.p2());
 	if (WB_Epsilon.isZero(u - 1)) {
 	    return T.p1().get();
 	}
@@ -1386,7 +1386,7 @@ public class WB_GeometryOp {
 	    final WB_Line L2) {
 	final double a = L1.getDirection().dot(L1.getDirection());
 	final double b = L1.getDirection().dot(L2.getDirection());
-	final WB_Vector r = L1.getOrigin().subToVector(L2.getOrigin());
+	final WB_Vector r = L1.getOrigin().subToVector3D(L2.getOrigin());
 	final double c = L1.getDirection().dot(r);
 	final double e = L2.getDirection().dot(L2.getDirection());
 	final double f = L2.getDirection().dot(r);
@@ -1438,7 +1438,7 @@ public class WB_GeometryOp {
 	double bestSqDist = Double.POSITIVE_INFINITY;
 	if (pointOtherSideOfPlane(p, T.p4, T.p1, T.p2, T.p3)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p2, T.p3);
-	    final double sqDist = (q.subToVector(p)).getSqLength3D();
+	    final double sqDist = (q.subToVector3D(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
 		bestSqDist = sqDist;
 		closestPt = q;
@@ -1446,7 +1446,7 @@ public class WB_GeometryOp {
 	}
 	if (pointOtherSideOfPlane(p, T.p2, T.p1, T.p3, T.p4)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p3, T.p4);
-	    final double sqDist = (q.subToVector(p)).getSqLength3D();
+	    final double sqDist = (q.subToVector3D(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
 		bestSqDist = sqDist;
 		closestPt = q;
@@ -1454,7 +1454,7 @@ public class WB_GeometryOp {
 	}
 	if (pointOtherSideOfPlane(p, T.p3, T.p1, T.p4, T.p2)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p1, T.p4, T.p2);
-	    final double sqDist = (q.subToVector(p)).getSqLength3D();
+	    final double sqDist = (q.subToVector3D(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
 		bestSqDist = sqDist;
 		closestPt = q;
@@ -1462,7 +1462,7 @@ public class WB_GeometryOp {
 	}
 	if (pointOtherSideOfPlane(p, T.p1, T.p2, T.p4, T.p3)) {
 	    final WB_Point q = getClosestPointToTriangle3D(p, T.p2, T.p4, T.p3);
-	    final double sqDist = (q.subToVector(p)).getSqLength3D();
+	    final double sqDist = (q.subToVector3D(p)).getSqLength3D();
 	    if (sqDist < bestSqDist) {
 		bestSqDist = sqDist;
 		closestPt = q;
@@ -2348,8 +2348,8 @@ public class WB_GeometryOp {
     // POINT-TRIANGLE
     public static WB_Point getClosestPoint2D(final WB_Coordinate p,
 	    final WB_Triangle T) {
-	final WB_Vector ab = T.p2.subToVector(T.p1);
-	final WB_Vector ac = T.p3.subToVector(T.p1);
+	final WB_Vector ab = T.p2.subToVector3D(T.p1);
+	final WB_Vector ac = T.p3.subToVector3D(T.p1);
 	final WB_Vector ap = new WB_Vector(T.p1, p);
 	final double d1 = ab.dot(ap);
 	final double d2 = ac.dot(ap);
@@ -2434,8 +2434,8 @@ public class WB_GeometryOp {
 
     public static WB_Point getClosestPointOnPeriphery2D(final WB_Coordinate p,
 	    final WB_Triangle T) {
-	final WB_Vector ab = T.p2.subToVector(T.p1);
-	final WB_Vector ac = T.p3.subToVector(T.p1);
+	final WB_Vector ab = T.p2.subToVector3D(T.p1);
+	final WB_Vector ac = T.p3.subToVector3D(T.p1);
 	final WB_Vector ap = new WB_Vector(T.p1, p);
 	final double d1 = ab.dot(ap);
 	final double d2 = ac.dot(ap);
@@ -3194,7 +3194,7 @@ public class WB_GeometryOp {
 
     public static double getSqDistance3D(final WB_Coordinate p,
 	    final WB_Segment S) {
-	final WB_Vector ab = S.getEndpoint().subToVector(S.getOrigin());
+	final WB_Vector ab = S.getEndpoint().subToVector3D(S.getOrigin());
 	final WB_Vector ac = new WB_Vector(S.getOrigin(), p);
 	final WB_Vector bc = new WB_Vector(S.getEndpoint(), p);
 	final double e = ac.dot(ab);

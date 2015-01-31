@@ -117,7 +117,7 @@ public class HEM_Mirror extends HEM_Modifier {
 	for (int i = 0; i < vertices.size(); i++) {
 	    v = vertices.get(i);
 	    final WB_Point p = WB_GeometryOp.getClosestPoint3D(v, lP);
-	    final WB_Vector dv = v.getPoint().subToVector(p);
+	    final WB_Vector dv = v.getPoint().subToVector3D(p);
 	    if (dv.getLength3D() <= WB_Epsilon.EPSILON) {
 		final List<HE_Halfedge> star = v.getHalfedgeStar();
 		origv = mesh.getVertexByIndex(i);
