@@ -164,20 +164,20 @@ public class WB_CoordinateSequence {
 
     public WB_CoordinateSequence applyAsNormal(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
-	return result._applyAsNormalSelf(T);
+	return result.applyAsNormalSelf(T);
     }
 
     public WB_CoordinateSequence applyAsPoint(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
-	return result._applyAsPointSelf(T);
+	return result.applyAsPointSelf(T);
     }
 
     public WB_CoordinateSequence applyAsVector(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
-	return result._applyAsVectorSelf(T);
+	return result.applyAsVectorSelf(T);
     }
 
-    public WB_CoordinateSequence _applyAsNormalSelf(final WB_Transform T) {
+    public WB_CoordinateSequence applyAsNormalSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;
 	for (int j = 0; j < size(); j++) {
@@ -190,7 +190,7 @@ public class WB_CoordinateSequence {
 	return this;
     }
 
-    public WB_CoordinateSequence _applyAsPointSelf(final WB_Transform T) {
+    public WB_CoordinateSequence applyAsPointSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;
 	for (int j = 0; j < size(); j++) {
@@ -203,7 +203,7 @@ public class WB_CoordinateSequence {
 	return this;
     }
 
-    public WB_CoordinateSequence _applyAsVectorSelf(final WB_Transform T) {
+    public WB_CoordinateSequence applyAsVectorSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;
 	for (int j = 0; j < size(); j++) {

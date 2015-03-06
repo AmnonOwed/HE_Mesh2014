@@ -903,15 +903,15 @@ WB_HasColor, WB_Mesh {
      *            second point on axis
      * @return self
      */
-    public HE_Mesh rotateAboutAxis(final double angle, final WB_Point p1,
-	    final WB_Point p2) {
+    public HE_Mesh rotateAbout2PointAxis(final double angle,
+	    final WB_Coordinate p1, final WB_Coordinate p2) {
 	if (!isCenterUpdated) {
 	    getCenter();
 	}
 	HE_Vertex v;
 	final Iterator<HE_Vertex> vItr = vItr();
 	final WB_Transform raa = new WB_Transform();
-	raa.addRotateAboutAxis(angle, p1, p2.subToVector3D(p1));
+	raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
 	while (vItr.hasNext()) {
 	    v = vItr.next();
 	    raa.applySelfAsPoint(v);
@@ -931,8 +931,8 @@ WB_HasColor, WB_Mesh {
      *            axis
      * @return self
      */
-    public HE_Mesh rotateAboutAxis(final double angle, final WB_Point p,
-	    final WB_Vector a) {
+    public HE_Mesh rotateAboutAxis(final double angle, final WB_Coordinate p,
+	    final WB_Coordinate a) {
 	if (!isCenterUpdated) {
 	    getCenter();
 	}

@@ -22,6 +22,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
     private boolean surface;
     /** The simple cap. */
     private boolean simpleCap;
+    private boolean bruteForce;
     /** Offset. */
     private double offset;
     /** The inner. */
@@ -206,9 +207,14 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 	return this;
     }
 
+    public HEMC_VoronoiCells setBruteForce(final boolean b) {
+	bruteForce = b;
+	return this;
+    }
+
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_MultiCreator#create()
      */
     @Override
@@ -235,19 +241,35 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 	final ArrayList<HE_Selection> linnersel = new ArrayList<HE_Selection>();
 	final ArrayList<HE_Selection> loutersel = new ArrayList<HE_Selection>();
 	final HEC_VoronoiCell cvc = new HEC_VoronoiCell();
-	final int[][] voronoiIndices = WB_Voronoi.getVoronoi3DNeighbors(points);
-	cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
-	.setSurface(surface).setOffset(offset).setSimpleCap(simpleCap)
-	.setLimitPoints(true);
-	for (int i = 0; i < numberOfPoints; i++) {
-	    tracker.setStatus("Creating cell " + i + " ("
-		    + voronoiIndices[i].length + " slices).", 255);
-	    cvc.setCellIndex(i);
-	    cvc.setPointsToUse(voronoiIndices[i]);
-	    final HE_Mesh mesh = cvc.createBase();
-	    linnersel.add(cvc.inner);
-	    loutersel.add(cvc.outer);
-	    lresult.add(mesh);
+	if (bruteForce || numberOfPoints < 10) {
+	    cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
+		    .setSurface(surface).setOffset(offset)
+		    .setSimpleCap(simpleCap);
+	    for (int i = 0; i < numberOfPoints; i++) {
+		tracker.setStatus("Creating cell " + i + " (" + numberOfPoints
+			+ " slices).", 255);
+		cvc.setCellIndex(i);
+		final HE_Mesh mesh = cvc.createBase();
+		linnersel.add(cvc.inner);
+		loutersel.add(cvc.outer);
+		lresult.add(mesh);
+	    }
+	} else {
+	    final int[][] voronoiIndices = WB_Voronoi
+		    .getVoronoi3DNeighbors(points);
+	    cvc.setPoints(points).setN(numberOfPoints).setContainer(container)
+		    .setSurface(surface).setOffset(offset)
+		    .setSimpleCap(simpleCap).setLimitPoints(true);
+	    for (int i = 0; i < numberOfPoints; i++) {
+		tracker.setStatus("Creating cell " + i + " ("
+			+ voronoiIndices[i].length + " slices).", 255);
+		cvc.setCellIndex(i);
+		cvc.setPointsToUse(voronoiIndices[i]);
+		final HE_Mesh mesh = cvc.createBase();
+		linnersel.add(cvc.inner);
+		loutersel.add(cvc.outer);
+		lresult.add(mesh);
+	    }
 	}
 	result = new HE_Mesh[(createSkin) ? lresult.size() + 1 : lresult.size()];
 	inner = new HE_Selection[lresult.size()];
@@ -265,7 +287,7 @@ public class HEMC_VoronoiCells extends HEMC_MultiCreator {
 		on[i] = true;
 	    }
 	    result[_numberOfMeshes] = new HE_Mesh(new HEC_FromVoronoiCells()
-		    .setActive(on).setCells(result));
+	    .setActive(on).setCells(result));
 	}
 	tracker.setStatus("Exiting HEMC_VoronoiCells.", 255);
 	tracker.setPriority(0);
