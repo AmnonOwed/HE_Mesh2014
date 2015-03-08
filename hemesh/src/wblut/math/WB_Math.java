@@ -3,7 +3,6 @@
  */
 package wblut.math;
 
-
 /**
  * A collection of fast and approximated math functions. Not as robust as the
  * JAVA implementations when dealing with special values (NaN etc). Some
@@ -129,7 +128,7 @@ public class WB_Math {
 	x *= 1.0f / (1 << 23);
 	x -= 127;
 	float y = x - floor(x);
-	y = (y - y * y) * 0.346607f;
+	y = (y - (y * y)) * 0.346607f;
 	return x + y;
     }
 
@@ -142,8 +141,8 @@ public class WB_Math {
      */
     public static final float fastPow2(final float i) {
 	float x = i - floor(i);
-	x = (x - x * x) * 0.33971f;
-	return Float.intBitsToFloat((int) ((i + 127 - x) * (1 << 23)));
+	x = (x - (x * x)) * 0.33971f;
+	return Float.intBitsToFloat((int) (((i + 127) - x) * (1 << 23)));
     }
 
     /**
@@ -171,7 +170,7 @@ public class WB_Math {
 	int i = Float.floatToIntBits(x);
 	i = 0x5f375a86 - (i >> 1);
 	x = Float.intBitsToFloat(i);
-	return x * (1.5F - half * x * x);
+	return x * (1.5F - (half * x * x));
     }
 
     /**
@@ -185,6 +184,12 @@ public class WB_Math {
 	return 1f / fastInvSqrt(x);
     }
 
+    /**
+     * 
+     *
+     * @param v 
+     * @return 
+     */
     public static int getExp(final double v) {
 	if (v == 0) {
 	    return 0;
@@ -192,15 +197,21 @@ public class WB_Math {
 	return (int) ((0x7ff0000000000000L & Double.doubleToLongBits(v)) >> 52) - 1022;
     }
 
-    /** sqrt(a^2 + b^2) without under/overflow. **/
+    /**
+     *  sqrt(a^2 + b^2) without under/overflow. *
+     *
+     * @param a 
+     * @param b 
+     * @return 
+     */
     public static double hypot(final double a, final double b) {
 	double r;
 	if (Math.abs(a) > Math.abs(b)) {
 	    r = b / a;
-	    r = Math.abs(a) * Math.sqrt(1 + r * r);
+	    r = Math.abs(a) * Math.sqrt(1 + (r * r));
 	} else if (b != 0) {
 	    r = a / b;
-	    r = Math.abs(b) * Math.sqrt(1 + r * r);
+	    r = Math.abs(b) * Math.sqrt(1 + (r * r));
 	} else {
 	    r = 0.0;
 	}

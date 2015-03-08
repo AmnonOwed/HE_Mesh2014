@@ -8,5 +8,33 @@ package wblut.geom;
  * 
  */
 public enum WB_ClassificationConvex {
-	UNKNOWN, CONVEX, CONCAVE, SADDLE, FLAT, FLATCONVEX, FLATCONCAVE
+    
+    /**
+     * 
+     */
+    UNKNOWN, 
+ /**
+  * 
+  */
+ CONVEX, 
+ /**
+  * 
+  */
+ CONCAVE, 
+ /**
+  * 
+  */
+ SADDLE, 
+ /**
+  * 
+  */
+ FLAT, 
+ /**
+  * 
+  */
+ FLATCONVEX, 
+ /**
+  * 
+  */
+ FLATCONCAVE
 }

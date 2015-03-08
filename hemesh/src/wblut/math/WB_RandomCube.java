@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.math;
 
 import wblut.geom.WB_Point;
@@ -11,30 +14,47 @@ import wblut.geom.WB_Vector;
  * 
  */
 public class WB_RandomCube {
+    
+    /**
+     * 
+     */
+    private final WB_MTRandom randomGen;
 
+    /**
+     * 
+     */
+    public WB_RandomCube() {
+	randomGen = new WB_MTRandom();
+    }
 
-	private final WB_MTRandom randomGen;
+    /**
+     * 
+     *
+     * @param seed 
+     * @return 
+     */
+    public WB_RandomCube setSeed(final long seed) {
+	randomGen.setSeed(seed);
+	return this;
+    }
 
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Point nextPoint() {
+	return new WB_Point(randomGen.nextDouble(), randomGen.nextDouble(),
+		randomGen.nextDouble());
+    }
 
-	public WB_RandomCube() {
-		randomGen = new WB_MTRandom();
-	}
-
-
-	public WB_RandomCube setSeed(final long seed) {
-		randomGen.setSeed(seed);
-		return this;
-	}
-
-	public WB_Point nextPoint() {
-		return new WB_Point(randomGen.nextDouble(), randomGen.nextDouble(),
-				randomGen.nextDouble());
-	}
-
-	public WB_Vector nextVector() {
-		return new WB_Vector(randomGen.nextDouble(), randomGen.nextDouble(),
-				randomGen.nextDouble());
-	}
-
-
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Vector nextVector() {
+	return new WB_Vector(randomGen.nextDouble(), randomGen.nextDouble(),
+		randomGen.nextDouble());
+    }
 }

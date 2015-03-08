@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -252,7 +255,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 	    }
 	    final HEM_MultiSlice msm = new HEM_MultiSlice();
 	    msm.setPlanes(cutPlanes).setSimpleCap(true)
-		    .setCenter(new WB_Point(points[cellIndex]));
+	    .setCenter(new WB_Point(points[cellIndex]));
 	    result.modify(msm);
 	}
 	return result;
@@ -282,7 +285,7 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 	    double stepSize = traceStep;
 	    int j = index;
 	    while (stepSize > WB_Epsilon.EPSILON) {
-		while ((j == index) && (d2self < cutoff * cutoff)) {
+		while ((j == index) && (d2self < (cutoff * cutoff))) {
 		    p.addSelf(stepSize * r.xd(), stepSize * r.yd(), stepSize
 			    * r.zd());
 		    d2self = WB_GeometryOp.getSqDistance3D(p, c);
@@ -296,8 +299,8 @@ public class HEC_VoronoiSphere extends HEC_Creator {
 		    d2self = 0;
 		    stepSize /= 2;
 		} else {
-		    p.set(c.xd() + cutoff * r.xd(), c.yd() + cutoff * r.yd(),
-			    c.zd() + cutoff * r.zd());
+		    p.set(c.xd() + (cutoff * r.xd()), c.yd()
+			    + (cutoff * r.yd()), c.zd() + (cutoff * r.zd()));
 		    stepSize = -1;
 		}
 	    }

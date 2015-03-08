@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 /**
@@ -8,32 +11,86 @@ package wblut.geom;
  *
  */
 public class WB_OrthoProject implements WB_Context2D {
+    
+    /**
+     * 
+     */
     int id;
+    
+    /**
+     * 
+     */
     private int mode;
+    
+    /**
+     * 
+     */
     public static final int X = 0;
+    
+    /**
+     * 
+     */
     public static final int Y = 1;
+    
+    /**
+     * 
+     */
     public static final int Z = 2;
+    
+    /**
+     * 
+     */
     public static final int Xrev = 3;
+    
+    /**
+     * 
+     */
     public static final int Yrev = 4;
+    
+    /**
+     * 
+     */
     public static final int Zrev = 5;
+    
+    /**
+     * 
+     */
     public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 	    .instance();
 
+    /**
+     * 
+     */
     protected WB_OrthoProject() {
 	this(Z);
     }
 
+    /**
+     * 
+     *
+     * @param mode 
+     */
     protected WB_OrthoProject(final int mode) {
 	super();
-	if (mode < 0 || mode > 2) {
+	if ((mode < 0) || (mode > 2)) {
 	    throw (new IndexOutOfBoundsException());
 	}
 	this.mode = mode;
     }
 
+    /**
+     * 
+     *
+     * @param v 
+     */
     protected WB_OrthoProject(final WB_Coordinate v) {
     }
 
+    /**
+     * 
+     *
+     * @param c 
+     */
     public void set(final WB_Coordinate c) {
 	if (c.xd() > c.yd()) {
 	    mode = (c.xd() > c.zd()) ? X : Z;
@@ -42,6 +99,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo2D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo2D(final WB_Coordinate p,
 	    final WB_MutableCoordinate result) {
@@ -67,6 +127,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo2D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo2D(final double x, final double y, final double z,
 	    final WB_MutableCoordinate result) {
@@ -92,6 +155,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final WB_Coordinate p,
 	    final WB_MutableCoordinate result) {
@@ -117,6 +183,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final double u, final double v, final double w,
 	    final WB_MutableCoordinate result) {
@@ -142,6 +211,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final double u, final double v,
 	    final WB_MutableCoordinate result) {
@@ -167,6 +239,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo2D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo2D(final WB_Coordinate v,
 	    final WB_MutableCoordinate result) {
@@ -192,6 +267,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo2D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo2D(final double x, final double y, final double z,
 	    final WB_MutableCoordinate result) {
@@ -217,6 +295,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final WB_Coordinate v,
 	    final WB_MutableCoordinate result) {
@@ -242,6 +323,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final double u, final double v, final double w,
 	    final WB_MutableCoordinate result) {
@@ -267,6 +351,9 @@ public class WB_OrthoProject implements WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final double u, final double v,
 	    final WB_MutableCoordinate result) {

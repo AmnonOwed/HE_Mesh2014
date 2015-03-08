@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.List;
@@ -14,7 +17,18 @@ import wblut.geom.WB_Segment;
 import wblut.geom.WB_Triangle;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HE_Intersection {
+    
+    /**
+     * 
+     *
+     * @param face 
+     * @param line 
+     * @return 
+     */
     public static HE_FaceIntersection getIntersection(final HE_Face face,
 	    final WB_Line line) {
 	final WB_Plane P = face.toPlane();
@@ -32,6 +46,13 @@ public class HE_Intersection {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @param face 
+     * @param ray 
+     * @return 
+     */
     public static HE_FaceIntersection getIntersection(final HE_Face face,
 	    final WB_Ray ray) {
 	final WB_Plane P = face.toPlane();
@@ -49,6 +70,13 @@ public class HE_Intersection {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @param face 
+     * @param segment 
+     * @return 
+     */
     public static HE_FaceIntersection getIntersection(final HE_Face face,
 	    final WB_Segment segment) {
 	final WB_Plane P = face.toPlane();
@@ -66,6 +94,13 @@ public class HE_Intersection {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @param e 
+     * @param P 
+     * @return 
+     */
     public static double getIntersection(final HE_Halfedge e, final WB_Plane P) {
 	final WB_IntersectionResult i = WB_GeometryOp.getIntersection3D(
 		e.getStartVertex(), e.getEndVertex(), P);
@@ -75,6 +110,13 @@ public class HE_Intersection {
 	return i.t1;// intersection on edge
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param ray 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(
 	    final WB_AABBTree tree, final WB_Ray ray) {
 	final List<HE_FaceIntersection> p = new FastTable<HE_FaceIntersection>();
@@ -93,6 +135,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param segment 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(
 	    final WB_AABBTree tree, final WB_Segment segment) {
 	final List<HE_FaceIntersection> p = new FastTable<HE_FaceIntersection>();
@@ -111,6 +160,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param line 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(
 	    final WB_AABBTree tree, final WB_Line line) {
 	final List<HE_FaceIntersection> p = new FastTable<HE_FaceIntersection>();
@@ -129,6 +185,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param P 
+     * @return 
+     */
     public static List<WB_Segment> getIntersection(final WB_AABBTree tree,
 	    final WB_Plane P) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -144,6 +207,13 @@ public class HE_Intersection {
 	return cuts;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param P 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final WB_AABBTree tree, final WB_Plane P) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -155,6 +225,13 @@ public class HE_Intersection {
 	return candidates;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param T 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final WB_AABBTree tree, final WB_Triangle T) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -166,6 +243,13 @@ public class HE_Intersection {
 	return candidates;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param R 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final WB_AABBTree tree, final WB_Ray R) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -177,6 +261,13 @@ public class HE_Intersection {
 	return candidates;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param L 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final WB_AABBTree tree, final WB_Line L) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -188,6 +279,13 @@ public class HE_Intersection {
 	return candidates;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param segment 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final WB_AABBTree tree, final WB_Segment segment) {
 	final List<HE_Face> candidates = new FastTable<HE_Face>();
@@ -199,6 +297,13 @@ public class HE_Intersection {
 	return candidates;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param ray 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final WB_AABBTree tree, final WB_Ray ray) {
 	HE_FaceIntersection p = null;
@@ -222,6 +327,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param ray 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final WB_AABBTree tree, final WB_Ray ray) {
 	HE_FaceIntersection p = null;
@@ -245,6 +357,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param line 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final WB_AABBTree tree, final WB_Line line) {
 	HE_FaceIntersection p = null;
@@ -268,6 +387,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param line 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final WB_AABBTree tree, final WB_Line line) {
 	HE_FaceIntersection p = null;
@@ -291,6 +417,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param segment 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final WB_AABBTree tree, final WB_Segment segment) {
 	HE_FaceIntersection p = null;
@@ -314,6 +447,13 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param tree 
+     * @param segment 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final WB_AABBTree tree, final WB_Segment segment) {
 	HE_FaceIntersection p = null;
@@ -337,71 +477,169 @@ public class HE_Intersection {
 	return p;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param ray 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh,
 	    final WB_Ray ray) {
 	return getIntersection(new WB_AABBTree(mesh, 10), ray);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param segment 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh,
 	    final WB_Segment segment) {
 	return getIntersection(new WB_AABBTree(mesh, 10), segment);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param line 
+     * @return 
+     */
     public static List<HE_FaceIntersection> getIntersection(final HE_Mesh mesh,
 	    final WB_Line line) {
 	return getIntersection(new WB_AABBTree(mesh, 10), line);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param P 
+     * @return 
+     */
     public static List<WB_Segment> getIntersection(final HE_Mesh mesh,
 	    final WB_Plane P) {
 	return getIntersection(new WB_AABBTree(mesh, 10), P);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param P 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final HE_Mesh mesh, final WB_Plane P) {
 	return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), P);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param R 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final HE_Mesh mesh, final WB_Ray R) {
 	return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), R);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param L 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final HE_Mesh mesh, final WB_Line L) {
 	return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), L);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param segment 
+     * @return 
+     */
     public static List<HE_Face> getPotentialIntersectedFaces(
 	    final HE_Mesh mesh, final WB_Segment segment) {
 	return getPotentialIntersectedFaces(new WB_AABBTree(mesh, 10), segment);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param ray 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final HE_Mesh mesh, final WB_Ray ray) {
 	return getClosestIntersection(new WB_AABBTree(mesh, 10), ray);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param ray 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final HE_Mesh mesh, final WB_Ray ray) {
 	return getFurthestIntersection(new WB_AABBTree(mesh, 10), ray);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param line 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final HE_Mesh mesh, final WB_Line line) {
 	return getClosestIntersection(new WB_AABBTree(mesh, 10), line);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param line 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final HE_Mesh mesh, final WB_Line line) {
 	return getFurthestIntersection(new WB_AABBTree(mesh, 10), line);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param segment 
+     * @return 
+     */
     public static HE_FaceIntersection getClosestIntersection(
 	    final HE_Mesh mesh, final WB_Segment segment) {
 	return getClosestIntersection(new WB_AABBTree(mesh, 10), segment);
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param segment 
+     * @return 
+     */
     public static HE_FaceIntersection getFurthestIntersection(
 	    final HE_Mesh mesh, final WB_Segment segment) {
 	return getFurthestIntersection(new WB_AABBTree(mesh, 10), segment);

@@ -20,7 +20,6 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package wblut.geom;
 
 /**
@@ -29,15 +28,40 @@ package wblut.geom;
  * @author Mark Howison
  */
 public final class Tri_FaceWalk {
-	public final static int		FAILED		= -1;
-	public final static int		COINCIDENT	= 0;
-	public final static int		CLOCKWISE	= 1;
+    
+    /**
+     * 
+     */
+    public final static int FAILED = -1;
+    
+    /**
+     * 
+     */
+    public final static int COINCIDENT = 0;
+    
+    /**
+     * 
+     */
+    public final static int CLOCKWISE = 1;
+    
+    /**
+     * 
+     */
+    public final Tri_HalfEdge he;
+    
+    /**
+     * 
+     */
+    public final int status;
 
-	public final Tri_HalfEdge	he;
-	public final int			status;
-
-	public Tri_FaceWalk(final Tri_HalfEdge he, final int status) {
-		this.he = he;
-		this.status = status;
-	}
+    /**
+     * 
+     *
+     * @param he 
+     * @param status 
+     */
+    public Tri_FaceWalk(final Tri_HalfEdge he, final int status) {
+	this.he = he;
+	this.status = status;
+    }
 }

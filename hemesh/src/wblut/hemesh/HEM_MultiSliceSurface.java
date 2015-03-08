@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -70,7 +73,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -101,7 +104,7 @@ public class HEM_MultiSliceSurface extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */

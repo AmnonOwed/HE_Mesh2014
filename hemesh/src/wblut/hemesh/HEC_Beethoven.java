@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.io.BufferedReader;
@@ -7,7 +10,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import wblut.geom.WB_Point;
 
+/**
+ * 
+ */
 public class HEC_Beethoven extends HEC_Creator {
+    
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HEC_Creator#createBase()
+     */
     @Override
     protected HE_Mesh createBase() {
 	final InputStream is = this.getClass().getClassLoader()
@@ -36,7 +46,7 @@ public class HEC_Beethoven extends HEC_Creator {
 	    // should work for non triangular faces
 	    if (parts[0].equals("f")) {
 		final int[] tempFace = new int[parts.length - 1];
-		for (int j = 0; j < parts.length - 1; j++) {
+		for (int j = 0; j < (parts.length - 1); j++) {
 		    final String[] num = parts[j + 1].split("/");
 		    tempFace[j] = Integer.parseInt(num[0]) - 1;
 		}
@@ -58,6 +68,12 @@ public class HEC_Beethoven extends HEC_Creator {
 	return new HE_Mesh(creator);
     }
 
+    /**
+     * 
+     *
+     * @param input 
+     * @return 
+     */
     private String[] loadStrings(final InputStream input) {
 	try {
 	    final BufferedReader reader = new BufferedReader(
@@ -69,6 +85,12 @@ public class HEC_Beethoven extends HEC_Creator {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @param reader 
+     * @return 
+     */
     private String[] loadStrings(final BufferedReader reader) {
 	try {
 	    String lines[] = new String[100];

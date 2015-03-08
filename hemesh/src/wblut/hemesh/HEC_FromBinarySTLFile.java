@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.io.BufferedInputStream;
@@ -11,11 +14,29 @@ import java.util.zip.GZIPInputStream;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Triangle;
 
+/**
+ * 
+ */
 public class HEC_FromBinarySTLFile extends HEC_Creator {
+    
+    /**
+     * 
+     */
     private final byte[] buf = new byte[12];
+    
+    /**
+     * 
+     */
     private String path;
+    
+    /**
+     * 
+     */
     private double scale;
 
+    /**
+     * 
+     */
     public HEC_FromBinarySTLFile() {
 	super();
 	scale = 1;
@@ -23,6 +44,11 @@ public class HEC_FromBinarySTLFile extends HEC_Creator {
 	override = true;
     }
 
+    /**
+     * 
+     *
+     * @param path 
+     */
     public HEC_FromBinarySTLFile(final String path) {
 	super();
 	this.path = path;
@@ -30,29 +56,63 @@ public class HEC_FromBinarySTLFile extends HEC_Creator {
 	override = true;
     }
 
+    /**
+     * 
+     *
+     * @param path 
+     * @return 
+     */
     public HEC_FromBinarySTLFile setPath(final String path) {
 	this.path = path;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param f 
+     * @return 
+     */
     public HEC_FromBinarySTLFile setScale(final double f) {
 	scale = f;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     private final double bufferToDouble() {
 	return Float.intBitsToFloat(bufferToInt());
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     private final int bufferToInt() {
 	return byteToInt(buf[0]) | (byteToInt(buf[1]) << 8)
 		| (byteToInt(buf[2]) << 16) | (byteToInt(buf[3]) << 24);
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     private final int byteToInt(final byte b) {
 	return (b < 0 ? 256 + b : b);
     }
 
+    /**
+     * 
+     *
+     * @param file 
+     * @return 
+     */
     private InputStream createInputStream(final File file) {
 	if (file == null) {
 	    throw new IllegalArgumentException("file can't be null");
@@ -69,6 +129,14 @@ public class HEC_FromBinarySTLFile extends HEC_Creator {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @param ds 
+     * @param result 
+     * @return 
+     * @throws IOException 
+     */
     private WB_Point readVector(final DataInputStream ds, final WB_Point result)
 	    throws IOException {
 	ds.read(buf, 0, 4);

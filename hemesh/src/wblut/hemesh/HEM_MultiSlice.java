@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -178,7 +181,7 @@ public class HEM_MultiSlice extends HEM_Modifier {
 	mesh.resetFaceInternalLabels();
 	final HEM_Slice slice = new HEM_Slice();
 	slice.setReverse(reverse).setCap(capHoles).setOffset(offset)
-		.setSimpleCap(simpleCap);
+	.setSimpleCap(simpleCap);
 	if (center != null) {
 	    final double[] r = new double[planes.size()];
 	    for (int i = 0; i < planes.size(); i++) {

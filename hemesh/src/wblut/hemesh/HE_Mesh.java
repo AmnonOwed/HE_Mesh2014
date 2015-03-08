@@ -1,3 +1,6 @@
+/*
+ *
+ */
 package wblut.hemesh;
 
 import static wblut.math.WB_Epsilon.isZero;
@@ -51,11 +54,29 @@ import wblut.math.WB_Epsilon;
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 WB_HasColor, WB_Mesh {
+    /**
+     *
+     */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
+    /**
+     *
+     */
     private WB_Point center;
+    /**
+     *
+     */
     private boolean isCenterUpdated;
+    /**
+     *
+     */
     protected int label;
+    /**
+     *
+     */
     private HashMap<String, Object> data;
+    /**
+     *
+     */
     private int meshcolor;
 
     /**
@@ -82,10 +103,20 @@ WB_HasColor, WB_Mesh {
 	label = -1;
     }
 
+    /**
+     *
+     *
+     * @param mesh
+     */
     public HE_Mesh(final WB_Mesh mesh) {
 	this(new HEC_FromMesh(mesh));
     }
 
+    /**
+     *
+     *
+     * @param mesh
+     */
     public HE_Mesh(final WB_MeshCreator mesh) {
 	this(new HEC_FromMesh(mesh.getMesh()));
     }
@@ -185,23 +216,6 @@ WB_HasColor, WB_Mesh {
      */
     public HE_Mesh simplify(final HES_Simplifier simplifier) {
 	return simplifier.apply(this);
-    }
-
-    /**
-     * Simplify.
-     *
-     * @param simplifier
-     *            the simplifier
-     * @param selection
-     *            the selection
-     * @return the h e_ mesh
-     * @deprecated Use {@link #simplifySelected(HES_Simplifier,HE_Selection)}
-     *             instead
-     */
-    @Deprecated
-    public HE_Mesh simplify(final HES_Simplifier simplifier,
-	    final HE_Selection selection) {
-	return simplifySelected(simplifier, selection);
     }
 
     /**
@@ -581,6 +595,11 @@ WB_HasColor, WB_Mesh {
 	return result;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public WB_FaceListMesh toFaceListMesh() {
 	return WB_GeometryFactory.instance().createMesh(getVerticesAsPoint(),
 		getFacesAsInt());
@@ -697,6 +716,11 @@ WB_HasColor, WB_Mesh {
 	return result;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public List<WB_Triangle> getTriangles() {
 	final List<WB_Triangle> result = new FastTable<WB_Triangle>();
 	final HE_Mesh trimesh = this.get();
@@ -971,13 +995,13 @@ WB_HasColor, WB_Mesh {
 	final Iterator<HE_Vertex> vItr = vItr();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
-	    v.set(c.xd() + scaleFactorx * (v.xd() - c.xd()), c.yd()
-		    + scaleFactory * (v.yd() - c.yd()), c.zd() + scaleFactorz
-		    * (v.zd() - c.zd()));
+	    v.set(c.xd() + (scaleFactorx * (v.xd() - c.xd())), c.yd()
+		    + (scaleFactory * (v.yd() - c.yd())), c.zd()
+		    + (scaleFactorz * (v.zd() - c.zd())));
 	}
-	center.set(c.xd() + scaleFactorx * (-c.xd() + center.xd()), c.yd()
-		+ scaleFactory * (-c.yd() + center.yd()), c.zd() + scaleFactorz
-		* (-c.zd() + center.zd()));
+	center.set(c.xd() + (scaleFactorx * (-c.xd() + center.xd())), c.yd()
+		+ (scaleFactory * (-c.yd() + center.yd())), c.zd()
+		+ (scaleFactorz * (-c.zd() + center.zd())));
 	;
 	return this;
     }
@@ -1015,9 +1039,9 @@ WB_HasColor, WB_Mesh {
 	final Iterator<HE_Vertex> vItr = vItr();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
-	    v.set(center.xd() + scaleFactorx * (v.xd() - center.xd()),
-		    center.yd() + scaleFactory * (v.yd() - center.yd()),
-		    center.zd() + scaleFactorz * (v.zd() - center.zd()));
+	    v.set(center.xd() + (scaleFactorx * (v.xd() - center.xd())),
+		    center.yd() + (scaleFactory * (v.yd() - center.yd())),
+		    center.zd() + (scaleFactorz * (v.zd() - center.zd())));
 	}
 	;
 	return this;
@@ -1090,7 +1114,7 @@ WB_HasColor, WB_Mesh {
 	HE_Halfedge he;
 	final int n = halfedges.size();
 	if (n > 0) {
-	    for (int j = 0; j < n - 1; j++) {
+	    for (int j = 0; j < (n - 1); j++) {
 		he = halfedges.get(j);
 		he.setNext(halfedges.get(j + 1));
 		halfedges.get(j + 1).setPrev(he);
@@ -1478,6 +1502,8 @@ WB_HasColor, WB_Mesh {
 
     /**
      * Reverse all faces. Flips normals.
+     *
+     * @return
      */
     public HE_Mesh flipAllFaces() {
 	tracker.setDefaultStatus("Flipping faces.");
@@ -1522,6 +1548,12 @@ WB_HasColor, WB_Mesh {
 	return this;
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @return
+     */
     public boolean flipEdge(final HE_Halfedge he) {
 	// boundary edge
 	if (he.getFace() == null) {
@@ -1555,7 +1587,7 @@ WB_HasColor, WB_Mesh {
 	double Af = new WB_Triangle(a, d, c).getArea();
 	Af += new WB_Triangle(c, d, b).getArea();
 	final double ratio = Ai / Af;
-	if (ratio > 1.000001 || ratio < 0.99999) {
+	if ((ratio > 1.000001) || (ratio < 0.99999)) {
 	    return false;
 	}
 	// get the 3 edges of triangle t1 and t2, he1t1 and he1t2 is the edge to
@@ -1732,6 +1764,13 @@ WB_HasColor, WB_Mesh {
 	return false;
     }
 
+    /**
+     *
+     *
+     * @param e
+     * @param strict
+     * @return
+     */
     public boolean collapseEdgeBP(final HE_Halfedge e, final boolean strict) {
 	if (contains(e)) {
 	    final HE_Halfedge he = (e.isEdge()) ? e : e.getPair();
@@ -1808,8 +1847,13 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param v
+     */
     public void deleteTwoEdgeVertex(final HE_Vertex v) {
-	if (contains(v) && v.getVertexOrder() == 2) {
+	if (contains(v) && (v.getVertexOrder() == 2)) {
 	    final HE_Halfedge he0 = v.getHalfedge();
 	    final HE_Halfedge he1 = he0.getNextInVertex();
 	    final HE_Halfedge he0n = he0.getNextInFace();
@@ -1834,6 +1878,9 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     */
     public void deleteTwoEdgeVertices() {
 	final HE_VertexIterator vitr = new HE_VertexIterator(this);
 	HE_Vertex v;
@@ -1881,6 +1928,11 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param d
+     */
     public void collapseDegenerateEdges(final double d) {
 	final FastTable<HE_Halfedge> edgesToRemove = new FastTable<HE_Halfedge>();
 	final Iterator<HE_Halfedge> eItr = eItr();
@@ -2278,7 +2330,7 @@ WB_HasColor, WB_Mesh {
 	if (n > 1) {
 	    final double[] f = new double[n - 1];
 	    final double in = 1.0 / n;
-	    for (int i = 0; i < n - 1; i++) {
+	    for (int i = 0; i < (n - 1); i++) {
 		f[i] = (i + 1) * in;
 	    }
 	    splitEdge(origE, f);
@@ -2501,6 +2553,7 @@ WB_HasColor, WB_Mesh {
     /**
      * Quad split faces.
      *
+     * @param d
      * @return selection of new faces and new vertices
      */
     public HE_Selection splitFacesQuad(final double d) {
@@ -2515,6 +2568,7 @@ WB_HasColor, WB_Mesh {
      *
      * @param sel
      *            selection to split
+     * @param d
      * @return selection of new faces and new vertices
      */
     public HE_Selection splitFacesQuad(final HE_Selection sel, final double d) {
@@ -2781,42 +2835,83 @@ WB_HasColor, WB_Mesh {
 	return selectionOut;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public HE_Selection splitFacesCenter() {
 	final HEM_CenterSplit cs = new HEM_CenterSplit();
 	modify(cs);
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public HE_Selection splitFacesCenterHole() {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole();
 	modify(csh);
 	return csh.getWallFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @return
+     */
     public HE_Selection splitFacesCenter(final HE_Selection faces) {
 	final HEM_CenterSplit cs = new HEM_CenterSplit();
 	modifySelected(cs, faces);
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @return
+     */
     public HE_Selection splitFacesCenterHole(final HE_Selection faces) {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole();
 	modifySelected(csh, faces);
 	return csh.getWallFaces();
     }
 
+    /**
+     *
+     *
+     * @param d
+     * @return
+     */
     public HE_Selection splitFacesCenter(final double d) {
 	final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d);
 	modify(cs);
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @param d
+     * @return
+     */
     public HE_Selection splitFacesCenterHole(final double d) {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d);
 	modify(csh);
 	return csh.getWallFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @param d
+     * @return
+     */
     public HE_Selection splitFacesCenter(final HE_Selection faces,
 	    final double d) {
 	final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d);
@@ -2824,6 +2919,13 @@ WB_HasColor, WB_Mesh {
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @param d
+     * @return
+     */
     public HE_Selection splitFacesCenterHole(final HE_Selection faces,
 	    final double d) {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d);
@@ -2831,6 +2933,13 @@ WB_HasColor, WB_Mesh {
 	return csh.getWallFaces();
     }
 
+    /**
+     *
+     *
+     * @param d
+     * @param c
+     * @return
+     */
     public HE_Selection splitFacesCenter(final double d, final double c) {
 	final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d)
 		.setChamfer(c);
@@ -2838,6 +2947,13 @@ WB_HasColor, WB_Mesh {
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @param d
+     * @param c
+     * @return
+     */
     public HE_Selection splitFacesCenterHole(final double d, final double c) {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d)
 		.setChamfer(c);
@@ -2846,6 +2962,14 @@ WB_HasColor, WB_Mesh {
 	return csh.getWallFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @param d
+     * @param c
+     * @return
+     */
     public HE_Selection splitFacesCenter(final HE_Selection faces,
 	    final double d, final double c) {
 	final HEM_CenterSplit cs = new HEM_CenterSplit().setOffset(d)
@@ -2855,6 +2979,14 @@ WB_HasColor, WB_Mesh {
 	return cs.getCenterFaces();
     }
 
+    /**
+     *
+     *
+     * @param faces
+     * @param d
+     * @param c
+     * @return
+     */
     public HE_Selection splitFacesCenterHole(final HE_Selection faces,
 	    final double d, final double c) {
 	final HEM_CenterSplitHole csh = new HEM_CenterSplitHole().setOffset(d)
@@ -3078,6 +3210,12 @@ WB_HasColor, WB_Mesh {
 	return selectionOut;
     }
 
+    /**
+     *
+     *
+     * @param selection
+     * @return
+     */
     public HE_Selection splitFacesMidEdgeHole(final HE_Selection selection) {
 	final HE_Selection selectionOut = new HE_Selection(this);
 	final int n = selection.getNumberOfFaces();
@@ -3159,6 +3297,11 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param sel
+     */
     public void triangulateConcaveFaces(final List<HE_Face> sel) {
 	final int n = sel.size();
 	for (int i = 0; i < n; i++) {
@@ -3296,7 +3439,7 @@ WB_HasColor, WB_Mesh {
 		}
 	    }
 	}
-	return (isConvex) ? true : (c % 2 == 1);
+	return (isConvex) ? true : ((c % 2) == 1);
     }
 
     /**
@@ -3355,6 +3498,7 @@ WB_HasColor, WB_Mesh {
      *
      * @param AABB
      *            the aabb
+     * @return
      */
     public double fitInAABBConstrained(final WB_AABB AABB) {
 	final WB_AABB self = getAABB();
@@ -3394,6 +3538,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param chance
+     * @return
+     */
     public HE_Selection selectRandomFaces(final double chance) {
 	final HE_Selection _selection = new HE_Selection(this);
 	HE_Face f;
@@ -3427,6 +3577,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param label
+     * @return
+     */
     public HE_Selection selectFacesWithInternalLabel(final int label) {
 	final HE_Selection _selection = new HE_Selection(this);
 	HE_Face f;
@@ -3440,6 +3596,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param v
+     * @return
+     */
     public HE_Selection selectFaces(final WB_Vector v) {
 	final HE_Selection _selection = new HE_Selection(this);
 	final WB_Vector w = v.get();
@@ -3455,6 +3617,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param P
+     * @return
+     */
     public HE_Selection selectFaces(final WB_Plane P) {
 	final HE_Selection _selection = new HE_Selection(this);
 	final HE_FaceIterator fitr = fItr();
@@ -3468,6 +3636,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param P
+     * @return
+     */
     public HE_Selection selectCrossingFaces(final WB_Plane P) {
 	final HE_Selection _selection = new HE_Selection(this);
 	final HE_FaceIterator fitr = fItr();
@@ -3501,6 +3675,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param label
+     * @return
+     */
     public HE_Selection selectFacesWithOtherInternalLabel(final int label) {
 	final HE_Selection _selection = new HE_Selection(this);
 	HE_Face f;
@@ -3587,6 +3767,12 @@ WB_HasColor, WB_Mesh {
 	return _selection;
     }
 
+    /**
+     *
+     *
+     * @param label
+     * @return
+     */
     public HE_Selection selectVerticesWithInternalLabel(final int label) {
 	final HE_Selection _selection = new HE_Selection(this);
 	HE_Vertex v;
@@ -3811,17 +3997,6 @@ WB_HasColor, WB_Mesh {
     /**
      * Remove all redundant vertices in straight edges.
      *
-     * @deprecated Use {@link #removeCollinearVertices()} instead
-     *
-     */
-    @Deprecated
-    public void removeColinearVertices() {
-	deleteCollinearVertices();
-    }
-
-    /**
-     * Remove all redundant vertices in straight edges.
-     *
      */
     public void deleteCollinearVertices() {
 	final Iterator<HE_Vertex> vItr = vItr();
@@ -3858,6 +4033,9 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     */
     public void deleteDegenerateTriangles() {
 	final List<HE_Face> faces = this.getFacesAsList();
 	HE_Halfedge he;
@@ -3894,10 +4072,7 @@ WB_HasColor, WB_Mesh {
 			he = he.getNextInFace();
 		    } while (he != face.getHalfedge());
 		    System.out.println("Deleting longest edge: " + he);
-		    final HE_Face f = deleteEdge(degeneratehe);
-		    /*
-		     * if (f != null) { triangulate(f,false); }
-		     */
+		    deleteEdge(degeneratehe);
 		}
 	    }
 	}
@@ -4152,6 +4327,13 @@ WB_HasColor, WB_Mesh {
 	vertexTree.add(nv, nv.key());
     }
 
+    /**
+     *
+     *
+     * @param v1
+     * @param v2
+     * @return
+     */
     public List<HE_Face> getSharedFaces(final HE_Vertex v1, final HE_Vertex v2) {
 	final List<HE_Face> result = v1.getFaceStar();
 	final List<HE_Face> compare = v2.getFaceStar();
@@ -4164,6 +4346,11 @@ WB_HasColor, WB_Mesh {
 	return result;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public List<WB_Polygon> getBoundaryAsPolygons() {
 	final List<WB_Polygon> polygons = new FastTable<WB_Polygon>();
 	final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
@@ -4187,6 +4374,11 @@ WB_HasColor, WB_Mesh {
 	return polygons;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public List<HE_Halfedge> getBoundaryLoopHalfedges() {
 	final List<HE_Halfedge> hes = new FastTable<HE_Halfedge>();
 	final List<HE_Halfedge> halfedges = getBoundaryHalfedges();
@@ -4207,6 +4399,11 @@ WB_HasColor, WB_Mesh {
 	return hes;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public HE_Path[] getBoundaryAsPath() {
 	final List<HE_Halfedge> boundaryhes = getBoundaryLoopHalfedges();
 	final HE_Path[] result = new HE_Path[boundaryhes.size()];
@@ -4224,6 +4421,11 @@ WB_HasColor, WB_Mesh {
 	fixNonManifoldVertices();
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public boolean fixNonManifoldVertices() {
 	class VertexInfo {
 	    FastTable<HE_Halfedge> out;
@@ -4286,6 +4488,11 @@ WB_HasColor, WB_Mesh {
 	return (toUnweld.size() > 0);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public double getArea() {
 	final Iterator<HE_Face> fItr = fItr();
 	double A = 0.0;
@@ -4300,11 +4507,18 @@ WB_HasColor, WB_Mesh {
      *
      * @param key
      *            key of face
+     * @return
      */
     public HE_Selection triangulate(final long key) {
 	return triangulate(getFaceByKey(key));
     }
 
+    /**
+     *
+     *
+     * @param v
+     * @return
+     */
     public HE_Selection triangulateFaceStar(final HE_Vertex v) {
 	final HE_Selection vf = new HE_Selection(this);
 	final HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(v);
@@ -4322,6 +4536,12 @@ WB_HasColor, WB_Mesh {
 	return triangulate(vf);
     }
 
+    /**
+     *
+     *
+     * @param vertexkey
+     * @return
+     */
     public HE_Selection triangulateFaceStar(final long vertexkey) {
 	final HE_Selection vf = new HE_Selection(this);
 	final HE_VertexFaceCirculator vfc = new HE_VertexFaceCirculator(
@@ -4340,6 +4560,12 @@ WB_HasColor, WB_Mesh {
 	return triangulate(vf);
     }
 
+    /**
+     *
+     *
+     * @param face
+     * @return
+     */
     public HE_Selection triangulate(final HE_Face face) {
 	final HE_Selection sel = new HE_Selection(this);
 	sel.add(face);
@@ -4349,6 +4575,7 @@ WB_HasColor, WB_Mesh {
     /**
      * Triangulate all faces.
      *
+     * @return
      */
     public HE_Selection triangulate() {
 	final HEM_Triangulate tri = new HEM_Triangulate();
@@ -4361,6 +4588,7 @@ WB_HasColor, WB_Mesh {
      *
      * @param sel
      *            the sel
+     * @return
      */
     public HE_Selection triangulate(final HE_Selection sel) {
 	final HEM_Triangulate tri = new HEM_Triangulate();
@@ -4405,6 +4633,11 @@ WB_HasColor, WB_Mesh {
 	subdivide(new HES_CatmullClark());
     }
 
+    /**
+     *
+     *
+     * @param rep
+     */
     public void smooth(final int rep) {
 	subdivide(new HES_CatmullClark(), rep);
     }
@@ -4425,37 +4658,72 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Geometry#getType()
+     */
     @Override
     public WB_GeometryType getType() {
 	return WB_GeometryType.MESH;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Geometry#apply(wblut.geom.WB_Transform)
+     */
     @Override
     public HE_Mesh apply(final WB_Transform T) {
 	final HE_Mesh result = get();
 	return result.transform(T);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getFaceNormal(int)
+     */
     @Override
     public WB_Vector getFaceNormal(final int id) {
 	return getFaceByIndex(id).getFaceNormal();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getFaceCenter(int)
+     */
     @Override
     public WB_Point getFaceCenter(final int id) {
 	return getFaceByIndex(id).getFaceCenter();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getVertexNormal(int)
+     */
     @Override
     public WB_Vector getVertexNormal(final int i) {
 	return getVertexByIndex(i).getVertexNormal();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getVertex(int)
+     */
     @Override
     public WB_Coordinate getVertex(final int i) {
 	return getVertexByIndex(i);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getEdgesAsInt()
+     */
     @Override
     public int[][] getEdgesAsInt() {
 	final int[][] result = new int[getNumberOfEdges()][2];
@@ -4479,21 +4747,41 @@ WB_HasColor, WB_Mesh {
 	return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_Mesh#getPoints()
+     */
     @Override
     public WB_CoordinateSequence getPoints() {
 	return gf.createPointSequence(getVertices());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_HasColor#getColor()
+     */
     @Override
     public int getColor() {
 	return meshcolor;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.geom.WB_HasColor#setColor(int)
+     */
     @Override
     public void setColor(final int color) {
 	meshcolor = color;
     }
 
+    /**
+     *
+     *
+     * @param color
+     */
     public void setFaceColor(final int color) {
 	final HE_FaceIterator fitr = new HE_FaceIterator(this);
 	while (fitr.hasNext()) {
@@ -4501,6 +4789,11 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     */
     public void setVertexColor(final int color) {
 	final HE_VertexIterator vitr = new HE_VertexIterator(this);
 	while (vitr.hasNext()) {
@@ -4508,6 +4801,11 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     */
     public void setHalfedgeColor(final int color) {
 	final HE_HalfedgeIterator heitr = new HE_HalfedgeIterator(this);
 	while (heitr.hasNext()) {
@@ -4515,6 +4813,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setFaceColorWithLabel(final int color, final int i) {
 	final HE_FaceIterator fitr = new HE_FaceIterator(this);
 	HE_Face f;
@@ -4526,6 +4830,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setFaceColorWithInternalLabel(final int color, final int i) {
 	final HE_FaceIterator fitr = new HE_FaceIterator(this);
 	HE_Face f;
@@ -4537,6 +4847,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setVertexColorWithLabel(final int color, final int i) {
 	final HE_VertexIterator fitr = new HE_VertexIterator(this);
 	HE_Vertex f;
@@ -4548,6 +4864,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setVertexColorWithInternalLabel(final int color, final int i) {
 	final HE_VertexIterator fitr = new HE_VertexIterator(this);
 	HE_Vertex f;
@@ -4559,6 +4881,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setHalfedgeColorWithLabel(final int color, final int i) {
 	final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
 	HE_Halfedge f;
@@ -4570,6 +4898,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setHalfedgeColorWithInternalLabel(final int color, final int i) {
 	final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
 	HE_Halfedge f;
@@ -4581,6 +4915,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setFaceColorWithOtherLabel(final int color, final int i) {
 	final HE_FaceIterator fitr = new HE_FaceIterator(this);
 	HE_Face f;
@@ -4592,6 +4932,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setFaceColorWithOtherInternalLabel(final int color, final int i) {
 	final HE_FaceIterator fitr = new HE_FaceIterator(this);
 	HE_Face f;
@@ -4603,6 +4949,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setVertexColorWithOtherLabel(final int color, final int i) {
 	final HE_VertexIterator fitr = new HE_VertexIterator(this);
 	HE_Vertex f;
@@ -4614,6 +4966,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setVertexColorWithOtherInternalLabel(final int color,
 	    final int i) {
 	final HE_VertexIterator fitr = new HE_VertexIterator(this);
@@ -4626,6 +4984,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setHalfedgeColorWithOtherLabel(final int color, final int i) {
 	final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
 	HE_Halfedge f;
@@ -4637,6 +5001,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @param color
+     * @param i
+     */
     public void setHalfedgeColorWithOtherInternalLabel(final int color,
 	    final int i) {
 	final HE_HalfedgeIterator fitr = new HE_HalfedgeIterator(this);
@@ -4649,7 +5019,12 @@ WB_HasColor, WB_Mesh {
 	}
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public int getGenus() {
-	return (2 - (getNumberOfVertices() - getNumberOfEdges() + getNumberOfFaces())) / 2;
+	return (2 - ((getNumberOfVertices() - getNumberOfEdges()) + getNumberOfFaces())) / 2;
     }
 }

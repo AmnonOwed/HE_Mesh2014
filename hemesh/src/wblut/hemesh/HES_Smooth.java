@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -72,7 +75,7 @@ public class HES_Smooth extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -143,7 +146,7 @@ public class HES_Smooth extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
      * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -204,14 +207,15 @@ public class HES_Smooth extends HES_Subdividor {
 		    }
 		}
 		newPositions
-		.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
+			.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
 	    }
 	    id++;
 	}
 	vItr = outer.iterator();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
-	    if ((keepEdges) || (v.getVertexType() != WB_ClassificationConvex.FLAT)) {
+	    if ((keepEdges)
+		    || (v.getVertexType() != WB_ClassificationConvex.FLAT)) {
 		newPositions.add(v.getPoint());
 	    } else {
 		final WB_Point p = new WB_Point(v);
@@ -239,7 +243,7 @@ public class HES_Smooth extends HES_Subdividor {
 		    }
 		}
 		newPositions
-		.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
+			.add((nc > 1) ? p.scaleSelf(1.0 / c) : v.getPoint());
 	    }
 	    id++;
 	}

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import gnu.trove.map.TIntObjectMap;
@@ -10,61 +13,152 @@ import java.io.InputStreamReader;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HEC_IsoSurfaceVOL extends HEC_Creator {
+    
+    /**
+     * 
+     */
     final static int ONVERTEX = 0;
+    
+    /**
+     * 
+     */
     final static int ONEDGE = 1;
+    
+    /**
+     * 
+     */
     final static int NEGATIVE = 0;
+    
+    /**
+     * 
+     */
     final static int EQUAL = 1;
+    
+    /**
+     * 
+     */
     final static int POSITIVE = 2;
+    
+    /**
+     * 
+     */
     int[] digits = new int[8];
     /*
      * VERTICES 000 ijk=0 100 Ijk=1 010 iJk=2 110 IJk=3 001 ijK=4 101 IjK=5 011
      * iJK=6 111 IJK=7
      */
+    /**
+     * 
+     */
     final static WB_Point[] gridvertices = new WB_Point[] {
-	    new WB_Point(0, 0, 0), new WB_Point(1, 0, 0),
-	    new WB_Point(0, 1, 0), new WB_Point(1, 1, 0),
-	    new WB_Point(0, 0, 1), new WB_Point(1, 0, 1),
-	    new WB_Point(0, 1, 1), new WB_Point(1, 1, 1), };
+	new WB_Point(0, 0, 0), new WB_Point(1, 0, 0),
+	new WB_Point(0, 1, 0), new WB_Point(1, 1, 0),
+	new WB_Point(0, 0, 1), new WB_Point(1, 0, 1),
+	new WB_Point(0, 1, 1), new WB_Point(1, 1, 1), };
     // EDGES: 2 vertices per edge
+    /**
+     * 
+     */
     final static int[][] edges = { { 0, 1 }, // x ijk
-	    { 0, 2 }, // y ijk
-	    { 1, 3 }, // y Ijk
-	    { 2, 3 }, // x iJk
-	    { 0, 4 }, // z ijk
-	    { 1, 5 }, // z Ijk
-	    { 2, 6 }, // z iJk
-	    { 3, 7 }, // z IJk
-	    { 4, 5 }, // x ijK
-	    { 4, 6 }, // y ijK
-	    { 5, 7 }, // y IjK
-	    { 6, 7 } // x iJK
+	{ 0, 2 }, // y ijk
+	{ 1, 3 }, // y Ijk
+	{ 2, 3 }, // x iJk
+	{ 0, 4 }, // z ijk
+	{ 1, 5 }, // z Ijk
+	{ 2, 6 }, // z iJk
+	{ 3, 7 }, // z IJk
+	{ 4, 5 }, // x ijK
+	{ 4, 6 }, // y ijK
+	{ 5, 7 }, // y IjK
+	{ 6, 7 } // x iJK
     };
     // ISOVERTICES: 20
     // type=ONVERTEX iso vertex on vertex, index in vertex list
     // type=ONEDGE iso vertex on edge, index in edge list, 0=lower
     // threshold,1=higher threshold
+    /**
+     * 
+     */
     final static int[][] isovertices = new int[][] { { 1, 0, 0 }, { 1, 0, 1 },
-	    { 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 0 }, { 1, 2, 1 }, { 1, 3, 0 },
-	    { 1, 3, 1 }, { 1, 4, 0 }, { 1, 4, 1 }, { 1, 5, 0 }, { 1, 5, 1 },
-	    { 1, 6, 0 }, { 1, 6, 1 }, { 1, 7, 0 }, { 1, 7, 1 }, { 1, 8, 0 },
-	    { 1, 8, 1 }, { 1, 9, 0 }, { 1, 9, 1 }, { 1, 10, 0 }, { 1, 10, 1 },
-	    { 1, 11, 0 }, { 1, 11, 1 }, { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 },
-	    { 0, 4 }, { 0, 5 }, { 0, 6 }, { 0, 7 } };
+	{ 1, 1, 0 }, { 1, 1, 1 }, { 1, 2, 0 }, { 1, 2, 1 }, { 1, 3, 0 },
+	{ 1, 3, 1 }, { 1, 4, 0 }, { 1, 4, 1 }, { 1, 5, 0 }, { 1, 5, 1 },
+	{ 1, 6, 0 }, { 1, 6, 1 }, { 1, 7, 0 }, { 1, 7, 1 }, { 1, 8, 0 },
+	{ 1, 8, 1 }, { 1, 9, 0 }, { 1, 9, 1 }, { 1, 10, 0 }, { 1, 10, 1 },
+	{ 1, 11, 0 }, { 1, 11, 1 }, { 0, 0 }, { 0, 1 }, { 0, 2 }, { 0, 3 },
+	{ 0, 4 }, { 0, 5 }, { 0, 6 }, { 0, 7 } };
+    
+    /**
+     * 
+     */
     int[][] entries;
+    
+    /**
+     * 
+     */
     private double[][][] values;
+    
+    /**
+     * 
+     */
     private int resx, resy, resz;
+    
+    /**
+     * 
+     */
     private double cx, cy, cz;
+    
+    /**
+     * 
+     */
     private double dx, dy, dz;
+    
+    /**
+     * 
+     */
     private double isolevel;
+    
+    /**
+     * 
+     */
     private double boundary;
+    
+    /**
+     * 
+     */
     private TIntObjectMap<HE_Vertex> xedges;
+    
+    /**
+     * 
+     */
     private TIntObjectMap<HE_Vertex> yedges;
+    
+    /**
+     * 
+     */
     private TIntObjectMap<HE_Vertex> zedges;
+    
+    /**
+     * 
+     */
     private TIntObjectMap<HE_Vertex> vertices;
+    
+    /**
+     * 
+     */
     HE_Mesh mesh;
+    
+    /**
+     * 
+     */
     private boolean invert;
 
+    /**
+     * 
+     */
     public HEC_IsoSurfaceVOL() {
 	super();
 	String line = "";
@@ -174,10 +268,9 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
     }
 
     /**
-     * Isolevel to render
+     * Isolevel to render.
      *
-     * @param v
-     *            isolevel
+     * @param v            isolevel
      * @return self
      */
     public HEC_IsoSurfaceVOL setIsolevel(final double v) {
@@ -232,9 +325,16 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @param k 
+     * @return 
+     */
     private int index(final int i, final int j, final int k) {
-	return ((i + 1) + (resx + 2) * (j + 1) + (resx + 2) * (resy + 2)
-		* (k + 1));
+	return ((i + 1) + ((resx + 2) * (j + 1)) + ((resx + 2) * (resy + 2) * (k + 1)));
     }
 
     /**
@@ -260,6 +360,15 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	return values[i][j][k];
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @param k 
+     * @param offset 
+     * @return 
+     */
     private HE_Vertex vertex(final int i, final int j, final int k,
 	    final WB_Point offset) {
 	HE_Vertex vertex = vertices.get(index(i, j, k));
@@ -276,12 +385,10 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
     /**
      * Xedge.
      *
-     * @param i
-     *            i: -1 .. resx+1
-     * @param j
-     *            j: -1 .. resy+1
-     * @param k
-     *            k: -1 .. resz+1
+     * @param i            i: -1 .. resx+1
+     * @param j            j: -1 .. resy+1
+     * @param k            k: -1 .. resz+1
+     * @param offset 
      * @return edge vertex
      */
     private HE_Vertex xedge(final int i, final int j, final int k,
@@ -291,7 +398,7 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	    return xedge;
 	}
 	final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
-	final WB_Point p1 = new WB_Point(i * dx + dx, j * dy, k * dz);
+	final WB_Point p1 = new WB_Point((i * dx) + dx, j * dy, k * dz);
 	final double val0 = value(i, j, k);
 	final double val1 = value(i + 1, j, k);
 	xedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
@@ -304,12 +411,10 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
     /**
      * Yedge.
      *
-     * @param i
-     *            i: -1 .. resx+1
-     * @param j
-     *            j: -1 .. resy+1
-     * @param k
-     *            k: -1 .. resz+1
+     * @param i            i: -1 .. resx+1
+     * @param j            j: -1 .. resy+1
+     * @param k            k: -1 .. resz+1
+     * @param offset 
      * @return edge vertex
      */
     private HE_Vertex yedge(final int i, final int j, final int k,
@@ -319,7 +424,7 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	    return yedge;
 	}
 	final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
-	final WB_Point p1 = new WB_Point(i * dx, j * dy + dy, k * dz);
+	final WB_Point p1 = new WB_Point(i * dx, (j * dy) + dy, k * dz);
 	final double val0 = value(i, j, k);
 	final double val1 = value(i, j + 1, k);
 	yedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
@@ -332,12 +437,10 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
     /**
      * Zedge.
      *
-     * @param i
-     *            i: -1 .. resx+1
-     * @param j
-     *            j: -1 .. resy+1
-     * @param k
-     *            k: -1 .. resz+1
+     * @param i            i: -1 .. resx+1
+     * @param j            j: -1 .. resy+1
+     * @param k            k: -1 .. resz+1
+     * @param offset 
      * @return edge vertex
      */
     private HE_Vertex zedge(final int i, final int j, final int k,
@@ -347,7 +450,7 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	    return zedge;
 	}
 	final WB_Point p0 = new WB_Point(i * dx, j * dy, k * dz);
-	final WB_Point p1 = new WB_Point(i * dx, j * dy, k * dz + dz);
+	final WB_Point p1 = new WB_Point(i * dx, j * dy, (k * dz) + dz);
 	final double val0 = value(i, j, k);
 	final double val1 = value(i, j, k + 1);
 	zedge = new HE_Vertex(interp(isolevel, p0, p1, val0, val1));
@@ -389,8 +492,9 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	    return (new HE_Vertex(p1));
 	}
 	mu = (isolevel - valp1) / (valp2 - valp1);
-	return new HE_Vertex(p1.xd() + mu * (p2.xd() - p1.xd()), p1.yd() + mu
-		* (p2.yd() - p1.yd()), p1.zd() + mu * (p2.zd() - p1.zd()));
+	return new HE_Vertex(p1.xd() + (mu * (p2.xd() - p1.xd())), p1.yd()
+		+ (mu * (p2.yd() - p1.yd())), p1.zd()
+		+ (mu * (p2.zd() - p1.zd())));
     }
 
     /**
@@ -554,8 +658,8 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	yedges = new TIntObjectHashMap<HE_Vertex>(1024, 0.5f, -1);
 	zedges = new TIntObjectHashMap<HE_Vertex>(1024, 0.5f, -1);
 	vertices = new TIntObjectHashMap<HE_Vertex>(1024, 0.5f, -1);
-	final WB_Point offset = new WB_Point(cx - 0.5 * resx * dx, cy - 0.5
-		* resy * dy, cz - 0.5 * resz * dz);
+	final WB_Point offset = new WB_Point(cx - (0.5 * resx * dx), cy
+		- (0.5 * resy * dy), cz - (0.5 * resz * dz));
 	if (Double.isNaN(boundary)) {
 	    for (int i = 0; i < resx; i++) {
 		// System.out.println("HEC_IsoSurface: " + (i + 1) + " of " +
@@ -567,11 +671,11 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 		}
 	    }
 	} else {
-	    for (int i = -1; i < resx + 1; i++) {
+	    for (int i = -1; i < (resx + 1); i++) {
 		// System.out.println("HEC_IsoSurface: " + (i + 1) + " of " +
 		// resx);
-		for (int j = -1; j < resy + 1; j++) {
-		    for (int k = -1; k < resz + 1; k++) {
+		for (int j = -1; j < (resy + 1); j++) {
+		    for (int k = -1; k < (resz + 1); k++) {
 			getPolygons(i, j, k, classifyCell(i, j, k), offset);
 		    }
 		}
@@ -582,14 +686,11 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
     /**
      * Gets the polygons.
      *
-     * @param i
-     *            the i
-     * @param j
-     *            the j
-     * @param k
-     *            the k
-     * @param cubeindex
-     *            the cubeindex
+     * @param i            the i
+     * @param j            the j
+     * @param k            the k
+     * @param cubeindex            the cubeindex
+     * @param offset 
      * @return the polygons
      */
     private void getPolygons(final int i, final int j, final int k,
@@ -643,6 +744,16 @@ public class HEC_IsoSurfaceVOL extends HEC_Creator {
 	return mesh;
     }
 
+    /**
+     * 
+     *
+     * @param isopointindex 
+     * @param i 
+     * @param j 
+     * @param k 
+     * @param offset 
+     * @return 
+     */
     HE_Vertex getIsoVertex(final int isopointindex, final int i, final int j,
 	    final int k, final WB_Point offset) {
 	if (isovertices[isopointindex][0] == ONVERTEX) {

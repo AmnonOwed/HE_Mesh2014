@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -25,10 +28,22 @@ public class HEM_SliceSurface extends HEM_Modifier {
     private WB_Plane P;
     /** Stores cut faces. */
     public HE_Selection cut;
+    
+    /**
+     * 
+     */
     public HE_Selection front;
+    
+    /**
+     * 
+     */
     public HE_Selection back;
     /** Stores new edges. */
     public HE_Selection cutEdges;
+    
+    /**
+     * 
+     */
     private List<HE_Path> paths;
 
     /**
@@ -50,12 +65,26 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param ox 
+     * @param oy 
+     * @param oz 
+     * @param nx 
+     * @param ny 
+     * @param nz 
+     * @return 
+     */
     public HEM_SliceSurface setPlane(final double ox, final double oy,
 	    final double oz, final double nx, final double ny, final double nz) {
 	P = new WB_Plane(ox, oy, oz, nx, ny, nz);
 	return this;
     }
 
+    /**
+     * 
+     */
     private double offset;
 
     /**
@@ -162,7 +191,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	    }
 	    if (u < WB_Epsilon.EPSILON) {
 		split.add(ce.getStartVertex());
-	    } else if (u > 1.0 - WB_Epsilon.EPSILON) {
+	    } else if (u > (1.0 - WB_Epsilon.EPSILON)) {
 		split.add(ce.getEndVertex());
 	    } else {
 		split.add(mesh.splitEdge(ce, u).vItr().next());
@@ -184,8 +213,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		    if (firstVertex == -1) {
 			firstVertex = j;
 			j++;// if one cut point is found, skip next point.
-			    // There should be at least one other vertex in
-			    // between for a proper cut.
+			// There should be at least one other vertex in
+			// between for a proper cut.
 		    } else {
 			secondVertex = j;
 			break;
@@ -195,7 +224,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	    if ((firstVertex != -1) && (secondVertex != -1)) {
 		final int fo = f.getFaceOrder();
 		int diff = Math.abs(firstVertex - secondVertex);
-		if (diff == fo - 1) {
+		if (diff == (fo - 1)) {
 		    diff = 1;
 		}
 		if (diff > 1) {
@@ -212,8 +241,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		    }
 		    if (out.getNumberOfFaces() > 0) {
 			final HE_Face nf = out.fItr().next();
-			cptp = WB_Classify.classifyPointToPlane3D(nf.getFaceCenter(),
-				lP);
+			cptp = WB_Classify.classifyPointToPlane3D(
+				nf.getFaceCenter(), lP);
 			if (cptp == WB_ClassificationGeometry.FRONT) {
 			    front.add(nf);
 			} else if (cptp == WB_ClassificationGeometry.BACK) {
@@ -366,8 +395,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			if (firstVertex == -1) {
 			    firstVertex = j;
 			    j++;// if one cut point is found, skip next point.
-				// There should be at least one other vertex in
-				// between for a proper cut.
+			    // There should be at least one other vertex in
+			    // between for a proper cut.
 			} else {
 			    secondVertex = j;
 			    break;
@@ -377,7 +406,7 @@ public class HEM_SliceSurface extends HEM_Modifier {
 		if ((firstVertex != -1) && (secondVertex != -1)) {
 		    final int fo = f.getFaceOrder();
 		    int diff = Math.abs(firstVertex - secondVertex);
-		    if (diff == fo - 1) {
+		    if (diff == (fo - 1)) {
 			diff = 1;
 		    }
 		    if (diff > 1) {
@@ -394,8 +423,8 @@ public class HEM_SliceSurface extends HEM_Modifier {
 			}
 			final HE_Face nf = out.fItr().next();
 			cut.add(nf);
-			cptp = WB_Classify.classifyPointToPlane3D(nf.getFaceCenter(),
-				lP);
+			cptp = WB_Classify.classifyPointToPlane3D(
+				nf.getFaceCenter(), lP);
 			if (cptp == WB_ClassificationGeometry.FRONT) {
 			    front.add(nf);
 			} else if (cptp == WB_ClassificationGeometry.BACK) {
@@ -414,6 +443,11 @@ public class HEM_SliceSurface extends HEM_Modifier {
 	return lsel.parent;
     }
 
+    /**
+     * 
+     *
+     * @param cutEdges 
+     */
     private void buildPaths(final HE_Selection cutEdges) {
 	tracker.setDefaultStatus("Building slice paths.");
 	paths = new FastTable<HE_Path>();

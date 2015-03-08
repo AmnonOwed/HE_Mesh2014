@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 /**
@@ -9,30 +12,87 @@ package wblut.geom;
  *
  */
 public class WB_EmbeddedPlane extends WB_CoordinateSystem implements
-WB_Context2D {
+	WB_Context2D {
+    
+    /**
+     * 
+     */
     private double offset;
+    
+    /**
+     * 
+     */
     int id;
+    
+    /**
+     * 
+     */
     private final WB_Transform T2D3D;
+    
+    /**
+     * 
+     */
     private int mode;
+    
+    /**
+     * 
+     */
     public static final int X = 0;
+    
+    /**
+     * 
+     */
     public static final int Y = 1;
+    
+    /**
+     * 
+     */
     public static final int Z = 2;
+    
+    /**
+     * 
+     */
     public static final int Xrev = 3;
+    
+    /**
+     * 
+     */
     public static final int Yrev = 4;
+    
+    /**
+     * 
+     */
     public static final int Zrev = 5;
+    
+    /**
+     * 
+     */
     public static final int PLANE = 6;
+    
+    /**
+     * 
+     */
     public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 	    .instance();
 
+    /**
+     * 
+     */
     protected WB_EmbeddedPlane() {
 	this(Z, 0);
     }
 
+    /**
+     * 
+     *
+     * @param mode 
+     * @param offset 
+     */
     protected WB_EmbeddedPlane(final int mode, final double offset) {
 	super();
 	this.mode = mode;
 	this.offset = offset;
-	if (mode < 0 || mode > 5) {
+	if ((mode < 0) || (mode > 5)) {
 	    throw (new IndexOutOfBoundsException());
 	}
 	if (mode == X) {
@@ -69,10 +129,20 @@ WB_Context2D {
 	T2D3D = getTransformToWorld();
     }
 
+    /**
+     * 
+     *
+     * @param mode 
+     */
     protected WB_EmbeddedPlane(final int mode) {
 	this(mode, 0);
     }
 
+    /**
+     * 
+     *
+     * @param P 
+     */
     protected WB_EmbeddedPlane(final WB_Plane P) {
 	super(P.getOrigin(), P.getU(), P.getV(), P.getW(), geometryfactory
 		.WORLD());
@@ -80,6 +150,12 @@ WB_Context2D {
 	T2D3D = getTransformToWorld();
     }
 
+    /**
+     * 
+     *
+     * @param P 
+     * @param offset 
+     */
     protected WB_EmbeddedPlane(final WB_Plane P, final double offset) {
 	super(P.getOrigin().addMul(offset, P.getNormal()), P.getU(), P.getV(),
 		P.getW(), geometryfactory.WORLD());
@@ -87,6 +163,9 @@ WB_Context2D {
 	T2D3D = getTransformToWorld();
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo2D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo2D(final WB_Coordinate p,
 	    final WB_MutableCoordinate result) {
@@ -114,6 +193,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo2D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo2D(final double x, final double y, final double z,
 	    final WB_MutableCoordinate result) {
@@ -141,6 +223,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final WB_Coordinate p,
 	    final WB_MutableCoordinate result) {
@@ -168,6 +253,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final double u, final double v, final double w,
 	    final WB_MutableCoordinate result) {
@@ -195,6 +283,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#pointTo3D(double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void pointTo3D(final double u, final double v,
 	    final WB_MutableCoordinate result) {
@@ -222,6 +313,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo2D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo2D(final WB_Coordinate v,
 	    final WB_MutableCoordinate result) {
@@ -249,6 +343,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo2D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo2D(final double x, final double y, final double z,
 	    final WB_MutableCoordinate result) {
@@ -276,6 +373,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final WB_Coordinate v,
 	    final WB_MutableCoordinate result) {
@@ -303,6 +403,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(double, double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final double u, final double v, final double w,
 	    final WB_MutableCoordinate result) {
@@ -330,6 +433,9 @@ WB_Context2D {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Context2D#vectorTo3D(double, double, wblut.geom.WB_MutableCoordinate)
+     */
     @Override
     public void vectorTo3D(final double u, final double v,
 	    final WB_MutableCoordinate result) {

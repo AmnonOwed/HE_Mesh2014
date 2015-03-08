@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Iterator;
@@ -35,6 +38,10 @@ public class HEM_Slice extends HEM_Modifier {
     public HE_Selection cap;
     /** The offset. */
     private double offset;
+    
+    /**
+     * 
+     */
     HEM_SliceSurface ss;
 
     /**

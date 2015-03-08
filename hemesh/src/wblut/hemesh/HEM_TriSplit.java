@@ -1,3 +1,6 @@
+/*
+ *
+ */
 package wblut.hemesh;
 
 import wblut.geom.WB_Coordinate;
@@ -5,15 +8,33 @@ import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Plane;
 import wblut.math.WB_Epsilon;
 
+/**
+ *
+ */
 public class HEM_TriSplit extends HEM_Modifier {
+    /**
+     *
+     */
     private double d;
+    /**
+     *
+     */
     private HE_Selection selectionOut;
 
+    /**
+     *
+     */
     public HEM_TriSplit() {
 	super();
 	d = 0;
     }
 
+    /**
+     *
+     *
+     * @param d
+     * @return
+     */
     public HEM_TriSplit setOffset(final double d) {
 	this.d = d;
 	return this;
@@ -21,7 +42,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -34,7 +55,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -73,6 +94,7 @@ public class HEM_TriSplit extends HEM_Modifier {
      *            face
      * @param d
      *            offset along face normal
+     * @param mesh
      * @return selection of new faces and new vertex
      */
     private HE_Selection splitFaceTri(final HE_Face face, final double d,
@@ -82,15 +104,13 @@ public class HEM_TriSplit extends HEM_Modifier {
     }
 
     /**
-     * @deprecated Use {@link #splitFaceTri(HE_Mesh,HE_Face,WB_Coordinate)}
-     *             instead
+     *
+     *
+     * @param mesh
+     * @param face
+     * @param v
+     * @return
      */
-    @Deprecated
-    public static HE_Selection splitFaceTri(final HE_Face face,
-	    final WB_Coordinate v, final HE_Mesh mesh) {
-	return splitFaceTri(mesh, face, v);
-    }
-
     public static HE_Selection splitFaceTri(final HE_Mesh mesh,
 	    final HE_Face face, final WB_Coordinate v) {
 	HE_Halfedge he = face.getHalfedge();
@@ -145,8 +165,8 @@ public class HEM_TriSplit extends HEM_Modifier {
 	    vi.setHalfedge(he2[0]);
 	    for (int i = 0; i < c; i++) {
 		he0[i].setNext(he1[i]);
-		he1[i].setPair(he2[i == c - 1 ? 0 : i + 1]);
-		he2[i == c - 1 ? 0 : i + 1].setPair(he1[i]);
+		he1[i].setPair(he2[i == (c - 1) ? 0 : i + 1]);
+		he2[i == (c - 1) ? 0 : i + 1].setPair(he1[i]);
 	    }
 	    out.add(vi);
 	    return out;
@@ -154,6 +174,11 @@ public class HEM_TriSplit extends HEM_Modifier {
 	return null;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public HE_Selection getSplitFaces() {
 	return this.selectionOut;
     }

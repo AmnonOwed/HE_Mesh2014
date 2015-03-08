@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 /**
@@ -8,28 +11,25 @@ package wblut.hemesh;
  *
  */
 abstract public class HES_Simplifier extends HE_Machine {
+    /**
+     * Instantiates a new HES_Simplifier.
+     */
+    public HES_Simplifier() {
+    }
 
-	/**
-	 * Instantiates a new HES_Simplifier.
-	 */
-	public HES_Simplifier() {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Mesh)
+     */
+    @Override
+    public abstract HE_Mesh apply(final HE_Mesh mesh);
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Mesh)
-	 */
-	@Override
-	public abstract HE_Mesh apply(final HE_Mesh mesh);
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Selection)
-	 */
-	@Override
-	public abstract HE_Mesh apply(final HE_Selection selection);
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.hemesh.HE_Machine#apply(wblut.hemesh.HE_Selection)
+     */
+    @Override
+    public abstract HE_Mesh apply(final HE_Selection selection);
 }

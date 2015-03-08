@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import wblut.geom.WB_Coordinate;
 
+/**
+ * 
+ */
 public class HET_POVWriter {
     /** The comma. */
     final String COMMA = ", ";
@@ -21,8 +24,8 @@ public class HET_POVWriter {
     /**
      * Handles PrintWriter input.
      *
-     * @param pw
-     *            the pw
+     * @param path 
+     * @param name 
      */
     public void beginSave(final String path, final String name) {
 	try {
@@ -33,6 +36,11 @@ public class HET_POVWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param pw 
+     */
     public void beginSave(final PrintWriter pw) {
 	povWriter = pw;
 	handleBeginSave();

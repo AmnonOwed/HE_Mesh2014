@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 import wblut.math.WB_Epsilon;
@@ -190,23 +193,22 @@ public class WB_CoordinateOp {
     }
 
     /**
+     * Return hascode for a triplet of double coordinates.
      *
-     * Return hascode for a triplet of double coordinates
-     *
-     * @param x
-     * @param y
-     * @param z
+     * @param x 
+     * @param y 
+     * @param z 
      * @return hashcode
      */
     protected static int calculateHashCode(final double x, final double y,
 	    final double z) {
 	int result = 17;
 	final long a = Double.doubleToLongBits(x);
-	result += 31 * result + (int) (a ^ (a >>> 32));
+	result += (31 * result) + (int) (a ^ (a >>> 32));
 	final long b = Double.doubleToLongBits(y);
-	result += 31 * result + (int) (b ^ (b >>> 32));
+	result += (31 * result) + (int) (b ^ (b >>> 32));
 	final long c = Double.doubleToLongBits(z);
-	result += 31 * result + (int) (c ^ (c >>> 32));
+	result += (31 * result) + (int) (c ^ (c >>> 32));
 	return result;
     }
 
@@ -258,7 +260,7 @@ public class WB_CoordinateOp {
      */
     public static double dot2D(final double ux, final double uy,
 	    final double vx, final double vy) {
-	return ux * vx + uy * vy;
+	return (ux * vx) + (uy * vy);
     }
 
     /**
@@ -275,8 +277,8 @@ public class WB_CoordinateOp {
      */
     public static double[] cross(final double ux, final double uy,
 	    final double uz, final double vx, final double vy, final double vz) {
-	return new double[] { uy * vz - uz * vy, uz * vx - ux * vz,
-		ux * vy - uy * vx };
+	return new double[] { (uy * vz) - (uz * vy), (uz * vx) - (ux * vz),
+		(ux * vy) - (uy * vx) };
     }
 
     /**
@@ -302,23 +304,22 @@ public class WB_CoordinateOp {
     }
 
     /**
+     * Interpolated point: p + t*(q-p) or alternatively, (1-t)*p+t*q.
      *
-     * Interpolated point: p + t*(q-p) or alternatively, (1-t)*p+t*q
-     *
-     * @param px
-     * @param py
-     * @param pz
-     * @param qx
-     * @param qy
-     * @param q
-     * @param t
+     * @param px 
+     * @param py 
+     * @param pz 
+     * @param qx 
+     * @param qy 
+     * @param qz 
+     * @param t 
      * @return double[] with coordinates of interpolated point
      */
     public static double[] interpolate(final double px, final double py,
 	    final double pz, final double qx, final double qy, final double qz,
 	    final double t) {
-	return new double[] { px + t * (qx - px), py + t * (qy - py),
-		pz + t * (qz - pz) };
+	return new double[] { px + (t * (qx - px)), py + (t * (qy - py)),
+		pz + (t * (qz - pz)) };
     }
 
     /**
@@ -362,15 +363,6 @@ public class WB_CoordinateOp {
     }
 
     /**
-     * @deprecated Use {@link #getLength3D(double,double,double)} instead
-     */
-    @Deprecated
-    public static double getLength(final double ux, final double uy,
-	    final double uz) {
-	return getLength3D(ux, uy, uz);
-    }
-
-    /**
      *
      * Length of 3D vector.
      *
@@ -381,16 +373,7 @@ public class WB_CoordinateOp {
      */
     public static double getLength3D(final double ux, final double uy,
 	    final double uz) {
-	return Math.sqrt(ux * ux + uy * uy + uz * uz);
-    }
-
-    /**
-     * @deprecated Use {@link #getSqLength3D(double,double,double)} instead
-     */
-    @Deprecated
-    public static double getSqLength(final double ux, final double uy,
-	    final double uz) {
-	return getSqLength3D(ux, uy, uz);
+	return Math.sqrt((ux * ux) + (uy * uy) + (uz * uz));
     }
 
     /**
@@ -404,18 +387,7 @@ public class WB_CoordinateOp {
      */
     public static double getSqLength3D(final double ux, final double uy,
 	    final double uz) {
-	return ux * ux + uy * uy + uz * uz;
-    }
-
-    /**
-     * @deprecated Use
-     *             {@link #getDistance3D(double,double,double,double,double,double)}
-     *             instead
-     */
-    @Deprecated
-    public static double getDistance(final double px, final double py,
-	    final double pz, final double qx, final double qy, final double qz) {
-	return getDistance3D(px, py, pz, qx, qy, qz);
+	return (ux * ux) + (uy * uy) + (uz * uz);
     }
 
     /**
@@ -432,19 +404,8 @@ public class WB_CoordinateOp {
      */
     public static double getDistance3D(final double px, final double py,
 	    final double pz, final double qx, final double qy, final double qz) {
-	return Math.sqrt((qx - px) * (qx - px) + (qy - py) * (qy - py)
-		+ (qz - pz) * (qz - pz));
-    }
-
-    /**
-     * @deprecated Use
-     *             {@link #getSqDistance3D(double,double,double,double,double,double)}
-     *             instead
-     */
-    @Deprecated
-    public static double getSqDistance(final double px, final double py,
-	    final double pz, final double qx, final double qy, final double qz) {
-	return getSqDistance3D(px, py, pz, qx, qy, qz);
+	return Math.sqrt(((qx - px) * (qx - px)) + ((qy - py) * (qy - py))
+		+ ((qz - pz) * (qz - pz)));
     }
 
     /**
@@ -461,47 +422,46 @@ public class WB_CoordinateOp {
      */
     public static double getSqDistance3D(final double px, final double py,
 	    final double pz, final double qx, final double qy, final double qz) {
-	return (qx - px) * (qx - px) + (qy - py) * (qy - py) + (qz - pz)
-		* (qz - pz);
+	return ((qx - px) * (qx - px)) + ((qy - py) * (qy - py))
+		+ ((qz - pz) * (qz - pz));
     }
 
     /**
      *
      * Length of 2D vector.
      *
-     * @param x
-     * @param y
+     * @param ux
+     * @param uy
      * @return length
      */
     public static double getLength2D(final double ux, final double uy) {
-	return Math.sqrt(ux * ux + uy * uy);
+	return Math.sqrt((ux * ux) + (uy * uy));
     }
 
     /**
      *
      * Square length of 2D vector.
      *
-     * @param x
-     * @param y
+     * @param ux
+     * @param uy
      * @return square length
      */
     public static double getSqLength2D(final double ux, final double uy) {
-	return ux * ux + uy * uy;
+	return (ux * ux) + (uy * uy);
     }
 
     /**
+     * Distance between two 2D points.
      *
-     * Distance between two 2D points
-     *
-     * @param px
-     * @param py
-     * @param qx
-     * @param qy
+     * @param px 
+     * @param py 
+     * @param qx 
+     * @param qy 
      * @return distance
      */
     public static double getDistance2D(final double px, final double py,
 	    final double qx, final double qy) {
-	return Math.sqrt((qx - px) * (qx - px) + (qy - py) * (qy - py));
+	return Math.sqrt(((qx - px) * (qx - px)) + ((qy - py) * (qy - py)));
     }
 
     /**
@@ -516,24 +476,7 @@ public class WB_CoordinateOp {
      */
     public static double getSqDistance2D(final double px, final double py,
 	    final double qx, final double qy) {
-	return (qx - px) * (qx - px) + (qy - py) * (qy - py);
-    }
-
-    /**
-     *
-     * Check if the square length of 3D vector is smaller than the SQEPSILON
-     * tolerance defined in {@link wblut.math.WB_Epsilon#SQEPSILON}
-     *
-     * @param ux
-     * @param uy
-     * @param uz
-     * @return
-     * @deprecated Use {@link #isZero3D(double,double,double)} instead
-     */
-    @Deprecated
-    public static boolean isZero(final double ux, final double uy,
-	    final double uz) {
-	return isZero3D(ux, uy, uz);
+	return ((qx - px) * (qx - px)) + ((qy - py) * (qy - py));
     }
 
     /**
@@ -558,6 +501,7 @@ public class WB_CoordinateOp {
      *
      * @param ux
      * @param uy
+     * @param uz
      * @return
      */
     public static boolean isZero2D(final double ux, final double uy,

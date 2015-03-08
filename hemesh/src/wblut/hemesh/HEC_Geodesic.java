@@ -1,20 +1,54 @@
+/*
+ *
+ */
 package wblut.hemesh;
 
-import wblut.geom.WB_FaceListMesh;
 import wblut.geom.WB_Geodesic;
 
+/**
+ *
+ */
 public class HEC_Geodesic extends HEC_Creator {
+    /**
+     *
+     */
     public static final int TETRAHEDRON = 0;
+    /**
+     *
+     */
     public static final int OCTAHEDRON = 1;
+    /**
+     *
+     */
     public static final int CUBE = 2;
+    /**
+     *
+     */
     public static final int DODECAHEDRON = 3;
+    /**
+     *
+     */
     public static final int ICOSAHEDRON = 4;
-    private WB_FaceListMesh mesh;
+    /**
+     *
+     */
     private double rx, ry, rz;
+    /**
+     *
+     */
     private int type;
+    /**
+     *
+     */
     private int b;
+    /**
+     *
+     */
     private int c;
 
+    /**
+     *
+     */
     public HEC_Geodesic() {
 	super();
 	rx = ry = rz = 1;
@@ -22,17 +56,36 @@ public class HEC_Geodesic extends HEC_Creator {
 	b = c = 4;
     }
 
+    /**
+     *
+     *
+     * @param R
+     */
     public HEC_Geodesic(final double R) {
 	this();
 	rx = ry = rz = R;
 	b = c = 4;
     }
 
+    /**
+     *
+     *
+     * @param R
+     * @return
+     */
     public HEC_Geodesic setRadius(final double R) {
 	rx = ry = rz = R;
 	return this;
     }
 
+    /**
+     *
+     *
+     * @param rx
+     * @param ry
+     * @param rz
+     * @return
+     */
     public HEC_Geodesic setRadius(final double rx, final double ry,
 	    final double rz) {
 	this.rx = rx;
@@ -41,16 +94,34 @@ public class HEC_Geodesic extends HEC_Creator {
 	return this;
     }
 
+    /**
+     *
+     *
+     * @param b
+     * @return
+     */
     public HEC_Geodesic setB(final int b) {
 	this.b = b;
 	return this;
     }
 
+    /**
+     *
+     *
+     * @param c
+     * @return
+     */
     public HEC_Geodesic setC(final int c) {
 	this.c = c;
 	return this;
     }
 
+    /**
+     *
+     *
+     * @param t
+     * @return
+     */
     public HEC_Geodesic setType(final int t) {
 	type = t;
 	return this;

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import gnu.trove.map.TLongDoubleMap;
@@ -25,6 +28,10 @@ import wblut.math.WB_Parameter;
  *
  */
 public class HEM_Extrude extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
     /** Extrusion distance. */
     private WB_Parameter<Double> d;
@@ -52,6 +59,10 @@ public class HEM_Extrude extends HEM_Modifier {
     private TLongDoubleMap _halfedgeEWs;
     /** Face centers. */
     private Map<Long, WB_Point> _faceCenters;
+    
+    /**
+     * 
+     */
     private double[] heights;
     /** The walls. */
     public HE_Selection walls;
@@ -59,6 +70,10 @@ public class HEM_Extrude extends HEM_Modifier {
     public HE_Selection extruded;
     /** The failed faces. */
     private List<HE_Face> failedFaces;
+    
+    /**
+     * 
+     */
     private List<Double> failedHeights;
     /** The flat. */
     private boolean flat;
@@ -194,11 +209,23 @@ public class HEM_Extrude extends HEM_Modifier {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param distances 
+     * @return 
+     */
     public HEM_Extrude setDistances(final double[] distances) {
 	this.heights = distances;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param distances 
+     * @return 
+     */
     public HEM_Extrude setDistances(final float[] distances) {
 	heights = new double[distances.length];
 	for (int i = 0; i < distances.length; i++) {
@@ -207,6 +234,12 @@ public class HEM_Extrude extends HEM_Modifier {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param distances 
+     * @return 
+     */
     public HEM_Extrude setDistances(final int[] distances) {
 	heights = new double[distances.length];
 	for (int i = 0; i < distances.length; i++) {
@@ -246,9 +279,9 @@ public class HEM_Extrude extends HEM_Modifier {
 	    do {
 		_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 		_halfedgeEWs
-			.put(he.key(),
-				(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-					: chamfer);
+		.put(he.key(),
+			(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+				: chamfer);
 		he = he.getNextInFace();
 	    } while (he != f.getHalfedge());
 	    tracker.incrementCounter();
@@ -283,7 +316,7 @@ public class HEM_Extrude extends HEM_Modifier {
 			    he = f.getHalfedge();
 			    do {
 				he.getVertex().getPoint()
-					.addMulSelf(heights[i], n);
+				.addMulSelf(heights[i], n);
 				he = he.getNextInFace();
 			    } while (he != f.getHalfedge());
 			}
@@ -301,9 +334,9 @@ public class HEM_Extrude extends HEM_Modifier {
 			do {
 			    final HE_Vertex v = he.getVertex();
 			    he.getVertex()
-				    .getPoint()
-				    .addMulSelf(
-					    d.value(v.xd(), v.yd(), v.zd()), n);
+			    .getPoint()
+			    .addMulSelf(
+				    d.value(v.xd(), v.yd(), v.zd()), n);
 			    he = he.getNextInFace();
 			} while (he != f.getHalfedge());
 		    }
@@ -331,7 +364,7 @@ public class HEM_Extrude extends HEM_Modifier {
 	}
 	_halfedgeNormals = new FastMap<Long, WB_Vector>();
 	_halfedgeEWs = new TLongDoubleHashMap(10, 0.5f, -1L, Double.NaN);
-	if ((chamfer == 0) && flat && heights == null) {
+	if ((chamfer == 0) && flat && (heights == null)) {
 	    return selection.parent;
 	}
 	HE_Face f;
@@ -348,9 +381,9 @@ public class HEM_Extrude extends HEM_Modifier {
 	    do {
 		_halfedgeNormals.put(he.key(), he.getHalfedgeNormal());
 		_halfedgeEWs
-			.put(he.key(),
-				(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
-					: chamfer);
+		.put(he.key(),
+			(he.getHalfedgeDihedralAngle() < thresholdAngle) ? hardEdgeChamfer
+				: chamfer);
 		he = he.getNextInFace();
 	    } while (he != f.getHalfedge());
 	    tracker.incrementCounter();
@@ -446,14 +479,11 @@ public class HEM_Extrude extends HEM_Modifier {
     /**
      * Apply straight extrusion to one face.
      *
-     * @param id
-     *            the id
-     * @param selfaces
-     *            the selfaces
-     * @param mesh
-     *            the mesh
-     * @param visited
-     *            the visited
+     * @param id            the id
+     * @param selfaces            the selfaces
+     * @param mesh            the mesh
+     * @param visited            the visited
+     * @param d 
      * @return true, if successful
      */
     private boolean applyStraightToOneFace(final int id,
@@ -641,12 +671,10 @@ public class HEM_Extrude extends HEM_Modifier {
     /**
      * Apply peaked extrusion to one face.
      *
-     * @param id
-     *            the id
-     * @param selFaces
-     *            the sel faces
-     * @param mesh
-     *            the mesh
+     * @param id            the id
+     * @param selFaces            the sel faces
+     * @param mesh            the mesh
+     * @param d 
      */
     private void applyPeakToOneFace(final int id, final List<HE_Face> selFaces,
 	    final HE_Mesh mesh, final double d) {

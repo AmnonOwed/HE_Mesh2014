@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Collection;
@@ -18,16 +21,40 @@ import wblut.geom.WB_Vector;
  *
  */
 public class HE_MeshStructure extends HE_Element implements WB_HasData {
+    
+    /**
+     * 
+     */
     public static final HET_ProgressTracker tracker = HET_ProgressTracker
 	    .instance();
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public static String getStatus() {
 	return tracker.getStatus();
     }
 
+    /**
+     * 
+     */
     public HE_RAS<HE_Vertex> vertices;
+    
+    /**
+     * 
+     */
     public HE_RAS<HE_Halfedge> halfedges;
+    
+    /**
+     * 
+     */
     public HE_RAS<HE_Face> faces;
+    
+    /**
+     * 
+     */
     private HashMap<String, Object> _data;
 
     /**
@@ -40,6 +67,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	faces = new HE_RASTrove<HE_Face>();
     }
 
+    /**
+     * 
+     *
+     * @param ms 
+     */
     public HE_MeshStructure(final HE_MeshStructure ms) {
 	this();
 	for (final HE_Face f : ms.faces) {
@@ -53,6 +85,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param ms 
+     */
     public void set(final HE_MeshStructure ms) {
 	final HE_MeshStructure msc = ms.get();
 	vertices = msc.vertices;
@@ -60,6 +97,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	faces = msc.faces;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_MeshStructure get() {
 	final HE_MeshStructure copy = new HE_MeshStructure();
 	for (final HE_Face f : faces) {
@@ -74,6 +116,12 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return copy;
     }
 
+    /**
+     * 
+     *
+     * @param n 
+     * @param ta 
+     */
     public void getFacesWithNormal(final WB_Coordinate n, final double ta) {
 	final WB_Vector normal = geometryfactory.createNormalizedVector(n);
 	final double cta = Math.cos(ta);
@@ -138,6 +186,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param source 
+     */
     public final void addFaces(final HE_Mesh source) {
 	tracker.setDefaultStatus("Adding faces", source.getNumberOfFaces());
 	for (final HE_Face f : source.faces) {
@@ -170,6 +223,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param source 
+     */
     public final void addHalfedges(final HE_Mesh source) {
 	tracker.setDefaultStatus("Adding halfedges",
 		source.getNumberOfHalfedges());
@@ -191,6 +249,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param source 
+     */
     public final void addVertices(final HE_Mesh source) {
 	tracker.setDefaultStatus("Adding vertices",
 		source.getNumberOfVertices());
@@ -290,14 +353,32 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return new WB_AABB(min, max);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public final HE_Face getFaceByIndex(final int i) {
 	return faces.get(i);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public final HE_Halfedge getHalfedgeByIndex(final int i) {
 	return halfedges.get(i);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public final HE_Vertex getVertexByIndex(final int i) {
 	return vertices.get(i);
     }
@@ -328,6 +409,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return result;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public final double[] limits() {
 	final double[] result = new double[6];
 	for (int i = 0; i < 3; i++) {
@@ -415,6 +501,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	vertices.remove(v);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     */
     public final void removeFace(final int i) {
 	if (i >= faces.size()) {
 	    throw new IllegalArgumentException("Face index " + i
@@ -447,6 +538,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     */
     public final void removeHalfedge(final int i) {
 	if (i >= halfedges.size()) {
 	    throw new IllegalArgumentException("Halfedge index " + i
@@ -479,6 +575,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     */
     public final void removeVertex(final int i) {
 	if (i >= vertices.size()) {
 	    throw new IllegalArgumentException("Vertex index " + i
@@ -511,14 +612,29 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public final List<HE_Vertex> getVertices() {
 	return vertices.getObjects();
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public final List<HE_Halfedge> getHalfedges() {
 	return halfedges.getObjects();
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public final List<HE_Halfedge> getEdges() {
 	final List<HE_Halfedge> edges = new FastTable<HE_Halfedge>();
 	final HE_HalfedgeIterator heitr = new HE_HalfedgeIterator(this);
@@ -532,30 +648,71 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return edges;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public final List<HE_Face> getFaces() {
 	return faces.getObjects();
     }
 
+    /**
+     * 
+     *
+     * @param key 
+     * @return 
+     */
     public final boolean containsFace(final long key) {
 	return faces.containsKey(key);
     }
 
+    /**
+     * 
+     *
+     * @param key 
+     * @return 
+     */
     public final boolean containsHalfedge(final long key) {
 	return halfedges.containsKey(key);
     }
 
+    /**
+     * 
+     *
+     * @param key 
+     * @return 
+     */
     public final boolean containsVertex(final long key) {
 	return vertices.containsKey(key);
     }
 
+    /**
+     * 
+     *
+     * @param f 
+     * @return 
+     */
     public final int getIndex(final HE_Face f) {
 	return faces.getIndex(f);
     }
 
+    /**
+     * 
+     *
+     * @param he 
+     * @return 
+     */
     public final int getIndex(final HE_Halfedge he) {
 	return halfedges.getIndex(he);
     }
 
+    /**
+     * 
+     *
+     * @param v 
+     * @return 
+     */
     public final int getIndex(final HE_Vertex v) {
 	return vertices.getIndex(v);
     }
@@ -573,14 +730,29 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     */
     public final void replaceFaces(final HE_Mesh mesh) {
 	faces = mesh.faces;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     */
     public final void replaceVertices(final HE_Mesh mesh) {
 	vertices = mesh.vertices;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     */
     public final void replaceHalfedges(final HE_Mesh mesh) {
 	halfedges = mesh.halfedges;
     }
@@ -677,6 +849,11 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return new HE_HalfedgeIterator(this);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_FaceIterator fItr() {
 	return new HE_FaceIterator(this);
     }
@@ -856,18 +1033,25 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return _data.get(s);
     }
 
+    /**
+     * 
+     *
+     * @param vertices 
+     * @param loop 
+     * @return 
+     */
     public HE_Path createPathFromIndices(final int[] vertices,
 	    final boolean loop) {
 	final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
 	if (vertices.length > 1) {
 	    HE_Halfedge he;
-	    for (int i = 0; i < vertices.length - 1; i++) {
+	    for (int i = 0; i < (vertices.length - 1); i++) {
 		he = searchHalfedgeFromTo(getVertexByIndex(vertices[i]),
 			getVertexByIndex(vertices[i + 1]));
 		if (he == null) {
 		    throw new IllegalArgumentException("Two vertices "
 			    + vertices[i] + " and " + vertices[i + 1]
-			    + " in path are not connected.");
+				    + " in path are not connected.");
 		}
 		halfedges.add(he);
 	    }
@@ -879,7 +1063,7 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 		    throw new IllegalArgumentException("Vertices "
 			    + vertices[vertices.length - 1] + " and "
 			    + vertices[0]
-			    + " in path are not connected: path is not a loop.");
+				    + " in path are not connected: path is not a loop.");
 		}
 	    }
 	}
@@ -887,6 +1071,13 @@ public class HE_MeshStructure extends HE_Element implements WB_HasData {
 	return path;
     }
 
+    /**
+     * 
+     *
+     * @param v0 
+     * @param v1 
+     * @return 
+     */
     public HE_Halfedge searchHalfedgeFromTo(final HE_Vertex v0,
 	    final HE_Vertex v1) {
 	final List<HE_Halfedge> hes = v0.getHalfedgeStar();

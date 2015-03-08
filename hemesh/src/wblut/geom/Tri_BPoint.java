@@ -31,8 +31,20 @@ package wblut.geom;
  * @author Mark Howison
  */
 public final class Tri_BPoint extends Tri_Point {
+    
+    /**
+     * 
+     */
     public int side;
+    
+    /**
+     * 
+     */
     public Tri_BPoint next;
+    
+    /**
+     * 
+     */
     public Tri_BPoint prev;
 
     /**

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import gnu.trove.map.TLongIntMap;
@@ -8,6 +11,9 @@ import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Point;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HES_DooSabin extends HES_Subdividor {
     /*
      * (non-Javadoc)
@@ -15,30 +21,79 @@ public class HES_DooSabin extends HES_Subdividor {
      * @see
      * wblut.hemesh.subdividors.HES_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
      */
+    /**
+     * 
+     */
     private double faceFactor;
+    
+    /**
+     * 
+     */
     private double edgeFactor;
+    
+    /**
+     * 
+     */
     private boolean absolute;
+    
+    /**
+     * 
+     */
     private double d;
+    
+    /**
+     * 
+     */
     public HE_Selection faceFaces;
+    
+    /**
+     * 
+     */
     public HE_Selection edgeFaces;
+    
+    /**
+     * 
+     */
     public HE_Selection vertexFaces;
 
+    /**
+     * 
+     */
     public HES_DooSabin() {
 	faceFactor = 1.0;
 	edgeFactor = 1.0;
     }
 
+    /**
+     * 
+     *
+     * @param ff 
+     * @param ef 
+     * @return 
+     */
     public HES_DooSabin setFactors(final double ff, final double ef) {
 	faceFactor = ff;
 	edgeFactor = ef;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HES_DooSabin setAbsolute(final boolean b) {
 	absolute = b;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public HES_DooSabin setDistance(final double d) {
 	this.d = d;
 	return this;
@@ -63,7 +118,7 @@ public class HES_DooSabin extends HES_Subdividor {
 	HE_Halfedge he;
 	WB_Point fc;
 	int vertexCount = 0;
-	double div = 1.0 + 2.0 * edgeFactor + faceFactor;
+	double div = 1.0 + (2.0 * edgeFactor) + faceFactor;
 	if (WB_Epsilon.isZero(div)) {
 	    div = 1.0;
 	}
@@ -95,9 +150,9 @@ public class HES_DooSabin extends HES_Subdividor {
 	    } while (he != f.getHalfedge());
 	}
 	final int[][] faces = new int[mesh.getNumberOfFaces()
-		+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
+	                              + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()][];
 	final int[] labels = new int[mesh.getNumberOfFaces()
-		+ mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
+	                             + mesh.getNumberOfEdges() + mesh.getNumberOfVertices()];
 	final int[] noe = { mesh.getNumberOfFaces(), mesh.getNumberOfEdges(),
 		mesh.getNumberOfVertices() };
 	int currentFace = 0;
@@ -161,7 +216,7 @@ public class HES_DooSabin extends HES_Subdividor {
 	    f.setInternalLabel(labels[currentFace]);
 	    if (currentFace < noe[0]) {
 		faceFaces.add(f);
-	    } else if (currentFace < noe[0] + noe[1]) {
+	    } else if (currentFace < (noe[0] + noe[1])) {
 		edgeFaces.add(f);
 	    } else {
 		vertexFaces.add(f);

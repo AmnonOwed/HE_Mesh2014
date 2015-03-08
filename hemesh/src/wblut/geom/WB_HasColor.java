@@ -1,7 +1,24 @@
+/*
+ * 
+ */
 package wblut.geom;
 
+/**
+ * 
+ */
 public interface WB_HasColor {
-	public int getColor();
+    
+    /**
+     * 
+     *
+     * @return 
+     */
+    public int getColor();
 
-	public void setColor(int color);
+    /**
+     * 
+     *
+     * @param color 
+     */
+    public void setColor(int color);
 }

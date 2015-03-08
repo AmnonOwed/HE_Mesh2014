@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Iterator;
@@ -156,7 +159,7 @@ public class HEM_Stretch extends HEM_Modifier {
 	    stretchDirection = new WB_Vector(groundPlane.getNormal());
 	}
 	if ((groundPlane != null)
-		&& ((stretchFactor != 0) || compressionFactor != 0)) {
+		&& ((stretchFactor != 0) || (compressionFactor != 0))) {
 	    final WB_Line L = new WB_Line(groundPlane.getOrigin(),
 		    stretchDirection);
 	    WB_Point p;

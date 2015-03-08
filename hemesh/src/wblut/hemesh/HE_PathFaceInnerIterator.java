@@ -1,41 +1,66 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Iterator;
 
+/**
+ * 
+ */
 public class HE_PathFaceInnerIterator implements Iterator<HE_Face> {
+    
+    /**
+     * 
+     */
+    private final HE_PathHalfedge _start;
+    
+    /**
+     * 
+     */
+    private HE_PathHalfedge _current;
 
-	private final HE_PathHalfedge _start;
-	private HE_PathHalfedge _current;
+    /**
+     * 
+     *
+     * @param path 
+     */
+    public HE_PathFaceInnerIterator(final HE_Path path) {
+	_start = path.getPathHalfedge();
+	_current = null;
+    }
 
-	public HE_PathFaceInnerIterator(final HE_Path path) {
-		_start = path.getPathHalfedge();
-		_current = null;
-
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
+    @Override
+    public boolean hasNext() {
+	if (_start == null) {
+	    return false;
 	}
+	return (_current == null)
+		|| ((_current.getNextInPath() != _start) && (_current
+			.getNextInPath() != null));
+    }
 
-	@Override
-	public boolean hasNext() {
-		if (_start == null)
-			return false;
-		return (_current == null)
-				|| ((_current.getNextInPath() != _start) && (_current
-						.getNextInPath() != null));
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
+    @Override
+    public HE_Face next() {
+	if (_current == null) {
+	    _current = _start;
+	} else {
+	    _current = _current.getNextInPath();
 	}
+	return _current.getHalfedge().getFace();
+    }
 
-	@Override
-	public HE_Face next() {
-		if (_current == null) {
-			_current = _start;
-		} else {
-			_current = _current.getNextInPath();
-		}
-		return _current.getHalfedge().getFace();
-	}
-
-	@Override
-	public void remove() {
-		throw new UnsupportedOperationException();
-
-	}
-
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
+    @Override
+    public void remove() {
+	throw new UnsupportedOperationException();
+    }
 }

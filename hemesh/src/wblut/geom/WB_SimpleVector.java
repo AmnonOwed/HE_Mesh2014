@@ -1,44 +1,88 @@
+/*
+ * 
+ */
 package wblut.geom;
 
+/**
+ * 
+ */
 public class WB_SimpleVector implements Comparable<WB_Coordinate>,
-	WB_MutableCoordinate {
+WB_MutableCoordinate {
     /** Coordinates. */
     private double x, y, z;
 
+    /**
+     * 
+     */
     public WB_SimpleVector() {
 	x = y = z = 0;
     }
 
+    /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     */
     public WB_SimpleVector(final double x, final double y) {
 	this.x = x;
 	this.y = y;
 	z = 0;
     }
 
+    /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     * @param z 
+     */
     public WB_SimpleVector(final double x, final double y, final double z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
     }
 
+    /**
+     * 
+     *
+     * @param x 
+     */
     public WB_SimpleVector(final double[] x) {
 	this.x = x[0];
 	this.y = x[1];
 	this.z = x[2];
     }
 
+    /**
+     * 
+     *
+     * @param fromPoint 
+     * @param toPoint 
+     */
     public WB_SimpleVector(final double[] fromPoint, final double[] toPoint) {
 	this.x = toPoint[0] - fromPoint[0];
 	this.y = toPoint[1] - fromPoint[1];
 	this.z = toPoint[2] - fromPoint[2];
     }
 
+    /**
+     * 
+     *
+     * @param v 
+     */
     public WB_SimpleVector(final WB_Coordinate v) {
 	x = v.xd();
 	y = v.yd();
 	z = v.zd();
     }
 
+    /**
+     * 
+     *
+     * @param fromPoint 
+     * @param toPoint 
+     */
     public WB_SimpleVector(final WB_Coordinate fromPoint,
 	    final WB_Coordinate toPoint) {
 	x = toPoint.xd() - fromPoint.xd();
@@ -47,6 +91,10 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
     }
 
     /**
+     * 
+     *
+     * @param x 
+     * @param y 
      * @deprecated Use {@link #set(double,double)} instead
      */
     @Deprecated
@@ -55,6 +103,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	set(x, y);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#set(double, double)
+     */
     @Override
     public void set(final double x, final double y) {
 	this.x = x;
@@ -63,6 +114,11 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
     }
 
     /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     * @param z 
      * @deprecated Use {@link #set(double,double,double)} instead
      */
     @Deprecated
@@ -71,6 +127,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	set(x, y, z);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
+     */
     @Override
     public void set(final double x, final double y, final double z) {
 	this.x = x;
@@ -79,6 +138,12 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
     }
 
     /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     * @param z 
+     * @param w 
      * @deprecated Use {@link #set(double,double,double,double)} instead
      */
     @Deprecated
@@ -88,6 +153,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	set(x, y, z, w);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
+     */
     @Override
     public void set(final double x, final double y, final double z,
 	    final double w) {
@@ -95,6 +163,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
     }
 
     /**
+     * 
+     *
+     * @param v 
      * @deprecated Use {@link #set(WB_Coordinate)} instead
      */
     @Deprecated
@@ -103,12 +174,19 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	set(v);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#set(wblut.geom.WB_Coordinate)
+     */
     @Override
     public void set(final WB_Coordinate v) {
 	set(v.xd(), v.yd(), v.zd());
     }
 
     /**
+     * 
+     *
+     * @param i 
+     * @param v 
      * @deprecated Use {@link #setCoord(int,double)} instead
      */
     @Deprecated
@@ -117,6 +195,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	setCoord(i, v);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#setCoord(int, double)
+     */
     @Override
     public void setCoord(final int i, final double v) {
 	if (i == 0) {
@@ -131,6 +212,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
     }
 
     /**
+     * 
+     *
+     * @param w 
      * @deprecated Use {@link #setW(double)} instead
      */
     @Deprecated
@@ -139,11 +223,17 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	setW(w);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#setW(double)
+     */
     @Override
     public void setW(final double w) {
     }
 
     /**
+     * 
+     *
+     * @param x 
      * @deprecated Use {@link #setX(double)} instead
      */
     @Deprecated
@@ -152,12 +242,18 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	setX(x);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#setX(double)
+     */
     @Override
     public void setX(final double x) {
 	this.x = x;
     }
 
     /**
+     * 
+     *
+     * @param y 
      * @deprecated Use {@link #setY(double)} instead
      */
     @Deprecated
@@ -166,12 +262,18 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	setY(y);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#setY(double)
+     */
     @Override
     public void setY(final double y) {
 	this.y = y;
     }
 
     /**
+     * 
+     *
+     * @param z 
      * @deprecated Use {@link #setZ(double)} instead
      */
     @Deprecated
@@ -180,51 +282,81 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	setZ(z);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_MutableCoordinate#setZ(double)
+     */
     @Override
     public void setZ(final double z) {
 	this.z = z;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#wd()
+     */
     @Override
     public double wd() {
 	return 0;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#wf()
+     */
     @Override
     public float wf() {
 	return 0;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#xd()
+     */
     @Override
     public double xd() {
 	return x;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#xf()
+     */
     @Override
     public float xf() {
 	return (float) x;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#yd()
+     */
     @Override
     public double yd() {
 	return y;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#yf()
+     */
     @Override
     public float yf() {
 	return (float) y;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#zd()
+     */
     @Override
     public double zd() {
 	return z;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#zf()
+     */
     @Override
     public float zf() {
 	return (float) z;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#getd(int)
+     */
     @Override
     public double getd(final int i) {
 	if (i == 0) {
@@ -239,6 +371,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	return Double.NaN;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_Coordinate#getf(int)
+     */
     @Override
     public float getf(final int i) {
 	if (i == 0) {
@@ -253,6 +388,9 @@ public class WB_SimpleVector implements Comparable<WB_Coordinate>,
 	return Float.NaN;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     @Override
     public int compareTo(final WB_Coordinate p) {
 	int cmp = Double.compare(xd(), p.xd());

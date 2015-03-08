@@ -30,14 +30,50 @@ package wblut.geom;
  * @author Mark Howison
  */
 public class Tri_Point extends WB_SimpleVector {
+    
+    /**
+     * 
+     */
     public final static int INTERIOR = 0;
+    
+    /**
+     * 
+     */
     public final static int BOUNDARY = 1;
+    
+    /**
+     * 
+     */
     public final static int DELETED = 2;
+    
+    /**
+     * 
+     */
     public final static int TRANSLATED = 3;
+    
+    /**
+     * 
+     */
     public final static int XSECTION = 4;
+    
+    /**
+     * 
+     */
     public final static int BOUNDS = 5;
+    
+    /**
+     * 
+     */
     public Tri_HalfEdge he = null;
+    
+    /**
+     * 
+     */
     public int type = INTERIOR;
+    
+    /**
+     * 
+     */
     public Tri_Point pair;
 
     /**
@@ -59,7 +95,8 @@ public class Tri_Point extends WB_SimpleVector {
     /**
      * Constructs a new point with 2D coordinates <tt>(x,y)</tt>.
      *
-     * @param p
+     * @param x
+     * @param y
      */
     public Tri_Point(final double x, final double y) {
 	super(x, y);
@@ -99,10 +136,10 @@ public class Tri_Point extends WB_SimpleVector {
 	if (this.type == type) {
 	    return true;
 	}
-	if (type == Tri_Point.INTERIOR && this.type == Tri_Point.TRANSLATED) {
+	if ((type == Tri_Point.INTERIOR) && (this.type == Tri_Point.TRANSLATED)) {
 	    return true;
 	}
-	if (type == Tri_Point.BOUNDARY && this.type == Tri_Point.XSECTION) {
+	if ((type == Tri_Point.BOUNDARY) && (this.type == Tri_Point.XSECTION)) {
 	    return true;
 	}
 	return false;

@@ -1,17 +1,43 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 import gnu.trove.list.array.TDoubleArrayList;
 import java.util.Collection;
 
+/**
+ * 
+ */
 public class WB_CoordinateSequence {
+    
+    /**
+     * 
+     */
     private TDoubleArrayList ordinates;
+    
+    /**
+     * 
+     */
     private int n;
+    
+    /**
+     * 
+     */
     public static final WB_GeometryFactory geometryfactory = WB_GeometryFactory
 	    .instance();
 
+    /**
+     * 
+     */
     protected WB_CoordinateSequence() {
     }
 
+    /**
+     * 
+     *
+     * @param tuples 
+     */
     protected WB_CoordinateSequence(
 	    final Collection<? extends WB_Coordinate> tuples) {
 	ordinates = new TDoubleArrayList(4 * tuples.size(), Double.NaN);
@@ -24,6 +50,11 @@ public class WB_CoordinateSequence {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param tuples 
+     */
     protected WB_CoordinateSequence(final WB_Coordinate[] tuples) {
 	ordinates = new TDoubleArrayList(4 * tuples.length, Double.NaN);
 	n = tuples.length;
@@ -35,14 +66,24 @@ public class WB_CoordinateSequence {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param tuples 
+     */
     protected WB_CoordinateSequence(final WB_CoordinateSequence tuples) {
 	ordinates = new TDoubleArrayList(4 * tuples.size(), Double.NaN);
 	n = tuples.size();
-	for (int i = 0; i < 4 * n; i++) {
+	for (int i = 0; i < (4 * n); i++) {
 	    ordinates.add(tuples.getRaw(i));
 	}
     }
 
+    /**
+     * 
+     *
+     * @param ordinates 
+     */
     protected WB_CoordinateSequence(final double[] ordinates) {
 	this.ordinates = new TDoubleArrayList(ordinates.length, Double.NaN);
 	n = ordinates.length / 4;
@@ -51,6 +92,11 @@ public class WB_CoordinateSequence {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param tuples 
+     */
     protected WB_CoordinateSequence(final double[][] tuples) {
 	ordinates = new TDoubleArrayList(tuples.length, Double.NaN);
 	n = tuples.length;
@@ -62,26 +108,63 @@ public class WB_CoordinateSequence {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public double getX(final int i) {
 	return ordinates.get(i * 4);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public double getY(final int i) {
-	return ordinates.get(i * 4 + 1);
+	return ordinates.get((i * 4) + 1);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public double getZ(final int i) {
-	return ordinates.get(i * 4 + 2);
+	return ordinates.get((i * 4) + 2);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @return 
+     */
     public double get(final int i, final int j) {
-	return ordinates.get(i * 4 + j);
+	return ordinates.get((i * 4) + j);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public double getRaw(final int i) {
 	return ordinates.get(i);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public WB_SequencePoint getPoint(final int i) {
 	if (i >= n) {
 	    throw (new IndexOutOfBoundsException());
@@ -89,6 +172,12 @@ public class WB_CoordinateSequence {
 	return new WB_SequencePoint(i, this);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @return 
+     */
     public WB_SequenceVector getVector(final int i) {
 	if (i >= n) {
 	    throw (new IndexOutOfBoundsException());
@@ -96,10 +185,21 @@ public class WB_CoordinateSequence {
 	return new WB_SequenceVector(i, this);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public int size() {
 	return n;
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param p 
+     */
     public void _set(final int i, final WB_Coordinate p) {
 	int id = i * 4;
 	ordinates.set(id++, p.xd());
@@ -108,6 +208,14 @@ public class WB_CoordinateSequence {
 	ordinates.set(id, p.wd());
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param x 
+     * @param y 
+     * @param z 
+     */
     public void _set(final int i, final double x, final double y, final double z) {
 	int id = i * 4;
 	ordinates.set(id++, x);
@@ -115,14 +223,31 @@ public class WB_CoordinateSequence {
 	ordinates.set(id, z);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param v 
+     */
     public void _setRaw(final int i, final double v) {
 	ordinates.set(i, v);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_AABB getAABB() {
 	return new WB_AABB(this);
     }
 
+    /**
+     * 
+     *
+     * @param indices 
+     * @return 
+     */
     public WB_CoordinateSequence getSubSequence(final int[] indices) {
 	final WB_CoordinateSequence subseq = new WB_CoordinateSequence();
 	final int n = indices.length;
@@ -141,9 +266,16 @@ public class WB_CoordinateSequence {
 	return subseq;
     }
 
+    /**
+     * 
+     *
+     * @param start 
+     * @param end 
+     * @return 
+     */
     public WB_CoordinateSequence getSubSequence(final int start, final int end) {
 	final WB_CoordinateSequence subseq = new WB_CoordinateSequence();
-	final int n = end - start + 1;
+	final int n = (end - start) + 1;
 	final TDoubleArrayList subordinates = new TDoubleArrayList(4 * n,
 		Double.NaN);
 	System.arraycopy(ordinates, 4 * start, subordinates, 0, 4 * n);
@@ -152,6 +284,11 @@ public class WB_CoordinateSequence {
 	return subseq;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_CoordinateSequence getCopy() {
 	final WB_CoordinateSequence subseq = new WB_CoordinateSequence();
 	final TDoubleArrayList subordinates = new TDoubleArrayList(4 * n,
@@ -162,21 +299,45 @@ public class WB_CoordinateSequence {
 	return subseq;
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsNormal(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
 	return result.applyAsNormalSelf(T);
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsPoint(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
 	return result.applyAsPointSelf(T);
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsVector(final WB_Transform T) {
 	final WB_CoordinateSequence result = getCopy();
 	return result.applyAsVectorSelf(T);
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsNormalSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;
@@ -190,6 +351,12 @@ public class WB_CoordinateSequence {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsPointSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;
@@ -203,6 +370,12 @@ public class WB_CoordinateSequence {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param T 
+     * @return 
+     */
     public WB_CoordinateSequence applyAsVectorSelf(final WB_Transform T) {
 	int id = 0;
 	double x1, y1, z1;

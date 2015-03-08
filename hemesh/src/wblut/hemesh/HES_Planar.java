@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import gnu.trove.map.TLongObjectMap;
@@ -117,8 +120,7 @@ public class HES_Planar extends HES_Subdividor {
 		    fv = new HE_Vertex();
 		    do {
 			final WB_Point tmp = new WB_Point(he.getVertex());
-			final double t = 0.5 + (randomGen.nextDouble() - 0.5)
-				* range;
+			final double t = 0.5 + ((randomGen.nextDouble() - 0.5) * range);
 			tmp.mulSelf(t);
 			fv.getPoint().addSelf(tmp);
 			c += t;
@@ -140,7 +142,7 @@ public class HES_Planar extends HES_Subdividor {
 	if (random) {
 	    final HE_Halfedge[] origE = mesh.getEdgesAsArray();
 	    for (int i = 0; i < n; i++) {
-		final double f = 0.5 + (randomGen.nextDouble() - 0.5) * range;
+		final double f = 0.5 + ((randomGen.nextDouble() - 0.5) * range);
 		mesh.splitEdge(origE[i], f);
 	    }
 	} else {
@@ -263,8 +265,7 @@ public class HES_Planar extends HES_Subdividor {
 		    fv = new HE_Vertex();
 		    do {
 			final WB_Point tmp = new WB_Point(he.getVertex());
-			final double t = 0.5 + (randomGen.nextDouble() - 0.5)
-				* range;
+			final double t = 0.5 + ((randomGen.nextDouble() - 0.5) * range);
 			tmp.mulSelf(t);
 			fv.getPoint().addSelf(tmp);
 			c += t;
@@ -287,7 +288,7 @@ public class HES_Planar extends HES_Subdividor {
 	    final int ne = selection.getNumberOfEdges();
 	    for (int i = 0; i < ne; i++) {
 		HE_Vertex v;
-		final double f = 0.5 + (randomGen.nextDouble() - 0.5) * range;
+		final double f = 0.5 + ((randomGen.nextDouble() - 0.5) * range);
 		v = selection.parent.splitEdge(edges[i], f).vItr().next();
 		if (v != null) {
 		    newVertices.add(v);

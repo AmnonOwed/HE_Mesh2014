@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.HashMap;
@@ -9,16 +12,54 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Polygon;
 import wblut.geom.WB_Vector;
 
+/**
+ * 
+ */
 public class HEM_Lattice extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     private static final WB_GeometryFactory gf = WB_GeometryFactory.instance();
+    
+    /**
+     * 
+     */
     private double d;
+    
+    /**
+     * 
+     */
     private double sew;
+    
+    /**
+     * 
+     */
     private double hew;
+    
+    /**
+     * 
+     */
     private double thresholdAngle;
+    
+    /**
+     * 
+     */
     private boolean fuse;
+    
+    /**
+     * 
+     */
     private double fuseAngle;
+    
+    /**
+     * 
+     */
     private double ibulge, obulge;
 
+    /**
+     * 
+     */
     public HEM_Lattice() {
 	super();
 	d = 0;
@@ -29,44 +70,94 @@ public class HEM_Lattice extends HEM_Modifier {
 	ibulge = obulge = 0;
     }
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public HEM_Lattice setDepth(final double d) {
 	this.d = d;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param w 
+     * @return 
+     */
     public HEM_Lattice setWidth(final double w) {
 	sew = 0.5 * w;
 	hew = w;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param w 
+     * @param hew 
+     * @return 
+     */
     public HEM_Lattice setWidth(final double w, final double hew) {
 	sew = 0.5 * w;
 	this.hew = hew;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public HEM_Lattice setBulge(final double d) {
 	ibulge = obulge = d;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param inner 
+     * @param outer 
+     * @return 
+     */
     public HEM_Lattice setBulge(final double inner, final double outer) {
 	ibulge = inner;
 	obulge = outer;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HEM_Lattice setFuse(final boolean b) {
 	fuse = b;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param a 
+     * @return 
+     */
     public HEM_Lattice setThresholdAngle(final double a) {
 	thresholdAngle = a;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param a 
+     * @return 
+     */
     public HEM_Lattice setFuseAngle(final double a) {
 	fuseAngle = a;
 	return this;
@@ -74,7 +165,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -237,7 +328,7 @@ public class HEM_Lattice extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override

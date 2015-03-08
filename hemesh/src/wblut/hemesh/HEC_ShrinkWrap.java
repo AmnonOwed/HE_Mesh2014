@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -10,12 +13,34 @@ import wblut.geom.WB_Ray;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HEC_ShrinkWrap extends HEC_Creator {
+    
+    /**
+     * 
+     */
     private HE_Mesh source;
+    
+    /**
+     * 
+     */
     private int level;
+    
+    /**
+     * 
+     */
     private WB_Point wcenter;
+    
+    /**
+     * 
+     */
     private WB_AABBTree tree;
 
+    /**
+     * 
+     */
     public HEC_ShrinkWrap() {
 	super();
 	override = true;
@@ -23,27 +48,60 @@ public class HEC_ShrinkWrap extends HEC_Creator {
 	level = 2;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @return 
+     */
     public HEC_ShrinkWrap setSource(final HE_Mesh mesh) {
 	source = mesh;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param tree 
+     * @return 
+     */
     public HEC_ShrinkWrap setSource(final HE_Mesh mesh, final WB_AABBTree tree) {
 	source = mesh;
 	this.tree = tree;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param level 
+     * @return 
+     */
     public HEC_ShrinkWrap setLevel(final int level) {
 	this.level = level;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param c 
+     * @return 
+     */
     public HEC_ShrinkWrap setWrapCenter(final WB_Point c) {
 	wcenter = c;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     * @param z 
+     * @return 
+     */
     public HEC_ShrinkWrap setWrapCenter(final double x, final double y,
 	    final double z) {
 	wcenter = new WB_Point(x, y, z);

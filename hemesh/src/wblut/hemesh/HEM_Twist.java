@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Iterator;
@@ -37,11 +40,25 @@ public class HEM_Twist extends HEM_Modifier {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param o 
+     * @param d 
+     * @return 
+     */
     public HEM_Twist setTwistAxis(final WB_Coordinate o, final WB_Coordinate d) {
 	twistAxis = new WB_Line(o, d);
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param a 
+     * @param b 
+     * @return 
+     */
     public HEM_Twist setTwistAxisFromPoints(final WB_Coordinate a,
 	    final WB_Coordinate b) {
 	final WB_Vector axis = new WB_Vector(a, b);

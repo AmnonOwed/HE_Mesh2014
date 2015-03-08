@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.List;
@@ -12,10 +15,16 @@ import wblut.geom.WB_Vector;
  *
  */
 public class HE_Selection extends HE_MeshStructure {
+    
+    /**
+     * 
+     */
     public HE_Mesh parent;
 
     /**
      * Instantiates a new HE_Selection.
+     *
+     * @param parent 
      */
     public HE_Selection(final HE_Mesh parent) {
 	super();
@@ -25,6 +34,9 @@ public class HE_Selection extends HE_MeshStructure {
 	faces = new HE_RASTrove<HE_Face>();
     }
 
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HE_MeshStructure#getNumberOfEdges()
+     */
     @Override
     public int getNumberOfEdges() {
 	int noe = 0;
@@ -228,6 +240,11 @@ public class HE_Selection extends HE_MeshStructure {
 	return copy;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Mesh getAsMesh() {
 	return new HE_Mesh(new HEC_Copy(this));
     }
@@ -250,6 +267,11 @@ public class HE_Selection extends HE_MeshStructure {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param sel 
+     */
     public void union(final HE_Selection sel) {
 	for (final HE_Face f : sel.faces) {
 	    add(f);
@@ -452,7 +474,7 @@ public class HE_Selection extends HE_MeshStructure {
 		    }
 		    he = he.getNextInFace();
 		} while (he != f.getHalfedge());
-		if (ns >= threshold * f.getFaceOrder()) {
+		if (ns >= (threshold * f.getFaceOrder())) {
 		    add(f);
 		}
 	    }
@@ -473,6 +495,11 @@ public class HE_Selection extends HE_MeshStructure {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Selection selectAllFaces() {
 	clear();
 	for (final HE_Face f : parent.faces) {
@@ -483,6 +510,12 @@ public class HE_Selection extends HE_MeshStructure {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param r 
+     * @return 
+     */
     public HE_Selection selectRandomFaces(final double r) {
 	clear();
 	for (final HE_Face f : parent.faces) {
@@ -495,6 +528,11 @@ public class HE_Selection extends HE_MeshStructure {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Selection selectAllEdges() {
 	clear();
 	for (final HE_Halfedge e : parent.halfedges) {
@@ -505,6 +543,11 @@ public class HE_Selection extends HE_MeshStructure {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Selection selectAllHalfedges() {
 	clear();
 	for (final HE_Halfedge he : parent.halfedges) {
@@ -515,6 +558,11 @@ public class HE_Selection extends HE_MeshStructure {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Selection selectAllVertices() {
 	clear();
 	for (final HE_Vertex v : parent.vertices) {
@@ -670,6 +718,9 @@ public class HE_Selection extends HE_MeshStructure {
 	}
     }
 
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HE_MeshStructure#getFacesWithNormal(wblut.geom.WB_Coordinate, double)
+     */
     @Override
     public void getFacesWithNormal(final WB_Coordinate n, final double ta) {
 	final WB_Vector nn = geometryfactory.createNormalizedVector(n);
@@ -691,6 +742,9 @@ public class HE_Selection extends HE_MeshStructure {
 	}
     }
 
+    /**
+     * 
+     */
     public void collectEdgesByVertex() {
 	final HE_VertexIterator vitr = new HE_VertexIterator(this);
 	while (vitr.hasNext()) {

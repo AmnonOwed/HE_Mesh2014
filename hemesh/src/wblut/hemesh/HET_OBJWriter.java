@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import gnu.trove.map.TLongIntMap;
@@ -11,19 +14,46 @@ import java.util.Iterator;
 import java.util.zip.GZIPOutputStream;
 import wblut.geom.WB_Coordinate;
 
+/**
+ * 
+ */
 public class HET_OBJWriter {
+    
+    /**
+     * 
+     */
     protected static OutputStream objStream;
+    
+    /**
+     * 
+     */
     protected static PrintWriter objWriter;
+    
+    /**
+     * 
+     */
     protected static OutputStream mtlStream;
+    
+    /**
+     * 
+     */
     protected static PrintWriter mtlWriter;
+    
+    /**
+     * 
+     */
     protected static int numVerticesWritten = 0;
+    
+    /**
+     * 
+     */
     protected static int numNormalsWritten = 0;
 
     /**
      * Begin save.
      *
-     * @param fn
-     *            the fn
+     * @param fn            the fn
+     * @param name 
      */
     public static void beginSave(final String fn, final String name) {
 	try {
@@ -35,6 +65,13 @@ public class HET_OBJWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param file 
+     * @return 
+     * @throws IOException 
+     */
     static public OutputStream createOutputStream(final File file)
 	    throws IOException {
 	if (file == null) {
@@ -48,6 +85,11 @@ public class HET_OBJWriter {
 	return stream;
     }
 
+    /**
+     * 
+     *
+     * @param file 
+     */
     static public void createDirectories(final File file) {
 	try {
 	    final String parentName = file.getParent();
@@ -95,20 +137,44 @@ public class HET_OBJWriter {
 	objWriter.println("f " + a + " " + b + " " + c);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param c 
+     */
     public static void facecolor(final int i, final int c) {
 	mtlWriter.println("newmtl f" + i);
 	mtlWriter.println("Kd " + red(c) + " " + green(c) + " " + blue(c));
 	mtlWriter.println("illum 0");
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final float red(final int what) {
 	return ((what >> 16) & 0xff) / 255.0f;
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final float green(final int what) {
 	return ((what >> 8) & 0xff) / 255.0f;
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final float blue(final int what) {
 	return ((what) & 0xff) / 255.0f;
     }
@@ -204,6 +270,12 @@ public class HET_OBJWriter {
 	numVerticesWritten++;
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param c 
+     */
     public static void vertexcolor(final int i, final int c) {
 	mtlWriter.println("newmtl v" + i);
 	mtlWriter.println("Kd " + red(c) + " " + green(c) + " " + blue(c));
@@ -223,6 +295,13 @@ public class HET_OBJWriter {
      * Public License along with this library; if not, write to the Free
      * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
      * 02110-1301, USA
+     */
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
      */
     public static void saveMesh(final HE_Mesh mesh, final String path,
 	    final String name) {
@@ -254,18 +333,25 @@ public class HET_OBJWriter {
 	    he = f.getHalfedge();
 	    faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + vOffset,
+		    + vOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + vOffset, keyToIndex.get(he.getVertex().key())
-			    + nOffset,
+		    + vOffset, keyToIndex.get(he.getVertex().key())
+		    + nOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + nOffset,
+		    + nOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + nOffset);
+		    + nOffset);
 	}
 	endSave();
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
+     */
     public static void saveMeshWithFaceColor(final HE_Mesh mesh,
 	    final String path, final String name) {
 	beginSave(path, name);
@@ -300,18 +386,25 @@ public class HET_OBJWriter {
 	    objWriter.println("usemtl f" + (fi++));
 	    faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + vOffset,
+		    + vOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + vOffset, keyToIndex.get(he.getVertex().key())
-			    + nOffset,
+		    + vOffset, keyToIndex.get(he.getVertex().key())
+		    + nOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + nOffset,
+		    + nOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + nOffset);
+		    + nOffset);
 	}
 	endSave();
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
+     */
     public static void saveMeshWithVertexColor(final HE_Mesh mesh,
 	    final String path, final String name) {
 	beginSave(path, name);
@@ -345,14 +438,14 @@ public class HET_OBJWriter {
 	    he = f.getHalfedge();
 	    faceWithNormals(keyToIndex.get(he.getVertex().key()) + vOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + vOffset,
+		    + vOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + vOffset, keyToIndex.get(he.getVertex().key())
-			    + nOffset,
+		    + vOffset, keyToIndex.get(he.getVertex().key())
+		    + nOffset,
 		    keyToIndex.get(he.getNextInFace().getVertex().key())
-			    + nOffset,
+		    + nOffset,
 		    keyToIndex.get(he.getPrevInFace().getVertex().key())
-			    + nOffset);
+		    + nOffset);
 	}
 	endSave();
     }

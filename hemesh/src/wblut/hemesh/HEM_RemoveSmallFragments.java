@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 /**
@@ -7,13 +10,26 @@ package wblut.hemesh;
  *
  */
 public class HEM_RemoveSmallFragments extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     private int n;
 
+    /**
+     * 
+     */
     public HEM_RemoveSmallFragments() {
 	super();
 	n = 4;
     }
 
+    /**
+     * 
+     *
+     * @param n 
+     * @return 
+     */
     public HEM_RemoveSmallFragments setMinimumFaces(final int n) {
 	this.n = n;
 	return this;

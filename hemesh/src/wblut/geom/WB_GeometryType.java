@@ -1,5 +1,75 @@
+/*
+ * 
+ */
 package wblut.geom;
 
+/**
+ * 
+ */
 public enum WB_GeometryType {
-	COORDINATE, POINT, VECTOR, LINE, RAY, SEGMENT, POLYLINE, RING, CIRCLE, POLYGON, TRIANGLE, PLANE, MESH, COLLECTION, TETRAHEDRON, SPHERE
+    
+    /**
+     * 
+     */
+    COORDINATE, 
+ /**
+  * 
+  */
+ POINT, 
+ /**
+  * 
+  */
+ VECTOR, 
+ /**
+  * 
+  */
+ LINE, 
+ /**
+  * 
+  */
+ RAY, 
+ /**
+  * 
+  */
+ SEGMENT, 
+ /**
+  * 
+  */
+ POLYLINE, 
+ /**
+  * 
+  */
+ RING, 
+ /**
+  * 
+  */
+ CIRCLE, 
+ /**
+  * 
+  */
+ POLYGON, 
+ /**
+  * 
+  */
+ TRIANGLE, 
+ /**
+  * 
+  */
+ PLANE, 
+ /**
+  * 
+  */
+ MESH, 
+ /**
+  * 
+  */
+ COLLECTION, 
+ /**
+  * 
+  */
+ TETRAHEDRON, 
+ /**
+  * 
+  */
+ SPHERE
 }

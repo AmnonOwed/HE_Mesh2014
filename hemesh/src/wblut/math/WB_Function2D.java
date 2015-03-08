@@ -1,7 +1,21 @@
+/*
+ * 
+ */
 package wblut.math;
 
+/**
+ * 
+ *
+ * @param <T> 
+ */
 public interface WB_Function2D<T> {
-
-	public T f(double x, double y);
-
+    
+    /**
+     * 
+     *
+     * @param x 
+     * @param y 
+     * @return 
+     */
+    public T f(double x, double y);
 }

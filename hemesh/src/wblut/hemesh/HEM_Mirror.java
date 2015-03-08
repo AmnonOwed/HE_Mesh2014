@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -11,38 +14,99 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HEM_Mirror extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     private WB_Plane P;
+    
+    /**
+     * 
+     */
     private boolean keepCenter = false;
+    
+    /**
+     * 
+     */
     private boolean reverse = false;
+    
+    /**
+     * 
+     */
     public HE_Selection cut;
+    
+    /**
+     * 
+     */
     private double offset;
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public HEM_Mirror setOffset(final double d) {
 	offset = d;
 	return this;
     }
 
+    /**
+     * 
+     */
     public HEM_Mirror() {
 	super();
     }
 
+    /**
+     * 
+     *
+     * @param P 
+     * @return 
+     */
     public HEM_Mirror setPlane(final WB_Plane P) {
 	this.P = P;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param ox 
+     * @param oy 
+     * @param oz 
+     * @param nx 
+     * @param ny 
+     * @param nz 
+     * @return 
+     */
     public HEM_Mirror setPlane(final double ox, final double oy,
 	    final double oz, final double nx, final double ny, final double nz) {
 	P = new WB_Plane(ox, oy, oz, nx, ny, nz);
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HEM_Mirror setReverse(final Boolean b) {
 	reverse = b;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HEM_Mirror setKeepCenter(final Boolean b) {
 	keepCenter = b;
 	return this;
@@ -50,7 +114,7 @@ public class HEM_Mirror extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -143,7 +207,7 @@ public class HEM_Mirror extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.io.BufferedOutputStream;
@@ -8,7 +11,14 @@ import java.io.OutputStream;
 import java.util.zip.GZIPOutputStream;
 import wblut.geom.WB_Coordinate;
 
+/**
+ * 
+ */
 public class HET_PLYWriter {
+    
+    /**
+     * 
+     */
     private static final byte[] buf = new byte[4];
 
     /**
@@ -29,12 +39,18 @@ public class HET_PLYWriter {
      */
     private static final byte[] le(final int i) {
 	buf[3] = (byte) (i >>> 24);
-	buf[2] = (byte) (i >> 16 & 0xff);
-	buf[1] = (byte) (i >> 8 & 0xff);
+	buf[2] = (byte) ((i >> 16) & 0xff);
+	buf[1] = (byte) ((i >> 8) & 0xff);
 	buf[0] = (byte) (i & 0xff);
 	return buf;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param stream 
+     */
     public static void saveMesh(final HE_Mesh mesh, final OutputStream stream) {
 	try {
 	    final BufferedOutputStream out = new BufferedOutputStream(stream,
@@ -82,18 +98,43 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final int red(final int what) {
 	return (what >> 16) & 0xff;
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final int green(final int what) {
 	return (what >> 8) & 0xff;
     }
 
+    /**
+     * 
+     *
+     * @param what 
+     * @return 
+     */
     public static final int blue(final int what) {
 	return (what) & 0xff;
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
+     */
     public static void saveMesh(final HE_Mesh mesh, final String path,
 	    final String name) {
 	try {
@@ -103,6 +144,13 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param file 
+     * @return 
+     * @throws IOException 
+     */
     static public OutputStream createOutputStream(final File file)
 	    throws IOException {
 	if (file == null) {
@@ -116,6 +164,11 @@ public class HET_PLYWriter {
 	return stream;
     }
 
+    /**
+     * 
+     *
+     * @param file 
+     */
     static public void createDirectories(final File file) {
 	try {
 	    final String parentName = file.getParent();
@@ -131,6 +184,12 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param stream 
+     */
     public static void saveMeshWithVertexColor(final HE_Mesh mesh,
 	    final OutputStream stream) {
 	try {
@@ -188,6 +247,13 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
+     */
     public static void saveMeshWithVertexColor(final HE_Mesh mesh,
 	    final String path, final String name) {
 	try {
@@ -198,6 +264,12 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param stream 
+     */
     public static void saveMeshWithFaceColor(final HE_Mesh mesh,
 	    final OutputStream stream) {
 	try {
@@ -255,6 +327,13 @@ public class HET_PLYWriter {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param mesh 
+     * @param path 
+     * @param name 
+     */
     public static void saveMeshWithFaceColor(final HE_Mesh mesh,
 	    final String path, final String name) {
 	try {

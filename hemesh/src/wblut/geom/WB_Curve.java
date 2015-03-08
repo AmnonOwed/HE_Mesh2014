@@ -1,10 +1,32 @@
+/*
+ * 
+ */
 package wblut.geom;
 
+/**
+ * 
+ */
 public interface WB_Curve {
+    
+    /**
+     * 
+     *
+     * @param u 
+     * @return 
+     */
+    public WB_Point curvePoint(double u);
 
-	public WB_Point curvePoint(double u);
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double loweru();
 
-	public double loweru();
-
-	public double upperu();
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double upperu();
 }

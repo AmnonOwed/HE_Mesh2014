@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 import java.util.ArrayList;
@@ -5,12 +8,39 @@ import javolution.util.FastMap;
 import wblut.math.WB_Epsilon;
 import wblut.math.WB_Math;
 
+/**
+ * 
+ */
 public class WB_GeomGrid {
+    
+    /**
+     * 
+     */
     private final FastMap<Integer, WB_GeomGridCell> cells;
+    
+    /**
+     * 
+     */
     private final int W, H, WH, D;
+    
+    /**
+     * 
+     */
     private final double dx, dy, dz, idx, idy, idz;
+    
+    /**
+     * 
+     */
     private final WB_Point min;
+    
+    /**
+     * 
+     */
     private final WB_Point max;
+    
+    /**
+     * 
+     */
     private final WB_AABB aabb;
 
     /**
@@ -22,6 +52,14 @@ public class WB_GeomGrid {
 	/** The inside. */
 	boolean inside;
 
+	/**
+	 * 
+	 *
+	 * @param i 
+	 * @param j 
+	 * @param k 
+	 * @param inside 
+	 */
 	Index(final int i, final int j, final int k, final boolean inside) {
 	    this.i = i;
 	    this.j = j;
@@ -29,10 +67,21 @@ public class WB_GeomGrid {
 	    this.inside = inside;
 	}
 
+	/**
+	 * 
+	 *
+	 * @return 
+	 */
 	int index() {
-	    return i + j * W + k * WH;
+	    return i + (j * W) + (k * WH);
 	}
 
+	/**
+	 * 
+	 *
+	 * @param id 
+	 * @return 
+	 */
 	boolean equals(final Index id) {
 	    return (i == id.i) && (j == id.j) && (k == id.k);
 	}
@@ -47,11 +96,29 @@ public class WB_GeomGrid {
 	    return ("i " + i + " j " + j + " k " + k + " inside " + inside);
 	}
 
+	/**
+	 * 
+	 *
+	 * @return 
+	 */
 	public Index get() {
 	    return new Index(i, j, k, inside);
 	}
     }
 
+    /**
+     * 
+     *
+     * @param minx 
+     * @param miny 
+     * @param minz 
+     * @param maxx 
+     * @param maxy 
+     * @param maxz 
+     * @param W 
+     * @param H 
+     * @param D 
+     */
     public WB_GeomGrid(final double minx, final double miny, final double minz,
 	    final double maxx, final double maxy, final double maxz,
 	    final int W, final int H, final int D) {
@@ -71,6 +138,11 @@ public class WB_GeomGrid {
 	idz = 1.0 / dz;
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     */
     public void addPoint(final WB_Coordinate p) {
 	final Index id = safeijk(p);
 	if (id != null) {
@@ -86,6 +158,12 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @param r 
+     */
     public void addPoint(final WB_Coordinate p, final double r) {
 	final ArrayList<WB_GeomGridCell> fatcells = getCellsInNeighborhood(p,
 		r, true);
@@ -101,6 +179,11 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     */
     public void removePoint(final WB_Point p) {
 	final Index id = safeijk(p);
 	if (id != null) {
@@ -114,6 +197,12 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @param r 
+     */
     public void removePoint(final WB_Point p, final double r) {
 	final ArrayList<WB_GeomGridCell> fatcells = getCellsInNeighborhood(p,
 		r, true);
@@ -129,6 +218,12 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param S 
+     * @param r 
+     */
     public void addSegment(final WB_Segment S, final double r) {
 	final ArrayList<WB_GeomGridCell> fatcells = getCellsInNeighborhood(S,
 		r, true);
@@ -144,6 +239,11 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param S 
+     */
     public void addSegment(final WB_Segment S) {
 	final ArrayList<Index> traversedIndices = indicesTraversed(S);
 	for (final Index id : traversedIndices) {
@@ -159,6 +259,11 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param S 
+     */
     public void removeSegment(final WB_Segment S) {
 	final ArrayList<Index> traversedIndices = indicesTraversed(S);
 	for (final Index id : traversedIndices) {
@@ -172,6 +277,12 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param S 
+     * @param r 
+     */
     public void removeSegment(final WB_Segment S, final double r) {
 	final ArrayList<WB_GeomGridCell> fatcells = getCellsInNeighborhood(S,
 		r, true);
@@ -187,11 +298,23 @@ public class WB_GeomGrid {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @return 
+     */
     public WB_Point index(final WB_Coordinate p) {
 	final Index id = ijk(p);
 	return new WB_Point(id.i, id.j, id.k);
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @return 
+     */
     public WB_Point safeIndex(final WB_Coordinate p) {
 	final Index id = safeijk(p);
 	if (id == null) {
@@ -200,23 +323,31 @@ public class WB_GeomGrid {
 	return new WB_Point(id.i, id.j, id.k);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @param k 
+     * @return 
+     */
     public ArrayList<WB_Point> getPoints(final int i, final int j, final int k) {
 	if (i < 0) {
 	    return null;
 	}
-	if (i > W - 1) {
+	if (i > (W - 1)) {
 	    return null;
 	}
 	if (j < 0) {
 	    return null;
 	}
-	if (j > H - 1) {
+	if (j > (H - 1)) {
 	    return null;
 	}
 	if (k < 0) {
 	    return null;
 	}
-	if (k > D - 1) {
+	if (k > (D - 1)) {
 	    return null;
 	}
 	final WB_GeomGridCell cell = cells.get(index(i, j, k));
@@ -226,6 +357,12 @@ public class WB_GeomGrid {
 	return cell.getPoints();
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @return 
+     */
     public ArrayList<WB_Point> getPointsInSameCell(final WB_Coordinate p) {
 	final Index id = safeijk(p);
 	if (id == null) {
@@ -238,6 +375,14 @@ public class WB_GeomGrid {
 	return cell.getPoints();
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @param r 
+     * @param all 
+     * @return 
+     */
     public ArrayList<WB_GeomGridCell> getCellsInNeighborhood(
 	    final WB_Coordinate p, final double r, final boolean all) {
 	final ArrayList<WB_GeomGridCell> result = new ArrayList<WB_GeomGridCell>();
@@ -255,13 +400,15 @@ public class WB_GeomGrid {
 		    if (neighbor > -1) {
 			cell = cells.get(neighbor);
 			if (cell != null) {
-			    if (WB_GeometryOp.getSqDistance3D(p, cell.getAABB()) <= r2) {
+			    if (WB_GeometryOp
+				    .getSqDistance3D(p, cell.getAABB()) <= r2) {
 				result.add(cell);
 			    }
 			} else if (all) {
 			    cell = getNewCellForIndex(id.i + di, id.j + dj,
 				    id.k + dk);
-			    if (WB_GeometryOp.getSqDistance3D(p, cell.getAABB()) <= r2) {
+			    if (WB_GeometryOp
+				    .getSqDistance3D(p, cell.getAABB()) <= r2) {
 				result.add(cell);
 			    }
 			}
@@ -272,13 +419,21 @@ public class WB_GeomGrid {
 	return result;
     }
 
+    /**
+     * 
+     *
+     * @param S 
+     * @param r 
+     * @param all 
+     * @return 
+     */
     public ArrayList<WB_GeomGridCell> getCellsInNeighborhood(
 	    final WB_Segment S, final double r, final boolean all) {
 	final ArrayList<WB_GeomGridCell> result = new ArrayList<WB_GeomGridCell>();
 	final Index ido = ijk(S.getOrigin());
 	final Index ide = ijk(S.getEndpoint());
 	WB_GeomGridCell cell;
-	double r2 = (r + 0.5 * WB_Math.max(dx, dy, dz));
+	double r2 = (r + (0.5 * WB_Math.max(dx, dy, dz)));
 	r2 *= r2;
 	int neighbor;
 	final int ri = (int) (r / dx) + 1;
@@ -321,44 +476,76 @@ public class WB_GeomGrid {
 	return result;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public ArrayList<WB_GeomGridCell> getCells() {
 	final ArrayList<WB_GeomGridCell> cellList = new ArrayList<WB_GeomGridCell>();
 	cellList.addAll(cells.values());
 	return cellList;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_AABB getAABB() {
 	return aabb;
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @param k 
+     * @return 
+     */
     private int index(final int i, final int j, final int k) {
-	return i + j * W + k * WH;
+	return i + (j * W) + (k * WH);
     }
 
+    /**
+     * 
+     *
+     * @param id 
+     * @return 
+     */
     private int index(final Index id) {
-	return id.i + id.j * W + id.k * WH;
+	return id.i + (id.j * W) + (id.k * WH);
     }
 
+    /**
+     * 
+     *
+     * @param i 
+     * @param j 
+     * @param k 
+     * @return 
+     */
     private int safeIndex(final int i, final int j, final int k) {
 	if (i < 0) {
 	    return -1;
 	}
-	if (i > W - 1) {
+	if (i > (W - 1)) {
 	    return -1;
 	}
 	if (j < 0) {
 	    return -1;
 	}
-	if (j > H - 1) {
+	if (j > (H - 1)) {
 	    return -1;
 	}
 	if (k < 0) {
 	    return -1;
 	}
-	if (k > D - 1) {
+	if (k > (D - 1)) {
 	    return -1;
 	}
-	return i + j * W + k * WH;
+	return i + (j * W) + (k * WH);
     }
 
     /**
@@ -373,21 +560,21 @@ public class WB_GeomGrid {
 	if (i < 0) {
 	    return null;
 	}
-	if (i > W - 1) {
+	if (i > (W - 1)) {
 	    return null;
 	}
 	final int j = (int) ((p.yd() - min.yd()) * idy);
 	if (j < 0) {
 	    return null;
 	}
-	if (j > H - 1) {
+	if (j > (H - 1)) {
 	    return null;
 	}
 	final int k = (int) ((p.zd() - min.zd()) * idz);
 	if (k < 0) {
 	    return null;
 	}
-	if (k > D - 1) {
+	if (k > (D - 1)) {
 	    return null;
 	}
 	return new Index(i, j, k, true);
@@ -401,29 +588,29 @@ public class WB_GeomGrid {
      * @return the index
      */
     private Index ijk(final WB_Coordinate p) {
-	final int i = (p.xd() - min.xd() < 0) ? (int) ((p.xd() - min.xd()) * idx) - 1
+	final int i = ((p.xd() - min.xd()) < 0) ? (int) ((p.xd() - min.xd()) * idx) - 1
 		: (int) ((p.xd() - min.xd()) * idx);
-	final int j = (p.yd() - min.yd() < 0) ? (int) ((p.yd() - min.yd()) * idy) - 1
+	final int j = ((p.yd() - min.yd()) < 0) ? (int) ((p.yd() - min.yd()) * idy) - 1
 		: (int) ((p.yd() - min.yd()) * idy);
-	final int k = (p.zd() - min.zd() < 0) ? (int) ((p.zd() - min.zd()) * idz) - 1
+	final int k = ((p.zd() - min.zd()) < 0) ? (int) ((p.zd() - min.zd()) * idz) - 1
 		: (int) ((p.zd() - min.zd()) * idz);
 	boolean inside = true;
 	if (i < 0) {
 	    inside = false;
 	}
-	if (i > W - 1) {
+	if (i > (W - 1)) {
 	    inside = false;
 	}
 	if (j < 0) {
 	    inside = false;
 	}
-	if (j > H - 1) {
+	if (j > (H - 1)) {
 	    inside = false;
 	}
 	if (k < 0) {
 	    inside = false;
 	}
-	if (k > D - 1) {
+	if (k > (D - 1)) {
 	    inside = false;
 	}
 	return new Index(i, j, k, inside);
@@ -470,11 +657,11 @@ public class WB_GeomGrid {
 	final double tdy = signy * dy * idy;
 	final double tdz = signz * dz * idz;
 	double tnx, tny, tnz; // distance along ray to next x,y,z grid boundary;
-	tnx = (signx > 0) ? (current.i + 1) * dx - x : current.i * dx - x;
+	tnx = (signx > 0) ? ((current.i + 1) * dx) - x : (current.i * dx) - x;
 	tnx *= idx;// distance along ray to next x crossing
-	tny = (signy > 0) ? (current.j + 1) * dy - y : current.j * dy - y;
+	tny = (signy > 0) ? ((current.j + 1) * dy) - y : (current.j * dy) - y;
 	tny *= idy;// distance along ray to next y crossing
-	tnz = (signz > 0) ? (current.k + 1) * dz - z : current.k * dz - z;
+	tnz = (signz > 0) ? ((current.k + 1) * dz) - z : (current.k * dz) - z;
 	tnz *= idz;// distance along ray to next z crossing
 	do {
 	    prev = current.get();
@@ -492,19 +679,19 @@ public class WB_GeomGrid {
 	    if (current.i < 0) {
 		current.inside = false;
 	    }
-	    if (current.i > W - 1) {
+	    if (current.i > (W - 1)) {
 		current.inside = false;
 	    }
 	    if (current.j < 0) {
 		current.inside = false;
 	    }
-	    if (current.j > H - 1) {
+	    if (current.j > (H - 1)) {
 		current.inside = false;
 	    }
 	    if (current.k < 0) {
 		current.inside = false;
 	    }
-	    if (current.k > D - 1) {
+	    if (current.k > (D - 1)) {
 		current.inside = false;
 	    }
 	    if (current.inside) {
@@ -514,9 +701,10 @@ public class WB_GeomGrid {
 		    indicesTraversed.add(newindex);
 		}
 	    }
-	} while (!current.equals(end) && (signx * current.i <= signx * end.i)
-		&& (signy * current.j <= signy * end.j)
-		&& (signz * current.k <= signz * end.k)
+	} while (!current.equals(end)
+		&& ((signx * current.i) <= (signx * end.i))
+		&& ((signy * current.j) <= (signy * end.j))
+		&& ((signz * current.k) <= (signz * end.k))
 		&& (!current.equals(prev)));
 	return indicesTraversed;
     }
@@ -552,10 +740,10 @@ public class WB_GeomGrid {
      * @return the new cell for index
      */
     private WB_GeomGridCell getNewCellForIndex(final Index id) {
-	return new WB_GeomGridCell(index(id), new WB_Point(
-		id.i * dx + min.xd(), id.j * dy + min.yd(), id.k * dz
-			+ min.zd()), new WB_Point(id.i * dx + min.xd() + dx,
-		id.j * dy + min.yd() + dy, id.k * dz + min.zd() + dz));
+	return new WB_GeomGridCell(index(id), new WB_Point((id.i * dx)
+		+ min.xd(), (id.j * dy) + min.yd(), (id.k * dz) + min.zd()),
+		new WB_Point((id.i * dx) + min.xd() + dx, (id.j * dy)
+			+ min.yd() + dy, (id.k * dz) + min.zd() + dz));
     }
 
     /**
@@ -571,9 +759,9 @@ public class WB_GeomGrid {
      */
     private WB_GeomGridCell getNewCellForIndex(final int i, final int j,
 	    final int k) {
-	return new WB_GeomGridCell(index(i, j, k), new WB_Point(i * dx
-		+ min.xd(), j * dy + min.yd(), k * dz + min.zd()),
-		new WB_Point(i * dx + min.xd() + dx, j * dy + min.yd() + dy, k
-			* dz + min.zd() + dz));
+	return new WB_GeomGridCell(index(i, j, k), new WB_Point((i * dx)
+		+ min.xd(), (j * dy) + min.yd(), (k * dz) + min.zd()),
+		new WB_Point((i * dx) + min.xd() + dx,
+			(j * dy) + min.yd() + dy, (k * dz) + min.zd() + dz));
     }
 }

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 /**
@@ -6,43 +9,42 @@ package wblut.geom;
  * @author Frederik Vanhoutte, W:Blut
  */
 public interface WB_Surface {
+    /**
+     * Retrieve the point at values (u,v).
+     * 
+     * @param u
+     *            the u
+     * @param v
+     *            the v
+     * @return WB_Point
+     */
+    public WB_Point surfacePoint(double u, double v);
 
-	/**
-	 * Retrieve the point at values (u,v).
-	 * 
-	 * @param u
-	 *            the u
-	 * @param v
-	 *            the v
-	 * @return WB_Point
-	 */
-	public WB_Point surfacePoint(double u, double v);
+    /**
+     * Get the lower end of the u parameter range.
+     * 
+     * @return u
+     */
+    public double loweru();
 
-	/**
-	 * Get the lower end of the u parameter range.
-	 * 
-	 * @return u
-	 */
-	public double loweru();
+    /**
+     * Get the upper end of the u parameter range.
+     * 
+     * @return u
+     */
+    public double upperu();
 
-	/**
-	 * Get the upper end of the u parameter range.
-	 * 
-	 * @return u
-	 */
-	public double upperu();
+    /**
+     * Get the lower end of the v parameter range.
+     * 
+     * @return v
+     */
+    public double lowerv();
 
-	/**
-	 * Get the lower end of the v parameter range.
-	 * 
-	 * @return v
-	 */
-	public double lowerv();
-
-	/**
-	 * Get the upper end of the v parameter range.
-	 * 
-	 * @return v
-	 */
-	public double upperv();
+    /**
+     * Get the upper end of the v parameter range.
+     * 
+     * @return v
+     */
+    public double upperv();
 }

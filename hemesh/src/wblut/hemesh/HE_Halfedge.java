@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import wblut.geom.WB_ClassificationConvex;
@@ -31,6 +34,10 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     /** The _data. */
     // private HashMap<String, Object> _data;
     private int hecolor;
+    
+    /**
+     * 
+     */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
     /**
@@ -179,6 +186,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Vector getEdgeTangent() {
 	final WB_Vector v = getHalfedgeTangent();
 	if (v == null) {
@@ -199,6 +211,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Point getEdgeCenter() {
 	if ((_next != null) && (_vertex != null) && (_next.getVertex() != null)) {
 	    return gf.createMidpoint(_next.getVertex(), _vertex);
@@ -250,6 +267,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return _vertex;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Vertex getStartVertex() {
 	return _vertex;
     }
@@ -284,14 +306,14 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     }
 
     /**
-     * Clear prev
+     * Clear prev.
      */
     public void clearPrev() {
 	// _prev = null;
     }
 
     /**
-     * Clear pair
+     * Clear pair.
      */
     public void clearPair() {
 	_pair = null;
@@ -314,6 +336,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	_vertex = null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Vector getEdgeNormal() {
 	if (_pair == null) {
 	    return null;
@@ -418,22 +445,38 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return null;// _data.get(s);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_HasColor#getColor()
+     */
     @Override
     public int getColor() {
 	return hecolor;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_HasColor#setColor(int)
+     */
     @Override
     public void setColor(final int color) {
 	hecolor = color;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public double getLength() {
 	return WB_GeometryOp.getDistance3D(getVertex(), getEndVertex());
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public boolean isEdge() {
-	if (_face == null || _pair == null) {
+	if ((_face == null) || (_pair == null)) {
 	    return false;
 	}
 	if (_pair._face == null) {
@@ -442,8 +485,13 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return (_key < _pair._key);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public boolean isBoundary() {
-	if (_face == null || _pair == null) {
+	if ((_face == null) || (_pair == null)) {
 	    return false;
 	}
 	if (_pair._face == null) {
@@ -511,11 +559,19 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	}
     }
 
+    /**
+     * 
+     *
+     * @param el 
+     */
     public void copyProperties(final HE_Vertex el) {
 	super.copyProperties(el);
 	hecolor = el.getColor();
     }
 
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HE_Element#clear()
+     */
     @Override
     public void clear() {
 	_face = null;
@@ -524,6 +580,11 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	_vertex = null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public double getAngle() {
 	final WB_Coordinate c = getVertex();
 	final WB_Coordinate p1 = getEndVertex();

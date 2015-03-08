@@ -43,83 +43,152 @@ import wblut.math.WB_Epsilon;
  * EECS-2009-56,
  * http://www.eecs.berkeley.edu/Pubs/TechRpts/2009/EECS-2009-56.html)
  *
- * Or contact the author: mark.howison <at> gmail <dot> com
+ * Or contact the author: mark.howison@gmail.com
  *
  * @author Mark Howison
  */
 public class WB_ConstrainedTriangulation {
-    /* typical size of polygons, for initializing FastLists */
-    private final static int TYPICAL_POLYGON_SIZE = 16;
-    /* errors */
+    /**
+     *
+     */
     protected final static String E_EXHAUSTED = "Exhausted halfedges or points!";
+    /**
+     *
+     */
     protected final static String E_MISSING = "Missing halfedge or point!";
+    /**
+     *
+     */
     protected final static String E_IDENTICAL = "Identical halfedges or points!";
+    /**
+     *
+     */
     protected final static String E_COINCIDENT = "Coincident points!";
+    /**
+     *
+     */
     protected final static String E_TYPE = "Incorrect type!";
+    /**
+     *
+     */
     protected final static String E_POLYGON = "Illegal polygonal region!";
+    /**
+     *
+     */
     protected final static String E_HALFEDGE = "Mismatched halfedge!";
+    /**
+     *
+     */
     protected final static int NULL_VALUE = -100000;
-    /* stdout/debug/test flags */
+    /**
+     *
+     */
     public final static boolean MESSAGES = false;
-    /* mesh data */
+    /**
+     *
+     */
     final protected List<Tri_Point> points = Collections
 	    .synchronizedList(new LinkedList<Tri_Point>());
+    /**
+     *
+     */
     final protected List<Tri_HalfEdge> halfEdges = Collections
 	    .synchronizedList(new LinkedList<Tri_HalfEdge>());
+    /**
+     *
+     */
     protected int nBoundary;
-    /* queues */
+    /**
+     *
+     */
     protected LinkedList<Tri_HalfEdge> delaunayQueue = new LinkedList<Tri_HalfEdge>();
+    /**
+     *
+     */
     protected LinkedList<Tri_Point> removedConstraints = new LinkedList<Tri_Point>();
+    /**
+     *
+     */
     protected LinkedList<Tri_Point> deleteQueue = new LinkedList<Tri_Point>();
+    /**
+     *
+     */
     private Tri_Point removeConstraintPeg = null;
 
-    /******************************************************************************/
-    /*
-     * Constructors etc.
-     * /*******************************************************
-     * **********************
-     */
     public WB_ConstrainedTriangulation() {
     }
 
-    /******************************************************************************/
-    /*
-     * Accessors & Mutators
-     * /****************************************************
-     * *************************
+    /**
+     * @return
      */
     public int size() {
 	return points.size();
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public int boundarySize() {
 	return nBoundary;
     }
 
+    /**
+     *
+     */
     public void clear() {
 	points.clear();
 	halfEdges.clear();
 	delaunayQueue.clear();
     }
 
+    /**
+     *
+     *
+     * @param flag
+     */
     public void clearFlags(final int flag) {
 	for (final Tri_HalfEdge he : halfEdges) {
 	    he.unflag(flag);
 	}
     }
 
+    /**
+     *
+     *
+     * @param p
+     * @return
+     */
     public boolean contains(final Tri_Point p) {
 	return points.contains(p);
     }
 
+    /**
+     *
+     *
+     * @param p
+     * @return
+     */
     public int indexOf(final Tri_Point p) {
 	return points.indexOf(p);
     }
 
+    /**
+     *
+     *
+     * @param i
+     * @return
+     */
     public Tri_Point getPoint(final int i) {
 	return points.get(i);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public WB_Coordinate[] getFaceCoordinates() {
 	final FastTable<WB_Coordinate> facePoints = new FastTable<WB_Coordinate>();
 	// reset 'used' flags
@@ -143,6 +212,11 @@ public class WB_ConstrainedTriangulation {
 	return facePoints.toArray(new WB_Point[0]);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public WB_Triangle[] getExplicitTriangles() {
 	final List<WB_Triangle> triangles = new FastTable<WB_Triangle>();
 	// reset 'used' flags
@@ -163,6 +237,11 @@ public class WB_ConstrainedTriangulation {
 	return triangles.toArray(new WB_Triangle[0]);
     }
 
+    /**
+     *
+     *
+     * @return
+     */
     public List<WB_Triangle> getExplicitTrianglesAsList() {
 	final List<WB_Triangle> triangles = new FastTable<WB_Triangle>();
 	// reset 'used' flags
@@ -183,142 +262,10 @@ public class WB_ConstrainedTriangulation {
 	return triangles;
     }
 
-    /*
-     * public WB_IndexedTriangle2D[] getIndexedTriangles(final WB_Point[]
-     * points) { final FastTable<WB_IndexedTriangle2D> triangles = new
-     * FastTable<WB_IndexedTriangle2D>(); // reset 'used' flags
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // find the faces for (final
-     * Tri_HalfEdge he0 : halfEdges) { if
-     * (he0.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final Tri_HalfEdge
-     * he1 = he0.next; final Tri_HalfEdge he2 = he1.next; triangles.add(new
-     * WB_IndexedTriangle2D(indexOf(he0.origin), indexOf(he1.origin),
-     * indexOf(he2.origin), points)); // mark these half edges as used
-     * he0.flag(Tri_HalfEdge.FLAG_READ); he1.flag(Tri_HalfEdge.FLAG_READ);
-     * he2.flag(Tri_HalfEdge.FLAG_READ); } return triangles.toArray(new
-     * WB_IndexedTriangle2D[0]); }
-     * 
-     * public WB_IndexedTriangle2D[] getIndexedTrianglesInsideConstraints( final
-     * WB_Point[] points) { final WB_AABB2D AABB = new WB_AABB2D(this.points);
-     * final double range = WB_Distance2D.distance(AABB.min, AABB.max); final
-     * FastTable<WB_IndexedTriangle2D> triangles = new
-     * FastTable<WB_IndexedTriangle2D>(); // reset 'used' flags
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // find the faces for (final
-     * Tri_HalfEdge he0 : halfEdges) { if
-     * (he0.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final Tri_HalfEdge
-     * he1 = he0.next; final Tri_HalfEdge he2 = he1.next; if
-     * (insideClosedConstraints(he0.origin, he1.origin, he2.origin, range)) {
-     * triangles.add(new WB_IndexedTriangle2D(indexOf(he0.origin),
-     * indexOf(he1.origin), indexOf(he2.origin), points)); } // mark these half
-     * edges as used he0.flag(Tri_HalfEdge.FLAG_READ);
-     * he1.flag(Tri_HalfEdge.FLAG_READ); he2.flag(Tri_HalfEdge.FLAG_READ); }
-     * return triangles.toArray(new WB_IndexedTriangle2D[0]); }
-     * 
-     * public List<WB_IndexedTriangle2D> getIndexedTrianglesAsList( final
-     * WB_Point[] points) { final List<WB_IndexedTriangle2D> triangles = new
-     * FastTable<WB_IndexedTriangle2D>(); // reset 'used' flags
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // find the faces for (final
-     * Tri_HalfEdge he0 : halfEdges) { if
-     * (he0.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final Tri_HalfEdge
-     * he1 = he0.next; final Tri_HalfEdge he2 = he1.next; triangles.add(new
-     * WB_IndexedTriangle2D(indexOf(he0.origin), indexOf(he1.origin),
-     * indexOf(he2.origin), points)); // mark these half edges as used
-     * he0.flag(Tri_HalfEdge.FLAG_READ); he1.flag(Tri_HalfEdge.FLAG_READ);
-     * he2.flag(Tri_HalfEdge.FLAG_READ); } return triangles; }
-     * 
-     * public List<WB_IndexedTriangle2D> getIndexedTrianglesAsList( final
-     * WB_Point[] points, final boolean reverse) { final
-     * List<WB_IndexedTriangle2D> triangles = new
-     * FastTable<WB_IndexedTriangle2D>(); // reset 'used' flags
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // find the faces final int n =
-     * points.length; for (final Tri_HalfEdge he0 : halfEdges) { if
-     * (he0.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final Tri_HalfEdge
-     * he1 = he0.next; final Tri_HalfEdge he2 = he1.next; triangles .add(new
-     * WB_IndexedTriangle2D(reverse ? n - 1 - indexOf(he0.origin) :
-     * indexOf(he0.origin), reverse ? n - 1 - indexOf(he1.origin) :
-     * indexOf(he1.origin), reverse ? n - 1 - indexOf(he2.origin) :
-     * indexOf(he2.origin), points)); // mark these half edges as used
-     * he0.flag(Tri_HalfEdge.FLAG_READ); he1.flag(Tri_HalfEdge.FLAG_READ);
-     * he2.flag(Tri_HalfEdge.FLAG_READ); } return triangles; }
-     * 
-     * public WB_Segment[] getExplicitEdges() { final FastTable<WB_Segment>
-     * edges = new FastTable<WB_Segment>(); clearFlags(Tri_HalfEdge.FLAG_READ);
-     * // find the faces for (final Tri_HalfEdge he : halfEdges) { if
-     * (he.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final WB_Segment e =
-     * new WB_Segment( new Tri_Point(he.origin), new Tri_Point(he.next.origin));
-     * edges.add(e); he.flag(Tri_HalfEdge.FLAG_READ); } return edges.toArray(new
-     * WB_Segment[0]); }
-     * 
-     * public WB_Segment[] getExplicitConstrainedEdges() { final
-     * FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // find the faces for (final
-     * Tri_HalfEdge he : halfEdges) { if (he.isFlagged(Tri_HalfEdge.FLAG_READ))
-     * { continue; } if (he.isType(Tri_HalfEdge.CONSTRAINT)) { final WB_Segment
-     * e = new WB_Segment( new Tri_Point(he.origin), new
-     * Tri_Point(he.next.origin)); edges.add(e); }
-     * he.flag(Tri_HalfEdge.FLAG_READ); } return edges.toArray(new
-     * WB_Segment[0]); }
-     * 
-     * 
-     * public WB_Segment[] getExplicitBoundaryEdges() { final
-     * FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // final find the faces for (final
-     * Tri_HalfEdge he : halfEdges) { if (he.isFlagged(Tri_HalfEdge.FLAG_READ))
-     * { continue; } if (he.isType(Tri_HalfEdge.BOUNDARY)) { final WB_Segment e
-     * = new WB_Segment( new Tri_Point(he.origin), new
-     * Tri_Point(he.next.origin)); edges.add(e); }
-     * he.flag(Tri_HalfEdge.FLAG_READ); } return edges.toArray(new
-     * WB_Segment[0]); }
-     * 
-     * public WB_Segment[] getExplicitInteriorEdges() { final
-     * FastTable<WB_Segment> edges = new FastTable<WB_Segment>();
-     * clearFlags(Tri_HalfEdge.FLAG_READ); // final find the faces for (final
-     * Tri_HalfEdge he : halfEdges) { if (he.isFlagged(Tri_HalfEdge.FLAG_READ))
-     * { continue; } if ((!he.isType(Tri_HalfEdge.BOUNDARY)) &&
-     * (!he.isType(Tri_HalfEdge.CONSTRAINT))) { final WB_Segment e = new
-     * WB_Segment( new Tri_Point(he.origin), new Tri_Point(he.next.origin));
-     * edges.add(e); } he.flag(Tri_HalfEdge.FLAG_READ); } return
-     * edges.toArray(new WB_Segment[0]); }
-     * 
-     * public WB_IndexedSegment2D[] getIndexedEdges(final WB_Point[] points) {
-     * final FastTable<WB_IndexedSegment2D> edges = new
-     * FastTable<WB_IndexedSegment2D>(); clearFlags(Tri_HalfEdge.FLAG_READ); //
-     * final find the faces for (final Tri_HalfEdge he : halfEdges) { if
-     * (he.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } final
-     * WB_IndexedSegment2D e = new WB_IndexedSegment2D( indexOf(he.origin),
-     * indexOf(he.next.origin), points); edges.add(e);
-     * he.flag(Tri_HalfEdge.FLAG_READ); } return edges.toArray(new
-     * WB_IndexedSegment2D[0]); }
-     * 
-     * public WB_IndexedSegment2D[] getIndexedConstrainedEdges( final WB_Point[]
-     * points) { final FastTable<WB_IndexedSegment2D> edges = new
-     * FastTable<WB_IndexedSegment2D>(); clearFlags(Tri_HalfEdge.FLAG_READ); //
-     * final find the faces for (final Tri_HalfEdge he : halfEdges) { if
-     * (he.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } if (he.getType() ==
-     * Tri_HalfEdge.CONSTRAINT) { final WB_IndexedSegment2D e = new
-     * WB_IndexedSegment2D( indexOf(he.origin), indexOf(he.next.origin),
-     * points); edges.add(e); } he.flag(Tri_HalfEdge.FLAG_READ); } return
-     * edges.toArray(new WB_IndexedSegment2D[0]); }
-     * 
-     * public WB_IndexedSegment2D[] getIndexedBoundaryEdges(final WB_Point[]
-     * points) { final FastTable<WB_IndexedSegment2D> edges = new
-     * FastTable<WB_IndexedSegment2D>(); clearFlags(Tri_HalfEdge.FLAG_READ); //
-     * final find the faces for (final Tri_HalfEdge he : halfEdges) { if
-     * (he.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } if (he.getType() ==
-     * Tri_HalfEdge.BOUNDARY) { final WB_IndexedSegment2D e = new
-     * WB_IndexedSegment2D( indexOf(he.origin), indexOf(he.next.origin),
-     * points); edges.add(e); } he.flag(Tri_HalfEdge.FLAG_READ); } return
-     * edges.toArray(new WB_IndexedSegment2D[0]); }
-     * 
-     * public WB_IndexedSegment2D[] getIndexedInternalEdges(final WB_Point[]
-     * points) { final FastTable<WB_IndexedSegment2D> edges = new
-     * FastTable<WB_IndexedSegment2D>(); clearFlags(Tri_HalfEdge.FLAG_READ); //
-     * final find the faces for (final Tri_HalfEdge he : halfEdges) { if
-     * (he.isFlagged(Tri_HalfEdge.FLAG_READ)) { continue; } if ((he.getType() !=
-     * Tri_HalfEdge.BOUNDARY) && (he.getType() != Tri_HalfEdge.CONSTRAINT)) {
-     * final WB_IndexedSegment2D e = new WB_IndexedSegment2D(
-     * indexOf(he.origin), indexOf(he.next.origin), points); edges.add(e); }
-     * he.flag(Tri_HalfEdge.FLAG_READ); } return edges.toArray(new
-     * WB_IndexedSegment2D[0]); }
+    /**
+     *
+     *
+     * @return
      */
     public WB_Coordinate[] getPoints() {
 	final WB_Coordinate[] lpoints = new WB_Coordinate[points.size()];
@@ -328,6 +275,12 @@ public class WB_ConstrainedTriangulation {
 	return lpoints;
     }
 
+    /**
+     *
+     *
+     * @param x
+     * @param y
+     */
     public void translate(final double x, final double y) {
 	for (final Tri_Point p : points) {
 	    p.setX(p.xd() + x);
@@ -335,22 +288,23 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
-    /******************************************************************************/
-    /*
-     * Insertion methods
-     * /*******************************************************
-     * **********************
+    /**
+     * 
+     * @param pts
      */
     public static void linkBoundary(final Tri_BPoint[] pts) {
 	final int s = pts.length;
 	for (int i = 0; i < s; i++) {
 	    pts[i].next = pts[(i + 1) % s];
-	    pts[i].prev = pts[(i - 1 + s) % s];
+	    pts[i].prev = pts[((i - 1) + s) % s];
 	}
     }
 
-    // expects a list of points in *clockwise* order for specifiying
-    // an initial boundary for the mesh
+    /**
+     *
+     *
+     * @param pts
+     */
     public void startWithBoundary(final WB_Coordinate[] pts) {
 	final int s = pts.length;
 	assert s >= 3 : error("Initialization requires at least 3 points!");
@@ -364,7 +318,7 @@ public class WB_ConstrainedTriangulation {
 	    halfEdges.add(p.he);
 	}
 	for (int i = 0; i < s; i++) {
-	    halfEdges.get(i).next = halfEdges.get((s + i - 1) % s);
+	    halfEdges.get(i).next = halfEdges.get(((s + i) - 1) % s);
 	}
 	nBoundary = s;
 	for (int i = 0; i < s; i++) {
@@ -375,6 +329,12 @@ public class WB_ConstrainedTriangulation {
 	updateDelaunay();
     }
 
+    /**
+     *
+     *
+     * @param pts
+     * @param reverse
+     */
     public void startWithBoundary(final WB_Coordinate[] pts,
 	    final boolean reverse) {
 	final int s = pts.length;
@@ -395,7 +355,7 @@ public class WB_ConstrainedTriangulation {
 	    Collections.reverse(halfEdges);
 	}
 	for (int i = 0; i < s; i++) {
-	    halfEdges.get(i).next = halfEdges.get((s + i - 1) % s);
+	    halfEdges.get(i).next = halfEdges.get(((s + i) - 1) % s);
 	}
 	nBoundary = s;
 	for (int i = 0; i < s; i++) {
@@ -406,6 +366,13 @@ public class WB_ConstrainedTriangulation {
 	updateDelaunay();
     }
 
+    /**
+     *
+     *
+     * @param origin
+     * @param destination
+     * @return
+     */
     private Tri_HalfEdge addHalfEdge(final Tri_Point origin,
 	    final Tri_Point destination) {
 	final Tri_HalfEdge he1 = new Tri_HalfEdge(origin);
@@ -421,10 +388,14 @@ public class WB_ConstrainedTriangulation {
 	return he1;
     }
 
-    /*
-     * Adds an edge connecting the origins of he1 and he2.
+    /**
      *
-     * @return the halfedge from he1.origin to he2.origin
+     *
+     * @param he1
+     * @param he2
+     * @param he1prev
+     * @param he2prev
+     * @return
      */
     private Tri_HalfEdge addEdge(final Tri_HalfEdge he1,
 	    final Tri_HalfEdge he2, final Tri_HalfEdge he1prev,
@@ -442,11 +413,17 @@ public class WB_ConstrainedTriangulation {
 	return heAdd;
     }
 
+    /**
+     *
+     *
+     * @param p
+     * @param he0
+     * @return
+     */
     public Tri_Point addBoundaryPoint(final Tri_Point p, final Tri_HalfEdge he0) {
 	assert halfEdges.contains(he0) : error(E_MISSING);
 	assert between(he0.origin, he0.next.origin, p) : error("Adding boundary point that doesn't lie on boundary!");
 	Tri_HalfEdge he1, he2;
-	/* check for coincidence with the endpoints of he0 */
 	if (coincident(p, he0.origin)) {
 	    if (MESSAGES) {
 		message("Boundary point is within epsilon of %d.",
@@ -479,6 +456,12 @@ public class WB_ConstrainedTriangulation {
 	return p;
     }
 
+    /**
+     *
+     *
+     * @param point
+     * @return
+     */
     public Tri_Point addInteriorPoint(final WB_Coordinate point) {
 	double dist, min;
 	Tri_Point pNearest = null;
@@ -519,12 +502,26 @@ public class WB_ConstrainedTriangulation {
 	return p;
     }
 
+    /**
+     *
+     *
+     * @param start
+     * @param end
+     * @return
+     */
     public boolean addConstraint(final int start, final int end) {
 	final Tri_Point pStart = getPoint(start);
 	final Tri_Point pEnd = getPoint(end);
 	return addConstraint(pStart, pEnd);
     }
 
+    /**
+     *
+     *
+     * @param pStart
+     * @param pEnd
+     * @return
+     */
     public boolean addConstraint(Tri_Point pStart, final Tri_Point pEnd) {
 	assert points.contains(pStart) : error(E_MISSING);
 	assert points.contains(pEnd) : error(E_MISSING);
@@ -563,14 +560,6 @@ public class WB_ConstrainedTriangulation {
 		    pSearch1, pStart);
 	    assert !coincident(pSearch1, pEnd) : error(E_COINCIDENT, pSearch1,
 		    pEnd);
-	    /* check for collinearity */
-	    // if (between(pStart,pEnd,pSearch1)) {
-	    /* split the constraint in two with pSearch1 as the midpoint */
-	    /*
-	     * addConstraintEdge(heStart,heSearch.next,heStartPrev,heSearch);
-	     * return addConstraint(pSearch1,pEnd); }
-	     */
-	    /* check for intersection */
 	    if (intersect(pStart, pEnd, pSearch0, pSearch1)) {
 		assert !heSearch.isType(Tri_HalfEdge.BOUNDARY) : error("Constraint crosses boundary edge!");
 		if (heSearch.isType(Tri_HalfEdge.AUXILARY)) {
@@ -600,6 +589,14 @@ public class WB_ConstrainedTriangulation {
 	return true;
     }
 
+    /**
+     *
+     *
+     * @param he1
+     * @param he2
+     * @param he1prev
+     * @param he2prev
+     */
     private void addConstraintEdge(final Tri_HalfEdge he1,
 	    final Tri_HalfEdge he2, final Tri_HalfEdge he1prev,
 	    final Tri_HalfEdge he2prev) {
@@ -611,11 +608,9 @@ public class WB_ConstrainedTriangulation {
 	fillEdgeVisiblePolygon(heAdd.sibling);
     }
 
-    /******************************************************************************/
-    /*
-     * Polygon filling methods
-     * /*************************************************
-     * ****************************
+    /**
+     *
+     * @param he1
      */
     protected void fillQuadrilateral(final Tri_HalfEdge he1) {
 	Tri_HalfEdge he2, he3, he4;
@@ -623,14 +618,20 @@ public class WB_ConstrainedTriangulation {
 	he3 = he2.next;
 	he4 = he3.next;
 	assert he4.next == he1;
-	if (WB_Predicates.orient2D(he1.origin, he3.origin, he2.origin)
-		* WB_Predicates.orient2D(he1.origin, he3.origin, he4.origin) < 0) {
+	if ((WB_Predicates.orient2D(he1.origin, he3.origin, he2.origin) * WB_Predicates
+		.orient2D(he1.origin, he3.origin, he4.origin)) < 0) {
 	    addEdge(he1, he3, he4, he2);
 	} else {
 	    addEdge(he2, he4, he1, he3);
 	}
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @return
+     */
     protected FastTable<Tri_HalfEdge> constructPolygon(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING);
 	int i;
@@ -649,15 +650,30 @@ public class WB_ConstrainedTriangulation {
 	return polygon;
     }
 
+    /**
+     *
+     *
+     * @param he
+     */
     protected void fillGeneralPolygon(final Tri_HalfEdge he) {
 	fillGeneralPolygon(constructPolygon(he));
     }
 
+    /**
+     *
+     *
+     * @param polygon
+     */
     protected void fillGeneralPolygon(final FastTable<Tri_HalfEdge> polygon) {
 	fillGeneralPolygonRecurse(polygon);
 	delaunayQueue.addAll(polygon);
     }
 
+    /**
+     *
+     *
+     * @param polygon
+     */
     private void fillGeneralPolygonRecurse(final FastTable<Tri_HalfEdge> polygon) {
 	assert polygon.size() >= 3 : error("Illegal size!");
 	int n, s;
@@ -688,7 +704,7 @@ public class WB_ConstrainedTriangulation {
 		p2 = polygon.get((i + 2) % s).origin;
 		// check that the ear edge p0->p2 lies strictly
 		// inside the polygon, i.e. to the left of p0->p1
-		if (WB_Predicates.orient2D(p0, p1, p2) > 0
+		if ((WB_Predicates.orient2D(p0, p1, p2) > 0)
 			&& (!between(p0, p2, p1))) {
 		    // check for intersections or points that lie too
 		    // close to the ear edge
@@ -710,7 +726,7 @@ public class WB_ConstrainedTriangulation {
 	    polygon.get((n + 1) % s).next = heAdd.sibling;
 	    // link halfedges in the remaining polygon of size s-1
 	    heAdd.next = polygon.get((n + 2) % s);
-	    polygon.get((n + s - 1) % s).next = heAdd;
+	    polygon.get(((n + s) - 1) % s).next = heAdd;
 	    if (s > 4) {
 		final FastTable<Tri_HalfEdge> polygon0 = new FastTable<Tri_HalfEdge>();
 		for (int j = 0; j < (s - 1); j++) {
@@ -722,12 +738,22 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     *
+     * @param he
+     */
     protected void fillEdgeVisiblePolygon(final Tri_HalfEdge he) {
 	final FastTable<Tri_HalfEdge> polygon = constructPolygon(he);
 	fillEdgeVisiblePolygonRecurse(polygon);
 	delaunayQueue.addAll(polygon);
     }
 
+    /**
+     *
+     *
+     * @param polygon
+     */
     private void fillEdgeVisiblePolygonRecurse(
 	    final FastTable<Tri_HalfEdge> polygon) {
 	assert polygon.size() >= 3 : error("Illegal size!");
@@ -765,15 +791,10 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
-    /******************************************************************************/
-    /*
-     * Splitting methods
-     * /*******************************************************
-     * **********************
-     */
-    /*
-     * Splits the two faces sharing edge he into four faces by inserting point
-     * p.
+    /**
+     *
+     * @param p
+     * @param he
      */
     private void splitEdge(final Tri_Point p, final Tri_HalfEdge he) {
 	Tri_HalfEdge he1, he2, he3;
@@ -814,9 +835,11 @@ public class WB_ConstrainedTriangulation {
 	delaunayQueue.add(he3);
     }
 
-    /*
-     * Insert point p into the face with halfedge he1, splitting it into three
-     * faces.
+    /**
+     *
+     *
+     * @param p
+     * @param he1
      */
     private void splitFace(final Tri_Point p, final Tri_HalfEdge he1) {
 	assert halfEdges.contains(he1) : error(E_MISSING);
@@ -851,6 +874,12 @@ public class WB_ConstrainedTriangulation {
 	delaunayQueue.add(he3);
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @param p
+     */
     private void splitConstraint(final Tri_HalfEdge he, final WB_Coordinate p) {
 	int i;
 	Tri_Point p0;
@@ -890,11 +919,9 @@ public class WB_ConstrainedTriangulation {
 	assert i < halfEdges.size() : error(E_EXHAUSTED);
     }
 
-    /******************************************************************************/
-    /*
-     * Removal methods
-     * /*********************************************************
-     * ********************
+    /**
+     *
+     * @param bp
      */
     public void removeBoundaryPoint(final Tri_BPoint bp) {
 	Tri_BPoint bp1, bp2;
@@ -911,6 +938,12 @@ public class WB_ConstrainedTriangulation {
 	bp2.prev = bp1;
     }
 
+    /**
+     *
+     *
+     * @param p
+     * @param pPrev
+     */
     private void removeBoundaryPoint(final Tri_Point p, final Tri_Point pPrev) {
 	int i;
 	Tri_Point pNext;
@@ -951,6 +984,11 @@ public class WB_ConstrainedTriangulation {
 	nBoundary--;
     }
 
+    /**
+     *
+     *
+     * @param p
+     */
     public void removeInteriorPoint(final Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
 	int i;
@@ -981,8 +1019,8 @@ public class WB_ConstrainedTriangulation {
 		p1 = heFlip.sibling.origin;
 		p2 = heFlip.next.next.origin;
 		p3 = heFlip.sibling.next.next.origin;
-		if (WB_Predicates.orient2D(p2, p3, p)
-			* WB_Predicates.orient2D(p2, p3, p1) < 0) {
+		if ((WB_Predicates.orient2D(p2, p3, p) * WB_Predicates
+			.orient2D(p2, p3, p1)) < 0) {
 		    flipEdge(heFlip);
 		} else {
 		    star.add(heFlip);
@@ -1001,10 +1039,10 @@ public class WB_ConstrainedTriangulation {
 	updateDelaunay();
     }
 
-    /*
-     * Removes an interior point without refilling.
+    /**
      *
-     * @params p
+     *
+     * @param p
      */
     private void removePoint(final Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
@@ -1028,6 +1066,11 @@ public class WB_ConstrainedTriangulation {
 	p.he = null;
     }
 
+    /**
+     *
+     *
+     * @param he
+     */
     private void removeEdge(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING);
 	assert !he.isType(Tri_HalfEdge.BOUNDARY) : error(E_TYPE);
@@ -1064,6 +1107,11 @@ public class WB_ConstrainedTriangulation {
 	heSibPrev.next = he.next;
     }
 
+    /**
+     *
+     *
+     * @param bounds
+     */
     private void floodDelete(final Tri_Point[] bounds) {
 	assert bounds.length >= 3 : error("Illegal bounds!");
 	int i;
@@ -1127,6 +1175,12 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     *
+     * @param pStart
+     * @param pEnd
+     */
     private void clearNewBoundaryEdge(final Tri_Point pStart,
 	    final Tri_Point pEnd) {
 	assert points.contains(pStart) : error(E_MISSING);
@@ -1174,12 +1228,6 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
-    /******************************************************************************/
-    /*
-     * Update methods
-     * /**********************************************************
-     * *******************
-     */
     protected final void updateHalfEdge(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING);
 	if (he.origin.isType(Tri_Point.INTERIOR)) {
@@ -1187,6 +1235,9 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     */
     public void updateDelaunay() {
 	WB_Coordinate p1, p2, p3, p4;
 	if (MESSAGES) {
@@ -1200,19 +1251,27 @@ public class WB_ConstrainedTriangulation {
 		p2 = he.next.next.origin;
 		p3 = he.origin;
 		p4 = he.sibling.next.next.origin;
-		if (WB_Predicates.incircle2D(p1, p2, p3, p4) > 0
-			|| WB_Predicates.incircle2D(p3, p4, p1, p2) > 0) {
+		if ((WB_Predicates.incircle2D(p1, p2, p3, p4) > 0)
+			|| (WB_Predicates.incircle2D(p3, p4, p1, p2) > 0)) {
 		    flipEdge(he);
 		}
 	    }
 	}
     }
 
+    /**
+     *
+     */
     public void updateDelaunayAll() {
 	delaunayQueue.addAll(halfEdges);
 	updateDelaunay();
     }
 
+    /**
+     *
+     *
+     * @param p
+     */
     public void updateInteriorPoint(Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
 	initRemoveConstraints(p);
@@ -1223,6 +1282,11 @@ public class WB_ConstrainedTriangulation {
 	updateDelaunay();
     }
 
+    /**
+     *
+     *
+     * @param p
+     */
     public void updateBoundaryPointOutside(final Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
 	int i;
@@ -1247,6 +1311,14 @@ public class WB_ConstrainedTriangulation {
 	updateDelaunay();
     }
 
+    /**
+     *
+     *
+     * @param p
+     * @param pPrev
+     * @param pTemp
+     * @return
+     */
     public boolean updateBoundaryPointInside(final Tri_Point p,
 	    final Tri_Point pPrev, Tri_Point pTemp) {
 	assert points.contains(p) : error(E_MISSING);
@@ -1260,10 +1332,6 @@ public class WB_ConstrainedTriangulation {
 	// locate the previous and next boundary points
 	pNext = p.he.next.origin;
 	// check for coincidence
-	/*
-	 * if (coincident(p,pTemp)) { p.xd() = pTemp.xd(); p.yd() = pTemp.yd();
-	 * return updateBoundaryPointAlong(p,pPrev); }
-	 */
 	// relocate p to ensure that the quadrilateral (p,pPrev,pTemp,pNext)
 	// is a simple polygon
 	if (intersectProper(pPrev, p, pNext, pTemp)) {
@@ -1271,16 +1339,16 @@ public class WB_ConstrainedTriangulation {
 		message("Moving point to ensure simple quadrilateral.");
 	    }
 	    final WB_Coordinate pp = intersection(pPrev, p, pNext, pTemp);
-	    p.setX(pp.xd() + 0.5 * (pPrev.xd() - pp.xd()));
-	    p.setY(pp.yd() + 0.5 * (pPrev.yd() - pp.yd()));
+	    p.setX(pp.xd() + (0.5 * (pPrev.xd() - pp.xd())));
+	    p.setY(pp.yd() + (0.5 * (pPrev.yd() - pp.yd())));
 	    updateBoundaryPointOutside(p);
 	} else if (intersectProper(pNext, p, pPrev, pTemp)) {
 	    if (MESSAGES) {
 		message("Moving point to ensure simple quadrilateral.");
 	    }
 	    final WB_Coordinate pp = intersection(pNext, p, pPrev, pTemp);
-	    p.setX(pp.xd() + 0.5 * (pNext.xd() - pp.xd()));
-	    p.setY(pp.yd() + 0.5 * (pNext.yd() - pp.yd()));
+	    p.setX(pp.xd() + (0.5 * (pNext.xd() - pp.xd())));
+	    p.setY(pp.yd() + (0.5 * (pNext.yd() - pp.yd())));
 	    updateBoundaryPointOutside(p);
 	}
 	// insert an interior point where the new boundary point will
@@ -1336,6 +1404,12 @@ public class WB_ConstrainedTriangulation {
 	return true;
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @return
+     */
     private boolean constrainEdge(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING);
 	if (MESSAGES) {
@@ -1352,6 +1426,9 @@ public class WB_ConstrainedTriangulation {
 	return true;
     }
 
+    /**
+     *
+     */
     public void constrainAllEdges() {
 	for (final Tri_HalfEdge he : halfEdges) {
 	    if (!he.isType(Tri_HalfEdge.BOUNDARY)) {
@@ -1360,12 +1437,22 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     *
+     * @param p
+     */
     public void initRemoveConstraints(final Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
 	removeConstraintPeg = p;
 	removedConstraints.clear();
     }
 
+    /**
+     *
+     *
+     * @param p
+     */
     public void restoreConstraints(final Tri_Point p) {
 	assert points.contains(p) : error(E_MISSING);
 	assert p == removeConstraintPeg : error("Race condition!");
@@ -1379,6 +1466,12 @@ public class WB_ConstrainedTriangulation {
 	removeConstraintPeg = null;
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @return
+     */
     private boolean flipEdge(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING);
 	assert !he.isType(Tri_HalfEdge.BOUNDARY) : error(E_TYPE);
@@ -1412,16 +1505,14 @@ public class WB_ConstrainedTriangulation {
 	return true;
     }
 
-    /******************************************************************************/
-    /*
-     * Locator methods
-     * /*********************************************************
-     * ********************
-     */
     /**
-     * This brute force approach works for *any* non-intersecting boundary,
-     * concave or convex. If the boundary is guaranteed to be a convex, a
-     * smarter face-walking algorithm could be used.
+     * @param heStart
+     * @param p
+     * @return
+     *
+     *         This brute force approach works for *any* non-intersecting
+     *         boundary, concave or convex. If the boundary is guaranteed to be
+     *         a convex, a smarter face-walking algorithm could be used.
      */
     public Tri_FaceWalk findFaceBruteForce(final Tri_HalfEdge heStart,
 	    final Tri_Point p) {
@@ -1467,6 +1558,10 @@ public class WB_ConstrainedTriangulation {
     /**
      * A slightly smarter face walk routine that resorts to brute force only
      * when it gets confused by an concave boundary.
+     *
+     * @param heStart
+     * @param p
+     * @return
      */
     public Tri_FaceWalk findFace(final Tri_HalfEdge heStart, final Tri_Point p) {
 	int i;
@@ -1518,6 +1613,12 @@ public class WB_ConstrainedTriangulation {
 	return null;
     }
 
+    /**
+     *
+     *
+     * @param he
+     * @return
+     */
     protected final Tri_HalfEdge findPrevious(final Tri_HalfEdge he) {
 	assert halfEdges.contains(he) : error(E_MISSING, he);
 	int i;
@@ -1534,7 +1635,13 @@ public class WB_ConstrainedTriangulation {
 	return heSearch;
     }
 
-    // robust with non-triangular regions
+    /**
+     *
+     *
+     * @param pStart
+     * @param pEnd
+     * @return
+     */
     Tri_FaceWalk startFaceWalk(final Tri_Point pStart, final Tri_Point pEnd) {
 	assert points.contains(pStart) : error(E_MISSING);
 	assert points.contains(pEnd) : error(E_MISSING);
@@ -1585,7 +1692,7 @@ public class WB_ConstrainedTriangulation {
 	    // check if the leading point is counter-clockwise/collinear and the
 	    // trailing point clockwise of pStart->pEnd
 	    ccwLeading = WB_Predicates.orient2D(pStart, pEnd, pLeading);
-	    if (ccwLeading >= 0 && ccwTrailing < 0) {
+	    if ((ccwLeading >= 0) && (ccwTrailing < 0)) {
 		return new Tri_FaceWalk(he, Tri_FaceWalk.CLOCKWISE);
 	    }
 	    ccwTrailing = ccwLeading;
@@ -1596,13 +1703,13 @@ public class WB_ConstrainedTriangulation {
 	return new Tri_FaceWalk(null, Tri_FaceWalk.FAILED);
     }
 
-    /******************************************************************************/
-    /*
-     * Computational geometry methods and predicates
-     * /***************************
-     * **************************************************
+    /**
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @return
      */
-    // compute the normalized projection of ac onto ab
     private final static double projNorm(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c) {
 	double x1, x2, y1, y2;
@@ -1610,21 +1717,17 @@ public class WB_ConstrainedTriangulation {
 	x2 = c.xd() - a.xd();
 	y1 = b.yd() - a.yd();
 	y2 = c.yd() - a.yd();
-	return (x1 * x2 + y1 * y2) / (x1 * x1 + y1 * y1);
+	return ((x1 * x2) + (y1 * y2)) / ((x1 * x1) + (y1 * y1));
     }
 
-    // compute the magnitude of the cross product of ab and ac
-    private final static double cross(final WB_Coordinate a,
-	    final WB_Coordinate b, final WB_Coordinate c) {
-	double x1, x2, y1, y2;
-	x1 = b.xd() - a.xd();
-	x2 = c.xd() - a.xd();
-	y1 = b.yd() - a.yd();
-	y2 = c.yd() - a.yd();
-	return x1 * y2 - y1 * x2;
-    }
-
-    // compute the squared perpendicular distance of c onto ab
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
     private final static double perpDistSq(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c) {
 	double x1, x2, y1, y2, cross, lenSq;
@@ -1632,12 +1735,19 @@ public class WB_ConstrainedTriangulation {
 	x2 = c.xd() - a.xd();
 	y1 = b.yd() - a.yd();
 	y2 = c.yd() - a.yd();
-	cross = x1 * y2 - y1 * x2;
+	cross = (x1 * y2) - (y1 * x2);
 	lenSq = cross * cross;
-	lenSq /= x1 * x1 + y1 * y1;
+	lenSq /= (x1 * x1) + (y1 * y1);
 	return lenSq;
     }
 
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @return
+     */
     public final boolean coincident(final WB_Coordinate a, final WB_Coordinate b) {
 	if (WB_GeometryOp.getSqDistance2D(a, b) < WB_Epsilon.SQEPSILON) {
 	    return true;
@@ -1645,8 +1755,14 @@ public class WB_ConstrainedTriangulation {
 	return false;
     }
 
-    // project the point p orthogonally onto the segment p1->p2
-    // and return the scaled, parameterized position in [0,1]
+    /**
+     *
+     *
+     * @param p1
+     * @param p2
+     * @param p
+     * @return
+     */
     public final static double projection(final WB_Coordinate p1,
 	    final WB_Coordinate p2, final WB_Coordinate p) {
 	double ax, ay, bx, by;
@@ -1654,11 +1770,18 @@ public class WB_ConstrainedTriangulation {
 	ay = p.yd() - p1.yd();
 	bx = p2.xd() - p1.xd();
 	by = p2.yd() - p1.yd();
-	return (ax * bx + ay * by) / (bx * bx + by * by);
+	return ((ax * bx) + (ay * by)) / ((bx * bx) + (by * by));
     }
 
-    // returns the intersection point of segments ab and cd
-    // as a point on ab
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @return
+     */
     public final static WB_Coordinate intersection(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
 	double t, l1, l2;
@@ -1667,23 +1790,32 @@ public class WB_ConstrainedTriangulation {
 	cdx = c.xd() - d.xd();
 	cdy = c.yd() - d.yd();
 	// distance from a to cd
-	l1 = Math.abs((a.xd() - d.xd()) * cdy - (a.yd() - d.yd()) * cdx);
+	l1 = Math.abs(((a.xd() - d.xd()) * cdy) - ((a.yd() - d.yd()) * cdx));
 	// distance from b to cd
-	l2 = Math.abs((b.xd() - d.xd()) * cdy - (b.yd() - d.yd()) * cdx);
+	l2 = Math.abs(((b.xd() - d.xd()) * cdy) - ((b.yd() - d.yd()) * cdx));
 	// need to handle case where l1+l2 = 0
 	// if this method could be called on parallel segments
 	// that overlap
-	if (l1 + l2 == 0) {
+	if ((l1 + l2) == 0) {
 	    System.err
 	    .println("Intersection called on parallel overlapping segments!");
 	}
 	t = l1 / (l1 + l2);
-	p = new WB_Point((1 - t) * a.xd() + t * b.xd(), (1 - t) * a.yd() + t
-		* b.yd());
+	p = new WB_Point(((1 - t) * a.xd()) + (t * b.xd()), ((1 - t) * a.yd())
+		+ (t * b.yd()));
 	return p;
     }
 
     // from O'Rourke's Computational Geometry in C
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @return
+     */
     public final boolean intersect(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
 	if (intersectProper(a, b, c, d)) {
@@ -1697,18 +1829,27 @@ public class WB_ConstrainedTriangulation {
     }
 
     // from O'Rourke's Computational Geometry in C
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @return
+     */
     public final boolean intersectProper(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c, final WB_Coordinate d) {
 	/* Eliminate improper cases. */
-	if (WB_Predicates.orient2D(a, b, c) == 0
-		|| WB_Predicates.orient2D(a, b, d) == 0
-		|| WB_Predicates.orient2D(c, d, a) == 0
-		|| WB_Predicates.orient2D(c, d, b) == 0) {
+	if ((WB_Predicates.orient2D(a, b, c) == 0)
+		|| (WB_Predicates.orient2D(a, b, d) == 0)
+		|| (WB_Predicates.orient2D(c, d, a) == 0)
+		|| (WB_Predicates.orient2D(c, d, b) == 0)) {
 	    return false;
-	} else if (WB_Predicates.orient2D(a, b, c)
-		* WB_Predicates.orient2D(a, b, d) > 0
-		|| WB_Predicates.orient2D(c, d, a)
-		* WB_Predicates.orient2D(c, d, b) > 0) {
+	} else if (((WB_Predicates.orient2D(a, b, c) * WB_Predicates.orient2D(
+		a, b, d)) > 0)
+		|| ((WB_Predicates.orient2D(c, d, a) * WB_Predicates.orient2D(
+			c, d, b)) > 0)) {
 	    return false;
 	} else {
 	    return true;
@@ -1718,6 +1859,14 @@ public class WB_ConstrainedTriangulation {
     /*
      * Tests whether c is within the epsilon tubular neighborhood around segment
      * ab.
+     */
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @return
      */
     public final boolean between(final WB_Coordinate a, final WB_Coordinate b,
 	    final WB_Coordinate c) {
@@ -1730,7 +1879,7 @@ public class WB_ConstrainedTriangulation {
 	    /* check the epsilon neighborhood along the segment */
 	    if (perpDistSq(a, b, c) < WB_Epsilon.SQEPSILON) {
 		final double d = projNorm(a, b, c);
-		if (0 < d && d < 1) {
+		if ((0 < d) && (d < 1)) {
 		    return true;
 		}
 	    }
@@ -1741,6 +1890,14 @@ public class WB_ConstrainedTriangulation {
     /*
      * Tests whether c is within the epsilon tubular neighborhood around segment
      * ab, but excludes the epsilon neighborhoods around a and b.
+     */
+    /**
+     *
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @return
      */
     public final boolean betweenProper(final WB_Coordinate a,
 	    final WB_Coordinate b, final WB_Coordinate c) {
@@ -1753,7 +1910,7 @@ public class WB_ConstrainedTriangulation {
 	    /* check the epsilon neighborhood along the segment */
 	    if (perpDistSq(a, b, c) < WB_Epsilon.SQEPSILON) {
 		final double d = projNorm(a, b, c);
-		if (0 < d && d < 1) {
+		if ((0 < d) && (d < 1)) {
 		    return true;
 		}
 	    }
@@ -1762,6 +1919,14 @@ public class WB_ConstrainedTriangulation {
     }
 
     // adapted from java.awt.geom.Line2d.ptSegDistSq()
+    /**
+     *
+     *
+     * @param p1
+     * @param p2
+     * @param p
+     * @return
+     */
     public final static double edgeDistanceSq(final WB_Coordinate p1,
 	    final WB_Coordinate p2, final WB_Coordinate p) {
 	double x2, y2, px, py;
@@ -1772,7 +1937,7 @@ public class WB_ConstrainedTriangulation {
 	// px,py becomes relative vector from x1,y1 to test point
 	px = p.xd() - p1.xd();
 	py = p.yd() - p1.yd();
-	double dotprod = px * x2 + py * y2;
+	double dotprod = (px * x2) + (py * y2);
 	double projlenSq;
 	if (dotprod <= 0.0) {
 	    // px,py is on the side of x1,y1 away from x2,y2
@@ -1787,7 +1952,7 @@ public class WB_ConstrainedTriangulation {
 	    // as the dot product of the two normal vectors
 	    px = x2 - px;
 	    py = y2 - py;
-	    dotprod = px * x2 + py * y2;
+	    dotprod = (px * x2) + (py * y2);
 	    if (dotprod <= 0.0) {
 		// px,py is on the side of x2,y2 away from x1,y1
 		// distance to segment is length of (backwards) px,py vector
@@ -1798,25 +1963,28 @@ public class WB_ConstrainedTriangulation {
 		// dotprod is the length of the px,py vector
 		// projected on the x2,y2=>x1,y1 vector times the
 		// length of the x2,y2=>x1,y1 vector
-		projlenSq = dotprod * dotprod / (x2 * x2 + y2 * y2);
+		projlenSq = (dotprod * dotprod) / ((x2 * x2) + (y2 * y2));
 	    }
 	}
 	// Distance to line is now the length of the relative point
 	// vector minus the length of its projection onto the line
 	// (which is zero if the projection falls outside the range
 	// of the line segment).
-	double lenSq = px * px + py * py - projlenSq;
+	double lenSq = ((px * px) + (py * py)) - projlenSq;
 	if (lenSq < 0) {
 	    lenSq = 0;
 	}
 	return lenSq;
     }
 
+    /**
+     *
+     */
     public void listPoints() {
 	message("### POINT LIST ###");
 	for (int i = 0; i < points.size(); i++) {
 	    final Tri_Point p = points.get(i);
-	    if (i % 20 == 0) {
+	    if ((i % 20) == 0) {
 		message("     ID | Halfedge |    Pair | Type");
 	    }
 	    int ih, ip;
@@ -1834,11 +2002,14 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     */
     public final void listHalfEdges() {
 	message("### HALFEDGE LIST ###");
 	for (int i = 0; i < halfEdges.size(); i++) {
 	    final Tri_HalfEdge he = halfEdges.get(i);
-	    if (i % 20 == 0) {
+	    if ((i % 20) == 0) {
 		message("     ID ->    Next |  Origin ->    "
 			+ "Next | Sibling | Type");
 	    }
@@ -1868,53 +2039,48 @@ public class WB_ConstrainedTriangulation {
 	}
     }
 
+    /**
+     *
+     *
+     * @param s
+     */
     public final void message(final String s) {
 	System.out.print("Triangulation: ");
 	System.out.print(s);
 	System.out.print("\n");
     }
 
+    /**
+     *
+     *
+     * @param s
+     * @param args
+     */
     public final void message(final String s, final Object... args) {
 	message(String.format(s, args));
     }
 
     // used in assert statements to dump halfedge and point lists
+    /**
+     *
+     *
+     * @param s
+     * @return
+     */
     protected final String error(final String s) {
 	listHalfEdges();
 	listPoints();
 	return s;
     }
 
+    /**
+     *
+     *
+     * @param s
+     * @param args
+     * @return
+     */
     protected final String error(final String s, final Object... args) {
 	return error(s);
-    }
-
-    // Check if triangle lies inside closed constraints (used when triangulating
-    // irregular polygons).
-    private boolean insideClosedConstraints(final WB_Coordinate p1,
-	    final WB_Coordinate p2, final WB_Coordinate p3, final double range) {
-	final WB_Triangle tri = new WB_Triangle(p1, p2, p3);
-	final WB_Coordinate s1 = tri.getIncenter();
-	final WB_Coordinate dir = new WB_Point(Math.random() - 0.5,
-		Math.random() - 0.5);
-	final WB_Segment Sray = new WB_Segment(s1, dir, range);
-	int count = 0;
-	for (int i = 0; i < halfEdges.size(); i++) {
-	    final Tri_HalfEdge he = halfEdges.get(i);
-	    if (he.isType(Tri_HalfEdge.CONSTRAINT)) {
-		final WB_Segment She = new WB_Segment(he.origin,
-			he.getNext().origin);
-		final WB_IntersectionResult ir = WB_GeometryOp
-			.getIntersection2D(Sray, She);
-		if (ir.intersection) {
-		    if ((ir.t2 > 0) && (ir.t2 < 1)) {
-			count++;
-		    } else {
-			return insideClosedConstraints(p1, p2, p3, range);
-		    }
-		}
-	    }
-	}
-	return ((count / 2) % 2 == 1);
     }
 }

@@ -1,124 +1,275 @@
+/*
+ * 
+ */
 package wblut.geom;
 
+/**
+ * 
+ */
 public class WB_FrameStrut {
-	private final WB_FrameNode start;
+    
+    /**
+     * 
+     */
+    private final WB_FrameNode start;
+    
+    /**
+     * 
+     */
+    private final WB_FrameNode end;
+    
+    /**
+     * 
+     */
+    private final int index;
+    
+    /**
+     * 
+     */
+    private double radiuss;
+    
+    /**
+     * 
+     */
+    private double radiuse;
+    
+    /**
+     * 
+     */
+    private double offsets;
+    
+    /**
+     * 
+     */
+    private double offsete;
 
-	private final WB_FrameNode end;
+    /**
+     * 
+     *
+     * @param s 
+     * @param e 
+     * @param id 
+     */
+    public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
+	    final int id) {
+	start = s;
+	end = e;
+	index = id;
+    }
 
-	private final int index;
+    /**
+     * 
+     *
+     * @param s 
+     * @param e 
+     * @param id 
+     * @param r 
+     */
+    public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
+	    final int id, final double r) {
+	start = s;
+	end = e;
+	index = id;
+	radiuss = radiuse = r;
+    }
 
-	private double radiuss;
+    /**
+     * 
+     *
+     * @param s 
+     * @param e 
+     * @param id 
+     * @param rs 
+     * @param re 
+     */
+    public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
+	    final int id, final double rs, final double re) {
+	start = s;
+	end = e;
+	index = id;
+	radiuss = rs;
+	radiuse = re;
+    }
 
-	private double radiuse;
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_FrameNode start() {
+	return start;
+    }
 
-	private double offsets;
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_FrameNode end() {
+	return end;
+    }
 
-	private double offsete;
+    /**
+     * 
+     *
+     * @return 
+     */
+    public int getStartIndex() {
+	return start.getIndex();
+    }
 
-	public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
-			final int id) {
-		start = s;
-		end = e;
-		index = id;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public int getEndIndex() {
+	return end.getIndex();
+    }
 
-	public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
-			final int id, final double r) {
-		start = s;
-		end = e;
-		index = id;
-		radiuss = radiuse = r;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public int getIndex() {
+	return index;
+    }
 
-	public WB_FrameStrut(final WB_FrameNode s, final WB_FrameNode e,
-			final int id, final double rs, final double re) {
-		start = s;
-		end = e;
-		index = id;
-		radiuss = rs;
-		radiuse = re;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Vector toVector() {
+	return end().subToVector3D(start());
+    }
 
-	public WB_FrameNode start() {
-		return start;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Vector toNormVector() {
+	final WB_Vector v = end().subToVector3D(start());
+	v.normalizeSelf();
+	return v;
+    }
 
-	public WB_FrameNode end() {
-		return end;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getSqLength() {
+	return WB_GeometryOp.getSqDistance3D(end(), start());
+    }
 
-	public int getStartIndex() {
-		return start.getIndex();
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getLength() {
+	return WB_GeometryOp.getDistance3D(end(), start());
+    }
 
-	public int getEndIndex() {
-		return end.getIndex();
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getRadiusStart() {
+	return radiuss;
+    }
 
-	public int getIndex() {
-		return index;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getRadiusEnd() {
+	return radiuse;
+    }
 
-	public WB_Vector toVector() {
-		return end().subToVector3D(start());
-	}
+    /**
+     * 
+     *
+     * @param r 
+     */
+    public void setRadiusStart(final double r) {
+	radiuss = r;
+    }
 
-	public WB_Vector toNormVector() {
-		final WB_Vector v = end().subToVector3D(start());
-		v.normalizeSelf();
-		return v;
-	}
+    /**
+     * 
+     *
+     * @param r 
+     */
+    public void setRadiusEnd(final double r) {
+	radiuse = r;
+    }
 
-	public double getSqLength() {
-		return WB_GeometryOp.getSqDistance3D(end(), start());
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getOffsetStart() {
+	return offsets;
+    }
 
-	public double getLength() {
-		return WB_GeometryOp.getDistance3D(end(), start());
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public double getOffsetEnd() {
+	return offsete;
+    }
 
-	public double getRadiusStart() {
-		return radiuss;
-	}
+    /**
+     * 
+     *
+     * @param o 
+     */
+    public void setOffsetStart(final double o) {
+	offsets = o;
+    }
 
-	public double getRadiusEnd() {
-		return radiuse;
-	}
+    /**
+     * 
+     *
+     * @param o 
+     */
+    public void setOffsetEnd(final double o) {
+	offsete = o;
+    }
 
-	public void setRadiusStart(final double r) {
-		radiuss = r;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Point getCenter() {
+	return end().add(start()).mulSelf(0.5);
+    }
 
-	public void setRadiusEnd(final double r) {
-		radiuse = r;
-	}
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Segment toSegment() {
+	return new WB_Segment(start, end);
+    }
 
-	public double getOffsetStart() {
-		return offsets;
-	}
-
-	public double getOffsetEnd() {
-		return offsete;
-	}
-
-	public void setOffsetStart(final double o) {
-		offsets = o;
-	}
-
-	public void setOffsetEnd(final double o) {
-		offsete = o;
-	}
-
-	public WB_Point getCenter() {
-		return end().add(start()).mulSelf(0.5);
-	}
-
-	public WB_Segment toSegment() {
-		return new WB_Segment(start, end);
-	}
-
-	public WB_Plane toPlane() {
-		return new WB_Plane(start().toPoint(), toVector());
-	}
-
+    /**
+     * 
+     *
+     * @return 
+     */
+    public WB_Plane toPlane() {
+	return new WB_Plane(start().toPoint(), toVector());
+    }
 }

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import static wblut.geom.WB_GeometryOp.projectOnPlane;
@@ -7,9 +10,24 @@ import wblut.geom.WB_AABB;
 import wblut.geom.WB_Plane;
 import wblut.geom.WB_Point;
 
+/**
+ * 
+ */
 public class HEM_TangentialSmooth extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     private boolean autoRescale;
+    
+    /**
+     * 
+     */
     private boolean keepBoundary;
+    
+    /**
+     * 
+     */
     private int iter;
 
     /*
@@ -17,16 +35,34 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
      * 
      * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
      */
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HEM_TangentialSmooth setAutoRescale(final boolean b) {
 	autoRescale = b;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param r 
+     * @return 
+     */
     public HEM_TangentialSmooth setIterations(final int r) {
 	iter = r;
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param b 
+     * @return 
+     */
     public HEM_TangentialSmooth setKeepBoundary(final boolean b) {
 	keepBoundary = b;
 	return this;
@@ -105,7 +141,7 @@ public class HEM_TangentialSmooth extends HEM_Modifier {
 	    box = selection.parent.getAABB();
 	}
 	final WB_Point[] newPositions = new WB_Point[selection
-		.getNumberOfVertices()];
+	                                             .getNumberOfVertices()];
 	if (iter < 1) {
 	    iter = 1;
 	}

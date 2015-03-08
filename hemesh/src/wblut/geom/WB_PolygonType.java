@@ -8,5 +8,17 @@ package wblut.geom;
  * 
  */
 public enum WB_PolygonType {
-	UNKNOWN, CONVEX, CONCAVE
+    
+    /**
+     * 
+     */
+    UNKNOWN, 
+ /**
+  * 
+  */
+ CONVEX, 
+ /**
+  * 
+  */
+ CONCAVE
 }

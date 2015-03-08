@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -6,43 +9,93 @@ import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
 
+/**
+ * 
+ */
 public class HEMC_WeairePhelan extends HEMC_MultiCreator {
+    
+    /**
+     * 
+     */
     private static final double[][] dodecahedronPoints = {
-	{ 0.31498, 0, 0.62996 }, { -0.31498, 0, 0.62996 },
-	{ 0.41997, 0.41997, 0.41997 }, { 0, 0.62996, 0.31498 },
-	{ -0.41997, 0.41997, 0.41997 }, { -0.41997, -0.41997, 0.41997 },
-	{ 0, -0.62996, .31498 }, { .41997, -.41997, .41997 },
-	{ .62996, .31498, 0 }, { -.62996, .31498, 0 },
-	{ -.62996, -.31498, 0 }, { .62996, -.31498, 0 },
-	{ .41997, .41997, -.41997 }, { 0, .62996, -.31498 },
-	{ -.41997, .41997, -.41997 }, { -.41997, -.41997, -.41997 },
-	{ 0, -.62996, -.31498 }, { .41997, -.41997, -.41997 },
-	{ .31498, 0, -.62996 }, { -.31498, 0, -.62996 } };
+	    { 0.31498, 0, 0.62996 }, { -0.31498, 0, 0.62996 },
+	    { 0.41997, 0.41997, 0.41997 }, { 0, 0.62996, 0.31498 },
+	    { -0.41997, 0.41997, 0.41997 }, { -0.41997, -0.41997, 0.41997 },
+	    { 0, -0.62996, .31498 }, { .41997, -.41997, .41997 },
+	    { .62996, .31498, 0 }, { -.62996, .31498, 0 },
+	    { -.62996, -.31498, 0 }, { .62996, -.31498, 0 },
+	    { .41997, .41997, -.41997 }, { 0, .62996, -.31498 },
+	    { -.41997, .41997, -.41997 }, { -.41997, -.41997, -.41997 },
+	    { 0, -.62996, -.31498 }, { .41997, -.41997, -.41997 },
+	    { .31498, 0, -.62996 }, { -.31498, 0, -.62996 } };
+    
+    /**
+     * 
+     */
     private static final double[][] tetrakaidecahedronPoints = {
-	{ .314980, .370039, .5 }, { -.314980, .370039, .5 },
-	{ -.5, 0, .5 }, { -.314980, -.370039, .5 },
-	{ .314980, -.370039, .5 }, { .5, 0, .5 },
-	{ .419974, .580026, 0.080026 }, { -.419974, .580026, 0.080026 },
-	{ -.685020, 0, .129961 }, { -.419974, -.580026, 0.080026 },
-	{ .419974, -.580026, 0.080026 }, { .685020, 0, .129961 },
-	{ .580026, .419974, -0.080026 }, { 0, .685020, -0.129961 },
-	{ -.580026, .419974, -0.080026 },
-	{ -.580026, -.419974, -0.080026 }, { 0, -.685020, -.129961 },
-	{ .580026, -.419974, -0.080026 }, { .370039, .314980, -.5 },
-	{ 0, .5, -.5 }, { -.370039, .314980, -.5 },
-	{ -.370039, -.314980, -.5 }, { 0, -.5, -.5 },
-	{ .370039, -.314980, -.5 } };
+	    { .314980, .370039, .5 }, { -.314980, .370039, .5 },
+	    { -.5, 0, .5 }, { -.314980, -.370039, .5 },
+	    { .314980, -.370039, .5 }, { .5, 0, .5 },
+	    { .419974, .580026, 0.080026 }, { -.419974, .580026, 0.080026 },
+	    { -.685020, 0, .129961 }, { -.419974, -.580026, 0.080026 },
+	    { .419974, -.580026, 0.080026 }, { .685020, 0, .129961 },
+	    { .580026, .419974, -0.080026 }, { 0, .685020, -0.129961 },
+	    { -.580026, .419974, -0.080026 },
+	    { -.580026, -.419974, -0.080026 }, { 0, -.685020, -.129961 },
+	    { .580026, -.419974, -0.080026 }, { .370039, .314980, -.5 },
+	    { 0, .5, -.5 }, { -.370039, .314980, -.5 },
+	    { -.370039, -.314980, -.5 }, { 0, -.5, -.5 },
+	    { .370039, -.314980, -.5 } };
+    
+    /**
+     * 
+     */
     private final HE_Mesh dodecahedron;
+    
+    /**
+     * 
+     */
     private final HE_Mesh tetrakaidecahedron;
+    
+    /**
+     * 
+     */
     private WB_Point origin;
+    
+    /**
+     * 
+     */
     private WB_Vector extents;
+    
+    /**
+     * 
+     */
     private int U, V, W;
+    
+    /**
+     * 
+     */
     private double scU, scV, scW;
+    
+    /**
+     * 
+     */
     private boolean cropUp, cropVp, cropWp;
+    
+    /**
+     * 
+     */
     private boolean cropUm, cropVm, cropWm;
+    
+    /**
+     * 
+     */
     private static int[] colors = new int[] { -65536, -16384, -8519936,
-	-16711870, -16712705, -16761857, -8126209, -65351 };
+	    -16711870, -16712705, -16761857, -8126209, -65351 };
 
+    /**
+     * 
+     */
     public HEMC_WeairePhelan() {
 	super();
 	dodecahedron = new HE_Mesh(
@@ -59,16 +112,36 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	cropWm = false;
     }
 
+    /**
+     * 
+     *
+     * @param p 
+     * @return 
+     */
     public HEMC_WeairePhelan setOrigin(final WB_Point p) {
 	origin = p.get();
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param v 
+     * @return 
+     */
     public HEMC_WeairePhelan setExtents(final WB_Vector v) {
 	extents = v.get();
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param scU 
+     * @param scV 
+     * @param scW 
+     * @return 
+     */
     public HEMC_WeairePhelan setScale(final double scU, final double scV,
 	    final double scW) {
 	this.scU = scU;
@@ -77,6 +150,14 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param U 
+     * @param V 
+     * @param W 
+     * @return 
+     */
     public HEMC_WeairePhelan setNumberOfUnits(final int U, final int V,
 	    final int W) {
 	this.U = WB_Math.max(1, U);
@@ -85,6 +166,12 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param crop 
+     * @return 
+     */
     public HEMC_WeairePhelan setCrop(final boolean crop) {
 	cropUm = crop;
 	cropVm = crop;
@@ -95,6 +182,14 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param cropU 
+     * @param cropV 
+     * @param cropW 
+     * @return 
+     */
     public HEMC_WeairePhelan setCrop(final boolean cropU, final boolean cropV,
 	    final boolean cropW) {
 	cropUm = cropU;
@@ -106,6 +201,17 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param cropUm 
+     * @param cropVm 
+     * @param cropWm 
+     * @param cropUp 
+     * @param cropVp 
+     * @param cropWp 
+     * @return 
+     */
     public HEMC_WeairePhelan setCrop(final boolean cropUm,
 	    final boolean cropVm, final boolean cropWm, final boolean cropUp,
 	    final boolean cropVp, final boolean cropWp) {
@@ -118,6 +224,12 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	return this;
     }
 
+    /**
+     * 
+     *
+     * @param offset 
+     * @return 
+     */
     private HE_Mesh[] singleCell(final WB_Vector offset) {
 	final HE_Mesh[] cells = new HE_Mesh[8];
 	cells[0] = tetrakaidecahedron.get();
@@ -153,7 +265,7 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_MultiCreator#create()
      */
     @Override
@@ -190,12 +302,13 @@ public class HEMC_WeairePhelan extends HEMC_MultiCreator {
 	    planes.add(new WB_Plane(end, new WB_Vector(0, 0, -1)));
 	}
 	final HEM_MultiSlice ms = new HEM_MultiSlice().setPlanes(planes);
-	for (int i = 0; i < U + 1; i++) {
-	    for (int j = 0; j < V + 1; j++) {
-		for (int k = 0; k < W + 1; k++) {
+	for (int i = 0; i < (U + 1); i++) {
+	    for (int j = 0; j < (V + 1); j++) {
+		for (int k = 0; k < (W + 1); k++) {
 		    final WB_Vector offset = new WB_Vector(origin.xd()
-			    + (i - 0.5) * scU, origin.yd() + (j - 0.5) * scV,
-			    origin.zd() + (k - 0.5) * scW);
+			    + ((i - 0.5) * scU), origin.yd()
+			    + ((j - 0.5) * scV), origin.zd()
+			    + ((k - 0.5) * scW));
 		    tmpCells = singleCell(offset);
 		    for (int c = 0; c < 8; c++) {
 			if (planes.size() > 0) {

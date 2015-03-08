@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Collection;
@@ -56,7 +59,7 @@ public class HEC_FromTriangles extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
@@ -66,17 +69,17 @@ public class HEC_FromTriangles extends HEC_Creator {
 	    final int[][] faces = new int[triangles.size()][3];
 	    for (int i = 0; i < triangles.size(); i++) {
 		vertices[3 * i] = triangles.get(i).p1();
-		vertices[3 * i + 1] = triangles.get(i).p2();
-		vertices[3 * i + 2] = triangles.get(i).p3();
+		vertices[(3 * i) + 1] = triangles.get(i).p2();
+		vertices[(3 * i) + 2] = triangles.get(i).p3();
 		faces[i][0] = 3 * i;
-		faces[i][1] = 3 * i + 1;
-		faces[i][2] = 3 * i + 2;
+		faces[i][1] = (3 * i) + 1;
+		faces[i][2] = (3 * i) + 2;
 	    }
 	    // System.out.println("HEC_FromTriangles: passing " +
 	    // triangles.size()
 	    // + " triangles as faces.");
 	    final HEC_FromFacelist ffl = new HEC_FromFacelist()
-	    .setVertices(vertices).setFaces(faces).setDuplicate(true);
+		    .setVertices(vertices).setFaces(faces).setDuplicate(true);
 	    return ffl.createBase();
 	}
 	return null;

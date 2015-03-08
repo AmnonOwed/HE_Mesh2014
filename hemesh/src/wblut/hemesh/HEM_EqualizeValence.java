@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.List;
@@ -21,10 +24,9 @@ public class HEM_EqualizeValence extends HEM_Modifier {
     }
 
     /**
-     * Set threshold angle
+     * Set threshold angle.
      *
-     * @param a
-     *            threshold angle in radians
+     * @param a            threshold angle in radians
      * @return self
      */
     public HEM_EqualizeValence setThreshold(final double a) {
@@ -34,7 +36,7 @@ public class HEM_EqualizeValence extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -81,7 +83,7 @@ public class HEM_EqualizeValence extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */

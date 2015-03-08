@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.HashMap;
@@ -24,6 +27,10 @@ public class HE_Path extends HE_Element implements WB_HasData {
      * path should be a single loop
      */
     protected HE_PathHalfedge _phalfedge;
+    
+    /**
+     * 
+     */
     private HashMap<String, Object> _data;
 
     /**
@@ -63,8 +70,8 @@ public class HE_Path extends HE_Element implements WB_HasData {
     /**
      * Create a looping path around a single vertex.
      *
-     * @param face
-     *            single face
+     * @param v
+     *            single vertex
      */
     public HE_Path(final HE_Vertex v) {
 	final List<HE_Halfedge> halfedges = new FastTable<HE_Halfedge>();
@@ -256,16 +263,16 @@ public class HE_Path extends HE_Element implements WB_HasData {
     }
 
     /**
-     * Set the starting HE_PathHalfedge
+     * Set the starting HE_PathHalfedge.
      *
-     * @param phalfedge
+     * @param phalfedge 
      */
     public void setPathHalfedge(final HE_PathHalfedge phalfedge) {
 	_phalfedge = phalfedge;
     }
 
     /**
-     * Clear the HE_PathHalfedge
+     * Clear the HE_PathHalfedge.
      */
     public void clearPathHalfedge() {
 	_phalfedge = null;
@@ -328,7 +335,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 		+ " vertices: ";
 	HE_PathHalfedge he = _phalfedge;
 	if (he != null) {
-	    for (int i = 0; i < getPathOrder() - 1; i++) {
+	    for (int i = 0; i < (getPathOrder() - 1); i++) {
 		s += he.getHalfedge().getVertex()._key + "-";
 		he = he.getNextInPath();
 	    }
@@ -360,6 +367,9 @@ public class HE_Path extends HE_Element implements WB_HasData {
 	return _data.get(s);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HE_Element#clear()
+     */
     @Override
     public void clear() {
 	_data = null;

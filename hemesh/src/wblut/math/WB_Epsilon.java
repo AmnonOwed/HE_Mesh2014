@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.math;
 
 /**
@@ -16,14 +19,17 @@ public class WB_Epsilon {
     /**
      * Clamp value to range with error margin.
      *
+     * @param x 
+     * @param min 
+     * @param max 
      * @return clamped value
      */
     public static double clampEpsilon(final double x, final double min,
 	    final double max) {
-	if (x < min + EPSILON) {
+	if (x < (min + EPSILON)) {
 	    return min;
 	}
-	if (x > max - EPSILON) {
+	if (x > (max - EPSILON)) {
 	    return max;
 	}
 	return x;
@@ -33,16 +39,20 @@ public class WB_Epsilon {
      * Equality with error range. Absolute for small values, relative for large
      * values
      *
+     * @param x 
+     * @param y 
      * @return true, if equal
      */
     public static boolean isEqualHybrid(final double x, final double y) {
-	return WB_Math.fastAbs(x - y) <= WB_Epsilon.EPSILON
-		* WB_Math.max(WB_Math.fastAbs(x), WB_Math.fastAbs(y), 1.0);
+	return WB_Math.fastAbs(x - y) <= (WB_Epsilon.EPSILON * WB_Math.max(
+		WB_Math.fastAbs(x), WB_Math.fastAbs(y), 1.0));
     }
 
     /**
      * Equality with absolute error range.
      *
+     * @param x 
+     * @param y 
      * @return true, if equal
      */
     public static boolean isEqualAbs(final double x, final double y) {
@@ -52,16 +62,19 @@ public class WB_Epsilon {
     /**
      * Equality with relative error range.
      *
+     * @param x 
+     * @param y 
      * @return true, if equal
      */
     public static boolean isEqualRel(final double x, final double y) {
-	return WB_Math.fastAbs(x - y) <= WB_Epsilon.EPSILON
-		* WB_Math.max(WB_Math.fastAbs(x), WB_Math.fastAbs(y));
+	return WB_Math.fastAbs(x - y) <= (WB_Epsilon.EPSILON * WB_Math.max(
+		WB_Math.fastAbs(x), WB_Math.fastAbs(y)));
     }
 
     /**
      * Check if value is zero with error range.
      *
+     * @param x 
      * @return true, if zero
      */
     public static boolean isZero(final double x) {
@@ -71,6 +84,7 @@ public class WB_Epsilon {
     /**
      * Check if value is zero within squared error range.
      *
+     * @param x 
      * @return true, if zero
      */
     public static boolean isZeroSq(final double x) {
@@ -80,6 +94,8 @@ public class WB_Epsilon {
     /**
      * Compare with error margin using isEqualHybrid.
      *
+     * @param x 
+     * @param y 
      * @return 0 if equal, -1 if x<y, +1 if x>1
      */
     public static int compareHybrid(final double x, final double y) {
@@ -95,6 +111,8 @@ public class WB_Epsilon {
     /**
      * Compare with error margin using isEqualAbs.
      *
+     * @param x 
+     * @param y 
      * @return 0 if equal, -1 if x<y, +1 if x>1
      */
     public static int compareAbs(final double x, final double y) {
@@ -110,6 +128,8 @@ public class WB_Epsilon {
     /**
      * Compare with error margin using isEqualRel.
      *
+     * @param x 
+     * @param y 
      * @return 0 if equal, -1 if x<y, +1 if x>1
      */
     public static int compareRel(final double x, final double y) {

@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import static wblut.geom.WB_GeometryOp.projectOnPlane;
@@ -33,16 +36,40 @@ import com.vividsolutions.jts.operation.valid.IsValidOp;
 public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
     /** Halfedge associated with this face. */
     private HE_Halfedge _halfedge;
+    
+    /**
+     * 
+     */
     private HashMap<String, Object> _data;
+    
+    /**
+     * 
+     */
     private int facecolor;
+    
+    /**
+     * 
+     */
     private int[][] triangles;
+    
+    /**
+     * 
+     */
     public static final HET_ProgressTracker tracker = HET_ProgressTracker
 	    .instance();
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public static String getStatus() {
 	return tracker.getStatus();
     }
 
+    /**
+     * 
+     */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
     /**
@@ -53,10 +80,20 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	facecolor = -1;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public long key() {
 	return super.getKey();
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Point getFaceCenter() {
 	if (_halfedge == null) {
 	    return null;
@@ -73,6 +110,12 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return _center;
     }
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public WB_Point getFaceCenter(final double d) {
 	if (_halfedge == null) {
 	    return null;
@@ -89,6 +132,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return _center;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Vector getFaceNormal() {
 	if (_halfedge == null) {
 	    return null;
@@ -110,6 +158,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return _normal;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Vector getFaceNormalNN() {
 	if (_halfedge == null) {
 	    return null;
@@ -130,6 +183,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return _normal;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public double getFaceArea() {
 	if (_halfedge == null) {
 	    return 0;
@@ -143,9 +201,9 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	final double z = WB_Math.fastAbs(n.zd());
 	double area = 0;
 	int coord = 3;
-	if (x >= y && x >= z) {
+	if ((x >= y) && (x >= z)) {
 	    coord = 1;
-	} else if (y >= x && y >= z) {
+	} else if ((y >= x) && (y >= z)) {
 	    coord = 2;
 	}
 	HE_Halfedge he = _halfedge;
@@ -179,6 +237,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return WB_Math.fastAbs(area);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_ClassificationConvex getFaceType() {
 	if (_halfedge == null) {
 	    return null;
@@ -193,6 +256,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return WB_ClassificationConvex.CONVEX;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public List<HE_Vertex> getFaceVertices() {
 	final List<HE_Vertex> fv = new FastTable<HE_Vertex>();
 	if (_halfedge == null) {
@@ -208,6 +276,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return fv;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public int getFaceOrder() {
 	int result = 0;
 	if (_halfedge == null) {
@@ -221,6 +294,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return result;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public List<HE_Halfedge> getFaceHalfedges() {
 	final List<HE_Halfedge> fhe = new FastTable<HE_Halfedge>();
 	if (_halfedge == null) {
@@ -236,6 +314,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return fhe;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public List<HE_Halfedge> getFaceEdges() {
 	final List<HE_Halfedge> fe = new FastTable<HE_Halfedge>();
 	if (_halfedge == null) {
@@ -257,15 +340,30 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return fe;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public HE_Halfedge getHalfedge() {
 	return _halfedge;
     }
 
+    /**
+     * 
+     *
+     * @param halfedge 
+     */
     public void setHalfedge(final HE_Halfedge halfedge) {
 	_halfedge = halfedge;
 	reset();
     }
 
+    /**
+     * 
+     *
+     * @param c 
+     */
     public void push(final WB_Coordinate c) {
 	HE_Halfedge he = _halfedge;
 	do {
@@ -274,10 +372,18 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	} while (he != _halfedge);
     }
 
+    /**
+     * 
+     */
     public void clearHalfedge() {
 	_halfedge = null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Plane toPlane() {
 	WB_Vector fn = getFaceNormal();
 	if (fn.getSqLength3D() < 0.5) {
@@ -291,11 +397,20 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return new WB_Plane(getFaceCenter(), fn);
     }
 
+    /**
+     * 
+     *
+     * @param d 
+     * @return 
+     */
     public WB_Plane toPlane(final double d) {
 	final WB_Vector fn = getFaceNormal();
 	return new WB_Plane(getFaceCenter().addMulSelf(d, fn), fn);
     }
 
+    /**
+     * 
+     */
     public void sort() {
 	if (_halfedge != null) {
 	    HE_Halfedge he = _halfedge;
@@ -310,10 +425,21 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	}
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public int[][] getTriangles() {
 	return getTriangles(true);
     }
 
+    /**
+     * 
+     *
+     * @param optimize 
+     * @return 
+     */
     public int[][] getTriangles(final boolean optimize) {
 	// tracker.setStatus("Starting getTriangles() in face " + getKey() +
 	// ".");
@@ -330,7 +456,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	    } else if (isDegenerate()) {
 		// degenerate face
 		triangles = new int[fo - 2][3];
-		for (int i = 0; i < fo - 2; i++) {
+		for (int i = 0; i < (fo - 2); i++) {
 		    triangles[i] = new int[] { 0, i + 1, i + 2 };
 		}
 	    } else if (fo == 4) {
@@ -362,10 +488,18 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return triangles;
     }
 
+    /**
+     * 
+     */
     public void reset() {
 	triangles = null;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_AABB toAABB() {
 	final WB_AABB aabb = new WB_AABB();
 	HE_Halfedge he = getHalfedge();
@@ -376,6 +510,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return aabb;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Triangle toTriangle() {
 	if (getFaceOrder() != 3) {
 	    return null;
@@ -384,6 +523,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 		_halfedge.getNextInFace().getEndVertex());
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Polygon toPolygon() {
 	final int n = getFaceOrder();
 	if (n == 0) {
@@ -400,6 +544,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return gf.createSimplePolygon(points);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public WB_Polygon toPlanarPolygon() {
 	final int n = getFaceOrder();
 	if (n == 0) {
@@ -417,6 +566,11 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return gf.createSimplePolygon(points);
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public List<HE_Face> getNeighborFaces() {
 	final List<HE_Face> ff = new FastTable<HE_Face>();
 	if (getHalfedge() == null) {
@@ -447,7 +601,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	String s = "HE_Face key: " + key() + ". Connects " + getFaceOrder()
 		+ " vertices: ";
 	HE_Halfedge he = getHalfedge();
-	for (int i = 0; i < getFaceOrder() - 1; i++) {
+	for (int i = 0; i < (getFaceOrder() - 1); i++) {
 	    s += he.getVertex()._key + "-";
 	    he = he.getNextInFace();
 	}
@@ -478,11 +632,17 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return _data.get(s);
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_HasColor#getColor()
+     */
     @Override
     public int getColor() {
 	return facecolor;
     }
 
+    /* (non-Javadoc)
+     * @see wblut.geom.WB_HasColor#setColor(int)
+     */
     @Override
     public void setColor(final int color) {
 	facecolor = color;
@@ -504,15 +664,28 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return false;
     }
 
+    /**
+     * 
+     *
+     * @return 
+     */
     public boolean isDegenerate() {
 	return getFaceNormal().getLength3D() < 0.5;
     }
 
+    /**
+     * 
+     *
+     * @param el 
+     */
     public void copyProperties(final HE_Face el) {
 	super.copyProperties(el);
 	facecolor = el.getColor();
     }
 
+    /* (non-Javadoc)
+     * @see wblut.hemesh.HE_Element#clear()
+     */
     @Override
     public void clear() {
 	_data = null;
@@ -520,6 +693,9 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	triangles = null;
     }
 
+    /**
+     * 
+     */
     public void checkValidity() {
 	final Coordinate[] coords = new Coordinate[getFaceOrder() + 1];
 	final WB_Point point = geometryfactory.createPoint();
@@ -537,7 +713,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	coords[i] = new Coordinate(point.xd(), point.yd(), i);
 	he = he.getNextInFace();
 	final Polygon inputPolygon = new GeometryFactory()
-	.createPolygon(coords);
+		.createPolygon(coords);
 	final IsValidOp isValidOp = new IsValidOp(inputPolygon);
 	if (!IsValidOp.isValid(inputPolygon)) {
 	    System.out.println(this);

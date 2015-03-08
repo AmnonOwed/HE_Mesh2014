@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.Iterator;
@@ -43,6 +46,12 @@ public class HEM_Bend extends HEM_Modifier {
     /**
      * Sets the ground plane.
      *
+     * @param ox 
+     * @param oy 
+     * @param oz 
+     * @param nx 
+     * @param ny 
+     * @param nz 
      * @return self
      */
     public HEM_Bend setGroundPlane(final double ox, final double oy,
@@ -66,8 +75,14 @@ public class HEM_Bend extends HEM_Modifier {
     /**
      * Sets the bend axis.
      *
+     * @param p1x 
+     * @param p1y 
+     * @param p1z 
+     * @param p2x 
+     * @param p2y 
+     * @param p2z 
      * @return self
-     * */
+     */
     public HEM_Bend setBendAxis(final double p1x, final double p1y,
 	    final double p1z, final double p2x, final double p2y,
 	    final double p2z) {
@@ -102,7 +117,7 @@ public class HEM_Bend extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.modifiers.HEB_Modifier#modify(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -124,7 +139,7 @@ public class HEM_Bend extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.hemesh.modifiers.HEB_Modifier#modifySelected(wblut.hemesh.HE_Mesh)
      */

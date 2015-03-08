@@ -1,55 +1,92 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ */
 public class HE_DynamicMesh extends HE_Mesh {
+    
+    /**
+     * 
+     */
+    private final ArrayList<HE_Machine> modifierStack;
+    
+    /**
+     * 
+     */
+    private HE_Mesh bkp;
 
-	private final ArrayList<HE_Machine> modifierStack;
+    /**
+     * 
+     *
+     * @param baseMesh 
+     */
+    public HE_DynamicMesh(final HE_Mesh baseMesh) {
+	this.set(baseMesh);
+	bkp = get();
+	modifierStack = new ArrayList<HE_Machine>();
+    }
 
-	private HE_Mesh bkp;
+    /**
+     * 
+     */
+    public void update() {
+	this.set(bkp);
+	applyStack();
+    }
 
-	public HE_DynamicMesh(final HE_Mesh baseMesh) {
-		this.set(baseMesh);
-		bkp = get();
-		modifierStack = new ArrayList<HE_Machine>();
+    /**
+     * 
+     */
+    private void applyStack() {
+	for (int i = 0; i < modifierStack.size(); i++) {
+	    modifierStack.get(i).apply(this);
 	}
+    }
 
-	public void update() {
-		this.set(bkp);
-		applyStack();
-	}
+    /**
+     * 
+     *
+     * @param mod 
+     */
+    public void add(final HE_Machine mod) {
+	modifierStack.add(mod);
+    }
 
-	private void applyStack() {
-		for (int i = 0; i < modifierStack.size(); i++) {
-			modifierStack.get(i).apply(this);
-		}
+    /**
+     * 
+     *
+     * @param mod 
+     */
+    public void remove(final HE_Machine mod) {
+	modifierStack.remove(mod);
+    }
 
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see wblut.hemesh.HE_MeshStructure#clear()
+     */
+    @Override
+    public void clear() {
+	modifierStack.clear();
+	set(bkp);
+    }
 
-	public void add(final HE_Machine mod) {
-		modifierStack.add(mod);
-	}
-
-	public void remove(final HE_Machine mod) {
-		modifierStack.remove(mod);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wblut.hemesh.HE_MeshStructure#clear()
-	 */
-	@Override
-	public void clear() {
-		modifierStack.clear();
-		set(bkp);
-	}
-
-	public HE_DynamicMesh setBaseMesh(final HE_Mesh baseMesh) {
-		set(baseMesh);
-		bkp = get();
-		applyStack();
-		return this;
-	}
-
+    /**
+     * 
+     *
+     * @param baseMesh 
+     * @return 
+     */
+    public HE_DynamicMesh setBaseMesh(final HE_Mesh baseMesh) {
+	set(baseMesh);
+	bkp = get();
+	applyStack();
+	return this;
+    }
 }

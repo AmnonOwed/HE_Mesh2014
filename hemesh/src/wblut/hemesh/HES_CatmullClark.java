@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.ArrayList;
@@ -21,6 +24,10 @@ import wblut.math.WB_Parameter;
  *
  */
 public class HES_CatmullClark extends HES_Subdividor {
+    
+    /**
+     * 
+     */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
     /** Keep edges?. */
     private boolean keepEdges;
@@ -261,7 +268,6 @@ public class HES_CatmullClark extends HES_Subdividor {
 	}
 	HE_Vertex n;
 	List<HE_Vertex> neighbors;
-	int id = 0;
 	vItr = inner.iterator();
 	while (vItr.hasNext()) {
 	    v = vItr.next();
@@ -328,7 +334,6 @@ public class HES_CatmullClark extends HES_Subdividor {
 				p.scaleSelf(1.0 / c),
 				blendFactor.value(v.xd(), v.yd(), v.zd())) : v);
 	    }
-	    id++;
 	}
 	List<WB_Plane> planes;
 	List<HE_Face> faceStar;
@@ -385,10 +390,10 @@ public class HES_CatmullClark extends HES_Subdividor {
 		    if (planes.size() == 1) {
 			p = WB_GeometryOp.getClosestPoint3D(p, planes.get(0));
 		    }/*
-		      * else if (planes.size() == 2) { final WB_Line L =
-		      * WB_Intersect.intersect(planes.get(0), planes.get(1)).L;
-		      * p = WB_ClosestPoint.getClosestPoint(p, L); p.set(v); }
-		      */
+		     * else if (planes.size() == 2) { final WB_Line L =
+		     * WB_Intersect.intersect(planes.get(0), planes.get(1)).L;
+		     * p = WB_ClosestPoint.getClosestPoint(p, L); p.set(v); }
+		     */
 		    else {
 			p.set(v);
 		    }
@@ -400,7 +405,6 @@ public class HES_CatmullClark extends HES_Subdividor {
 			gf.createInterpolatedPoint(v, p,
 				blendFactor.value(v.xd(), v.yd(), v.zd())));
 	    }
-	    id++;
 	}
 	vItr = inner.iterator();
 	while (vItr.hasNext()) {

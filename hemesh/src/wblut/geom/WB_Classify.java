@@ -1,8 +1,18 @@
+/*
+ * 
+ */
 package wblut.geom;
 
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class WB_Classify {
+    
+    /**
+     * 
+     */
     final public static WB_GeometryFactory geometryfactory = WB_GeometryFactory
 	    .instance();
 
@@ -17,10 +27,10 @@ public class WB_Classify {
      */
     public static WB_ClassificationGeometry classifyPointToLine2D(
 	    final WB_Coordinate p, final WB_Line L) {
-	final double dist = -L.getDirection().yd() * p.xd()
-		+ L.getDirection().xd() * p.yd() + L.getOrigin().xd()
-		* L.getDirection().yd() - L.getOrigin().yd()
-		* L.getDirection().xd();
+	final double dist = ((-L.getDirection().yd() * p.xd())
+		+ (L.getDirection().xd() * p.yd()) + (L.getOrigin().xd() * L
+		.getDirection().yd()))
+		- (L.getOrigin().yd() * L.getDirection().xd());
 	if (dist > WB_Epsilon.EPSILON) {
 	    return WB_ClassificationGeometry.FRONT;
 	}
@@ -111,6 +121,8 @@ public class WB_Classify {
      *            2D point
      * @param q
      *            2D point
+     * @param L
+     *            2D line
      * @return WB_ClassificationGeometry.SAME, WB_ClassificationGeometry.DIFF
      */
     public static WB_ClassificationGeometry sameSideOfLine2D(
@@ -125,15 +137,13 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.DIFF;
     }
 
-    private static double[] toDouble(final WB_Coordinate p) {
-	return new double[] { p.xd(), p.yd(), 0 };
-    }
-
     /**
      * Classify a 2D segment to 2D line.
      *
      * @param seg
      *            2D segment
+     * @param L
+     *            2D line
      * @return WB_ClassificationGeometry.ON, WB_ClassificationGeometry.FRONT,
      *         WB_ClassificationGeometry.BACK or
      *         WB_ClassificationGeometry.CROSSING
@@ -179,6 +189,8 @@ public class WB_Classify {
      *
      * @param P
      *            2D polygon
+     * @param L
+     *            2D line
      * @return WB_ClassificationGeometry.FRONT, WB_ClassificationGeometry.BACK
      *         or WB_ClassificationGeometry.CROSSING
      */
@@ -192,7 +204,7 @@ public class WB_Classify {
 	    } else if (classifyPointToLine2D(P.getPoint(i), L) == WB_ClassificationGeometry.BACK) {
 		numBack++;
 	    }
-	    if (numFront > 0 && numBack > 0) {
+	    if ((numFront > 0) && (numBack > 0)) {
 		return WB_ClassificationGeometry.CROSSING;
 	    }
 	}
@@ -205,16 +217,34 @@ public class WB_Classify {
 	return null;
     }
 
+    /**
+     *
+     * @param p
+     * @param P
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPointToPlaneFast3D(
 	    final WB_Coordinate p, final WB_Plane P) {
 	return classifyPointToPlaneFast3D(P, p);
     }
 
+    /**
+     *
+     * @param p
+     * @param P
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPointToPlane3D(
 	    final WB_Coordinate p, final WB_Plane P) {
 	return classifyPointToPlane3D(P, p);
     }
 
+    /**
+     *
+     * @param P
+     * @param p
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPointToPlaneFast3D(
 	    final WB_Plane P, final WB_Coordinate p) {
 	final double signp = WB_GeometryOp.signedDistanceToPlane3D(p, P);
@@ -227,6 +257,12 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.BACK;
     }
 
+    /**
+     *
+     * @param P
+     * @param p
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPointToPlane3D(
 	    final WB_Plane P, final WB_Coordinate p) {
 	if (WB_Epsilon.isZeroSq(WB_GeometryOp.getDistanceToPlane3D(p, P))) {
@@ -245,6 +281,12 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.BACK;
     }
 
+    /**
+     *
+     * @param T
+     * @param p
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPointToTetrahedron3D(
 	    final WB_Tetrahedron T, final WB_Coordinate p) {
 	final WB_Plane pl012 = geometryfactory.createPlane(T.p1(), T.p2(),
@@ -290,15 +332,21 @@ public class WB_Classify {
 	} else {
 	    back++;
 	}
-	if (front == 4 || back == 4) {
+	if ((front == 4) || (back == 4)) {
 	    return WB_ClassificationGeometry.INSIDE;
 	}
-	if ((front + on == 4) || (back + on) == 4) {
+	if (((front + on) == 4) || ((back + on) == 4)) {
 	    return WB_ClassificationGeometry.ON;
 	}
 	return WB_ClassificationGeometry.OUTSIDE;
     }
 
+    /**
+     *
+     * @param poly
+     * @param P
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPolygonToPlane3D(
 	    final WB_Polygon poly, final WB_Plane P) {
 	int numInFront = 0;
@@ -312,7 +360,7 @@ public class WB_Classify {
 		numBehind++;
 		break;
 	    }
-	    if (numBehind != 0 && numInFront != 0) {
+	    if ((numBehind != 0) && (numInFront != 0)) {
 		return WB_ClassificationGeometry.CROSSING;
 	    }
 	}
@@ -325,6 +373,12 @@ public class WB_Classify {
 	return WB_ClassificationGeometry.ON;
     }
 
+    /**
+     *
+     * @param poly
+     * @param P
+     * @return
+     */
     public static WB_ClassificationGeometry classifyPolygonToPlaneFast3D(
 	    final WB_Polygon poly, final WB_Plane P) {
 	int numInFront = 0;
@@ -337,7 +391,7 @@ public class WB_Classify {
 	    } else if (d < -WB_Epsilon.EPSILON) {
 		numBehind++;
 	    }
-	    if (numBehind != 0 && numInFront != 0) {
+	    if ((numBehind != 0) && (numInFront != 0)) {
 		return WB_ClassificationGeometry.CROSSING;
 	    }
 	}

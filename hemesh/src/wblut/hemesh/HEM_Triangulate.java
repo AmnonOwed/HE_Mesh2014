@@ -1,18 +1,31 @@
+/*
+ * 
+ */
 package wblut.hemesh;
 
 import java.util.List;
 import wblut.math.WB_Epsilon;
 
+/**
+ * 
+ */
 public class HEM_Triangulate extends HEM_Modifier {
+    
+    /**
+     * 
+     */
     public HE_Selection triangles;
 
+    /**
+     * 
+     */
     public HEM_Triangulate() {
 	super();
     }
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -45,7 +58,7 @@ public class HEM_Triangulate extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -76,6 +89,12 @@ public class HEM_Triangulate extends HEM_Modifier {
 	return selection.parent;
     }
 
+    /**
+     * 
+     *
+     * @param face 
+     * @param mesh 
+     */
     private void triangulateNoPairing(final HE_Face face, final HE_Mesh mesh) {
 	if (face.getFaceOrder() == 3) {
 	    triangles.add(face);
