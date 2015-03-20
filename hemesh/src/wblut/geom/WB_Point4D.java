@@ -709,36 +709,12 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	return w;
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @deprecated Use {@link #setX(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setX(final double x) {
-	setX(x);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setX(double)
      */
     @Override
     public void setX(final double x) {
 	this.x = x;
-    }
-
-    /**
-     * 
-     *
-     * @param y 
-     * @deprecated Use {@link #setY(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setY(final double y) {
-	setY(y);
     }
 
     /* (non-Javadoc)
@@ -749,18 +725,6 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	this.y = y;
     }
 
-    /**
-     * 
-     *
-     * @param z 
-     * @deprecated Use {@link #setZ(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setZ(final double z) {
-	setZ(z);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
@@ -769,37 +733,12 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	this.z = z;
     }
 
-    /**
-     * 
-     *
-     * @param w 
-     * @deprecated Use {@link #setW(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setW(final double w) {
-	setW(w);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setW(double)
      */
     @Override
     public void setW(final double w) {
 	this.w = w;
-    }
-
-    /**
-     * 
-     *
-     * @param i 
-     * @param v 
-     * @deprecated Use {@link #setCoord(int,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setCoord(final int i, final double v) {
-	setCoord(i, v);
     }
 
     /* (non-Javadoc)
@@ -821,22 +760,6 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	}
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @param w 
-     * @deprecated Use {@link #set(double,double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z,
-	    final double w) {
-	set(x, y, z, w);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
      */
@@ -849,20 +772,6 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	this.w = w;
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @deprecated Use {@link #set(double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z) {
-	set(x, y, z);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
      */
@@ -872,19 +781,6 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	this.y = y;
 	this.z = z;
 	this.w = 0;
-    }
-
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @deprecated Use {@link #set(double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y) {
-	set(x, y);
     }
 
     /* (non-Javadoc)
@@ -931,18 +827,6 @@ public class WB_Point4D implements Comparable<WB_Coordinate>,
 	    return cmp;
 	}
 	return Double.compare(wd(), p.wd());
-    }
-
-    /**
-     * 
-     *
-     * @param p 
-     * @deprecated Use {@link #set(WB_Coordinate)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final WB_Coordinate p) {
-	set(p);
     }
 
     /* (non-Javadoc)

@@ -579,36 +579,12 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	T.applyAsPoint(this, pos);
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @deprecated Use {@link #setX(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setX(final double x) {
-	setX(x);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setX(double)
      */
     @Override
     public void setX(final double x) {
 	pos.setX(x);
-    }
-
-    /**
-     * 
-     *
-     * @param y 
-     * @deprecated Use {@link #setY(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setY(final double y) {
-	setY(y);
     }
 
     /* (non-Javadoc)
@@ -619,36 +595,12 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setY(y);
     }
 
-    /**
-     * 
-     *
-     * @param z 
-     * @deprecated Use {@link #setZ(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setZ(final double z) {
-	setZ(z);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
     @Override
     public void setZ(final double z) {
 	pos.setZ(z);
-    }
-
-    /**
-     * 
-     *
-     * @param w 
-     * @deprecated Use {@link #setW(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setW(final double w) {
-	setW(w);
     }
 
     /* (non-Javadoc)
@@ -659,37 +611,12 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setW(w);
     }
 
-    /**
-     * 
-     *
-     * @param i 
-     * @param v 
-     * @deprecated Use {@link #setCoord(int,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setCoord(final int i, final double v) {
-	setCoord(i, v);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setCoord(int, double)
      */
     @Override
     public void setCoord(final int i, final double v) {
 	pos.setCoord(i, v);
-    }
-
-    /**
-     * 
-     *
-     * @param p 
-     * @deprecated Use {@link #set(WB_Coordinate)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final WB_Coordinate p) {
-	set(p);
     }
 
     /* (non-Javadoc)
@@ -700,19 +627,6 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(p);
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @deprecated Use {@link #set(double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y) {
-	set(x, y);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double)
      */
@@ -721,42 +635,12 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(x, y);
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @deprecated Use {@link #set(double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z) {
-	set(x, y, z);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
      */
     @Override
     public void set(final double x, final double y, final double z) {
 	pos.set(x, y, z);
-    }
-
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @param w 
-     * @deprecated Use {@link #set(double,double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z,
-	    final double w) {
-	set(x, y, z, w);
     }
 
     /* (non-Javadoc)
@@ -854,7 +738,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		boolean degenerate = false;
 		for (int j = i + 1; j < normals.size(); j++) {
 		    final WB_Vector nj = normals.get(j);
-		    ni.crossInto(nj, tmp);
+		    ni.crossInto(tmp, nj);
 		    if (tmp.getSqLength3D() < WB_Epsilon.SQEPSILON) {
 			degenerate = true;
 			break;
@@ -1015,7 +899,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	    final WB_Vector ret) {
 	tempD1 = p1.subToVector3D(p2);
 	tempD2 = p2.subToVector3D(p0);
-	tempD1.crossInto(tempD2, ret);
+	tempD1.crossInto(ret, tempD2);
 	double norm = ret.getLength3D();
 	if ((norm * norm) > (WB_Epsilon.SQEPSILON * ((tempD1.xd() * tempD1.xd())
 		+ (tempD1.yd() * tempD1.yd())

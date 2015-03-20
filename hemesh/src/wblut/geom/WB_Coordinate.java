@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.geom;
 
@@ -12,7 +12,6 @@ package wblut.geom;
  *
  */
 public interface WB_Coordinate {
-    
     /**
      * Get x as double.
      *
@@ -42,9 +41,10 @@ public interface WB_Coordinate {
     public double wd();
 
     /**
-     * Get i'th ordinate as double.
+     * Get i'th ordinate as double. An implementation of this interface does not
+     * necessarily check the validity of the passed parameter.
      *
-     * @param i 
+     * @param i
      * @return i'th ordinate
      */
     public double getd(int i);
@@ -78,9 +78,10 @@ public interface WB_Coordinate {
     public float wf();
 
     /**
-     * Get i'th ordinate as float.
+     * Get i'th ordinate as float. An implementation of this interface does not
+     * necessarily check the validity of the passed parameter.
      *
-     * @param i 
+     * @param i
      * @return i'th ordinate
      */
     public float getf(int i);

@@ -33,19 +33,6 @@ WB_MutableCoordinate {
 	this.seq = seq;
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @deprecated Use {@link #set(double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y) {
-	set(x, y);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double)
      */
@@ -54,20 +41,6 @@ WB_MutableCoordinate {
 	seq._setRaw(offset, x);
 	seq._setRaw(offset + 1, y);
 	seq._setRaw(offset + 2, 0);
-    }
-
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @deprecated Use {@link #set(double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z) {
-	set(x, y, z);
     }
 
     /* (non-Javadoc)
@@ -80,22 +53,6 @@ WB_MutableCoordinate {
 	seq._setRaw(offset + 2, z);
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @param w 
-     * @deprecated Use {@link #set(double,double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z,
-	    final double w) {
-	set(x, y, z, w);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
      */
@@ -103,18 +60,6 @@ WB_MutableCoordinate {
     public void set(final double x, final double y, final double z,
 	    final double w) {
 	set(x, y, z);
-    }
-
-    /**
-     * 
-     *
-     * @param v 
-     * @deprecated Use {@link #set(WB_Coordinate)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final WB_Coordinate v) {
-	set(v);
     }
 
     /* (non-Javadoc)
@@ -125,35 +70,11 @@ WB_MutableCoordinate {
 	set(v.xd(), v.yd(), v.zd());
     }
 
-    /**
-     * 
-     *
-     * @param w 
-     * @deprecated Use {@link #setW(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setW(final double w) {
-	setW(w);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setW(double)
      */
     @Override
     public void setW(final double w) {
-    }
-
-    /**
-     * 
-     *
-     * @param x 
-     * @deprecated Use {@link #setX(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setX(final double x) {
-	setX(x);
     }
 
     /* (non-Javadoc)
@@ -164,18 +85,6 @@ WB_MutableCoordinate {
 	seq._setRaw(offset, x);
     }
 
-    /**
-     * 
-     *
-     * @param y 
-     * @deprecated Use {@link #setY(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setY(final double y) {
-	setY(y);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setY(double)
      */
@@ -184,37 +93,12 @@ WB_MutableCoordinate {
 	seq._setRaw(offset + 1, y);
     }
 
-    /**
-     * 
-     *
-     * @param z 
-     * @deprecated Use {@link #setZ(double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setZ(final double z) {
-	setZ(z);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
     @Override
     public void setZ(final double z) {
 	seq._setRaw(offset + 2, z);
-    }
-
-    /**
-     * 
-     *
-     * @param i 
-     * @param v 
-     * @deprecated Use {@link #setCoord(int,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _setCoord(final int i, final double v) {
-	setCoord(i, v);
     }
 
     /* (non-Javadoc)

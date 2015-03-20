@@ -16,7 +16,7 @@ import wblut.geom.WB_Point;
 /**
  * 
  */
-public class HEC_FromObjFile extends HEC_Creator {
+public class HEC_FromOBJFile extends HEC_Creator {
     
     /**
      * 
@@ -31,7 +31,7 @@ public class HEC_FromObjFile extends HEC_Creator {
     /**
      * 
      */
-    public HEC_FromObjFile() {
+    public HEC_FromOBJFile() {
 	super();
 	scale = 1;
 	path = null;
@@ -43,7 +43,7 @@ public class HEC_FromObjFile extends HEC_Creator {
      *
      * @param path 
      */
-    public HEC_FromObjFile(final String path) {
+    public HEC_FromOBJFile(final String path) {
 	super();
 	this.path = path;
 	scale = 1;
@@ -56,7 +56,7 @@ public class HEC_FromObjFile extends HEC_Creator {
      * @param path 
      * @return 
      */
-    public HEC_FromObjFile setPath(final String path) {
+    public HEC_FromOBJFile setPath(final String path) {
 	this.path = path;
 	return this;
     }
@@ -67,7 +67,7 @@ public class HEC_FromObjFile extends HEC_Creator {
      * @param f 
      * @return 
      */
-    public HEC_FromObjFile setScale(final double f) {
+    public HEC_FromOBJFile setScale(final double f) {
 	scale = f;
 	return this;
     }

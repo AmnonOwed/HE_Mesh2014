@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.geom;
 
@@ -11,24 +11,22 @@ import javolution.util.FastTable;
 import wblut.hemesh.HE_Mesh;
 
 /**
- * 
+ *
  */
 public class WB_MeshGraph {
-    
     /**
-     * 
+     *
      */
     private final WB_GVertex[] vertices;
-    
     /**
-     * 
+     *
      */
     private int lastSource;
 
     /**
-     * 
      *
-     * @param mesh 
+     *
+     * @param mesh
      */
     public WB_MeshGraph(final WB_Mesh mesh) {
 	vertices = new WB_GVertex[mesh.getNumberOfVertices()];
@@ -56,19 +54,19 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
      *
-     * @param i 
-     * @return 
+     *
+     * @param i
+     * @return
      */
     public int getVertex(final int i) {
 	return vertices[i].index;
     }
 
     /**
-     * 
      *
-     * @param i 
+     *
+     * @param i
      */
     public void computePaths(final int i) {
 	final WB_GVertex source = vertices[i];
@@ -97,11 +95,11 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
      *
-     * @param source 
-     * @param target 
-     * @return 
+     *
+     * @param source
+     * @param target
+     * @return
      */
     public int[] getShortestPath(final int source, final int target) {
 	if (source != lastSource) {
@@ -123,10 +121,10 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
      *
-     * @param i 
-     * @return 
+     *
+     * @param i
+     * @return
      */
     public WB_Frame getFrame(final int i) {
 	final WB_Frame frame = new WB_Frame();
@@ -150,11 +148,11 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
      *
-     * @param i 
-     * @param maxnodes 
-     * @return 
+     *
+     * @param i
+     * @param maxnodes
+     * @return
      */
     public WB_Frame getFrame(final int i, final int maxnodes) {
 	final WB_Frame frame = new WB_Frame();
@@ -177,10 +175,34 @@ public class WB_MeshGraph {
 	return frame;
     }
 
+    public WB_Frame getFrame(final int i, final int maxnodes, final int cuttail) {
+	final WB_Frame frame = new WB_Frame();
+	computePaths(i);
+	for (final WB_GVertex v : vertices) {
+	    frame.addNode(v.pos, 0);
+	}
+	for (final WB_GVertex v : vertices) {
+	    final int[] path = getShortestPath(i, v.index);
+	    final int nodes = Math.min(maxnodes, path.length - cuttail);
+	    if (nodes <= 1) {
+		continue;
+	    }
+	    for (int j = 0; j < (nodes - 1); j++) {
+		frame.nodes.get(path[j]).value = Math.max(
+			frame.nodes.get(path[j]).value,
+			1.0 - ((j * 1.0) / nodes));
+		frame.addStrut(path[j], path[j + 1]);
+	    }
+	    frame.nodes.get(path[nodes - 1]).value = Math.max(
+		    frame.nodes.get(path[nodes - 1]).value, 1.0 / nodes);
+	}
+	return frame;
+    }
+
     /**
-     * 
      *
-     * @param args 
+     *
+     * @param args
      */
     public static void main(final String[] args) {
 	final WB_Geodesic geo = new WB_Geodesic(1.0, 2, 0,
@@ -219,40 +241,35 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
+     *
      */
     public class WB_GVertex implements Comparable<WB_GVertex> {
-	
 	/**
-	 * 
+	 *
 	 */
 	public final int index;
-	
 	/**
-	 * 
+	 *
 	 */
 	public List<WB_GEdge> adjacencies;
-	
 	/**
-	 * 
+	 *
 	 */
 	public double minDistance = Double.POSITIVE_INFINITY;
-	
 	/**
-	 * 
+	 *
 	 */
 	public WB_GVertex previous;
-	
 	/**
-	 * 
+	 *
 	 */
 	WB_Coordinate pos;
 
 	/**
-	 * 
 	 *
-	 * @param id 
-	 * @param pos 
+	 *
+	 * @param id
+	 * @param pos
 	 */
 	public WB_GVertex(final int id, final WB_Coordinate pos) {
 	    index = id;
@@ -260,7 +277,9 @@ public class WB_MeshGraph {
 	    this.pos = new WB_Point(pos);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -268,7 +287,9 @@ public class WB_MeshGraph {
 	    return ("Vertex " + index);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -277,7 +298,7 @@ public class WB_MeshGraph {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void reset() {
 	    minDistance = Double.POSITIVE_INFINITY;
@@ -286,25 +307,23 @@ public class WB_MeshGraph {
     }
 
     /**
-     * 
+     *
      */
     public class WB_GEdge {
-	
 	/**
-	 * 
+	 *
 	 */
 	public final WB_GVertex target;
-	
 	/**
-	 * 
+	 *
 	 */
 	public final double weight;
 
 	/**
-	 * 
 	 *
-	 * @param argTarget 
-	 * @param argWeight 
+	 *
+	 * @param argTarget
+	 * @param argWeight
 	 */
 	public WB_GEdge(final WB_GVertex argTarget, final double argWeight) {
 	    target = argTarget;

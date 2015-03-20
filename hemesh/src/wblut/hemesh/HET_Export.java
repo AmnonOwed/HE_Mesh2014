@@ -29,6 +29,11 @@ public class HET_Export {
 	HET_OBJWriter.saveMesh(mesh, path, name);
     }
 
+    public static void saveToOBJNN(final HE_Mesh mesh, final String path,
+	    final String name) {
+	HET_OBJWriter.saveMeshNN(mesh, path, name);
+    }
+
     /**
      *
      *
@@ -79,7 +84,7 @@ public class HET_Export {
 		(colormodel == 1) ? HET_STLWriter.MATERIALISE
 			: (colormodel == 0) ? HET_STLWriter.DEFAULT
 				: HET_STLWriter.NONE,
-		HET_STLWriter.DEFAULT_BUFFER);
+				HET_STLWriter.DEFAULT_BUFFER);
 	stl.beginSave(path, name, mesh.getNumberOfFaces());
 	saveToSTLWithFaceColor(mesh, stl);
 	stl.endSave();
@@ -423,9 +428,9 @@ public class HET_Export {
 		    keyToIndex.get(f.getHalfedge().getNextInFace().getVertex()
 			    .key())
 			    + vOffset,
-		    keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
-			    .key())
-			    + vOffset);
+			    keyToIndex.get(f.getHalfedge().getPrevInFace().getVertex()
+				    .key())
+				    + vOffset);
 	}
 	pov.endSection();
     }

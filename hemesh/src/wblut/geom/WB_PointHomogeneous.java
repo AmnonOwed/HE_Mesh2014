@@ -124,22 +124,6 @@ public class WB_PointHomogeneous extends WB_Point4D {
 	pointAtInfinity = atInfinity;
     }
 
-    /**
-     * 
-     *
-     * @param x 
-     * @param y 
-     * @param z 
-     * @param w 
-     * @deprecated Use {@link #set(double,double,double,double)} instead
-     */
-    @Deprecated
-    @Override
-    public void _set(final double x, final double y, final double z,
-	    final double w) {
-	set(x, y, z, w);
-    }
-
     /* (non-Javadoc)
      * @see wblut.geom.WB_Point4D#set(double, double, double, double)
      */
@@ -162,7 +146,7 @@ public class WB_PointHomogeneous extends WB_Point4D {
      * @param w 
      * @param atInfinity 
      */
-    public void _set(final double x, final double y, final double z,
+    public void set(final double x, final double y, final double z,
 	    final double w, final boolean atInfinity) {
 	if (atInfinity) {
 	    this.x = x;
@@ -185,7 +169,7 @@ public class WB_PointHomogeneous extends WB_Point4D {
      * @param w 
      * @param atInfinity 
      */
-    public void _set(final WB_Coordinate v, final double w,
+    public void set(final WB_Coordinate v, final double w,
 	    final boolean atInfinity) {
 	if (atInfinity) {
 	    x = v.xd();
@@ -206,7 +190,7 @@ public class WB_PointHomogeneous extends WB_Point4D {
      *
      * @param p 
      */
-    public void _set(final WB_PointHomogeneous p) {
+    public void set(final WB_PointHomogeneous p) {
 	x = p.x;
 	y = p.y;
 	z = p.z;
@@ -236,7 +220,7 @@ public class WB_PointHomogeneous extends WB_Point4D {
      */
     public void setWeight(final double w) {
 	final WB_Point p = project();
-	_set(p, w, pointAtInfinity);
+	set(p, w, pointAtInfinity);
     }
 
     /**
