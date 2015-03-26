@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -27,20 +27,19 @@ import wblut.math.WB_M33;
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	WB_HasData, WB_HasColor {
-    
     /**
-     * 
+     *
      */
     private WB_Point pos;
     /** Halfedge associated with this vertex. */
     private HE_Halfedge _halfedge;
     /** The _data. */
     private HashMap<String, Object> _data;
-    
     /**
-     * 
+     *
      */
     private int vertexcolor;
+    private double u, v, w;
 
     /**
      * Instantiates a new HE_Vertex.
@@ -49,6 +48,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	super();
 	pos = new WB_Point();
 	vertexcolor = -1;
+	u = v = w = 0;
     }
 
     /**
@@ -65,6 +65,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	super();
 	pos = new WB_Point(x, y, z);
 	vertexcolor = -1;
+	u = v = w = 0;
     }
 
     /**
@@ -77,12 +78,13 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	super();
 	pos = new WB_Point(v);
 	vertexcolor = -1;
+	u = this.v = w = 0;
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public HE_Vertex get() {
 	return new HE_Vertex(pos);
@@ -118,10 +120,10 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param d 
-     * @return 
+     *
+     * @param d
+     * @return
      */
     public WB_Point getOffset(final double d) {
 	return new WB_Point(pos).addMulSelf(d, getVertexNormal());
@@ -305,18 +307,18 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public List<HE_Vertex> getVertexStar() {
 	return getNeighborVertices();
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public List<HE_Vertex> getNextNeighborVertices() {
 	final List<HE_Vertex> result = new FastTable<HE_Vertex>();
@@ -438,15 +440,17 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public WB_Point getPoint() {
 	return pos;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#xd()
      */
     @Override
@@ -454,7 +458,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.xd();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#yd()
      */
     @Override
@@ -462,7 +468,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.yd();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#zd()
      */
     @Override
@@ -470,15 +478,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.zd();
     }
 
-    /* (non-Javadoc)
-     * @see wblut.geom.WB_Coordinate#wd()
-     */
-    @Override
-    public double wd() {
-	return pos.wd();
-    }
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#getd(int)
      */
     @Override
@@ -486,7 +488,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.getd(i);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#xf()
      */
     @Override
@@ -494,7 +498,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.xf();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#yf()
      */
     @Override
@@ -502,7 +508,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.yf();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#zf()
      */
     @Override
@@ -510,15 +518,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return pos.zf();
     }
 
-    /* (non-Javadoc)
-     * @see wblut.geom.WB_Coordinate#wf()
-     */
-    @Override
-    public float wf() {
-	return pos.wf();
-    }
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_Coordinate#getf(int)
      */
     @Override
@@ -527,10 +529,10 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param p 
-     * @return 
+     *
+     * @param p
+     * @return
      */
     public int compareTo(final WB_Coordinate p) {
 	final int compX = compare(xd(), p.xd());
@@ -545,11 +547,11 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param a 
-     * @param b 
-     * @return 
+     *
+     * @param a
+     * @param b
+     * @return
      */
     public static int compare(final double a, final double b) {
 	if (a < b) {
@@ -571,15 +573,17 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param T 
+     *
+     * @param T
      */
     public void apply(final WB_Transform T) {
 	T.applyAsPoint(this, pos);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#setX(double)
      */
     @Override
@@ -587,7 +591,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setX(x);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#setY(double)
      */
     @Override
@@ -595,7 +601,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setY(y);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
     @Override
@@ -603,7 +611,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setZ(z);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#setW(double)
      */
     @Override
@@ -611,7 +621,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setW(w);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#setCoord(int, double)
      */
     @Override
@@ -619,7 +631,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.setCoord(i, v);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -627,7 +641,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(p);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double)
      */
     @Override
@@ -635,7 +651,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(x, y);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
      */
     @Override
@@ -643,7 +661,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(x, y, z);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
      */
     @Override
@@ -652,7 +672,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	pos.set(x, y, z, w);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -660,7 +682,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return vertexcolor;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
@@ -669,9 +693,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public WB_CoordinateSystem getCS() {
 	final WB_Vector normal = getVertexNormal();
@@ -696,9 +720,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     // Common area-weighted mean normal
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public WB_Vector getVertexNormal() {
 	if (_halfedge == null) {
@@ -766,8 +790,8 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
      * curvature. Guoliang Xu suggests improvements in his papers
      * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
      *
-     * @param meanCurvatureVector 
-     * @return 
+     * @param meanCurvatureVector
+     * @return
      */
     public double getGaussianCurvature(final WB_Vector meanCurvatureVector) {
 	meanCurvatureVector.set(0, 0, 0);
@@ -820,38 +844,20 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public WB_CoordinateSystem getCurvatureDirections() {
 	final WB_CoordinateSystem tangent = getCS();
 	if (tangent == null) {
 	    return null;
 	}
-	// To compute B eigenvectors, we search for the minimum of
-	// E(a,b,c) = sum omega_ij (T(d_ij) B d_ij - kappa_ij)^2
-	// d_ij is the unit direction of the edge ij in the tangent
-	// plane, so it can be written in the (t1,t2) local frame:
-	// d_ij = d1_ij t1 + d2_ij t2
-	// Then
-	// T(d_ij) B d_ij = a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2
-	// We solve grad E = 0
-	// dE/da = 2 d1_ij^2 (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 - kappa_ij)
-	// dE/db = 4 d1_ij d2_ij (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 -
-	// kappa_ij)
-	// dE/dc = 2 d2_ij^2 (a d1_ij^2 + 2b d1_ij d2_ij + c d2_ij^2 - kappa_ij)
-	// We may decrease the dimension by using a+c=Kh identity,
-	// but we found that Kh is much less accurate than Kg on
-	// a sphere, so we do not use this identity.
-	// (1/2) grad E = G (a b c) - H
 	final WB_Vector vect1 = findOptimalSolution(tangent.getZ(),
 		tangent.getX(), tangent.getY());
 	if (vect1 == null) {
 	    return null;
 	}
-	// We can eventually compute eigenvectors of B(a b; b c).
-	// Let first compute the eigenvector associated to K1
 	double e1, e2;
 	if (Math.abs(vect1.yd()) < WB_Epsilon.EPSILON) {
 	    if (Math.abs(vect1.xd()) < Math.abs(vect1.zd())) {
@@ -884,15 +890,15 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param p0 
-     * @param p1 
-     * @param p2 
-     * @param tempD1 
-     * @param tempD2 
-     * @param ret 
-     * @return 
+     *
+     * @param p0
+     * @param p1
+     * @param p2
+     * @param tempD1
+     * @param tempD2
+     * @param ret
+     * @return
      */
     private static double computeNormal3D(final WB_Point p0, final WB_Point p1,
 	    final WB_Point p2, WB_Vector tempD1, WB_Vector tempD2,
@@ -915,12 +921,12 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param normal 
-     * @param t1 
-     * @param t2 
-     * @return 
+     *
+     * @param normal
+     * @param t1
+     * @param t2
+     * @return
      */
     private WB_Vector findOptimalSolution(final WB_Vector normal,
 	    final WB_Vector t1, final WB_Vector t2) {
@@ -983,16 +989,18 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @param el 
+     *
+     * @param el
      */
     public void copyProperties(final HE_Vertex el) {
 	super.copyProperties(el);
 	vertexcolor = el.getColor();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override
@@ -1003,9 +1011,9 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public double getUmbrellaAngle() {
 	double result = 0;
@@ -1018,5 +1026,43 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	    he = he.getNextInVertex();
 	} while (he != _halfedge);
 	return result;
+    }
+
+    public double ud() {
+	return u;
+    }
+
+    public double vd() {
+	return v;
+    }
+
+    @Override
+    public double wd() {
+	return w;
+    }
+
+    public float uf() {
+	return (float) u;
+    }
+
+    public float vf() {
+	return (float) v;
+    }
+
+    @Override
+    public float wf() {
+	return (float) w;
+    }
+
+    public void setUVW(final double u, final double v, final double w) {
+	this.u = u;
+	this.v = v;
+	this.w = w;
+    }
+
+    public void setUVW(final WB_Coordinate u) {
+	this.u = u.xd();
+	this.v = u.yd();
+	this.w = u.zd();
     }
 }
