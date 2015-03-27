@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -25,6 +25,7 @@ import wblut.math.WB_Epsilon;
 public class HEC_FromFacelist extends HEC_Creator {
     /** Vertices. */
     private WB_Coordinate[] vertices;
+    private WB_Coordinate[] uvws;
     /** Face indices. */
     private int[][] faces;
     /** Duplicate vertices?. */
@@ -70,6 +71,18 @@ public class HEC_FromFacelist extends HEC_Creator {
 	int i = 0;
 	while (itr.hasNext()) {
 	    vertices[i] = itr.next();
+	    i++;
+	}
+	return this;
+    }
+
+    public HEC_FromFacelist setUVW(final Collection<? extends WB_Coordinate> vs) {
+	final int n = vs.size();
+	final Iterator<? extends WB_Coordinate> itr = vs.iterator();
+	uvws = new WB_Coordinate[n];
+	int i = 0;
+	while (itr.hasNext()) {
+	    uvws[i] = itr.next();
 	    i++;
 	}
 	return this;
@@ -226,6 +239,8 @@ public class HEC_FromFacelist extends HEC_Creator {
     protected HE_Mesh createBase() {
 	final HE_Mesh mesh = new HE_Mesh();
 	if ((faces != null) && (vertices != null)) {
+	    final boolean useUVW = (uvws != null)
+		    && (uvws.length == vertices.length);
 	    final HE_Vertex[] uniqueVertices = new HE_Vertex[vertices.length];
 	    if (duplicate) {
 		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
@@ -236,6 +251,9 @@ public class HEC_FromFacelist extends HEC_Creator {
 		mesh.add(v);
 		for (int i = 1; i < vertices.length; i++) {
 		    v = new HE_Vertex(vertices[i]);
+		    if (useUVW) {
+			v.setUVW(uvws[i]);
+		    }
 		    neighbors = kdtree.getNearestNeighbors(v, 1);
 		    if (neighbors[0].d2 < WB_Epsilon.SQEPSILON) {
 			uniqueVertices[i] = uniqueVertices[neighbors[0].value];
@@ -249,6 +267,9 @@ public class HEC_FromFacelist extends HEC_Creator {
 		HE_Vertex v;
 		for (int i = 0; i < vertices.length; i++) {
 		    v = new HE_Vertex(vertices[i]);
+		    if (useUVW) {
+			v.setUVW(uvws[i]);
+		    }
 		    v.setInternalLabel(i);
 		    uniqueVertices[i] = v;
 		    mesh.add(uniqueVertices[i]);
