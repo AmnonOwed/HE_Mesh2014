@@ -26,7 +26,7 @@ import wblut.math.WB_M33;
  *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-WB_HasData, WB_HasColor {
+	WB_HasData, WB_HasColor {
     /**
      *
      */
@@ -39,7 +39,7 @@ WB_HasData, WB_HasColor {
      *
      */
     private int vertexcolor;
-    private double u, v, w;
+    private HE_TextureCoordinate uvw;
 
     /**
      * Instantiates a new HE_Vertex.
@@ -48,7 +48,7 @@ WB_HasData, WB_HasColor {
 	super();
 	pos = new WB_Point();
 	vertexcolor = -1;
-	u = v = w = 0;
+	uvw = null;
     }
 
     /**
@@ -65,7 +65,7 @@ WB_HasData, WB_HasColor {
 	super();
 	pos = new WB_Point(x, y, z);
 	vertexcolor = -1;
-	u = v = w = 0;
+	uvw = null;
     }
 
     /**
@@ -78,7 +78,7 @@ WB_HasData, WB_HasColor {
 	super();
 	pos = new WB_Point(v);
 	vertexcolor = -1;
-	u = this.v = w = 0;
+	uvw = null;
     }
 
     /**
@@ -88,7 +88,9 @@ WB_HasData, WB_HasColor {
      */
     public HE_Vertex get() {
 	final HE_Vertex copy = new HE_Vertex(pos);
-	copy.setUVW(u, v, w);
+	if (uvw != null) {
+	    copy.setUVW(uvw);
+	}
 	return copy;
     }
 
@@ -194,7 +196,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -404,7 +406,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -417,7 +419,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -763,7 +765,7 @@ WB_HasData, WB_HasColor {
 	    }
 	    final double area = computeNormal3D(pos,
 		    _halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
-		    .getVertex().pos, temp[0], temp[1], temp[2]);
+			    .getVertex().pos, temp[0], temp[1], temp[2]);
 	    normal.addMulSelf(area, temp[2]);
 	} while (_halfedge.getEndVertex() != d);
 	final double n = normal.getLength3D();
@@ -933,7 +935,7 @@ WB_HasData, WB_HasColor {
 		+ (tempD1.yd() * tempD1.yd())
 		+ (tempD1.zd() * tempD1.zd())
 		+ (tempD2.xd() * tempD2.xd()) + (tempD2.yd() * tempD2.yd()) + (tempD2
-			.zd() * tempD2.zd())))) {
+		.zd() * tempD2.zd())))) {
 	    ret.mulSelf(1.0 / norm);
 	} else {
 	    ret.set(0, 0, 0);
@@ -1018,9 +1020,11 @@ WB_HasData, WB_HasColor {
     public void copyProperties(final HE_Vertex el) {
 	super.copyProperties(el);
 	vertexcolor = el.getColor();
-	u = el.u;
-	v = el.v;
-	w = el.w;
+	if (el.getUVW() == null) {
+	    uvw = null;
+	} else {
+	    uvw = new HE_TextureCoordinate(el.getUVW());
+	}
     }
 
     /*
@@ -1053,39 +1057,50 @@ WB_HasData, WB_HasColor {
 	return result;
     }
 
-    public double getUd() {
-	return u;
+    public HE_TextureCoordinate getUVW() {
+	if (uvw == null) {
+	    return HE_TextureCoordinate.ZERO;
+	}
+	return uvw;
     }
 
-    public double getVd() {
-	return v;
+    public HE_TextureCoordinate getUVW(final HE_Face f) {
+	final HE_Halfedge he = getHalfedge(f);
+	if (he != null && he.hasTexture()) {
+	    return he.getUVW();
+	} else if (uvw == null) {
+	    return HE_TextureCoordinate.ZERO;
+	}
+	return uvw;
     }
 
-    public double getWd() {
-	return w;
-    }
-
-    public float getUf() {
-	return (float) u;
-    }
-
-    public float getVf() {
-	return (float) v;
-    }
-
-    public float getWf() {
-	return (float) w;
+    public HE_Halfedge getHalfedge(final HE_Face f) {
+	HE_Halfedge he = _halfedge;
+	if (he == null) {
+	    return null;
+	}
+	do {
+	    if (he.getFace() == f) {
+		return he;
+	    }
+	    he = he.getNextInVertex();
+	} while (he != _halfedge);
+	return null;
     }
 
     public void setUVW(final double u, final double v, final double w) {
-	this.u = u;
-	this.v = v;
-	this.w = w;
+	uvw = new HE_TextureCoordinate(u, v, w);
     }
 
-    public void setUVW(final WB_Coordinate u) {
-	this.u = u.xd();
-	this.v = u.yd();
-	this.w = u.zd();
+    public void setUVW(final WB_Coordinate uvw) {
+	this.uvw = new HE_TextureCoordinate(uvw);
+    }
+
+    public void setUVW(final HE_TextureCoordinate uvw) {
+	this.uvw = new HE_TextureCoordinate(uvw);
+    }
+
+    public boolean hasTexture() {
+	return uvw != null;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -8,9 +8,9 @@ import wblut.math.WB_Epsilon;
 
 /**
  * Cylinder.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_Cylinder extends HEC_Creator {
     /** Base radius. */
@@ -32,7 +32,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Instantiates a new cylinder.
-     * 
+     *
      */
     public HEC_Cylinder() {
 	super();
@@ -49,7 +49,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Instantiates a new cylinder.
-     * 
+     *
      * @param Ri
      *            bottom radius
      * @param Ro
@@ -74,7 +74,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Set fixed radius.
-     * 
+     *
      * @param R
      *            radius
      * @return self
@@ -87,7 +87,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Set lower and upper radius.
-     * 
+     *
      * @param Ri
      *            lower radius
      * @param Ro
@@ -102,7 +102,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * set height.
-     * 
+     *
      * @param H
      *            height
      * @return self
@@ -114,7 +114,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Set vertical divisions.
-     * 
+     *
      * @param steps
      *            vertical divisions
      * @return self
@@ -126,7 +126,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Set number of sides.
-     * 
+     *
      * @param facets
      *            number of sides
      * @return self
@@ -138,7 +138,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Set capping options.
-     * 
+     *
      * @param topcap
      *            create top cap?
      * @param bottomcap
@@ -153,7 +153,7 @@ public class HEC_Cylinder extends HEC_Creator {
 
     /**
      * Sets the taper.
-     * 
+     *
      * @param t
      *            the t
      * @return the hE c_ cylinder
@@ -181,17 +181,49 @@ public class HEC_Cylinder extends HEC_Creator {
 	    cone.setReverse(true);
 	    return cone.createBase();
 	}
-	final double[][] vertices = new double[(steps + 1) * facets][3];
+	final double[][] vertices = new double[(steps + 1) * (facets + 1)
+	                                       + ((bottomcap) ? facets : 0) + ((topcap) ? facets : 0)][3];
+	final double[][] uvw = new double[(steps + 1) * (facets + 1)
+		+ ((bottomcap) ? facets : 0) + ((topcap) ? facets : 0)][3];
 	final double invs = 1.0 / steps;
+	int id = 0;
 	for (int i = 0; i < (steps + 1); i++) {
 	    final double R = Ri + (Math.pow(i * invs, taper) * (Ro - Ri));
 	    final double Hj = i * H * invs;
+	    for (int j = 0; j < (facets + 1); j++) {
+		vertices[id][0] = R * Math.cos(((2 * Math.PI) / facets) * j);
+		vertices[id][2] = R * Math.sin(((2 * Math.PI) / facets) * j);
+		vertices[id][1] = Hj;
+		uvw[id][0] = (j * 1.0 / facets);
+		uvw[id][1] = i * 1.0 / steps;
+		uvw[id][2] = 0.0;
+		id++;
+	    }
+	}
+	int bv = 0;
+	int tv = 0;
+	if (bottomcap) {
+	    bv = id;
 	    for (int j = 0; j < facets; j++) {
-		vertices[j + (i * facets)][0] = R
-			* Math.cos(((2 * Math.PI) / facets) * j);
-		vertices[j + (i * facets)][2] = R
-			* Math.sin(((2 * Math.PI) / facets) * j);
-		vertices[j + (i * facets)][1] = Hj;
+		vertices[id][0] = 0;
+		vertices[id][2] = 0;
+		vertices[id][1] = 0;
+		uvw[id][0] = (j + 0.5) / facets;
+		uvw[id][1] = 0;
+		uvw[id][2] = 1.0;
+		id++;
+	    }
+	}
+	if (topcap) {
+	    tv = id;
+	    for (int j = 0; j < facets; j++) {
+		vertices[id][0] = 0;
+		vertices[id][2] = 0;
+		vertices[id][1] = H;
+		uvw[id][0] = (j + 0.5) / facets;
+		uvw[id][1] = 1.0;
+		uvw[id][2] = 1.0;
+		id++;
 	    }
 	}
 	int nfaces = steps * facets;
@@ -199,37 +231,42 @@ public class HEC_Cylinder extends HEC_Creator {
 	int tc = 0;
 	if (bottomcap) {
 	    bc = nfaces;
-	    nfaces++;
+	    nfaces += facets;
 	}
 	if (topcap) {
 	    tc = nfaces;
-	    nfaces++;
+	    nfaces += facets;
 	}
 	final int[][] faces = new int[nfaces][];
-	if (bottomcap) {
-	    faces[bc] = new int[facets];
-	}
-	if (topcap) {
-	    faces[tc] = new int[facets];
-	}
 	for (int j = 0; j < facets; j++) {
-	    if (bottomcap) {
-		faces[bc][j] = j;
-	    }
-	    if (topcap) {
-		faces[tc][facets - 1 - j] = (steps * facets) + j;
-	    }
 	    for (int i = 0; i < steps; i++) {
 		faces[j + (i * facets)] = new int[4];
-		faces[j + (i * facets)][0] = j + (i * facets);
-		faces[j + (i * facets)][1] = j + (i * facets) + facets;
-		faces[j + (i * facets)][2] = ((j + 1) % facets) + facets
-			+ (i * facets);
-		faces[j + (i * facets)][3] = ((j + 1) % facets) + (i * facets);
+		faces[j + (i * facets)][0] = j + (i * (facets + 1));
+		faces[j + (i * facets)][1] = j + (i * (facets + 1)) + facets
+			+ 1;
+		faces[j + (i * facets)][2] = (j + 1) + facets + 1
+			+ (i * (facets + 1));
+		faces[j + (i * facets)][3] = (j + 1) + (i * (facets + 1));
+	    }
+	}
+	if (bottomcap) {
+	    for (int i = 0; i < facets; i++) {
+		faces[bc + i] = new int[3];
+		faces[bc + i][0] = i;
+		faces[bc + i][1] = i + 1;
+		faces[bc + i][2] = bv + i;
+	    }
+	}
+	if (topcap) {
+	    for (int i = 0; i < facets; i++) {
+		faces[tc + i] = new int[3];
+		faces[tc + i][1] = (steps * (facets + 1)) + i;
+		faces[tc + i][0] = (steps * (facets + 1)) + i + 1;
+		faces[tc + i][2] = tv + i;
 	    }
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
-	fl.setVertices(vertices).setFaces(faces);
+	fl.setVertices(vertices).setFaces(faces).setUVW(uvw);
 	return fl.createBase();
     }
 }

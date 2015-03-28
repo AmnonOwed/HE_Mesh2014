@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -97,7 +97,7 @@ public class HES_Planar extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -110,6 +110,25 @@ public class HES_Planar extends HES_Subdividor {
 	    face = fItr.next();
 	    if (!random) {
 		final HE_Vertex fv = new HE_Vertex(face.getFaceCenter());
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		HE_Halfedge he = face.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture()) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW().ud();
+		    v += he.getVertex().getUVW().vd();
+		    w += he.getVertex().getUVW().wd();
+		    he = he.getNextInFace();
+		} while (he != face.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / face.getFaceOrder();
+		    fv.setUVW(u * ifo, v * ifo, w * ifo);
+		}
 		faceVertices.put(face.key(), fv);
 	    } else {
 		HE_Halfedge he = face.getHalfedge();
@@ -132,6 +151,25 @@ public class HES_Planar extends HES_Subdividor {
 			&& (trial < 10));
 		if (trial == 10) {
 		    fv.set(face.getFaceCenter());
+		}
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		he = face.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture()) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW().ud();
+		    v += he.getVertex().getUVW().vd();
+		    w += he.getVertex().getUVW().wd();
+		    he = he.getNextInFace();
+		} while (he != face.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / face.getFaceOrder();
+		    fv.setUVW(u * ifo, v * ifo, w * ifo);
 		}
 		faceVertices.put(face.key(), fv);
 	    }
@@ -235,7 +273,7 @@ public class HES_Planar extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
      * .HE_Mesh, wblut.hemesh.HE_Selection)

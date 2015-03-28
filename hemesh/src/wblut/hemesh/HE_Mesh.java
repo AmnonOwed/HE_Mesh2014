@@ -53,7 +53,7 @@ import wblut.math.WB_Epsilon;
  *
  */
 public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-	WB_HasColor, WB_Mesh {
+WB_HasColor, WB_Mesh {
     /**
      *
      */
@@ -860,7 +860,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	final Iterator<HE_Vertex> vItr = vItr();
 	while (vItr.hasNext()) {
 	    vItr.next().getPoint()
-		    .addSelf(x - center.xd(), y - center.yd(), z - center.zd());
+	    .addSelf(x - center.xd(), y - center.yd(), z - center.zd());
 	}
 	center.set(x, y, z);
 	return this;
@@ -1238,9 +1238,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he2 = vInfo.in.get(j);
 			if ((he2.getPair() == null)
 				&& (he.getVertex() == he2.getNextInFace()
-					.getVertex())
+				.getVertex())
 				&& (he2.getVertex() == he.getNextInFace()
-					.getVertex())) {
+				.getVertex())) {
 			    he.setPair(he2);
 			    he2.setPair(he);
 			    break;
@@ -1309,9 +1309,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he2 = vInfo.in.get(j);
 			if ((he2.getPair() == null)
 				&& (he.getVertex() == he2.getNextInFace()
-					.getVertex())
+				.getVertex())
 				&& (he2.getVertex() == he.getNextInFace()
-					.getVertex())) {
+				.getVertex())) {
 			    he.setPair(he2);
 			    he2.setPair(he);
 			    break;
@@ -2027,12 +2027,54 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 	final HE_Vertex vNew = new HE_Vertex(v);
 	final HE_Halfedge he0new = new HE_Halfedge();
 	final HE_Halfedge he1new = new HE_Halfedge();
+	final HE_Halfedge he0n = he0.getNextInFace();
+	final HE_Halfedge he1n = he1.getNextInFace();
+	final HE_Vertex v0 = he0.getVertex();
+	final HE_Vertex v1 = he1.getVertex();
+	if ((v0.hasTexture() || he0.hasTexture())
+		&& (v1.hasTexture() || he1.hasTexture())) {
+	    final double d0 = he0.getVertex().getPoint().getDistance3D(v);
+	    final double d1 = he1.getVertex().getPoint().getDistance3D(v);
+	    final double f0 = d1 / (d0 + d1);
+	    final double f1 = d0 / (d0 + d1);
+	    if (he0.hasTexture()) {
+		if (he0n.hasTexture()) {
+		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(),
+			    he0n.getUVW()));
+		} else if (v1.hasTexture()) {
+		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(), v1
+			    .getUVW()));
+		}
+	    } else if (v0.hasTexture()) {
+		if (he0n.hasTexture()) {
+		    he0new.setUVW(new HE_TextureCoordinate(f0, v0.getUVW(),
+			    he0n.getUVW()));
+		} else if (v1.hasTexture()) {
+		    vNew.setUVW(new HE_TextureCoordinate(f0, v0.getUVW(), v1
+			    .getUVW()));
+		}
+	    }
+	    if (he1.hasTexture()) {
+		if (he1n.hasTexture()) {
+		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(),
+			    he1n.getUVW()));
+		} else if (v0.hasTexture()) {
+		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(), v0
+			    .getUVW()));
+		}
+	    } else if (v1.hasTexture()) {
+		if (he1n.hasTexture()) {
+		    he1new.setUVW(new HE_TextureCoordinate(f1, v1.getUVW(),
+			    he1n.getUVW()));
+		}
+	    }
+	}
 	he0new.setVertex(vNew);
 	he1new.setVertex(vNew);
 	vNew.setHalfedge(he0new);
-	he0new.setNext(he0.getNextInFace());
+	he0new.setNext(he0n);
 	he0new.copyProperties(he0);
-	he1new.setNext(he1.getNextInFace());
+	he1new.setNext(he1n);
 	he1new.copyProperties(he1);
 	he0.setNext(he0new);
 	he1.setNext(he1new);
@@ -4009,9 +4051,9 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			he.getNextInVertex().getHalfedgeTangent())) {
 		    he.getPrevInFace().setNext(he.getNextInFace());
 		    he.getPair().getPrevInFace()
-			    .setNext(he.getPair().getNextInFace());
+		    .setNext(he.getPair().getNextInFace());
 		    he.getPair().getNextInFace()
-			    .setVertex(he.getNextInFace().getVertex());
+		    .setVertex(he.getNextInFace().getVertex());
 		    if (he.getFace() != null) {
 			if (he.getFace().getHalfedge() == he) {
 			    he.getFace().setHalfedge(he.getNextInFace());
@@ -4021,7 +4063,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 			if (he.getPair().getFace().getHalfedge() == he
 				.getPair()) {
 			    he.getPair().getFace()
-				    .setHalfedge(he.getPair().getNextInFace());
+			    .setHalfedge(he.getPair().getNextInFace());
 			}
 		    }
 		    vItr.remove();
@@ -4604,7 +4646,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -4617,7 +4659,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -4659,7 +4701,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Geometry#getType()
      */
     @Override
@@ -4669,7 +4711,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Geometry#apply(wblut.geom.WB_Transform)
      */
     @Override
@@ -4680,7 +4722,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getFaceNormal(int)
      */
     @Override
@@ -4690,7 +4732,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getFaceCenter(int)
      */
     @Override
@@ -4700,7 +4742,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getVertexNormal(int)
      */
     @Override
@@ -4710,7 +4752,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getVertex(int)
      */
     @Override
@@ -4720,7 +4762,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getEdgesAsInt()
      */
     @Override
@@ -4748,7 +4790,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getPoints()
      */
     @Override
@@ -4758,7 +4800,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -4768,7 +4810,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override

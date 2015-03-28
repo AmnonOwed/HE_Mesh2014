@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -7,22 +7,20 @@ import java.util.Iterator;
 import wblut.geom.WB_Point;
 
 /**
- * 
+ *
  */
 public class HEM_QuadSplit extends HEM_Modifier {
-    
     /**
-     * 
+     *
      */
     private HE_Selection selectionOut;
-    
     /**
-     * 
+     *
      */
     private double d;
 
     /**
-     * 
+     *
      */
     public HEM_QuadSplit() {
 	super();
@@ -30,10 +28,10 @@ public class HEM_QuadSplit extends HEM_Modifier {
     }
 
     /**
-     * 
      *
-     * @param d 
-     * @return 
+     *
+     * @param d
+     * @return
      */
     public HEM_QuadSplit setOffset(final double d) {
 	this.d = d;
@@ -74,13 +72,32 @@ public class HEM_QuadSplit extends HEM_Modifier {
 	    f = faces[i];
 	    vi = new HE_Vertex(faceCenters[i]);
 	    vi.setInternalLabel(2);
+	    double u = 0;
+	    double v = 0;
+	    double w = 0;
+	    HE_Halfedge he = f.getHalfedge();
+	    boolean hasTexture = true;
+	    do {
+		if (!he.getVertex().hasTexture()) {
+		    hasTexture = false;
+		    break;
+		}
+		u += he.getVertex().getUVW().ud();
+		v += he.getVertex().getUVW().vd();
+		w += he.getVertex().getUVW().wd();
+		he = he.getNextInFace();
+	    } while (he != f.getHalfedge());
+	    if (hasTexture) {
+		final double ifo = 1.0 / f.getFaceOrder();
+		vi.setUVW(u * ifo, v * ifo, w * ifo);
+	    }
 	    mesh.add(vi);
 	    selectionOut.add(vi);
 	    HE_Halfedge startHE = f.getHalfedge();
 	    while (orig.contains(startHE.getVertex())) {
 		startHE = startHE.getNextInFace();
 	    }
-	    HE_Halfedge he = startHE;
+	    he = startHE;
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
@@ -212,9 +229,9 @@ public class HEM_QuadSplit extends HEM_Modifier {
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public HE_Selection getSplitFaces() {
 	return this.selectionOut;

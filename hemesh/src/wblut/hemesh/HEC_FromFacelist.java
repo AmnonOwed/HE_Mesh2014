@@ -88,6 +88,15 @@ public class HEC_FromFacelist extends HEC_Creator {
 	return this;
     }
 
+    public HEC_FromFacelist setUVW(final double[][] vs) {
+	final int n = vs.length;
+	uvws = new WB_Point[n];
+	for (int i = 0; i < n; i++) {
+	    uvws[i] = new WB_Point(vs[i][0], vs[i][1], vs[i][2]);
+	}
+	return this;
+    }
+
     /**
      * Set vertex coordinates from an array of WB_point.
      *
@@ -242,12 +251,17 @@ public class HEC_FromFacelist extends HEC_Creator {
 	    final boolean useUVW = (uvws != null)
 		    && (uvws.length == vertices.length);
 	    final HE_Vertex[] uniqueVertices = new HE_Vertex[vertices.length];
+	    final boolean[] duplicated = new boolean[vertices.length];
 	    if (duplicate) {
 		final WB_KDTree<WB_Coordinate, Integer> kdtree = new WB_KDTree<WB_Coordinate, Integer>();
 		WB_KDEntry<WB_Coordinate, Integer>[] neighbors;
 		HE_Vertex v = new HE_Vertex(vertices[0]);
+		if (useUVW) {
+		    v.setUVW(uvws[0]);
+		}
 		kdtree.add(v, 0);
 		uniqueVertices[0] = v;
+		duplicated[0] = false;
 		mesh.add(v);
 		for (int i = 1; i < vertices.length; i++) {
 		    v = new HE_Vertex(vertices[i]);
@@ -257,10 +271,12 @@ public class HEC_FromFacelist extends HEC_Creator {
 		    neighbors = kdtree.getNearestNeighbors(v, 1);
 		    if (neighbors[0].d2 < WB_Epsilon.SQEPSILON) {
 			uniqueVertices[i] = uniqueVertices[neighbors[0].value];
+			duplicated[i] = true;
 		    } else {
 			kdtree.add(v, i);
 			uniqueVertices[i] = v;
 			mesh.add(uniqueVertices[i]);
+			duplicated[i] = false;
 		    }
 		}
 	    } else {
@@ -272,6 +288,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 		    }
 		    v.setInternalLabel(i);
 		    uniqueVertices[i] = v;
+		    duplicated[i] = false;
 		    mesh.add(uniqueVertices[i]);
 		}
 	    }
@@ -375,6 +392,17 @@ public class HEC_FromFacelist extends HEC_Creator {
 			    hef.setHalfedge(he);
 			}
 			he.setVertex(uniqueVertices[locface[i]]);
+			if (useUVW) {
+			    if (duplicated[locface[i]]) {
+				final HE_TextureCoordinate uvw = uniqueVertices[locface[i]]
+					.getUVW();
+				if (uvw.ud() != uvws[locface[i]].xd()
+					|| uvw.vd() != uvws[locface[i]].yd()
+					|| uvw.wd() != uvws[locface[i]].zd()) {
+				    he.setUVW(uvws[locface[i]]);
+				}
+			    }
+			}
 			he.getVertex().setHalfedge(he);
 		    }
 		    mesh.add(hef);
