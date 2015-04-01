@@ -78,13 +78,13 @@ public class HEM_QuadSplit extends HEM_Modifier {
 	    HE_Halfedge he = f.getHalfedge();
 	    boolean hasTexture = true;
 	    do {
-		if (!he.getVertex().hasTexture()) {
+		if (!he.getVertex().hasTexture(f)) {
 		    hasTexture = false;
 		    break;
 		}
-		u += he.getVertex().getUVW().ud();
-		v += he.getVertex().getUVW().vd();
-		w += he.getVertex().getUVW().wd();
+		u += he.getVertex().getUVW(f).ud();
+		v += he.getVertex().getUVW(f).vd();
+		w += he.getVertex().getUVW(f).wd();
 		he = he.getNextInFace();
 	    } while (he != f.getHalfedge());
 	    if (hasTexture) {
@@ -121,6 +121,9 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		mesh.add(he2[c]);
 		mesh.add(he3[c]);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (he2[c].getVertex().hasHalfedgeTexture(f)) {
+		    he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(f));
+		}
 		he3[c].setVertex(vi);
 		he2[c].setNext(he3[c]);
 		he3[c].setNext(he);
@@ -178,12 +181,31 @@ public class HEM_QuadSplit extends HEM_Modifier {
 	    final HE_Vertex vi = new HE_Vertex(faceCenters[i]);
 	    sel.parent.add(vi);
 	    vi.setInternalLabel(2);
+	    double u = 0;
+	    double v = 0;
+	    double w = 0;
+	    HE_Halfedge he = face.getHalfedge();
+	    boolean hasTexture = true;
+	    do {
+		if (!he.getVertex().hasTexture(face)) {
+		    hasTexture = false;
+		    break;
+		}
+		u += he.getVertex().getUVW(face).ud();
+		v += he.getVertex().getUVW(face).vd();
+		w += he.getVertex().getUVW(face).wd();
+		he = he.getNextInFace();
+	    } while (he != face.getHalfedge());
+	    if (hasTexture) {
+		final double ifo = 1.0 / face.getFaceOrder();
+		vi.setUVW(u * ifo, v * ifo, w * ifo);
+	    }
 	    selectionOut.add(vi);
 	    HE_Halfedge startHE = face.getHalfedge();
 	    while (orig.contains(startHE.getVertex())) {
 		startHE = startHE.getNextInFace();
 	    }
-	    HE_Halfedge he = startHE;
+	    he = startHE;
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
@@ -208,6 +230,9 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		sel.parent.add(he2[c]);
 		sel.parent.add(he3[c]);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (he2[c].getVertex().hasHalfedgeTexture(f)) {
+		    he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(f));
+		}
 		he3[c].setVertex(vi);
 		he2[c].setNext(he3[c]);
 		he3[c].setNext(he);

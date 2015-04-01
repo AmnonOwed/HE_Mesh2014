@@ -1,23 +1,23 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
 import wblut.geom.WB_Point;
 
 /**
- * 
+ *
  ///////////////////////////////////// // // // /////// superduper shapes //
  * // // // // ///////////////////////////////// // /////////// (c) Martin
  * Schneider 2009
- * 
+ *
  * // http://www.k2g2.org/blog:bit.craft
- * 
+ *
  * Hemesh implementation of bit.craft's superduper formula explorer
- * 
- * 
+ *
+ *
  * @author Martin Schneider
- * 
+ *
  */
 public class HEC_SuperDuper extends HEC_Creator {
     /** The u. */
@@ -47,7 +47,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the u.
-     * 
+     *
      * @param U
      *            the u
      * @return the hE c_ super duper
@@ -59,7 +59,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the v.
-     * 
+     *
      * @param V
      *            the v
      * @return the hE c_ super duper
@@ -71,7 +71,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the u wrap.
-     * 
+     *
      * @param b
      *            the b
      * @return the hE c_ super duper
@@ -83,7 +83,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the v wrap.
-     * 
+     *
      * @param b
      *            the b
      * @return the hE c_ super duper
@@ -95,7 +95,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the radius.
-     * 
+     *
      * @param r
      *            the r
      * @return the hE c_ super duper
@@ -107,7 +107,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the general parameters.
-     * 
+     *
      * @param m1
      *            the m1
      * @param n11
@@ -153,7 +153,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the donut parameters.
-     * 
+     *
      * @param m1
      *            the m1
      * @param n11
@@ -187,7 +187,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the shell parameters.
-     * 
+     *
      * @param m1
      *            the m1
      * @param n11
@@ -225,7 +225,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Sets the super shape parameters.
-     * 
+     *
      * @param m1
      *            the m1
      * @param n11
@@ -255,18 +255,19 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.creators.HEC_Creator#createBase()
      */
     @Override
     protected HE_Mesh createBase() {
 	final WB_Point[] points = getPoints();
+	final WB_Point[] uvw = getUVW();
 	final int[][] faces = new int[U * V][4];
 	int li, lj;
 	for (int i = 0; i < U; i++) {
-	    li = (uWrap && (i == (U - 1))) ? 0 : i + 1;
+	    li = i + 1;
 	    for (int j = 0; j < V; j++) {
-		lj = (vWrap && (j == (V - 1))) ? 0 : j + 1;
+		lj = j + 1;
 		faces[i + (U * j)][3] = i + ((U + 1) * j);
 		faces[i + (U * j)][2] = li + ((U + 1) * j);
 		faces[i + (U * j)][1] = li + ((U + 1) * lj);
@@ -274,13 +275,13 @@ public class HEC_SuperDuper extends HEC_Creator {
 	    }
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
-	fl.setFaces(faces).setVertices(points);
+	fl.setFaces(faces).setVertices(points).setUVW(uvw);
 	return new HE_Mesh(fl);
     }
 
     /**
      * Gets the points.
-     * 
+     *
      * @return the points
      */
     private WB_Point[] getPoints() {
@@ -288,8 +289,22 @@ public class HEC_SuperDuper extends HEC_Creator {
 	final double iU = 1.0 / U;
 	final double iV = 1.0 / V;
 	for (int i = 0; i <= U; i++) {
+	    final int li = (uWrap) ? ((i == U) ? 0 : i) : i;
 	    for (int j = 0; j <= V; j++) {
-		m[i + ((U + 1) * j)] = eval(i * iU, j * iV);
+		final int lj = (vWrap) ? ((j == V) ? 0 : j) : j;
+		m[i + ((U + 1) * j)] = eval(li * iU, lj * iV);
+	    }
+	}
+	return m;
+    }
+
+    private WB_Point[] getUVW() {
+	final WB_Point[] m = new WB_Point[(U + 1) * (V + 1)];
+	final double iU = 1.0 / U;
+	final double iV = 1.0 / V;
+	for (int i = 0; i <= U; i++) {
+	    for (int j = 0; j <= V; j++) {
+		m[i + ((U + 1) * j)] = new WB_Point(i * iU, j * iV, 0);
 	    }
 	}
 	return m;
@@ -297,7 +312,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Eval.
-     * 
+     *
      * @param u
      *            the u
      * @param v
@@ -312,7 +327,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Superformula.
-     * 
+     *
      * @param phi
      *            the phi
      * @param a
@@ -338,7 +353,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Superduperformula.
-     * 
+     *
      * @param r0
      *            the r0
      * @param u
@@ -401,7 +416,7 @@ public class HEC_SuperDuper extends HEC_Creator {
 
     /**
      * Lerp.
-     * 
+     *
      * @param ll
      *            the ll
      * @param ul

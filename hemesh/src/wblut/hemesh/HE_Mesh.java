@@ -2031,8 +2031,8 @@ WB_HasColor, WB_Mesh {
 	final HE_Halfedge he1n = he1.getNextInFace();
 	final HE_Vertex v0 = he0.getVertex();
 	final HE_Vertex v1 = he1.getVertex();
-	if ((v0.hasTexture() || he0.hasTexture())
-		&& (v1.hasTexture() || he1.hasTexture())) {
+	if ((v0.hasVertexTexture() || he0.hasTexture())
+		&& (v1.hasVertexTexture() || he1.hasTexture())) {
 	    final double d0 = he0.getVertex().getPoint().getDistance3D(v);
 	    final double d1 = he1.getVertex().getPoint().getDistance3D(v);
 	    final double f0 = d1 / (d0 + d1);
@@ -2041,32 +2041,33 @@ WB_HasColor, WB_Mesh {
 		if (he0n.hasTexture()) {
 		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(),
 			    he0n.getUVW()));
-		} else if (v1.hasTexture()) {
+		} else if (v1.hasVertexTexture()) {
 		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(), v1
-			    .getUVW()));
+			    .getVertexUVW()));
 		}
-	    } else if (v0.hasTexture()) {
+	    } else if (v0.hasVertexTexture()) {
 		if (he0n.hasTexture()) {
-		    he0new.setUVW(new HE_TextureCoordinate(f0, v0.getUVW(),
-			    he0n.getUVW()));
-		} else if (v1.hasTexture()) {
-		    vNew.setUVW(new HE_TextureCoordinate(f0, v0.getUVW(), v1
-			    .getUVW()));
+		    he0new.setUVW(new HE_TextureCoordinate(f0, v0
+			    .getVertexUVW(), he0n.getUVW()));
 		}
 	    }
 	    if (he1.hasTexture()) {
 		if (he1n.hasTexture()) {
 		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(),
 			    he1n.getUVW()));
-		} else if (v0.hasTexture()) {
+		} else if (v0.hasVertexTexture()) {
 		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(), v0
-			    .getUVW()));
+			    .getVertexUVW()));
 		}
-	    } else if (v1.hasTexture()) {
+	    } else if (v1.hasVertexTexture()) {
 		if (he1n.hasTexture()) {
-		    he1new.setUVW(new HE_TextureCoordinate(f1, v1.getUVW(),
-			    he1n.getUVW()));
+		    he1new.setUVW(new HE_TextureCoordinate(f1, v1
+			    .getVertexUVW(), he1n.getUVW()));
 		}
+	    }
+	    if (v0.hasVertexTexture() && v1.hasVertexTexture()) {
+		vNew.setUVW(new HE_TextureCoordinate(f0, v0.getVertexUVW(), v1
+			.getVertexUVW()));
 	    }
 	}
 	he0new.setVertex(vNew);
@@ -2427,6 +2428,10 @@ WB_HasColor, WB_Mesh {
 	final HE_Selection out = new HE_Selection(this);
 	final HE_Halfedge hei = findHalfedge(face, vi);
 	final HE_Halfedge hej = findHalfedge(face, vj);
+	final HE_TextureCoordinate ti = (hei.hasTexture()) ? hei.getUVW()
+		: null;
+	final HE_TextureCoordinate tj = (hej.hasTexture()) ? hej.getUVW()
+		: null;
 	final double d = vi.getPoint().getDistance3D(vj);
 	boolean degenerate = false;
 	if (isZero(d)) {// happens when a collinear (part of a) face
@@ -2447,7 +2452,13 @@ WB_HasColor, WB_Mesh {
 		he0new = new HE_Halfedge();
 		he1new = new HE_Halfedge();
 		he0new.setVertex(vj);
+		if (tj != null) {
+		    he0new.setUVW(tj);
+		}
 		he1new.setVertex(vi);
+		if (ti != null) {
+		    he1new.setUVW(ti);
+		}
 		he0new.setNext(hei);
 		he1new.setNext(hej);
 		heiPrev.setNext(he1new);
@@ -2659,7 +2670,13 @@ WB_HasColor, WB_Mesh {
 		final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+		final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 		int c = 0;
+		do {
+		    textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		    he = he.getNextInFace().getNextInFace();
+		} while (he != startHE);
+		c = 0;
 		do {
 		    final HE_Face fn = new HE_Face();
 		    fn.copyProperties(f);
@@ -2673,11 +2690,17 @@ WB_HasColor, WB_Mesh {
 		    add(he2[c]);
 		    add(hec[c]);
 		    hec[c].setVertex(he.getVertex());
+		    if (textures[c] != null) {
+			hec[c].setUVW(textures[c]);
+		    }
 		    hec[c].setPair(he2[c]);
 		    he2[c].setPair(hec[c]);
 		    hec[c].setFace(f);
 		    he2[c].setVertex(he.getNextInFace().getNextInFace()
 			    .getVertex());
+		    if (textures[(c + 1) % fo] != null) {
+			he2[c].setUVW(textures[(c + 1) % fo]);
+		    }
 		    he2[c].setNext(he0[c]);
 		    he0[c].setPrev(he2[c]);
 		    he1[c].setFace(fn);
@@ -2695,13 +2718,32 @@ WB_HasColor, WB_Mesh {
 	    } else if (fo > 3) {
 		vi = new HE_Vertex(faceCenters[i]);
 		vi.setInternalLabel(2);
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		HE_Halfedge he = f.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture(f)) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW(f).ud();
+		    v += he.getVertex().getUVW(f).vd();
+		    w += he.getVertex().getUVW(f).wd();
+		    he = he.getNextInFace();
+		} while (he != f.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / f.getFaceOrder();
+		    vi.setUVW(u * ifo, v * ifo, w * ifo);
+		}
 		add(vi);
 		selectionOut.add(vi);
 		HE_Halfedge startHE = f.getHalfedge();
 		while (orig.contains(startHE.getVertex())) {
 		    startHE = startHE.getNextInFace();
 		}
-		HE_Halfedge he = startHE;
+		he = startHE;
 		final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
@@ -2726,6 +2768,9 @@ WB_HasColor, WB_Mesh {
 		    add(he3[c]);
 		    he2[c].setVertex(he.getNextInFace().getNextInFace()
 			    .getVertex());
+		    if (he2[c].getVertex().hasHalfedgeTexture(f)) {
+			he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(f));
+		    }
 		    he3[c].setVertex(vi);
 		    he2[c].setNext(he3[c]);
 		    he3[c].setPrev(he2[c]);
@@ -2776,9 +2821,11 @@ WB_HasColor, WB_Mesh {
 	selectionOut.addVertices(splitEdges().getVerticesAsArray());
 	final HE_Face[] faces = sel.getFacesAsArray();
 	HE_Vertex vi = new HE_Vertex();
+	int fo;
 	for (i = 0; i < n; i++) {
 	    f = faces[i];
-	    if (f.getFaceOrder() == 3) {
+	    fo = f.getFaceOrder() / 2;
+	    if (fo == 3) {
 		HE_Halfedge startHE = f.getHalfedge();
 		while (orig.contains(startHE.getVertex())) {
 		    startHE = startHE.getNextInFace();
@@ -2788,7 +2835,13 @@ WB_HasColor, WB_Mesh {
 		final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+		final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 		int c = 0;
+		do {
+		    textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		    he = he.getNextInFace().getNextInFace();
+		} while (he != startHE);
+		c = 0;
 		do {
 		    final HE_Face fn = new HE_Face();
 		    fn.copyProperties(f);
@@ -2803,11 +2856,17 @@ WB_HasColor, WB_Mesh {
 		    add(he2[c]);
 		    add(hec[c]);
 		    hec[c].setVertex(he.getVertex());
+		    if (textures[c] != null) {
+			hec[c].setUVW(textures[c]);
+		    }
 		    hec[c].setPair(he2[c]);
 		    he2[c].setPair(hec[c]);
 		    hec[c].setFace(f);
 		    he2[c].setVertex(he.getNextInFace().getNextInFace()
 			    .getVertex());
+		    if (textures[(c + 1) % fo] != null) {
+			he2[c].setUVW(textures[(c + 1) % fo]);
+		    }
 		    he2[c].setNext(he0[c]);
 		    he0[c].setPrev(he2[c]);
 		    he1[c].setFace(fn);
@@ -2822,16 +2881,35 @@ WB_HasColor, WB_Mesh {
 		    he2[j].setPrev(he1[j]);
 		    hec[(j + 1) % c].setPrev(hec[j]);
 		}
-	    } else if (f.getFaceOrder() > 3) {
+	    } else if (fo > 3) {
 		vi = new HE_Vertex(faceCenters[i]);
 		vi.setInternalLabel(2);
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		HE_Halfedge he = f.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture(f)) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW(f).ud();
+		    v += he.getVertex().getUVW(f).vd();
+		    w += he.getVertex().getUVW(f).wd();
+		    he = he.getNextInFace();
+		} while (he != f.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / f.getFaceOrder();
+		    vi.setUVW(u * ifo, v * ifo, w * ifo);
+		}
 		add(vi);
 		selectionOut.add(vi);
 		HE_Halfedge startHE = f.getHalfedge();
 		while (orig.contains(startHE.getVertex())) {
 		    startHE = startHE.getNextInFace();
 		}
-		HE_Halfedge he = startHE;
+		he = startHE;
 		final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 		final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
@@ -2857,6 +2935,9 @@ WB_HasColor, WB_Mesh {
 		    add(he3[c]);
 		    he2[c].setVertex(he.getNextInFace().getNextInFace()
 			    .getVertex());
+		    if (he2[c].getVertex().hasHalfedgeTexture(f)) {
+			he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(f));
+		    }
 		    he3[c].setVertex(vi);
 		    he2[c].setNext(he3[c]);
 		    he3[c].setNext(he);
@@ -3071,26 +3152,40 @@ WB_HasColor, WB_Mesh {
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+	    final int fo = face.getFaceOrder() / 2;
+	    final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 	    int c = 0;
+	    do {
+		textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		he = he.getNextInFace().getNextInFace();
+	    } while (he != startHE);
+	    c = 0;
+	    he = startHE;
 	    do {
 		final HE_Face f = new HE_Face();
 		f.copyProperties(face);
 		add(f);
 		he0[c] = he;
-		he.setFace(f);
-		f.setHalfedge(he);
 		he1[c] = he.getNextInFace();
 		he2[c] = new HE_Halfedge();
 		hec[c] = new HE_Halfedge();
 		add(he2[c]);
 		add(hec[c]);
 		hec[c].setVertex(he.getVertex());
+		if (textures[c] != null) {
+		    hec[c].setUVW(textures[c]);
+		}
 		hec[c].setPair(he2[c]);
 		he2[c].setPair(hec[c]);
 		hec[c].setFace(face);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (textures[(c + 1) % fo] != null) {
+		    he2[c].setUVW(textures[(c + 1) % fo]);
+		}
 		he2[c].setNext(he0[c]);
 		he0[c].setPrev(he2[c]);
+		he0[c].setFace(f);
+		f.setHalfedge(he0[c]);
 		he1[c].setFace(f);
 		he2[c].setFace(f);
 		c++;
@@ -3141,7 +3236,14 @@ WB_HasColor, WB_Mesh {
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+	    final int fo = face.getFaceOrder() / 2;
+	    final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 	    int c = 0;
+	    do {
+		textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		he = he.getNextInFace().getNextInFace();
+	    } while (he != startHE);
+	    c = 0;
 	    do {
 		final HE_Face f = new HE_Face();
 		f.copyProperties(face);
@@ -3155,10 +3257,16 @@ WB_HasColor, WB_Mesh {
 		add(he2[c]);
 		add(hec[c]);
 		hec[c].setVertex(he.getVertex());
+		if (textures[c] != null) {
+		    hec[c].setUVW(textures[c]);
+		}
 		hec[c].setPair(he2[c]);
 		he2[c].setPair(hec[c]);
 		hec[c].setFace(face);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (textures[(c + 1) % fo] != null) {
+		    he2[c].setUVW(textures[(c + 1) % fo]);
+		}
 		he2[c].setNext(he0[c]);
 		he0[c].setPrev(he2[c]);
 		he1[c].setFace(f);
@@ -3214,7 +3322,14 @@ WB_HasColor, WB_Mesh {
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+	    final int fo = face.getFaceOrder() / 2;
+	    final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 	    int c = 0;
+	    do {
+		textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		he = he.getNextInFace().getNextInFace();
+	    } while (he != startHE);
+	    c = 0;
 	    do {
 		final HE_Face f = new HE_Face();
 		add(f);
@@ -3229,10 +3344,16 @@ WB_HasColor, WB_Mesh {
 		add(he2[c]);
 		add(hec[c]);
 		hec[c].setVertex(he.getVertex());
+		if (textures[c] != null) {
+		    hec[c].setUVW(textures[c]);
+		}
 		hec[c].setPair(he2[c]);
 		he2[c].setPair(hec[c]);
 		hec[c].setFace(face);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (textures[(c + 1) % fo] != null) {
+		    he2[c].setUVW(textures[(c + 1) % fo]);
+		}
 		he2[c].setNext(he0[c]);
 		he0[c].setPrev(he2[c]);
 		he1[c].setFace(f);
@@ -3286,7 +3407,14 @@ WB_HasColor, WB_Mesh {
 	    final HE_Halfedge[] he0 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he1 = new HE_Halfedge[faceOrders[i]];
 	    final HE_Halfedge[] he2 = new HE_Halfedge[faceOrders[i]];
+	    final int fo = face.getFaceOrder() / 2;
+	    final HE_TextureCoordinate[] textures = new HE_TextureCoordinate[fo];
 	    int c = 0;
+	    do {
+		textures[c++] = (he.hasTexture()) ? he.getUVW() : null;
+		he = he.getNextInFace().getNextInFace();
+	    } while (he != startHE);
+	    c = 0;
 	    do {
 		final HE_Face f = new HE_Face();
 		add(f);
@@ -3301,10 +3429,16 @@ WB_HasColor, WB_Mesh {
 		add(he2[c]);
 		add(hec[c]);
 		hec[c].setVertex(he.getVertex());
+		if (textures[c] != null) {
+		    hec[c].setUVW(textures[c]);
+		}
 		hec[c].setPair(he2[c]);
 		he2[c].setPair(hec[c]);
 		hec[c].setFace(face);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
+		if (textures[(c + 1) % fo] != null) {
+		    he2[c].setUVW(textures[(c + 1) % fo]);
+		}
 		he2[c].setNext(he0[c]);
 		he0[c].setPrev(he2[c]);
 		he1[c].setFace(f);

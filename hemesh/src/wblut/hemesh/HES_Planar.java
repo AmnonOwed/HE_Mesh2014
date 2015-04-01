@@ -116,13 +116,13 @@ public class HES_Planar extends HES_Subdividor {
 		HE_Halfedge he = face.getHalfedge();
 		boolean hasTexture = true;
 		do {
-		    if (!he.getVertex().hasTexture()) {
+		    if (!he.getVertex().hasTexture(face)) {
 			hasTexture = false;
 			break;
 		    }
-		    u += he.getVertex().getUVW().ud();
-		    v += he.getVertex().getUVW().vd();
-		    w += he.getVertex().getUVW().wd();
+		    u += he.getVertex().getUVW(face).ud();
+		    v += he.getVertex().getUVW(face).vd();
+		    w += he.getVertex().getUVW(face).wd();
 		    he = he.getNextInFace();
 		} while (he != face.getHalfedge());
 		if (hasTexture) {
@@ -158,13 +158,13 @@ public class HES_Planar extends HES_Subdividor {
 		he = face.getHalfedge();
 		boolean hasTexture = true;
 		do {
-		    if (!he.getVertex().hasTexture()) {
+		    if (!he.getVertex().hasTexture(face)) {
 			hasTexture = false;
 			break;
 		    }
-		    u += he.getVertex().getUVW().ud();
-		    v += he.getVertex().getUVW().vd();
-		    w += he.getVertex().getUVW().wd();
+		    u += he.getVertex().getUVW(face).ud();
+		    v += he.getVertex().getUVW(face).vd();
+		    w += he.getVertex().getUVW(face).wd();
 		    he = he.getNextInFace();
 		} while (he != face.getHalfedge());
 		if (hasTexture) {
@@ -206,7 +206,6 @@ public class HES_Planar extends HES_Subdividor {
 		    final HE_Face newFace = new HE_Face();
 		    newFaces.add(newFace);
 		    newFace.copyProperties(face);
-		    newFace.setHalfedge(origHE1);
 		    final HE_Halfedge origHE2 = origHE1.getNextInFace();
 		    final HE_Halfedge origHE3 = origHE2.getNextInFace();
 		    final HE_Halfedge newHE = new HE_Halfedge();
@@ -214,6 +213,10 @@ public class HES_Planar extends HES_Subdividor {
 		    mesh.add(newHE);
 		    mesh.add(newHEp);
 		    faceHalfedges.add(newHEp);
+		    if (origHE3.getVertex().hasHalfedgeTexture(face)) {
+			newHE.setUVW(origHE3.getVertex().getHalfedgeUVW(face));
+		    }
+		    newFace.setHalfedge(origHE1);
 		    origHE2.setNext(newHE);
 		    newHE.setNext(origHE1);
 		    newHE.setVertex(origHE3.getVertex());
@@ -228,6 +231,13 @@ public class HES_Planar extends HES_Subdividor {
 		    origHE1 = origHE3;
 		} while (origHE1 != startHE);
 		HE_Mesh.cycleHalfedges(faceHalfedges);
+		HE_Halfedge cfhe = centerFace.getHalfedge();
+		do {
+		    if (cfhe.getPair().getNextInFace().hasTexture()) {
+			cfhe.setUVW(cfhe.getPair().getNextInFace().getUVW());
+		    }
+		    cfhe = cfhe.getNextInFace();
+		} while (cfhe != centerFace.getHalfedge());
 	    } else {
 		HE_Halfedge origHE1 = startHE;
 		unpairedhes = new FastTable<HE_Halfedge>();
@@ -235,13 +245,16 @@ public class HES_Planar extends HES_Subdividor {
 		    final HE_Face newFace = new HE_Face();
 		    newFaces.add(newFace);
 		    newFace.copyProperties(face);
-		    newFace.setHalfedge(origHE1);
 		    final HE_Halfedge origHE2 = origHE1.getNextInFace();
 		    final HE_Halfedge origHE3 = origHE2.getNextInFace();
 		    final HE_Halfedge newHE1 = new HE_Halfedge();
 		    final HE_Halfedge newHE2 = new HE_Halfedge();
 		    mesh.add(newHE1);
 		    mesh.add(newHE2);
+		    if (origHE3.getVertex().hasHalfedgeTexture(face)) {
+			newHE1.setUVW(origHE3.getVertex().getHalfedgeUVW(face));
+		    }
+		    newFace.setHalfedge(origHE1);
 		    origHE2.setNext(newHE1);
 		    newHE1.setNext(newHE2);
 		    newHE2.setNext(origHE1);
@@ -293,6 +306,25 @@ public class HES_Planar extends HES_Subdividor {
 	    face = fItr.next();
 	    if (!random) {
 		final HE_Vertex fv = new HE_Vertex(face.getFaceCenter());
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		HE_Halfedge he = face.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture(face)) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW(face).ud();
+		    v += he.getVertex().getUVW(face).vd();
+		    w += he.getVertex().getUVW(face).wd();
+		    he = he.getNextInFace();
+		} while (he != face.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / face.getFaceOrder();
+		    fv.setUVW(u * ifo, v * ifo, w * ifo);
+		}
 		faceVertices.put(face.key(), fv);
 	    } else {
 		HE_Halfedge he = face.getHalfedge();
@@ -315,6 +347,25 @@ public class HES_Planar extends HES_Subdividor {
 			&& (trial < 10));
 		if (trial == 10) {
 		    fv.set(face.getFaceCenter());
+		}
+		double u = 0;
+		double v = 0;
+		double w = 0;
+		he = face.getHalfedge();
+		boolean hasTexture = true;
+		do {
+		    if (!he.getVertex().hasTexture(face)) {
+			hasTexture = false;
+			break;
+		    }
+		    u += he.getVertex().getUVW(face).ud();
+		    v += he.getVertex().getUVW(face).vd();
+		    w += he.getVertex().getUVW(face).wd();
+		    he = he.getNextInFace();
+		} while (he != face.getHalfedge());
+		if (hasTexture) {
+		    final double ifo = 1.0 / face.getFaceOrder();
+		    fv.setUVW(u * ifo, v * ifo, w * ifo);
 		}
 		faceVertices.put(face.key(), fv);
 	    }
@@ -353,7 +404,6 @@ public class HES_Planar extends HES_Subdividor {
 		    final HE_Face newFace = new HE_Face();
 		    newFaces.add(newFace);
 		    newFace.copyProperties(face);
-		    newFace.setHalfedge(origHE1);
 		    final HE_Halfedge origHE2 = origHE1.getNextInFace();
 		    final HE_Halfedge origHE3 = origHE2.getNextInFace();
 		    final HE_Halfedge newHE = new HE_Halfedge();
@@ -361,6 +411,10 @@ public class HES_Planar extends HES_Subdividor {
 		    selection.parent.add(newHE);
 		    selection.parent.add(newHEp);
 		    faceHalfedges.add(newHEp);
+		    if (origHE3.getVertex().hasHalfedgeTexture(face)) {
+			newHE.setUVW(origHE3.getVertex().getHalfedgeUVW(face));
+		    }
+		    newFace.setHalfedge(origHE1);
 		    origHE2.setNext(newHE);
 		    newHE.setNext(origHE1);
 		    newHE.setVertex(origHE3.getVertex());
@@ -375,6 +429,13 @@ public class HES_Planar extends HES_Subdividor {
 		    origHE1 = origHE3;
 		} while (origHE1 != startHE);
 		HE_Mesh.cycleHalfedges(faceHalfedges);
+		HE_Halfedge cfhe = centerFace.getHalfedge();
+		do {
+		    if (cfhe.getPair().getNextInFace().hasTexture()) {
+			cfhe.setUVW(cfhe.getPair().getNextInFace().getUVW());
+		    }
+		    cfhe = cfhe.getNextInFace();
+		} while (cfhe != centerFace.getHalfedge());
 	    } else {
 		HE_Halfedge origHE1 = startHE;
 		unpairedhes = new FastTable<HE_Halfedge>();
@@ -389,6 +450,9 @@ public class HES_Planar extends HES_Subdividor {
 		    final HE_Halfedge newHE2 = new HE_Halfedge();
 		    selection.parent.add(newHE1);
 		    selection.parent.add(newHE2);
+		    if (origHE3.getVertex().hasHalfedgeTexture(face)) {
+			newHE1.setUVW(origHE3.getVertex().getHalfedgeUVW(face));
+		    }
 		    origHE2.setNext(newHE1);
 		    newHE1.setNext(newHE2);
 		    newHE2.setNext(origHE1);

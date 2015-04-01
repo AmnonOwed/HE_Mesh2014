@@ -365,24 +365,24 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - (d * P.getU().xd()) - (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-		- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
-		.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
+			- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
+				.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() - (d * P.getU().xd())) + (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() - (d * P
-			.getU().yd())) + (d * P.getV().yd())), (float) ((P
-			.getOrigin().zd() - (d * P.getU().zd())) + (d * P
-			.getV().zd())));
+				.getU().yd())) + (d * P.getV().yd())), (float) ((P
+					.getOrigin().zd() - (d * P.getU().zd())) + (d * P
+						.getV().zd())));
 	home.vertex((float) (P.getOrigin().xd() + (d * P.getU().xd()) + (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-		+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
-		.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
+			+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
+				.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() + (d * P.getU().xd())) - (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() + (d * P
-			.getU().yd())) - (d * P.getV().yd())), (float) ((P
-			.getOrigin().zd() + (d * P.getU().zd())) - (d * P
-			.getV().zd())));
+				.getU().yd())) - (d * P.getV().yd())), (float) ((P
+					.getOrigin().zd() + (d * P.getU().zd())) - (d * P
+						.getV().zd())));
 	home.endShape();
     }
 
@@ -1200,6 +1200,10 @@ public class WB_Render3D {
 	drawFace(f, texture, false);
     }
 
+    public void drawFace(final HE_Face f, final PImage[] textures) {
+	drawFace(f, textures, false);
+    }
+
     /**
      *
      *
@@ -1352,6 +1356,96 @@ public class WB_Render3D {
 		    tri = tris[i];
 		    home.beginShape(PConstants.TRIANGLES);
 		    home.texture(texture);
+		    v0 = vertices.get(tri[0]);
+		    v1 = vertices.get(tri[1]);
+		    v2 = vertices.get(tri[2]);
+		    home.vertex(v0.xf(), v0.yf(), v0.zf(), v0.getUVW(f).uf(),
+			    v0.getUVW(f).vf());
+		    home.vertex(v1.xf(), v1.yf(), v1.zf(), v1.getUVW(f).uf(),
+			    v1.getUVW(f).vf());
+		    home.vertex(v2.xf(), v2.yf(), v2.zf(), v2.getUVW(f).uf(),
+			    v2.getUVW(f).vf());
+		    home.endShape();
+		}
+	    }
+	}
+    }
+
+    public void drawFace(final HE_Face f, final PImage[] textures,
+	    final boolean smooth) {
+	final int fo = f.getFaceOrder();
+	final int fti = f.getTextureId();
+	final List<HE_Vertex> vertices = f.getFaceVertices();
+	if ((fo < 3) || (vertices.size() < 3)) {
+	} else if (fo == 3) {
+	    final int[] tri = new int[] { 0, 1, 2 };
+	    HE_Vertex v0, v1, v2;
+	    WB_Vector n0, n1, n2;
+	    if (smooth) {
+		home.beginShape(PConstants.TRIANGLES);
+		home.texture(textures[fti]);
+		v0 = vertices.get(tri[0]);
+		n0 = v0.getVertexNormal();
+		v1 = vertices.get(tri[1]);
+		n1 = v1.getVertexNormal();
+		v2 = vertices.get(tri[2]);
+		n2 = v2.getVertexNormal();
+		home.normal(n0.xf(), n0.yf(), n0.zf());
+		home.vertex(v0.xf(), v0.yf(), v0.zf(), v0.getUVW(f).uf(), v0
+			.getUVW(f).vf());
+		home.normal(n1.xf(), n1.yf(), n1.zf());
+		home.vertex(v1.xf(), v1.yf(), v1.zf(), v1.getUVW(f).uf(), v1
+			.getUVW(f).vf());
+		home.normal(n2.xf(), n2.yf(), n2.zf());
+		home.vertex(v2.xf(), v2.yf(), v2.zf(), v2.getUVW(f).uf(), v2
+			.getUVW(f).vf());
+		home.endShape();
+	    } else {
+		home.beginShape(PConstants.TRIANGLES);
+		home.texture(textures[fti]);
+		v0 = vertices.get(tri[0]);
+		v1 = vertices.get(tri[1]);
+		v2 = vertices.get(tri[2]);
+		home.vertex(v0.xf(), v0.yf(), v0.zf(), v0.getUVW(f).uf(), v0
+			.getUVW(f).vf());
+		home.vertex(v1.xf(), v1.yf(), v1.zf(), v1.getUVW(f).uf(), v1
+			.getUVW(f).vf());
+		home.vertex(v2.xf(), v2.yf(), v2.zf(), v2.getUVW(f).uf(), v2
+			.getUVW(f).vf());
+		home.endShape();
+	    }
+	} else {
+	    final int[][] tris = f.getTriangles();
+	    HE_Vertex v0, v1, v2;
+	    WB_Vector n0, n1, n2;
+	    int[] tri;
+	    if (smooth) {
+		for (int i = 0; i < tris.length; i++) {
+		    tri = tris[i];
+		    home.beginShape(PConstants.TRIANGLES);
+		    home.texture(textures[fti]);
+		    v0 = vertices.get(tri[0]);
+		    n0 = v0.getVertexNormal();
+		    v1 = vertices.get(tri[1]);
+		    n1 = v1.getVertexNormal();
+		    v2 = vertices.get(tri[2]);
+		    n2 = v2.getVertexNormal();
+		    home.normal(n0.xf(), n0.yf(), n0.zf());
+		    home.vertex(v0.xf(), v0.yf(), v0.zf(), v0.getUVW(f).uf(),
+			    v0.getUVW(f).vf());
+		    home.normal(n1.xf(), n1.yf(), n1.zf());
+		    home.vertex(v1.xf(), v1.yf(), v1.zf(), v1.getUVW(f).uf(),
+			    v1.getUVW(f).vf());
+		    home.normal(n2.xf(), n2.yf(), n2.zf());
+		    home.vertex(v2.xf(), v2.yf(), v2.zf(), v2.getUVW(f).uf(),
+			    v2.getUVW(f).vf());
+		    home.endShape();
+		}
+	    } else {
+		for (int i = 0; i < tris.length; i++) {
+		    tri = tris[i];
+		    home.beginShape(PConstants.TRIANGLES);
+		    home.texture(textures[fti]);
 		    v0 = vertices.get(tri[0]);
 		    v1 = vertices.get(tri[1]);
 		    v2 = vertices.get(tri[2]);
@@ -1611,6 +1705,13 @@ public class WB_Render3D {
 	}
     }
 
+    public void drawFaces(final HE_MeshStructure mesh, final PImage[] textures) {
+	final Iterator<HE_Face> fItr = mesh.fItr();
+	while (fItr.hasNext()) {
+	    drawFace(fItr.next(), textures);
+	}
+    }
+
     /**
      * Draw mesh faces matching label. Typically used with noStroke();
      *
@@ -1793,6 +1894,24 @@ public class WB_Render3D {
 	final Iterator<HE_Face> fItr = mesh.fItr();
 	while (fItr.hasNext()) {
 	    drawFace(fItr.next(), true);
+	}
+    }
+
+    public void drawFacesSmooth(final HE_MeshStructure mesh,
+	    final PImage texture) {
+	new ArrayList<HE_Vertex>();
+	final Iterator<HE_Face> fItr = mesh.fItr();
+	while (fItr.hasNext()) {
+	    drawFace(fItr.next(), texture, true);
+	}
+    }
+
+    public void drawFacesSmooth(final HE_MeshStructure mesh,
+	    final PImage[] textures) {
+	new ArrayList<HE_Vertex>();
+	final Iterator<HE_Face> fItr = mesh.fItr();
+	while (fItr.hasNext()) {
+	    drawFace(fItr.next(), textures, true);
 	}
     }
 
@@ -2299,7 +2418,7 @@ public class WB_Render3D {
     class EyeProximityComparator implements Comparator<HE_Face> {
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -2610,7 +2729,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-				.getVertex().zf());
+			.getVertex().zf());
 	    }
 	}
     }
@@ -2631,7 +2750,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-				.getVertex().zf());
+			.getVertex().zf());
 	    }
 	}
 	home.popStyle();

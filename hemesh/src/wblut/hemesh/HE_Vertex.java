@@ -26,7 +26,7 @@ import wblut.math.WB_M33;
  *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-	WB_HasData, WB_HasColor {
+WB_HasData, WB_HasColor {
     /**
      *
      */
@@ -196,7 +196,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -406,7 +406,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -419,7 +419,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -454,7 +454,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#xd()
      */
     @Override
@@ -464,7 +464,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#yd()
      */
     @Override
@@ -474,7 +474,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#zd()
      */
     @Override
@@ -484,7 +484,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#zd()
      */
     @Override
@@ -494,7 +494,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#getd(int)
      */
     @Override
@@ -504,7 +504,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#xf()
      */
     @Override
@@ -514,7 +514,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#yf()
      */
     @Override
@@ -524,7 +524,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#zf()
      */
     @Override
@@ -534,7 +534,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#zf()
      */
     @Override
@@ -544,7 +544,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_Coordinate#getf(int)
      */
     @Override
@@ -607,7 +607,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#setX(double)
      */
     @Override
@@ -617,7 +617,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#setY(double)
      */
     @Override
@@ -627,7 +627,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
     @Override
@@ -637,7 +637,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#setW(double)
      */
     @Override
@@ -647,7 +647,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#setCoord(int, double)
      */
     @Override
@@ -657,7 +657,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -667,7 +667,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double)
      */
     @Override
@@ -677,7 +677,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
      */
     @Override
@@ -687,7 +687,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
      */
     @Override
@@ -698,7 +698,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -708,7 +708,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
@@ -765,7 +765,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	    }
 	    final double area = computeNormal3D(pos,
 		    _halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
-			    .getVertex().pos, temp[0], temp[1], temp[2]);
+		    .getVertex().pos, temp[0], temp[1], temp[2]);
 	    normal.addMulSelf(area, temp[2]);
 	} while (_halfedge.getEndVertex() != d);
 	final double n = normal.getLength3D();
@@ -935,7 +935,7 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 		+ (tempD1.yd() * tempD1.yd())
 		+ (tempD1.zd() * tempD1.zd())
 		+ (tempD2.xd() * tempD2.xd()) + (tempD2.yd() * tempD2.yd()) + (tempD2
-		.zd() * tempD2.zd())))) {
+			.zd() * tempD2.zd())))) {
 	    ret.mulSelf(1.0 / norm);
 	} else {
 	    ret.set(0, 0, 0);
@@ -1020,16 +1020,16 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
     public void copyProperties(final HE_Vertex el) {
 	super.copyProperties(el);
 	vertexcolor = el.getColor();
-	if (el.getUVW() == null) {
+	if (el.getVertexUVW() == null) {
 	    uvw = null;
 	} else {
-	    uvw = new HE_TextureCoordinate(el.getUVW());
+	    uvw = new HE_TextureCoordinate(el.getVertexUVW());
 	}
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override
@@ -1057,11 +1057,20 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	return result;
     }
 
-    public HE_TextureCoordinate getUVW() {
+    public HE_TextureCoordinate getVertexUVW() {
 	if (uvw == null) {
 	    return HE_TextureCoordinate.ZERO;
 	}
 	return uvw;
+    }
+
+    public HE_TextureCoordinate getHalfedgeUVW(final HE_Face f) {
+	final HE_Halfedge he = getHalfedge(f);
+	if (he != null && he.hasTexture()) {
+	    return he.getUVW();
+	} else {
+	    return HE_TextureCoordinate.ZERO;
+	}
     }
 
     public HE_TextureCoordinate getUVW(final HE_Face f) {
@@ -1100,7 +1109,24 @@ public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
 	this.uvw = new HE_TextureCoordinate(uvw);
     }
 
-    public boolean hasTexture() {
+    public boolean hasVertexTexture() {
 	return uvw != null;
+    }
+
+    public boolean hasHalfedgeTexture(final HE_Face f) {
+	final HE_Halfedge he = getHalfedge(f);
+	if (he != null && he.hasTexture()) {
+	    return true;
+	}
+	return false;
+    }
+
+    public boolean hasTexture(final HE_Face f) {
+	final HE_Halfedge he = getHalfedge(f);
+	if (he != null && he.hasTexture()) {
+	    return true;
+	} else {
+	    return uvw != null;
+	}
     }
 }

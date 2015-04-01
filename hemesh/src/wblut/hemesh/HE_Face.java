@@ -51,6 +51,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
     /**
      *
      */
+    private int textureId;
     public static final HET_ProgressTracker tracker = HET_ProgressTracker
 	    .instance();
 
@@ -695,6 +696,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
     public void copyProperties(final HE_Face el) {
 	super.copyProperties(el);
 	facecolor = el.getColor();
+	textureId = el.textureId;
     }
 
     /*
@@ -743,5 +745,13 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	    } while (he != _halfedge);
 	    System.out.println(isValidOp.getValidationError());
 	}
+    }
+
+    public int getTextureId() {
+	return textureId;
+    }
+
+    public void setTextureId(final int i) {
+	textureId = i;
     }
 }

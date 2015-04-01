@@ -208,8 +208,8 @@ public class HEC_Cylinder extends HEC_Creator {
 		vertices[id][0] = 0;
 		vertices[id][2] = 0;
 		vertices[id][1] = 0;
-		uvw[id][0] = (j + 0.5) / facets;
-		uvw[id][1] = 0;
+		uvw[id][0] = 0.5;// (j + 0.5) / facets;
+		uvw[id][1] = 1;
 		uvw[id][2] = 1.0;
 		id++;
 	    }
@@ -220,8 +220,8 @@ public class HEC_Cylinder extends HEC_Creator {
 		vertices[id][0] = 0;
 		vertices[id][2] = 0;
 		vertices[id][1] = H;
-		uvw[id][0] = (j + 0.5) / facets;
-		uvw[id][1] = 1.0;
+		uvw[id][0] = 0.5;// (j + 0.5) / facets;
+		uvw[id][1] = 0;
 		uvw[id][2] = 1.0;
 		id++;
 	    }
@@ -238,6 +238,7 @@ public class HEC_Cylinder extends HEC_Creator {
 	    nfaces += facets;
 	}
 	final int[][] faces = new int[nfaces][];
+	final int[] faceTextureIds = new int[nfaces];
 	for (int j = 0; j < facets; j++) {
 	    for (int i = 0; i < steps; i++) {
 		faces[j + (i * facets)] = new int[4];
@@ -247,6 +248,7 @@ public class HEC_Cylinder extends HEC_Creator {
 		faces[j + (i * facets)][2] = (j + 1) + facets + 1
 			+ (i * (facets + 1));
 		faces[j + (i * facets)][3] = (j + 1) + (i * (facets + 1));
+		faceTextureIds[j + (i * facets)] = 0;
 	    }
 	}
 	if (bottomcap) {
@@ -255,6 +257,7 @@ public class HEC_Cylinder extends HEC_Creator {
 		faces[bc + i][0] = i;
 		faces[bc + i][1] = i + 1;
 		faces[bc + i][2] = bv + i;
+		faceTextureIds[bc + i] = 1;
 	    }
 	}
 	if (topcap) {
@@ -263,10 +266,12 @@ public class HEC_Cylinder extends HEC_Creator {
 		faces[tc + i][1] = (steps * (facets + 1)) + i;
 		faces[tc + i][0] = (steps * (facets + 1)) + i + 1;
 		faces[tc + i][2] = tv + i;
+		faceTextureIds[tc + i] = 2;
 	    }
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
-	fl.setVertices(vertices).setFaces(faces).setUVW(uvw);
+	fl.setVertices(vertices).setFaces(faces).setUVW(uvw)
+		.setFacetextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }

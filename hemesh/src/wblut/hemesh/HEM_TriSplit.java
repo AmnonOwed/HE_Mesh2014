@@ -42,7 +42,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -55,7 +55,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -112,10 +112,29 @@ public class HEM_TriSplit extends HEM_Modifier {
      * @return
      */
     public static HE_Selection splitFaceTri(final HE_Mesh mesh,
-	    final HE_Face face, final WB_Coordinate v) {
+	    final HE_Face face, final WB_Coordinate p) {
 	HE_Halfedge he = face.getHalfedge();
-	final HE_Vertex vi = new HE_Vertex(v);
+	final HE_Vertex vi = new HE_Vertex(p);
 	vi.setInternalLabel(2);
+	double u = 0;
+	double v = 0;
+	double w = 0;
+	boolean hasTexture = true;
+	do {
+	    if (!he.getVertex().hasTexture(face)) {
+		hasTexture = false;
+		break;
+	    }
+	    u += he.getVertex().getUVW(face).ud();
+	    v += he.getVertex().getUVW(face).vd();
+	    w += he.getVertex().getUVW(face).wd();
+	    he = he.getNextInFace();
+	} while (he != face.getHalfedge());
+	if (hasTexture) {
+	    final double ifo = 1.0 / face.getFaceOrder();
+	    vi.setUVW(u * ifo, v * ifo, w * ifo);
+	}
+	he = face.getHalfedge();
 	final HE_Selection out = new HE_Selection(mesh);
 	int c = 0;
 	boolean onEdge = false;
@@ -123,7 +142,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 	    c++;
 	    final WB_Plane P = new WB_Plane(he.getHalfedgeCenter(),
 		    he.getHalfedgeNormal());
-	    final double d = WB_GeometryOp.getDistance3D(v, P);
+	    final double d = WB_GeometryOp.getDistance3D(p, P);
 	    if (WB_Epsilon.isZero(d)) {
 		onEdge = true;
 		break;
@@ -153,6 +172,9 @@ public class HEM_TriSplit extends HEM_Modifier {
 		he2[c] = new HE_Halfedge();
 		mesh.add(he1[c]);
 		mesh.add(he2[c]);
+		if (he.getNextInFace().hasTexture()) {
+		    he1[c].setUVW(he.getNextInFace().getUVW());
+		}
 		he1[c].setVertex(he.getNextInFace().getVertex());
 		he2[c].setVertex(vi);
 		he1[c].setNext(he2[c]);

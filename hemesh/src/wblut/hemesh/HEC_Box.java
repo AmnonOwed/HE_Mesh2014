@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -7,9 +7,9 @@ import wblut.geom.WB_AABB;
 
 /**
  * Axis Aligned Box.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_Box extends HEC_Creator {
     /** width. */
@@ -27,7 +27,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Create a placeholder box.
-     * 
+     *
      */
     public HEC_Box() {
 	super();
@@ -37,7 +37,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Create a box at (0,0,0).
-     * 
+     *
      * @param W
      *            width (X)
      * @param H
@@ -64,7 +64,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box from AABB.
-     * 
+     *
      * @param AABB
      *            WB_AABB
      * @param padding
@@ -81,7 +81,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box width.
-     * 
+     *
      * @param W
      *            width of box (x-axis)
      * @return self
@@ -93,7 +93,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box height.
-     * 
+     *
      * @param H
      *            height of box (y-axis)
      * @return self
@@ -105,7 +105,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box depth.
-     * 
+     *
      * @param D
      *            depth of box (z-axis)
      * @return self
@@ -117,7 +117,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box width segments.
-     * 
+     *
      * @param L
      *            number of width segments (x-axis)
      * @return self
@@ -129,7 +129,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box height segments.
-     * 
+     *
      * @param M
      *            number of height segments (y-axis)
      * @return self
@@ -141,7 +141,7 @@ public class HEC_Box extends HEC_Creator {
 
     /**
      * Set box depth segments.
-     * 
+     *
      * @param N
      *            number of depth segments (z-axis)
      * @return self
@@ -153,7 +153,7 @@ public class HEC_Box extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
@@ -164,9 +164,16 @@ public class HEC_Box extends HEC_Creator {
 	final double dW = (W * 1.0) / L;
 	final double dH = (H * 1.0) / M;
 	final double dD = (D * 1.0) / N;
+	final double di = 1.0 / L;
+	final double dj = 1.0 / M;
+	final double dk = 1.0 / N;
 	final double[][] vertices = new double[(2 * (L + 1) * (M + 1))
+	                                       + (2 * (L + 1) * (N + 1)) + (2 * (M + 1) * (N + 1))][3];
+	final double[][] uvws = new double[(2 * (L + 1) * (M + 1))
 		+ (2 * (L + 1) * (N + 1)) + (2 * (M + 1) * (N + 1))][3];
 	final int[][] faces = new int[(2 * M * L) + (2 * L * N) + (2 * M * N)][4];// XY,XZ,YZ
+	final int[] faceTextureIds = new int[(2 * M * L) + (2 * L * N)
+		+ (2 * M * N)];
 	int idv = 0;
 	int idf = 0;
 	final int LMv = (L + 1) * (M + 1);
@@ -175,12 +182,16 @@ public class HEC_Box extends HEC_Creator {
 	final int LNf = L * N;
 	final int MNv = (M + 1) * (N + 1);
 	final int MNf = M * N;
-	for (int j = 0; j < (M + 1); j++) {
-	    for (int i = 0; i < (L + 1); i++) {
-		vertices[idv][0] = vertices[idv + LMv][0] = oW + (i * dW);
-		vertices[idv][1] = vertices[idv + LMv][1] = oH + (j * dH);
+	for (int v = 0; v < (M + 1); v++) {
+	    for (int u = 0; u < (L + 1); u++) {
+		vertices[idv][0] = vertices[idv + LMv][0] = oW + (u * dW);
+		vertices[idv][1] = vertices[idv + LMv][1] = oH + (v * dH);
 		vertices[idv][2] = oD;
 		vertices[idv + LMv][2] = -oD;
+		uvws[idv][0] = di * u;
+		uvws[idv + LMv][1] = uvws[idv][1] = dj * v;
+		uvws[idv + LMv][0] = 1 - uvws[idv][0];
+		uvws[idv][2] = uvws[idv + LMv][2] = 0;
 		idv++;
 	    }
 	}
@@ -194,17 +205,23 @@ public class HEC_Box extends HEC_Creator {
 		faces[idf + LMf][1] = i + 1 + (j * (L + 1)) + LMv;
 		faces[idf + LMf][2] = i + 1 + ((j + 1) * (L + 1)) + LMv;
 		faces[idf + LMf][3] = i + ((j + 1) * (L + 1)) + LMv;
+		faceTextureIds[idf] = 0;
+		faceTextureIds[idf + LMf] = 1;
 		idf++;
 	    }
 	}
 	int offset = 2 * LMv;
 	idv = offset;
-	for (int j = 0; j < (N + 1); j++) {
-	    for (int i = 0; i < (L + 1); i++) {
-		vertices[idv][0] = vertices[idv + LNv][0] = oW + (i * dW);
-		vertices[idv][2] = vertices[idv + LNv][2] = oD + (j * dD);
+	for (int v = 0; v < (N + 1); v++) {
+	    for (int u = 0; u < (L + 1); u++) {
+		vertices[idv][0] = vertices[idv + LNv][0] = oW + (u * dW);
+		vertices[idv][2] = vertices[idv + LNv][2] = oD + (v * dD);
 		vertices[idv][1] = oH;
 		vertices[idv + LNv][1] = -oH;
+		uvws[idv][0] = uvws[idv + LMv][0] = di * u;
+		uvws[idv + LMv][1] = dk * v;
+		uvws[idv][1] = 1 - uvws[idv + LMv][1];
+		uvws[idv][2] = uvws[idv + LMv][2] = 0;
 		idv++;
 	    }
 	}
@@ -220,17 +237,23 @@ public class HEC_Box extends HEC_Creator {
 		faces[idf + LNf][1] = i + 1 + ((j + 1) * (L + 1)) + LNv
 			+ offset;
 		faces[idf + LNf][0] = i + ((j + 1) * (L + 1)) + LNv + offset;
+		faceTextureIds[idf] = 2;
+		faceTextureIds[idf + LNf] = 3;
 		idf++;
 	    }
 	}
 	offset = (2 * LMv) + (2 * LNv);
 	idv = offset;
-	for (int j = 0; j < (N + 1); j++) {
-	    for (int i = 0; i < (M + 1); i++) {
-		vertices[idv][1] = vertices[idv + MNv][1] = oH + (i * dH);
-		vertices[idv][2] = vertices[idv + MNv][2] = oD + (j * dD);
+	for (int u = 0; u < (N + 1); u++) {
+	    for (int v = 0; v < (M + 1); v++) {
+		vertices[idv][1] = vertices[idv + MNv][1] = oH + (v * dH);
+		vertices[idv][2] = vertices[idv + MNv][2] = oD + (u * dD);
 		vertices[idv][0] = oW;
 		vertices[idv + MNv][0] = -oW;
+		uvws[idv + LMv][0] = dk * u;
+		uvws[idv][0] = 1 - uvws[idv + LMv][0];
+		uvws[idv + LMv][1] = uvws[idv][1] = v * dj;
+		uvws[idv + LMv][2] = uvws[idv][2] = 0;
 		idv++;
 	    }
 	}
@@ -246,11 +269,14 @@ public class HEC_Box extends HEC_Creator {
 		faces[idf + MNf][2] = i + 1 + ((j + 1) * (M + 1)) + MNv
 			+ offset;
 		faces[idf + MNf][3] = i + ((j + 1) * (M + 1)) + MNv + offset;
+		faceTextureIds[idf] = 4;
+		faceTextureIds[idf + MNf] = 5;
 		idf++;
 	    }
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
-	fl.setVertices(vertices).setFaces(faces).setDuplicate(true);
+	fl.setVertices(vertices).setFaces(faces).setDuplicate(true)
+		.setUVW(uvws).setFacetextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }

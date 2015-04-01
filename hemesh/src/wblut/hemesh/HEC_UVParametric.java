@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -8,9 +8,9 @@ import wblut.math.WB_Function2D;
 
 /**
  * Creates a new mesh from a parametric uv equation.
- * 
+ *
  * @author David Bollinger
- * 
+ *
  */
 public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
     /** Number of subdivisions along u-axis. */
@@ -41,7 +41,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /**
      * Sets the evaluator.
-     * 
+     *
      * @param eval
      *            an implementation of HET_UVEvaluator
      * @return self
@@ -53,7 +53,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /**
      * Sets the number of subdivisions along u/v axes.
-     * 
+     *
      * @param usteps
      *            the number of subdivisions along u-axis
      * @param vsteps
@@ -68,7 +68,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /**
      * Sets the scale factor.
-     * 
+     *
      * @param r
      *            the r
      * @return self
@@ -80,7 +80,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /**
      * is u a periodic parameter?.
-     * 
+     *
      * @param b
      *            true/false
      * @return self
@@ -92,7 +92,7 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /**
      * is v a periodic parameter?.
-     * 
+     *
      * @param b
      *            true/false
      * @return self
@@ -104,16 +104,17 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
     protected HE_Mesh createBase() {
 	if (evaluator != null) {
-	    final int lusteps = (uWrap) ? usteps : usteps + 1;
-	    final int lvsteps = (vWrap) ? vsteps : vsteps + 1;
+	    final int lusteps = usteps + 1;
+	    final int lvsteps = vsteps + 1;
 	    int N = lusteps * lvsteps;
 	    final WB_Point[] vertices = new WB_Point[N];
+	    final WB_Point[] uvws = new WB_Point[N];
 	    int index = 0;
 	    for (int iv = 0; iv < lvsteps; iv++) {
 		final double v = (double) (iv) / (double) (vsteps);
@@ -121,6 +122,8 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 		    final double u = (double) (iu) / (double) (usteps);
 		    vertices[index] = evaluator.f(u, v);
 		    vertices[index].scaleSelf(radius);
+		    uvws[index] = new WB_Point(iu * 1.0 / lusteps, iv * 1.0
+			    / lusteps, 0);
 		    index++;
 		} // for iu
 	    } // for iv
@@ -130,14 +133,14 @@ public class HEC_UVParametric extends HEC_FromFacelist { // Creator {
 	    for (int iv = 0; iv < vsteps; iv++) {
 		for (int iu = 0; iu < usteps; iu++) {
 		    faces[index][0] = (iv * lusteps) + iu;
-		    faces[index][1] = (iv * lusteps) + ((iu + 1) % lusteps);
-		    faces[index][2] = (((iv + 1) % lvsteps) * lusteps)
-			    + ((iu + 1) % lusteps);
-		    faces[index][3] = (((iv + 1) % lvsteps) * lusteps) + iu;
+		    faces[index][1] = (iv * lusteps) + (iu + 1);
+		    faces[index][2] = (iv + 1) * lusteps + (iu + 1);
+		    faces[index][3] = (iv + 1) * lusteps + iu;
 		    index++;
 		} // for iu
 	    } // for iv
-	    this.setVertices(vertices).setFaces(faces).setDuplicate(true);
+	    this.setVertices(vertices).setFaces(faces).setUVW(uvws)
+		    .setDuplicate(true);
 	    return super.createBase();
 	}
 	return null;

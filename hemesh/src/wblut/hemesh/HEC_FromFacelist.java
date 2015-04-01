@@ -26,6 +26,7 @@ public class HEC_FromFacelist extends HEC_Creator {
     /** Vertices. */
     private WB_Coordinate[] vertices;
     private WB_Coordinate[] uvws;
+    private int[] faceTextureIds;
     /** Face indices. */
     private int[][] faces;
     /** Duplicate vertices?. */
@@ -83,6 +84,17 @@ public class HEC_FromFacelist extends HEC_Creator {
 	int i = 0;
 	while (itr.hasNext()) {
 	    uvws[i] = itr.next();
+	    i++;
+	}
+	return this;
+    }
+
+    public HEC_FromFacelist setUVW(final WB_Coordinate[] vs) {
+	final int n = vs.length;
+	uvws = new WB_Coordinate[n];
+	int i = 0;
+	for (final WB_Coordinate v : vs) {
+	    uvws[i] = v;
 	    i++;
 	}
 	return this;
@@ -215,6 +227,11 @@ public class HEC_FromFacelist extends HEC_Creator {
 	return this;
     }
 
+    public HEC_FromFacelist setFacetextureIds(final int[] fts) {
+	faceTextureIds = fts;
+	return this;
+    }
+
     /**
      * Duplicate vertices in input?.
      *
@@ -241,7 +258,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
@@ -347,7 +364,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 					    for (int k = 0; k < (fln / 2); k++) {
 						temp = faces[neighbor][k];
 						faces[neighbor][k] = faces[neighbor][fln
-							- k - 1];
+						                                     - k - 1];
 						faces[neighbor][fln - k - 1] = temp;
 					    }
 					}
@@ -365,10 +382,15 @@ public class HEC_FromFacelist extends HEC_Creator {
 		    }
 		} while (facesleft);
 	    }
+	    final boolean useFaceTextures = (faceTextureIds != null)
+		    && (faceTextureIds.length == faces.length);
 	    for (final int[] face : faces) {
 		final ArrayList<HE_Halfedge> faceEdges = new ArrayList<HE_Halfedge>();
 		final HE_Face hef = new HE_Face();
 		hef.setInternalLabel(id);
+		if (useFaceTextures) {
+		    hef.setTextureId(faceTextureIds[id]);
+		}
 		id++;
 		final int fl = face.length;
 		final int[] locface = new int[fl];
@@ -395,7 +417,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 			if (useUVW) {
 			    if (duplicated[locface[i]]) {
 				final HE_TextureCoordinate uvw = uniqueVertices[locface[i]]
-					.getUVW();
+					.getVertexUVW();
 				if (uvw.ud() != uvws[locface[i]].xd()
 					|| uvw.vd() != uvws[locface[i]].yd()
 					|| uvw.wd() != uvws[locface[i]].zd()) {

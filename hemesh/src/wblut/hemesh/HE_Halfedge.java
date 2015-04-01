@@ -413,7 +413,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -425,7 +425,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -438,7 +438,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -448,7 +448,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -458,7 +458,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
@@ -572,16 +572,16 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     public void copyProperties(final HE_Vertex el) {
 	super.copyProperties(el);
 	hecolor = el.getColor();
-	if (el.getUVW() == null) {
+	if (el.getVertexUVW() == null) {
 	    uvw = null;
 	} else {
-	    uvw = new HE_TextureCoordinate(el.getUVW());
+	    uvw = new HE_TextureCoordinate(el.getVertexUVW());
 	}
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override
@@ -612,7 +612,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     public HE_TextureCoordinate getUVW() {
 	if (uvw == null) {
 	    if (_vertex != null) {
-		return _vertex.getUVW();
+		return _vertex.getVertexUVW();
 	    } else {
 		return HE_TextureCoordinate.ZERO;
 	    }
