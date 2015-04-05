@@ -46,14 +46,19 @@ import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
 import wblut.hemesh.HE_EdgeIterator;
 import wblut.hemesh.HE_Face;
+import wblut.hemesh.HE_FaceHalfedgeInnerCirculator;
 import wblut.hemesh.HE_FaceIntersection;
+import wblut.hemesh.HE_FaceIterator;
+import wblut.hemesh.HE_FaceVertexCirculator;
 import wblut.hemesh.HE_Halfedge;
 import wblut.hemesh.HE_Intersection;
 import wblut.hemesh.HE_Mesh;
 import wblut.hemesh.HE_MeshStructure;
 import wblut.hemesh.HE_Path;
 import wblut.hemesh.HE_Selection;
+import wblut.hemesh.HE_TextureCoordinate;
 import wblut.hemesh.HE_Vertex;
+import wblut.hemesh.HE_VertexIterator;
 
 /**
  *
@@ -3016,6 +3021,60 @@ public class WB_Render3D {
 	    v = vItr.next();
 	    vn = v.getVertexNormal();
 	    draw(v, vn, d);
+	}
+    }
+
+    public void setVertexColorFromTexture(final HE_Mesh mesh,
+	    final PImage texture) {
+	final HE_VertexIterator vitr = mesh.vItr();
+	HE_Vertex v;
+	HE_TextureCoordinate p;
+	while (vitr.hasNext()) {
+	    v = vitr.next();
+	    p = v.getVertexUVW();
+	    v.setColor(texture.get((int) (p.ud() * texture.width),
+		    (int) (p.vd() * texture.height)));
+	}
+    }
+
+    public void setHalfedgeColorFromTexture(final HE_Mesh mesh,
+	    final PImage texture) {
+	final HE_FaceIterator fitr = mesh.fItr();
+	HE_Face f;
+	HE_Halfedge he;
+	HE_TextureCoordinate p;
+	while (fitr.hasNext()) {
+	    f = fitr.next();
+	    final HE_FaceHalfedgeInnerCirculator fhec = new HE_FaceHalfedgeInnerCirculator(
+		    f);
+	    while (fhec.hasNext()) {
+		he = fhec.next();
+		p = he.getVertex().getUVW(f);
+		he.setColor(texture.get((int) (p.ud() * texture.width),
+			(int) (p.vd() * texture.height)));
+	    }
+	}
+    }
+
+    public void setFaceColorFromTexture(final HE_Mesh mesh, final PImage texture) {
+	final HE_FaceIterator fitr = mesh.fItr();
+	HE_Face f;
+	HE_Vertex v;
+	HE_TextureCoordinate uvw;
+	while (fitr.hasNext()) {
+	    f = fitr.next();
+	    final HE_FaceVertexCirculator fvc = new HE_FaceVertexCirculator(f);
+	    final WB_Point point = new WB_Point();
+	    int id = 0;
+	    while (fvc.hasNext()) {
+		v = fvc.next();
+		uvw = v.getUVW(f);
+		point.addSelf(uvw.ud(), uvw.vd(), 0);
+		id++;
+	    }
+	    point.divSelf(id);
+	    f.setColor(texture.get((int) (point.xd() * texture.width),
+		    (int) (point.yd() * texture.height)));
 	}
     }
 }
