@@ -30,6 +30,7 @@ import wblut.geom.WB_FrameStrut;
 import wblut.geom.WB_Geometry;
 import wblut.geom.WB_GeometryCollection;
 import wblut.geom.WB_GeometryFactory;
+import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_Line;
 import wblut.geom.WB_Mesh;
 import wblut.geom.WB_Plane;
@@ -46,6 +47,7 @@ import wblut.geom.WB_Triangulation2D;
 import wblut.geom.WB_Vector;
 import wblut.hemesh.HE_EdgeIterator;
 import wblut.hemesh.HE_Face;
+import wblut.hemesh.HE_FaceEdgeCirculator;
 import wblut.hemesh.HE_FaceHalfedgeInnerCirculator;
 import wblut.hemesh.HE_FaceIntersection;
 import wblut.hemesh.HE_FaceIterator;
@@ -370,24 +372,24 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - (d * P.getU().xd()) - (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-		- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
-		.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
+			- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
+				.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() - (d * P.getU().xd())) + (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() - (d * P
-			.getU().yd())) + (d * P.getV().yd())), (float) ((P
-			.getOrigin().zd() - (d * P.getU().zd())) + (d * P
-			.getV().zd())));
+				.getU().yd())) + (d * P.getV().yd())), (float) ((P
+					.getOrigin().zd() - (d * P.getU().zd())) + (d * P
+						.getV().zd())));
 	home.vertex((float) (P.getOrigin().xd() + (d * P.getU().xd()) + (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-		+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
-		.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
+			+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
+				.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() + (d * P.getU().xd())) - (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() + (d * P
-			.getU().yd())) - (d * P.getV().yd())), (float) ((P
-			.getOrigin().zd() + (d * P.getU().zd())) - (d * P
-			.getV().zd())));
+				.getU().yd())) - (d * P.getV().yd())), (float) ((P
+					.getOrigin().zd() + (d * P.getU().zd())) - (d * P
+						.getV().zd())));
 	home.endShape();
     }
 
@@ -2423,7 +2425,7 @@ public class WB_Render3D {
     class EyeProximityComparator implements Comparator<HE_Face> {
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -2620,6 +2622,74 @@ public class WB_Render3D {
      * @param y
      * @return
      */
+    public HE_Vertex pickVertex(final HE_Mesh mesh, final double x,
+	    final double y) {
+	final WB_Ray mouseRay3d = getPickingRay(x, y);
+	final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
+		mesh, mouseRay3d);
+	if (p == null) {
+	    return null;
+	}
+	final HE_Face f = p.face;
+	final HE_FaceVertexCirculator fvc = new HE_FaceVertexCirculator(f);
+	HE_Vertex trial;
+	HE_Vertex closest = null;
+	double d2 = 0;
+	double d2min = Double.MAX_VALUE;
+	while (fvc.hasNext()) {
+	    trial = fvc.next();
+	    d2 = trial.getPoint().getSqDistance3D(p.point);
+	    if (d2 < d2min) {
+		d2min = d2;
+		closest = trial;
+	    }
+	}
+	return closest;
+    }
+
+    /**
+     *
+     *
+     * @param mesh
+     * @param x
+     * @param y
+     * @return
+     */
+    public HE_Halfedge pickEdge(final HE_Mesh mesh, final double x,
+	    final double y) {
+	final WB_Ray mouseRay3d = getPickingRay(x, y);
+	final HE_FaceIntersection p = HE_Intersection.getClosestIntersection(
+		mesh, mouseRay3d);
+	if (p == null) {
+	    return null;
+	}
+	final HE_Face f = p.face;
+	final HE_FaceEdgeCirculator fec = new HE_FaceEdgeCirculator(f);
+	HE_Halfedge trial;
+	HE_Halfedge closest = null;
+	double d2 = 0;
+	double d2min = Double.MAX_VALUE;
+	while (fec.hasNext()) {
+	    trial = fec.next();
+	    d2 = WB_GeometryOp.getDistanceToSegment3D(p.point, trial
+		    .getStartVertex().getPoint(), trial.getEndVertex()
+		    .getPoint());
+	    if (d2 < d2min) {
+		d2min = d2;
+		closest = trial;
+	    }
+	}
+	return closest;
+    }
+
+    /**
+     *
+     *
+     * @param mesh
+     * @param x
+     * @param y
+     * @return
+     */
     public HE_Face pickFurthestFace(final HE_Mesh mesh, final double x,
 	    final double y) {
 	final WB_Ray mouseRay3d = getPickingRay(x, y);
@@ -2734,7 +2804,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-				.getVertex().zf());
+			.getVertex().zf());
 	    }
 	}
     }
@@ -2755,7 +2825,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-				.getVertex().zf());
+			.getVertex().zf());
 	    }
 	}
 	home.popStyle();

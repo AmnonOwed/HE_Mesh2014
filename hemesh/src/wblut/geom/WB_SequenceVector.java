@@ -11,7 +11,7 @@ import wblut.math.WB_Math;
  *
  */
 public class WB_SequenceVector extends WB_SimpleSequenceVector implements
-WB_MutableCoordinateFull {
+	WB_MutableCoordinateFull {
     /**
      *
      *
@@ -24,7 +24,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#addMulSelf(double, double,
      * double, double)
      */
@@ -37,7 +37,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#addMulSelf(double,
      * wblut.geom.WB_Coordinate)
      */
@@ -49,7 +49,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#addSelf(double, double, double)
      */
     @Override
@@ -61,7 +61,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#addSelf(wblut.geom.WB_Coordinate)
      */
@@ -73,7 +73,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#applyAsNormalSelf(wblut.geom.WB_Transform
      * )
@@ -86,7 +86,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#applyAsPointSelf(wblut.geom.WB_Transform
      * )
@@ -99,7 +99,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#applyAsVectorSelf(wblut.geom.WB_Transform
      * )
@@ -112,7 +112,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#crossSelf(wblut.geom.WB_Coordinate)
      */
@@ -125,7 +125,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#divSelf(double)
      */
     @Override
@@ -142,7 +142,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#mulAddMulSelf(double, double,
      * wblut.geom.WB_Coordinate)
      */
@@ -156,7 +156,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#mulSelf(double)
      */
     @Override
@@ -167,7 +167,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#normalizeSelf()
      */
     @Override
@@ -183,7 +183,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateTransform#scaleSelf(double)
      */
     @Override
@@ -193,7 +193,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateTransform#scaleSelf(double, double,
      * double)
      */
@@ -206,7 +206,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#scale(double)
      */
     @Override
@@ -216,7 +216,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#scale(double, double, double)
      */
     @Override
@@ -226,7 +226,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#subSelf(double, double, double)
      */
     @Override
@@ -238,7 +238,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#subSelf(wblut.geom.WB_Coordinate)
      */
@@ -250,7 +250,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateMath#trimSelf(double)
      */
     @Override
@@ -264,7 +264,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#absDot(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -275,7 +275,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#absDot2D(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -297,7 +297,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#add(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -307,7 +307,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#addInto(wblut.geom.WB_Coordinate,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -331,7 +331,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#addMul(double,
      * wblut.geom.WB_Coordinate)
      */
@@ -343,7 +343,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#addMulInto(double,
      * wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
      */
@@ -356,7 +356,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#apply(wblut.geom.WB_Transform)
      */
     @Override
@@ -366,7 +366,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#applyInto(wblut.geom.WB_Transform,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -378,7 +378,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateMath#applySelf(wblut.geom.WB_Transform)
      */
@@ -389,7 +389,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsNormal(wblut.geom.WB_Transform)
      */
@@ -402,7 +402,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsNormalInto(wblut.geom.WB_Transform
      * , wblut.geom.WB_MutableCoordinate)
@@ -415,7 +415,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsPoint(wblut.geom.WB_Transform)
      */
@@ -428,7 +428,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsPointInto(wblut.geom.WB_Transform
      * , wblut.geom.WB_MutableCoordinate)
@@ -441,7 +441,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsVector(wblut.geom.WB_Transform)
      */
@@ -454,7 +454,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateTransform#applyAsVectorInto(wblut.geom.WB_Transform
      * , wblut.geom.WB_MutableCoordinate)
@@ -467,7 +467,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_SimpleSequenceVector#compareTo(wblut.geom.WB_Coordinate)
      */
@@ -521,7 +521,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#cross(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -532,7 +532,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#crossInto(wblut.geom.WB_Coordinate,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -545,7 +545,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#div(double)
      */
     @Override
@@ -555,7 +555,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#divInto(double,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -566,7 +566,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#dot(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -576,7 +576,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#dot2D(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -586,7 +586,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -614,7 +614,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getAngle(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -625,7 +625,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateMetric#getAngleNorm(wblut.geom.WB_Coordinate)
      */
@@ -637,7 +637,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateMetric#getDistance3D(wblut.geom.WB_Coordinate)
      */
@@ -649,7 +649,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateMetric#getDistance2D(wblut.geom.WB_Coordinate)
      */
@@ -660,7 +660,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getLength3D()
      */
     @Override
@@ -670,7 +670,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getLength2D()
      */
     @Override
@@ -680,7 +680,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateMetric#getSqDistance3D(wblut.geom.WB_Coordinate)
      */
@@ -692,7 +692,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_CoordinateMetric#getSqDistance2D(wblut.geom.WB_Coordinate)
      */
@@ -703,7 +703,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getSqLength3D()
      */
     @Override
@@ -713,7 +713,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getSqLength2D()
      */
     @Override
@@ -723,7 +723,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -733,7 +733,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#heading2D()
      */
     @Override
@@ -809,7 +809,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#isZero()
      */
     @Override
@@ -819,7 +819,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#mul(double)
      */
     @Override
@@ -829,7 +829,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#mulInto(double,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -840,7 +840,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#mulAddMul(double, double,
      * wblut.geom.WB_Coordinate)
      */
@@ -853,7 +853,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#mulAddMulInto(double, double,
      * wblut.geom.WB_Coordinate, wblut.geom.WB_MutableCoordinate)
      */
@@ -866,7 +866,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
      * , double, double, double, double, double, double)
@@ -884,7 +884,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see
      * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
      * , wblut.geom.WB_Coordinate, wblut.geom.WB_Coordinate)
@@ -900,7 +900,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinateTransform#rotateAboutAxisSelf(double,
      * wblut.geom.WB_Coordinate, wblut.geom.WB_Coordinate)
      */
@@ -915,7 +915,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#rotateAbout2PointAxis(double,
      * double, double, double, double, double, double)
      */
@@ -933,7 +933,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#rotateAbout2PointAxis(double,
      * wblut.geom.WB_Coordinate, wblut.geom.WB_Coordinate)
      */
@@ -949,7 +949,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateTransform#rotateAboutAxis(double,
      * wblut.geom.WB_Coordinate, wblut.geom.WB_Coordinate)
      */
@@ -965,7 +965,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#scalarTriple(wblut.geom.WB_Coordinate,
      * wblut.geom.WB_Coordinate)
      */
@@ -1006,7 +1006,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#sub(double, double, double)
      */
     @Override
@@ -1017,7 +1017,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#subInto(double, double, double,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -1028,7 +1028,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#sub(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -1039,7 +1039,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#subInto(wblut.geom.WB_Coordinate,
      * wblut.geom.WB_MutableCoordinate)
      */
@@ -1050,7 +1050,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMath#tensor(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -1061,7 +1061,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see java.lang.Object#toString()
      */
     @Override
@@ -1072,7 +1072,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getOrthoNormal2D()
      */
     @Override
@@ -1084,7 +1084,7 @@ WB_MutableCoordinateFull {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_CoordinateMetric#getOrthoNormal3D()
      */
     @Override
@@ -1110,5 +1110,42 @@ WB_MutableCoordinateFull {
 	    final double f, final double g, final double... x) {
 	result.set(f * this.xd() + (g * x[0]), f * this.yd() + (g * x[1]), f
 		* this.zd() + (g * x[2]));
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
+     * , double, double, double, double, double, double)
+     */
+    @Override
+    public WB_Vector rotateAboutAxis(final double angle, final double px,
+	    final double py, final double pz, final double ax, final double ay,
+	    final double az) {
+	final WB_Vector result = new WB_Vector(this);
+	final WB_Transform raa = new WB_Transform();
+	raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz), new WB_Vector(
+		ax, ay, az));
+	raa.applySelfAsVector(result);
+	return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
+     * , double, double, double, double, double, double)
+     */
+    @Override
+    public WB_SequenceVector rotateAboutAxisSelf(final double angle,
+	    final double px, final double py, final double pz, final double ax,
+	    final double ay, final double az) {
+	final WB_Transform raa = new WB_Transform();
+	raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz), new WB_Vector(
+		ax, ay, az));
+	raa.applySelfAsVector(this);
+	return this;
     }
 }

@@ -1038,6 +1038,24 @@ WB_MutableCoordinateFull {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
+     * , double, double, double, double, double, double)
+     */
+    @Override
+    public WB_Vector rotateAboutAxisSelf(final double angle, final double px,
+	    final double py, final double pz, final double ax, final double ay,
+	    final double az) {
+	final WB_Transform raa = new WB_Transform();
+	raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz), new WB_Vector(
+		ax, ay, az));
+	raa.applySelfAsVector(this);
+	return this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see wblut.geom.WB_CoordinateTransform#rotateAbout2PointAxis(double,
      * double, double, double, double, double, double)
      */
@@ -1065,7 +1083,26 @@ WB_MutableCoordinateFull {
 	final WB_Vector result = new WB_Vector(this);
 	final WB_Transform raa = new WB_Transform();
 	raa.addRotateAboutAxis(angle, p1, new WB_Vector(p1, p2));
-	raa.applySelfAsVector(this);
+	raa.applySelfAsVector(result);
+	return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * wblut.geom.WB_MutableCoordinateTransform#rotateAbout2PointAxisSelf(double
+     * , double, double, double, double, double, double)
+     */
+    @Override
+    public WB_Vector rotateAboutAxis(final double angle, final double px,
+	    final double py, final double pz, final double ax, final double ay,
+	    final double az) {
+	final WB_Vector result = new WB_Vector(this);
+	final WB_Transform raa = new WB_Transform();
+	raa.addRotateAboutAxis(angle, new WB_Vector(px, py, pz), new WB_Vector(
+		ax, ay, az));
+	raa.applySelfAsVector(result);
 	return result;
     }
 
@@ -1081,7 +1118,7 @@ WB_MutableCoordinateFull {
 	final WB_Vector result = new WB_Vector(this);
 	final WB_Transform raa = new WB_Transform();
 	raa.addRotateAboutAxis(angle, p, a);
-	raa.applySelfAsVector(this);
+	raa.applySelfAsVector(result);
 	return result;
     }
 
