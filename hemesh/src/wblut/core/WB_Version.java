@@ -7,31 +7,26 @@ package wblut.core;
  * The Class WB_Version.
  */
 public class WB_Version {
-    
     /**
-     * 
+     *
      */
     public static final WB_Version CURRENT_VERSION = new WB_Version();
-    
     /**
-     * 
+     *
      */
     public static final int MAJOR = 2;
-    
     /**
-     * 
+     *
      */
     public static final int MINOR = 0;
-    
     /**
-     * 
+     *
      */
-    public static final int PATCH = 10;
-    
+    public static final int PATCH = 11;
     /**
-     * 
+     *
      */
-    private static final String releaseInfo = "Quahog";
+    private static final String releaseInfo = "Persephone";
 
     /**
      * @param args
@@ -69,7 +64,7 @@ public class WB_Version {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Object#toString()
      */
     @Override
