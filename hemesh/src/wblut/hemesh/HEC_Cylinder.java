@@ -271,7 +271,7 @@ public class HEC_Cylinder extends HEC_Creator {
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
 	fl.setVertices(vertices).setFaces(faces).setUVW(uvw)
-		.setFacetextureIds(faceTextureIds);
+		.setFaceTextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }

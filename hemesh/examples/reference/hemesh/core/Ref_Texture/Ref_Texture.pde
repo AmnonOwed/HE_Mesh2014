@@ -9,78 +9,76 @@ import processing.opengl.*;
 HE_Mesh mesh;
 WB_Render render;
 PImage img;
-PImage[] imgs;
+int MODE=0;
+
 void setup() {
   size(800, 800, OPENGL);
   smooth(8);
-textureMode(NORMAL);
-  float[][] values=new float[21][21];
-  for (int j = 0; j < 21; j++) {
-    for (int i = 0; i < 21; i++) {
-      values[i][j]=200*noise(0.35*i, 0.35*j);
-    }
-  }
-
-  HEC_Grid creator=new HEC_Grid();
-  creator.setU(20);
-  creator.setV(20);
-  creator.setUSize(500);
-  creator.setVSize(500);
-  creator.setWValues(values);
-  mesh=new HE_Mesh(creator);
- /*
-HEC_Cylinder creator=new HEC_Cylinder();
-  creator.setRadius(150,150); // upper and lower radius. If one is 0, HEC_Cone is called. 
-  creator.setHeight(400);
-  creator.setFacets(14).setSteps(1);
-  creator.setCap(true,true);// cap top, cap bottom?
-  //Default axis of the cylinder is (0,1,0). To change this use the HEC_Creator method setZAxis(..).
-  creator.setZAxis(0,0,1);
-  mesh=new HE_Mesh(creator); 
- 
-
-  mesh=new HE_Mesh(new HEC_Torus(80,200,6,12).setTwist(4)); 
-
- mesh=new HE_Mesh(new HEC_Sphere().setRadius(200).setUFacets(16).setVFacets(8));
-
- HEC_UVParametric creator=new  HEC_UVParametric();
-  creator.setUVSteps(40, 40);
-  creator.setRadius(100); //scaling factor
-  creator.setUWrap(true); // needs to be set manually
-  creator.setVWrap(true); // needs to be set manually
-  creator.setEvaluator(new UVFunction());// expects an implementation of the WB_Function2D<WB_Point3d> interface, taking u and v from 0 to 1
-mesh=new HE_Mesh(creator); 
-  HEC_SuperDuper creator=new HEC_SuperDuper();
-   creator.setU(64);
-   creator.setV(8);
-   creator.setUWrap(true); // needs to be set manually
-   creator.setVWrap(false); // needs to be set manually
-   creator.setRadius(50);
-    // creator.setGeneralParameters(0, 10, 0, 0,6, 10, 6, 10, 3, 0, 0, 0, 4, 0.5, 0.25);
-creator.setDonutParameters(0, 10, 10, 10, 5, 6, 12, 12,  3, 1);
-  mesh=new HE_Mesh(creator); 
-  */
-  //mesh.splitEdges();
-//mesh.splitFacesQuad();
-//mesh.splitFacesHybrid();
-//mesh.splitFacesHybrid();
-//mesh.splitFacesTri();
-//mesh.splitFacesTri();
-//mesh.smooth();
-  //mesh.splitFacesMidEdge();
-  //mesh.splitFacesMidEdgeHole();
- //mesh.subdivide(new HES_Planar().setKeepTriangles(false));
- //mesh.modify(new HEM_Lattice().setWidth(20).setDepth(-18));
- //mesh.modify(new HEM_Crocodile().setDistance(50));
-//mesh.modify(new HEM_Slice().setPlane(0,0,0,1,0,1));
-
-//mesh.smooth(2);
+  textureMode(NORMAL);
+  create();
   img=loadImage("texture.jpg");
   render=new WB_Render(this);
-  imgs=new PImage[]{img,img,img};
-  mesh.validate();
-  
-  
+}
+
+void create() {
+  switch(MODE) {
+  case 0:
+    float[][] values=new float[21][21];
+    for (int j = 0; j < 21; j++) {
+      for (int i = 0; i < 21; i++) {
+        values[i][j]=200*noise(0.35*i, 0.35*j);
+      }
+    }
+    HEC_Grid creator0=new HEC_Grid();
+    creator0.setU(20);
+    creator0.setV(20);
+    creator0.setUSize(500);
+    creator0.setVSize(500);
+    creator0.setWValues(values);
+    mesh=new HE_Mesh(creator0);
+    break;
+  case 1:
+    HEC_Cylinder creator1=new HEC_Cylinder();
+    creator1.setRadius(150, 150); 
+    creator1.setHeight(400);
+    creator1.setFacets(14).setSteps(1);
+    creator1.setCap(true, true);
+    mesh=new HE_Mesh(creator1); 
+    break;
+  case 2:
+    HEC_Cone creator2=new HEC_Cone();
+    creator2.setRadius(150); 
+    creator2.setHeight(400);
+    creator2.setFacets(14).setSteps(5);
+    creator2.setCap(true);
+    mesh=new HE_Mesh(creator2); 
+    break;
+  case 3:
+    mesh=new HE_Mesh(new HEC_Torus(80, 200, 6, 12).setTwist(4)); 
+    break;
+  case 4:
+    mesh=new HE_Mesh(new HEC_Sphere().setRadius(200).setUFacets(16).setVFacets(8));
+    break;
+  case 5:
+    HEC_UVParametric creator5=new  HEC_UVParametric();
+    creator5.setUVSteps(40, 40);
+    creator5.setRadius(100); 
+    creator5.setUWrap(true); 
+    creator5.setVWrap(true); 
+    creator5.setEvaluator(new UVFunction());
+    mesh=new HE_Mesh(creator5);
+    break;
+  case 6:
+    HEC_SuperDuper creator6=new HEC_SuperDuper();
+    creator6.setU(64);
+    creator6.setV(8);
+    creator6.setUWrap(true);
+    creator6.setVWrap(false); 
+    creator6.setRadius(50);
+    creator6.setDonutParameters(0, 10, 10, 10, 5, 6, 12, 12, 3, 1);
+    mesh=new HE_Mesh(creator6); 
+    break;
+  }
 }
 
 void draw() {
@@ -90,11 +88,15 @@ void draw() {
   rotateY(mouseX*1.0f/width*TWO_PI);
   rotateX(mouseY*1.0f/height*TWO_PI);
   noStroke();
-  render.drawFaces(mesh,img);
+  render.drawFaces(mesh, img);
   stroke(0);
   render.drawEdges(mesh);
- 
-  }
+}
+
+void mousePressed(){
+ MODE=(MODE+1)%7;
+create(); 
+}
 
 class UVFunction implements WB_Function2D<WB_Point> {
   WB_Point f(double u, double v) {

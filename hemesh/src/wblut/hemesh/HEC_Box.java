@@ -276,7 +276,7 @@ public class HEC_Box extends HEC_Creator {
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
 	fl.setVertices(vertices).setFaces(faces).setDuplicate(true)
-		.setUVW(uvws).setFacetextureIds(faceTextureIds);
+		.setUVW(uvws).setFaceTextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }

@@ -227,7 +227,7 @@ public class HEC_FromFacelist extends HEC_Creator {
 	return this;
     }
 
-    public HEC_FromFacelist setFacetextureIds(final int[] fts) {
+    public HEC_FromFacelist setFaceTextureIds(final int[] fts) {
 	faceTextureIds = fts;
 	return this;
     }

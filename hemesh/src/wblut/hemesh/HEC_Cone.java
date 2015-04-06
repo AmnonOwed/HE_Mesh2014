@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -7,9 +7,9 @@ import wblut.geom.WB_Vector;
 
 /**
  * Cone.
- * 
+ *
  * @author Frederik Vanhoutte (W:Blut)
- * 
+ *
  */
 public class HEC_Cone extends HEC_Creator {
     /** Base radius. */
@@ -29,7 +29,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Instantiates a new cone.
-     * 
+     *
      */
     public HEC_Cone() {
 	super();
@@ -44,7 +44,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Instantiates a new cone.
-     * 
+     *
      * @param R
      *            radius
      * @param H
@@ -66,7 +66,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Set base radius.
-     * 
+     *
      * @param R
      *            base radius
      * @return self
@@ -78,7 +78,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Set height.
-     * 
+     *
      * @param H
      *            height
      * @return self
@@ -90,7 +90,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Set number of sides.
-     * 
+     *
      * @param facets
      *            number of sides
      * @return self
@@ -102,7 +102,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Set number of vertical divisions.
-     * 
+     *
      * @param steps
      *            vertical divisions
      * @return self
@@ -114,7 +114,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Set capping options.
-     * 
+     *
      * @param cap
      *            create cap?
      * @return self
@@ -126,7 +126,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Reverse cone.
-     * 
+     *
      * @param rev
      *            the rev
      * @return self
@@ -138,7 +138,7 @@ public class HEC_Cone extends HEC_Creator {
 
     /**
      * Sets the taper.
-     * 
+     *
      * @param t
      *            the t
      * @return the hE c_ cone
@@ -155,49 +155,82 @@ public class HEC_Cone extends HEC_Creator {
      */
     @Override
     protected HE_Mesh createBase() {
-	final double[][] vertices = new double[(facets * steps) + 1][3];
-	final int[][] faces = new int[(cap) ? (facets * steps) + 1 : facets
-		* steps][];
+	final double[][] vertices = new double[(facets + 1) * steps + facets
+		+ ((cap) ? facets : 0)][3];
+	final double[][] uvws = new double[(facets + 1) * steps + facets
+		+ ((cap) ? facets : 0)][3];
+	final int[][] faces = new int[(cap) ? (facets * steps) + facets
+		: facets * steps][];
+	final int[] faceTextureIds = new int[(cap) ? (facets * steps) + facets
+		: facets * steps];
 	double Ri;
 	double Hj;
 	final double invs = 1.0 / steps;
+	int id = 0;
 	for (int i = 0; i < steps; i++) {
 	    Ri = R - (Math.pow(i * invs, taper) * R);
 	    Hj = (reverse) ? H - ((i * H) / steps) : (i * H) / steps;
-	    for (int j = 0; j < facets; j++) {
-		vertices[j + (i * facets)][0] = Ri
-			* Math.cos(((2 * Math.PI) / facets) * j);
-		vertices[j + (i * facets)][2] = Ri
-			* Math.sin(((2 * Math.PI) / facets) * j);
-		vertices[j + (i * facets)][1] = Hj;
+	    for (int j = 0; j < facets + 1; j++) {
+		vertices[id][0] = Ri * Math.cos(((2 * Math.PI) / facets) * j);
+		vertices[id][2] = Ri * Math.sin(((2 * Math.PI) / facets) * j);
+		vertices[id][1] = Hj;
+		uvws[id][0] = j * 1.0 / facets;
+		uvws[id][1] = i * 1.0 / steps;
+		uvws[id][2] = 0;
+		id++;
 	    }
 	}
-	vertices[facets * steps][0] = 0;
-	vertices[facets * steps][2] = 0;
-	vertices[facets * steps][1] = (reverse) ? 0 : H;
-	if (cap) {
-	    faces[steps * facets] = new int[facets];
-	}
+	final int tipoffset = id;
 	for (int j = 0; j < facets; j++) {
-	    if (cap) {
-		faces[steps * facets][j] = j;
+	    vertices[id][0] = 0;
+	    vertices[id][2] = 0;
+	    vertices[id][1] = (reverse) ? 0 : H;
+	    uvws[id][0] = 0.5;
+	    uvws[id][1] = 1;
+	    uvws[id][2] = 0;
+	    id++;
+	}
+	final int capoffset = id;
+	if (cap) {
+	    for (int j = 0; j < facets; j++) {
+		vertices[id][0] = 0;
+		vertices[id][2] = 0;
+		vertices[id][1] = (reverse) ? H : 0;
+		uvws[id][0] = 0.5;
+		uvws[id][1] = 1;
+		uvws[id][2] = 0;
+		id++;
 	    }
+	}
+	id = 0;
+	for (int j = 0; j < facets; j++) {
 	    for (int i = 0; i < (steps - 1); i++) {
-		faces[j + (i * facets)] = new int[4];
-		faces[j + (i * facets)][0] = j + (i * facets);
-		faces[j + (i * facets)][1] = j + (i * facets) + facets;
-		faces[j + (i * facets)][2] = ((j + 1) % facets) + facets
-			+ (i * facets);
-		faces[j + (i * facets)][3] = ((j + 1) % facets) + (i * facets);
+		faces[id] = new int[4];
+		faceTextureIds[id] = 0;
+		faces[id][0] = j + i * (facets + 1);
+		faces[id][1] = j + (i + 1) * (facets + 1);
+		faces[id][2] = j + 1 + (i + 1) * (facets + 1);
+		faces[id][3] = j + 1 + i * (facets + 1);
+		id++;
 	    }
-	    faces[j + ((steps - 1) * facets)] = new int[3];
-	    faces[j + ((steps - 1) * facets)][0] = facets * steps;
-	    faces[j + ((steps - 1) * facets)][2] = j + ((steps - 1) * facets);
-	    faces[j + ((steps - 1) * facets)][1] = ((j + 1) % facets)
-		    + ((steps - 1) * facets);
+	    faces[id] = new int[3];
+	    faceTextureIds[id] = 0;
+	    faces[id][0] = tipoffset + j;
+	    faces[id][2] = j + (steps - 1) * (facets + 1);
+	    faces[id][1] = j + 1 + (steps - 1) * (facets + 1);
+	    id++;
+	    if (cap) {
+		faces[id] = new int[3];
+		faceTextureIds[id] = 1;
+		faces[id][0] = j;
+		faces[id][2] = j + capoffset;
+		faces[id][1] = (j + 1);
+		id++;
+	    }
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
-	fl.setVertices(vertices).setFaces(faces);
+	fl.setVertices(vertices).setUVW(uvws).setFaces(faces)
+	.setFaceTextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }
