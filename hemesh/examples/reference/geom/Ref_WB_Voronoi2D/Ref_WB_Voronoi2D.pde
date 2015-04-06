@@ -23,7 +23,7 @@ render= new WB_Render3D(this);
   // add points to collection
   for (int i=0;i<10;i++) {
     for (int j=0;j<10;j++) {
-    points.add(new WB_Point(-270+i*60, -270+j*60));
+    points.add(new WB_Point(-270+i*60, -270+j*60,2));
     }  
 }
   boundary=new ArrayList<WB_Point>();
@@ -56,7 +56,7 @@ void draw() {
 void mousePressed(){
  for (WB_Point p:points) {
     
-    p._addSelf(random(-5,5),random(-5,5),0);
+    p.addSelf(random(-5,5),random(-5,5),0);
 
     
 } 

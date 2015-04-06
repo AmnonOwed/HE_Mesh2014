@@ -370,24 +370,24 @@ public class WB_Render3D {
 	home.beginShape(PConstants.QUAD);
 	home.vertex((float) (P.getOrigin().xd() - (d * P.getU().xd()) - (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-			- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
-				.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
+		- (d * P.getU().yd()) - (d * P.getV().yd())), (float) (P
+		.getOrigin().zd() - (d * P.getU().zd()) - (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() - (d * P.getU().xd())) + (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() - (d * P
-				.getU().yd())) + (d * P.getV().yd())), (float) ((P
-					.getOrigin().zd() - (d * P.getU().zd())) + (d * P
-						.getV().zd())));
+			.getU().yd())) + (d * P.getV().yd())), (float) ((P
+			.getOrigin().zd() - (d * P.getU().zd())) + (d * P
+			.getV().zd())));
 	home.vertex((float) (P.getOrigin().xd() + (d * P.getU().xd()) + (d * P
 		.getV().xd())), (float) (P.getOrigin().yd()
-			+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
-				.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
+		+ (d * P.getU().yd()) + (d * P.getV().yd())), (float) (P
+		.getOrigin().zd() + (d * P.getU().zd()) + (d * P.getV().zd())));
 	home.vertex(
 		(float) ((P.getOrigin().xd() + (d * P.getU().xd())) - (d * P
 			.getV().xd())), (float) ((P.getOrigin().yd() + (d * P
-				.getU().yd())) - (d * P.getV().yd())), (float) ((P
-					.getOrigin().zd() + (d * P.getU().zd())) - (d * P
-						.getV().zd())));
+			.getU().yd())) - (d * P.getV().yd())), (float) ((P
+			.getOrigin().zd() + (d * P.getU().zd())) - (d * P
+			.getV().zd())));
 	home.endShape();
     }
 
@@ -2423,7 +2423,7 @@ public class WB_Render3D {
     class EyeProximityComparator implements Comparator<HE_Face> {
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 	 */
 	@Override
@@ -2734,7 +2734,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-			.getVertex().zf());
+				.getVertex().zf());
 	    }
 	}
     }
@@ -2755,7 +2755,7 @@ public class WB_Render3D {
 		home.line(he.getVertex().xf(), he.getVertex().yf(), he
 			.getVertex().zf(), he.getNextInFace().getVertex().xf(),
 			he.getNextInFace().getVertex().yf(), he.getNextInFace()
-			.getVertex().zf());
+				.getVertex().zf());
 	    }
 	}
 	home.popStyle();
@@ -3032,8 +3032,7 @@ public class WB_Render3D {
 	while (vitr.hasNext()) {
 	    v = vitr.next();
 	    p = v.getVertexUVW();
-	    v.setColor(texture.get((int) (p.ud() * texture.width),
-		    (int) (p.vd() * texture.height)));
+	    v.setColor(getColorFromPImage(p.ud(), p.vd(), texture));
 	}
     }
 
@@ -3050,8 +3049,7 @@ public class WB_Render3D {
 	    while (fhec.hasNext()) {
 		he = fhec.next();
 		p = he.getVertex().getUVW(f);
-		he.setColor(texture.get((int) (p.ud() * texture.width),
-			(int) (p.vd() * texture.height)));
+		he.setColor(getColorFromPImage(p.ud(), p.vd(), texture));
 	    }
 	}
     }
@@ -3064,17 +3062,25 @@ public class WB_Render3D {
 	while (fitr.hasNext()) {
 	    f = fitr.next();
 	    final HE_FaceVertexCirculator fvc = new HE_FaceVertexCirculator(f);
-	    final WB_Point point = new WB_Point();
+	    final WB_Point p = new WB_Point();
 	    int id = 0;
 	    while (fvc.hasNext()) {
 		v = fvc.next();
 		uvw = v.getUVW(f);
-		point.addSelf(uvw.ud(), uvw.vd(), 0);
+		p.addSelf(uvw.ud(), uvw.vd(), 0);
 		id++;
 	    }
-	    point.divSelf(id);
-	    f.setColor(texture.get((int) (point.xd() * texture.width),
-		    (int) (point.yd() * texture.height)));
+	    p.divSelf(id);
+	    f.setColor(getColorFromPImage(p.xd(), p.yd(), texture));
 	}
+    }
+
+    private int getColorFromPImage(final double u, final double v,
+	    final PImage texture) {
+	return texture
+		.get(Math.max(0,
+			Math.min((int) (u * texture.width), texture.width - 1)),
+			Math.max(0, Math.min((int) (v * texture.height),
+				texture.height - 1)));
     }
 }

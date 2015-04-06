@@ -43,7 +43,7 @@ void draw() {
 
 void update() {
   for (int i=0; i<n; i++) {
-    vectors[i].rotateAboutAxis(0.01, axes[i], WB_Point.ZERO());
+    vectors[i].rotateAbout2PointAxisSelf(0.01, axes[i], WB_Point.ZERO());
   }
 
   zono=gf.createZonohedron(vectors, 40);

@@ -9,6 +9,7 @@ WB_Render render;
 
 void setup() {
   size(800, 800, P3D);
+  smooth(8);
   createMesh();
 
   HES_Smooth subdividor=new HES_Smooth();

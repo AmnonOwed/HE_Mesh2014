@@ -26,7 +26,7 @@ import wblut.math.WB_M33;
  *
  */
 public class HE_Vertex extends HE_Element implements WB_MutableCoordinate,
-WB_HasData, WB_HasColor {
+	WB_HasData, WB_HasColor {
     /**
      *
      */
@@ -196,7 +196,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -406,7 +406,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -419,7 +419,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
@@ -454,7 +454,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#xd()
      */
     @Override
@@ -464,7 +464,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#yd()
      */
     @Override
@@ -474,7 +474,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#zd()
      */
     @Override
@@ -484,7 +484,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#zd()
      */
     @Override
@@ -494,7 +494,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#getd(int)
      */
     @Override
@@ -504,7 +504,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#xf()
      */
     @Override
@@ -514,7 +514,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#yf()
      */
     @Override
@@ -524,7 +524,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#zf()
      */
     @Override
@@ -534,7 +534,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#zf()
      */
     @Override
@@ -544,7 +544,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Coordinate#getf(int)
      */
     @Override
@@ -607,7 +607,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#setX(double)
      */
     @Override
@@ -617,7 +617,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#setY(double)
      */
     @Override
@@ -627,7 +627,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#setZ(double)
      */
     @Override
@@ -637,7 +637,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#setW(double)
      */
     @Override
@@ -647,7 +647,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#setCoord(int, double)
      */
     @Override
@@ -657,7 +657,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#set(wblut.geom.WB_Coordinate)
      */
     @Override
@@ -667,7 +667,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#set(double, double)
      */
     @Override
@@ -677,7 +677,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double)
      */
     @Override
@@ -687,7 +687,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_MutableCoordinate#set(double, double, double, double)
      */
     @Override
@@ -698,7 +698,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -708,7 +708,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
@@ -765,7 +765,7 @@ WB_HasData, WB_HasColor {
 	    }
 	    final double area = computeNormal3D(pos,
 		    _halfedge.getEndVertex().pos, _halfedge.getPrevInFace()
-		    .getVertex().pos, temp[0], temp[1], temp[2]);
+			    .getVertex().pos, temp[0], temp[1], temp[2]);
 	    normal.addMulSelf(area, temp[2]);
 	} while (_halfedge.getEndVertex() != d);
 	final double n = normal.getLength3D();
@@ -819,6 +819,69 @@ WB_HasData, WB_HasColor {
      */
     public double getGaussianCurvature(final WB_Vector meanCurvatureVector) {
 	meanCurvatureVector.set(0, 0, 0);
+	WB_Point vect1 = new WB_Point();
+	WB_Point vect2 = new WB_Point();
+	WB_Point vect3 = new WB_Point();
+	double mixed = 0.0;
+	double gauss = 0.0;
+	HE_Halfedge ot = getHalfedge();
+	final HE_Vertex d = ot.getEndVertex();
+	do {
+	    ot = ot.getNextInVertex();
+	    if (ot.getFace() == null) {
+		continue;
+	    }
+	    if (ot.getPair().getFace() == null) {
+		meanCurvatureVector.set(0, 0, 0);
+		return 0.0;
+	    }
+	    final HE_Vertex p1 = ot.getEndVertex();
+	    final HE_Vertex p2 = ot.getPrevInFace().getVertex();
+	    vect1 = p1.pos.sub(pos);
+	    vect2 = p2.pos.sub(p1.pos);
+	    vect3 = pos.sub(p2.pos);
+	    final double c12 = vect1.dot(vect2);
+	    final double c23 = vect2.dot(vect3);
+	    final double c31 = vect3.dot(vect1);
+	    // Override vect2
+	    vect2 = vect1.cross(vect3);
+	    final double area = 0.5 * vect2.getLength3D();
+	    if (c31 > 0.0) {
+		mixed += 0.5 * area;
+	    } else if ((c12 > 0.0) || (c23 > 0.0)) {
+		mixed += 0.25 * area;
+	    } else {
+		// Non-obtuse triangle
+		if ((area > 0.0)
+			&& (area > (-WB_Epsilon.EPSILON * (c12 + c23)))) {
+		    mixed -= (0.125 * 0.5 * ((c12 * vect3.dot(vect3)) + (c23 * vect1
+			    .dot(vect1)))) / area;
+		}
+	    }
+	    gauss += Math.abs(Math.atan2(2.0 * area, -c31));
+	    meanCurvatureVector.addMulSelf(0.5 / area,
+		    vect3.mulAddMul(c12, -c23, vect1));
+	} while (ot.getEndVertex() != d);
+	meanCurvatureVector.mulSelf(0.5 / mixed);
+	// Discrete gaussian curvature
+	return ((2.0 * Math.PI) - gauss) / mixed;
+    }
+
+    /**
+     * Returns the discrete Gaussian curvature. These discrete operators are
+     * described in "Discrete Differential-Geometry Operators for Triangulated
+     * 2-Manifolds", Mark Meyer, Mathieu Desbrun, Peter Schr�der, and Alan H.
+     * Barr. http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf
+     * http://www.cs.caltech.edu/~mmeyer/Publications/diffGeomOps.pdf Note: on a
+     * sphere, the Gaussian curvature is very accurate, but not the mean
+     * curvature. Guoliang Xu suggests improvements in his papers
+     * http://lsec.cc.ac.cn/~xuguo/xuguo3.htm
+     *
+     * 
+     * @return
+     */
+    public double getGaussianCurvature() {
+	final WB_Vector meanCurvatureVector = new WB_Vector(0, 0, 0);
 	WB_Point vect1 = new WB_Point();
 	WB_Point vect2 = new WB_Point();
 	WB_Point vect3 = new WB_Point();
@@ -935,7 +998,7 @@ WB_HasData, WB_HasColor {
 		+ (tempD1.yd() * tempD1.yd())
 		+ (tempD1.zd() * tempD1.zd())
 		+ (tempD2.xd() * tempD2.xd()) + (tempD2.yd() * tempD2.yd()) + (tempD2
-			.zd() * tempD2.zd())))) {
+		.zd() * tempD2.zd())))) {
 	    ret.mulSelf(1.0 / norm);
 	} else {
 	    ret.set(0, 0, 0);
@@ -1029,7 +1092,7 @@ WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override

@@ -1,8 +1,16 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Vector;
+import colorlib.Palette;
 
 public class HET_Texture {
+    /**
+     * Set vertex colors according to the vertex normal normal.x: -1 to 1, red
+     * component from 0 to 255 normal.y: -1 to 1, green component from 0 to 255
+     * normal.z: -1 to 1, blue component from 0 to 255
+     *
+     * @param mesh
+     */
     public static void setVertexColorFromVertexNormal(final HE_Mesh mesh) {
 	final HE_VertexIterator vitr = mesh.vItr();
 	HE_Vertex v;
@@ -17,21 +25,101 @@ public class HET_Texture {
 	}
     }
 
-    public static void setVertexColorFromVertexUmbrella(final HE_Mesh mesh,
-	    final double rescale) {
+    /**
+     * Set vertex colors by vertex.getLabel() from a palette created with the
+     * colorLib library
+     *
+     * @param mesh
+     * @param palette
+     */
+    public static void setVertexColorFromPalette(final HE_Mesh mesh,
+	    final Palette palette) {
 	final HE_VertexIterator vitr = mesh.vItr();
 	HE_Vertex v;
+	final int size = palette.numSwatches();
 	int color;
-	final double idenom = 64 / Math.PI;
 	while (vitr.hasNext()) {
 	    v = vitr.next();
-	    color = (int) (idenom * (2 * Math.PI + rescale
-		    * (v.getUmbrellaAngle() - 2 * Math.PI)));
-	    color = Math.max(0, Math.min(color, 255));
-	    v.setColor(optimal[255 - color]);
+	    final int choice = (Math.max(0, Math.min(size - 1, v.getLabel())));
+	    color = palette.getColor(choice);
+	    v.setColor(color);
 	}
     }
 
+    /**
+     * Set vertex colors randomly chosen from a palette created with the
+     * colorLib library
+     *
+     * @param mesh
+     * @param palette
+     */
+    public static void setRandomVertexColorFromPalette(final HE_Mesh mesh,
+	    final Palette palette) {
+	final HE_VertexIterator vitr = mesh.vItr();
+	HE_Vertex v;
+	final int size = palette.numSwatches();
+	int color;
+	while (vitr.hasNext()) {
+	    v = vitr.next();
+	    final int choice = (int) (Math.min(size - 1, Math.random() * size));
+	    ;
+	    color = palette.getColor(choice);
+	    v.setColor(color);
+	}
+    }
+
+    /**
+     * Set vertex colors according to the umbrella angle. The color scale used
+     * is a perceptually linearized rainbow scale. Angle: 0 (infinite outward or
+     * inward spike) to 2 Pi (flat).
+     *
+     * @param mesh
+     * @param minrange
+     * @param maxrange
+     */
+    public static void setVertexColorFromVertexUmbrella(final HE_Mesh mesh,
+	    final double minrange, final double maxrange) {
+	final HE_VertexIterator vitr = mesh.vItr();
+	HE_Vertex v;
+	int color;
+	final double idenom = 128 / Math.PI;
+	while (vitr.hasNext()) {
+	    v = vitr.next();
+	    color = (int) (idenom * (v.getUmbrellaAngle() - minrange) / (maxrange - minrange));
+	    color = Math.max(0, Math.min(color, 255));
+	    v.setColor(rainbow[255 - color]);
+	}
+    }
+
+    /**
+     * Set vertex colors according to the Gaussian curvature. The color scale
+     * used is a perceptually linearized heat map.
+     *
+     * @param mesh
+     * @param minrange
+     * @param maxrange
+     */
+    public static void setVertexColorFromVertexCurvature(final HE_Mesh mesh,
+	    final double minrange, final double maxrange) {
+	final HE_VertexIterator vitr = mesh.vItr();
+	HE_Vertex v;
+	int color;
+	final double idenom = 128 / Math.PI;
+	while (vitr.hasNext()) {
+	    v = vitr.next();
+	    color = (int) (idenom * (v.getGaussianCurvature() - minrange) / (maxrange - minrange));
+	    color = Math.max(0, Math.min(color, 255));
+	    v.setColor(heat[color]);
+	}
+    }
+
+    /**
+     * Set face colors according to the face normal normal.x: -1 to 1, red
+     * component from 0 to 255 normal.y: -1 to 1, green component from 0 to 255
+     * normal.z: -1 to 1, blue component from 0 to 255
+     *
+     * @param mesh
+     */
     public static void setFaceColorFromFaceNormal(final HE_Mesh mesh) {
 	final HE_FaceIterator fitr = mesh.fItr();
 	HE_Face f;
@@ -42,6 +130,48 @@ public class HET_Texture {
 	    n = f.getFaceNormal();
 	    color = color((int) (128 * (n.xd() + 1)),
 		    (int) (128 * (n.yd() + 1)), (int) (128 * (n.zd() + 1)));
+	    f.setColor(color);
+	}
+    }
+
+    /**
+     * Set face colors randomly chosen from a palette created with the colorLib
+     * library
+     *
+     * @param mesh
+     * @param palette
+     */
+    public static void setRandomFaceColorFromPalette(final HE_Mesh mesh,
+	    final Palette palette) {
+	final HE_FaceIterator fitr = mesh.fItr();
+	HE_Face f;
+	final int size = palette.numSwatches();
+	int color;
+	while (fitr.hasNext()) {
+	    f = fitr.next();
+	    final int choice = (int) (Math.min(size - 1, Math.random() * size));
+	    color = palette.getColor(choice);
+	    f.setColor(color);
+	}
+    }
+
+    /**
+     * Set face colors by face.getLabel() from a palette created with the
+     * colorLib library
+     *
+     * @param mesh
+     * @param palette
+     */
+    public static void setFaceColorFromPalette(final HE_Mesh mesh,
+	    final Palette palette) {
+	final HE_FaceIterator fitr = mesh.fItr();
+	HE_Face f;
+	final int size = palette.numSwatches();
+	int color;
+	while (fitr.hasNext()) {
+	    f = fitr.next();
+	    final int choice = (Math.max(0, Math.min(size - 1, f.getLabel())));
+	    color = palette.getColor(choice);
 	    f.setColor(color);
 	}
     }

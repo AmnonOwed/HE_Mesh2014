@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['m',['M',['../classwblut_1_1hemesh_1_1_h_e_c___box.html#a7b44959deb1e1134c08159f83393559a',1,'wblut.hemesh.HEC_Box.M()'],['../classwblut_1_1hemesh_1_1_h_e_c___cube.html#a2aaaee8a93dfba3fb720408046283aa3',1,'wblut.hemesh.HEC_Cube.M()'],['../classwblut_1_1math_1_1_w_b___m_t_random.html#a279bab9bf061ff71f10b58a6c97e8886',1,'wblut.math.WB_MTRandom.M()'],['../classwblut_1_1geom_1_1_w_b___bezier_surface.html#ac3e349967993506452de9767205f2382',1,'wblut.geom.WB_BezierSurface.m()'],['../classwblut_1_1geom_1_1_w_b___b_spline_surface.html#a99119dc6cd0bf4a33b5c0d7f16fe2b5f',1,'wblut.geom.WB_BSplineSurface.m()'],['../classwblut_1_1geom_1_1_w_b___nurbs_knot.html#a3a2a4d05bba99b7325e59e487a7ffe38',1,'wblut.geom.WB_NurbsKnot.m()']]],
+  ['m',['m',['../classwblut_1_1geom_1_1_w_b___bezier_surface.html#ac3e349967993506452de9767205f2382',1,'wblut.geom.WB_BezierSurface.m()'],['../classwblut_1_1geom_1_1_w_b___b_spline_surface.html#a99119dc6cd0bf4a33b5c0d7f16fe2b5f',1,'wblut.geom.WB_BSplineSurface.m()'],['../classwblut_1_1geom_1_1_w_b___nurbs_knot.html#a3a2a4d05bba99b7325e59e487a7ffe38',1,'wblut.geom.WB_NurbsKnot.m()'],['../classwblut_1_1hemesh_1_1_h_e_c___box.html#a7b44959deb1e1134c08159f83393559a',1,'wblut.hemesh.HEC_Box.M()'],['../classwblut_1_1hemesh_1_1_h_e_c___cube.html#a2aaaee8a93dfba3fb720408046283aa3',1,'wblut.hemesh.HEC_Cube.M()'],['../classwblut_1_1math_1_1_w_b___m_t_random.html#a279bab9bf061ff71f10b58a6c97e8886',1,'wblut.math.WB_MTRandom.M()']]],
   ['m11',['m11',['../classwblut_1_1math_1_1_w_b___m33.html#a868fa4ceef0820a27e70c9aec592ac59',1,'wblut.math.WB_M33.m11()'],['../classwblut_1_1math_1_1_w_b___m44.html#a28678236db29ccc799cba4aea250a732',1,'wblut.math.WB_M44.m11()']]],
   ['m21',['m21',['../classwblut_1_1math_1_1_w_b___m33.html#abd43bbe4056b1d95da8ae3187e5e6f67',1,'wblut.math.WB_M33.m21()'],['../classwblut_1_1math_1_1_w_b___m44.html#a9ef13915cb0a78681cc0ac8e12bfafb5',1,'wblut.math.WB_M44.m21()']]],
   ['m31',['m31',['../classwblut_1_1math_1_1_w_b___m33.html#a4472d8266268563229ba598565ed07b4',1,'wblut.math.WB_M33.m31()'],['../classwblut_1_1math_1_1_w_b___m44.html#a743b3cafe5f6b04195c5c76e46a91bf5',1,'wblut.math.WB_M44.m31()']]],
@@ -34,12 +34,11 @@ var searchData=
   ['mindistance',['minDistance',['../classwblut_1_1geom_1_1_w_b___mesh_graph_1_1_w_b___g_vertex.html#ae22ac640165fa217d8f7cc8410fdddc6',1,'wblut::geom::WB_MeshGraph::WB_GVertex']]],
   ['minimumballjointangle',['minimumBalljointAngle',['../classwblut_1_1hemesh_1_1_h_e_c___from_frame.html#a13afebde1c7465a45aaeed3175de74e5',1,'wblut::hemesh::HEC_FromFrame']]],
   ['minor',['MINOR',['../classwblut_1_1core_1_1_w_b___version.html#a4c4445dafa9f3670fdda7a179246496e',1,'wblut::core::WB_Version']]],
+  ['minwvalue',['minWValue',['../classwblut_1_1hemesh_1_1_h_e_c___grid.html#a258c61f0d46feac80220201f3d8e4b44',1,'wblut::hemesh::HEC_Grid']]],
   ['mode',['mode',['../classwblut_1_1geom_1_1_w_b___embedded_plane.html#a858b941751d9d3692d9cb0692ff503e5',1,'wblut.geom.WB_EmbeddedPlane.mode()'],['../classwblut_1_1geom_1_1_w_b___ortho_project.html#ab47cf44d6aa4d4111da38837e44176c5',1,'wblut.geom.WB_OrthoProject.mode()']]],
   ['modifierstack',['modifierStack',['../classwblut_1_1hemesh_1_1_h_e___dynamic_mesh.html#a9b83be783285713f3c368c4c7ce987d9',1,'wblut::hemesh::HE_DynamicMesh']]],
   ['mt',['mt',['../classwblut_1_1math_1_1_w_b___m_t_random.html#af009420674df0cf54a900759594fcc80',1,'wblut::math::WB_MTRandom']]],
   ['mti',['mti',['../classwblut_1_1math_1_1_w_b___m_t_random.html#a81b722fbe9de8d0d9ad99378a0cf6cd3',1,'wblut::math::WB_MTRandom']]],
-  ['mtlstream',['mtlStream',['../classwblut_1_1hemesh_1_1_h_e_t___o_b_j_writer.html#a882eaded6a0c070eb38e6153c45d0b72',1,'wblut::hemesh::HET_OBJWriter']]],
-  ['mtlwriter',['mtlWriter',['../classwblut_1_1hemesh_1_1_h_e_t___o_b_j_writer.html#ad73c52f19e18dbe972af85402eda717c',1,'wblut::hemesh::HET_OBJWriter']]],
   ['muf',['muf',['../classwblut_1_1hemesh_1_1_h_e_c___sea_shell.html#a0d4801f34c81bf97c1d6c80c76e42f95',1,'wblut::hemesh::HEC_SeaShell']]],
   ['mx',['mX',['../classwblut_1_1geom_1_1_w_b___geometry_factory.html#a28fc79dcb0eeb8cebd75362f32be66c1',1,'wblut::geom::WB_GeometryFactory']]],
   ['my',['mY',['../classwblut_1_1geom_1_1_w_b___geometry_factory.html#ae766082388c85a787a19c7e4fa9c089c',1,'wblut::geom::WB_GeometryFactory']]],

@@ -42,7 +42,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -55,7 +55,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -108,7 +108,7 @@ public class HEM_TriSplit extends HEM_Modifier {
      *
      * @param mesh
      * @param face
-     * @param v
+     * @param p
      * @return
      */
     public static HE_Selection splitFaceTri(final HE_Mesh mesh,

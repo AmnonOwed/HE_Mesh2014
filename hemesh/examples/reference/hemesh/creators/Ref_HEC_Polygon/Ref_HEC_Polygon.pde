@@ -14,7 +14,7 @@ void setup() {
   WB_Point[] basepoints =new WB_Point[6];
   for (int i=0;i<6;i++) {
    basepoints[i]=new WB_Point(0,200,0);
-   if(i>0) basepoints[i].rotateAboutAxis(Math.PI/3.0*i,0,0,0,0,0,1);
+   if(i>0) basepoints[i].rotateAbout2PointAxisSelf(Math.PI/3.0*i,0,0,0,0,0,1);
   }
   
   //create polygon from base points, HEC_Polygon assumes the polygon is planar

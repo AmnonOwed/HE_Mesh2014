@@ -5,7 +5,7 @@ import wblut.geom.*;
 import wblut.core.*;
 HE_Mesh mesh, base;
 WB_Render3D render;
-WB_Logger log=WB_Logger.instance().setOff();
+
 void setup() {
   size(800, 800, P3D);
   smooth(8);

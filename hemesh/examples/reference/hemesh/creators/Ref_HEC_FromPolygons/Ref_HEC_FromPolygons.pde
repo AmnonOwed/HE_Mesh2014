@@ -16,7 +16,7 @@ void setup() {
   WB_Point[] basepoints =new WB_Point[6];
   for (int i=0;i<6;i++) {
    basepoints[i]=new WB_Point(0,100,0);
-   if(i>0) basepoints[i].rotateAboutAxis(Math.PI/3.0*i,0,0,0,0,0,1);
+   if(i>0) basepoints[i].rotateAbout2PointAxisSelf(Math.PI/3.0*i,0,0,0,0,0,1);
   }
   
   //create polygons from shifted copies of base points
@@ -27,7 +27,7 @@ void setup() {
     WB_Point[] localpoints=new WB_Point[6];
     for(int j=0;j<6;j++){
      localpoints[j]=basepoints[j].add(ds,0,0);//Shift base polygon
-     localpoints[j].rotateAboutAxis(Math.PI/3.0*i,0,0,0,0,0,1);//Rotate shifted polygon
+     localpoints[j].rotateAbout2PointAxisSelf(Math.PI/3.0*i,0,0,0,0,0,1);//Rotate shifted polygon
     }
     polygons[i+1]=gf.createSimplePolygon(localpoints);
   }

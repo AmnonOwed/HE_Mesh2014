@@ -29,6 +29,7 @@ var searchData=
   ['he_5frasjavolution_2ejava',['HE_RASJavolution.java',['../_h_e___r_a_s_javolution_8java.html',1,'']]],
   ['he_5frastrove_2ejava',['HE_RASTrove.java',['../_h_e___r_a_s_trove_8java.html',1,'']]],
   ['he_5fselection_2ejava',['HE_Selection.java',['../_h_e___selection_8java.html',1,'']]],
+  ['he_5ftexturecoordinate_2ejava',['HE_TextureCoordinate.java',['../_h_e___texture_coordinate_8java.html',1,'']]],
   ['he_5fvertex_2ejava',['HE_Vertex.java',['../_h_e___vertex_8java.html',1,'']]],
   ['he_5fvertexedgecirculator_2ejava',['HE_VertexEdgeCirculator.java',['../_h_e___vertex_edge_circulator_8java.html',1,'']]],
   ['he_5fvertexfacecirculator_2ejava',['HE_VertexFaceCirculator.java',['../_h_e___vertex_face_circulator_8java.html',1,'']]],
@@ -57,7 +58,7 @@ var searchData=
   ['hec_5ffromframe_2ejava',['HEC_FromFrame.java',['../_h_e_c___from_frame_8java.html',1,'']]],
   ['hec_5ffromhemeshfile_2ejava',['HEC_FromHemeshFile.java',['../_h_e_c___from_hemesh_file_8java.html',1,'']]],
   ['hec_5ffrommesh_2ejava',['HEC_FromMesh.java',['../_h_e_c___from_mesh_8java.html',1,'']]],
-  ['hec_5ffromobjfile_2ejava',['HEC_FromObjFile.java',['../_h_e_c___from_obj_file_8java.html',1,'']]],
+  ['hec_5ffromobjfile_2ejava',['HEC_FromOBJFile.java',['../_h_e_c___from_o_b_j_file_8java.html',1,'']]],
   ['hec_5ffrompolygons_2ejava',['HEC_FromPolygons.java',['../_h_e_c___from_polygons_8java.html',1,'']]],
   ['hec_5ffromquads_2ejava',['HEC_FromQuads.java',['../_h_e_c___from_quads_8java.html',1,'']]],
   ['hec_5ffromsimplemeshfile_2ejava',['HEC_FromSimpleMeshFile.java',['../_h_e_c___from_simple_mesh_file_8java.html',1,'']]],
@@ -164,5 +165,7 @@ var searchData=
   ['het_5frecorder_2ejava',['HET_Recorder.java',['../_h_e_t___recorder_8java.html',1,'']]],
   ['het_5fsimplemeshwriter_2ejava',['HET_SimpleMeshWriter.java',['../_h_e_t___simple_mesh_writer_8java.html',1,'']]],
   ['het_5fstlwriter_2ejava',['HET_STLWriter.java',['../_h_e_t___s_t_l_writer_8java.html',1,'']]],
+  ['het_5ftexture_2ejava',['HET_Texture.java',['../_h_e_t___texture_8java.html',1,'']]],
+  ['het_5fuvwmap_2ejava',['HET_UVWMap.java',['../_h_e_t___u_v_w_map_8java.html',1,'']]],
   ['het_5fwrlwriter_2ejava',['HET_WRLWriter.java',['../_h_e_t___w_r_l_writer_8java.html',1,'']]]
 ];

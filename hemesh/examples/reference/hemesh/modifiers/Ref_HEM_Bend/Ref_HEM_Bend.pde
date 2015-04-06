@@ -10,7 +10,7 @@ WB_Plane P;
 WB_Line L;
 HEM_Bend modifier;
 WB_GeometryFactory gf=WB_GeometryFactory.instance();
-WB_Logger log=WB_Logger.instance().setOff();
+
 void setup() {
   size(800, 800, OPENGL);
   smooth(8);

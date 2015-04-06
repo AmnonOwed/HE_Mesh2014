@@ -147,7 +147,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___transform.html#ac52f1250e83830dc7184022479d4b392">wblut.geom.WB_Transform</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___vector.html#a4d6f379993d61e4ebbc07e53458bf51a">wblut.geom.WB_Vector</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh.html#a32ba7d84c01f4781e3906332697a3d9c">wblut.hemesh.HE_Mesh</a>
-, <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh_structure.html#a54ffec9d8e2885e2ab0ab84a554bfaaf">wblut.hemesh.HE_MeshStructure</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___r_a_s.html#a9f1198ce562d464a20034830ab830632">wblut.hemesh.HE_RAS&lt; E extends HE_Element &gt;</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___r_a_s_javolution.html#adea1ed29bcf472ccb9535101959dd97d">wblut.hemesh.HE_RASJavolution&lt; E extends HE_Element &gt;</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___r_a_s_trove.html#a732f1bbac47256bcf975ea61d3444aa4">wblut.hemesh.HE_RASTrove&lt; E extends HE_Element &gt;</a>
@@ -306,7 +305,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh.html#a6908bcd91beef93d7bf5515b365e25e2">wblut.hemesh.HE_Mesh</a>
 </li>
 <li>getClosestPoint2D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a4217d6784d908f2e8137e70d6e484f85">wblut.geom.WB_GeometryOp</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#aff01ab473a93014106a814f1cae37d01">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getClosestPoint3D()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a9b4d2bf8ca17d60b2067e39060727877">wblut.geom.WB_GeometryOp</a>
@@ -357,6 +356,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh.html#ad58b031636ae67cf8056734a186ed5af">wblut.hemesh.HE_Mesh</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#a185389f5b0a2a47fe432427cfd218344">wblut.hemesh.HE_Vertex</a>
 </li>
+<li>getColorFromPImage()
+: <a class="el" href="classwblut_1_1processing_1_1_w_b___render3_d.html#acee7b959ddbf7037aeeb08c389132cf1">wblut.processing.WB_Render3D</a>
+</li>
 <li>getConformingTriangles2D()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#abd07fe1e2227b81829dac2c98e1ef60d">wblut.geom.WB_Triangulate</a>
 </li>
@@ -391,12 +393,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_factory.html#a583eb368cd38d5103269503b7c1d16c8">wblut.geom.WB_GeometryFactory</a>
 </li>
 <li>getCurrNormalOffset()
-: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___o_b_j_writer.html#a5892fe19cca91e3b1681f997b21af4a1">wblut.hemesh.HET_OBJWriter</a>
-, <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_o_v_writer.html#ac2ea22cfefc31a490d3811e97d240d0b">wblut.hemesh.HET_POVWriter</a>
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_o_v_writer.html#ac2ea22cfefc31a490d3811e97d240d0b">wblut.hemesh.HET_POVWriter</a>
 </li>
 <li>getCurrVertexOffset()
-: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___o_b_j_writer.html#a91ac5c598d8d020aeecef0afc32ea098">wblut.hemesh.HET_OBJWriter</a>
-, <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_o_v_writer.html#ad69d6e1b4f9f4af64d0c414c6b0a51ab">wblut.hemesh.HET_POVWriter</a>
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_o_v_writer.html#ad69d6e1b4f9f4af64d0c414c6b0a51ab">wblut.hemesh.HET_POVWriter</a>
 </li>
 <li>getCurvatureDirections()
 : <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#ac1475e9a1f418416ca5631514d313f28">wblut.hemesh.HE_Vertex</a>
@@ -748,8 +748,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getHalfedgeType()
 : <a class="el" href="classwblut_1_1hemesh_1_1_h_e___halfedge.html#a25153689241f0721377f1b22b0968ab8">wblut.hemesh.HE_Halfedge</a>
 </li>
+<li>getHalfedgeUVW()
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#a71c7637ae37a0cc2c0f26cda2d8923af">wblut.hemesh.HE_Vertex</a>
+</li>
 <li>getHeight()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b.html#afd810ac3fcbad110a0a45cc7cb26e731">wblut.geom.WB_AABB</a>
+</li>
+<li>getHex()
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___tri_grid.html#aaf4221c3e4d1bbc7dff978ce5c12a7b6">wblut.geom.WB_TriGrid</a>
+</li>
+<li>getHexTriangles()
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___tri_grid.html#a96abaa134814a2ed8b0811d28fe169c1">wblut.geom.WB_TriGrid</a>
 </li>
 <li>getId()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b.html#ac5e3888c814af7bd4db3fb2770c91972">wblut.geom.WB_AABB</a>
@@ -1168,7 +1177,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getPlane()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___face_list_mesh.html#aa026635fc8f86f94d26577db0dd1c954">wblut.geom.WB_FaceListMesh</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___polygon.html#a8dc2691e5d79a1e132b5992a5ff40e15">wblut.geom.WB_Polygon</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___polygon.html#a835a415a6480d285951cb88a10728493">wblut.geom.WB_Polygon</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___triangle.html#a2d3c1b77a2b99081808e01346eec75e7">wblut.geom.WB_Triangle</a>
 </li>
 <li>getPlanes()
@@ -1243,13 +1252,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e_c___iso_surface_v_o_l.html#a661c77bd8df50042831e1b69a39249d7">wblut.hemesh.HEC_IsoSurfaceVOL</a>
 </li>
 <li>getPolygonTriangulation2D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#adab9d43800f94a07534b758c5307422b">wblut.geom.WB_Triangulate</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#aaa2061a455f04a4833380c26fe84e29d">wblut.geom.WB_Triangulate</a>
 </li>
 <li>getPosChild()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b_tree_1_1_w_b___a_a_b_b_node.html#ae91295bc585ad6ced6c21937f4aec0b0">wblut.geom.WB_AABBTree.WB_AABBNode</a>
 </li>
 <li>getPotentialIntersectedFaces()
-: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___intersection.html#a5ce1d18f6d445a31533cd354c5b01139">wblut.hemesh.HE_Intersection</a>
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___intersection.html#a6d409af1663c34ad7603075f4c43935f">wblut.hemesh.HE_Intersection</a>
 </li>
 <li>getPrev()
 : <a class="el" href="classwblut_1_1geom_1_1_tri___half_edge.html#a2429c93f5166d13b505a10b0a6d50e04">wblut.geom.Tri_HalfEdge</a>
@@ -1274,7 +1283,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___frame_strut.html#ae5a31123ba2cd7fc2a72e95c19d8c7e3">wblut.geom.WB_FrameStrut</a>
 </li>
 <li>getRange()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___k_d_tree.html#a9c7bd8937f67366b706b4dbbf0c0319c">wblut.geom.WB_KDTree&lt; T extends WB_Coordinate, V &gt;</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___k_d_tree.html#a911690d81a04139cf29eb9741f5728ee">wblut.geom.WB_KDTree&lt; T extends WB_Coordinate, V &gt;</a>
 </li>
 <li>getRaw()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___coordinate_sequence.html#aa81df10624a729ad1422ad1f8378e012">wblut.geom.WB_CoordinateSequence</a>
@@ -1283,7 +1292,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b_tree.html#a199a76656991b914d4d992ed53b0c991">wblut.geom.WB_AABBTree</a>
 </li>
 <li>getRuledSurface()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___nurbs_ruled_surface.html#a5f4d6cdc88c0cf26f684c74eddbd3820">wblut.geom.WB_NurbsRuledSurface</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___nurbs_ruled_surface.html#a2c66f9521ba351f57a273eaadecd51c9">wblut.geom.WB_NurbsRuledSurface</a>
 </li>
 <li>getSegment()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___poly_line.html#a8bb3729a053ef245b0cd0321a9f3772e">wblut.geom.WB_PolyLine</a>
@@ -1321,7 +1330,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getSqDistance2D()
 : <a class="el" href="interfacewblut_1_1geom_1_1_w_b___coordinate_metric.html#a54728bd5d09e7e75c31595d8b129e4cd">wblut.geom.WB_CoordinateMetric</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___coordinate_op.html#ad974ff9251fce68981be26a3d26186ce">wblut.geom.WB_CoordinateOp</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#aca75b766048cec48508affed63aa794a">wblut.geom.WB_GeometryOp</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#ac0d67a10e3a686eac4bc2ed832f230eb">wblut.geom.WB_GeometryOp</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___sequence_point.html#a3715b02ecbe4e448bf223860377bafe6">wblut.geom.WB_SequencePoint</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___sequence_vector.html#a3156116fb96879343baa651c18574008">wblut.geom.WB_SequenceVector</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___vector.html#a3e80167394d60c0b043f620445d2e230">wblut.geom.WB_Vector</a>
@@ -1329,16 +1338,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getSqDistance3D()
 : <a class="el" href="interfacewblut_1_1geom_1_1_w_b___coordinate_metric.html#a7a4ca5569ddb898eea496b716271e11f">wblut.geom.WB_CoordinateMetric</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___coordinate_op.html#a0b549925839a2326b5713b769bd47e28">wblut.geom.WB_CoordinateOp</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#abc0ecf7c39d6c73ebf6916c1f189d3c1">wblut.geom.WB_GeometryOp</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a7e5434c16f3dc91064e3d41581ea58b7">wblut.geom.WB_GeometryOp</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___sequence_point.html#a962d38a65b1c47052469f94dc9cc8ff2">wblut.geom.WB_SequencePoint</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___sequence_vector.html#aeaf78e1afe1ce930a551aa5b26718085">wblut.geom.WB_SequenceVector</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___vector.html#a2bd32169de2cf3e7f2aa06a79f86c917">wblut.geom.WB_Vector</a>
 </li>
 <li>getSqDistanceToLine2D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#ab6b440682504a1d355e60c053da4336e">wblut.geom.WB_GeometryOp</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a5abace1377940b743bdd8e2451917a78">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqDistanceToLine3D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#af589e951c61cfc9594727c6a057b5b74">wblut.geom.WB_GeometryOp</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a0e9054c4c1c76c2120dd63d7dc476a93">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqDistanceToPlane3D()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#aaef58f5a514ef11b5710fbc6351c88e0">wblut.geom.WB_GeometryOp</a>
@@ -1353,13 +1362,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a51c9d5b8a3e914a958af9be2c21b8846">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqDistanceToRay3D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#ac1977ec39449977111c9f461c2a54bd6">wblut.geom.WB_GeometryOp</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a2882379aa0cc1fae3342fcbff06b4c80">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqDistanceToSegment2D()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a69e28d5724ddd9917768b5f57f1ca29b">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqDistanceToSegment3D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#af9a864b73a7427b7b5f308fb4807ab3d">wblut.geom.WB_GeometryOp</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___geometry_op.html#a481c5b57403a4dd4fc7c359fd993e71a">wblut.geom.WB_GeometryOp</a>
 </li>
 <li>getSqLength()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___frame_strut.html#aaac559bb16181b6c54620d4911d1763a">wblut.geom.WB_FrameStrut</a>
@@ -1415,13 +1424,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___nurbs_surface_of_revolution.html#a00e0bc8504fccf6a95f86a18c960ca77">wblut.geom.WB_NurbsSurfaceOfRevolution</a>
 </li>
 <li>getSwungSurface()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___nurbs_swung_surface.html#aa0c1ee837cbd59765da0f76809c20385">wblut.geom.WB_NurbsSwungSurface</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___nurbs_swung_surface.html#af333149970c2607fbd4143992ff7c908">wblut.geom.WB_NurbsSwungSurface</a>
 </li>
 <li>getT()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___line.html#ae67606e8d45a2fc25ca44ff92e61b2b0">wblut.geom.WB_Line</a>
 </li>
 <li>getTetrahedra()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulation3_d.html#aa62f83285398dfa8d0864e6757093620">wblut.geom.WB_Triangulation3D</a>
+</li>
+<li>getTextureId()
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___face.html#a09f9fde39827921c514146f0f0429f1d">wblut.hemesh.HE_Face</a>
 </li>
 <li>getTiles()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___danzer.html#ab71bf17fc4165d4320565ddf3074999b">wblut.geom.WB_Danzer</a>
@@ -1450,7 +1462,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getTriangles()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b.html#a211c64750fe1dadde898cdf142f82e31">wblut.geom.WB_AABB</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___polygon.html#a4d7199a81272fb64fb3ea64b424585d3">wblut.geom.WB_Polygon</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___polygon.html#a113e8d94000002bc729509597cd38ac3">wblut.geom.WB_Polygon</a>
 , <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulation2_d.html#a0a2ac9c2481574323133e2f7a0614108">wblut.geom.WB_Triangulation2D</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___face.html#aac5191b705bd015d8f14454d7e7c0a6c">wblut.hemesh.HE_Face</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh.html#a3740243499ec3c1148f3220f9ec4b209">wblut.hemesh.HE_Mesh</a>
@@ -1462,15 +1474,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#a2be01c46aa38f3e1e3b6379226a7abcc">wblut.geom.WB_Delaunay</a>
 </li>
 <li>getTriangulation2D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#ab5e36e26b946aae5bdb5635933dc9177">wblut.geom.WB_Delaunay</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#a9fa2ccfe3154b3ce440dcbb62a833173">wblut.geom.WB_Triangulate</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#a2ab5cc3dcaa57acedaf4ca5aa6e55e3c">wblut.geom.WB_Delaunay</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#aaa026514eebe52d72403c38876188dbe">wblut.geom.WB_Triangulate</a>
 </li>
 <li>getTriangulation3D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#ab6f4fec55b2f1f91d57907b60b3e76bf">wblut.geom.WB_Delaunay</a>
-, <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#ad28e87137db46c9faa4c3edb89f6f391">wblut.geom.WB_Triangulate</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#a420e2de7b34085f07c00ed5f10841b66">wblut.geom.WB_Delaunay</a>
+, <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate.html#af6ad63783295fd52eeb895d94266e355">wblut.geom.WB_Triangulate</a>
 </li>
 <li>getTriangulation4D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#a2f35483f4f61592ae2a36789467f8289">wblut.geom.WB_Delaunay</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___delaunay.html#a92c5f6a0d4785067702f88b2b7a26199">wblut.geom.WB_Delaunay</a>
 </li>
 <li>getTrueDim()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___a_a_b_b.html#ac97579346fa5b1658e8ae80fe37daf3a">wblut.geom.WB_AABB</a>
@@ -1503,6 +1515,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>getUnpairedHalfedges()
 : <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh.html#a9f249a69df661c12d0f0191591e5b6c1">wblut.hemesh.HE_Mesh</a>
+</li>
+<li>getUVW()
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___halfedge.html#a0130c2fb40c3f0810576024fc22748db">wblut.hemesh.HE_Halfedge</a>
+, <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#afd0dfb4506e4515f5e809c086cc3f802">wblut.hemesh.HE_Vertex</a>
+, <a class="el" href="classwblut_1_1hemesh_1_1_h_e_c___super_duper.html#a31e19b2a80cbbfc46b604ac5bfbf2669">wblut.hemesh.HEC_SuperDuper</a>
 </li>
 <li>getV()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___plane.html#ab073e294b3f7b4c0ca1e330740a24fb3">wblut.geom.WB_Plane</a>
@@ -1556,6 +1573,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getVertexType()
 : <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#a8dbeb3c972daa540a7321dfd71917b24">wblut.hemesh.HE_Vertex</a>
 </li>
+<li>getVertexUVW()
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___vertex.html#adbaa55488906b8ec6dc4aebcf17f49d8">wblut.hemesh.HE_Vertex</a>
+</li>
 <li>getVertices()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___triangulate_1_1_triangle.html#a67ca9d168c16d08c958a4a4bbe288d0a">wblut.geom.WB_Triangulate.Triangle</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e___mesh_structure.html#aae476aa321b46ad5b7be59667b9e5dd6">wblut.hemesh.HE_MeshStructure</a>
@@ -1582,13 +1602,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___tetrahedron.html#a63e0376c59b441c710593f8618f4a67c">wblut.geom.WB_Tetrahedron</a>
 </li>
 <li>getVoronoi2D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#a7b6ee18075f200d5c44065f4e805d82c">wblut.geom.WB_Voronoi</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#acf66da47c2cc9bca633b88c1e7e65d8d">wblut.geom.WB_Voronoi</a>
 </li>
 <li>getVoronoi3D()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#a17b305e54731755923b27b916549c422">wblut.geom.WB_Voronoi</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#a2b4ee8a98348f3dcb4ea6e746169e5d7">wblut.geom.WB_Voronoi</a>
 </li>
 <li>getVoronoi3DBF()
-: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#a5b87a39d3389acd661a2a787bde787af">wblut.geom.WB_Voronoi</a>
+: <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#a18d96a9f8d19316cdd8d01b2b32fcfd2">wblut.geom.WB_Voronoi</a>
 </li>
 <li>getVoronoi3DNeighbors()
 : <a class="el" href="classwblut_1_1geom_1_1_w_b___voronoi.html#ad6c140f5901eb206e1b3fdf7df1ca466">wblut.geom.WB_Voronoi</a>
@@ -1622,12 +1642,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classwblut_1_1processing_1_1_w_b___render3_d_1_1_unproject.html#a09d039895ad423945ac9da0182a4ad98">wblut.processing.WB_Render3D.Unproject</a>
 </li>
 <li>green()
-: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___o_b_j_writer.html#ac90049c5a71ad8ac49e2cb59a17e1038">wblut.hemesh.HET_OBJWriter</a>
-, <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_l_y_writer.html#af093bb95ded0f820e912478f180856c0">wblut.hemesh.HET_PLYWriter</a>
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___p_l_y_writer.html#af093bb95ded0f820e912478f180856c0">wblut.hemesh.HET_PLYWriter</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e_t___w_r_l_writer.html#a4b6b8b54db120abebf65dd6ef42044ec">wblut.hemesh.HET_WRLWriter</a>
 </li>
 <li>grow()
-: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___selection.html#a6ffce9a5214a8077f7a25a9c3adb7f01">wblut.hemesh.HE_Selection</a>
+: <a class="el" href="classwblut_1_1hemesh_1_1_h_e___selection.html#a225e665a870fb1d71ec446ec5091a756">wblut.hemesh.HE_Selection</a>
 , <a class="el" href="classwblut_1_1hemesh_1_1_h_e_c___voronoi_sphere.html#ab28ae1ff1a298ade1661ebce0c269541">wblut.hemesh.HEC_VoronoiSphere</a>
 </li>
 <li>growSpherebyPoint()
@@ -1640,7 +1659,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 8 2015 22:23:38 for HE_Mesh2014 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 6 2015 19:25:05 for HE_Mesh2014 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

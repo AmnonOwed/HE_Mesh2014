@@ -16,7 +16,7 @@ void setup() {
   smooth(8);
   
   //create a hull mesh
-  hull=new HE_Mesh(new HEC_Geodesic().setRadius(250));
+  hull=new HE_Mesh(new HEC_Geodesic().setB(2).setC(0).setRadius(250));
   hull.splitFacesCenter();
   //panelize the hull
   HEMC_Panelizer multiCreator=new HEMC_Panelizer();
@@ -50,7 +50,7 @@ void drawEdges(){
 void drawFaces(){
   noStroke();
   fill(255);
-  for(int i=0;i<numpanels;i+=3) {
+  for(int i=0;i<numpanels/4;i++) {
     render.drawFaces(panels[i]);
   }   
 }

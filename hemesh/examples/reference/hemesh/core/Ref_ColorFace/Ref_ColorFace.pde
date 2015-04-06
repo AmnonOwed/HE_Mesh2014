@@ -6,12 +6,11 @@ import wblut.core.*;
 
 HE_Mesh mesh;
 WB_Render3D render;
-WB_Logger log=WB_Logger.instance();
 
 void setup() {
   size(800, 800, OPENGL);
   smooth(8);
-log.setOff();
+
   HEC_Dodecahedron creator=new HEC_Dodecahedron();
   creator.setEdge(200); 
   mesh=new HE_Mesh(creator); 
