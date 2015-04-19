@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -221,8 +221,10 @@ public class HEM_MultiSlice extends HEM_Modifier {
 		slice.setKeepCenter(true);
 		slice.apply(mesh);
 		fItr = slice.cap.fItr();
+		HE_Face f;
 		while (fItr.hasNext()) {
-		    fItr.next().setInternalLabel(labels[i]);
+		    f = fItr.next();
+		    f.setInternalLabel(labels[i]);
 		}
 	    }
 	}

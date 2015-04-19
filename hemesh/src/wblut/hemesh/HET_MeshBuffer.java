@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -12,37 +12,27 @@ import wblut.geom.WB_Triangle;
 
 /**
  * Class HET_MeshBuffer.
- * 
+ *
  * @author Frederik Vanhoutte, W:Blut
  */
 public class HET_MeshBuffer extends PGraphics {
     /** Calling applet. */
     protected PApplet home;
-    /** The meshes. */
     protected ArrayList<HE_Mesh> meshes;
-    /** The temp meshes. */
     private ArrayList<HE_Mesh> tempMeshes;
-    /** The triangles. */
     private ArrayList<WB_Triangle> triangles;
-    /** The quads. */
     private ArrayList<WB_Quad> quads;
-    /** The p4. */
     private WB_Point p1, p2, p3, p4;
-    /** The shape. */
     private int shape;
-    /** The shapectr. */
     private int shapectr;
 
-    /**
-     * Instantiates a new hE t_ mesh buffer.
-     */
     public HET_MeshBuffer() {
 	meshes = new ArrayList<HE_Mesh>();
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics3D#allocate()
      */
     @Override
@@ -51,7 +41,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics#dispose()
      */
     @Override
@@ -60,7 +50,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics#displayable()
      */
     @Override
@@ -70,7 +60,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics3D#beginDraw()
      */
     @Override
@@ -79,7 +69,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics3D#endDraw()
      */
     @Override
@@ -94,7 +84,7 @@ public class HET_MeshBuffer extends PGraphics {
 	if (triangles != null) {
 	    if (triangles.size() > 0) {
 		final HEC_FromTriangles ft = new HEC_FromTriangles()
-			.setTriangles(triangles);
+		.setTriangles(triangles);
 		m.add(new HE_Mesh(ft));
 	    }
 	}
@@ -122,7 +112,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics3D#beginShape(int)
      */
     @Override
@@ -140,7 +130,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics3D#vertex(float, float)
      */
     @Override
@@ -150,7 +140,7 @@ public class HET_MeshBuffer extends PGraphics {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see processing.core.PGraphics#vertex(float, float, float)
      */
     @Override

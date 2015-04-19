@@ -15,7 +15,7 @@ void setup() {
   
   modifier=new HEM_MultiSliceSurface();
   planes=new WB_Plane[20];
-  for(int i=0;i<20;i++){
+  for(int i=0;i<2;i++){
   planes[i]=new WB_Plane(0,0,random(-50,50),random(-1,1),random(-1,1),random(-1,1));
   } 
   modifier.setPlanes(planes);// Cut plane 
@@ -44,10 +44,10 @@ void draw() {
   strokeWeight(4);
   stroke(0,0,255);
   render.drawEdgesWithInternalLabel(1,mesh);// New edges by the slice operation get label 1
- 
+  
   strokeWeight(1);
   stroke(255,0,0);
-  for(int i=0;i<20;i++){
+  for(int i=0;i<1;i++){
   render.drawPlane(planes[i],400);
   }
 
@@ -56,7 +56,7 @@ void draw() {
 
 void createMesh(){
   HEC_Cylinder creator=new HEC_Cylinder();
-  creator.setFacets(32).setSteps(1).setRadius(100).setHeight(400).setCenter(0,0,0);
+  creator.setFacets(8).setSteps(1).setRadius(100).setHeight(400).setCenter(0,0,0);
   mesh=new HE_Mesh(creator);
   
 }

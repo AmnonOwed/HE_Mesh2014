@@ -1,43 +1,38 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
 import wblut.geom.WB_GeometryFactory;
 
 /**
- * 
+ *
  */
 public abstract class HE_Element {
-    
     /**
-     * 
+     *
      */
     protected static long _currentKey;
-    
     /**
-     * 
+     *
      */
     protected final long _key;
-    
     /**
-     * 
+     *
      */
     private int _internalLabel;
-    
     /**
-     * 
+     *
      */
     private int _label;
-    
     /**
-     * 
+     *
      */
     protected final static WB_GeometryFactory geometryfactory = WB_GeometryFactory
 	    .instance();
 
     /**
-     * 
+     *
      */
     public HE_Element() {
 	_key = _currentKey;
@@ -47,51 +42,53 @@ public abstract class HE_Element {
     }
 
     /**
-     * 
      *
-     * @param label 
+     *
+     * @param label
      */
     public final void setInternalLabel(final int label) {
 	_internalLabel = label;
     }
 
     /**
-     * 
      *
-     * @param label 
+     *
+     * @param label
      */
     public final void setLabel(final int label) {
 	_label = label;
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public final long getKey() {
 	return _key;
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public final int getInternalLabel() {
 	return _internalLabel;
     }
 
     /**
-     * 
      *
-     * @return 
+     *
+     * @return
      */
     public final int getLabel() {
 	return _label;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -99,7 +96,9 @@ public abstract class HE_Element {
 	return (int) (_key ^ (_key >>> 32));
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -117,9 +116,9 @@ public abstract class HE_Element {
     }
 
     /**
-     * 
      *
-     * @param el 
+     *
+     * @param el
      */
     public void copyProperties(final HE_Element el) {
 	_label = el.getLabel();
@@ -127,7 +126,7 @@ public abstract class HE_Element {
     }
 
     /**
-     * 
+     *
      */
     public abstract void clear();
 }
