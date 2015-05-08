@@ -153,7 +153,7 @@ public class HEC_Box extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.hemesh.HE_Creator#create()
      */
     @Override
@@ -168,12 +168,12 @@ public class HEC_Box extends HEC_Creator {
 	final double dj = 1.0 / M;
 	final double dk = 1.0 / N;
 	final double[][] vertices = new double[(2 * (L + 1) * (M + 1))
-	                                       + (2 * (L + 1) * (N + 1)) + (2 * (M + 1) * (N + 1))][3];
-	final double[][] uvws = new double[(2 * (L + 1) * (M + 1))
 		+ (2 * (L + 1) * (N + 1)) + (2 * (M + 1) * (N + 1))][3];
+	final double[][] uvws = new double[(2 * (L + 1) * (M + 1))
+	                                   + (2 * (L + 1) * (N + 1)) + (2 * (M + 1) * (N + 1))][3];
 	final int[][] faces = new int[(2 * M * L) + (2 * L * N) + (2 * M * N)][4];// XY,XZ,YZ
 	final int[] faceTextureIds = new int[(2 * M * L) + (2 * L * N)
-		+ (2 * M * N)];
+	                                     + (2 * M * N)];
 	int idv = 0;
 	int idf = 0;
 	final int LMv = (L + 1) * (M + 1);
@@ -218,10 +218,10 @@ public class HEC_Box extends HEC_Creator {
 		vertices[idv][2] = vertices[idv + LNv][2] = oD + (v * dD);
 		vertices[idv][1] = oH;
 		vertices[idv + LNv][1] = -oH;
-		uvws[idv][0] = uvws[idv + LMv][0] = di * u;
-		uvws[idv + LMv][1] = dk * v;
-		uvws[idv][1] = 1 - uvws[idv + LMv][1];
-		uvws[idv][2] = uvws[idv + LMv][2] = 0;
+		uvws[idv][0] = uvws[idv + LNv][0] = di * u;
+		uvws[idv + LNv][1] = dk * v;
+		uvws[idv][1] = 1 - uvws[idv + LNv][1];
+		uvws[idv][2] = uvws[idv + LNv][2] = 0;
 		idv++;
 	    }
 	}
@@ -250,10 +250,10 @@ public class HEC_Box extends HEC_Creator {
 		vertices[idv][2] = vertices[idv + MNv][2] = oD + (u * dD);
 		vertices[idv][0] = oW;
 		vertices[idv + MNv][0] = -oW;
-		uvws[idv + LMv][0] = dk * u;
-		uvws[idv][0] = 1 - uvws[idv + LMv][0];
-		uvws[idv + LMv][1] = uvws[idv][1] = v * dj;
-		uvws[idv + LMv][2] = uvws[idv][2] = 0;
+		uvws[idv + MNv][0] = dk * u;
+		uvws[idv][0] = 1 - uvws[idv + MNv][0];
+		uvws[idv + MNv][1] = uvws[idv][1] = v * dj;
+		uvws[idv + MNv][2] = uvws[idv][2] = 0;
 		idv++;
 	    }
 	}
@@ -276,7 +276,7 @@ public class HEC_Box extends HEC_Creator {
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
 	fl.setVertices(vertices).setFaces(faces).setDuplicate(true)
-		.setUVW(uvws).setFaceTextureIds(faceTextureIds);
+	.setUVW(uvws).setFaceTextureIds(faceTextureIds);
 	return fl.createBase();
     }
 }
