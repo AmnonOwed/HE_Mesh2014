@@ -40,7 +40,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -146,7 +146,7 @@ public class HEM_QuadSplit extends HEM_Modifier {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Modifier#apply(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -230,8 +230,8 @@ public class HEM_QuadSplit extends HEM_Modifier {
 		sel.parent.add(he2[c]);
 		sel.parent.add(he3[c]);
 		he2[c].setVertex(he.getNextInFace().getNextInFace().getVertex());
-		if (he2[c].getVertex().hasHalfedgeTexture(f)) {
-		    he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(f));
+		if (he2[c].getVertex().hasHalfedgeTexture(face)) {
+		    he2[c].setUVW(he2[c].getVertex().getHalfedgeUVW(face));
 		}
 		he3[c].setVertex(vi);
 		he2[c].setNext(he3[c]);

@@ -233,7 +233,7 @@ public class HES_Planar extends HES_Subdividor {
 		HE_Mesh.cycleHalfedges(faceHalfedges);
 		HE_Halfedge cfhe = centerFace.getHalfedge();
 		do {
-		    if (cfhe.getPair().getNextInFace().hasTexture()) {
+		    if (cfhe.getPair().getNextInFace().hasHalfedgeTexture()) {
 			cfhe.setUVW(cfhe.getPair().getNextInFace().getUVW());
 		    }
 		    cfhe = cfhe.getNextInFace();
@@ -431,7 +431,7 @@ public class HES_Planar extends HES_Subdividor {
 		HE_Mesh.cycleHalfedges(faceHalfedges);
 		HE_Halfedge cfhe = centerFace.getHalfedge();
 		do {
-		    if (cfhe.getPair().getNextInFace().hasTexture()) {
+		    if (cfhe.getPair().getNextInFace().hasHalfedgeTexture()) {
 			cfhe.setUVW(cfhe.getPair().getNextInFace().getUVW());
 		    }
 		    cfhe = cfhe.getNextInFace();

@@ -4,25 +4,20 @@
 package wblut.hemesh;
 
 import wblut.geom.WB_Coordinate;
+import wblut.geom.WB_MutableCoordinate;
 
-public class HE_TextureCoordinate extends HE_Element {
-    private double u, v, w;
+public class HE_TextureCoordinate implements WB_MutableCoordinate {
     public static final HE_TextureCoordinate ZERO = new HE_TextureCoordinate();
+    private double u, v, w;
 
     public HE_TextureCoordinate() {
-	u = v = w = 0;
+	u = v = w = 0.0;
     }
 
     public HE_TextureCoordinate(final WB_Coordinate uvw) {
 	u = uvw.xd();
 	v = uvw.yd();
 	w = uvw.zd();
-    }
-
-    public HE_TextureCoordinate(final HE_TextureCoordinate uvw) {
-	u = uvw.ud();
-	v = uvw.vd();
-	w = uvw.wd();
     }
 
     public HE_TextureCoordinate(final double f,
@@ -45,24 +40,6 @@ public class HE_TextureCoordinate extends HE_Element {
 	this.w = w;
     }
 
-    /**
-     *
-     *
-     * @param el
-     */
-    public void copyProperties(final HE_TextureCoordinate el) {
-	super.copyProperties(el);
-	u = el.u;
-	v = el.v;
-	w = el.w;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see wblut.hemesh.HE_Element#clear()
-     */
-    @Override
     public void clear() {
 	u = v = w = 0;
     }
@@ -75,6 +52,7 @@ public class HE_TextureCoordinate extends HE_Element {
 	return v;
     }
 
+    @Override
     public double wd() {
 	return w;
     }
@@ -87,6 +65,7 @@ public class HE_TextureCoordinate extends HE_Element {
 	return (float) v;
     }
 
+    @Override
     public float wf() {
 	return (float) w;
     }
@@ -107,5 +86,122 @@ public class HE_TextureCoordinate extends HE_Element {
     public String toString() {
 	return "Texture Coordinate: [u=" + ud() + ", v=" + vd() + ", w=" + wd()
 		+ "]";
+    }
+
+    @Override
+    public double xd() {
+	return u;
+    }
+
+    @Override
+    public double yd() {
+	return v;
+    }
+
+    @Override
+    public double zd() {
+	return w;
+    }
+
+    @Override
+    public double getd(final int i) {
+	if (i == 0) {
+	    return u;
+	}
+	if (i == 1) {
+	    return v;
+	}
+	if (i == 2) {
+	    return w;
+	}
+	return Double.NaN;
+    }
+
+    @Override
+    public float xf() {
+	return (float) u;
+    }
+
+    @Override
+    public float yf() {
+	return (float) v;
+    }
+
+    @Override
+    public float zf() {
+	return (float) w;
+    }
+
+    @Override
+    public float getf(final int i) {
+	if (i == 0) {
+	    return (float) u;
+	}
+	if (i == 1) {
+	    return (float) v;
+	}
+	if (i == 2) {
+	    return (float) w;
+	}
+	return Float.NaN;
+    }
+
+    @Override
+    public void setX(final double x) {
+	u = x;
+    }
+
+    @Override
+    public void setY(final double y) {
+	v = y;
+    }
+
+    @Override
+    public void setZ(final double z) {
+	w = z;
+    }
+
+    @Override
+    public void setW(final double w) {
+	throw new UnsupportedOperationException(
+		"4D coordinates not available for texture coordinates.");
+    }
+
+    @Override
+    public void setCoord(final int i, final double v) {
+	if (i == 0) {
+	    this.u = v;
+	}
+	if (i == 1) {
+	    this.v = v;
+	}
+	if (i == 2) {
+	    this.w = v;
+	}
+    }
+
+    @Override
+    public void set(final WB_Coordinate p) {
+	set(p.xd(), p.yd(), p.zd());
+    }
+
+    @Override
+    public void set(final double x, final double y) {
+	u = x;
+	v = y;
+    }
+
+    @Override
+    public void set(final double x, final double y, final double z) {
+	u = x;
+	v = y;
+	w = z;
+    }
+
+    @Override
+    public void set(final double x, final double y, final double z,
+	    final double w) {
+	throw new UnsupportedOperationException(
+		"4D coordinates not available for texture coordinates.");
     }
 }

@@ -3,6 +3,7 @@
  */
 package wblut.hemesh;
 
+import java.util.HashMap;
 import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateOp;
@@ -35,9 +36,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     // private HashMap<String, Object> _data;
     private int hecolor;
     private HE_TextureCoordinate uvw;
-    /**
-     *
-     */
+    private HashMap<String, Object> _data;
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
     /**
@@ -413,7 +412,7 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -425,25 +424,25 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
     public void setData(final String s, final Object o) {
-	// if (_data == null) {
-	// _data = new HashMap<String, Object>();
-	// }
-	// _data.put(s, o);
+	if (_data == null) {
+	    _data = new HashMap<String, Object>();
+	}
+	_data.put(s, o);
     }
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
     public Object getData(final String s) {
-	return null;// _data.get(s);
+	return (_data == null) ? null : _data.get(s);
     }
 
     /*
@@ -620,19 +619,38 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return uvw;
     }
 
+    public void clearUVW() {
+	uvw = null;
+    }
+
     public void setUVW(final double u, final double v, final double w) {
 	uvw = new HE_TextureCoordinate(u, v, w);
     }
 
     public void setUVW(final WB_Coordinate uvw) {
+	if (uvw == null) {
+	    return;
+	}
 	this.uvw = new HE_TextureCoordinate(uvw);
     }
 
     public void setUVW(final HE_TextureCoordinate uvw) {
+	if (uvw == null) {
+	    return;
+	}
 	this.uvw = new HE_TextureCoordinate(uvw);
     }
 
+    public boolean hasHalfedgeTexture() {
+	return uvw != null;
+    }
+
     public boolean hasTexture() {
+	if (_vertex != null) {
+	    if (_vertex.hasVertexTexture()) {
+		return true;
+	    }
+	}
 	return uvw != null;
     }
 }

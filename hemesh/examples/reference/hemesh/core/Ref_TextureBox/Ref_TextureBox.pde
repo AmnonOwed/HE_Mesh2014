@@ -16,7 +16,8 @@ void setup() {
   size(800, 800, OPENGL);
   smooth(8);
   textureMode(NORMAL);
-  HEC_Box creator=new HEC_Box(300, 300, 300, 1, 1, 1);
+  HEC_Box creator=new HEC_Box(300, 300, 300, 5,2, 3);
+  
   mesh=new HE_Mesh(creator); 
   render=new WB_Render(this);
   imgs=new PImage[] {

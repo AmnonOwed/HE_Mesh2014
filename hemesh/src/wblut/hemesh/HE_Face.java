@@ -273,6 +273,21 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	return fv;
     }
 
+    public List<HE_TextureCoordinate> getFaceUVWs() {
+	final List<HE_TextureCoordinate> fv = new FastTable<HE_TextureCoordinate>();
+	if (_halfedge == null) {
+	    return fv;
+	}
+	HE_Halfedge he = _halfedge;
+	do {
+	    if (!fv.contains(he.getVertex())) {
+		fv.add(he.getUVW());
+	    }
+	    he = he.getNextInFace();
+	} while (he != _halfedge);
+	return fv;
+    }
+
     /**
      *
      *
@@ -604,7 +619,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -622,7 +637,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -635,17 +650,17 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
     public Object getData(final String s) {
-	return _data.get(s);
+	return (_data == null) ? null : _data.get(s);
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -655,7 +670,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
@@ -701,7 +716,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override
@@ -731,7 +746,7 @@ public class HE_Face extends HE_Element implements WB_HasData, WB_HasColor {
 	coords[i] = new Coordinate(point.xd(), point.yd(), i);
 	he = he.getNextInFace();
 	final Polygon inputPolygon = new GeometryFactory()
-	.createPolygon(coords);
+		.createPolygon(coords);
 	final IsValidOp isValidOp = new IsValidOp(inputPolygon);
 	if (!IsValidOp.isValid(inputPolygon)) {
 	    System.out.println(this);

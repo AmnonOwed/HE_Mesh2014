@@ -132,47 +132,10 @@ public class HET_MeshOp {
 	final HE_Halfedge he1new = new HE_Halfedge();
 	final HE_Halfedge he0n = he0.getNextInFace();
 	final HE_Halfedge he1n = he1.getNextInFace();
-	final HE_Vertex v0 = he0.getVertex();
-	final HE_Vertex v1 = he1.getVertex();
-	if ((v0.hasVertexTexture() || he0.hasTexture())
-		&& (v1.hasVertexTexture() || he1.hasTexture())) {
-	    final double d0 = he0.getVertex().getPoint().getDistance3D(v);
-	    final double d1 = he1.getVertex().getPoint().getDistance3D(v);
-	    final double f0 = d1 / (d0 + d1);
-	    final double f1 = d0 / (d0 + d1);
-	    if (he0.hasTexture()) {
-		if (he0n.hasTexture()) {
-		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(),
-			    he0n.getUVW()));
-		} else if (v1.hasVertexTexture()) {
-		    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(), v1
-			    .getVertexUVW()));
-		}
-	    } else if (v0.hasVertexTexture()) {
-		if (he0n.hasTexture()) {
-		    he0new.setUVW(new HE_TextureCoordinate(f0, v0
-			    .getVertexUVW(), he0n.getUVW()));
-		}
-	    }
-	    if (he1.hasTexture()) {
-		if (he1n.hasTexture()) {
-		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(),
-			    he1n.getUVW()));
-		} else if (v0.hasVertexTexture()) {
-		    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(), v0
-			    .getVertexUVW()));
-		}
-	    } else if (v1.hasVertexTexture()) {
-		if (he1n.hasTexture()) {
-		    he1new.setUVW(new HE_TextureCoordinate(f1, v1
-			    .getVertexUVW(), he1n.getUVW()));
-		}
-	    }
-	    if (v0.hasVertexTexture() && v1.hasVertexTexture()) {
-		vNew.setUVW(new HE_TextureCoordinate(f0, v0.getVertexUVW(), v1
-			.getVertexUVW()));
-	    }
-	}
+	final double d0 = he0.getVertex().getPoint().getDistance3D(v);
+	final double d1 = he1.getVertex().getPoint().getDistance3D(v);
+	final double f0 = d1 / (d0 + d1);
+	final double f1 = d0 / (d0 + d1);
 	he0new.setVertex(vNew);
 	he1new.setVertex(vNew);
 	vNew.setHalfedge(he0new);
@@ -180,6 +143,14 @@ public class HET_MeshOp {
 	he0new.copyProperties(he0);
 	he1new.setNext(he1n);
 	he1new.copyProperties(he1);
+	if (he0.hasTexture() && he0n.hasTexture()) {
+	    he0new.setUVW(new HE_TextureCoordinate(f0, he0.getUVW(), he0n
+		    .getUVW()));
+	}
+	if (he1.hasTexture() && he1n.hasTexture()) {
+	    he1new.setUVW(new HE_TextureCoordinate(f1, he1.getUVW(), he1n
+		    .getUVW()));
+	}
 	he0.setNext(he0new);
 	he1.setNext(he1new);
 	he0.setPair(he1new);

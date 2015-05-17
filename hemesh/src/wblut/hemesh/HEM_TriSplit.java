@@ -172,7 +172,7 @@ public class HEM_TriSplit extends HEM_Modifier {
 		he2[c] = new HE_Halfedge();
 		mesh.add(he1[c]);
 		mesh.add(he2[c]);
-		if (he.getNextInFace().hasTexture()) {
+		if (he.getNextInFace().hasHalfedgeTexture()) {
 		    he1[c].setUVW(he.getNextInFace().getUVW());
 		}
 		he1[c].setVertex(he.getNextInFace().getVertex());

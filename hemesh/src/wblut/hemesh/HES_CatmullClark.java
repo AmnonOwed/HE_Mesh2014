@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -24,9 +24,8 @@ import wblut.math.WB_Parameter;
  *
  */
 public class HES_CatmullClark extends HES_Subdividor {
-    
     /**
-     * 
+     *
      */
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
     /** Keep edges?. */
@@ -94,7 +93,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.HE_Subdividor#subdivide(wblut.hemesh.HE_Mesh)
      */
     @Override
@@ -222,7 +221,7 @@ public class HES_CatmullClark extends HES_Subdividor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * wblut.hemesh.subdividors.HEB_Subdividor#subdivideSelected(wblut.hemesh
      * .HE_Mesh, wblut.hemesh.HE_Selection)
@@ -389,10 +388,11 @@ public class HES_CatmullClark extends HES_Subdividor {
 		    p.scaleSelf(1.0 / c);
 		    if (planes.size() == 1) {
 			p = WB_GeometryOp.getClosestPoint3D(p, planes.get(0));
-		    }/*
+		    }
+		    /*
 		     * else if (planes.size() == 2) { final WB_Line L =
-		     * WB_Intersect.intersect(planes.get(0), planes.get(1)).L;
-		     * p = WB_ClosestPoint.getClosestPoint(p, L); p.set(v); }
+		     * WB_Intersect.intersect(planes.get(0), planes.get(1)).L; p
+		     * = WB_ClosestPoint.getClosestPoint(p, L); p.set(v); }
 		     */
 		    else {
 			p.set(v);

@@ -222,7 +222,7 @@ public class HEC_Grid extends HEC_Creator {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.hemesh.creators.HEB_Creator#createBase()
      */
     @Override
@@ -259,6 +259,9 @@ public class HEC_Grid extends HEC_Creator {
 		    uvw[index][0] = i * ndU;
 		    uvw[index][1] = j * ndV;
 		    uvw[index][2] = (values[i][j] - minWValue) / maxWValue;
+		    if (Double.isNaN(uvw[index][2])) {
+			uvw[index][2] = 0.0;
+		    }
 		    index++;
 		}
 	    }
@@ -275,7 +278,7 @@ public class HEC_Grid extends HEC_Creator {
 	}
 	final HEC_FromFacelist fl = new HEC_FromFacelist();
 	fl.setVertices(points).setUVW(uvw).setFaces(faces).setDuplicate(false)
-		.setCheckNormals(false);
+	.setCheckNormals(false);
 	return fl.createBase();
     }
 }
