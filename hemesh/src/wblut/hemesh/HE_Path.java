@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package wblut.hemesh;
 
@@ -27,9 +27,8 @@ public class HE_Path extends HE_Element implements WB_HasData {
      * path should be a single loop
      */
     protected HE_PathHalfedge _phalfedge;
-    
     /**
-     * 
+     *
      */
     private HashMap<String, Object> _data;
 
@@ -265,7 +264,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
     /**
      * Set the starting HE_PathHalfedge.
      *
-     * @param phalfedge 
+     * @param phalfedge
      */
     public void setPathHalfedge(final HE_PathHalfedge phalfedge) {
 	_phalfedge = phalfedge;
@@ -326,7 +325,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.geom.Point3D#toString()
      */
     @Override
@@ -346,7 +345,7 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
      */
     @Override
@@ -359,15 +358,17 @@ public class HE_Path extends HE_Element implements WB_HasData {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see wblut.core.WB_HasData#getData(java.lang.String)
      */
     @Override
     public Object getData(final String s) {
-	return _data.get(s);
+	return _data == null ? null : _data.get(s);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see wblut.hemesh.HE_Element#clear()
      */
     @Override

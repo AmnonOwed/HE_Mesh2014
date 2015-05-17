@@ -3,14 +3,12 @@
  */
 package wblut.hemesh;
 
-import java.util.HashMap;
 import wblut.geom.WB_ClassificationConvex;
 import wblut.geom.WB_Coordinate;
 import wblut.geom.WB_CoordinateOp;
 import wblut.geom.WB_GeometryFactory;
 import wblut.geom.WB_GeometryOp;
 import wblut.geom.WB_HasColor;
-import wblut.geom.WB_HasData;
 import wblut.geom.WB_Point;
 import wblut.geom.WB_Vector;
 import wblut.math.WB_Math;
@@ -21,7 +19,7 @@ import wblut.math.WB_Math;
  * @author Frederik Vanhoutte (W:Blut)
  *
  */
-public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
+public class HE_Halfedge extends HE_Element implements WB_HasColor {
     /** Start vertex of halfedge. */
     private HE_Vertex _vertex;
     /** Halfedge pair. */
@@ -36,7 +34,6 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
     // private HashMap<String, Object> _data;
     private int hecolor;
     private HE_TextureCoordinate uvw;
-    private HashMap<String, Object> _data;
     private static WB_GeometryFactory gf = WB_GeometryFactory.instance();
 
     /**
@@ -420,29 +417,6 @@ public class HE_Halfedge extends HE_Element implements WB_HasData, WB_HasColor {
 	return "HE_Halfedge key: " + key() + ", paired with halfedge "
 		+ getPair().key() + ". Vertex: " + getVertex().key()
 		+ ". Is this an edge: " + isEdge() + ".";
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see wblut.core.WB_HasData#setData(java.lang.String, java.lang.Object)
-     */
-    @Override
-    public void setData(final String s, final Object o) {
-	if (_data == null) {
-	    _data = new HashMap<String, Object>();
-	}
-	_data.put(s, o);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see wblut.core.WB_HasData#getData(java.lang.String)
-     */
-    @Override
-    public Object getData(final String s) {
-	return (_data == null) ? null : _data.get(s);
     }
 
     /*

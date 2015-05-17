@@ -50,8 +50,7 @@ import wblut.math.WB_Epsilon;
  * @author Frederik Vanhoutte (W:Blut)
  *
  */
-public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
-	WB_HasColor, WB_Mesh {
+public class HE_Mesh extends HE_MeshStructure implements WB_HasColor, WB_Mesh {
     /**
      *
      */
@@ -3871,7 +3870,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Geometry#getType()
      */
     @Override
@@ -3881,7 +3880,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Geometry#apply(wblut.geom.WB_Transform)
      */
     @Override
@@ -3892,7 +3891,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getFaceNormal(int)
      */
     @Override
@@ -3902,7 +3901,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getFaceCenter(int)
      */
     @Override
@@ -3912,7 +3911,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getVertexNormal(int)
      */
     @Override
@@ -3922,7 +3921,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getVertex(int)
      */
     @Override
@@ -3932,7 +3931,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getEdgesAsInt()
      */
     @Override
@@ -3960,7 +3959,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_Mesh#getPoints()
      */
     @Override
@@ -3970,7 +3969,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#getColor()
      */
     @Override
@@ -3980,7 +3979,7 @@ public class HE_Mesh extends HE_MeshStructure implements WB_HasData,
 
     /*
      * (non-Javadoc)
-     *
+     * 
      * @see wblut.geom.WB_HasColor#setColor(int)
      */
     @Override
